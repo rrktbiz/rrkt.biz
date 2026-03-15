@@ -581,6 +581,9 @@ body{top:0!important}
 ══════════════════════════════════════════════════════ */
 const DRIVE_API_KEY = "AIzaSyDeMjPYDMSvwbuVjJ3lfpVEZV0J_bTb02s";
 
+/* ── Google Sheets 동기화 설정 ── */
+const SHEETS_ID = "19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk";
+
 /**
  * Drive 텍스트 파일 내용 가져오기
  * @param {string} fileId  — Drive 파일 ID
@@ -1675,7 +1678,9 @@ window.closeChar = function(){ S.activeChar=null; S.view="charlist"; renderCharL
 const ADMIN_PW = "0000";
 const LS_EP = "biz_ep_data";
 
-function saveEpData(){
+/* ── Sheets 저장 ── */
+async function saveEpData(){
+  // 1) localStorage에도 저장 (오프라인 백업)
   const data={};
   Object.entries(VOLUMES).forEach(([pid,vols])=>{
     if(!Array.isArray(vols))return;
@@ -1686,8 +1691,51 @@ function saveEpData(){
     });
   });
   localStorage.setItem(LS_EP,JSON.stringify(data));
+
+  // 2) Sheets에 저장
+  try{
+    // 전체 데이터를 한 행으로 직렬화해서 A1에 저장
+    const payload = JSON.stringify(data);
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/episodes!A1?valueInputOption=RAW&key=${DRIVE_API_KEY}`;
+    await fetch(url, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({values:[[payload]]})
+    });
+  }catch(e){
+    console.warn("Sheets 저장 실패 (localhost 미리보기에서는 정상):", e.message);
+  }
 }
 
+/* ── Sheets 불러오기 ── */
+async function loadEpDataFromSheets(){
+  try{
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/episodes!A1?key=${DRIVE_API_KEY}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error("Sheets fetch 실패");
+    const json = await res.json();
+    const raw = json?.values?.[0]?.[0];
+    if(!raw) return false; // 시트가 비어있음
+    const data = JSON.parse(raw);
+    Object.entries(VOLUMES).forEach(([pid,vols])=>{
+      if(!Array.isArray(vols))return;
+      vols.forEach(v=>{
+        v.episodes.forEach(e=>{
+          const k=`${pid}_${v.id}_${e.id}`;
+          if(data[k]){e.status=data[k].status;e.date=data[k].date;}
+        });
+      });
+    });
+    // Sheets 데이터로 localStorage도 갱신
+    localStorage.setItem(LS_EP, JSON.stringify(data));
+    return true;
+  }catch(e){
+    console.warn("Sheets 불러오기 실패, localStorage 사용:", e.message);
+    return false;
+  }
+}
+
+/* ── localStorage 불러오기 (오프라인 백업) ── */
 function loadEpData(){
   try{
     const data=JSON.parse(localStorage.getItem(LS_EP)||"{}");
@@ -1703,8 +1751,12 @@ function loadEpData(){
   }catch(e){}
 }
 
-// Load saved data on startup
-loadEpData();
+// 시작시 Sheets에서 먼저 불러오고, 실패하면 localStorage 사용
+loadEpData(); // 일단 localStorage로 빠르게 렌더
+render();
+loadEpDataFromSheets().then(ok=>{
+  if(ok){ rebuildWorkLog(); render(); } // Sheets 성공하면 다시 렌더
+});
 
 function toggleAdmin(){
   if(document.body.classList.contains("admin-mode")){
@@ -1756,7 +1808,8 @@ function adminSetDate(projId, volId, epId, val){
   renderEpList();
 }
 
-render();
+// (초기 render는 위 loadEpData 블록에서 실행됨)
+
 </script>
 
 <!-- ADMIN BUTTON -->
