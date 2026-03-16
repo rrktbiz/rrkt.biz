@@ -634,6 +634,15 @@ const PROJECTS = [
     tags:["웹소설","판타지","학원","액션","다크"]
   },
   {
+    id:"biz-oc-doll",
+    label:"biz-OC-doll",
+    acc:"#0ea5e9", acc2:"#0284c7",
+    keepSub:true, landOnIntro:true,
+    subType:"doll",
+    intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 프로젝트. .",
+    tags:["웹툰","판타지","OC","자캐","드라마"]
+  },
+  {
     id:"x-project",
     label:"X project",
     acc:"#111827", acc2:"#1e3a8a",
@@ -642,15 +651,6 @@ const PROJECTS = [
     youtubeUrl:"https://youtube.com/@your_channel",
     intro:"유튜브 중심 SF 콘텐츠 프로젝트. 커버곡과 오리지널 영상으로 구성된 멀티미디어 세계관.",
     tags:["웹툰","SF","음악","유튜브"]
-  },
-  {
-    id:"biz-oc-doll",
-    label:"biz-OC-doll",
-    acc:"#0ea5e9", acc2:"#0284c7",
-    keepSub:true, landOnIntro:true,
-    subType:"doll",
-    intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 프로젝트. .",
-    tags:["웹툰","판타지","OC","자캐","드라마"]
   },
 ];
 
@@ -832,7 +832,6 @@ function closeNav(){
 }
 function showSubPanel(projId){
   clearTimeout(_navHideTimer);
-  if(projId==='x-project') return; // X project는 서브패널 없음 — Xproject.html로 이동
   S.hoveredProj=projId;
   const sp=document.getElementById("sub-panel");
   renderSubPanelContent(projId);
@@ -1451,7 +1450,6 @@ function goHome(){S.view="home";S.activeProj=null;S.activeVol=null;S.activeEp=nu
 function goCal(){S.view="calendar";S.activeProj=null;closeMobMenu();render();}
 
 function clickProj(id){
-  if(id==='x-project'){location.href='Xproject.html';return;}
   if(S.activeProj!==id){S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;}
   S.view="intro";
   const dw={"blood-highschool":290,"x-project":290,"biz-oc-doll":290}[id]||290;
