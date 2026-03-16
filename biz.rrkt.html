@@ -25,6 +25,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
   background:var(--sb);border-bottom:1px solid var(--bd);
   display:flex;align-items:center;padding:0 16px;gap:14px;
   position:fixed;top:0;left:0;right:0;z-index:100;
+  transition:transform .28s ease;
 }
 #menu-toggle{
   background:transparent;border:none;width:32px;height:32px;
@@ -159,7 +160,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .doll-banner-count{font-size:11px;color:var(--tx3);margin-top:auto}
 
 /* ── CONTENT ── */
-#content{display:block;margin-top:48px;height:calc(100vh - 48px);overflow-y:auto;overflow-x:hidden;background:var(--bg)}
+#content{display:block;margin-top:48px;height:calc(100vh - 48px);overflow-y:auto;overflow-x:hidden;background:var(--bg);transition:margin-top .28s ease,height .28s ease}
 #nav-backdrop{display:none;position:fixed;inset:0;top:48px;z-index:150}
 #nav-backdrop.show{display:block}
 body.nav-pinned #nav-backdrop{display:none!important}
@@ -194,6 +195,15 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .hw-stat-l{font-size:11px;color:var(--tx2)}.hw-stat-n{font-size:13px;font-weight:700;color:var(--tx)}
 .home-twitter-btn{display:flex;align-items:center;gap:8px;padding:11px 14px;background:#000;color:#fff;border-radius:10px;border:none;font-size:12px;font-weight:500;cursor:pointer;width:100%;justify-content:center}
 .home-twitter-btn:hover{background:#1a1a1a}
+.home-about{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.home-about-hd{padding:10px 14px 8px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.home-about-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.home-about-avatar{width:48px;height:48px;border-radius:50%;border:1px solid var(--bd);background:linear-gradient(135deg,#e8e8e8,#d0d0d0);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.home-about-row{display:flex;gap:12px;align-items:flex-start}
+.home-about-name{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px}
+.home-about-bio{font-size:11px;color:var(--tx2);line-height:1.65}
+.home-about-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.home-about-tag{font-size:9px;padding:2px 7px;border-radius:10px;background:var(--bg);border:1px solid var(--bd);color:var(--tx3)}
 .home-recent-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
 .home-recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
 .home-r-item{padding:10px 12px;background:var(--sb);border:1px solid var(--bd);border-left-width:3px;border-radius:7px}
@@ -641,7 +651,7 @@ const PROJECTS = [
     acc:"#0ea5e9", acc2:"#0284c7",
     keepSub:true, landOnIntro:true,
     subType:"doll",
-    intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 인형 판타지 프로젝트. 각기 다른 배경을 가진 캐릭터들이 하나의 세계 안에서 엮이는 이야기.",
+    intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 프로젝트. .",
     tags:["웹툰","판타지","OC","자캐","드라마"]
   },
 ];
@@ -658,8 +668,8 @@ const VOLUMES = {
      coverId:null, // ← Drive 커버 이미지 파일 ID
      synopsis:"평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.",
      episodes:[
-      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:"1AZCqg6d5ziJ9oRKyIzLpk7X45Ed0uvap"},
-      {id:2,  title:"2화 미술실의 마리오네트",       date:null, status:"예정", textId:null},
+      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:"1Szx88n7H6-35_iIspBDmetJ96mGO8SUD"},
+      {id:2,  title:"2화 미술실의 마리오네트",       date:null, status:"예정", textId:"1-8Jnp9QRWE1YR80RnMBRzJH4-JMUdO2U"},
       {id:3,  title:"3화 버려진 성지의 보석",        date:null, status:"예정", textId:null},
       {id:4,  title:"4화 흑마법사의 영원한 1학년",   date:null, status:"예정", textId:null},
       {id:5,  title:"5화 엇갈린 계승과 원치 않는 힘",date:null, status:"예정", textId:null},
@@ -673,7 +683,7 @@ const VOLUMES = {
     ]},
     {id:2, label:"[웹소설]블러드하이스쿨 ~류오가편~", sub:"2부", grad:"150deg,#1a0010,#6b0030,#c0304a", type:"웹소설", tags:["판타지","미스터리"],
      coverId:null,
-     synopsis:"류오가 일족과의 만남. 숨겨진 혈통의 비밀이 드러나기 시작하는 편.",
+     synopsis:"류오가 줄거리 요약좀 ㅠ.",
      episodes:[
       {id:1,  title:"1화",  date:null, status:"예정", textId:null},
       {id:2,  title:"2화",  date:null, status:"예정", textId:null},
@@ -698,10 +708,7 @@ const VOLUMES = {
      coverId:null,
      synopsis:"웹소설 1부를 웹툰으로 각색한 버전.",
      episodes:[
-      {id:1, title:"웹툰 1화 전학생 도착", date:null, status:"예정", textId:null},
-      {id:2, title:"웹툰 2화 피의 교실",   date:null, status:"예정", textId:null},
-      {id:3, title:"웹툰 3화 추격",        date:null, status:"예정", textId:null},
-      {id:4, title:"웹툰 4화 에필로그",    date:null, status:"예정", textId:null},
+      {id:1, title:"웹툰 1화", date:null, status:"예정", textId:null},
     ]},
   ],
   "x-project": [
@@ -739,20 +746,13 @@ const VOLUMES = {
     ],
     episodes:{
       "char":[
-        {id:1, title:"Doll 01 Awakening", date:null, status:"예정", textId:null},
-        {id:2, title:"Doll 02 Market",    date:null, status:"예정", textId:null},
-        {id:3, title:"Doll 03 Collector", date:null, status:"예정", textId:null},
-        {id:4, title:"Doll 04 Broken",    date:null, status:"예정", textId:null},
+        {id:1, title:"캐릭터 01", date:null, status:"예정", textId:null},
       ],
       "main":[
-        {id:1, title:"메인 01 시작",  date:null, status:"예정", textId:null},
-        {id:2, title:"메인 02 만남",  date:null, status:"예정", textId:null},
-        {id:3, title:"메인 03 균열",  date:null, status:"예정", textId:null},
-        {id:4, title:"메인 04 결말",  date:null, status:"예정", textId:null},
+        {id:1, title:"메인 01",  date:null, status:"예정", textId:null},
       ],
       "sub":[
         {id:1, title:"서브 01", date:null, status:"예정", textId:null},
-        {id:2, title:"서브 02", date:null, status:"예정", textId:null},
       ],
       "collab":[
         {id:1, title:"콜라보 01", date:null, status:"예정", textId:null},
@@ -834,6 +834,7 @@ function closeNav(){
 }
 function showSubPanel(projId){
   clearTimeout(_navHideTimer);
+  if(projId==='x-project') return; // X project는 서브패널 없음 — Xproject.html로 이동
   S.hoveredProj=projId;
   const sp=document.getElementById("sub-panel");
   renderSubPanelContent(projId);
@@ -1013,10 +1014,17 @@ function renderMobMenu(){
     const isArr=Array.isArray(vols);
     let sub="";
     // links
-    sub+=`<div class="mob-sub-links"><button class="mob-sub-link" onclick="goIntro('${p.id}');closeMobMenu()">소개글</button>`;
-    if(p.subType==="doll") sub+=`<button class="mob-sub-link" onclick="goDollChar();closeMobMenu()">캐릭터 일람</button>`;
-    if(p.subType==="youtube") sub+=`<a class="mob-sub-link" href="${p.youtubeUrl||"#"}" target="_blank">YouTube</a>`;
-    sub+=`</div>`;
+    sub+=`<div class="mob-sub-links">`;
+    if(p.id==='x-project'){
+      sub+=`<a class="mob-sub-link" href="Xproject.html">소개글</a>`;
+      sub+=`<a class="mob-sub-link" href="${p.youtubeUrl||"#"}" target="_blank">YouTube</a>`;
+      sub+=`</div>`;
+    } else {
+      sub+=`<button class="mob-sub-link" onclick="goIntro('${p.id}');closeMobMenu()">소개글</button>`;
+      if(p.subType==="doll") sub+=`<button class="mob-sub-link" onclick="goDollChar();closeMobMenu()">캐릭터 일람</button>`;
+      if(p.subType==="youtube") sub+=`<a class="mob-sub-link" href="${p.youtubeUrl||"#"}" target="_blank">YouTube</a>`;
+      sub+=`</div>`;
+    }
     // doll categories
     if(p.subType==="doll"){
       sub+=`<div style="display:flex;flex-direction:column;gap:8px;padding:10px 16px">`;
@@ -1031,8 +1039,8 @@ function renderMobMenu(){
       });
       sub+=`</div>`;
     }
-    // vol list (array projects)
-    if(isArr && vols){
+    // vol list (array projects) — x-project 제외
+    if(isArr && vols && p.id !== 'x-project'){
       sub+=`<div style="display:flex;flex-direction:column;gap:6px;padding:8px 16px 14px">`;
       vols.forEach(v=>{
         const isYt=p.subType==="youtube";
@@ -1068,6 +1076,22 @@ function closeMobMenu(){document.getElementById("mob-menu").classList.remove("op
 /* ── MAIN RENDER ── */
 function render(){
   renderNavItems();
+  // 모바일 topbar 리셋 (content view 이탈 시)
+  if(S.view !== "content"){
+    const tb = document.getElementById("topbar");
+    if(tb) tb.style.transform = "";
+    const ctb = document.getElementById("content-topbar");
+    if(ctb) ctb.style.transform = "";
+    const ct = document.getElementById("content");
+    if(ct){
+      ct.style.marginTop = "48px";
+      ct.style.height = "calc(100vh - 48px)";
+      if(ct._mobScrollHandler){
+        ct.removeEventListener("scroll", ct._mobScrollHandler);
+        ct._mobScrollHandler = null;
+      }
+    }
+  }
   if(S.view==="home")          renderHome();
   else if(S.view==="calendar") renderCalendar();
   else if(S.view==="intro")    renderIntro();
@@ -1116,6 +1140,24 @@ function renderHome(){
             <div class="hw-stat"><span class="hw-stat-l">해외 방문</span><span class="hw-stat-n">${foreignVisits.toLocaleString()}</span></div>
           </div>
           <a href="https://twitter.com/your_handle" target="_blank" class="home-twitter-btn">&#120143; 작가 트위터</a>
+          <div class="home-about">
+            <div class="home-about-hd">About 작가</div>
+            <div class="home-about-body">
+              <div class="home-about-row">
+                <div class="home-about-avatar">✍️</div>
+                <div>
+                  <div class="home-about-name">biz.rrkt</div>
+                  <div class="home-about-bio">작가 소개글을 이곳에 작성하세요.<br>장르, 작업 스타일, 관심사 등을 자유롭게 채워주세요.</div>
+                  <div class="home-about-tags">
+                    <span class="home-about-tag">웹소설</span>
+                    <span class="home-about-tag">OC창작</span>
+                    <span class="home-about-tag">SF</span>
+                    <span class="home-about-tag">판타지</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="home-recent-lbl">최근 작업</div>
@@ -1283,13 +1325,14 @@ function renderContentView(){
   const ws=[100,84,92,67,97,58,88,74,80,54,93,69];
 
   document.getElementById("content").innerHTML=`
-    <div style="background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10">
+    <div id="content-topbar" style="background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;position:fixed;top:48px;left:0;right:0;z-index:99;transition:transform .28s ease;will-change:transform;">
       <button class="tb-back" onclick="backToEps()">&larr; 목록</button>
       <div class="tb-sep"></div>
       <span class="tb-crumb">${proj.label}</span><span class="tb-arr">&#8250;</span>
       <span class="tb-crumb">${vol.label}</span><span class="tb-arr">&#8250;</span>
       <span class="tb-cur">${epObj.title}</span>
     </div>
+    <div id="content-topbar-spacer"></div>
     <div class="postype-wrap">
       <div class="postype-header">
         <div class="postype-series-lbl" onclick="backToEps()">${proj.label} &middot; ${vol.label}</div>
@@ -1323,6 +1366,57 @@ function renderContentView(){
 
   // Drive에서 본문 비동기 로드
   _loadPostypeContent(epObj.textId, proj.acc);
+
+  // ── 모바일 전용: 스크롤 시 상단 자동 숨김/표시 ──
+  (function(){
+    const contentEl = document.getElementById("content");
+    const topbarEl  = document.getElementById("topbar");
+
+    const ctb    = document.getElementById("content-topbar");
+    const spacer = document.getElementById("content-topbar-spacer");
+    const ctbH   = ctb ? ctb.offsetHeight : 45;
+    if(spacer){ spacer.style.transition="height .28s ease"; spacer.style.overflow="hidden"; spacer.style.height=ctbH+"px"; }
+
+    let lastScrollY = 0, ticking = false, hidden = false;
+
+    function _applyHide(doHide){
+      if(hidden === doHide) return;
+      hidden = doHide;
+      const bar = document.getElementById("content-topbar");
+      const sp  = document.getElementById("content-topbar-spacer");
+      if(doHide){
+        topbarEl.style.transform = "translateY(-48px)";
+        if(bar) bar.style.transform = `translateY(-${ctbH+48}px)`;
+        contentEl.style.marginTop = "0";
+        contentEl.style.height = "100vh";
+        if(sp) sp.style.height = "0";
+      } else {
+        topbarEl.style.transform = "";
+        if(bar) bar.style.transform = "";
+        contentEl.style.marginTop = "48px";
+        contentEl.style.height = "calc(100vh - 48px)";
+        if(sp) sp.style.height = ctbH+"px";
+      }
+    }
+
+    function _onMobScroll(){
+      // 매 스크롤마다 모바일 여부 재확인 — 데스크탑에선 즉시 리셋 후 종료
+      if(window.innerWidth > 768){
+        _applyHide(false);
+        ticking = false;
+        return;
+      }
+      const st = contentEl.scrollTop;
+      if(st > lastScrollY && st > 60)    _applyHide(true);
+      else if(st < lastScrollY - 10)     _applyHide(false);
+      lastScrollY = st <= 0 ? 0 : st;
+      ticking = false;
+    }
+    contentEl._mobScrollHandler = function(){
+      if(!ticking){ requestAnimationFrame(_onMobScroll); ticking=true; }
+    };
+    contentEl.addEventListener("scroll", contentEl._mobScrollHandler, {passive:true});
+  })();
 }
 
 async function _loadPostypeContent(textId, acc){
@@ -1365,6 +1459,7 @@ function goHome(){S.view="home";S.activeProj=null;S.activeVol=null;S.activeEp=nu
 function goCal(){S.view="calendar";S.activeProj=null;closeMobMenu();render();}
 
 function clickProj(id){
+  if(id==='x-project'){location.href='Xproject.html';return;}
   if(S.activeProj!==id){S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;}
   S.view="intro";
   const dw={"blood-highschool":290,"x-project":290,"biz-oc-doll":290}[id]||290;
