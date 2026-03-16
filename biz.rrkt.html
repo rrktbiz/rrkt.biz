@@ -1300,7 +1300,7 @@ function renderCalendar(){
   const curY=new Date().getFullYear();
   if(!allYears.includes(curY)) allYears.push(curY);
   allYears.sort((a,b)=>b-a);
-  const yearTabs = tl ? "" : allYears.map(yr=>`<button class="cal-year-tab${yr===y?" active":""}" onclick="goYear(${yr})">${yr}년</button>`).join("");
+  const yearTabs = allYears.map(yr=>`<button class="cal-year-tab${yr===y&&!ov&&!tl?" active":""}" onclick="goYear(${yr})">${yr}년</button>`).join("");
 
   // 연간 요약 미니캘
   function buildMiniMonth(yr,mo){
@@ -1389,20 +1389,17 @@ function renderCalendar(){
 
   document.getElementById("content").innerHTML=`
     <div class="cal-page">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-        <div class="cal-page-title" style="margin-bottom:0">작업 캘린더</div>
-        <button class="cal-year-overview-btn${tl?" active":""}" onclick="toggleTimeline()">
-          ${tl?`← 캘린더로`:`☰ 연도별 타임라인`}
-        </button>
-      </div>
-      ${tl ? buildTimeline() : `
+      <div class="cal-page-title">작업 캘린더</div>
       <div class="cal-year-row">
         ${yearTabs}
-        <button class="cal-year-overview-btn${ov?" active":""}" onclick="toggleCalOverview()">
-          ${ov?`▲ 월별 보기`:`⊞ ${y}년 전체 보기`}
+        <button class="cal-year-overview-btn${ov&&!tl?" active":""}" onclick="toggleCalOverview()">
+          ⊞ ${y}년 전체 보기
+        </button>
+        <button class="cal-year-overview-btn${tl?" active":""}" onclick="toggleTimeline()">
+          ☰ 연도별 타임라인
         </button>
       </div>
-      ${ov ? overviewHtml : `
+      ${tl ? buildTimeline() : ov ? overviewHtml : `
       <div class="cal-layout">
         <div>
           <div class="cal-top-row"><button class="cal-nav-btn" onclick="prevMonth()">&#8249;</button><span class="cal-month-lbl">${monthStr}</span><button class="cal-nav-btn" onclick="nextMonth()">&#8250;</button></div>
@@ -1410,7 +1407,7 @@ function renderCalendar(){
           ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row"><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
         </div>
         <div><div class="recent-hd">Recent</div><div class="recent-list">${recent.map(w=>`<div class="r-item" style="border-left-color:${w.acc}"><div class="r-top"><span class="r-proj" style="color:${w.acc}">${w.proj}</span><span class="r-date">${w.date.slice(5)}</span></div><div class="r-title">${w.title}</div></div>`).join("")}</div></div>
-      </div>`}`}
+      </div>`}
     </div>`;
 }
 
@@ -1709,10 +1706,10 @@ function backToIntro(){S.view="intro";render();}
 function selectDay(d){S.selDay=S.selDay===d?null:d;renderCalendar();}
 function prevMonth(){if(S.calM===0){S.calM=11;S.calY--;}else S.calM--;S.selDay=null;renderCalendar();}
 function nextMonth(){if(S.calM===11){S.calM=0;S.calY++;}else S.calM++;S.selDay=null;renderCalendar();}
-function goYear(y){S.calY=y;S.calM=new Date().getMonth();S.selDay=null;S.calOverview=false;renderCalendar();}
+function goYear(y){S.calY=y;S.calM=new Date().getMonth();S.selDay=null;S.calOverview=false;S.calTimeline=false;renderCalendar();}
 function goMonth(y,m){S.calY=y;S.calM=m;S.selDay=null;S.calOverview=false;S.calTimeline=false;renderCalendar();}
-function toggleCalOverview(){S.calOverview=!S.calOverview;S.selDay=null;renderCalendar();}
-function toggleTimeline(){S.calTimeline=!S.calTimeline;S.calOverview=false;S.selDay=null;renderCalendar();}
+function toggleCalOverview(){S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
+function toggleTimeline(){S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
 function miniPrev(){if(S.homeMiniM===0){S.homeMiniM=11;S.homeMiniY--;}else S.homeMiniM--;renderHome();}
 function miniNext(){if(S.homeMiniM===11){S.homeMiniM=0;S.homeMiniY++;}else S.homeMiniM++;renderHome();}
 
