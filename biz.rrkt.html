@@ -488,7 +488,7 @@ body{top:0!important}
 .postype-loading{display:flex;align-items:center;gap:10px;color:var(--tx3);font-size:13px;padding:32px 0}
 .postype-spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--tx3);border-radius:50%;animation:ptSpin .7s linear infinite;flex-shrink:0}
 @keyframes ptSpin{to{transform:rotate(360deg)}}
-.postype-text{white-space:pre-wrap;word-break:keep-all;line-height:2.1;font-size:16px}
+.postype-text{white-space:pre-wrap;word-break:keep-all;line-height:1.8;font-size:14px}
 .postype-error{background:#fff5f5;border:1px solid #ffd0d0;border-radius:8px;padding:16px 20px;color:#c03030;font-size:12px;line-height:1.7}
 .postype-error pre{margin-top:8px;font-size:11px;white-space:pre-wrap;color:#a03030}
 </style>
@@ -1094,7 +1094,22 @@ function renderHome(){
         <div id="home-clock" class="home-clock">${timeStr}</div>
       </div>
       <div class="home-body">
-        <div class="home-illust"><div style="text-align:center"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Main Illustration</div><div style="font-size:11px;color:#bbb">이미지를 이곳에 배치하세요</div></div></div>
+        <div class="home-illust" style="flex-direction:column;align-items:stretch;justify-content:flex-start;padding:0;overflow:hidden;background:var(--sb)">
+          <div style="padding:12px 16px 10px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">About 작가</div>
+          <div style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;flex:1">
+            <div class="home-about-avatar" style="width:80px;height:80px;font-size:36px">✍️</div>
+            <div style="text-align:center">
+              <div class="home-about-name" style="font-size:17px;margin-bottom:8px">biz.rrkt</div>
+              <div class="home-about-bio" style="font-size:13px;max-width:380px">작가 소개글을 이곳에 작성하세요.<br>장르, 작업 스타일, 관심사 등을 자유롭게 채워주세요.</div>
+            </div>
+            <div class="home-about-tags" style="justify-content:center;margin-top:4px">
+              <span class="home-about-tag">웹소설</span>
+              <span class="home-about-tag">OC창작</span>
+              <span class="home-about-tag">SF</span>
+              <span class="home-about-tag">판타지</span>
+            </div>
+          </div>
+        </div>
         <div class="home-right">
           <div class="home-mini-cal">
             <div class="hmc-head"><span class="hmc-month">${new Date(y,m,1).toLocaleDateString("ko-KR",{year:"numeric",month:"long"})}</span><div class="hmc-nav"><button class="hmc-btn" onclick="miniPrev()">&#8249;</button><button class="hmc-btn" onclick="miniNext()">&#8250;</button></div></div>
@@ -1106,24 +1121,6 @@ function renderHome(){
             <div class="hw-stat"><span class="hw-stat-l">해외 방문</span><span class="hw-stat-n">${foreignVisits.toLocaleString()}</span></div>
           </div>
           <a href="https://twitter.com/your_handle" target="_blank" class="home-twitter-btn">&#120143; 작가 트위터</a>
-          <div class="home-about">
-            <div class="home-about-hd">About 작가</div>
-            <div class="home-about-body">
-              <div class="home-about-row">
-                <div class="home-about-avatar">✍️</div>
-                <div>
-                  <div class="home-about-name">biz.rrkt</div>
-                  <div class="home-about-bio">작가 소개글을 이곳에 작성하세요.<br>장르, 작업 스타일, 관심사 등을 자유롭게 채워주세요.</div>
-                  <div class="home-about-tags">
-                    <span class="home-about-tag">웹소설</span>
-                    <span class="home-about-tag">OC창작</span>
-                    <span class="home-about-tag">SF</span>
-                    <span class="home-about-tag">판타지</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="home-recent-lbl">최근 작업</div>
