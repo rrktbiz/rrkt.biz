@@ -185,17 +185,20 @@ body.nav-pinned #nav-backdrop{display:none!important}
 /* ── Recent work panel (center) ── */
 .home-recent-panel{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
 .home-recent-panel-hd{padding:10px 14px 9px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
-.home-recent-panel-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
-.home-recent-body{padding:10px}
-.home-recent-grid{display:grid;grid-template-columns:1fr;gap:6px}
-.home-r-item{padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-left-width:3px;border-radius:7px;cursor:pointer;transition:all .12s}
+.home-recent-panel-lbl{font-size:13px;font-weight:700;letter-spacing:0.5px;color:var(--tx2);text-transform:none}
+.home-recent-body{padding:8px}
+.home-recent-grid{display:grid;grid-template-columns:1fr;gap:4px}
+.home-r-item{padding:6px 12px;background:var(--bg);border:1px solid var(--bd);border-left-width:3px;border-radius:7px;cursor:pointer;transition:all .12s}
 .home-r-item:hover{background:color-mix(in srgb,var(--bd) 30%,var(--bg));transform:translateX(2px)}
-.home-r-top{display:flex;justify-content:space-between;margin-bottom:5px;align-items:center}
+.home-r-top{display:flex;justify-content:space-between;margin-bottom:3px;align-items:center}
 .home-r-proj{font-size:11px;font-weight:500}.home-r-date{font-size:10px;color:var(--tx3)}
 .home-r-title-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .home-r-title{font-size:13px;font-weight:400;color:var(--tx3);line-height:1.4}
 .home-r-status{font-size:9px;font-weight:600;padding:1px 6px;border-radius:3px;display:inline-block;flex-shrink:0}
 .home-r-status.done{background:#ffe4e4;color:#c0392b}
+.home-r-item.is-done .home-r-proj{color:#bbb!important}
+.home-r-item.is-done .home-r-date{color:#bbb}
+.home-r-item.is-done .home-r-title{color:#bbb}
 .home-r-status.wip{background:#fff9e0;color:#d4a017}
 .home-r-status.plan{background:var(--bg);color:var(--tx3);border:1px solid var(--bd)}
 .home-r-empty{padding:28px;text-align:center;font-size:11px;color:var(--tx3)}
@@ -1160,7 +1163,7 @@ function renderHome(){
         const navCall = w.projId==="biz-oc-doll"
           ? `goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
           : `goRecentWork('${w.projId}',${w.volId},${w.epId},null)`;
-        return `<div class="home-r-item" style="border-left-color:${w.acc}" onclick="${navCall}" title="${w.title} 바로가기">
+        return `<div class="home-r-item${stCls==='done'?' is-done':''}" style="border-left-color:${stCls==='done'?'#ddd':w.acc}" onclick="${navCall}" title="${w.title} 바로가기">
           <div class="home-r-top">
             <span class="home-r-proj" style="color:${w.acc}">${w.proj}</span>
             <span class="home-r-date">${w.date}</span>
@@ -1199,7 +1202,7 @@ function renderHome(){
         <!-- ② Recent work panel (center / blue box) -->
         <div class="home-recent-panel">
           <div class="home-recent-panel-hd">
-            <span class="home-recent-panel-lbl">최근 작업</span>
+            <span class="home-recent-panel-lbl">Updates</span>
             <span style="font-size:9px;color:var(--tx3)">클릭하면 해당 작업으로 이동</span>
           </div>
           <div class="home-recent-body">
