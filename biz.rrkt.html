@@ -476,6 +476,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
   .yt-ep-thumb{width:120px;height:68px}
   .ep-nav{padding:10px 12px}
   .ep-nav-btn{max-width:40%;padding:6px 10px;font-size:11px}
+  .postype-text{font-size:15px}
 }
 
 /* Google Translate */
@@ -488,7 +489,7 @@ body{top:0!important}
 .postype-loading{display:flex;align-items:center;gap:10px;color:var(--tx3);font-size:13px;padding:32px 0}
 .postype-spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--tx3);border-radius:50%;animation:ptSpin .7s linear infinite;flex-shrink:0}
 @keyframes ptSpin{to{transform:rotate(360deg)}}
-.postype-text{white-space:pre-wrap;word-break:keep-all;line-height:1.8;font-size:14px}
+.postype-text{white-space:pre-wrap;word-break:keep-all;line-height:1.7;font-size:17px}
 .postype-error{background:#fff5f5;border:1px solid #ffd0d0;border-radius:8px;padding:16px 20px;color:#c03030;font-size:12px;line-height:1.7}
 .postype-error pre{margin-top:8px;font-size:11px;white-space:pre-wrap;color:#a03030}
 </style>
@@ -1094,20 +1095,106 @@ function renderHome(){
         <div id="home-clock" class="home-clock">${timeStr}</div>
       </div>
       <div class="home-body">
-        <div class="home-illust" style="flex-direction:column;align-items:stretch;justify-content:flex-start;padding:0;overflow:hidden;background:var(--sb)">
-          <div style="padding:12px 16px 10px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">About 작가</div>
-          <div style="padding:28px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;flex:1">
-            <div class="home-about-avatar" style="width:80px;height:80px;font-size:36px">✍️</div>
-            <div style="text-align:center">
-              <div class="home-about-name" style="font-size:17px;margin-bottom:8px">biz.rrkt</div>
-              <div class="home-about-bio" style="font-size:13px;max-width:380px">작가 소개글을 이곳에 작성하세요.<br>장르, 작업 스타일, 관심사 등을 자유롭게 채워주세요.</div>
-            </div>
-            <div class="home-about-tags" style="justify-content:center;margin-top:4px">
-              <span class="home-about-tag">웹소설</span>
-              <span class="home-about-tag">OC창작</span>
-              <span class="home-about-tag">SF</span>
-              <span class="home-about-tag">판타지</span>
-            </div>
+        <div class="home-illust" style="flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:20px;overflow:hidden;background:var(--sb)">
+          <div style="width:200px;height:200px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 8px 32px #e0c0f040,0 2px 8px #0000000d">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+              <defs>
+                <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
+                  <stop offset="0%" stop-color="#fde8f7"/>
+                  <stop offset="100%" stop-color="#d4b8f0"/>
+                </radialGradient>
+                <radialGradient id="skinGrad" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%" stop-color="#fff0e8"/>
+                  <stop offset="100%" stop-color="#f8d8c8"/>
+                </radialGradient>
+                <radialGradient id="cheekL" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ffaacc" stop-opacity="0.7"/>
+                  <stop offset="100%" stop-color="#ffaacc" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="cheekR" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ffaacc" stop-opacity="0.7"/>
+                  <stop offset="100%" stop-color="#ffaacc" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <!-- background -->
+              <circle cx="100" cy="100" r="100" fill="url(#bgGrad)"/>
+              <!-- floating sparkles bg -->
+              <circle cx="28" cy="38" r="4" fill="#fff" opacity="0.7"/>
+              <circle cx="170" cy="30" r="3" fill="#ffccee" opacity="0.8"/>
+              <circle cx="160" cy="155" r="5" fill="#fff" opacity="0.5"/>
+              <circle cx="36" cy="158" r="3" fill="#e8d0ff" opacity="0.8"/>
+              <!-- stars -->
+              <text x="22" y="58" font-size="14" fill="#f0a0d0" opacity="0.85">✦</text>
+              <text x="155" y="52" font-size="10" fill="#c8a0f0" opacity="0.9">✦</text>
+              <text x="148" y="168" font-size="12" fill="#f9c0e0" opacity="0.85">✦</text>
+              <text x="32" y="170" font-size="9" fill="#d0b8f8" opacity="0.8">✦</text>
+              <!-- hair back -->
+              <ellipse cx="100" cy="94" rx="46" ry="50" fill="#4a2460"/>
+              <!-- neck -->
+              <rect x="88" y="134" width="24" height="20" rx="8" fill="url(#skinGrad)"/>
+              <!-- shoulder/body -->
+              <ellipse cx="100" cy="168" rx="42" ry="22" fill="#c084e0" opacity="0.9"/>
+              <!-- collar detail -->
+              <path d="M82 160 Q100 150 118 160 Q110 175 100 172 Q90 175 82 160Z" fill="#e8b0f8" opacity="0.7"/>
+              <!-- face -->
+              <ellipse cx="100" cy="112" rx="38" ry="40" fill="url(#skinGrad)"/>
+              <!-- hair front top -->
+              <ellipse cx="100" cy="76" rx="42" ry="22" fill="#4a2460"/>
+              <!-- hair strands -->
+              <path d="M58 86 Q50 100 54 118" stroke="#4a2460" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <path d="M142 86 Q150 100 146 118" stroke="#4a2460" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <!-- hair highlight -->
+              <ellipse cx="88" cy="80" rx="10" ry="5" fill="#7a4490" opacity="0.5" transform="rotate(-15 88 80)"/>
+              <!-- ears -->
+              <ellipse cx="62" cy="114" rx="7" ry="9" fill="url(#skinGrad)"/>
+              <ellipse cx="138" cy="114" rx="7" ry="9" fill="url(#skinGrad)"/>
+              <ellipse cx="62" cy="114" rx="4" ry="5.5" fill="#f5c5b5" opacity="0.5"/>
+              <ellipse cx="138" cy="114" rx="4" ry="5.5" fill="#f5c5b5" opacity="0.5"/>
+              <!-- eyes white -->
+              <ellipse cx="86" cy="111" rx="11" ry="12" fill="#fff"/>
+              <ellipse cx="114" cy="111" rx="11" ry="12" fill="#fff"/>
+              <!-- iris -->
+              <circle cx="86" cy="113" r="8" fill="#6a2890"/>
+              <circle cx="114" cy="113" r="8" fill="#6a2890"/>
+              <!-- iris shine -->
+              <circle cx="86" cy="113" r="5.5" fill="#9048c0"/>
+              <circle cx="114" cy="113" r="5.5" fill="#9048c0"/>
+              <!-- pupil -->
+              <circle cx="86" cy="113" r="3.5" fill="#1a0830"/>
+              <circle cx="114" cy="113" r="3.5" fill="#1a0830"/>
+              <!-- eye highlights -->
+              <circle cx="89" cy="109" r="2.2" fill="#fff" opacity="0.95"/>
+              <circle cx="117" cy="109" r="2.2" fill="#fff" opacity="0.95"/>
+              <circle cx="84" cy="116" r="1.2" fill="#fff" opacity="0.6"/>
+              <circle cx="112" cy="116" r="1.2" fill="#fff" opacity="0.6"/>
+              <!-- lower lashes -->
+              <path d="M78 121 Q82 125 86 124" stroke="#4a2460" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+              <path d="M114 124 Q118 125 122 121" stroke="#4a2460" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+              <!-- upper lashes -->
+              <path d="M75 106 Q86 101 97 106" stroke="#2a1040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M103 106 Q114 101 125 106" stroke="#2a1040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <!-- eyebrows -->
+              <path d="M76 101 Q86 97 96 101" stroke="#4a2460" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M104 101 Q114 97 124 101" stroke="#4a2460" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- cheeks -->
+              <ellipse cx="74" cy="122" rx="10" ry="6" fill="url(#cheekL)"/>
+              <ellipse cx="126" cy="122" rx="10" ry="6" fill="url(#cheekR)"/>
+              <!-- nose -->
+              <path d="M98 122 Q100 126 102 122" stroke="#d0a090" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+              <!-- mouth -->
+              <path d="M91 131 Q100 138 109 131" stroke="#e07090" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M94 132 Q100 136 106 132" fill="#f090b0" opacity="0.4"/>
+              <!-- tiny star accessories -->
+              <text x="148" y="96" font-size="11" fill="#f0d020" opacity="0.9">★</text>
+              <text x="42" y="100" font-size="8" fill="#e8d030" opacity="0.7">★</text>
+              <!-- floating hearts -->
+              <text x="150" y="76" font-size="13" fill="#ff80aa" opacity="0.8">♡</text>
+              <text x="30" y="80" font-size="10" fill="#d0a0f0" opacity="0.7">♡</text>
+            </svg>
+          </div>
+          <div style="text-align:center">
+            <div class="home-about-name" style="font-size:16px;margin-bottom:10px">biz.rrkt</div>
+            <div class="home-about-bio" style="font-size:12px;max-width:340px;color:var(--tx3)"></div>
           </div>
         </div>
         <div class="home-right">
