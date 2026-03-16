@@ -551,40 +551,38 @@ body{top:0!important}
 
 <script>
 /* ══════════════════════════════════════════════════════
-   ★  GOOGLE DRIVE 설정  ★
-   
-   API 키 발급 방법 (무료, 3분):
-   1. https://console.cloud.google.com 접속
-   2. 새 프로젝트 생성
-   3. [API 및 서비스 → 라이브러리] → "Google Drive API" 검색 → 사용 설정
-   4. [API 및 서비스 → 사용자 인증 정보] → [+ 사용자 인증 정보 만들기] → [API 키]
-   5. 아래 DRIVE_API_KEY 에 붙여넣기
+   ★  텍스트 파일 설정 (GitHub Gist / raw)  ★
 
-   파일 공개 설정 (에피소드 텍스트 / 커버 이미지 모두):
-   Drive에서 파일 우클릭 → 공유 → 링크가 있는 모든 사용자 → 뷰어
+   API 키 불필요! 할당량 없음!
+
+   에피소드 textId 에 아래 형식의 URL을 그대로 넣으세요:
+
+   ① GitHub Gist raw URL:
+      https://gist.githubusercontent.com/유저명/GIST_ID/raw/파일명.txt
+
+   ② GitHub 레포 raw URL:
+      https://raw.githubusercontent.com/유저명/레포명/main/파일명.txt
+
+   Gist 사용법:
+   1. https://gist.github.com 접속
+   2. 새 gist 생성 → 에피소드 본문 붙여넣기 → "Create secret gist"
+   3. Raw 버튼 클릭 → 주소창 URL 복사 → textId 에 붙여넣기
 ══════════════════════════════════════════════════════ */
-const DRIVE_API_KEY = "AIzaSyCdYIWKrbj8wi70EBKOycOYAlo7Q-l4MOg";
 
-/* ── Google Sheets 동기화 설정 ── */
+/* ── Google Sheets 동기화 설정 (API 키 불필요 — 공개 CSV 방식) ── */
 const SHEETS_ID = "19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk";
+/* ↑ 시트를 "링크가 있는 모든 사용자 → 뷰어"로 공개 설정만 하면 됩니다. */
 
 /**
- * Drive 텍스트 파일 내용 가져오기
- * @param {string} fileId  — Drive 파일 ID
+ * 에피소드 본문 가져오기 — GitHub Gist / raw URL 직접 fetch
+ * @param {string} url  — GitHub raw URL (textId 에 입력한 값)
  */
-async function fetchDriveText(fileId){
-  if(!fileId) throw new Error("파일 ID 없음");
-  if(!DRIVE_API_KEY || DRIVE_API_KEY.length < 10) throw new Error(
-    "DRIVE_API_KEY 가 설정되지 않았습니다.\n코드 상단 DRIVE_API_KEY 에 Google Drive API 키를 입력해주세요."
-  );
-  const url=`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${DRIVE_API_KEY}`;
-  const res=await fetch(url);
+async function fetchEpText(url){
+  if(!url) throw new Error("URL 없음");
+  const res = await fetch(url);
   if(!res.ok){
-    const err=await res.json().catch(()=>({}));
-    const msg=err?.error?.message||`HTTP ${res.status}`;
-    if(res.status===403) throw new Error(`접근 권한 없음 (403)\n파일이 '링크가 있는 모든 사용자'로 공유되어 있는지 확인하세요.\n${msg}`);
-    if(res.status===404) throw new Error(`파일을 찾을 수 없음 (404)\nFile ID: ${fileId}`);
-    throw new Error(`Drive 오류: ${msg}`);
+    if(res.status === 404) throw new Error(`파일을 찾을 수 없음 (404)\nURL: ${url}`);
+    throw new Error(`불러오기 실패 (HTTP ${res.status})`);
   }
   return await res.text();
 }
@@ -668,8 +666,8 @@ const VOLUMES = {
      coverId:null, // ← Drive 커버 이미지 파일 ID
      synopsis:"평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.",
      episodes:[
-      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:"1Szx88n7H6-35_iIspBDmetJ96mGO8SUD"},
-      {id:2,  title:"2화 미술실의 마리오네트",       date:null, status:"예정", textId:"1-8Jnp9QRWE1YR80RnMBRzJH4-JMUdO2U"},
+      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:"https://gist.githubusercontent.com/biz202099-hue/976e501ae71e033cffbd350632da6352/raw/fc8130d66a75087a72b09c85cab32aca6a84944a/gistfile1.txt"},
+      {id:2,  title:"2화 미술실의 마리오네트",       date:null, status:"예정", textId:"https://gist.githubusercontent.com/your_github/gist_id_2화/raw/ep2.txt"},
       {id:3,  title:"3화 버려진 성지의 보석",        date:null, status:"예정", textId:null},
       {id:4,  title:"4화 흑마법사의 영원한 1학년",   date:null, status:"예정", textId:null},
       {id:5,  title:"5화 엇갈린 계승과 원치 않는 힘",date:null, status:"예정", textId:null},
@@ -1423,11 +1421,11 @@ async function _loadPostypeContent(textId, acc){
   const el = document.getElementById("postype-body");
   if(!el) return;
   if(!textId){
-    el.innerHTML = '<div class="postype-hint">본문 파일 ID가 없습니다.<br><small style="color:#bbb">에피소드의 <code>textId</code>에 Google Drive 파일 ID를 입력하세요.</small></div>';
+    el.innerHTML = '<div class="postype-hint">본문 URL이 없습니다.<br><small style="color:#bbb">에피소드의 <code>textId</code>에 GitHub raw URL을 입력하세요.</small></div>';
     return;
   }
   try{
-    const text = await fetchDriveText(textId);
+    const text = await fetchEpText(textId);
     el.innerHTML = `<div class="postype-text">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`;
   } catch(err){
     el.innerHTML = `<div class="postype-error"><strong>본문을 불러오지 못했습니다</strong><br><pre>${err.message}</pre></div>`;
@@ -1717,16 +1715,29 @@ window.openChar = function(id){ S.activeChar=id; S.view="chardetail"; render(); 
 window.closeChar = function(){ S.activeChar=null; S.view="charlist"; renderCharList(); };
 
 
-/* ── Sheets 불러오기 ── */
+/* ── Sheets 불러오기 (공개 CSV — API 키 불필요) ── */
 async function loadEpDataFromSheets(){
   try{
-    // A:F 전체 범위 읽기 (헤더 포함)
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/episodes!A:F?key=${DRIVE_API_KEY}`;
+    // 시트를 "링크가 있는 모든 사용자 → 뷰어"로 공개하면 API 키 없이 CSV로 읽을 수 있습니다.
+    // gid=0 은 첫 번째 시트. 다른 시트라면 해당 gid 값으로 변경하세요.
+    const url = `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/export?format=csv&gid=0`;
     const res = await fetch(url);
-    if(!res.ok) throw new Error("Sheets fetch 실패 " + res.status);
-    const json = await res.json();
-    const rows = json?.values;
-    if(!rows || rows.length < 2) return false;
+    if(!res.ok) throw new Error("CSV fetch 실패 " + res.status);
+    const csv = await res.text();
+
+    // CSV 파싱
+    const rows = csv.trim().split("\n").map(r=>{
+      // 쉼표 구분, 큰따옴표 처리
+      const cols=[];let cur="",inQ=false;
+      for(const ch of r){
+        if(ch==='"'){inQ=!inQ;}
+        else if(ch===','&&!inQ){cols.push(cur.trim());cur="";}
+        else cur+=ch;
+      }
+      cols.push(cur.trim());
+      return cols;
+    });
+    if(rows.length < 2) return false;
 
     // 프로젝트 이름 → ID 매핑
     const projMap = {
@@ -1737,18 +1748,16 @@ async function loadEpDataFromSheets(){
       "biz-oc-doll":    "biz-oc-doll",
     };
 
-    // 날짜 정규화: "2026. 3. 16" → "2026-03-16"
+    // 날짜 정규화
     function normalizeDate(v){
       if(!v) return null;
-      // 이미 YYYY-MM-DD 형식
       if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-      // "2026. 3. 16" 형식
       const m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
       if(m) return `${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
       return null;
     }
 
-    // 데이터 파싱 (1행은 헤더라 건너뜀)
+    // 데이터 파싱 (1행 헤더 건너뜀)
     const data = {};
     rows.slice(1).forEach(row => {
       const projName = (row[0]||"").trim();
@@ -1756,7 +1765,6 @@ async function loadEpDataFromSheets(){
       const epId     = (row[3]||"").toString().trim();
       const status   = (row[4]||"").trim();
       const date     = (row[5]||"").trim();
-      // 빈 행 스킵
       if(!projName || !volId || !epId) return;
       const pid = projMap[projName];
       if(!pid) return;
@@ -1764,10 +1772,7 @@ async function loadEpDataFromSheets(){
       const eid = parseInt(epId);
       if(isNaN(vid) || isNaN(eid)) return;
       const k = `${pid}_${vid}_${eid}`;
-      data[k] = {
-        status: status || "예정",
-        date:   normalizeDate(date)
-      };
+      data[k] = { status: status || "예정", date: normalizeDate(date) };
     });
 
     // VOLUMES에 반영
@@ -1783,7 +1788,7 @@ async function loadEpDataFromSheets(){
 
     return true;
   }catch(e){
-    console.warn("Sheets 불러오기 실패:", e.message);
+    console.warn("Sheets CSV 불러오기 실패:", e.message);
     return false;
   }
 }
