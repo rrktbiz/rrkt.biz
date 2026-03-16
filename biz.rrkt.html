@@ -166,12 +166,39 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 body.nav-pinned #nav-backdrop{display:none!important}
 
 /* ── HOME ── */
-.home-page{padding:28px 32px;max-width:900px;margin:0 auto}
+.home-page{padding:28px 32px;max-width:1100px;margin:0 auto}
 .home-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
 .home-logo-big{font-size:28px;font-weight:700;color:#111;letter-spacing:-.04em}
 .home-clock{font-size:28px;font-weight:300;color:var(--tx2);letter-spacing:.02em;font-variant-numeric:tabular-nums}
-.home-body{display:grid;grid-template-columns:1fr 260px;gap:24px;margin-bottom:24px}
-.home-illust{background:#e8e8e8;border:1px solid var(--bd);border-radius:12px;min-height:340px;display:flex;align-items:center;justify-content:center;color:var(--tx3);font-size:12px;font-weight:500;letter-spacing:1px}
+/* 3-column: about | recent-work | right-panel */
+.home-body{display:grid;grid-template-columns:220px 1fr 260px;gap:18px;align-items:start}
+/* ── About card (left) ── */
+.home-about-card{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.home-about-card-hd{padding:8px 12px;border-bottom:1px solid var(--bd);font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
+.home-about-avatar-wrap{width:100%;padding:16px;display:flex;justify-content:center;background:var(--bg)}
+.home-about-popart{width:160px;height:160px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 4px 20px #0003,0 0 0 3px #111}
+.home-about-info{padding:12px 14px 14px}
+.home-about-name{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:5px;text-align:center}
+.home-about-bio{font-size:10px;color:var(--tx3);line-height:1.6;text-align:center}
+.home-about-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+.home-about-tag{font-size:8px;padding:2px 6px;border-radius:10px;background:var(--bg);border:1px solid var(--bd);color:var(--tx3)}
+/* ── Recent work panel (center) ── */
+.home-recent-panel{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.home-recent-panel-hd{padding:10px 14px 9px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.home-recent-panel-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
+.home-recent-body{padding:10px}
+.home-recent-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.home-r-item{padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-left-width:3px;border-radius:7px;cursor:pointer;transition:all .12s}
+.home-r-item:hover{background:color-mix(in srgb,var(--bd) 30%,var(--bg));transform:translateX(2px)}
+.home-r-top{display:flex;justify-content:space-between;margin-bottom:4px;align-items:center}
+.home-r-proj{font-size:9px;font-weight:600}.home-r-date{font-size:9px;color:var(--tx3)}
+.home-r-title{font-size:11px;color:var(--tx2);line-height:1.4}
+.home-r-status{font-size:8px;font-weight:600;margin-top:4px;padding:1px 5px;border-radius:3px;display:inline-block}
+.home-r-status.done{background:#ffe4e4;color:#c0392b}
+.home-r-status.wip{background:#fff9e0;color:#d4a017}
+.home-r-status.plan{background:var(--bg);color:var(--tx3);border:1px solid var(--bd)}
+.home-r-empty{padding:28px;text-align:center;font-size:11px;color:var(--tx3)}
+/* ── Right column ── */
 .home-right{display:flex;flex-direction:column;gap:14px}
 .home-mini-cal{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
 .hmc-head{padding:10px 14px 8px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
@@ -195,21 +222,13 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .hw-stat-l{font-size:11px;color:var(--tx2)}.hw-stat-n{font-size:13px;font-weight:700;color:var(--tx)}
 .home-twitter-btn{display:flex;align-items:center;gap:8px;padding:11px 14px;background:#000;color:#fff;border-radius:10px;border:none;font-size:12px;font-weight:500;cursor:pointer;width:100%;justify-content:center}
 .home-twitter-btn:hover{background:#1a1a1a}
+/* legacy - kept for safety */
 .home-about{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
 .home-about-hd{padding:10px 14px 8px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
 .home-about-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .home-about-avatar{width:48px;height:48px;border-radius:50%;border:1px solid var(--bd);background:linear-gradient(135deg,#e8e8e8,#d0d0d0);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .home-about-row{display:flex;gap:12px;align-items:flex-start}
-.home-about-name{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px}
-.home-about-bio{font-size:11px;color:var(--tx2);line-height:1.65}
-.home-about-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
-.home-about-tag{font-size:9px;padding:2px 7px;border-radius:10px;background:var(--bg);border:1px solid var(--bd);color:var(--tx3)}
 .home-recent-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
-.home-recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
-.home-r-item{padding:10px 12px;background:var(--sb);border:1px solid var(--bd);border-left-width:3px;border-radius:7px}
-.home-r-top{display:flex;justify-content:space-between;margin-bottom:3px}
-.home-r-proj{font-size:9px;font-weight:600}.home-r-date{font-size:9px;color:var(--tx3)}
-.home-r-title{font-size:11px;color:var(--tx2)}
 
 /* ── CALENDAR ── */
 .cal-page{padding:24px 20px 28px;max-width:calc(100% - 160px);margin:0 auto}
@@ -460,6 +479,8 @@ body.nav-pinned #nav-backdrop{display:none!important}
   #content{margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px)}
   .topbar-right{gap:4px}
   .home-body{grid-template-columns:1fr}
+  .home-about-card{max-width:100%}
+  .home-recent-grid{grid-template-columns:1fr}
   .cal-page{padding:16px 10px 20px;max-width:100%}
   .cal-layout{grid-template-columns:1fr}
   .ep-board-head,.ep-row{grid-template-columns:28px 1fr 52px}
@@ -635,7 +656,7 @@ const PROJECTS = [
     subType:"default",
     twitterUrl:"https://twitter.com/your_handle",
     intro:"혈액형이 운명을 결정하는 세계. 전학 온 주인공이 숨겨진 비밀과 마주하며 성장하는 다크 판타지 학원물입니다. 권력, 혈통, 그리고 그 너머의 진실을 쫓아가는 이야기.",
-    tags:["웹소설","판타지","학원","액션","다크"]
+    tags:["다크판타지","학원물","액션","병맛개그","소년만화","뉴트로"]
   },
   {
     id:"biz-oc-doll",
@@ -644,7 +665,7 @@ const PROJECTS = [
     keepSub:true, landOnIntro:true,
     subType:"doll",
     intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 프로젝트. .",
-    tags:["웹툰","판타지","OC","자캐","드라마"]
+    tags:["비주얼게임","판타지","OC","자캐","드라마"]
   },
   {
     id:"x-project",
@@ -653,8 +674,8 @@ const PROJECTS = [
     keepSub:true, landOnIntro:true,
     subType:"youtube",
     youtubeUrl:"https://youtube.com/@your_channel",
-    intro:"유튜브 중심 SF 콘텐츠 프로젝트. 커버곡과 오리지널 영상으로 구성된 멀티미디어 세계관.",
-    tags:["웹툰","SF","음악","유튜브"]
+    intro:"유투브 캐릭터.",
+    tags:["음악","유튜브"]
   },
 ];
 
@@ -685,7 +706,7 @@ const VOLUMES = {
     ]},
     {id:2, label:"[웹소설]블러드하이스쿨 ~류오가편~", sub:"2부", grad:"150deg,#1a0010,#6b0030,#c0304a", type:"웹소설", tags:["판타지","미스터리"],
      coverId:null,
-     synopsis:"류오가 줄거리 요약좀 ㅠ.",
+     synopsis:"류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.",
      episodes:[
       {id:1,  title:"1화",  date:null, status:"예정", textId:null},
       {id:2,  title:"2화",  date:null, status:"예정", textId:null},
@@ -702,7 +723,7 @@ const VOLUMES = {
     ]},
     {id:3, label:"[웹소설]블러드하이스쿨 3부", sub:"3부", grad:"150deg,#1a0000,#700000,#aa2020", type:"웹소설", tags:["판타지","액션"],
      coverId:null,
-     synopsis:"최종 결전을 향해 달려가는 3부의 이야기. 준비 중.",
+     synopsis:"이제 순진하지만은 않은 쿠로. -새로운 종족이 나타난다.",
      episodes:[
       {id:15, title:"미공개", date:null, status:"예정", textId:null},
     ]},
@@ -771,15 +792,15 @@ function buildWorkLog(){
     (VOLUMES[pid]||[]).forEach(v=>v.episodes.forEach(e=>{
       if(!e.date)return;
       if(!WORK_LOG[e.date])WORK_LOG[e.date]=[];
-      WORK_LOG[e.date].push({proj:proj.label,title:e.title,status:e.status,acc:proj.acc});
+      WORK_LOG[e.date].push({proj:proj.label,title:e.title,status:e.status,acc:proj.acc,projId:pid,volId:v.id,epId:e.id});
     }));
   });
   const dollProj = PROJECTS.find(p=>p.id==="biz-oc-doll");
   const dv = VOLUMES["biz-oc-doll"];
-  Object.values(dv.episodes).forEach(eps=>eps.forEach(e=>{
+  Object.entries(dv.episodes).forEach(([catId,eps])=>eps.forEach(e=>{
     if(!e.date)return;
     if(!WORK_LOG[e.date])WORK_LOG[e.date]=[];
-    WORK_LOG[e.date].push({proj:dollProj.label,title:e.title,status:e.status,acc:dollProj.acc});
+    WORK_LOG[e.date].push({proj:dollProj.label,title:e.title,status:e.status,acc:dollProj.acc,projId:"biz-oc-doll",dollCatId:catId,epId:e.id});
   }));
 }
 buildWorkLog();
@@ -1090,7 +1111,63 @@ function renderHome(){
     const dot=hasW?WORK_LOG[ds_][0].acc:null;
     miniCells+=`<div class="${cls}"><span>${d}</span>${dot?`<div class="hmc-dot" style="background:${dot}"></div>`:""}</div>`;
   }
-  const recent=Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w}))).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
+  const recent=Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w}))).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
+
+  /* ── Pop-art avatar SVG ── */
+  const popArtSVG=`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+    <defs>
+      <pattern id="hdots" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+        <circle cx="4" cy="4" r="1.4" fill="#0002"/>
+      </pattern>
+      <clipPath id="circClip"><circle cx="100" cy="100" r="100"/></clipPath>
+    </defs>
+    <circle cx="100" cy="100" r="100" fill="#fff9e6"/>
+    <circle cx="100" cy="100" r="100" fill="url(#hdots)"/>
+    <!-- WOW! - starburst top-center -->
+    <g clip-path="url(#circClip)">
+      <!-- WOW starburst -->
+      <polygon points="100,8 106,28 124,18 116,36 136,32 124,48 144,50 128,62 144,70 126,74 136,90 118,86 116,106 104,92 96,106 94,86 76,90 86,74 68,70 84,62 68,50 88,48 76,32 96,36 88,18 106,28" fill="#FFD700" stroke="#111" stroke-width="2.2" stroke-linejoin="round"/>
+      <text x="100" y="56" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="16" font-weight="900" fill="#111" letter-spacing="1">WOW!</text>
+      <!-- COOL speech bubble - right -->
+      <rect x="118" y="90" width="72" height="32" rx="7" fill="#e63030" stroke="#111" stroke-width="2.2"/>
+      <polygon points="130,120 126,136 140,122" fill="#e63030" stroke="#111" stroke-width="2"/>
+      <text x="154" y="111" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="15" font-weight="900" fill="#FFD700" letter-spacing="1">COOL!</text>
+      <!-- HEY bubble - left -->
+      <ellipse cx="42" cy="118" rx="34" ry="22" fill="#ff7a00" stroke="#111" stroke-width="2.2"/>
+      <polygon points="52,136 44,154 64,138" fill="#ff7a00" stroke="#111" stroke-width="2"/>
+      <text x="42" y="123" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="17" font-weight="900" fill="#fff" letter-spacing="1">HEY</text>
+      <!-- OK square bubble - bottom-center -->
+      <rect x="60" y="148" width="52" height="34" rx="6" fill="#00bfa5" stroke="#111" stroke-width="2.2"/>
+      <polygon points="74,148 70,134 82,146" fill="#00bfa5" stroke="#111" stroke-width="2"/>
+      <text x="86" y="172" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="20" font-weight="900" fill="#FFD700" letter-spacing="2">OK</text>
+      <!-- BOOM text - bottom-right -->
+      <text x="153" y="175" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="16" font-weight="900" fill="#e63030" stroke="#111" stroke-width="3" paint-order="stroke" letter-spacing="1">BOOM!</text>
+      <!-- small stars -->
+      <text x="20" y="90" font-size="14" fill="#FFD700" stroke="#111" stroke-width="1" paint-order="stroke">★</text>
+      <text x="168" y="44" font-size="10" fill="#ff7a00" stroke="#111" stroke-width="1" paint-order="stroke">✦</text>
+      <text x="14" y="155" font-size="9" fill="#00bfa5">✦</text>
+      <text x="176" y="145" font-size="10" fill="#FFD700" stroke="#111" stroke-width="1" paint-order="stroke">★</text>
+    </g>
+    <circle cx="100" cy="100" r="99" fill="none" stroke="#111" stroke-width="3"/>
+  </svg>`;
+
+  const recentCards = recent.length===0
+    ? `<div class="home-r-empty">작업 기록이 없습니다</div>`
+    : recent.map(w=>{
+        const stCls=stClass(w.status);
+        const navCall = w.projId==="biz-oc-doll"
+          ? `goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
+          : `goRecentWork('${w.projId}',${w.volId},${w.epId},null)`;
+        return `<div class="home-r-item" style="border-left-color:${w.acc}" onclick="${navCall}" title="${w.title} 바로가기">
+          <div class="home-r-top">
+            <span class="home-r-proj" style="color:${w.acc}">${w.proj}</span>
+            <span class="home-r-date">${w.date.slice(5)}</span>
+          </div>
+          <div class="home-r-title">${w.title}</div>
+          <span class="home-r-status ${stCls}">${w.status}</span>
+        </div>`;
+      }).join("");
+
   document.getElementById("content").innerHTML=`
     <div class="home-page">
       <div class="home-header">
@@ -1098,108 +1175,34 @@ function renderHome(){
         <div id="home-clock" class="home-clock">${timeStr}</div>
       </div>
       <div class="home-body">
-        <div class="home-illust" style="flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:20px;overflow:hidden;background:var(--sb)">
-          <div style="width:200px;height:200px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 8px 32px #e0c0f040,0 2px 8px #0000000d">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-              <defs>
-                <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
-                  <stop offset="0%" stop-color="#fde8f7"/>
-                  <stop offset="100%" stop-color="#d4b8f0"/>
-                </radialGradient>
-                <radialGradient id="skinGrad" cx="50%" cy="40%" r="60%">
-                  <stop offset="0%" stop-color="#fff0e8"/>
-                  <stop offset="100%" stop-color="#f8d8c8"/>
-                </radialGradient>
-                <radialGradient id="cheekL" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#ffaacc" stop-opacity="0.7"/>
-                  <stop offset="100%" stop-color="#ffaacc" stop-opacity="0"/>
-                </radialGradient>
-                <radialGradient id="cheekR" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#ffaacc" stop-opacity="0.7"/>
-                  <stop offset="100%" stop-color="#ffaacc" stop-opacity="0"/>
-                </radialGradient>
-              </defs>
-              <!-- background -->
-              <circle cx="100" cy="100" r="100" fill="url(#bgGrad)"/>
-              <!-- floating sparkles bg -->
-              <circle cx="28" cy="38" r="4" fill="#fff" opacity="0.7"/>
-              <circle cx="170" cy="30" r="3" fill="#ffccee" opacity="0.8"/>
-              <circle cx="160" cy="155" r="5" fill="#fff" opacity="0.5"/>
-              <circle cx="36" cy="158" r="3" fill="#e8d0ff" opacity="0.8"/>
-              <!-- stars -->
-              <text x="22" y="58" font-size="14" fill="#f0a0d0" opacity="0.85">✦</text>
-              <text x="155" y="52" font-size="10" fill="#c8a0f0" opacity="0.9">✦</text>
-              <text x="148" y="168" font-size="12" fill="#f9c0e0" opacity="0.85">✦</text>
-              <text x="32" y="170" font-size="9" fill="#d0b8f8" opacity="0.8">✦</text>
-              <!-- hair back -->
-              <ellipse cx="100" cy="94" rx="46" ry="50" fill="#4a2460"/>
-              <!-- neck -->
-              <rect x="88" y="134" width="24" height="20" rx="8" fill="url(#skinGrad)"/>
-              <!-- shoulder/body -->
-              <ellipse cx="100" cy="168" rx="42" ry="22" fill="#c084e0" opacity="0.9"/>
-              <!-- collar detail -->
-              <path d="M82 160 Q100 150 118 160 Q110 175 100 172 Q90 175 82 160Z" fill="#e8b0f8" opacity="0.7"/>
-              <!-- face -->
-              <ellipse cx="100" cy="112" rx="38" ry="40" fill="url(#skinGrad)"/>
-              <!-- hair front top -->
-              <ellipse cx="100" cy="76" rx="42" ry="22" fill="#4a2460"/>
-              <!-- hair strands -->
-              <path d="M58 86 Q50 100 54 118" stroke="#4a2460" stroke-width="9" stroke-linecap="round" fill="none"/>
-              <path d="M142 86 Q150 100 146 118" stroke="#4a2460" stroke-width="9" stroke-linecap="round" fill="none"/>
-              <!-- hair highlight -->
-              <ellipse cx="88" cy="80" rx="10" ry="5" fill="#7a4490" opacity="0.5" transform="rotate(-15 88 80)"/>
-              <!-- ears -->
-              <ellipse cx="62" cy="114" rx="7" ry="9" fill="url(#skinGrad)"/>
-              <ellipse cx="138" cy="114" rx="7" ry="9" fill="url(#skinGrad)"/>
-              <ellipse cx="62" cy="114" rx="4" ry="5.5" fill="#f5c5b5" opacity="0.5"/>
-              <ellipse cx="138" cy="114" rx="4" ry="5.5" fill="#f5c5b5" opacity="0.5"/>
-              <!-- eyes white -->
-              <ellipse cx="86" cy="111" rx="11" ry="12" fill="#fff"/>
-              <ellipse cx="114" cy="111" rx="11" ry="12" fill="#fff"/>
-              <!-- iris -->
-              <circle cx="86" cy="113" r="8" fill="#6a2890"/>
-              <circle cx="114" cy="113" r="8" fill="#6a2890"/>
-              <!-- iris shine -->
-              <circle cx="86" cy="113" r="5.5" fill="#9048c0"/>
-              <circle cx="114" cy="113" r="5.5" fill="#9048c0"/>
-              <!-- pupil -->
-              <circle cx="86" cy="113" r="3.5" fill="#1a0830"/>
-              <circle cx="114" cy="113" r="3.5" fill="#1a0830"/>
-              <!-- eye highlights -->
-              <circle cx="89" cy="109" r="2.2" fill="#fff" opacity="0.95"/>
-              <circle cx="117" cy="109" r="2.2" fill="#fff" opacity="0.95"/>
-              <circle cx="84" cy="116" r="1.2" fill="#fff" opacity="0.6"/>
-              <circle cx="112" cy="116" r="1.2" fill="#fff" opacity="0.6"/>
-              <!-- lower lashes -->
-              <path d="M78 121 Q82 125 86 124" stroke="#4a2460" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
-              <path d="M114 124 Q118 125 122 121" stroke="#4a2460" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
-              <!-- upper lashes -->
-              <path d="M75 106 Q86 101 97 106" stroke="#2a1040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-              <path d="M103 106 Q114 101 125 106" stroke="#2a1040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-              <!-- eyebrows -->
-              <path d="M76 101 Q86 97 96 101" stroke="#4a2460" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <path d="M104 101 Q114 97 124 101" stroke="#4a2460" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <!-- cheeks -->
-              <ellipse cx="74" cy="122" rx="10" ry="6" fill="url(#cheekL)"/>
-              <ellipse cx="126" cy="122" rx="10" ry="6" fill="url(#cheekR)"/>
-              <!-- nose -->
-              <path d="M98 122 Q100 126 102 122" stroke="#d0a090" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
-              <!-- mouth -->
-              <path d="M91 131 Q100 138 109 131" stroke="#e07090" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <path d="M94 132 Q100 136 106 132" fill="#f090b0" opacity="0.4"/>
-              <!-- tiny star accessories -->
-              <text x="148" y="96" font-size="11" fill="#f0d020" opacity="0.9">★</text>
-              <text x="42" y="100" font-size="8" fill="#e8d030" opacity="0.7">★</text>
-              <!-- floating hearts -->
-              <text x="150" y="76" font-size="13" fill="#ff80aa" opacity="0.8">♡</text>
-              <text x="30" y="80" font-size="10" fill="#d0a0f0" opacity="0.7">♡</text>
-            </svg>
+        <!-- ① About card (left / red box) -->
+        <div class="home-about-card">
+          <div class="home-about-card-hd">About</div>
+          <div class="home-about-avatar-wrap">
+            <div class="home-about-popart">${popArtSVG}</div>
           </div>
-          <div style="text-align:center">
-            <div class="home-about-name" style="font-size:16px;margin-bottom:10px">biz.rrkt</div>
-            <div class="home-about-bio" style="font-size:12px;max-width:340px;color:var(--tx3)"></div>
+          <div class="home-about-info">
+            <div class="home-about-name">biz.rrkt</div>
+            <div class="home-about-bio">창작 / 글 / 그림<br>웹소설 · 웹툰 · OC</div>
+            <div class="home-about-tags">
+              <span class="home-about-tag">다크판타지</span>
+              <span class="home-about-tag">학원물</span>
+              <span class="home-about-tag">OC</span>
+              <span class="home-about-tag">웹소설</span>
+            </div>
           </div>
         </div>
+        <!-- ② Recent work panel (center / blue box) -->
+        <div class="home-recent-panel">
+          <div class="home-recent-panel-hd">
+            <span class="home-recent-panel-lbl">최근 작업</span>
+            <span style="font-size:9px;color:var(--tx3)">클릭하면 해당 작업으로 이동</span>
+          </div>
+          <div class="home-recent-body">
+            <div class="home-recent-grid">${recentCards}</div>
+          </div>
+        </div>
+        <!-- ③ Right column -->
         <div class="home-right">
           <div class="home-mini-cal">
             <div class="hmc-head"><span class="hmc-month">${new Date(y,m,1).toLocaleDateString("ko-KR",{year:"numeric",month:"long"})}</span><div class="hmc-nav"><button class="hmc-btn" onclick="miniPrev()">&#8249;</button><button class="hmc-btn" onclick="miniNext()">&#8250;</button></div></div>
@@ -1213,8 +1216,6 @@ function renderHome(){
           <a href="https://twitter.com/your_handle" target="_blank" class="home-twitter-btn">&#120143; 작가 트위터</a>
         </div>
       </div>
-      <div class="home-recent-lbl">최근 작업</div>
-      <div class="home-recent-grid">${recent.map(w=>`<div class="home-r-item" style="border-left-color:${w.acc}"><div class="home-r-top"><span class="home-r-proj" style="color:${w.acc}">${w.proj}</span><span class="home-r-date">${w.date.slice(5)}</span></div><div class="home-r-title">${w.title}</div></div>`).join("")}</div>
     </div>`;
 }
 
@@ -1510,6 +1511,17 @@ function closeEpPickerBtn(){document.getElementById("ep-picker-modal").classList
 /* ── HANDLERS ── */
 function goHome(){S.view="home";S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;render();}
 function goCal(){S.view="calendar";S.activeProj=null;closeMobMenu();render();}
+
+function goRecentWork(projId,volId,epId,dollCatId){
+  S.activeProj=projId;S.activeEp=epId;
+  if(projId==="biz-oc-doll"){
+    S.activeDollCat=dollCatId||null;
+    S.activeVol=null;
+  } else {
+    S.activeVol=volId;S.activeDollCat=null;
+  }
+  S.view="content";render();
+}
 
 function clickProj(id){
   if(S.activeProj!==id){S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;}
