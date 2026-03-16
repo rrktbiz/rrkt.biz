@@ -666,7 +666,7 @@ const VOLUMES = {
      coverId:null, // ← Drive 커버 이미지 파일 ID
      synopsis:"평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.",
      episodes:[
-      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:"https://gist.githubusercontent.com/your_github/gist_id_1화/raw/ep1.txt"},
+      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:"https://gist.githubusercontent.com/biz202099-hue/976e501ae71e033cffbd350632da6352/raw/fc8130d66a75087a72b09c85cab32aca6a84944a/gistfile1.txt"},
       {id:2,  title:"2화 미술실의 마리오네트",       date:null, status:"예정", textId:"https://gist.githubusercontent.com/your_github/gist_id_2화/raw/ep2.txt"},
       {id:3,  title:"3화 버려진 성지의 보석",        date:null, status:"예정", textId:null},
       {id:4,  title:"4화 흑마법사의 영원한 1학년",   date:null, status:"예정", textId:null},
@@ -832,6 +832,7 @@ function closeNav(){
 }
 function showSubPanel(projId){
   clearTimeout(_navHideTimer);
+  if(projId==='x-project') return;
   S.hoveredProj=projId;
   const sp=document.getElementById("sub-panel");
   renderSubPanelContent(projId);
@@ -874,7 +875,7 @@ function renderNavItems(){
     ${PROJECTS.map(p=>`
       <button class="nav-proj-item ${S.activeProj===p.id?"active":""}"
         style="--acc:${p.acc}"
-        onmouseenter="showSubPanel('${p.id}')"
+        onmouseenter="${p.id!=='x-project'?`showSubPanel('${p.id}')`:''}" 
         onclick="clickProj('${p.id}')">
         <div class="nav-proj-dot" style="background:${p.acc}"></div>
         ${p.label}
@@ -940,36 +941,10 @@ function renderDefaultSub(proj){
 }
 
 function renderYtSub(proj){
-  const vols=VOLUMES[proj.id]||[];
-  const allEps=vols.flatMap(v=>v.episodes);
-  const cnt=s=>allEps.filter(e=>e.status===s).length;
-  const stClr={"완료":"#c0392b","작업중":"#F9CB4C","예정":"#999"};
-  const hasCover=vols.some(v=>v.type==="커버곡");
-  const hasOther=vols.some(v=>v.type==="그 외");
-  const tabs=["ALL",...(hasCover?["커버곡"]:[]),(hasOther?["그 외"]:[])].flat();
-  const filtered=S.subTab==="ALL"?vols:vols.filter(v=>v.type===S.subTab);
   document.getElementById("sm-inner").innerHTML=`
     ${_subHeader(proj)}
     <button class="sm-intro-link" onclick="goIntro('${proj.id}')">프로젝트 소개글 &#9654;</button>
-    <a href="${proj.youtubeUrl||"#"}" target="_blank" class="sm-yt-link" style="text-decoration:none">&#9654; YouTube 채널 바로가기</a>
-    <div class="sm-stats">
-      ${["완료","작업중","예정"].map(s=>`<div class="sm-stat"><div class="sm-stat-n" style="color:${stClr[s]}">${cnt(s)}</div><div class="sm-stat-l">${s}</div></div>`).join("")}
-    </div>
-    <div class="sm-tabs">
-      ${tabs.map(t=>`<button class="sm-tab ${S.subTab===t?"active":""}" style="--tacc:${proj.acc}" onclick="setSubTabFn('${t}')">${t}</button>`).join("")}
-    </div>
-    <div class="vol-grid">
-      ${filtered.map(v=>{
-        const wip=v.episodes.some(e=>e.status==="작업중");
-        const plan=v.episodes.every(e=>e.status==="예정");
-        const sel=S.activeVol===v.id&&S.activeProj===proj.id;
-        const badge=wip?`<div class="vol-badge" style="background:${proj.acc};color:#fff">UP</div>`:plan?`<div class="vol-badge" style="background:#e0e0e0;color:#999">TBD</div>`:"";
-        return `<div class="vol-card" onclick="clickVol('${proj.id}',${v.id})" style="${sel?`outline:2px solid ${proj.acc};border-radius:8px`:""}">
-          <div class="vol-thumb yt" style="background:linear-gradient(${v.grad})">${badge}<div class="vol-type-chip">${v.type}</div></div>
-          <div class="vol-title">${v.label}</div>
-        </div>`;
-      }).join("")}
-    </div>`;
+    <a href="${proj.youtubeUrl||"#"}" target="_blank" class="sm-yt-link" style="text-decoration:none">&#9654; YouTube 채널 바로가기</a>`;
 }
 
 function renderDollSub(proj){
