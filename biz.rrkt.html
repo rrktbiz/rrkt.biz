@@ -1755,6 +1755,45 @@ function renderEpList(){
     vol=vols.find(v=>v.id===S.activeVol);if(!vol)return;
     eps=vol.episodes;synopsis=vol.synopsis||"";
   }
+
+  // 웹툰 타입: 16:9 썸네일 리스트
+  if(vol.type==="웹툰"){
+    document.getElementById("content").innerHTML=`
+    <div style="background:var(--sb);padding-top:8px">
+    <div class="vol-banner">
+      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad})"></div>
+      <div style="flex:1">
+        <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type||""}</div>
+        <div class="vb-title">${vol.label||vol.sub}</div>
+        <div class="vb-sub">${eps.length}화 수록</div>
+        ${synopsis?`<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div><div class="vb-synopsis-text">${synopsis}</div></div>`:`<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div><div class="vb-synopsis-text" style="color:#ccc">줄거리를 입력하세요</div></div>`}
+      </div>
+    </div>
+    </div>
+    <div style="display:flex;flex-direction:column;width:calc(100% - 40px);max-width:700px;margin:0 auto;padding-bottom:24px">
+      ${eps.map((e,i)=>{
+        const stCls=stClass(e.status);
+        const canRead=e.status==="완료";
+        const wipStyle=e.status==="작업중"?`background:#F9F4CA;color:#F9CB4C`:"";
+        return `<div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--bd);${i===0?"border-top:1px solid var(--bd);":""}cursor:${canRead?"pointer":"default"}" ${canRead?`onclick="clickEp(${e.id})" onmouseenter="this.style.background='var(--bg)'" onmouseleave="this.style.background=''"`:""}> 
+          <div style="width:120px;aspect-ratio:16/9;flex-shrink:0;border-radius:6px;background:linear-gradient(${vol.grad});border:1px solid var(--bd);position:relative;overflow:hidden">
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 6px 4px;background:linear-gradient(to top,#000000a0,transparent)">
+              <span style="font-size:8px;font-weight:600;color:#ffffffcc">EP.${e.id}</span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:500;color:${canRead?"var(--tx)":"var(--tx3)"};line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <span style="font-size:10px;color:var(--tx3)">${e.date||"—"}</span>
+            <span class="ep-status-badge ${stCls}" style="${wipStyle}">${e.status}</span>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>`;
+    return;
+  }
+
   document.getElementById("content").innerHTML=`
     <div style="background:var(--sb);padding-top:8px">
     <div class="vol-banner">
