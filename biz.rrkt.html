@@ -162,7 +162,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 /* ── CONTENT ── */
 #content{display:block;margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);transition:margin-top .28s ease,height .28s ease;padding-bottom:env(safe-area-inset-bottom,0px)}
-#nav-backdrop{display:none;position:fixed;inset:0;top:48px;z-index:150}
+#nav-backdrop{display:none;position:fixed;inset:0;top:48px;z-index:150;pointer-events:none}
 #nav-backdrop.show{display:block}
 body.nav-pinned #nav-backdrop{display:none!important}
 
@@ -2138,6 +2138,11 @@ function miniNext(){if(S.homeMiniM===11){S.homeMiniM=0;S.homeMiniY++;}else S.hom
 document.getElementById("menu-toggle").addEventListener("click",function(e){
   if(window.innerWidth<=768){e.stopPropagation();toggleMobile();return;}
   toggleNav();
+});
+
+/* 콘텐츠 클릭 시 메뉴 닫기 (backdrop 대체) */
+document.getElementById("content").addEventListener("click",function(){
+  if(!S.navPinned) closeNav();
 });
 
 /* ─── CHARACTER DATA (200명) ─── */
