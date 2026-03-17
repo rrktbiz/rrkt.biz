@@ -387,6 +387,8 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .ep-row{display:grid;grid-template-columns:44px 1fr 90px auto;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
 .ep-row:last-child{border-bottom:none}
 .ep-row:hover{background:#ebebeb}
+.ep-row-locked{cursor:default;opacity:.5}
+.ep-row-locked:hover{background:transparent}
 .ep-num{font-size:11px;color:var(--tx3);font-weight:500}
 .ep-title-col{font-size:13px;color:var(--tx);display:flex;align-items:center;gap:7px}
 .ep-status-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0}
@@ -1740,7 +1742,8 @@ function renderEpList(){
         const pid=S.activeProj, vid=S.activeVol;
         const stCls=stClass(e.status);
         const wipStyle=e.status==="작업중"?`background:#F9F4CA;color:#F9CB4C`:"";
-        return `<div class="ep-row" onclick="clickEp(${e.id})">
+        const canRead=e.status==="완료";
+        return `<div class="ep-row${canRead?"":" ep-row-locked"}" ${canRead?`onclick="clickEp(${e.id})"`:""}>
           <span class="ep-num">${e.id}</span>
           <span class="ep-title-col">
             <span class="ep-title-text">${e.title}</span>
@@ -1973,7 +1976,13 @@ function goIntro(pid){
 function clickVol(pid,volId){
   S.activeProj=pid;S.activeVol=volId;S.activeEp=null;S.view="episodes";render();
 }
-function clickEp(epId){S.activeEp=epId;S.view="content";render();}
+function clickEp(epId){
+  const vols=VOLUMES[S.activeProj]||[];
+  const vol=vols.find?.(v=>v.id===S.activeVol);
+  const ep=vol?.episodes?.find(e=>e.id===epId);
+  if(ep&&ep.status!=="완료") return;
+  S.activeEp=epId;S.view="content";render();
+}
 function clickDollCat(catId){S.activeDollCat=catId;S.activeEp=null;S.view="episodes";render();}
 function goDollChar(){S.view="charlist";render();}
 function backToEps(){S.activeEp=null;S.view="episodes";render();}
