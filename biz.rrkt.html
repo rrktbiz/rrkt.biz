@@ -1167,15 +1167,9 @@ function hideSubPanel(){
   sp.classList.remove("visible");
   S.hoveredProj=null;
 }
-function onNavPanelLeave(){
-  if(S.navPinned)return;
-  _navHideTimer=setTimeout(()=>{ closeNav(); },200);
-}
-function onSubPanelEnter(){clearTimeout(_navHideTimer);}
-function onSubPanelLeave(){
-  if(S.navPinned)return;
-  _navHideTimer=setTimeout(()=>{ closeNav(); },200);
-}
+function onNavPanelLeave(){}
+function onSubPanelEnter(){}
+function onSubPanelLeave(){}
 function setPinned(v){
   S.navPinned=v;
   document.querySelector(".sm-pin-btn")?.classList.toggle("on",v);
