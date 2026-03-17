@@ -2928,10 +2928,7 @@ function rebuildWorkLog(){
 
     if(!isMenuOpen() && t.clientX <= EDGE_ZONE){
       openDrag = true;
-      var mob=getMob();
-      mob.style.transition='none';
-      mob.style.transform='translateX(-105%)';
-      mob.style.pointerEvents='none';
+      // 인라인 스타일은 실제 드래그가 확인될 때(touchmove)까지 건드리지 않음
     }
   }, {passive:true});
 
@@ -2943,7 +2940,13 @@ function rebuildWorkLog(){
 
     if(!dragging){
       if(Math.abs(dy) > Math.abs(dx) + 6) return;
-      if(openDrag  && dx >  6){ dragging=true; }
+      if(openDrag  && dx >  6){ 
+        dragging=true;
+        // 드래그 확정 시점에 인라인 스타일 설정
+        var mob2=getMob();
+        mob2.style.transition='none';
+        mob2.style.pointerEvents='none';
+      }
       else if(isMenuOpen() && dx < -6){ dragging=true; }
       else return;
     }
@@ -2963,7 +2966,15 @@ function rebuildWorkLog(){
 
   document.addEventListener('touchend', function(e){
     if(window.innerWidth > 768) return;
-    if(!dragging){ dragging=false; openDrag=false; return; }
+    if(!dragging){
+      // touchstart가 인라인 스타일을 설정했을 수 있으므로 반드시 초기화
+      var mob=getMob();
+      mob.style.transform='';
+      mob.style.transition='';
+      mob.style.pointerEvents='';
+      dragging=false; openDrag=false;
+      return;
+    }
 
     var dx  = lastX - startX;
     var dt  = Date.now() - lastT + 1;
