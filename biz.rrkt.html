@@ -559,22 +559,74 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-menu{
   display:none;
   position:fixed;top:48px;left:0;bottom:0;
-  width:280px;
+  width:130px;
   background:var(--sb);
   border-right:1px solid var(--bd);
   box-shadow:4px 0 24px #0000001a;
   z-index:300;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  transform:translateX(-290px);
-  transition:transform .24s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  transform:translateX(-105%);
+  transition:transform .24s cubic-bezier(.4,0,.2,1), width .22s cubic-bezier(.4,0,.2,1);
 }
-.mob-menu.open{display:block;transform:translateX(0)}
+.mob-menu.open{display:flex;transform:translateX(0)}
+/* 두 패널을 가로로 배치 */
+.mob-panel-wrap{
+  display:flex;
+  width:100%;
+  height:100%;
+}
+/* 1차 패널 */
+.mob-panel-1{
+  width:130px;min-width:120px;
+  height:100%;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  flex-shrink:0;
+  border-right:1px solid var(--bd);
+}
+/* 2차 패널 */
+.mob-panel-2{
+  width:200px;max-width:200px;flex-shrink:0;
+  height:100%;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:var(--sm,#fafafa);
+  display:none;
+}
+/* 1차 메뉴가 열린 상태에서 2차 패널 표시 */
+.mob-menu.show-sub{width:auto;max-width:340px}
+.mob-menu.show-sub .mob-panel-2{display:block}
+/* 2차 패널 헤더 */
+.mob-sub2-hd{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--bd);
+  position:sticky;top:0;background:var(--sm,#fafafa);z-index:2;
+}
+.mob-sub2-back{
+  background:transparent;border:none;
+  color:var(--tx2);font-size:18px;padding:0 6px 0 0;
+  cursor:pointer;line-height:1;flex-shrink:0;
+}
+.mob-sub2-back:hover{color:var(--tx)}
+.mob-sub2-title{font-size:15px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mob-sub2-x{background:transparent;border:none;color:var(--tx3);font-size:16px;padding:0 2px;cursor:pointer;line-height:1}
+.mob-sub2-x:hover{color:var(--tx)}
+
 .mob-backdrop{display:none;position:fixed;inset:0;top:48px;z-index:299;background:#0000003a}
 .mob-backdrop.show{display:block}
-.mob-nav-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 20px;background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--tx2);font-size:14px;font-weight:500;text-align:left;cursor:pointer}
+.mob-nav-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--tx2);font-size:12px;font-weight:500;text-align:left;cursor:pointer}
 .mob-nav-item:hover,.mob-nav-item.active{color:var(--tx);background:var(--bg)}
 .mob-nav-item .mob-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:10px}
+/* 1차 메뉴 프로젝트 아이템 — 단일 버튼(화살표 없음) */
+.mob-proj-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;padding:11px 14px;
+  background:transparent;border:none;border-bottom:1px solid var(--bd);
+  color:var(--tx2);font-size:12px;font-weight:500;text-align:left;cursor:pointer;
+  gap:8px;
+}
+.mob-proj-btn:hover{color:var(--tx);background:var(--bg)}
+.mob-proj-btn .mob-arr{font-size:12px;color:var(--tx3);flex-shrink:0}
+/* 기존 호환 (사용 안 하지만 오류 방지) */
 .mob-proj-row{display:flex;align-items:center;width:100%;border:none;border-bottom:1px solid var(--bd)}
 .mob-proj-name{flex:1;padding:13px 20px;background:transparent;border:none;color:var(--tx2);font-size:14px;font-weight:500;text-align:left;cursor:pointer}
 .mob-proj-name:hover{color:var(--tx)}
@@ -595,6 +647,20 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-lang-row{padding:10px 14px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--bd)}
 .mob-lang-btn{font-size:11px;font-weight:600;padding:5px 10px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx2)}
 .mob-lang-btn:hover{background:var(--tx);color:#fff}
+/* 2차 패널 컨텐츠 */
+.mob2-intro-link{display:flex;align-items:center;justify-content:space-between;margin:10px 12px 0;padding:10px 14px;background:#fff;color:var(--tx);border:1px solid var(--bd);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .12s}
+.mob2-intro-link:hover{background:var(--bg)}
+.mob2-vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 12px 20px}
+.mob2-vol-card{cursor:pointer;transition:opacity .12s}
+.mob2-vol-card:hover{opacity:.75}
+.mob2-vol-thumb{aspect-ratio:3/4;border-radius:7px;border:1px solid var(--bd);position:relative;overflow:hidden;margin-bottom:6px}
+.mob2-vol-badge{position:absolute;top:5px;right:5px;font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px}
+.mob2-vol-type{position:absolute;top:5px;left:5px;font-size:8px;font-weight:600;padding:2px 5px;border-radius:3px;background:#00000060;color:#fff}
+.mob2-vol-title{font-size:11px;font-weight:500;color:var(--tx);line-height:1.4}
+.mob2-progress{display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid var(--bd);margin-top:8px}
+.mob2-cat-list{display:flex;flex-direction:column;gap:8px;padding:10px 12px 20px}
+.mob2-cat-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#fff;border:1px solid var(--bd);border-radius:8px;cursor:pointer;transition:background .12s}
+.mob2-cat-item:hover{background:var(--bg)}
 @media(min-width:769px){.mob-menu,.mob-lang-row{display:none!important}}
 .postype-text{white-space:pre-wrap;word-break:keep-all;line-height:1.9;font-size:17px}
 @media(max-width:768px){.topbar-right{display:none!important}}
@@ -683,7 +749,14 @@ body{top:0!important}
 <div id="nav-backdrop" onclick="closeNav()"></div>
 
 <!-- MOBILE MENU -->
-<div class="mob-menu" id="mob-menu"></div>
+<div class="mob-menu" id="mob-menu">
+  <div class="mob-panel-wrap" id="mob-panel-wrap">
+    <!-- 1차 패널 -->
+    <div class="mob-panel-1" id="mob-panel-1"></div>
+    <!-- 2차 패널 -->
+    <div class="mob-panel-2" id="mob-panel-2"></div>
+  </div>
+</div>
 <div class="mob-backdrop" id="mob-backdrop" onclick="closeMobMenu()"></div>
 
 <!-- MAIN CONTENT -->
@@ -1516,8 +1589,8 @@ function renderDollSub(proj){
 function setSubTabFn(t){S.subTab=t;if(S.hoveredProj)renderSubPanelContent(S.hoveredProj);}
 
 /* ── MOBILE MENU ── */
-function renderMobMenu(){
-  const mob=document.getElementById("mob-menu");
+function renderMobPanel1(){
+  const p1=document.getElementById("mob-panel-1");
   let html="";
   // lang row
   html+=`<div class="mob-lang-row">
@@ -1527,68 +1600,168 @@ function renderMobMenu(){
     <button class="mob-lang-btn" onclick="setLang('ko')">KO</button>
   </div>`;
   // calendar
-  html+=`<button class="mob-nav-item" onclick="goCal();closeMobMenu()"><span style="display:flex;align-items:center;gap:8px"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0"><rect x="1" y="2.5" width="13" height="11.5" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 6h13" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 1v3M10.5 1v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="4" y="8.5" width="2" height="2" rx=".4" fill="currentColor"/><rect x="6.5" y="8.5" width="2" height="2" rx=".4" fill="currentColor"/><rect x="9" y="8.5" width="2" height="2" rx=".4" fill="currentColor"/></svg>작업 캘린더</span></button>`;
-  // projects
+  html+=`<button class="mob-nav-item" onclick="goCal();closeMobMenu()">
+    <span style="display:flex;align-items:center;gap:8px">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0"><rect x="1" y="2.5" width="13" height="11.5" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1 6h13" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 1v3M10.5 1v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="4" y="8.5" width="2" height="2" rx=".4" fill="currentColor"/><rect x="6.5" y="8.5" width="2" height="2" rx=".4" fill="currentColor"/><rect x="9" y="8.5" width="2" height="2" rx=".4" fill="currentColor"/></svg>
+      작업 캘린더
+    </span>
+  </button>`;
+  // projects — x-project는 바로 소개글, 나머지는 2차 패널
   PROJECTS.forEach(p=>{
-    const vols=VOLUMES[p.id];
-    const isArr=Array.isArray(vols);
-    let sub="";
-    // links
-    sub+=`<div class="mob-sub-links">`;
-    sub+=`<button class="mob-sub-link" onclick="goIntro('${p.id}');closeMobMenu()">소개글</button>`;
-    if(p.subType==="doll") sub+=`<button class="mob-sub-link" onclick="goDollChar();closeMobMenu()">캐릭터 일람</button>`;
-    if(p.subType==="youtube") sub+=`<a class="mob-sub-link" href="${p.youtubeUrl||"#"}" target="_blank">YouTube</a>`;
-    sub+=`</div>`;
-    // doll categories
-    if(p.subType==="doll"){
-      sub+=`<div style="display:flex;flex-direction:column;gap:8px;padding:10px 16px">`;
-      VOLUMES["biz-oc-doll"].categories.forEach(cat=>{
-        sub+=`<div class="mob-sub-card" onclick="clickDollCat('${cat.id}');closeMobMenu()">
-          <div style="padding:10px 14px;background:${cat.color}1a;border:1px solid ${cat.color}44;border-radius:7px;display:flex;align-items:center;gap:10px">
-            <div style="width:10px;height:10px;border-radius:50%;background:${cat.color};flex-shrink:0"></div>
-            <span style="font-size:13px;font-weight:600">${cat.label}</span>
-            <span style="margin-left:auto;font-size:11px;color:#aaa">${cat.count}개</span>
-          </div>
-        </div>`;
-      });
-      sub+=`</div>`;
+    if(p.id==='x-project'){
+      html+=`<button class="mob-proj-btn" style="color:${p.acc}" onclick="goIntro('${p.id}');closeMobMenu()">
+        <span style="display:flex;align-items:center;gap:10px">${p.label}</span>
+      </button>`;
+    } else {
+      html+=`<button class="mob-proj-btn" style="color:${p.acc}" onclick="mobShowSub('${p.id}')">
+        <span style="display:flex;align-items:center;gap:10px">${p.label}</span>
+        <span class="mob-arr">&#8250;</span>
+      </button>`;
     }
-    // vol list (array projects) — x-project 제외
-    if(isArr && vols && p.id !== 'x-project'){
-      sub+=`<div style="display:flex;flex-direction:column;gap:6px;padding:8px 16px 14px">`;
-      vols.forEach(v=>{
-        const isYt=p.subType==="youtube";
-        const thumbStyle=isYt?"width:78px;height:44px;":"width:44px;height:58px;";
-        sub+=`<div class="mob-sub-card" onclick="clickVol('${p.id}','${v.id}');closeMobMenu()">
-          <div style="display:flex;align-items:center;gap:12px;padding:9px 12px;background:#fff;border:1px solid var(--bd);border-radius:8px">
-            <div style="${thumbStyle}border-radius:5px;flex-shrink:0;background:linear-gradient(${v.grad})"></div>
-            <div style="font-size:12px;font-weight:600;color:var(--tx);line-height:1.4">${v.label}</div>
-          </div>
-        </div>`;
-      });
-      sub+=`</div>`;
-    }
-    html+=`<div>
-      <div class="mob-proj-row">
-        <button class="mob-proj-name" style="color:${p.acc}" onclick="clickProj('${p.id}');closeMobMenu()">${p.label}</button>
-        <button class="mob-proj-toggle" onclick="mobToggleSub('mob-sub-${p.id}')">▾</button>
-      </div>
-      <div class="mob-sub" id="mob-sub-${p.id}">${sub}</div>
-    </div>`;
   });
-  mob.innerHTML=html;
+  p1.innerHTML=html;
+}
+
+function mobShowSub(projId){
+  const p=PROJECTS.find(pr=>pr.id===projId);
+  if(!p) return;
+  // 2차 패널 내용 생성
+  const p2=document.getElementById("mob-panel-2");
+  let html=`<div class="mob-sub2-hd">
+    <span class="mob-sub2-title" style="color:${p.acc}">${p.label}</span>
+    <button class="mob-sub2-x" onclick="closeMobMenu()">&#10005;</button>
+  </div>`;
+
+  // 소개글 / 캐릭터 버튼
+  html+=`<button class="mob2-intro-link" onclick="goIntro('${p.id}');closeMobMenu()">
+    프로젝트 소개글 <span>&#9654;</span>
+  </button>`;
+  if(p.subType==="doll"){
+    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="goDollChar();closeMobMenu()">
+      캐릭터 일람 <span>&#9654;</span>
+    </button>`;
+  }
+  if(p.subType==="youtube"){
+    html+=`<a class="mob2-intro-link" style="margin-top:6px;color:#e00;border-color:#fdd;text-decoration:none" href="${p.youtubeUrl||'#'}" target="_blank">
+      &#9654; YouTube 채널 바로가기
+    </a>`;
+  }
+
+  // 진행 상황 (doll 제외한 기본 / doll)
+  if(p.subType==="doll"){
+    const dv=VOLUMES["biz-oc-doll"];
+    const allEps=Object.values(dv.episodes).flat();
+    const cnt=s=>allEps.filter(e=>e.status===s).length;
+    const total=allEps.length;
+    const r=22,circ=2*Math.PI*r;
+    function arc(val,offset){
+      if(!total||!val)return'';
+      const len=(val/total)*circ;
+      return `stroke-dasharray="${len.toFixed(1)} ${(circ-len).toFixed(1)}" stroke-dashoffset="${(-offset).toFixed(1)}"`;
+    }
+    const doneLen=(cnt("완료")/Math.max(total,1))*circ;
+    const pct=total?Math.round(cnt("완료")/total*100):0;
+    html+=`<div class="mob2-progress">
+      <svg width="54" height="54" viewBox="0 0 54 54" style="flex-shrink:0">
+        <circle cx="27" cy="27" r="22" fill="none" stroke="var(--bd)" stroke-width="5"/>
+        <circle cx="27" cy="27" r="22" fill="none" stroke="#F9CB4C" stroke-width="5" ${arc(cnt("작업중"),doneLen)} stroke-linecap="butt" transform="rotate(-90 27 27)"/>
+        <circle cx="27" cy="27" r="22" fill="none" stroke="${p.acc}" stroke-width="5" ${arc(cnt("완료"),0)} stroke-linecap="butt" transform="rotate(-90 27 27)"/>
+        <text x="27" y="31" text-anchor="middle" font-family="var(--fn)" font-size="11" font-weight="700" fill="var(--tx)">${pct}%</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+        <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--tx3)">완료</span><span style="font-size:14px;font-weight:700;color:${p.acc}">${cnt("완료")}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--tx3)">작업중</span><span style="font-size:14px;font-weight:700;color:#F9CB4C">${cnt("작업중")}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--tx3)">예정</span><span style="font-size:14px;font-weight:700;color:#999">${cnt("예정")}</span></div>
+      </div>
+    </div>`;
+    // 카테고리 목록
+    html+=`<div class="mob2-cat-list">`;
+    dv.categories.forEach(cat=>{
+      html+=`<div class="mob2-cat-item" onclick="clickDollCat('${cat.id}');closeMobMenu()">
+        <div style="width:10px;height:10px;border-radius:50%;background:${cat.color};flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:600;flex:1">${cat.label}</span>
+        <span style="font-size:11px;color:var(--tx3)">${cat.count}개</span>
+      </div>`;
+    });
+    html+=`</div>`;
+
+  } else if(p.subType!=="youtube"){
+    // 기본 (웹소설/웹툰 볼륨 목록)
+    const vols=VOLUMES[p.id]||[];
+    const allEps=vols.flatMap(v=>v.episodes);
+    const cnt=s=>allEps.filter(e=>e.status===s).length;
+    const total=cnt("완료")+cnt("작업중")+cnt("예정");
+    const r=22,circ=2*Math.PI*r;
+    function arc2(val,offset){
+      if(!total||!val)return'';
+      const len=(val/total)*circ;
+      return `stroke-dasharray="${len.toFixed(1)} ${(circ-len).toFixed(1)}" stroke-dashoffset="${(-offset).toFixed(1)}"`;
+    }
+    const doneLen=(cnt("완료")/Math.max(total,1))*circ;
+    const pct=total?Math.round(cnt("완료")/total*100):0;
+    html+=`<div class="mob2-progress">
+      <svg width="54" height="54" viewBox="0 0 54 54" style="flex-shrink:0">
+        <circle cx="27" cy="27" r="22" fill="none" stroke="var(--bd)" stroke-width="5"/>
+        <circle cx="27" cy="27" r="22" fill="none" stroke="#F9CB4C" stroke-width="5" ${arc2(cnt("작업중"),doneLen)} stroke-linecap="butt" transform="rotate(-90 27 27)"/>
+        <circle cx="27" cy="27" r="22" fill="none" stroke="${p.acc}" stroke-width="5" ${arc2(cnt("완료"),0)} stroke-linecap="butt" transform="rotate(-90 27 27)"/>
+        <text x="27" y="31" text-anchor="middle" font-family="var(--fn)" font-size="11" font-weight="700" fill="var(--tx)">${pct}%</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+        <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--tx3)">완료</span><span style="font-size:14px;font-weight:700;color:${p.acc}">${cnt("완료")}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--tx3)">작업중</span><span style="font-size:14px;font-weight:700;color:#F9CB4C">${cnt("작업중")}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--tx3)">예정</span><span style="font-size:14px;font-weight:700;color:#999">${cnt("예정")}</span></div>
+      </div>
+    </div>`;
+    // 볼륨 그리드
+    html+=`<div class="mob2-vol-grid">`;
+    vols.forEach(v=>{
+      const wip=v.episodes.some(e=>e.status==="작업중");
+      const plan=v.episodes.every(e=>e.status==="예정");
+      const badge=wip?`<div class="mob2-vol-badge" style="background:${p.acc};color:#fff">UP</div>`:
+                  plan?`<div class="mob2-vol-badge" style="background:#e0e0e0;color:#999">TBD</div>`:"";
+      html+=`<div class="mob2-vol-card" onclick="clickVol('${p.id}','${v.id}');closeMobMenu()">
+        <div class="mob2-vol-thumb" style="background:linear-gradient(${v.grad})">
+          ${badge}
+          <div class="mob2-vol-type">${v.type}</div>
+          ${driveImg(v.coverId)?`<img src="${driveImg(v.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}
+          ${!v.coverId?`<div style="position:absolute;bottom:0;left:0;right:0;padding:14px 7px 6px;background:linear-gradient(to top,#00000075,transparent);font-size:9px;font-weight:600;color:#ffffffb0">${v.label}</div>`:""}
+        </div>
+        <div class="mob2-vol-title">${v.label}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
+  p2.innerHTML=html;
+  // 1차 메뉴 유지 + 2차 패널 오른쪽에 표시
+  document.getElementById("mob-menu").classList.add("show-sub");
+}
+
+function mobHideSub(){
+  document.getElementById("mob-menu").classList.remove("show-sub");
+}
+
+function renderMobMenu(){
+  renderMobPanel1();
+  // 2차 패널은 mobShowSub 호출 시 채움
 }
 
 function mobToggleSub(id){document.getElementById(id)?.classList.toggle("open");}
 function toggleMobile(){
   const mob=document.getElementById("mob-menu");
   const bd=document.getElementById("mob-backdrop");
-  if(!mob.classList.contains("open")){renderMobMenu();}
+  if(!mob.classList.contains("open")){
+    renderMobMenu();
+    // 열 때마다 2차 패널 닫기
+    document.getElementById("mob-menu").classList.remove("show-sub");
+  }
   mob.classList.toggle("open");
   bd&&bd.classList.toggle("show",mob.classList.contains("open"));
 }
 function closeMobMenu(){
-  document.getElementById("mob-menu").classList.remove("open");
+  const mob=document.getElementById("mob-menu");
+  mob.classList.remove("open");
+  mob.classList.remove("show-sub");
   const bd=document.getElementById("mob-backdrop");
   if(bd)bd.classList.remove("show");
 }
@@ -2297,7 +2470,7 @@ function clickEp(epId){
   if(ep&&ep.status!=="완료") return;
   S.activeEp=epId;S.view="content";render();
 }
-function clickDollCat(catId){S.activeDollCat=catId;S.activeEp=null;S.view="episodes";render();}
+function clickDollCat(catId){S.activeProj="biz-oc-doll";S.activeDollCat=catId;S.activeEp=null;S.view="episodes";render();}
 function goDollChar(){S.view="charlist";render();}
 function backToEps(){S.activeEp=null;S.view="episodes";render();}
 function backToIntro(){S.view="intro";render();}
