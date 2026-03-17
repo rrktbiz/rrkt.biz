@@ -1358,6 +1358,7 @@ const S={
   charFilter:"ALL",charSearch:"",activeChar:null,
   navPinned:false,
   hoveredProj:null,
+  lastMobProj:null,
 };
 
 const getProj=id=>PROJECTS.find(p=>p.id===id);
@@ -1625,6 +1626,7 @@ function renderMobPanel1(){
 }
 
 function mobShowSub(projId){
+  S.lastMobProj = projId;
   const p=PROJECTS.find(pr=>pr.id===projId);
   if(!p) return;
   // 2차 패널 내용 생성
@@ -1754,8 +1756,12 @@ function toggleMobile(){
   const bd=document.getElementById("mob-backdrop");
   if(!mob.classList.contains("open")){
     renderMobMenu();
-    // 열 때마다 2차 패널 닫기
-    document.getElementById("mob-menu").classList.remove("show-sub");
+    // 마지막으로 열었던 2차 패널이 있으면 복원
+    if(S.lastMobProj){
+      mobShowSub(S.lastMobProj);
+    } else {
+      document.getElementById("mob-menu").classList.remove("show-sub");
+    }
   }
   mob.classList.toggle("open");
   bd&&bd.classList.toggle("show",mob.classList.contains("open"));
@@ -1770,6 +1776,7 @@ function closeMobMenu(){
 
 /* ── MAIN RENDER ── */
 function render(){
+  pushHash();
   renderNavItems();
   // 모바일 topbar 리셋 (content view 이탈 시)
   if(S.view !== "content"){
@@ -2788,7 +2795,76 @@ async function loadEpDataFromSheets(){
   }
 }
 
-// 시작: 먼저 빈 화면 없이 렌더하고, Sheets 데이터 오면 갱신
+// ══════════════════════════════════════════════
+//  # HASH NAVIGATION (location.hash 방식 — iframe 호환)
+// ══════════════════════════════════════════════
+let _skipHashChange = false;
+
+function stateToHash(){
+  const v = S.view;
+  if(v === 'home')       return '#home';
+  if(v === 'calendar')   return '#calendar';
+  if(v === 'charlist')   return '#chars';
+  if(v === 'chardetail') return `#char/${S.activeChar}`;
+  if(v === 'intro')      return `#proj/${S.activeProj}/intro`;
+  if(v === 'episodes'){
+    if(S.activeProj === 'biz-oc-doll' && S.activeDollCat)
+      return `#proj/biz-oc-doll/doll/${S.activeDollCat}`;
+    return `#proj/${S.activeProj}/eps/${S.activeVol}`;
+  }
+  if(v === 'content'){
+    if(S.activeProj === 'biz-oc-doll')
+      return `#proj/biz-oc-doll/dolleep/${S.activeDollCat}/${S.activeEp}`;
+    return `#proj/${S.activeProj}/ep/${S.activeVol}/${S.activeEp}`;
+  }
+  return '#home';
+}
+
+function applyHash(hash){
+  if(!hash || hash === '#' || hash === '#home'){
+    S.view='home';S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;S.activeChar=null;
+    return;
+  }
+  const parts = hash.replace(/^#/,'').split('/');
+  const p0 = parts[0];
+  if(p0 === 'calendar'){ S.view='calendar'; return; }
+  if(p0 === 'chars')   { S.view='charlist'; return; }
+  if(p0 === 'char')    { S.activeChar=parseInt(parts[1]); S.view='chardetail'; return; }
+  if(p0 === 'proj'){
+    const pid = parts[1]; S.activeProj = pid;
+    const sub = parts[2];
+    if(sub === 'intro')   { S.view='intro'; return; }
+    if(sub === 'eps')     { S.activeVol=parts[3]; S.activeEp=null; S.view='episodes'; return; }
+    if(sub === 'doll')    { S.activeDollCat=parts[3]; S.activeEp=null; S.view='episodes'; return; }
+    if(sub === 'ep')      { S.activeVol=parts[3]; S.activeEp=parseInt(parts[4]); S.view='content'; return; }
+    if(sub === 'dolleep') { S.activeDollCat=parts[3]; S.activeEp=parseInt(parts[4]); S.view='content'; return; }
+  }
+  S.view='home';S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;S.activeChar=null;
+}
+
+function pushHash(){
+  try {
+    const h = stateToHash();
+    if(location.hash !== h){
+      _skipHashChange = true;
+      location.hash = h;
+    }
+  } catch(e){ /* iframe 등 제한 환경에서는 무시 */ }
+}
+
+window.addEventListener('hashchange', function(){
+  if(_skipHashChange){ _skipHashChange=false; return; }
+  applyHash(location.hash);
+  closeMobMenu();
+  // render 내부에서 pushHash가 또 호출되지 않도록
+  _skipHashChange = true;
+  render();
+});
+
+// ── 시작: URL 해시가 있으면 해당 상태로 복원, 없으면 홈 ──
+if(location.hash && location.hash.length > 1){
+  try { applyHash(location.hash); } catch(e){}
+}
 render();
 loadEpDataFromSheets().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
@@ -2825,7 +2901,11 @@ function rebuildWorkLog(){
     const mob=getMob(), bd=getBd();
     mob.style.transition=''; mob.style.transform='';
     renderMobMenu();
-    mob.classList.remove('show-sub');
+    if(S.lastMobProj){
+      mobShowSub(S.lastMobProj);
+    } else {
+      mob.classList.remove('show-sub');
+    }
     mob.classList.add('open');
     if(bd) bd.classList.add('show');
   }
