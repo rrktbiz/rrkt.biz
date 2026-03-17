@@ -2410,27 +2410,21 @@ async function loadEpDataFromSheets(){
     }
 
     // 데이터 파싱 (1행 헤더 건너뜀)
-    // row[0]=프로젝트, row[1]=종류(웹소설/웹툰), row[2]=권수(num), row[3]=N화, row[4]=상태, row[5]=날짜
-    rows.slice(1).forEach(row => {
-      const projName = (row[0]||"").trim();
-      const typeName = (row[1]||"").trim();   // v.type 과 일치
-      const volNum   = parseInt((row[2]||"").trim()); // v.num 과 일치
-      const epId     = parseInt((row[3]||"").trim());
-      const status   = (row[4]||"").trim();
-      const date     = (row[5]||"").trim();
-      if(!projName || isNaN(volNum) || isNaN(epId)) return;
-      const pid = projMap[projName];
-      if(!pid) return;
-      const vols = VOLUMES[pid];
-      if(!Array.isArray(vols)) return;
-      // type + num 으로 정확히 매칭 (id 숫자에 의존하지 않음)
-      const vol = vols.find(v => v.type === typeName && v.num === volNum);
-      if(!vol) return;
-      const ep = vol.episodes.find(e => e.id === epId);
-      if(!ep) return;
-      if(status) ep.status = status;
-      const d = normalizeDate(date);
-      if(d) ep.date = d;
+    // 시트 구조: A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜 (왼쪽)
+    //           G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜 (오른쪽)
+    function applyRow(p,t,vn,en,s,d){
+      const volNum=parseInt(vn), epId=parseInt(en);
+      if(!p||isNaN(volNum)||isNaN(epId)) return;
+      const pid=projMap[p]; if(!pid) return;
+      const vols=VOLUMES[pid]; if(!Array.isArray(vols)) return;
+      const vol=vols.find(v=>v.type===t&&v.num===volNum); if(!vol) return;
+      const ep=vol.episodes.find(e=>e.id===epId); if(!ep) return;
+      if(s) ep.status=s;
+      const nd=normalizeDate(d); if(nd) ep.date=nd;
+    }
+    rows.slice(1).forEach(row=>{
+      applyRow((row[0]||'').trim(),(row[1]||'').trim(),(row[2]||'').trim(),(row[3]||'').trim(),(row[4]||'').trim(),(row[5]||'').trim());
+      if((row[6]||'').trim()) applyRow((row[6]||'').trim(),(row[7]||'').trim(),(row[8]||'').trim(),(row[9]||'').trim(),(row[10]||'').trim(),(row[11]||'').trim());
     });
 
     return true;
