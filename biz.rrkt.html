@@ -2142,7 +2142,7 @@ function renderCalendar(){
         const isCurMo=yr===String(_tn.getFullYear())&&mo===_tn.getMonth();
         const chips = moEntries.length
           ? moEntries.map(w=>`
-              <span class="cal-tl-entry" style="background:color-mix(in srgb,${w.acc} 10%,#f8f8f8);border-color:color-mix(in srgb,${w.acc} 20%,#e0e0e0)" onclick="${navCall(w)}" title="${w.date} · ${w.proj}">
+              <span class="cal-tl-entry" style="background:transparent;border-color:transparent" onclick="${navCall(w)}" title="${w.date} · ${w.proj}">
                 <span class="cal-tl-entry-dot" style="background:${w.acc}"></span>
                 <span class="cal-tl-entry-title">${w.title}</span>
                 <span class="cal-tl-entry-st" style="background:${stBg[w.status]||'#f0f0f0'};color:${stClr[w.status]||'#aaa'}">${w.status}</span>
