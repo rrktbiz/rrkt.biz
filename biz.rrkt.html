@@ -298,6 +298,13 @@ body.nav-pinned #nav-backdrop{display:none!important}
 /* ── TIMELINE VIEW ── */
 .cal-timeline{padding-bottom:32px}
 .cal-tl-year-block{margin-bottom:40px}
+.cal-tl-multi-grid{display:grid;align-items:start;gap:0 32px}
+.cal-tl-year-col{display:flex;flex-direction:column}
+.cal-tl-year-col .cal-tl-year-hd{padding:0 0 14px 0;margin-bottom:0;display:flex;align-items:center;gap:10px}
+.cal-tl-year-col .cal-tl-year-hd .cal-tl-year-line{flex:1;height:1px;background:var(--bd)}
+.cal-tl-year-col .cal-tl-month-row{border-bottom:1px solid var(--bd)}
+.cal-tl-year-col .cal-tl-entries{padding:7px 6px}
+.cal-tl-year-col .cal-tl-entry-title{max-width:140px}
 .cal-tl-year-hd{display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer}
 .cal-tl-year-label{font-size:22px;font-weight:800;color:var(--tx);letter-spacing:-.03em}
 .cal-tl-year-count{font-size:11px;font-weight:600;color:var(--tx3);background:var(--bg);border:1px solid var(--bd);padding:2px 10px;border-radius:12px}
@@ -2090,7 +2097,7 @@ function renderCalendar(){
       const s=String(i);
       if(!years.includes(s)) years.push(s);
     }
-    years.sort((a,b)=>b.localeCompare(a));
+    years.sort((a,b)=>span>1?a.localeCompare(b):b.localeCompare(a));
 
     const _atMaxTl = startY >= _tn.getFullYear() - span + 1;
 
@@ -2122,17 +2129,17 @@ function renderCalendar(){
         </div>
       </div>`;
 
-    const body = years.map(yr=>{
+    const buildYearHtml = (yr) => {
       const yearEntries=allEntries.filter(e=>e.date.startsWith(yr));
       const yearCount=yearEntries.length;
+      const navCall=w=>w.projId==="biz-oc-doll"
+        ?`goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
+        :`goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
       const months=Array.from({length:12},(_,mo)=>{
         const moStr=`${yr}-${String(mo+1).padStart(2,"0")}`;
         const moEntries=yearEntries.filter(e=>e.date.startsWith(moStr))
           .sort((a,b)=>a.date.localeCompare(b.date));
         const isCurMo=yr===String(_tn.getFullYear())&&mo===_tn.getMonth();
-        const navCall=w=>w.projId==="biz-oc-doll"
-          ?`goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
-          :`goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
         const chips = moEntries.length
           ? moEntries.map(w=>`
               <span class="cal-tl-entry" style="background:color-mix(in srgb,${w.acc} 10%,#f8f8f8);border-color:color-mix(in srgb,${w.acc} 20%,#e0e0e0)" onclick="${navCall(w)}" title="${w.date} · ${w.proj}">
@@ -2146,7 +2153,14 @@ function renderCalendar(){
           <div class="cal-tl-entries">${chips}</div>
         </div>`;
       });
-      return`<div class="cal-tl-year-block">
+      return { yearCount, months };
+    };
+
+    let body;
+    if(span === 1){
+      const yr = years[0];
+      const { yearCount, months } = buildYearHtml(yr);
+      body = `<div class="cal-tl-year-block">
         <div class="cal-tl-year-hd">
           <span class="cal-tl-year-label">${yr}</span>
           <span class="cal-tl-year-count">${yearCount}건</span>
@@ -2154,7 +2168,21 @@ function renderCalendar(){
         </div>
         <div class="cal-tl-months">${months.join("")}</div>
       </div>`;
-    }).join("");
+    } else {
+      // span > 1: 연도별로 좌우 나란히 배치
+      const cols = years.map(yr=>{
+        const { yearCount, months } = buildYearHtml(yr);
+        return `<div class="cal-tl-year-col">
+          <div class="cal-tl-year-hd" style="padding:0 0 14px 0;margin-bottom:0;display:flex;align-items:center;gap:10px">
+            <span class="cal-tl-year-label">${yr}</span>
+            <span class="cal-tl-year-count">${yearCount}건</span>
+            <div class="cal-tl-year-line"></div>
+          </div>
+          <div class="cal-tl-months" style="border-top:1px solid var(--bd)">${months.join("")}</div>
+        </div>`;
+      }).join("");
+      body = `<div class="cal-tl-multi-grid" style="grid-template-columns:repeat(${span},1fr)">${cols}</div>`;
+    }
 
     return `<div class="cal-timeline">${tlHeader}${body}</div>`;
   }
