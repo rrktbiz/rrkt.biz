@@ -2032,8 +2032,8 @@ function renderCalendar(){
   const DNAMES=["일","월","화","수","목","금","토"],DCLS=["sun","","","","","","sat"];
 
   // 연도 목록
-  const allYears=[...new Set(Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))))];
   const curY=new Date().getFullYear();
+  const allYears=[...new Set(Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))).filter(yr=>yr<=curY))];
   if(!allYears.includes(curY)) allYears.push(curY);
   allYears.sort((a,b)=>b-a);
   const yearTabs = allYears.map(yr=>`<button class="cal-year-tab${yr===y&&!ov&&!tl?" active":""}" onclick="goYear(${yr})">${yr}년</button>`).join("");
@@ -2077,7 +2077,10 @@ function renderCalendar(){
   }
   const overviewHtml = buildMultiYearGrid();
   const _curY_ov = new Date().getFullYear();
-  const _atMaxOv = y >= _curY_ov - span + 1;
+  const _minY_ov_arr = Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))).filter(yr=>yr<=_curY_ov);
+  const _minY_ov = _minY_ov_arr.length ? Math.min(..._minY_ov_arr) : _curY_ov;
+  const _atMaxOv = y >= _curY_ov + 2 - span + 1;
+  const _atMinOv = y <= _minY_ov;
 
   // ── 타임라인 뷰 ──
   function buildTimeline(){
@@ -2099,7 +2102,10 @@ function renderCalendar(){
     }
     years.sort((a,b)=>span>1?a.localeCompare(b):b.localeCompare(a));
 
-    const _atMaxTl = startY >= _tn.getFullYear() - span + 1;
+    const _atMaxTl = startY >= _tn.getFullYear() + 2 - span + 1;
+    const _minY_tl_arr = Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))).filter(yr=>yr<=_tn.getFullYear());
+    const _minY_tl = _minY_tl_arr.length ? Math.min(..._minY_tl_arr) : _tn.getFullYear();
+    const _atMinTl = startY <= _minY_tl;
 
     const stBg={완료:"#ffe4e4",작업중:"#fff9e0",예정:"#f0f0f0"};
     const stClr={완료:"#c0392b",작업중:"#d4a017",예정:"#aaa"};
@@ -2109,7 +2115,7 @@ function renderCalendar(){
       <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin-bottom:20px;gap:12px">
         <div></div>
         <div style="display:flex;align-items:center;gap:10px">
-          <button class="cal-nav-btn" onclick="prevTlYear()">&#8249;</button>
+          <button class="cal-nav-btn" onclick="prevTlYear()" ${_atMinTl?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8249;</button>
           <span style="font-size:16px;font-weight:700;color:var(--tx);min-width:${span>1?'150px':'72px'};text-align:center">
             ${span===1?`${startY}년`:`${startY}년 ~ ${endY}년`}
           </span>
@@ -2225,7 +2231,7 @@ function renderCalendar(){
       <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin-bottom:16px;gap:12px">
         <div></div>
         <div style="display:flex;align-items:center;gap:10px">
-          <button class="cal-nav-btn" onclick="prevOverviewYear()">&#8249;</button>
+          <button class="cal-nav-btn" onclick="prevOverviewYear()" ${_atMinOv?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8249;</button>
           <span style="font-size:16px;font-weight:700;color:var(--tx);min-width:${span>1?'150px':'72px'};text-align:center">
             ${span===1?`${y}년`:`${y}년 ~ ${y+span-1}년`}
           </span>
@@ -2712,18 +2718,18 @@ function floatEpNav(dir){
   if(id != null) clickEp(id);
 }
 function selectDay(d){S.selDay=S.selDay===d?null:d;renderCalendar();}
-function prevMonth(){if(S.calM===0){S.calM=11;S.calY--;}else S.calM--;S.selDay=null;renderCalendar();}
-function nextMonth(){if(S.calM===11){S.calM=0;S.calY++;}else S.calM++;S.selDay=null;renderCalendar();}
-function goYear(y){S.calY=y;S.calM=new Date().getMonth();S.selDay=null;S.calOverview=false;S.calTimeline=false;renderCalendar();}
-function goMonth(y,m){S.calY=y;S.calM=m;S.selDay=null;S.calOverview=false;S.calTimeline=false;renderCalendar();}
-function toggleCalOverview(){S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
-function toggleTimeline(){S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
-function prevOverviewYear(){S.calY-=S.calSpan;S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
-function nextOverviewYear(){const _maxY=new Date().getFullYear()-S.calSpan+1;if(S.calY>=_maxY)return;S.calY=Math.min(S.calY+S.calSpan,_maxY);S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
-function setCalSpan(n){S.calSpan=n;S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
-function prevTlYear(){S.calY-=S.calSpan;S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
-function nextTlYear(){const _maxY=new Date().getFullYear()-S.calSpan+1;if(S.calY>=_maxY)return;S.calY=Math.min(S.calY+S.calSpan,_maxY);S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
-function setTlSpan(n){S.calSpan=n;S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
+function prevMonth(){if(S.calM===0){S.calM=11;S.calY--;}else S.calM--;S.selDay=null;pushHash();renderCalendar();}
+function nextMonth(){if(S.calM===11){S.calM=0;S.calY++;}else S.calM++;S.selDay=null;pushHash();renderCalendar();}
+function goYear(y){S.calY=y;S.calM=new Date().getMonth();S.selDay=null;S.calOverview=false;S.calTimeline=false;pushHash();renderCalendar();}
+function goMonth(y,m){S.calY=y;S.calM=m;S.selDay=null;S.calOverview=false;S.calTimeline=false;pushHash();renderCalendar();}
+function toggleCalOverview(){S.calOverview=true;S.calTimeline=false;S.selDay=null;pushHash();renderCalendar();}
+function toggleTimeline(){S.calTimeline=true;S.calOverview=false;S.selDay=null;pushHash();renderCalendar();}
+function prevOverviewYear(){const _arr=Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))).filter(yr=>yr<=new Date().getFullYear());const _minY=_arr.length?Math.min(..._arr):new Date().getFullYear();if(S.calY<=_minY)return;S.calY=Math.max(S.calY-S.calSpan,_minY);S.calOverview=true;S.calTimeline=false;S.selDay=null;pushHash();renderCalendar();}
+function nextOverviewYear(){const _maxY=new Date().getFullYear()+2-S.calSpan+1;if(S.calY>=_maxY)return;S.calY=Math.min(S.calY+S.calSpan,_maxY);S.calOverview=true;S.calTimeline=false;S.selDay=null;pushHash();renderCalendar();}
+function setCalSpan(n){S.calSpan=n;S.calOverview=true;S.calTimeline=false;S.selDay=null;pushHash();renderCalendar();}
+function prevTlYear(){const _arr=Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))).filter(yr=>yr<=new Date().getFullYear());const _minY=_arr.length?Math.min(..._arr):new Date().getFullYear();if(S.calY<=_minY)return;S.calY=Math.max(S.calY-S.calSpan,_minY);S.calTimeline=true;S.calOverview=false;S.selDay=null;pushHash();renderCalendar();}
+function nextTlYear(){const _maxY=new Date().getFullYear()+2-S.calSpan+1;if(S.calY>=_maxY)return;S.calY=Math.min(S.calY+S.calSpan,_maxY);S.calTimeline=true;S.calOverview=false;S.selDay=null;pushHash();renderCalendar();}
+function setTlSpan(n){S.calSpan=n;S.calTimeline=true;S.calOverview=false;S.selDay=null;pushHash();renderCalendar();}
 function toggleTlSpanDropdown(){
   const d=document.getElementById("tl-span-dropdown");
   if(!d)return;
@@ -3076,7 +3082,11 @@ async function loadEpDataFromSheets(){
 function stateToHash(){
   const v = S.view;
   if(v === 'home')       return '#home';
-  if(v === 'calendar')   return '#calendar';
+  if(v === 'calendar'){
+    if(S.calTimeline) return `#calendar/${S.calY}/timeline`;
+    if(S.calOverview) return `#calendar/${S.calY}/overview`;
+    return `#calendar/${S.calY}/${S.calM+1}`;
+  }
   if(v === 'charlist')   return '#chars';
   if(v === 'chardetail') return `#char/${S.activeChar}`;
   if(v === 'intro')      return `#proj/${S.activeProj}/intro`;
@@ -3100,7 +3110,14 @@ function applyHash(hash){
   }
   const parts = hash.replace(/^#/,'').split('/');
   const p0 = parts[0];
-  if(p0 === 'calendar'){ S.view='calendar'; return; }
+  if(p0 === 'calendar'){
+    S.view='calendar';
+    if(parts[1]) S.calY = parseInt(parts[1]);
+    if(parts[2] === 'overview'){ S.calOverview=true; S.calTimeline=false; }
+    else if(parts[2] === 'timeline'){ S.calTimeline=true; S.calOverview=false; }
+    else if(parts[2]){ S.calM=parseInt(parts[2])-1; S.calOverview=false; S.calTimeline=false; }
+    return;
+  }
   if(p0 === 'chars')   { S.view='charlist'; return; }
   if(p0 === 'char')    { S.activeChar=parseInt(parts[1]); S.view='chardetail'; return; }
   if(p0 === 'proj'){
