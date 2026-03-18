@@ -2159,9 +2159,9 @@ function renderCalendar(){
               const count=g.entries.length;
               const nav=navCall(g.entries[0]);
               const typeBadge=g.volType==='웹소설'
-                ?`<span style="font-size:9px;font-weight:600;padding:1px 4px;border-radius:3px;background:#e8eaf6;color:#283593;flex-shrink:0">웹소설</span>`
+                ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">웹소설</span>`
                 :g.volType==='웹툰'
-                ?`<span style="font-size:9px;font-weight:600;padding:1px 4px;border-radius:3px;background:#e3f2fd;color:#1565c0;flex-shrink:0">웹툰</span>`
+                ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">웹툰</span>`
                 :'';
               const volLabel=g.volSub?` ${g.volSub}`:'';
               return`<span class="cal-tl-entry" onclick="${nav}" title="${g.proj}${volLabel} · ${count}화">
