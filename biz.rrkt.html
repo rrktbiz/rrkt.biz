@@ -269,6 +269,42 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-about-row{display:flex;gap:12px;align-items:flex-start}
 .home-recent-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
 
+/* ── HOME HIGHLIGHT CARD ── */
+.home-hl-wrap{padding:10px}
+.home-hl-card{border:1px solid var(--bd);border-radius:9px;overflow:hidden;cursor:pointer;transition:opacity .12s}
+.home-hl-card:hover{opacity:.82}
+.home-hl-thumb{height:72px;display:flex;align-items:flex-end;padding:8px 12px;position:relative}
+.home-hl-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;background:#fff;color:#c0392b}
+.home-hl-vol{font-size:9px;color:#ffffff70}
+.home-hl-body{padding:9px 12px;background:var(--sm);display:flex;align-items:center;justify-content:space-between}
+.home-hl-title{font-size:13px;font-weight:500;color:var(--tx)}
+.home-hl-cta{font-size:11px;color:#3558c0;font-weight:500;flex-shrink:0;margin-left:8px}
+
+/* ── HOME WIP SIMPLE LIST ── */
+.home-wip-hd{padding:8px 14px 7px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.home-wip-lbl{font-size:11px;font-weight:500;color:var(--tx3)}
+.home-wip-sub{font-size:10px;color:var(--tx3)}
+.home-wip-list{padding:2px 14px 10px;display:flex;flex-direction:column}
+.home-wip-item{display:flex;align-items:center;gap:0;padding:7px 0;border-bottom:1px solid var(--bd)}
+.home-wip-item:last-child{border-bottom:none}
+.home-wip-proj{font-size:11px;color:var(--tx3);flex:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-wip-title{font-size:12px;color:var(--tx2);flex:1;text-align:center}
+
+/* ── HOME AUTHOR NOTE ── */
+.home-author-note{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.home-author-note-hd{padding:7px 12px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.home-author-note-body{padding:12px 14px}
+.home-author-note-text{font-size:12px;color:var(--tx2);line-height:1.75}
+.home-author-note-date{font-size:9px;color:var(--tx3);margin-top:8px}
+
+/* ── HOME VISITOR SIMPLE ── */
+.home-visitor-simple{padding:6px 2px 2px}
+.home-visitor-simple-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:5px}
+.home-visitor-simple-row{display:flex;align-items:baseline;gap:5px}
+.home-visitor-n{font-size:16px;font-weight:300;color:var(--tx2)}
+.home-visitor-l{font-size:10px;color:var(--tx3)}
+.home-visitor-sep{font-size:12px;color:var(--bd2);margin:0 4px}
+
 /* ── CALENDAR ── */
 .cal-page{padding:24px 20px 28px;max-width:calc(100% - 160px);margin:0 auto}
 .cal-page-title{font-size:20px;font-weight:700;color:var(--tx);margin-bottom:16px}
@@ -1119,6 +1155,11 @@ const VOLUMES = {
   },
 };
 
+/* ── 작가 노트 — 여기 텍스트를 직접 수정하세요 ── */
+const AUTHOR_NOTE = {
+  text: "활발하게 작업하고 있어요. 곧 새 내용을 올릴게요.",
+};
+
 /* Build work log */
 const WORK_LOG = {};
 function buildWorkLog(){
@@ -1897,7 +1938,30 @@ function renderHome(){
     const dot=hasW?WORK_LOG[ds_][0].acc:null;
     miniCells+=`<div class="${cls}"><span>${d}</span>${dot?`<div class="hmc-dot" style="background:${dot}"></div>`:""}</div>`;
   }
-  const recent=Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w}))).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
+  const allRecent=Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w}))).sort((a,b)=>b.date.localeCompare(a.date));
+  const doneItems=allRecent.filter(w=>w.status==="완료").slice(0,6);
+  const wipItems=allRecent.filter(w=>w.status==="작업중").slice(0,5);
+  const latestDone=doneItems[0]||null;
+  function relTime(dateStr){
+    if(!dateStr) return "";
+    const now_=new Date(), d_=new Date(dateStr);
+    if(isNaN(d_)) return "";
+    const diff=now_-d_;
+    const min=Math.floor(diff/60000), hr=Math.floor(diff/3600000), day=Math.floor(diff/86400000);
+    if(diff<60000) return "방금 전";
+    if(min<60) return `${min}분 전`;
+    if(hr<24) return `${hr}시간 전`;
+    if(day<30) return `${day}일 전`;
+    const mon=Math.floor(day/30);
+    return mon<12?`${mon}달 전`:`${Math.floor(mon/12)}년 전`;
+  }
+  function getVolGrad(projId,volId){
+    if(!projId||!volId) return "150deg,#333,#666";
+    const vols=VOLUMES[projId];
+    if(!vols||!Array.isArray(vols)) return "150deg,#333,#666";
+    const vol=vols.find(v=>String(v.id)===String(volId));
+    return vol?vol.grad:"150deg,#333,#666";
+  }
 
   /* ── Pop-art avatar SVG ── */
   const popArtSVG=`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
@@ -1937,39 +2001,65 @@ function renderHome(){
     <circle cx="100" cy="100" r="99" fill="none" stroke="#111" stroke-width="3"/>
   </svg>`;
 
-  const recentCards = recent.length===0
-    ? `<div class="home-r-empty">작업 기록이 없습니다</div>`
-    : recent.map(w=>{
-        const stCls=stClass(w.status);
+  // ── 완료 카드 HTML ──
+  const doneCardsHtml = doneItems.length===0
+    ? `<div class="home-r-empty">완료된 작업이 없습니다</div>`
+    : doneItems.map(w=>{
         const navCall = w.projId==="biz-oc-doll"
           ? `goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
           : `goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
-        function relTime(dateStr){
-          if(!dateStr) return "";
-          const now=new Date(), d=new Date(dateStr);
-          if(isNaN(d)) return "";
-          const diff=now-d;
-          const min=Math.floor(diff/60000), hr=Math.floor(diff/3600000), day=Math.floor(diff/86400000);
-          if(diff<60000) return "방금 전";
-          if(min<60) return `${min}분 전`;
-          if(hr<24) return `${hr}시간 전`;
-          if(day<30) return `${day}일 전`;
-          const mon=Math.floor(day/30);
-          return mon<12?`${mon}달 전`:`${Math.floor(mon/12)}년 전`;
-        }
         const rel=relTime(w.date);
-        const isDone=stCls==='done', isWip=stCls==='wip';
-        return `<div class="home-r-item${isDone?' is-done':isWip?' is-wip':''}" style="border-left-color:${isWip?'#ddd':w.acc}" ${isDone?`onclick="${navCall}"`:''}  title="${w.title} 바로가기">
+        return `<div class="home-r-item is-done" style="border-left-color:${w.acc}" onclick="${navCall}" title="${w.title} 바로가기">
           <div class="home-r-top">
             <span class="home-r-proj" style="color:${w.acc}">${w.proj}${w.volSub?` <span style="font-weight:400;opacity:.7">· ${w.volSub}</span>`:''}</span>
             <span class="home-r-date">${w.date}${rel?` <span class="home-r-reltime">· ${rel}</span>`:''}</span>
           </div>
           <div class="home-r-title-row">
             <span class="home-r-title">${w.title}</span>
-            <span class="home-r-status ${stCls}">${w.status}</span>
+            <span class="home-r-status done">완료</span>
           </div>
         </div>`;
       }).join("");
+
+  // ── 하이라이트 카드 (최신 완료화) ──
+  const hlHtml = latestDone ? (()=>{
+    const grad=getVolGrad(latestDone.projId,latestDone.volId);
+    const navCall = latestDone.projId==="biz-oc-doll"
+      ? `goRecentWork('${latestDone.projId}',null,${latestDone.epId},'${latestDone.dollCatId||""}')`
+      : `goRecentWork('${latestDone.projId}','${latestDone.volId}',${latestDone.epId},null)`;
+    return `<div class="home-hl-wrap">
+      <div class="home-hl-card" onclick="${navCall}">
+        <div class="home-hl-thumb" style="background:linear-gradient(${grad})">
+          <span class="home-hl-badge">완료</span>
+          <span class="home-hl-vol">${latestDone.proj}${latestDone.volSub?` · ${latestDone.volSub}`:''}</span>
+        </div>
+        <div class="home-hl-body">
+          <span class="home-hl-title">${latestDone.title}</span>
+          <span class="home-hl-cta">읽기 →</span>
+        </div>
+      </div>
+    </div>`;
+  })() : '';
+
+  // ── 작업중 심플 리스트 ──
+  const wipHtml = wipItems.length===0 ? '' : `
+    <div class="home-wip-hd">
+      <span class="home-wip-lbl">작업중</span>
+      <span class="home-wip-sub">곧 업로드 예정</span>
+    </div>
+    <div class="home-wip-list">
+      ${wipItems.map(w=>{
+        const rel=relTime(w.date);
+        return `<div class="home-wip-item">
+          <span class="home-wip-proj">${w.proj}${w.volSub?` ${w.volSub}`:''}</span>
+          <span class="home-wip-title">${w.title}</span>
+          <span class="home-r-status wip">작업중</span>
+        </div>`;
+      }).join("")}
+    </div>`;
+
+  // ── 작가 노트 날짜 ──
+  const noteDate=new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});
 
   document.getElementById("content").innerHTML=`
     <div class="home-page">
@@ -1978,7 +2068,7 @@ function renderHome(){
         <div id="home-clock" class="home-clock">${timeStr}</div>
       </div>
       <div class="home-body">
-        <!-- ① About card (left / red box) -->
+        <!-- ① About card (left) -->
         <div class="home-about-card">
           <div class="home-about-card-hd">About</div>
           <div class="home-about-avatar-wrap">
@@ -1997,28 +2087,41 @@ function renderHome(){
           ${buildAuthorStatus()}
           ${buildFocusWidget()}
         </div>
-        <!-- ② Recent work panel (center / blue box) -->
+        <!-- ② Updates panel (center) -->
         <div class="home-recent-panel">
           <div class="home-recent-panel-hd">
             <span class="home-recent-panel-lbl">Updates</span>
-            <span style="font-size:9px;color:var(--tx3)">클릭하면 해당 작업으로 이동</span>
+            <span style="font-size:9px;color:var(--tx3)">클릭하면 해당 화로 이동</span>
           </div>
+          ${hlHtml}
           <div class="home-recent-body">
-            <div class="home-recent-grid">${recentCards}</div>
+            <div class="home-recent-grid">${doneCardsHtml}</div>
           </div>
+          ${wipHtml}
         </div>
         <!-- ③ Right column -->
         <div class="home-right">
+          <div class="home-author-note">
+            <div class="home-author-note-hd">작가 노트</div>
+            <div class="home-author-note-body">
+              <div class="home-author-note-text">${AUTHOR_NOTE.text}</div>
+              <div class="home-author-note-date">${noteDate}</div>
+            </div>
+          </div>
           <div class="home-mini-cal">
             <div class="hmc-head"><span class="hmc-month">${new Date(y,m,1).toLocaleDateString("ko-KR",{year:"numeric",month:"long"})}</span><div class="hmc-nav"><button class="hmc-btn" onclick="miniPrev()">&#8249;</button><button class="hmc-btn" onclick="miniNext()">&#8250;</button></div></div>
             <div class="hmc-grid">${DNAMES.map((n,i)=>`<div class="hmc-dn ${DCLS[i]}">${n}</div>`).join("")}${miniCells}</div>
           </div>
-          <div class="home-widget">
-            <div class="hw-label">방문자</div>
-            <div class="hw-stat"><span class="hw-stat-l">총 방문</span><span class="hw-stat-n">${totalVisits.toLocaleString()}</span></div>
-            <div class="hw-stat"><span class="hw-stat-l">해외 방문</span><span class="hw-stat-n">${foreignVisits.toLocaleString()}</span></div>
+          <div class="home-visitor-simple">
+            <div class="home-visitor-simple-lbl">방문자</div>
+            <div class="home-visitor-simple-row">
+              <span class="home-visitor-n">${totalVisits.toLocaleString()}</span>
+              <span class="home-visitor-l">총 방문</span>
+              <span class="home-visitor-sep">·</span>
+              <span class="home-visitor-n">${foreignVisits.toLocaleString()}</span>
+              <span class="home-visitor-l">해외</span>
+            </div>
           </div>
-          <a href="https://twitter.com/your_handle" target="_blank" class="home-twitter-btn">&#120143; 작가 트위터</a>
         </div>
       </div>
     </div>`;
