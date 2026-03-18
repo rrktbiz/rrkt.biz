@@ -2056,17 +2056,21 @@ function renderCalendar(){
 
   // 멀티 연도 그리드 (span 적용)
   function buildMultiYearGrid(){
+    const cols = span > 1 ? 12 : 6;
+    const gap  = span > 1 ? 6 : 10;
     let html="";
     for(let offset=0;offset<span;offset++){
       const yr=y+offset;
-      html+=`<div style="margin-bottom:${span>1?28:0}px">
-        ${span>1?`<div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--bd)">${yr}년</div>`:""}
-        <div class="cal-year-grid">${Array.from({length:12},(_,mo)=>buildMiniMonth(yr,mo)).join("")}</div>
+      html+=`<div style="margin-bottom:${span>1?24:0}px">
+        ${span>1?`<div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--bd)">${yr}년</div>`:""}
+        <div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px;margin-bottom:0">${Array.from({length:12},(_,mo)=>buildMiniMonth(yr,mo)).join("")}</div>
       </div>`;
     }
     return html;
   }
   const overviewHtml = buildMultiYearGrid();
+  const _curY_ov = new Date().getFullYear();
+  const _atMaxOv = y >= _curY_ov - span + 1;
 
   // ── 타임라인 뷰 ──
   function buildTimeline(){
@@ -2088,6 +2092,8 @@ function renderCalendar(){
     }
     years.sort((a,b)=>b.localeCompare(a));
 
+    const _atMaxTl = startY >= _tn.getFullYear() - span + 1;
+
     const stBg={완료:"#ffe4e4",작업중:"#fff9e0",예정:"#f0f0f0"};
     const stClr={완료:"#c0392b",작업중:"#d4a017",예정:"#aaa"};
 
@@ -2100,7 +2106,7 @@ function renderCalendar(){
           <span style="font-size:16px;font-weight:700;color:var(--tx);min-width:${span>1?'150px':'72px'};text-align:center">
             ${span===1?`${startY}년`:`${startY}년 ~ ${endY}년`}
           </span>
-          <button class="cal-nav-btn" onclick="nextTlYear()">&#8250;</button>
+          <button class="cal-nav-btn" onclick="nextTlYear()" ${_atMaxTl?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8250;</button>
         </div>
         <div style="display:flex;justify-content:flex-end">
           <div style="position:relative;display:inline-block" id="tl-span-dropdown-wrap">
@@ -2195,7 +2201,7 @@ function renderCalendar(){
           <span style="font-size:16px;font-weight:700;color:var(--tx);min-width:${span>1?'150px':'72px'};text-align:center">
             ${span===1?`${y}년`:`${y}년 ~ ${y+span-1}년`}
           </span>
-          <button class="cal-nav-btn" onclick="nextOverviewYear()">&#8250;</button>
+          <button class="cal-nav-btn" onclick="nextOverviewYear()" ${_atMaxOv?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8250;</button>
         </div>
         <div style="display:flex;justify-content:flex-end">
           <div style="position:relative;display:inline-block" id="span-dropdown-wrap">
@@ -2685,10 +2691,10 @@ function goMonth(y,m){S.calY=y;S.calM=m;S.selDay=null;S.calOverview=false;S.calT
 function toggleCalOverview(){S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
 function toggleTimeline(){S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
 function prevOverviewYear(){S.calY-=S.calSpan;S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
-function nextOverviewYear(){S.calY+=S.calSpan;S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
+function nextOverviewYear(){const _maxY=new Date().getFullYear()-S.calSpan+1;if(S.calY>=_maxY)return;S.calY=Math.min(S.calY+S.calSpan,_maxY);S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
 function setCalSpan(n){S.calSpan=n;S.calOverview=true;S.calTimeline=false;S.selDay=null;renderCalendar();}
 function prevTlYear(){S.calY-=S.calSpan;S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
-function nextTlYear(){S.calY+=S.calSpan;S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
+function nextTlYear(){const _maxY=new Date().getFullYear()-S.calSpan+1;if(S.calY>=_maxY)return;S.calY=Math.min(S.calY+S.calSpan,_maxY);S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
 function setTlSpan(n){S.calSpan=n;S.calTimeline=true;S.calOverview=false;S.selDay=null;renderCalendar();}
 function toggleTlSpanDropdown(){
   const d=document.getElementById("tl-span-dropdown");
