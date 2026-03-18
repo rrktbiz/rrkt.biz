@@ -793,6 +793,30 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .fep-mid:hover{color:var(--tx)}
 .fep-div{width:1px;height:18px;background:var(--bd);flex-shrink:0}
 
+/* ── PROGRESS PAGE ── */
+.progress-page{padding:22px 32px;max-width:1020px;margin:0 auto}
+.progress-page-title{font-size:19px;font-weight:700;color:var(--tx);margin-bottom:15px}
+.progress-outer-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.progress-proj-block{background:var(--sb);border:1px solid var(--bd);border-radius:11px;overflow:hidden}
+.progress-proj-hd{padding:9px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
+.progress-proj-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.progress-proj-name{font-size:13px;font-weight:700;color:var(--tx)}
+.progress-proj-cnt{font-size:10px;color:var(--tx3);margin-left:auto}
+.progress-vol-inner{padding:9px;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.progress-oc-inner{padding:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px}
+.progress-vol-card{background:var(--bg);border-radius:7px;padding:8px 10px}
+.progress-vol-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.progress-vol-card-label{font-size:11px;font-weight:500;color:var(--tx2)}
+.progress-vol-card-stat{font-size:9px;color:var(--tx3)}
+.progress-ep-grid{display:flex;flex-wrap:wrap;gap:2px}
+.progress-ep-cell{width:11px;height:11px;border-radius:1px;border:1px solid var(--bd);background:var(--sb);flex-shrink:0}
+.progress-ep-cell.done{border-color:transparent}
+.progress-ep-cell.wip{border-color:transparent;opacity:0.4}
+.progress-char-row{padding:10px 14px;border-top:1px solid var(--bd)}
+.progress-char-row-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.progress-char-label{font-size:12px;font-weight:700;color:var(--tx)}
+.progress-char-stat{font-size:10px;color:var(--tx3)}
+
 /* Google Translate */
 .goog-te-banner-frame,.goog-te-menu-frame{display:none!important}
 body{top:0!important}
@@ -817,6 +841,10 @@ body{top:0!important}
   <button id="topbar-cal-btn" onclick="goCal()">
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
     작업 캘린더
+  </button>
+  <button id="topbar-progress-btn" onclick="goProgress()" style="font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s;margin-left:0">
+    <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="4" height="10" rx="1" fill="currentColor" opacity=".4"/><rect x="5.5" y="5" width="4" height="7" rx="1" fill="currentColor" opacity=".7"/><rect x="10" y="1" width="4" height="11" rx="1" fill="currentColor"/></svg>
+    진행 현황
   </button>
   <div class="topbar-right">
     <button class="tb-lang-btn" onclick="setLang('en')">EN</button>
@@ -1912,11 +1940,101 @@ function render(){
   }
   if(S.view==="home")          renderHome();
   else if(S.view==="calendar") renderCalendar();
+  else if(S.view==="progress") renderProgress();
   else if(S.view==="intro")    renderIntro();
   else if(S.view==="episodes") renderEpList();
   else if(S.view==="content")  renderContentView();
   else if(S.view==="charlist") window.renderCharList();
   else if(S.view==="chardetail") window.renderCharDetail();
+}
+
+function goProgress(){S.view="progress";pushHash();render();}
+
+/* ── PROGRESS PAGE ── */
+function renderProgress(){
+  function cells(total, done, wip, color){
+    return Array.from({length:total},(_,i)=>{
+      if(i<done) return `<div class="progress-ep-cell done" style="background:${color}"></div>`;
+      if(i<done+wip) return `<div class="progress-ep-cell wip" style="background:${color}"></div>`;
+      return `<div class="progress-ep-cell"></div>`;
+    }).join("");
+  }
+
+  // 블러드하이스쿨 — 2열 카드 그리드
+  const bhProj = PROJECTS.find(p=>p.id==="blood-highschool");
+  const bhVols = VOLUMES["blood-highschool"]||[];
+  const bhTotalAll = bhVols.reduce((s,v)=>s+v.episodes.length,0);
+  const bhDoneAll  = bhVols.reduce((s,v)=>s+v.episodes.filter(e=>e.status==="완료").length,0);
+  const bhCards = bhVols.map(v=>{
+    const total=v.episodes.length;
+    const done=v.episodes.filter(e=>e.status==="완료").length;
+    const wip=v.episodes.filter(e=>e.status==="작업중").length;
+    return `<div class="progress-vol-card">
+      <div class="progress-vol-card-top">
+        <span class="progress-vol-card-label">[${v.type}] ${v.sub||v.label}</span>
+        <span class="progress-vol-card-stat">${done}/${total}</span>
+      </div>
+      <div class="progress-ep-grid">${cells(total,done,wip,bhProj.acc)}</div>
+    </div>`;
+  }).join("");
+
+  // biz-OC-doll — 4열 카드 + 캐릭터 200 행
+  const ocProj = PROJECTS.find(p=>p.id==="biz-oc-doll");
+  const dv = VOLUMES["biz-oc-doll"];
+  const ocCards = dv.categories.map(cat=>{
+    const eps=dv.episodes[cat.id]||[];
+    const total=cat.count;
+    const done=eps.filter(e=>e.status==="완료").length;
+    const wip=eps.filter(e=>e.status==="작업중").length;
+    return `<div class="progress-vol-card">
+      <div class="progress-vol-card-top">
+        <span class="progress-vol-card-label">${cat.label}</span>
+        <span class="progress-vol-card-stat">${done}/${total}</span>
+      </div>
+      <div class="progress-ep-grid">${cells(total,done,wip,cat.color)}</div>
+    </div>`;
+  }).join("");
+  const charReg = dv.categories.reduce((s,c)=>s+c.count,0);
+  const charDone = dv.categories.reduce((s,c)=>s+(dv.episodes[c.id]||[]).filter(e=>e.status==="완료").length,0);
+  const charPct = Math.round(charReg/200*100);
+  const charCells = Array.from({length:200},(_,i)=>{
+    if(i<charDone) return `<div class="progress-ep-cell done" style="background:${ocProj.acc}"></div>`;
+    if(i<charReg)  return `<div class="progress-ep-cell wip" style="background:${ocProj.acc}"></div>`;
+    return `<div class="progress-ep-cell"></div>`;
+  }).join("");
+
+  document.getElementById("content").innerHTML=`
+    <div class="progress-page">
+      <div class="progress-page-title">진행 현황</div>
+      <div class="progress-outer-grid">
+
+        <div class="progress-proj-block">
+          <div class="progress-proj-hd">
+            <div class="progress-proj-dot" style="background:${bhProj.acc}"></div>
+            <span class="progress-proj-name">${bhProj.label}</span>
+            <span class="progress-proj-cnt">${bhDoneAll} / ${bhTotalAll}화</span>
+          </div>
+          <div class="progress-vol-inner">${bhCards}</div>
+        </div>
+
+        <div class="progress-proj-block">
+          <div class="progress-proj-hd">
+            <div class="progress-proj-dot" style="background:${ocProj.acc}"></div>
+            <span class="progress-proj-name">${ocProj.label}</span>
+            <span class="progress-proj-cnt">${charReg} / 200 캐릭터</span>
+          </div>
+          <div class="progress-oc-inner">${ocCards}</div>
+          <div class="progress-char-row">
+            <div class="progress-char-row-top">
+              <span class="progress-char-label">캐릭터 200개 달성</span>
+              <span class="progress-char-stat">${charReg}/200 (${charPct}%)</span>
+            </div>
+            <div class="progress-ep-grid">${charCells}</div>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
 }
 
 /* ── HOME ── */
@@ -3204,6 +3322,7 @@ async function loadEpDataFromSheets(){
 function stateToHash(){
   const v = S.view;
   if(v === 'home')       return '#home';
+  if(v === 'progress')   return '#progress';
   if(v === 'calendar'){
     if(S.calTimeline) return `#calendar/${S.calY}/timeline`;
     if(S.calOverview) return `#calendar/${S.calY}/overview`;
@@ -3240,6 +3359,7 @@ function applyHash(hash){
     else if(parts[2]){ S.calM=parseInt(parts[2])-1; S.calOverview=false; S.calTimeline=false; }
     return;
   }
+  if(p0 === 'progress') { S.view='progress'; return; }
   if(p0 === 'chars')   { S.view='charlist'; return; }
   if(p0 === 'char')    { S.activeChar=parseInt(parts[1]); S.view='chardetail'; return; }
   if(p0 === 'proj'){
