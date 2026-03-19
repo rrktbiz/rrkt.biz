@@ -870,6 +870,16 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-cat-body.collapsed{display:none}
 .mob-proj-btn-inner{padding-left:20px!important}
 
+/* ── 에피소드 언어 전환 버튼 ── */
+.ep-lang-btn{
+  font-size:10px;font-weight:600;padding:3px 8px;
+  border:1px solid var(--bd);border-radius:5px;
+  background:transparent;color:var(--tx3);
+  font-family:var(--fn);cursor:pointer;transition:all .12s;
+}
+.ep-lang-btn:hover{background:var(--bg);color:var(--tx);border-color:var(--bd2)}
+.ep-lang-btn.active{background:var(--tx);color:#fff;border-color:var(--tx)}
+
 /* Google Translate */
 .goog-te-banner-frame,.goog-te-menu-frame{display:none!important}
 body{top:0!important}
@@ -1584,6 +1594,7 @@ const S={
   navPinned:false,
   hoveredProj:null,
   lastMobProj:null,
+  epLang:"ko",
 };
 
 const getProj=id=>PROJECTS.find(p=>p.id===id);
@@ -2938,6 +2949,11 @@ function renderContentView(){
       <span class="tb-crumb">${proj.label}</span><span class="tb-arr">&#8250;</span>
       <span class="tb-crumb">${vol.label}</span><span class="tb-arr">&#8250;</span>
       <span class="tb-cur">${epObj.title}</span>
+      <div style="margin-left:auto;display:flex;gap:4px;flex-shrink:0">
+        <button class="ep-lang-btn ${S.epLang==='ko'?'active':''}" data-lang="ko" onclick="setEpLang('ko')">한본어</button>
+        <button class="ep-lang-btn ${S.epLang==='pure_ko'?'active':''}" data-lang="pure_ko" onclick="setEpLang('pure_ko')">순KO</button>
+        <button class="ep-lang-btn ${S.epLang==='jp'?'active':''}" data-lang="jp" onclick="setEpLang('jp')">JA</button>
+      </div>
     </div>
     <div id="content-topbar-spacer"></div>
     <div class="postype-wrap">
@@ -2971,8 +2987,8 @@ function renderContentView(){
     </div>
     </div>`;
 
-  // 본문 로드 — textId 있으면 그대로, 없으면 상대경로 자동 생성
-  const _textPath = epObj.textId || `./texts/${S.activeProj}-${S.activeVol}-${String(S.activeEp).padStart(2,'0')}.txt`;
+  // 본문 로드 — textId 있으면 그대로, 없으면 언어 + 폴더 구조 자동 생성
+  const _textPath = epObj.textId || _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, S.epLang);
   _loadPostypeContent(_textPath, proj.acc);
 
   // ── 플로팅 네비 버튼 상태 세팅 ──
@@ -3043,6 +3059,26 @@ function renderContentView(){
     };
     contentEl.addEventListener("scroll", contentEl._mobScrollHandler, {passive:true});
   })();
+}
+
+/* ── 에피소드 언어별 경로 자동 생성 ── */
+function _resolveEpPath(projId, volId, epId, lang){
+  const base = `${projId}-${volId}-${String(epId).padStart(2,'0')}`;
+  if(lang === 'pure_ko') return `./texts_pure_ko/${base}_pure_ko.txt`;
+  if(lang === 'jp')      return `./texts_jp/${base}_jp.txt`;
+  return `./texts/${base}.txt`; // 기본: 한본어
+}
+
+function setEpLang(lang){
+  S.epLang = lang;
+  // 버튼 활성 상태 업데이트
+  document.querySelectorAll('.ep-lang-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  // 본문 즉시 리로드
+  const proj = getProj(S.activeProj);
+  const epPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, lang);
+  _loadPostypeContent(epPath, proj.acc);
 }
 
 async function _loadPostypeContent(textId, acc){
