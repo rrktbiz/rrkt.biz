@@ -958,14 +958,14 @@ body{top:0!important}
 <!-- MAIN CONTENT -->
 <main id="content"></main>
 
-<!-- VOTE OVERLAY MODAL -->
-<div id="vote-overlay" onclick="if(event.target===this)closeVoteOverlay()" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.45);align-items:center;justify-content:center;">
-  <div style="width:min(820px,96vw);height:min(88vh,860px);background:var(--sb);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 40px #00000030;position:relative;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--bd);flex-shrink:0;">
+<!-- VOTE OVERLAY (iframe 방식) -->
+<div id="vote-overlay" onclick="if(event.target===this)closeVoteOverlay()" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);align-items:center;justify-content:center;">
+  <div style="width:min(860px,96vw);height:min(90vh,900px);background:var(--sb);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 40px #00000030">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--bd);flex-shrink:0;background:var(--sb)">
       <div style="font-size:13px;font-weight:700;color:var(--tx)">&#9733; 오씨돌 인기 투표</div>
-      <button onclick="closeVoteOverlay()" style="background:transparent;border:none;color:var(--tx3);font-size:20px;line-height:1;padding:0 4px;cursor:pointer;">&times;</button>
+      <button onclick="closeVoteOverlay()" style="background:transparent;border:none;color:var(--tx3);font-size:22px;line-height:1;padding:0 6px;cursor:pointer">&times;</button>
     </div>
-    <iframe id="vote-iframe" src="" style="flex:1;border:none;width:100%;background:var(--sm);" loading="lazy"></iframe>
+    <iframe id="vote-iframe" style="flex:1;border:none;width:100%;background:var(--sm)"></iframe>
   </div>
 </div>
 
@@ -3848,21 +3848,22 @@ function rebuildWorkLog(){
   }, {passive:true});
 })();
 
-/* ── 투표 오버레이 ── */
-function openVoteOverlay(){
+/* ── 투표 오버레이 (iframe) ── */
+window.openVoteOverlay = function(){
   var overlay = document.getElementById('vote-overlay');
   var iframe  = document.getElementById('vote-iframe');
-  if(!iframe.src || iframe.src === window.location.href) {
-    iframe.src = 'vote.html';
+  // getAttribute로 확인 — .src는 브라우저가 절대경로로 바꿔서 비교가 꼬임
+  if(!iframe.getAttribute('src')){
+    iframe.setAttribute('src', 'vote.html');
   }
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
-}
-function closeVoteOverlay(){
+};
+window.closeVoteOverlay = function(){
   var overlay = document.getElementById('vote-overlay');
-  overlay.style.display = 'none';
+  if(overlay) overlay.style.display = 'none';
   document.body.style.overflow = '';
-}
+};
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') closeVoteOverlay();
 });
