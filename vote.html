@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>오씨돌 인기투표 — biz.rrkt</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== 설정: VOTE_URL 아래 한 줄만 교체하세요 ===== */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --acc:#0ea5e9;--acc2:#0284c7;
+  --bg:#ffffff;--sb:#ffffff;--sm:#fafafa;
+  --bd:#e2e2e2;--bd2:#c6c6c6;
+  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
+  --fn:'Inter','Noto Sans KR',sans-serif;
+}
+html,body{height:100%;overflow:hidden;background:var(--sm);color:var(--tx);font-family:var(--fn);font-size:14px;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+button{font-family:var(--fn);cursor:pointer}
+input{font-family:var(--fn)}
+
+/* ── TOPBAR ── */
+#topbar{
+  height:48px;background:var(--sb);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;padding:0 16px;gap:12px;
+  position:fixed;top:0;left:0;right:0;z-index:100;
+}
+.tb-back{
+  background:transparent;border:1px solid var(--bd);border-radius:6px;
+  color:var(--tx2);font-size:12px;padding:4px 10px;
+  transition:all .12s;text-decoration:none;display:flex;align-items:center;gap:5px;
+}
+.tb-back:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
+.tb-title{font-size:15px;font-weight:700;color:#111;letter-spacing:-.04em}
+.tb-sub{font-size:11px;color:var(--tx3);margin-left:2px}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sel-badge{
+  font-size:12px;font-weight:600;padding:4px 12px;
+  background:color-mix(in srgb,var(--acc) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--acc) 30%,transparent);
+  border-radius:20px;color:var(--acc2);white-space:nowrap;
+}
+#submit-btn{
+  font-size:11px;font-weight:700;padding:5px 16px;
+  background:var(--acc);color:#fff;border:none;border-radius:6px;
+  transition:background .12s;white-space:nowrap;
+}
+#submit-btn:hover:not(:disabled){background:var(--acc2)}
+#submit-btn:disabled{background:var(--bd);color:var(--tx3);cursor:default}
+
+/* ── TABS ── */
+#tabs{
+  position:fixed;top:48px;left:0;right:0;z-index:90;
+  display:flex;border-bottom:1px solid var(--bd);background:var(--sb);padding:0 16px;
+}
+.tab{
+  padding:10px 14px 9px;background:transparent;border:none;
+  border-bottom:2px solid transparent;font-size:13px;font-weight:500;
+  color:var(--tx3);cursor:pointer;transition:color .12s;margin-bottom:-1px;
+}
+.tab:hover{color:var(--tx)}
+.tab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:700}
+
+/* ── CONTENT ── */
+#content{
+  margin-top:88px;height:calc(100vh - 88px);height:calc(100dvh - 88px);
+  overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+
+/* ── DONE BANNER ── */
+#done-banner{
+  display:none;align-items:center;gap:10px;
+  background:color-mix(in srgb,var(--acc) 8%,#fff);
+  border:1px solid color-mix(in srgb,var(--acc) 25%,transparent);
+  border-radius:8px;padding:12px 16px;margin:12px 16px 0;
+}
+#done-banner.show{display:flex}
+.done-check{
+  width:24px;height:24px;border-radius:50%;background:var(--acc);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.done-text-main{font-size:13px;font-weight:600;color:var(--acc2)}
+.done-text-sub{font-size:11px;color:var(--tx2);margin-top:2px}
+
+/* ── FILTER BAR ── */
+#filter-bar{
+  display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:var(--sb);border-bottom:1px solid var(--bd);flex-wrap:wrap;
+  position:sticky;top:0;z-index:10;
+}
+.filter-btn{
+  font-size:11px;font-weight:600;padding:4px 10px;
+  border:1px solid var(--bd);border-radius:20px;
+  background:transparent;color:var(--tx2);transition:all .12s;
+}
+.filter-btn:hover{border-color:var(--bd2);color:var(--tx)}
+.filter-btn.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+#search-input{
+  flex:1;min-width:100px;max-width:160px;font-size:12px;
+  padding:4px 10px;border:1px solid var(--bd);border-radius:6px;
+  outline:none;color:var(--tx);background:var(--bg);
+}
+#search-input:focus{border-color:var(--acc)}
+#result-count{font-size:11px;color:var(--tx3);margin-left:auto;white-space:nowrap}
+
+/* ── CHAR GRID ── */
+#char-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(115px,1fr));
+  gap:8px;padding:12px 16px;
+}
+.char-card{
+  background:var(--sb);border:1.5px solid var(--bd);border-radius:10px;
+  overflow:hidden;cursor:pointer;
+  transition:transform .12s,border-color .12s,background .12s;
+  user-select:none;-webkit-user-select:none;
+}
+.char-card:hover{transform:translateY(-2px);border-color:var(--bd2)}
+.char-card.voted{
+  border-color:var(--acc);
+  background:color-mix(in srgb,var(--acc) 5%,#fff);
+}
+.card-thumb{
+  aspect-ratio:3/4;position:relative;
+}
+.card-type{
+  position:absolute;top:6px;left:6px;
+  font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;
+}
+.card-check{
+  position:absolute;top:6px;right:6px;
+  width:18px;height:18px;border-radius:50%;background:var(--acc);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .14s;
+}
+.char-card.voted .card-check{opacity:1}
+.card-info{padding:7px 8px 0}
+.card-name{font-size:11px;font-weight:600;color:var(--tx);line-height:1.35;margin-bottom:2px}
+.card-vcnt{font-size:9px;color:var(--tx3)}
+.card-vcnt span{color:var(--acc);font-weight:700}
+.card-vote-btn{
+  width:100%;padding:5px 0;margin-top:5px;
+  border:none;border-top:1px solid var(--bd);
+  background:transparent;font-size:10px;font-weight:600;color:var(--tx2);
+  transition:all .12s;
+}
+.char-card.voted .card-vote-btn{
+  color:var(--acc);
+  background:color-mix(in srgb,var(--acc) 6%,transparent);
+  border-top-color:color-mix(in srgb,var(--acc) 20%,transparent);
+}
+
+/* ── RANK PAGE ── */
+#rank-page{display:none;padding:12px 16px}
+.rank-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rank-hd-title{font-size:13px;font-weight:700;color:var(--tx)}
+#rank-total{font-size:11px;color:var(--tx3)}
+.rank-reload{
+  font-size:10px;font-weight:600;padding:3px 10px;
+  border:1px solid var(--bd);border-radius:5px;background:transparent;color:var(--tx2);
+  transition:all .12s;
+}
+.rank-reload:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
+#rank-list{display:flex;flex-direction:column;gap:5px}
+.rank-item{
+  background:var(--sb);border:1px solid var(--bd);border-radius:8px;
+  display:flex;align-items:center;gap:10px;padding:9px 12px;
+}
+.rank-num{font-size:16px;font-weight:700;min-width:26px;text-align:center;color:var(--tx3)}
+.rank-num.n1{color:#f59e0b}.rank-num.n2{color:#94a3b8}.rank-num.n3{color:#b45309}
+.rank-thumb{width:34px;height:46px;border-radius:5px;flex-shrink:0}
+.rank-info{flex:1;min-width:0}
+.rank-name{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-row2{display:flex;align-items:center;gap:6px}
+.rank-type{font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;flex-shrink:0}
+.rank-bar-wrap{flex:1;background:var(--bd);border-radius:3px;height:4px;overflow:hidden}
+.rank-bar{height:4px;border-radius:3px;background:var(--acc);transition:width .4s ease}
+.rank-votes{font-size:13px;font-weight:700;color:var(--tx);flex-shrink:0}
+.rank-empty{padding:48px;text-align:center;font-size:12px;color:var(--tx3);line-height:1.8}
+
+/* ── LOADING ── */
+#loading-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(255,255,255,.8);backdrop-filter:blur(2px);
+  align-items:center;justify-content:center;flex-direction:column;gap:12px;
+}
+#loading-overlay.show{display:flex}
+.spinner{
+  width:28px;height:28px;border:3px solid var(--bd);
+  border-top-color:var(--acc);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:12px;color:var(--tx2)}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  #char-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;padding:10px 12px}
+  #filter-bar{padding:8px 12px}
+  .tb-sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 로딩 오버레이 -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="loading-txt">투표 제출 중...</div>
+</div>
+
+<!-- 탑바 -->
+<div id="topbar">
+  <a class="tb-back" href="javascript:history.back()">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    돌아가기
+  </a>
+  <div>
+    <span class="tb-title">인기 투표</span>
+    <span class="tb-sub">biz-OC-doll</span>
+  </div>
+  <div class="tb-right">
+    <div class="sel-badge" id="sel-badge">0명 선택</div>
+    <button id="submit-btn" disabled onclick="submitVote()">투표하기</button>
+  </div>
+</div>
+
+<!-- 탭 -->
+<div id="tabs">
+  <button class="tab active" id="tab-vote" onclick="switchTab('vote')">투표하기</button>
+  <button class="tab" id="tab-rank" onclick="switchTab('rank')">순위 보기</button>
+</div>
+
+<!-- 콘텐츠 -->
+<div id="content">
+
+  <!-- 투표 완료 배너 -->
+  <div id="done-banner">
+    <div class="done-check">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg>
+    </div>
+    <div>
+      <div class="done-text-main">투표가 완료됐어요!</div>
+      <div class="done-text-sub">순위 탭에서 현재 순위를 확인해보세요.</div>
+    </div>
+  </div>
+
+  <!-- 투표 탭 -->
+  <div id="vote-page">
+    <div id="filter-bar">
+      <button class="filter-btn on" onclick="setFilter('ALL',this)">ALL</button>
+      <button class="filter-btn" onclick="setFilter('A',this)">A타입</button>
+      <button class="filter-btn" onclick="setFilter('B',this)">B타입</button>
+      <button class="filter-btn" onclick="setFilter('C',this)">C타입</button>
+      <input type="text" id="search-input" placeholder="캐릭터 검색..." oninput="onSearch(this.value)">
+      <span id="result-count">200명</span>
+    </div>
+    <div id="char-grid"></div>
+  </div>
+
+  <!-- 순위 탭 -->
+  <div id="rank-page">
+    <div class="rank-hd">
+      <span class="rank-hd-title">실시간 투표 순위</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="rank-total">총 0표</span>
+        <button class="rank-reload" onclick="reloadRank()">새로고침</button>
+      </div>
+    </div>
+    <div id="rank-list"></div>
+  </div>
+
+</div>
+
+<script>
+// =====================================================
+//  설정: 아래 URL만 교체하면 됩니다
+// =====================================================
+var VOTE_URL = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
+// =====================================================
+
+// 캐릭터 데이터
+var FIRSTNAMES = ['아이','유이','하루','미오','사쿠라','린','아카네','유나','미나','코토','하나','시오리','아야','나오','레이','에마','노아','세나','리나','아스나','히나','카나','미유','소라','츠바키','마야','이쿠','나나','유리','세리','아키','카호','루이','미사','사야','이부키','코노미','히나타','아나','세이카','란','치나츠','후우카','유카','이치카','니나','미라이','아스카','카린','메이','리오','마호','시오','나기','히요리','유즈','모모','이로하','코코','후타바','아오이','카에데','스즈','마도카','호타루','미나미','유우키','사에','코유키','무츠미','아마네','카이','이즈미','노노','하야테','토카','우미','키라라','치히로','아키라','나루','오리히메','이치요','아리스','사야카','레미','루카','아쿠아','아리아','히메','유이나','카구야','칸나','미코토','아이리','카코','하즈키','루루','미오나','코하루'];
+var LASTNAMES  = ['야마다','타나카','스즈키','사토','와타나베','이토','나카무라','코바야시','카토','요시다','야마모토','마츠모토','이노우에','키무라','하야시','시미즈','야마구치','사이토','마츠다','이케다','오가와','하세가와','요코야마','미야자키','오카모토','나카가와','코지마','마에다','후지와라','오노','타마키','시오미','하기와라','후쿠다','이마이','오오시마','쿠로다','노다','쿠보','후지타','히라야마','이시카와','나카지마','하마다','오쿠다','토쿠나가','시바타','나카니시','오오타','카와구치','카와무라','아오키','마루야마','스기우라','타카하시','후나하시','야마시타','타카기','타케우치','우에다','타케다','코마츠','키노시타','후지모토','마루타','미야타','오카와','하마노','시모다','타니모토','쿠라모토','나리타','마에지마','카이도','시노다','아베','아라이','타케시타','우에노','유아사','카와카미','타카노','야마자키','아사노','노자와','오오이','쿠와하라','마키','키리시마','후지사키','마시마','미조구치','코노','후쿠시마','소가','치바','이에나가','시라이','카토우'];
+
+var TYPE_COLORS = {A:'#d97706', B:'#db2777', C:'#0ea5e9'};
+var GRADS_A = ['160deg,#fffbeb,#fde68a','160deg,#fef9c3,#fbbf24','160deg,#fff7ed,#fed7aa'];
+var GRADS_B = ['160deg,#fdf2f8,#f9a8d4','160deg,#fce7f3,#f472b6','160deg,#fff0f9,#fb7185'];
+var GRADS_C = ['160deg,#eff6ff,#93c5fd','160deg,#f5f3ff,#a78bfa','160deg,#f0fdf4,#6ee7b7','160deg,#fff7ed,#fb923c'];
+
+// 타입 배열 생성 + 셔플
+var TYPES = [];
+for (var i = 0; i < 200; i++) {
+  if (i < 30) TYPES.push('A');
+  else if (i < 100) TYPES.push('B');
+  else TYPES.push('C');
+}
+for (var i = TYPES.length - 1; i > 0; i--) {
+  var j = Math.floor(Math.random() * (i + 1));
+  var tmp = TYPES[i]; TYPES[i] = TYPES[j]; TYPES[j] = tmp;
+}
+
+// 캐릭터 목록 생성
+var CHARS = [];
+for (var i = 0; i < 200; i++) {
+  var t = TYPES[i];
+  var grads = t === 'A' ? GRADS_A : t === 'B' ? GRADS_B : GRADS_C;
+  CHARS.push({
+    id: i + 1,
+    firstname: FIRSTNAMES[i % FIRSTNAMES.length],
+    lastname:  LASTNAMES[i % LASTNAMES.length],
+    type: t,
+    grad: grads[i % grads.length],
+  });
+}
+
+// 상태
+var voteData   = {};
+var selected   = JSON.parse(localStorage.getItem('ocidol_sel') || '[]');
+var hasDone    = localStorage.getItem('ocidol_done') === '1';
+var filterType = 'ALL';
+var searchQ    = '';
+var curTab     = 'vote';
+
+// ---- 초기화 ----
+if (hasDone) {
+  document.getElementById('done-banner').classList.add('show');
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = '투표 완료';
+}
+updateSelBadge();
+renderGrid();
+loadVoteData();
+
+// ---- 득표 데이터 로드 ----
+function loadVoteData(cb) {
+  fetch(VOTE_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      if (json.ok) {
+        voteData = json.votes;
+        updateGridCounts();
+        if (cb) cb();
+      }
+    })
+    .catch(function(){});
+}
+
+// ---- 투표 제출 ----
+function submitVote() {
+  if (hasDone || selected.length === 0) return;
+  document.getElementById('loading-overlay').classList.add('show');
+
+  fetch(VOTE_URL, {
+    method: 'POST',
+    body: JSON.stringify({ votes: selected }),
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      document.getElementById('loading-overlay').classList.remove('show');
+      if (json.ok) {
+        hasDone = true;
+        localStorage.setItem('ocidol_done', '1');
+        localStorage.setItem('ocidol_sel',  JSON.stringify(selected));
+        // 로컬 즉시 반영
+        selected.forEach(function(id){
+          voteData[id] = (voteData[id] || 0) + 1;
+        });
+        document.getElementById('done-banner').classList.add('show');
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('submit-btn').textContent = '투표 완료';
+        updateGridCounts();
+      } else {
+        alert('오류가 발생했어요: ' + (json.error || '알 수 없는 오류'));
+      }
+    })
+    .catch(function(){
+      document.getElementById('loading-overlay').classList.remove('show');
+      alert('네트워크 오류가 발생했어요. 다시 시도해주세요.');
+    });
+}
+
+// ---- 선택 토글 ----
+function toggleChar(id) {
+  if (hasDone) return;
+  var idx = selected.indexOf(id);
+  if (idx > -1) selected.splice(idx, 1);
+  else           selected.push(id);
+  var card = document.querySelector('.char-card[data-id="' + id + '"]');
+  if (card) {
+    var on = selected.indexOf(id) > -1;
+    card.classList.toggle('voted', on);
+    card.querySelector('.card-vote-btn').textContent = on ? '선택 취소' : '투표';
+  }
+  updateSelBadge();
+}
+
+function updateSelBadge() {
+  var n = selected.length;
+  document.getElementById('sel-badge').textContent = n + '명 선택';
+  var btn = document.getElementById('submit-btn');
+  if (!hasDone) btn.disabled = n === 0;
+}
+
+// ---- 그리드 렌더 ----
+function renderGrid() {
+  var q = searchQ.toLowerCase();
+  var filtered = CHARS.filter(function(c){
+    var typeOk = filterType === 'ALL' || c.type === filterType;
+    var nameOk = !q || c.firstname.toLowerCase().includes(q) || c.lastname.toLowerCase().includes(q) || (c.lastname + c.firstname).includes(q);
+    return typeOk && nameOk;
+  });
+  document.getElementById('result-count').textContent = filtered.length + '명';
+  document.getElementById('char-grid').innerHTML = filtered.map(function(c){
+    var voted = selected.indexOf(c.id) > -1;
+    var cnt   = voteData[c.id] || 0;
+    return '<div class="char-card' + (voted ? ' voted' : '') + '" data-id="' + c.id + '" onclick="toggleChar(' + c.id + ')">' +
+      '<div class="card-thumb" style="background:linear-gradient(' + c.grad + ')">' +
+        '<div class="card-type" style="background:' + TYPE_COLORS[c.type] + '">' + c.type + '</div>' +
+        '<div class="card-check">' +
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card-info">' +
+        '<div class="card-name">' + c.lastname + ' ' + c.firstname + '</div>' +
+        '<div class="card-vcnt">득표 <span id="vcnt-' + c.id + '">' + cnt + '</span></div>' +
+      '</div>' +
+      '<button class="card-vote-btn" onclick="event.stopPropagation();toggleChar(' + c.id + ')">' + (voted ? '선택 취소' : '투표') + '</button>' +
+    '</div>';
+  }).join('');
+}
+
+function updateGridCounts() {
+  CHARS.forEach(function(c){
+    var el = document.getElementById('vcnt-' + c.id);
+    if (el) el.textContent = voteData[c.id] || 0;
+  });
+  if (curTab === 'rank') renderRank();
+}
+
+// ---- 순위 렌더 ----
+function renderRank() {
+  var ranked = CHARS
+    .map(function(c){ return {c:c, cnt: voteData[c.id] || 0}; })
+    .filter(function(x){ return x.cnt > 0; })
+    .sort(function(a,b){ return b.cnt - a.cnt; });
+
+  var total = Object.values(voteData).reduce(function(s,v){ return s + v; }, 0);
+  document.getElementById('rank-total').textContent = '총 ' + total + '표';
+
+  if (ranked.length === 0) {
+    document.getElementById('rank-list').innerHTML =
+      '<div class="rank-empty">아직 투표 기록이 없어요.<br>투표 탭에서 먼저 투표해보세요!</div>';
+    return;
+  }
+
+  var maxCnt = ranked[0].cnt || 1;
+  var rankClrs = ['n1','n2','n3'];
+
+  document.getElementById('rank-list').innerHTML = ranked.map(function(x, i){
+    var c   = x.c;
+    var pct = Math.round((x.cnt / maxCnt) * 100);
+    var nCls = i < 3 ? rankClrs[i] : '';
+    return '<div class="rank-item">' +
+      '<div class="rank-num ' + nCls + '">' + (i+1) + '</div>' +
+      '<div class="rank-thumb" style="background:linear-gradient(' + c.grad + ')"></div>' +
+      '<div class="rank-info">' +
+        '<div class="rank-name">' + c.lastname + ' ' + c.firstname + '</div>' +
+        '<div class="rank-row2">' +
+          '<span class="rank-type" style="background:' + TYPE_COLORS[c.type] + '">' + c.type + '</span>' +
+          '<div class="rank-bar-wrap"><div class="rank-bar" style="width:' + pct + '%"></div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="rank-votes">' + x.cnt + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function reloadRank() {
+  loadVoteData(renderRank);
+}
+
+// ---- 필터/검색 ----
+function setFilter(t, btn) {
+  filterType = t;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  renderGrid();
+}
+
+function onSearch(v) {
+  searchQ = v;
+  renderGrid();
+}
+
+// ---- 탭 전환 ----
+function switchTab(tab) {
+  curTab = tab;
+  document.getElementById('vote-page').style.display  = tab === 'vote' ? 'block' : 'none';
+  document.getElementById('rank-page').style.display  = tab === 'rank' ? 'block' : 'none';
+  document.getElementById('tab-vote').classList.toggle('active', tab === 'vote');
+  document.getElementById('tab-rank').classList.toggle('active', tab === 'rank');
+  if (tab === 'rank') { loadVoteData(renderRank); }
+}
+</script>
+</body>
+</html>
