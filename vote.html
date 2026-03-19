@@ -17,7 +17,7 @@
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
   --fn:'Inter','Noto Sans KR',sans-serif;
 }
-html,body{height:100%;overflow:hidden;background:var(--sm);color:var(--tx);font-family:var(--fn);font-size:14px;-webkit-font-smoothing:antialiased}
+html,body{min-height:100%;background:var(--sm);color:var(--tx);font-family:var(--fn);font-size:14px;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 button{font-family:var(--fn);cursor:pointer}
 input{font-family:var(--fn)}
@@ -26,7 +26,7 @@ input{font-family:var(--fn)}
 #topbar{
   height:48px;background:var(--sb);border-bottom:1px solid var(--bd);
   display:flex;align-items:center;padding:0 16px;gap:12px;
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:sticky;top:0;z-index:100;
 }
 .tb-back{
   background:transparent;border:1px solid var(--bd);border-radius:6px;
@@ -53,7 +53,7 @@ input{font-family:var(--fn)}
 
 /* ── TABS ── */
 #tabs{
-  position:fixed;top:48px;left:0;right:0;z-index:90;
+  position:sticky;top:48px;z-index:90;
   display:flex;border-bottom:1px solid var(--bd);background:var(--sb);padding:0 16px;
 }
 .tab{
@@ -66,9 +66,7 @@ input{font-family:var(--fn)}
 
 /* ── CONTENT ── */
 #content{
-  margin-top:88px;height:calc(100vh - 88px);height:calc(100dvh - 88px);
-  overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
-  padding-bottom:env(safe-area-inset-bottom,0px);
+  padding-bottom:env(safe-area-inset-bottom,24px);
 }
 
 /* ── DONE BANNER ── */
