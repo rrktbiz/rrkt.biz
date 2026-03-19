@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>biz.rrkt — v37</title>
+<title>biz.rrkt</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
@@ -1599,10 +1599,23 @@ const foreignVisits=parseInt(localStorage.getItem("biz_foreign")||"0");
 
 setInterval(()=>{const el=document.getElementById("home-clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});},1000);
 function setLang(lang){
-  // googtrans 쿠키 — path=/ 로 전체 경로 적용
-  var domain = location.hostname === 'localhost' ? '' : ';domain=' + location.hostname;
-  document.cookie = 'googtrans=/ko/' + lang + ';path=/' + domain;
-  document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  if(lang==='ko'){
+    // KO: 쿠키 삭제 후 리로드
+    document.cookie='googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie='googtrans=;path=/;domain=.'+location.hostname+';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    location.reload();
+    return;
+  }
+  // 위젯이 이미 로드된 경우 직접 select 제어
+  var sel=document.querySelector('.goog-te-combo');
+  if(sel){
+    sel.value=lang;
+    sel.dispatchEvent(new Event('change'));
+    return;
+  }
+  // 위젯 미로드 시 쿠키 방식 폴백
+  document.cookie='googtrans=/ko/'+lang+';path=/';
+  document.cookie='googtrans=/ko/'+lang+';path=/;domain=.'+location.hostname;
   location.reload();
 }
 
@@ -2427,7 +2440,6 @@ function renderHome(){
     <div class="home-page">
       <div class="home-header">
         <div class="home-logo-big">biz.rrkt</div>
-        <div id="home-clock" class="home-clock">${timeStr}</div>
       </div>
       <div class="home-body">
         <!-- ① About card (left) -->
@@ -3792,8 +3804,7 @@ function googleTranslateElementInit(){
   new google.translate.TranslateElement({
     pageLanguage:'ko',
     includedLanguages:'en,ja,zh-CN,ko',
-    autoDisplay:false,
-    layout:google.translate.TranslateElement.InlineLayout.SIMPLE
+    autoDisplay:false
   },'google_translate_element');
 }
 </script>
