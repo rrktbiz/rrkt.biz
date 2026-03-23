@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>biz-OC-doll · 프로젝트 소개</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f5f5;--sb:#fff;--bd:#e2e2e2;--bd2:#c6c6c6;
+  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
+  --fn:'Inter','Noto Sans KR',sans-serif;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
+button{font-family:var(--fn);cursor:pointer}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- ───────────────────────────────────────────
+     HERO
+─────────────────────────────────────────── -->
+<div style="background:linear-gradient(160deg,#020c18,#042038,#0a3a6b);padding:52px 32px 44px;text-align:center;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,#0ea5e920 0%,transparent 70%);pointer-events:none"></div>
+  <div style="position:relative;max-width:680px;margin:0 auto">
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;color:#0ea5e9;text-transform:uppercase;margin-bottom:14px">BIZ-OC-DOLL</div>
+    <div style="font-size:32px;font-weight:700;color:#fff;letter-spacing:-.03em;line-height:1.18;margin-bottom:16px">캐릭터의 무한한 무대</div>
+    <div style="font-size:14px;color:#94a3b8;line-height:1.85;max-width:480px;margin:0 auto">
+      작품이 끝나도 사라지지 않는 캐릭터들.<br>매체를 넘나들며 자신만의 필모그래피를 쌓아가는 '캐릭터 배우'의 세계.
+    </div>
+    <div style="margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center">
+      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">비주얼게임</span>
+      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">판타지</span>
+      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">OC</span>
+      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">자캐</span>
+      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">드라마</span>
+      <button onclick="openBizModal()" style="font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;background:linear-gradient(135deg,#f59e0b,#ef4444);border:none;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 0 0 2px #f59e0b55,0 4px 18px #ef444440;letter-spacing:.02em;transition:transform .15s,box-shadow .15s" onmouseover="this.style.transform='scale(1.06)';this.style.boxShadow='0 0 0 3px #f59e0b88,0 6px 24px #ef444460'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 0 2px #f59e0b55,0 4px 18px #ef444440'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        기업용 페이지
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     BODY
+─────────────────────────────────────────── -->
+<div style="max-width:780px;margin:0 auto;padding:32px 24px 52px">
+
+  <!-- ① 컨셉 3열 + 기획 의도 -->
+  <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:24px">
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--bd)">
+      <div style="padding:20px 18px;border-right:1px solid var(--bd)">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#0ea5e9;margin-bottom:6px">01 · Concept</div>
+        <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:9px">죽지 않는 캐릭터</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.75">작품이 끝나면 사라지는 캐릭터가 아닙니다. 매체를 넘나들며 자신만의 필모그래피(Filmography)를 쌓아가는 '캐릭터 배우'에 가깝습니다.</div>
+      </div>
+      <div style="padding:20px 18px;border-right:1px solid var(--bd)">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#0ea5e9;margin-bottom:6px">02 · System</div>
+        <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:9px">한계 없는 커리어</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.75">인형들은 고정된 배역에 갇히지 않습니다. 웹툰 주인공, 게임 빌런, 일러스트 모델 등 어떤 역할도 소화합니다. 등록된 활동은 공식 커리어로 남습니다.</div>
+      </div>
+      <div style="padding:20px 18px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#0ea5e9;margin-bottom:6px">03 · Action</div>
+        <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:9px">당신이 만드는 역사</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.75">누구나 Biz-OC-doll의 인형을 사용할 수 있습니다. 여러분이 만드는 창작물은 이 캐릭터의 새로운 인생이 될 수 있습니다.</div>
+      </div>
+    </div>
+
+    <div style="padding:20px 22px">
+      <div style="font-size:13px;color:var(--tx3);line-height:1.9;font-style:italic;border-left:3px solid #0ea5e9;padding-left:14px;margin-bottom:18px">
+        이 캐릭터는, 자신이 만들어져가는 감각을 느끼고, 당신이 그들을 볼 때, 그들도 당신을 느낍니다.
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">"작품은 끝나도, 캐릭터의 영원을 바라며"</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">이야기가 끝나면 공들인 캐릭터까지 같이 사라지는 소모적인 구조를 거부합니다.</span></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">특정 컨텐츠에 갇히지 않고, 수많은 창작자가 각자의 방식으로 활용할 때 캐릭터는 비로소 진짜 생명력을 얻습니다.</span></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">제작자는 캐릭터를 가두는 주인이 아니라, 캐릭터들이 어디서든 자유롭게 쓰일 수 있게 제공할 뿐입니다.</span></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">창작자가 함께하는 한, 이 인형들의 경력과 이야기는 멈추지 않고 이어집니다.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 가이드라인 -->
+  <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:24px">
+
+    <div style="padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:14px;font-weight:700;color:var(--tx)">2차 창작 · 수익 · 저작권</span>
+      <span style="font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">Fan Creation Guidelines</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--bd)">
+      <div style="padding:18px 20px;border-right:1px solid var(--bd)">
+        <div style="font-size:11px;font-weight:700;color:#0ea5e9;margin-bottom:8px">01 · 창작 및 수익 창출의 자유</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.8">모든 캐릭터는 창작을 위해 열려 있습니다. 개인 굿즈, 포스타입 유료 발행, SNS 업로드 등 개인 단위 창작 활동과 수익 창출에 대해 공식은 어떠한 배당이나 권리도 요구하지 않습니다.</div>
+      </div>
+      <div style="padding:18px 20px">
+        <div style="font-size:11px;font-weight:700;color:#0ea5e9;margin-bottom:8px">03 · 저작권 귀속</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.8">여러분이 만든 2차 저작물의 권리는 전적으로 창작자(여러분)에게 귀속됩니다. 공식은 여러분의 창작물을 무단으로 사용하거나 소유권을 주장하지 않습니다.</div>
+      </div>
+    </div>
+
+    <div style="padding:18px 20px;border-bottom:1px solid var(--bd)">
+      <div style="font-size:11px;font-weight:700;color:#0ea5e9;margin-bottom:12px">02 · 출처 표기 안내</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="padding:12px 14px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#16a34a;margin-bottom:6px">자율 — 개인 SNS · 소규모 창작</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7">별도 표기 의무 없음. 원할 경우 <strong>#Biz-OC-doll</strong> 해시태그를 사용해 주세요.</div>
+        </div>
+        <div style="padding:12px 14px;border-radius:8px;background:#fffbeb;border:1px solid #fde68a">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#d97706;margin-bottom:6px">필수 — 정식 플랫폼 · 상업 판매</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7">웹툰/웹소설 연재, 게임 개발, 대규모 상업 판매 시 작품 하단이나 크레딧에 기재해 주세요.</div>
+        </div>
+      </div>
+      <div style="border-radius:8px;border:1px solid var(--bd);overflow:hidden">
+        <div style="padding:8px 14px;background:var(--bg);border-bottom:1px solid var(--bd)">
+          <span style="font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase">출처 표기 예시 3종</span>
+        </div>
+        <div style="padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;background:#fff;border-bottom:1px solid var(--bd)">본 작품에 등장하는 캐릭터 [캐릭터명]은 Biz-OC-doll 프로젝트(rrkt.biz)의 [BIZOC-000-000] 캐릭터를 기반으로 창작되었습니다.</div>
+        <div style="padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;background:#fff;border-bottom:1px solid var(--bd)">Original Character by Biz-OC-doll</div>
+        <div style="padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;background:#fff">#Biz_OC_doll #BIZOC_2026_001</div>
+      </div>
+    </div>
+
+    <div style="padding:18px 20px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
+        <span style="font-size:11px;font-weight:700;color:#dc2626">이용 제한 및 공식 패널티</span>
+        <span style="font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">Restrictions</span>
+      </div>
+      <div style="font-size:13px;color:var(--tx2);line-height:1.8;padding:10px 13px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;margin-bottom:12px">
+        창작은 자율에 맡겨지나, 아래 조항을 포함 시 공식 생태계(프로젝트, 앱 게임, 굿즈화 등)에서 불리함이 발생할 수 있음을 미리 알립니다.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd);align-items:flex-start">
+          <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:#fee2e2;color:#dc2626;flex-shrink:0;margin-top:2px">1</span>
+          <div><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px">사회적·정치적 악용 금지</div><div style="font-size:13px;color:var(--tx2);line-height:1.75">특정 정치적 견해 표명, 사회적 혐오 조장 및 분쟁 유발 목적의 사용을 엄격히 금지합니다.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd);align-items:flex-start">
+          <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:#fee2e2;color:#dc2626;flex-shrink:0;margin-top:2px">2</span>
+          <div><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px">종교적 오용 방지</div><div style="font-size:13px;color:var(--tx2);line-height:1.75">콘텐츠 내 종교적 설정 연기는 허용. 단, 캐릭터를 현실 종교의 포교용 홍보물에 사용하거나 선전 도구로 쓰는 행위는 금지합니다.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:11px 0;align-items:flex-start">
+          <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:#fee2e2;color:#dc2626;flex-shrink:0;margin-top:2px">3</span>
+          <div><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px">극단적 수위 및 윤리 위반</div><div style="font-size:13px;color:var(--tx2);line-height:1.75">과도한 고어, 혐오·불쾌감을 주는 극단적 수위, 성착취적 묘사 및 비도덕적 연출을 금지합니다.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 제작자 스탠드 -->
+  <div style="padding:22px 24px;background:linear-gradient(135deg,#020c18,#042038);border-radius:14px;border:1px solid #0ea5e925;display:flex;gap:18px;align-items:flex-start">
+    <div style="flex-shrink:0;margin-top:2px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:#7dd3fc;text-transform:uppercase;margin-bottom:4px">Creator's Stand</div>
+      <div style="width:36px;height:1px;background:#0ea5e950"></div>
+    </div>
+    <div style="font-size:14px;color:#94a3b8;line-height:1.85">
+      해당 프로젝트를 운영할 때 제작자의 모든 역량은 오직 캐릭터의 완성에만 집중됩니다. 불필요한 운영 소모를 최소화하고 본질적인 작업에 전력을 다하기 위함이니, 너그러운 양해를 바랍니다.
+    </div>
+  </div>
+
+</div>
+
+<!-- ───────────────────────────────────────────
+     기업용 모달
+─────────────────────────────────────────── -->
+<div id="biz-overlay" onclick="if(event.target===this)closeBizModal()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.6);align-items:center;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)">
+  <div id="biz-modal" style="background:#fff;border-radius:18px;width:min(540px,calc(100vw - 32px));max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.35);position:relative;transform:translateY(20px) scale(.97);opacity:0;transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .22s ease">
+
+    <div style="padding:22px 24px 18px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0;z-index:2">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px #ef444440">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#111;letter-spacing:-.02em">기업용 페이지</div>
+          <div style="font-size:10px;color:#999;margin-top:1px;font-weight:500;letter-spacing:.5px">BIZ-OC-DOLL · Business</div>
+        </div>
+      </div>
+      <button onclick="closeBizModal()" style="background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f5f5f5'">×</button>
+    </div>
+
+    <div style="padding:24px 24px 28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-bottom:14px">기업 협업 불변 원칙</div>
+
+      <div id="biz-principles" style="display:flex;flex-direction:column;gap:0;border:1px solid #efefef;border-radius:12px;overflow:hidden;margin-bottom:22px"></div>
+
+      <div style="background:linear-gradient(135deg,#020c18,#0a2540);border-radius:10px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px">
+        <span style="font-size:16px;flex-shrink:0;margin-top:1px">📋</span>
+        <div style="font-size:13px;color:#94a3b8;line-height:1.8">
+          모든 협업의 구체적인 조건과 범위는 <span style="color:#7dd3fc;font-weight:600">개별 계약</span>으로 정한다.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BIZ_PRINCIPLES = [
+  "원저작권은 Biz-OC-doll에 있으며, 어떠한 형태로도 이전되지 않는다.",
+  "기업은 허가된 범위 안에서만 캐릭터를 활용할 수 있다.",
+  "팬 창작물의 권리는 창작자에게 있다. 기업이 이를 활용하려면 창작자와 개별 협의를 거쳐야 한다.",
+  "기업은 Biz-OC-doll을 공식으로 자칭하거나 대표할 수 없다.",
+  "프로젝트의 제작과 운영에 기업이 관여할 수 없다.",
+  "개별 커스텀 요청은 받지 않는다.",
+];
+
+document.getElementById('biz-principles').innerHTML = BIZ_PRINCIPLES.map((txt, i) => `
+  <div style="display:flex;align-items:flex-start;gap:14px;padding:14px 18px;${i < BIZ_PRINCIPLES.length-1 ? "border-bottom:1px solid #f5f5f5" : ""};background:${i%2===0?"#fff":"#fafafa"}">
+    <span style="font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,#f59e0b,#ef4444);width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</span>
+    <span style="font-size:13px;color:#2a2a2a;line-height:1.75">${txt}</span>
+  </div>
+`).join("");
+
+function openBizModal(){
+  var ov = document.getElementById('biz-overlay');
+  var md = document.getElementById('biz-modal');
+  ov.style.display = 'flex';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    md.style.transform = 'translateY(0) scale(1)';
+    md.style.opacity = '1';
+  }));
+}
+function closeBizModal(){
+  var md = document.getElementById('biz-modal');
+  md.style.transform = 'translateY(16px) scale(.97)';
+  md.style.opacity = '0';
+  setTimeout(()=>{ document.getElementById('biz-overlay').style.display='none'; }, 240);
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBizModal(); });
+</script>
+
+</body>
+</html>
