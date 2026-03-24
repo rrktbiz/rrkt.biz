@@ -4,233 +4,584 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 프로젝트 소개</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f5f5f5;--sb:#fff;--bd:#e2e2e2;--bd2:#c6c6c6;
-  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
-  --fn:'Inter','Noto Sans KR',sans-serif;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #ffffff;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e8e8e8;
+  --gray-400: #a3a3a3;
+  --gray-600: #525252;
+  --gray-900: #111111;
+  --blue: #5a90b0;
+  --red: #d93025;
+  --font: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;
 }
-html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
-button{font-family:var(--fn);cursor:pointer}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+html, body {
+  background: var(--white);
+  color: var(--gray-900);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* HERO */
+.hero {
+  background:
+    radial-gradient(ellipse 160px 120px at 8% 22%, rgba(185,210,230,0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 110px 90px at 22% 65%, rgba(210,195,230,0.28) 0%, transparent 100%),
+    radial-gradient(ellipse 140px 100px at 38% 18%, rgba(230,215,195,0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 100px 120px at 52% 72%, rgba(175,220,225,0.25) 0%, transparent 100%),
+    radial-gradient(ellipse 150px 90px at 67% 30%, rgba(220,210,235,0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 120px 140px at 80% 70%, rgba(190,215,235,0.28) 0%, transparent 100%),
+    radial-gradient(ellipse 130px 90px at 92% 18%, rgba(225,205,210,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 100px 110px at 15% 85%, rgba(200,225,220,0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 120px 100px at 45% 45%, rgba(215,210,230,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 110px 120px at 73% 55%, rgba(185,220,230,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 90px 80px at 60% 10%, rgba(230,220,205,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 130px 70px at 30% 40%, rgba(200,190,225,0.16) 0%, transparent 100%),
+    radial-gradient(ellipse 80px 110px at 88% 45%, rgba(195,225,235,0.2) 0%, transparent 100%),
+    linear-gradient(145deg, #eef4f8 0%, #f2eff8 35%, #f5f2ee 65%, #edf5f7 100%);
+  padding: 72px 24px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+/* GLITTER */
+.glitter-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.spark {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.7;
+}
+.spark svg { display: block; }
+
+.hero-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; margin-bottom: 16px; position: relative; z-index: 2; }
+.hero-title { font-size: clamp(28px, 5vw, 42px); font-weight: 100; color: #4a5560; letter-spacing: 0.22em; line-height: 1.0; margin-bottom: 20px; font-family: 'Josefin Sans', sans-serif; position: relative; z-index: 2; }
+.diamond-i { position: relative; display: inline-block; }
+.diamond-i::after {
+  content: '';
+  position: absolute;
+  top: -0.18em;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 0.18em;
+  height: 0.18em;
+  background: #4a5560;
+}
+.diamond-o { position: relative; display: inline-block; }
+.diamond-o::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%) rotate(45deg);
+  width: 0.18em;
+  height: 0.18em;
+  background: #4a5560;
+}
+.hero-sub { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 0 auto 28px; position: relative; z-index: 2; }
+.hero-hashtag { font-size: 13px; color: rgba(90,144,176,0.65); font-weight: 400; letter-spacing: 0.02em; }
+.hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center; }
+.tag { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 100px; background: rgba(255,255,255,0.4); border: 1px solid rgba(90,144,176,0.3); color: var(--blue); }
+.btn-biz { font-size: 13px; font-weight: 600; padding: 7px 18px; border-radius: 100px; background: rgba(255,255,255,0.6); border: 1px solid rgba(74,85,96,0.2); color: #4a5560; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2; }
+.btn-biz:hover { background: #e8e8e8; transform: scale(1.02); }
+.btn-report { font-size: 13px; font-weight: 600; padding: 7px 18px; border-radius: 100px; background: rgba(90,144,176,0.1); border: 1px solid rgba(90,144,176,0.35); color: var(--blue); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; text-decoration: none; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2; }
+.btn-report:hover { background: rgba(90,144,176,0.18); transform: scale(1.02); }
+
+/* PAGE */
+.page { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* SECTION */
+.sec { padding-top: 56px; margin-top: 56px; border-top: 1px solid var(--gray-200); }
+.sec-first { border-top: none; padding-top: 12px; }
+.sec-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+.sec-title { font-size: 22px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; line-height: 1.3; margin-bottom: 32px; }
+
+/* CONCEPTS */
+.concepts { display: flex; flex-direction: column; gap: 0; margin-bottom: 36px; border-top: 1px solid var(--gray-200); }
+.concept-item { padding: 16px 0; border-bottom: 1px solid var(--gray-200); display: flex; gap: 24px; align-items: flex-start; }
+.concept-num { font-size: 10px; font-weight: 600; color: var(--gray-400); letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; width: 44px; padding-top: 2px; }
+.concept-content { flex: 1; }
+.concept-title { font-size: 15px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 4px; line-height: 1.35; }
+.concept-body { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+/* INTENT */
+.intent-quote { font-size: 14px; color: var(--gray-400); font-style: italic; line-height: 1.9; padding-left: 16px; border-left: 2px solid var(--blue); margin-bottom: 32px; }
+.intent-heading { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 20px; }
+.dash-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.dash-list li { font-size: 14px; color: var(--gray-600); line-height: 1.55; }
+
+/* GUIDE */
+.guide-pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--gray-200); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.guide-cell { background: var(--white); padding: 24px; }
+.guide-cell:first-child { border-radius: 14px 0 0 14px; }
+.guide-cell:last-child  { border-radius: 0 14px 14px 0; }
+.guide-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--gray-400); text-transform: uppercase; margin-bottom: 10px; }
+.guide-label-section { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--gray-900); text-transform: none; margin-bottom: 14px; }
+.guide-label-section-red { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: #b91c1c; text-transform: none; margin-bottom: 14px; }
+.guide-label-red { color: #b91c1c; }
+.guide-body { font-size: 15px; color: var(--gray-600); line-height: 1.8; }
+
+/* SOURCE */
+.source-block { border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+.source-row { display: flex; align-items: flex-start; gap: 14px; padding: 17px 20px; border-bottom: 1px solid var(--gray-100); }
+.source-row:last-of-type { border-bottom: none; }
+.badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
+.badge-opt { background: var(--gray-100); color: var(--gray-600); }
+.badge-req { background: #fff3e0; color: #b45309; }
+.source-text { font-size: 15px; color: var(--gray-600); line-height: 1.75; }
+.source-text strong { color: var(--gray-900); font-weight: 600; }
+.cite-box { background: var(--gray-50); border-top: 1px solid var(--gray-100); padding: 16px 20px; }
+.cite-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--gray-400); text-transform: uppercase; margin-bottom: 12px; }
+.cite-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--gray-200); }
+.cite-item:last-child { border-bottom: none; padding-bottom: 0; }
+.cite-num { font-size: 10px; font-weight: 700; color: var(--gray-400); flex-shrink: 0; min-width: 14px; padding-top: 3px; }
+.cite-line { font-size: 13px; color: var(--gray-600); line-height: 1.7; font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace; }
+
+/* RESTRICT */
+.restrict-note { font-size: 15px; color: var(--gray-600); line-height: 1.8; background: #fff8f8; border: 1px solid #fde2e2; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; }
+.restrict-list { border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; }
+.restrict-item { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-bottom: 1px solid var(--gray-100); }
+.restrict-item:last-child { border-bottom: none; }
+.restrict-num { font-size: 11px; font-weight: 700; color: var(--red); flex-shrink: 0; min-width: 16px; padding-top: 2px; }
+.restrict-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; letter-spacing: -0.01em; }
+.restrict-body { font-size: 15px; color: var(--gray-600); line-height: 1.75; }
+
+/* CREATOR */
+.creator-block { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--gray-200); }
+.creator-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
+.creator-label-ko { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 14px; }
+.creator-text { font-size: 15px; color: var(--gray-600); line-height: 1.8; font-weight: 400; }
+
+/* MODAL */
+#biz-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+#biz-modal { background: #fff; border-radius: 20px; width: min(520px, calc(100vw - 32px)); max-height: 88vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.18); transform: translateY(16px) scale(0.97); opacity: 0; transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), opacity 0.2s ease; }
+.modal-header { padding: 22px 24px 18px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #fff; border-radius: 20px 20px 0 0; z-index: 2; }
+.modal-title { font-size: 17px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; }
+.modal-sub { font-size: 11px; color: var(--gray-400); margin-top: 2px; letter-spacing: 0.3px; }
+.modal-close { width: 30px; height: 30px; border-radius: 50%; background: var(--gray-100); border: none; font-size: 16px; color: var(--gray-600); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.1s; }
+.modal-close:hover { background: var(--gray-200); }
+.modal-body { padding: 24px; }
+.modal-eyebrow { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--gray-900); text-transform: none; margin-bottom: 14px; }
+#biz-principles { border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+.modal-footer { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--gray-600); line-height: 1.7; }
+.modal-footer strong { color: var(--gray-900); font-weight: 600; }
+
+/* RESPONSIVE */
+@media (max-width: 580px) {
+  .page { padding: 0 20px 64px; }
+  .concepts { grid-template-columns: 1fr; }
+  .concept-item { border-radius: 0 !important; }
+  .concept-item:first-child { border-radius: 14px 14px 0 0 !important; }
+  .concept-item:last-child  { border-radius: 0 0 14px 14px !important; }
+  .guide-pair { grid-template-columns: 1fr; }
+  .guide-cell { border-radius: 0 !important; }
+  .guide-cell:first-child { border-radius: 14px 14px 0 0 !important; }
+  .guide-cell:last-child  { border-radius: 0 0 14px 14px !important; }
+  .sec { margin-top: 44px; padding-top: 44px; }
+}
 </style>
 </head>
 <body>
 
-<!-- ───────────────────────────────────────────
-     HERO
-─────────────────────────────────────────── -->
-<div style="background:linear-gradient(160deg,#020c18,#042038,#0a3a6b);padding:52px 32px 44px;text-align:center;position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,#0ea5e920 0%,transparent 70%);pointer-events:none"></div>
-  <div style="position:relative;max-width:680px;margin:0 auto">
-    <div style="font-size:10px;font-weight:700;letter-spacing:3px;color:#0ea5e9;text-transform:uppercase;margin-bottom:14px">BIZ-OC-DOLL</div>
-    <div style="font-size:32px;font-weight:700;color:#fff;letter-spacing:-.03em;line-height:1.18;margin-bottom:16px">캐릭터의 무한한 무대</div>
-    <div style="font-size:14px;color:#94a3b8;line-height:1.85;max-width:480px;margin:0 auto">
-      작품이 끝나도 사라지지 않는 캐릭터들.<br>매체를 넘나들며 자신만의 필모그래피를 쌓아가는 '캐릭터 배우'의 세계.
-    </div>
-    <div style="margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center">
-      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">비주얼게임</span>
-      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">판타지</span>
-      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">OC</span>
-      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">자캐</span>
-      <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:#0ea5e915;border:1px solid #0ea5e940;color:#7dd3fc">드라마</span>
-      <button onclick="openBizModal()" style="font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;background:linear-gradient(135deg,#f59e0b,#ef4444);border:none;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 0 0 2px #f59e0b55,0 4px 18px #ef444440;letter-spacing:.02em;transition:transform .15s,box-shadow .15s" onmouseover="this.style.transform='scale(1.06)';this.style.boxShadow='0 0 0 3px #f59e0b88,0 6px 24px #ef444460'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 0 2px #f59e0b55,0 4px 18px #ef444440'">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
-        기업용 페이지
-      </button>
-    </div>
+<div class="hero">
+  <div class="hero-diamonds">
+    <svg viewBox="0 0 1200 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
+      <defs>
+        <linearGradient id="d1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c8dff0" stop-opacity="0.6"/><stop offset="50%" stop-color="#ddeef8" stop-opacity="0.2"/><stop offset="100%" stop-color="#e8f2f8" stop-opacity="0.25"/></linearGradient>
+        <linearGradient id="d2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#d0e8f8" stop-opacity="0.25"/><stop offset="50%" stop-color="#e4f0f8" stop-opacity="0.15"/><stop offset="100%" stop-color="#c8e0f4" stop-opacity="0.2"/></linearGradient>
+        <linearGradient id="d3" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d8e8f5" stop-opacity="0.2"/><stop offset="100%" stop-color="#e8f0f8" stop-opacity="0.15"/></linearGradient>
+      </defs>
+      <!-- geometric lines -->
+      <g stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none">
+        <!-- large triangle left -->
+        <polygon points="-40,320 180,-20 400,320"/>
+        <!-- large triangle right -->
+        <polygon points="800,320 1050,-20 1280,320"/>
+        <!-- crossing diagonals -->
+        <line x1="-60" y1="0" x2="480" y2="340"/>
+        <line x1="1260" y1="0" x2="720" y2="340"/>
+        <!-- wide flat triangle center -->
+        <polygon points="300,340 600,-40 900,340"/>
+        <!-- inner echo left -->
+        <polygon points="20,320 200,40 360,320" stroke-width="0.6" stroke="rgba(255,255,255,0.3)"/>
+        <!-- inner echo right -->
+        <polygon points="840,320 1040,40 1200,320" stroke-width="0.6" stroke="rgba(255,255,255,0.3)"/>
+        <!-- horizontal slice lines -->
+        <line x1="-60" y1="180" x2="1260" y2="80" stroke="rgba(255,255,255,0.25)" stroke-width="0.6"/>
+        <line x1="-60" y1="260" x2="1260" y2="160" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
+      </g>
+      <polygon points="80,10 130,50 80,115 30,50" fill="url(#d1)" stroke="rgba(255,255,255,0.25)" stroke-width="0.5"/>
+      <polygon points="80,50 130,50 80,85 30,50" fill="rgba(255,255,255,0.1)"/>
+      <polygon points="320,0 390,55 320,130 250,55" fill="url(#d2)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+      <polygon points="320,55 390,55 320,95 250,55" fill="rgba(255,255,255,0.08)"/>
+      <polygon points="900,5 965,50 900,115 835,50" fill="url(#d3)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+      <polygon points="900,50 965,50 900,85 835,50" fill="rgba(255,255,255,0.08)"/>
+      <polygon points="1150,30 1200,70 1150,130 1100,70" fill="url(#d2)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+      <!-- small diamonds -->
+      <polygon points="190,60 220,85 190,120 160,85" fill="url(#d3)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="460,25 485,50 460,85 435,50" fill="url(#d1)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="750,40 775,60 750,90 725,60" fill="url(#d2)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="1050,60 1080,85 1050,120 1020,85" fill="url(#d1)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="30,180 55,205 30,240 5,205" fill="url(#d2)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="1170,180 1195,200 1170,230 1145,200" fill="url(#d3)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="420,200 445,220 420,250 395,220" fill="url(#d1)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" opacity="0.6"/>
+      <polygon points="830,170 860,195 830,230 800,195" fill="url(#d2)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+      <!-- tiny accents -->
+      <polygon points="250,155 265,170 250,190 235,170" fill="rgba(200,220,240,0.18)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+      <polygon points="700,240 715,255 700,275 685,255" fill="rgba(210,225,240,0.15)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+      <polygon points="1000,240 1015,255 1000,275 985,255" fill="rgba(200,225,245,0.15)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+      <polygon points="150,270 162,282 150,298 138,282" fill="rgba(215,225,240,0.15)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+    </svg>
+  </div>
+  <div class="glitter-canvas" id="glitter"></div>
+  <canvas id="mol-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+
+  <div class="hero-label">OPEN OC PROJECT</div>
+  <div class="hero-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL</div>
+  <div class="hero-sub">
+    <span class="hero-hashtag">#비즈돌</span>
+    <span class="hero-hashtag">#캐릭터배우</span>
+    <span class="hero-hashtag">#BOD</span>
+    <span class="hero-hashtag">#자캐</span>
+    <span class="hero-hashtag">#OC</span>
+  </div>
+  <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+    <button class="btn-biz" onclick="openBizModal()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      비즈니스 안내
+    </button>
+    <a class="btn-report" href="#fan-work-registration" onclick="document.getElementById('fan-work-registration').scrollIntoView({behavior:'smooth'});return false;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      연재·상업 창작 등록
+    </a>
   </div>
 </div>
 
-<!-- ───────────────────────────────────────────
-     BODY
-─────────────────────────────────────────── -->
-<div style="max-width:780px;margin:0 auto;padding:32px 24px 52px">
+<div class="page">
 
-  <!-- ① 컨셉 3열 + 기획 의도 -->
-  <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:24px">
+  <!-- 컨셉 -->
+  <div class="sec sec-first">
+    <div class="sec-eyebrow">PROJECT INTRODUCTION</div>
+    <div class="sec-title">프로젝트 소개서</div>
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--bd)">
-      <div style="padding:20px 18px;border-right:1px solid var(--bd)">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#0ea5e9;margin-bottom:6px">01 · Concept</div>
-        <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:9px">죽지 않는 캐릭터</div>
-        <div style="font-size:13px;color:var(--tx2);line-height:1.75">작품이 끝나면 사라지는 캐릭터가 아닙니다. 매체를 넘나들며 자신만의 필모그래피(Filmography)를 쌓아가는 '캐릭터 배우'에 가깝습니다.</div>
+    <!-- WHY: 기획의도 -->
+    <div style="margin-bottom:48px">
+      <div class="sec-eyebrow" style="margin-bottom:12px;font-size:14px">기획의도</div>
+      <div class="intent-heading">"작품은 끝나도, 이 캐릭터들은 끝나지 않는다."</div>
+      <ul class="dash-list">
+        <li>좋아하는 캐릭터가 나오는 작품의 마지막화가 끝나도 보내기 싫었습니다. 굿즈 몇 개로는 안 달래졌어요. 원했던 건 이 캐릭터가 다른 무대에서도 계속 살아있는 걸 추적하는 것, 그리고 내 작품 안에서 직접 움직이게 하고 싶은 창작자로서의 욕심. 저작권이 그걸 막았습니다.</li>
+        <li>그 허무함을 아는 사람들을 위해 만들었습니다. 여기선 마음껏 좋아해도 됩니다.</li>
+      </ul>
+    </div>
+
+    <!-- WHAT·HOW·YOUR MOVE -->
+    <div class="concepts">
+      <div class="concept-item">
+        <div class="concept-num">01 · WHAT</div>
+        <div class="concept-content">
+          <div class="concept-title">"배우"로 정의된 인형</div>
+          <div class="concept-body">한 작품의 캐릭터가 아닙니다. 웹툰, 게임, 일러스트, 소설 — 어떤 무대든 오르고, 작품마다 새로운 역할을 맡습니다. 거쳐간 작품이 쌓일수록, 이 인형은 더 깊어집니다.</div>
+        </div>
       </div>
-      <div style="padding:20px 18px;border-right:1px solid var(--bd)">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#0ea5e9;margin-bottom:6px">02 · System</div>
-        <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:9px">한계 없는 커리어</div>
-        <div style="font-size:13px;color:var(--tx2);line-height:1.75">인형들은 고정된 배역에 갇히지 않습니다. 웹툰 주인공, 게임 빌런, 일러스트 모델 등 어떤 역할도 소화합니다. 등록된 활동은 공식 커리어로 남습니다.</div>
+      <div class="concept-item">
+        <div class="concept-num">02 · HOW</div>
+        <div class="concept-content">
+          <div class="concept-title">공식은 뼈대만 세운다</div>
+          <div class="concept-body">공식은 기본값을 제공하고, 창작자가 어떻게 활용하느냐에 따라 캐릭터만의 결이 자연스럽게 생깁니다. 수많은 손을 거치며, 이야기는 계속 이어집니다.</div>
+        </div>
       </div>
-      <div style="padding:20px 18px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#0ea5e9;margin-bottom:6px">03 · Action</div>
-        <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:9px">당신이 만드는 역사</div>
-        <div style="font-size:13px;color:var(--tx2);line-height:1.75">누구나 Biz-OC-doll의 인형을 사용할 수 있습니다. 여러분이 만드는 창작물은 이 캐릭터의 새로운 인생이 될 수 있습니다.</div>
+      <div class="concept-item">
+        <div class="concept-num">03 · YOUR MOVE</div>
+        <div class="concept-content">
+          <div class="concept-title">당신의 창작이 이 인형의 이력이 된다</div>
+          <div class="concept-body">누구나 이 인형을 쓸 수 있습니다. 웹툰, 게임, 굿즈, 소설 — 형태는 상관없습니다. 당신이 만드는 작품이 이 캐릭터의 새로운 커리어가 됩니다. 그 권리는 전부 당신의 것입니다.</div>
+        </div>
       </div>
     </div>
 
-    <div style="padding:20px 22px">
-      <div style="font-size:13px;color:var(--tx3);line-height:1.9;font-style:italic;border-left:3px solid #0ea5e9;padding-left:14px;margin-bottom:18px">
-        이 캐릭터는, 자신이 만들어져가는 감각을 느끼고, 당신이 그들을 볼 때, 그들도 당신을 느낍니다.
-      </div>
-      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">"작품은 끝나도, 캐릭터의 영원을 바라며"</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">이야기가 끝나면 공들인 캐릭터까지 같이 사라지는 소모적인 구조를 거부합니다.</span></div>
-        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">특정 컨텐츠에 갇히지 않고, 수많은 창작자가 각자의 방식으로 활용할 때 캐릭터는 비로소 진짜 생명력을 얻습니다.</span></div>
-        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">제작자는 캐릭터를 가두는 주인이 아니라, 캐릭터들이 어디서든 자유롭게 쓰일 수 있게 제공할 뿐입니다.</span></div>
-        <div style="display:flex;gap:9px;align-items:flex-start"><span style="color:#0ea5e9;flex-shrink:0;font-size:14px;line-height:1.75">—</span><span style="font-size:13px;color:var(--tx2);line-height:1.75">창작자가 함께하는 한, 이 인형들의 경력과 이야기는 멈추지 않고 이어집니다.</span></div>
-      </div>
-    </div>
+    <p class="intent-quote">이 인형들은 당신이 부를 때, 그 무대 위에 섭니다.</p>
   </div>
 
-  <!-- ② 가이드라인 -->
-  <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:24px">
+  <!-- 가이드라인 -->
+  <div class="sec">
+    <div class="sec-eyebrow">Fan Creation Guidelines</div>
+    <div class="sec-title">2차 창작 · 수익 · 저작권</div>
 
-    <div style="padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
-      <span style="font-size:14px;font-weight:700;color:var(--tx)">2차 창작 · 수익 · 저작권</span>
-      <span style="font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">Fan Creation Guidelines</span>
-    </div>
+    <div class="guide-label-section" style="margin-bottom:10px">01 · 창작과 수익, 모두 당신의 것</div>
+    <p class="guide-body" style="margin-bottom:32px">모든 캐릭터는 창작을 위해 열려 있습니다. 개인 굿즈, 포스타입 유료 발행, SNS 업로드 — 어떤 형태의 개인 창작이든 공식은 배당이나 권리를 요구하지 않습니다.</p>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--bd)">
-      <div style="padding:18px 20px;border-right:1px solid var(--bd)">
-        <div style="font-size:11px;font-weight:700;color:#0ea5e9;margin-bottom:8px">01 · 창작 및 수익 창출의 자유</div>
-        <div style="font-size:13px;color:var(--tx2);line-height:1.8">모든 캐릭터는 창작을 위해 열려 있습니다. 개인 굿즈, 포스타입 유료 발행, SNS 업로드 등 개인 단위 창작 활동과 수익 창출에 대해 공식은 어떠한 배당이나 권리도 요구하지 않습니다.</div>
+    <div class="guide-label-section" style="margin-bottom:8px">02 · 출처 표기 안내</div>
+    <div style="font-size:14px;color:var(--gray-400);margin-bottom:14px;line-height:1.6">창작자의 미적 자유를 존중하여 출처 표기를 상황에 따라 구분합니다.</div>
+    <div class="source-block">
+      <div class="source-row">
+        <span class="badge badge-opt">자율</span>
+        <div class="source-text">개인 SNS · 소규모 창작은 별도 표기 의무 없음. 원할 경우 <strong>#Biz-OC-doll</strong> 해시태그를 사용해 주세요.</div>
       </div>
-      <div style="padding:18px 20px">
-        <div style="font-size:11px;font-weight:700;color:#0ea5e9;margin-bottom:8px">03 · 저작권 귀속</div>
-        <div style="font-size:13px;color:var(--tx2);line-height:1.8">여러분이 만든 2차 저작물의 권리는 전적으로 창작자(여러분)에게 귀속됩니다. 공식은 여러분의 창작물을 무단으로 사용하거나 소유권을 주장하지 않습니다.</div>
+      <div class="source-row">
+        <span class="badge badge-req">필수</span>
+        <div class="source-text">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 시 작품 하단이나 크레딧에 기재해 주세요.</div>
       </div>
-    </div>
-
-    <div style="padding:18px 20px;border-bottom:1px solid var(--bd)">
-      <div style="font-size:11px;font-weight:700;color:#0ea5e9;margin-bottom:12px">02 · 출처 표기 안내</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-        <div style="padding:12px 14px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">
-          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#16a34a;margin-bottom:6px">자율 — 개인 SNS · 소규모 창작</div>
-          <div style="font-size:13px;color:#374151;line-height:1.7">별도 표기 의무 없음. 원할 경우 <strong>#Biz-OC-doll</strong> 해시태그를 사용해 주세요.</div>
+      <div class="cite-box">
+        <div class="cite-label">출처 표기 예시 3종</div>
+        <div class="cite-item">
+          <span class="cite-num">1</span>
+          <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 Biz-OC-doll 프로젝트(rrkt.biz)의 [BIZOC-000-000] 캐릭터를 기반으로 창작되었습니다.</div>
         </div>
-        <div style="padding:12px 14px;border-radius:8px;background:#fffbeb;border:1px solid #fde68a">
-          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#d97706;margin-bottom:6px">필수 — 정식 플랫폼 · 상업 판매</div>
-          <div style="font-size:13px;color:#374151;line-height:1.7">웹툰/웹소설 연재, 게임 개발, 대규모 상업 판매 시 작품 하단이나 크레딧에 기재해 주세요.</div>
+        <div class="cite-item">
+          <span class="cite-num">2</span>
+          <div class="cite-line">Original Character by Biz-OC-doll</div>
         </div>
-      </div>
-      <div style="border-radius:8px;border:1px solid var(--bd);overflow:hidden">
-        <div style="padding:8px 14px;background:var(--bg);border-bottom:1px solid var(--bd)">
-          <span style="font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase">출처 표기 예시 3종</span>
-        </div>
-        <div style="padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;background:#fff;border-bottom:1px solid var(--bd)">본 작품에 등장하는 캐릭터 [캐릭터명]은 Biz-OC-doll 프로젝트(rrkt.biz)의 [BIZOC-000-000] 캐릭터를 기반으로 창작되었습니다.</div>
-        <div style="padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;background:#fff;border-bottom:1px solid var(--bd)">Original Character by Biz-OC-doll</div>
-        <div style="padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;background:#fff">#Biz_OC_doll #BIZOC_2026_001</div>
-      </div>
-    </div>
-
-    <div style="padding:18px 20px">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
-        <span style="font-size:11px;font-weight:700;color:#dc2626">이용 제한 및 공식 패널티</span>
-        <span style="font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">Restrictions</span>
-      </div>
-      <div style="font-size:13px;color:var(--tx2);line-height:1.8;padding:10px 13px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;margin-bottom:12px">
-        창작은 자율에 맡겨지나, 아래 조항을 포함 시 공식 생태계(프로젝트, 앱 게임, 굿즈화 등)에서 불리함이 발생할 수 있음을 미리 알립니다.
-      </div>
-      <div style="display:flex;flex-direction:column;gap:0">
-        <div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd);align-items:flex-start">
-          <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:#fee2e2;color:#dc2626;flex-shrink:0;margin-top:2px">1</span>
-          <div><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px">사회적·정치적 악용 금지</div><div style="font-size:13px;color:var(--tx2);line-height:1.75">특정 정치적 견해 표명, 사회적 혐오 조장 및 분쟁 유발 목적의 사용을 엄격히 금지합니다.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd);align-items:flex-start">
-          <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:#fee2e2;color:#dc2626;flex-shrink:0;margin-top:2px">2</span>
-          <div><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px">종교적 오용 방지</div><div style="font-size:13px;color:var(--tx2);line-height:1.75">콘텐츠 내 종교적 설정 연기는 허용. 단, 캐릭터를 현실 종교의 포교용 홍보물에 사용하거나 선전 도구로 쓰는 행위는 금지합니다.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;padding:11px 0;align-items:flex-start">
-          <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:#fee2e2;color:#dc2626;flex-shrink:0;margin-top:2px">3</span>
-          <div><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px">극단적 수위 및 윤리 위반</div><div style="font-size:13px;color:var(--tx2);line-height:1.75">과도한 고어, 혐오·불쾌감을 주는 극단적 수위, 성착취적 묘사 및 비도덕적 연출을 금지합니다.</div></div>
+        <div class="cite-item">
+          <span class="cite-num">3</span>
+          <div class="cite-line">#Biz_OC_doll #BIZOC_2026_001</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ③ 제작자 스탠드 -->
-  <div style="padding:22px 24px;background:linear-gradient(135deg,#020c18,#042038);border-radius:14px;border:1px solid #0ea5e925;display:flex;gap:18px;align-items:flex-start">
-    <div style="flex-shrink:0;margin-top:2px">
-      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:#7dd3fc;text-transform:uppercase;margin-bottom:4px">Creator's Stand</div>
-      <div style="width:36px;height:1px;background:#0ea5e950"></div>
-    </div>
-    <div style="font-size:14px;color:#94a3b8;line-height:1.85">
-      해당 프로젝트를 운영할 때 제작자의 모든 역량은 오직 캐릭터의 완성에만 집중됩니다. 불필요한 운영 소모를 최소화하고 본질적인 작업에 전력을 다하기 위함이니, 너그러운 양해를 바랍니다.
-    </div>
-  </div>
+    <div class="guide-label-section" style="margin-bottom:10px;margin-top:32px">03 · 저작권 귀속</div>
+    <p class="guide-body" style="margin-bottom:32px">당신이 만든 2차 저작물의 권리는 전적으로 당신에게 있습니다. 공식은 당신의 창작물을 무단으로 사용하지 않고, 소유권을 주장하지 않습니다.</p>
 
-</div>
-
-<!-- ───────────────────────────────────────────
-     기업용 모달
-─────────────────────────────────────────── -->
-<div id="biz-overlay" onclick="if(event.target===this)closeBizModal()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.6);align-items:center;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)">
-  <div id="biz-modal" style="background:#fff;border-radius:18px;width:min(540px,calc(100vw - 32px));max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.35);position:relative;transform:translateY(20px) scale(.97);opacity:0;transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .22s ease">
-
-    <div style="padding:22px 24px 18px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0;z-index:2">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px #ef444440">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
-        </div>
+    <div class="guide-label-section-red" style="margin-bottom:12px">이용 제한 · Restrictions</div>
+    <div class="restrict-note">공식은 모든 창작물을 실시간으로 검열하거나 통제하지 않습니다. 창작은 창작자에게 맡겨지지만, 아래 항목이 포함된 창작물은 공식 생태계(공식 프로젝트, 앱 게임, 굿즈화 등)에서 불리해질 수 있습니다.</div>
+    <div class="restrict-list">
+      <div class="restrict-item">
+        <div class="restrict-num">1</div>
         <div>
-          <div style="font-size:15px;font-weight:800;color:#111;letter-spacing:-.02em">기업용 페이지</div>
-          <div style="font-size:10px;color:#999;margin-top:1px;font-weight:500;letter-spacing:.5px">BIZ-OC-DOLL · Business</div>
+          <div class="restrict-title">사회적·정치적 악용</div>
+          <div class="restrict-body">특정 정치적 견해 표명, 사회적 혐오 조장, 분쟁 유발을 목적으로 한 사용은 허용하지 않습니다.</div>
         </div>
       </div>
-      <button onclick="closeBizModal()" style="background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f5f5f5'">×</button>
+      <div class="restrict-item">
+        <div class="restrict-num">2</div>
+        <div>
+          <div class="restrict-title">종교적 오용 방지 <span style="font-weight:400;font-size:13px;color:var(--gray-400)">(배우와 홍보물 구분)</span></div>
+          <div class="restrict-body" style="margin-top:8px">
+            <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
+              <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#e8f5e9;color:#2e7d32;flex-shrink:0;margin-top:2px">O 허용</span>
+              <span>캐릭터가 각종 콘텐츠(웹소설, 웹툰, 일러스트, 영상, 게임 등) 및 미디어 서사 내에서 종교적 설정(사제, 수녀, 불교 신자 등)을 연기하거나 관련 복식을 착용하는 창작 행위. 그로 인한 3차 창작도 허용합니다.</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:flex-start">
+              <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#fff0f0;color:#c62828;flex-shrink:0;margin-top:2px">X 금지</span>
+              <span>캐릭터를 현실 종교의 포교용 홍보물(포스터, 전단지 등)에 무단 사용하는 행위. 캐릭터를 특정 종교의 상징물로 전락시켜 선전 도구로 쓰는 것을 금지합니다.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="restrict-item">
+        <div class="restrict-num">3</div>
+        <div>
+          <div class="restrict-title">수위 및 표현 기준</div>
+          <div class="restrict-body">과도한 고어, 혐오감을 조장하는 묘사, 성착취적 연출이 포함된 창작물은 공식 생태계 연계가 어렵습니다.</div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div style="padding:24px 24px 28px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-bottom:14px">기업 협업 불변 원칙</div>
+  <!-- 연재·상업 창작 등록 안내 -->
+  <div id="fan-work-registration" style="margin-top:40px;background:linear-gradient(135deg,rgba(90,144,176,0.07) 0%,rgba(90,144,176,0.03) 100%);border:1px solid rgba(90,144,176,0.2);border-radius:16px;padding:28px 28px 24px;scroll-margin-top:32px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a90b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--blue);text-transform:uppercase">Fan Work Registration</span>
+    </div>
+    <div style="font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-0.02em;margin-bottom:10px">연재·상업 창작 등록</div>
+    <p style="font-size:14px;color:var(--gray-600);line-height:1.85;margin-bottom:12px">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 등 중·대규모 창작을 진행 중이거나 완료하신 분들을 위한 자발적 등록 창구입니다. 등록된 창작물은 캐릭터의 공식 아카이브에 기록되며, 공식 생태계 연계 시 우선적으로 검토됩니다.</p>
+    <div style="background:rgba(90,144,176,0.07);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--gray-600);line-height:1.75">
+      📌 <strong style="color:var(--gray-900)">등록은 의무가 아닙니다.</strong> 개인 SNS·소규모 창작·소규모 판매, 태그만 달린 창작물은 전혀 해당 없습니다. 만들고 싶은 대로 만드세요. 이 창구는 원하는 분들만을 위한 선택지입니다.
+    </div>
+    <a href="https://forms.gle/BbJbpsScUjK59FYN7" target="_blank" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--blue);background:rgba(255,255,255,0.8);border:1px solid rgba(90,144,176,0.3);border-radius:100px;padding:8px 20px;text-decoration:none;transition:background 0.15s;" onmouseover="this.style.background='rgba(90,144,176,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.8)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      등록 폼 바로가기
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+    </a>
+  </div>
 
-      <div id="biz-principles" style="display:flex;flex-direction:column;gap:0;border:1px solid #efefef;border-radius:12px;overflow:hidden;margin-bottom:22px"></div>
+  <!-- 제작자 스탠드 -->
+  <div class="creator-block">
+    <div class="creator-label">Creator's Stand</div>
+    <div class="creator-label-ko" style="display:flex;align-items:center;gap:8px">
+      <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.6" y="0.6" width="14.8" height="18.8" rx="2" stroke="var(--gray-900)" stroke-width="1.2"/>
+        <line x1="4.5" y1="0.6" x2="4.5" y2="19.4" stroke="var(--gray-900)" stroke-width="1.2"/>
+        <line x1="7" y1="5" x2="13" y2="5" stroke="var(--gray-600)" stroke-width="1"/>
+        <line x1="7" y1="9" x2="13" y2="9" stroke="var(--gray-600)" stroke-width="1"/>
+        <line x1="7" y1="13" x2="11" y2="13" stroke="var(--gray-600)" stroke-width="1"/>
+      </svg>
+      제작자 노트
+    </div>
+    <div class="creator-text">이 프로젝트를 운영하면서 제작자의 모든 역량은 캐릭터를 완성하는 것에만 씁니다. 불필요한 운영에 에너지를 쓰지 않기 위한 선택입니다.<br><br>이 프로젝트에는 종료 시점이 없습니다. 캐릭터는 계속 나오고, 생태계는 당신들이 만듭니다. 그게 이 프로젝트의 약속입니다.</div>
+  </div>
 
-      <div style="background:linear-gradient(135deg,#020c18,#0a2540);border-radius:10px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px">
-        <span style="font-size:16px;flex-shrink:0;margin-top:1px">📋</span>
-        <div style="font-size:13px;color:#94a3b8;line-height:1.8">
-          모든 협업의 구체적인 조건과 범위는 <span style="color:#7dd3fc;font-weight:600">개별 계약</span>으로 정한다.
-        </div>
+</div>
+
+<!-- MODAL -->
+<div id="biz-overlay" onclick="if(event.target===this)closeBizModal()">
+  <div id="biz-modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">기업 협업 원칙</div>
+        <div class="modal-sub">BIZ-OC-DOLL · Business</div>
       </div>
+      <button class="modal-close" onclick="closeBizModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-eyebrow">협업에서 변하지 않는 것들</div>
+      <div id="biz-principles"></div>
+      <div class="modal-footer">협업의 구체적인 조건과 범위는 모두 <strong>개별 계약</strong>으로 정한다.</div>
     </div>
   </div>
 </div>
 
 <script>
 const BIZ_PRINCIPLES = [
-  "원저작권은 Biz-OC-doll에 있으며, 어떠한 형태로도 이전되지 않는다.",
+  "원저작권은 Biz-OC-doll에 있다. 어떤 형태로도 이전되지 않는다.",
   "기업은 허가된 범위 안에서만 캐릭터를 활용할 수 있다.",
   "팬 창작물의 권리는 창작자에게 있다. 기업이 이를 활용하려면 창작자와 개별 협의를 거쳐야 한다.",
   "기업은 Biz-OC-doll을 공식으로 자칭하거나 대표할 수 없다.",
-  "프로젝트의 제작과 운영에 기업이 관여할 수 없다.",
+  "프로젝트의 제작과 운영에 기업은 관여하지 않는다.",
   "개별 커스텀 요청은 받지 않는다.",
 ];
-
 document.getElementById('biz-principles').innerHTML = BIZ_PRINCIPLES.map((txt, i) => `
-  <div style="display:flex;align-items:flex-start;gap:14px;padding:14px 18px;${i < BIZ_PRINCIPLES.length-1 ? "border-bottom:1px solid #f5f5f5" : ""};background:${i%2===0?"#fff":"#fafafa"}">
-    <span style="font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,#f59e0b,#ef4444);width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</span>
-    <span style="font-size:13px;color:#2a2a2a;line-height:1.75">${txt}</span>
+  <div style="display:flex;align-items:flex-start;gap:14px;padding:10px 18px;">
+    <span style="font-size:11px;font-weight:600;color:#aaa;flex-shrink:0;min-width:16px;padding-top:2px">${i+1}</span>
+    <span style="font-size:13px;color:#333;line-height:1.75">${txt}</span>
   </div>
-`).join("");
+`).join('');
 
-function openBizModal(){
+function openBizModal() {
   var ov = document.getElementById('biz-overlay');
   var md = document.getElementById('biz-modal');
   ov.style.display = 'flex';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     md.style.transform = 'translateY(0) scale(1)';
     md.style.opacity = '1';
   }));
 }
-function closeBizModal(){
+function closeBizModal() {
   var md = document.getElementById('biz-modal');
-  md.style.transform = 'translateY(16px) scale(.97)';
+  md.style.transform = 'translateY(16px) scale(0.97)';
   md.style.opacity = '0';
-  setTimeout(()=>{ document.getElementById('biz-overlay').style.display='none'; }, 240);
+  setTimeout(() => { document.getElementById('biz-overlay').style.display = 'none'; }, 220);
 }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBizModal(); });
-</script>
+// GLITTER
+(function() {
+  const container = document.getElementById('glitter');
+  const sparkSVG = (size, color) => `<svg width="${size}" height="${size}" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 0 C10 0 10.6 7 13 10 C10.6 13 10 20 10 20 C10 20 9.4 13 7 10 C9.4 7 10 0 10 0Z" fill="${color}" opacity="0.9"/>
+    <path d="M0 10 C0 10 7 10.6 10 13 C13 10.6 20 10 20 10 C20 10 13 9.4 10 7 C7 9.4 0 10 0 10Z" fill="${color}" opacity="0.9"/>
+  </svg>`;
+  const colors = [
+    'rgba(255,255,255,0.98)',
+    'rgba(255,255,255,0.95)',
+    'rgba(255,255,255,0.92)',
+    'rgba(255,255,255,0.88)',
+    'rgba(240,248,255,0.95)',
+    'rgba(255,255,255,0.98)',
+    'rgba(210,235,250,0.9)',
+    'rgba(255,255,255,0.95)',
+    'rgba(225,240,250,0.9)',
+    'rgba(255,255,255,0.98)',
+  ];
+  const positions = [
+    [3,8],[22,30],[43,25],[62,35],[80,40],[90,68],
+    [6,90],[25,20],[45,42],[65,28],[86,12],
+    [10,5],[30,72],[54,28],[74,35],
+  ];
+  positions.forEach(([x, y], i) => {
+    const size = 6 + Math.random() * 14;
+    const color = colors[i % colors.length];
+    const dur = (2 + Math.random() * 3.5).toFixed(2);
+    const delay = (Math.random() * 6).toFixed(2);
+    const el = document.createElement('div');
+    el.className = 'spark';
+    el.style.cssText = `left:${x}%;top:${y}%;width:${size}px;height:${size}px;--dur:${dur}s;--delay:${delay}s;`;
+    el.innerHTML = sparkSVG(size, color);
+    container.appendChild(el);
+  });
+})();
 
+// MOLECULAR NETWORK
+(function() {
+  const hero = document.querySelector('.hero');
+  const canvas = document.getElementById('mol-canvas');
+  function draw() {
+    const W = hero.offsetWidth;
+    const H = hero.offsetHeight;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, W, H);
+
+    const CONNECT_DIST = 110;
+
+    // grid-based even distribution — always equally spaced regardless of W/H
+    const COLS = W < 500 ? 4 : W < 800 ? 6 : 8;
+    const ROWS = W < 500 ? 2 : W < 800 ? 3 : 4;
+    const nodes = [];
+    const bigPositions = new Set([2, 6, 11, 17, 22, 27, 30]);
+    let idx = 0;
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        // jitter within each cell so it doesn't look like a grid
+        const jx = (Math.sin(idx * 7.3) * 0.5 + 0.5) * 0.5 + 0.25;
+        const jy = (Math.cos(idx * 5.1) * 0.5 + 0.5) * 0.5 + 0.25;
+        nodes.push({
+          x: (col + jx) / COLS * W,
+          y: (row + jy) / ROWS * H,
+          big: bigPositions.has(idx)
+        });
+        idx++;
+      }
+    }
+
+    // draw lines
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < CONNECT_DIST) {
+          const alpha = (1 - dist / CONNECT_DIST) * 0.65;
+          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // draw nodes with glow
+    nodes.forEach(n => {
+      const r = n.big ? 4 : 2.2;
+      // outer glow
+      const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 5);
+      glow.addColorStop(0, `rgba(255,255,255,${n.big ? 0.3 : 0.15})`);
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r * 5, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+      // core dot
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = n.big ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.7)';
+      ctx.fill();
+    });
+  }
+  draw();
+  window.addEventListener('resize', draw);
+})();
+</script>
 </body>
 </html>
