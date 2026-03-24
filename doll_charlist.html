@@ -11,7 +11,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f5f5;--sb:#fff;--bd:#e2e2e2;--bd2:#c6c6c6;
+  --bg:#ffffff;--sb:#fff;--bd:#e2e2e2;--bd2:#c6c6c6;
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
   --fn:'Inter','Noto Sans KR',sans-serif;
 }
@@ -43,40 +43,57 @@ button{font-family:var(--fn);cursor:pointer}
 .char-card{cursor:pointer;text-align:center}
 .char-card:hover .char-thumb{box-shadow:0 2px 10px #0002;transform:translateY(-2px)}
 .char-thumb{width:100%;aspect-ratio:1;border-radius:8px;border:1px solid var(--bd);overflow:hidden;transition:transform .14s,box-shadow .14s;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative;background:#d8d8d8;filter:grayscale(1)}
-.char-thumb.rA{background:#d8d8d8}
-.char-thumb.rB{background:#d8d8d8}
-.char-thumb.rC{background:#d8d8d8}
 .char-name-row{display:flex;align-items:center;justify-content:center;gap:3px;margin-top:5px}
 .char-circle{font-size:8px;line-height:1}
-.char-circle.rA{color:#38bdf8}
-.char-circle.rB{color:#111}
-.char-circle.rC{color:#e03030}
 .char-firstname{font-size:13px;font-weight:600;color:var(--tx)}
 .char-lastname{font-size:11px;color:var(--tx3);margin-top:1px}
 .char-empty{grid-column:1/-1;padding:48px 0;text-align:center;font-size:12px;color:var(--tx3)}
 .char-slot .char-thumb{background:#ebebeb;border:1px solid var(--bd2)}
 .char-slot .char-firstname{color:var(--tx3)}
 
-/* ── CHAR DETAIL ── */
-.char-detail-hero{display:flex;gap:24px;padding:24px 28px;background:var(--sb);border-bottom:1px solid var(--bd)}
-.char-detail-thumb{width:120px;height:120px;border-radius:12px;flex-shrink:0;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;position:relative;background:#d8d8d8;filter:grayscale(1)}
-.char-detail-rank{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;margin-bottom:8px}
-.char-detail-rank.rA{background:#e0f5ff;color:#0369a1}
-.char-detail-rank.rB{background:#f0f0f0;color:#111}
-.char-detail-rank.rC{background:#ffe4e4;color:#c01020}
-.char-detail-name{font-size:22px;font-weight:700;margin-bottom:4px}
-.char-detail-subname{font-size:14px;color:var(--tx3);margin-bottom:12px}
-.char-detail-tags{display:flex;gap:5px;flex-wrap:wrap}
-.char-detail-tag{font-size:10px;padding:3px 8px;border-radius:4px;background:var(--bg);border:1px solid var(--bd);color:var(--tx2)}
-.char-detail-body{padding:22px 28px}
-.char-detail-sec{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px;margin-top:22px}
-.char-detail-sec:first-child{margin-top:0}
-.char-detail-ph{height:11px;border-radius:3px;background:var(--bd);margin-bottom:8px}
-.char-detail-hint{padding:14px;border:1px dashed var(--bd2);border-radius:8px;font-size:11px;color:var(--tx3);text-align:center;margin-top:16px}
-.char-stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.char-stat{padding:10px 14px;background:var(--sb);border:1px solid var(--bd);border-radius:8px;min-width:80px}
-.char-stat-l{font-size:9px;font-weight:600;color:var(--tx3);letter-spacing:.5px;margin-bottom:3px}
-.char-stat-v{font-size:15px;font-weight:700;color:var(--tx)}
+/* ── CHAR DETAIL (new minimal sheet) ── */
+.sheet-wrap{max-width:560px;margin:0 auto;padding:24px 20px 40px}
+
+/* ID 코드 헤더 */
+.sheet-id-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.sheet-id-code{font-family:'Inter',monospace;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase}
+.sheet-id-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase}
+.sheet-id-badge.rM{background:#dbeafe;color:#1d4ed8}
+.sheet-id-badge.rN{background:#f3e8ff;color:#7c3aed}
+.sheet-id-badge.rF{background:#fce7f3;color:#be185d}
+.sheet-id-badge.rO{background:#f3f4f6;color:#6b7280}
+
+/* 일러스트 + 이름 */
+.sheet-hero{display:flex;gap:20px;align-items:flex-start;margin-bottom:24px}
+.sheet-illust{width:100px;height:100px;border-radius:10px;flex-shrink:0;overflow:hidden;border:1px solid var(--bd)}
+.sheet-illust-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;filter:grayscale(.3)}
+.sheet-illust-ph{font-size:32px;opacity:.15}
+.sheet-name-block{display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:4px}
+.sheet-name{font-size:24px;font-weight:700;letter-spacing:-.5px;line-height:1.1;margin-bottom:3px}
+.sheet-subname{font-size:13px;color:var(--tx3);margin-bottom:10px}
+.sheet-badges{display:flex;gap:5px;flex-wrap:wrap}
+.sheet-badge{font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;border:1px solid var(--bd);color:var(--tx2);letter-spacing:.3px}
+
+/* 구분선 */
+.sheet-divider{height:1px;background:var(--bd);margin:0 0 20px}
+
+/* 데이터 그리드 */
+.sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.sheet-cell{background:var(--sb);padding:12px 14px}
+.sheet-cell-label{font-size:9px;font-weight:600;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px}
+.sheet-cell-value{font-size:14px;font-weight:600;color:var(--tx)}
+.sheet-cell-value.accent{color:inherit}
+.sheet-cell.full{grid-column:1/-1}
+
+/* 태그 섹션 */
+.sheet-tag-label{font-size:9px;font-weight:600;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px}
+.sheet-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.sheet-tag{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--bd);color:var(--tx2)}
+
+/* 일러스트 등록 힌트 */
+.sheet-hint{border:1px dashed var(--bd2);border-radius:8px;padding:20px;text-align:center;margin-bottom:0}
+.sheet-hint-icon{font-size:20px;opacity:.2;margin-bottom:6px}
+.sheet-hint-text{font-size:10px;color:var(--tx3);line-height:1.6}
 
 /* ── EP NAV ── */
 .ep-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 24px;border-top:1px solid var(--bd);background:var(--sb)}
@@ -120,26 +137,65 @@ button{font-family:var(--fn);cursor:pointer}
     <span class="tb-arr">›</span>
     <span class="tb-cur" id="detail-breadcrumb"></span>
   </div>
-  <div class="char-detail-hero">
-    <div class="char-detail-thumb" id="detail-thumb" style="background:#d8d8d8">
-      <span style="font-size:48px;opacity:.2">◉</span>
+
+  <div class="sheet-wrap">
+    <!-- ID 코드 -->
+    <div class="sheet-id-bar">
+      <span class="sheet-id-code" id="detail-id-code">BIZOC-2026-001-M</span>
+      <span class="sheet-id-badge" id="detail-gender-badge">M</span>
     </div>
-    <div>
-      <div class="char-detail-rank" id="detail-rank"></div>
-      <div class="char-detail-name" id="detail-name"></div>
-      <div class="char-detail-subname" id="detail-subname"></div>
-      <div class="char-detail-tags" id="detail-tags"></div>
+
+    <!-- 일러스트 + 이름 -->
+    <div class="sheet-hero">
+      <div class="sheet-illust" id="detail-illust">
+        <div class="sheet-illust-inner" id="detail-illust-inner">
+          <span class="sheet-illust-ph">◉</span>
+        </div>
+      </div>
+      <div class="sheet-name-block">
+        <div class="sheet-name" id="detail-name"></div>
+        <div class="sheet-subname" id="detail-subname"></div>
+        <div class="sheet-badges" id="detail-badges"></div>
+      </div>
+    </div>
+
+    <div class="sheet-divider"></div>
+
+    <!-- 데이터 그리드 -->
+    <div class="sheet-grid" id="detail-grid">
+      <div class="sheet-cell">
+        <div class="sheet-cell-label">ID Code</div>
+        <div class="sheet-cell-value" id="dc-id" style="font-size:11px;letter-spacing:1px;font-family:monospace"></div>
+      </div>
+      <div class="sheet-cell">
+        <div class="sheet-cell-label">Gender</div>
+        <div class="sheet-cell-value" id="dc-gender"></div>
+      </div>
+      <div class="sheet-cell">
+        <div class="sheet-cell-label">Physical Age</div>
+        <div class="sheet-cell-value" id="dc-age"></div>
+      </div>
+      <div class="sheet-cell">
+        <div class="sheet-cell-label">Body Type</div>
+        <div class="sheet-cell-value" id="dc-body"></div>
+      </div>
+      <div class="sheet-cell full">
+        <div class="sheet-cell-label">Holder</div>
+        <div class="sheet-cell-value" id="dc-holder" style="color:var(--tx3)"></div>
+      </div>
+    </div>
+
+    <!-- 태그 -->
+    <div class="sheet-tag-label">Tags</div>
+    <div class="sheet-tags" id="detail-tags"></div>
+
+    <!-- 일러스트 힌트 -->
+    <div class="sheet-hint">
+      <div class="sheet-hint-icon">◻</div>
+      <div class="sheet-hint-text">일러스트 / 상세 프로필을 이곳에 등록하세요<br><span style="opacity:.6">illustration · profile · story</span></div>
     </div>
   </div>
-  <div class="char-detail-body">
-    <div class="char-detail-sec">기본 정보</div>
-    <div class="char-stat-row" id="detail-stats"></div>
-    <div class="char-detail-sec">프로필</div>
-    <div id="detail-profile-ph"></div>
-    <div class="char-detail-sec">스토리</div>
-    <div id="detail-story-ph"></div>
-    <div class="char-detail-hint">캐릭터 상세 정보 / 일러스트를 이곳에 등록하세요</div>
-  </div>
+
   <div class="ep-nav">
     <button class="ep-nav-btn" id="nav-prev" onclick="navChar(-1)"><span>←</span><span class="ep-nav-title" id="nav-prev-name"></span></button>
     <div></div>
@@ -153,58 +209,22 @@ button{font-family:var(--fn);cursor:pointer}
 if(window.CHARACTERS) return; // 이미 생성된 경우 스킵
   const FIRSTNAMES=[
     "아이","유이","하루","미오","사쿠라","린","아카네","유나","미나","코토",
-    "하나","시오리","아야","나오","레이","에마","노아","세나","리나","아스나",
-    "히나","카나","미유","소라","츠바키","마야","이쿠","나나","유리","세리",
-    "아키","카호","루이","미사","사야","이부키","코노미","히나타","아나","세이카",
-    "란","치나츠","후우카","유카","이치카","니나","미라이","아스카","카린","메이",
-    "리오","마호","시오","나기","히요리","유즈","모모","이로하","코코","후타바",
-    "아오이","카에데","스즈","마도카","호타루","미나미","유우키","사에","코유키","무츠미",
-    "아마네","카이","이즈미","노노","하야테","토카","우미","키라라","치히로","아키라",
-    "나루","오리히메","이치요","아리스","사야카","레미","루카","아쿠아","아리아","히메",
-    "유이나","카구야","칸나","미코토","아이리","카코","하즈키","루루","미오나","코하루",
-    "세이라","아야카","미나토","유우나","나노카","치카","사치코","미사키","이치나","쿄카",
-    "아야노","미즈키","타마키","리오나","나기사","마치코","아린","소노다","마리아","코코로",
-    "미호","유호","루나","사히로","이오리","카나타","히카리","아야히","소와카","레이나",
-    "이자나","아마리","후미카","카즈하","하요이","타마나","이쿠코","시오네","아스히","노아카",
-    "유미나","세이라","카이나","하나비","호노카","유이카","미아","소나","카이리","이호",
-    "나기코","미오리","루우","치에","세이코","히나코","유이리","사쿠야","나나미","히지리",
-    "아리나","코요이","마리코","노리코","이치루","유미코","하루나","아이나","세이나","유우카",
-    "카나에","이오나","미즈나","히나노","노보루","사유리","나나호","아야미","코우메","테루미",
-    "치호","유미","카나코","미나코","히로나","루카코","나나코","유이코","호무라","마도카",
-    "리코","아코","치카코","유우코","후미코","하나코","사치","이코","미코","유코",
   ];
   const LASTNAMES=[
     "야마다","타나카","스즈키","사토","와타나베","이토","나카무라","코바야시","카토","요시다",
-    "야마모토","마츠모토","이노우에","키무라","하야시","시미즈","야마구치","사이토","마츠다","이케다",
-    "오가와","하세가와","요코야마","미야자키","오카모토","나카가와","코지마","마에다","후지와라","오노",
-    "타마키","시오미","하기와라","후쿠다","이마이","오오시마","쿠로다","노다","쿠보","후지타",
-    "히라야마","이시카와","나카지마","하마다","오쿠다","토쿠나가","시바타","나카니시","오오타","카와구치",
-    "카와무라","아오키","마루야마","스기우라","타카하시","후나하시","야마시타","타카기","타케우치","우에다",
-    "타케다","코마츠","키노시타","후지모토","마루타","미야타","오카와","야마다","하마노","시모다",
-    "타니모토","쿠라모토","나리타","마에지마","카이도","시노다","아베","아라이","타케시타","우에노",
-    "유아사","카와카미","타카노","야마자키","아사노","노자와","오오이","쿠와하라","마키","키리시마",
-    "후지사키","마시마","미조구치","코노","후쿠시마","소가","치바","이에나가","시라이","카토우",
-    "오오타니","노무라","히로세","타케시","아다치","카미조","이케지마","유키","쿠마가이","타나베",
-    "오오하라","야마기시","카와시마","노구치","타카미","이시다","코야마","와카바야시","에노모토","키타가와",
-    "후쿠이","야마우치","이마무라","아라카와","마스다","하라다","타케모토","오노데라","코이즈미","키쿠치",
-    "세키구치","모리타","하시모토","요코야마","오카노","쿠리야마","나카노","타나베","카와사키","혼다",
-    "와타나베","나카야마","우에하라","야마오카","코지마","후루카와","키도","카스가","모리모토","이마이",
-    "오카다","아마노","하기노","타치바나","이시하라","미나토","스기야마","오치아이","카나이","마루","나가타",
-    "히사모토","야나기사와","카시와기","야마베","쿠도","사카이","이나바","스에요시","카와나베","오오니시",
-    "무라타","우치다","하타노","이사카","이쿠타","타카이","쿠와바라","나가세","타마미","후지노",
-    "오오카와","나카무라","니시다","히데시마","카스야","오오나카","오오바야시","아베","키쿠치","이와사키",
   ];
   const TYPES=[];
-  for(let i=0;i<200;i++){
-    if(i<30) TYPES.push("A");
-    else if(i<100) TYPES.push("B");
-    else TYPES.push("C");
+  for(let i=0;i<10;i++){
+    if(i<3) TYPES.push("M");
+    else if(i<5) TYPES.push("N");
+    else if(i<8) TYPES.push("F");
+    else TYPES.push("O");
   }
-  for(let i=TYPES.length-1;i>0;i--){const j=Math.floor(Math.random()*i);[TYPES[i],TYPES[j]]=[TYPES[j],TYPES[i]];}
 
-  const GRADIENTS_A=["135deg,#fff9c4,#fde68a","135deg,#fef3c7,#f59e0b","135deg,#fffbeb,#fbbf24"];
-  const GRADIENTS_B=["135deg,#fce7f3,#f9a8d4","135deg,#fdf2f8,#e879f9","135deg,#fff0f9,#fb7185"];
-  const GRADIENTS_C=["135deg,#eff6ff,#93c5fd","135deg,#f0f9ff,#38bdf8","135deg,#f5f3ff,#a78bfa","135deg,#f0fdf4,#6ee7b7","135deg,#fff7ed,#fb923c"];
+  const GRADIENTS_M=["135deg,#dbeafe,#93c5fd","135deg,#eff6ff,#60a5fa","135deg,#e0f2fe,#38bdf8"];
+  const GRADIENTS_N=["135deg,#f3e8ff,#c4b5fd","135deg,#faf5ff,#a78bfa","135deg,#ede9fe,#8b5cf6"];
+  const GRADIENTS_F=["135deg,#fce7f3,#f9a8d4","135deg,#fdf2f8,#e879f9","135deg,#fff0f9,#fb7185"];
+  const GRADIENTS_O=["135deg,#f3f4f6,#d1d5db","135deg,#f9fafb,#9ca3af","135deg,#f1f5f9,#cbd5e1"];
   const SAMPLE_TAGS=[
     ["활발","음악","리더"],["조용","독서","미술"],["쾌활","댄스","요리"],
     ["신비","마법","고양이"],["용감","스포츠","모험"],["온화","꽃","힐링"],
@@ -212,14 +232,22 @@ if(window.CHARACTERS) return; // 이미 생성된 경우 스킵
     ["천진","자연","빛"]
   ];
 
-  window.CHARACTERS = Array.from({length:200},(_,i)=>{
+  const AGES=[19,22,17,24,20,18,23,21,26,19];
+  const BODIES=["M","S","L","M","S","M","L","M","S","L"];
+
+  window.CHARACTERS = Array.from({length:10},(_,i)=>{
     const t=TYPES[i];
     const fn=FIRSTNAMES[i%FIRSTNAMES.length];
     const ln=LASTNAMES[i%LASTNAMES.length];
-    const grads=t==="A"?GRADIENTS_A:t==="B"?GRADIENTS_B:GRADIENTS_C;
+    const gradMap={M:GRADIENTS_M,N:GRADIENTS_N,F:GRADIENTS_F,O:GRADIENTS_O};
+    const grads=gradMap[t];
     const grad=grads[i%grads.length];
     const tags=SAMPLE_TAGS[i%SAMPLE_TAGS.length];
-    return {id:i+1, firstname:fn, lastname:ln, type:t, grad, tags, registered:i<7};
+    const serial=String(i+1).padStart(3,"0");
+    const bodySize=BODIES[i];
+    const idCode=`BIZOC-2026-${serial}-${bodySize}`;
+    return {id:i+1, firstname:fn, lastname:ln, type:t, grad, tags, registered:true,
+            age:AGES[i], bodySize, idCode, holder:"—"};
   });
 })();
 
@@ -237,13 +265,21 @@ function renderList(){
     return typeOk && nameOk;
   });
 
-  const counts = {ALL:200, A:0, B:0, C:0};
-  window.CHARACTERS.forEach(c=>counts[c.type]++);
+  const counts = {ALL:0, M:0, N:0, F:0, O:0};
+  window.CHARACTERS.forEach(c=>{counts[c.type]++;counts.ALL++;});
+
+  const TAB_INFO = {
+    ALL:{label:"ALL", color:"#6b7280"},
+    M:{label:"M", color:"#3b82f6"},
+    N:{label:"N", color:"#8b5cf6"},
+    F:{label:"F", color:"#ec4899"},
+    O:{label:"O", color:"#9ca3af"},
+  };
 
   // Filter tabs
-  document.getElementById('filter-tabs').innerHTML = ["ALL","A","B","C"].map(t=>`
+  document.getElementById('filter-tabs').innerHTML = ["ALL","M","N","F","O"].map(t=>`
     <button class="char-tab ${state.filter===t?"active":""}" onclick="setFilter('${t}')">
-      ${t==="ALL"?"ALL":t==="A"?"A <span style='color:#38bdf8'>●</span>":t==="B"?"B <span style='color:#111'>●</span>":"C <span style='color:#e03030'>●</span>"}
+      ${t==="ALL"?"ALL":`${t} <span style="color:${TAB_INFO[t].color}">●</span>`}
       <span style="font-size:10px;opacity:.6">${counts[t]}</span>
     </button>
   `).join("");
@@ -253,17 +289,18 @@ function renderList(){
   document.getElementById('char-grid').innerHTML = filtered.length===0
     ? `<div class="char-empty">검색 결과 없음</div>`
     : filtered.map(c=>{
-        const dclr = c.type==="A"?"#38bdf8":c.type==="B"?"#111":"#e03030";
+        const clrMap={M:"#3b82f6",N:"#8b5cf6",F:"#ec4899",O:"#9ca3af"};
+        const dclr = clrMap[c.type]||"#9ca3af";
         const isSlot = !c.registered;
         return `<div class="char-card ${isSlot?"char-slot":""}" onclick="openChar(${c.id})">
-          <div class="char-thumb r${c.type}">
+          <div class="char-thumb">
             ${isSlot?``:`<span style="font-size:20px;opacity:.2">◉</span>`}
           </div>
           <div class="char-name-row">
-            <span class="char-circle r${c.type}" style="color:${dclr}">●</span>
-            <span class="char-firstname">${isSlot?"-":c.firstname}</span>
+            <span class="char-circle" style="color:${dclr}">●</span>
+            <span class="char-firstname">${isSlot?"-":String(c.id).padStart(3,"0")}</span>
           </div>
-          <div class="char-lastname">${isSlot?"":c.lastname}</div>
+          <div class="char-lastname">-</div>
         </div>`;
       }).join("");
 }
@@ -272,24 +309,42 @@ function renderList(){
 function renderDetail(id){
   const c = window.CHARACTERS.find(ch=>ch.id===id);
   if(!c) return;
-  const dclr = c.type==="A"?"#38bdf8":c.type==="B"?"#111":"#e03030";
-  const rankLabel = c.type==="A"?"●●● Type-A":c.type==="B"?"●● Type-B":"● Type-C";
-  const ws = [100,76,90,58,95,68,82,72];
+  const clrMap={M:"#3b82f6",N:"#8b5cf6",F:"#ec4899",O:"#9ca3af"};
+  const dclr = clrMap[c.type]||"#9ca3af";
+  const genderLabel={M:"Male",N:"Neutral",F:"Female",O:"Other"};
+  const bodySizeLabel={S:"S — Small",M:"M — Medium",L:"L — Large"};
 
+  // top bar breadcrumb
   document.getElementById('detail-breadcrumb').textContent = c.firstname+" "+c.lastname;
-  document.getElementById('detail-thumb').style.background = `linear-gradient(${c.grad})`;
-  document.getElementById('detail-rank').className = `char-detail-rank r${c.type}`;
-  document.getElementById('detail-rank').textContent = rankLabel;
+
+  // ID bar
+  document.getElementById('detail-id-code').textContent = c.idCode;
+  const gbadge = document.getElementById('detail-gender-badge');
+  gbadge.textContent = c.type;
+  gbadge.className = `sheet-id-badge r${c.type}`;
+
+  // Illustration
+  document.getElementById('detail-illust-inner').style.background = `linear-gradient(${c.grad})`;
+
+  // Name
   document.getElementById('detail-name').textContent = c.firstname;
   document.getElementById('detail-subname').textContent = c.lastname;
-  document.getElementById('detail-tags').innerHTML = c.tags.map(t=>`<span class="char-detail-tag">${t}</span>`).join("");
-  document.getElementById('detail-stats').innerHTML = `
-    <div class="char-stat"><div class="char-stat-l">ID</div><div class="char-stat-v">#${String(c.id).padStart(3,"0")}</div></div>
-    <div class="char-stat"><div class="char-stat-l">타입</div><div class="char-stat-v" style="color:${dclr}">Type-${c.type}</div></div>
-    <div class="char-stat"><div class="char-stat-l">태그수</div><div class="char-stat-v">${c.tags.length}</div></div>
-  `;
-  document.getElementById('detail-profile-ph').innerHTML = ws.slice(0,4).map(w=>`<div class="char-detail-ph" style="width:${w}%;background:color-mix(in srgb,${dclr} 15%,#e4e4e4)"></div>`).join("");
-  document.getElementById('detail-story-ph').innerHTML = ws.map(w=>`<div class="char-detail-ph" style="width:${w}%;background:color-mix(in srgb,${dclr} 10%,#e4e4e4)"></div>`).join("");
+  document.getElementById('detail-badges').innerHTML =
+    `<span class="sheet-badge">${genderLabel[c.type]}</span>` +
+    `<span class="sheet-badge">${bodySizeLabel[c.bodySize]||c.bodySize}</span>`;
+
+  // Data cells
+  document.getElementById('dc-id').textContent = c.idCode;
+  document.getElementById('dc-id').style.color = dclr;
+  document.getElementById('dc-gender').textContent = genderLabel[c.type];
+  document.getElementById('dc-gender').style.color = dclr;
+  document.getElementById('dc-age').textContent = c.age + "세";
+  document.getElementById('dc-body').textContent = bodySizeLabel[c.bodySize]||c.bodySize;
+  document.getElementById('dc-holder').textContent = c.holder;
+
+  // Tags
+  document.getElementById('detail-tags').innerHTML = c.tags.map(t=>
+    `<span class="sheet-tag">${t}</span>`).join("");
 
   // Prev / Next
   const allChars = state.filter==="ALL"
@@ -298,12 +353,10 @@ function renderDetail(id){
   const idx = allChars.findIndex(ch=>ch.id===c.id);
   const prev = allChars[idx-1]||null;
   const next = allChars[idx+1]||null;
-  const prevBtn = document.getElementById('nav-prev');
-  const nextBtn = document.getElementById('nav-next');
   document.getElementById('nav-prev-name').textContent = prev ? prev.firstname+" "+prev.lastname : "없음";
   document.getElementById('nav-next-name').textContent = next ? next.firstname+" "+next.lastname : "없음";
-  prevBtn.className = "ep-nav-btn"+(prev?"":" disabled");
-  nextBtn.className = "ep-nav-btn"+(next?"":" disabled");
+  document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
+  document.getElementById('nav-next').className = "ep-nav-btn"+(next?"":" disabled");
 }
 
 /* ── ACTIONS ── */
