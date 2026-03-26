@@ -935,6 +935,20 @@ body{top:0!important}
   </div>
 </div>
 
+<!-- 아카이브 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
+<iframe
+  id="archive-frame"
+  src="archive.html"
+  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
+></iframe>
+
+<!-- 이벤트 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
+<iframe
+  id="event-frame"
+  src="event.html"
+  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
+></iframe>
+
 <!-- EP PICKER MODAL -->
 <div class="ep-picker-modal hidden" id="ep-picker-modal" onclick="closeEpPicker(event)">
   <div class="ep-picker-inner" onclick="event.stopPropagation()">
@@ -1824,7 +1838,9 @@ function renderDollSub(proj){
     ${_subHeader(proj)}
     <button class="sm-intro-link" onclick="goIntro('${proj.id}')">프로젝트 소개글 &#9654;</button>
     <button class="sm-char-link" onclick="goDollChar()">캐릭터 일람 &#9654;</button>
-    <button class="sm-char-link" onclick="openVoteOverlay()" style="color:#5a90b0;border-color:color-mix(in srgb,#5a90b0 30%,var(--bd))">&#9733; 인기 투표</button>
+    <button class="sm-char-link" onclick="openArchiveOverlay()">아카이브 &#9654;</button>
+    <button class="sm-char-link" onclick="openEventOverlay()">이벤트 &#9654;</button>
+    <button class="sm-char-link" onclick="openVoteOverlay()" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700">&#9733; 인기 투표</button>
     <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid var(--bd)">
       <svg width="54" height="54" viewBox="0 0 54 54" style="flex-shrink:0">
         <circle cx="27" cy="27" r="22" fill="none" stroke="var(--bd)" stroke-width="5"/>
@@ -1950,7 +1966,13 @@ function mobShowSub(projId){
     html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="goDollChar();closeMobMenu()">
       캐릭터 일람 <span>&#9654;</span>
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px;color:#5a90b0;border-color:color-mix(in srgb,#5a90b0 30%,#e2e2e2)" onclick="openVoteOverlay();closeMobMenu()">
+    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openArchiveOverlay();closeMobMenu()">
+      아카이브 <span>&#9654;</span>
+    </button>`;
+    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openEventOverlay();closeMobMenu()">
+      이벤트 <span>&#9654;</span>
+    </button>`;
+    html+=`<button class="mob2-intro-link" style="margin-top:6px;background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700" onclick="openVoteOverlay();closeMobMenu()">
       &#9733; 인기 투표 <span>&#9654;</span>
     </button>`;
   }
@@ -2089,6 +2111,8 @@ function render(){
   // charlist iframe 토글: charlist/chardetail이 아니면 iframe 숨기고 #content 복원
   var charFr = document.getElementById("char-frame");
   var introFr = document.getElementById("doll-intro-frame");
+  var archiveFr = document.getElementById("archive-frame");
+  var eventFr = document.getElementById("event-frame");
   var ct = document.getElementById("content");
   if(S.view !== "charlist" && S.view !== "chardetail"){
     if(charFr) charFr.style.display = "none";
@@ -2097,6 +2121,16 @@ function render(){
   if(S.view !== "intro"){
     if(introFr) introFr.style.display = "none";
     if(ct && S.view !== "charlist" && S.view !== "chardetail") ct.style.display = "";
+  }
+  if(S.view !== "archive"){
+    if(archiveFr) archiveFr.style.display = "none";
+  }
+  if(S.view !== "event"){
+    if(eventFr) eventFr.style.display = "none";
+  }
+  // archive/event 뷰일 때 #content 숨기기
+  if(S.view === "archive" || S.view === "event"){
+    if(ct) ct.style.display = "none";
   }
   // 모바일 topbar 리셋 (content view 이탈 시)
   if(S.view !== "content"){
@@ -2129,6 +2163,14 @@ function render(){
     // #content를 숨기고 char-frame iframe을 보여줌
     document.getElementById("content").style.display="none";
     document.getElementById("char-frame").style.display="block";
+  }
+  else if(S.view==="archive"){
+    document.getElementById("content").style.display="none";
+    document.getElementById("archive-frame").style.display="block";
+  }
+  else if(S.view==="event"){
+    document.getElementById("content").style.display="none";
+    document.getElementById("event-frame").style.display="block";
   }
   else if(S.view==="about")    renderAbout();
 }
@@ -3401,6 +3443,8 @@ function stateToHash(){
   const v = S.view;
   if(v === 'home')       return '#home';
   if(v === 'about')      return '#about';
+  if(v === 'archive')    return '#archive';
+  if(v === 'event')      return '#event';
   if(v === 'progress')   return '#progress';
   if(v === 'calendar'){
     if(S.calTimeline) return `#calendar/${S.calY}/timeline`;
@@ -3430,6 +3474,8 @@ function applyHash(hash){
   const parts = hash.replace(/^#/,'').split('/');
   const p0 = parts[0];
   if(p0 === 'about'){ S.view='about'; return; }
+  if(p0 === 'archive'){ S.view='archive'; return; }
+  if(p0 === 'event')  { S.view='event';   return; }
   if(p0 === 'calendar'){
     S.view='calendar';
     if(parts[1]) S.calY = parseInt(parts[1]);
@@ -3635,6 +3681,12 @@ window.closeVoteOverlay = function(){
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') closeVoteOverlay();
 });
+
+/* ── 아카이브 / 이벤트 뷰 전환 ── */
+window.openArchiveOverlay = function(){ goArchive(); };
+window.openEventOverlay   = function(){ goEvent();   };
+function goArchive(){ S.view="archive"; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
+function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
 
 </script>
 
