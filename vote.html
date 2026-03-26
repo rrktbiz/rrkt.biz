@@ -244,6 +244,18 @@ input{font-family:var(--fn)}
 }
 .tray-item:hover .tray-x{background:#f87171}
 .tray-empty{font-size:11px;color:var(--tx3);font-style:italic}
+.tray-item-done{
+  cursor:default;
+  border-color:color-mix(in srgb,var(--acc) 35%,transparent);
+  background:color-mix(in srgb,var(--acc) 6%,var(--sm));
+}
+.tray-item-done:hover{border-color:color-mix(in srgb,var(--acc) 35%,transparent);background:color-mix(in srgb,var(--acc) 6%,var(--sm))}
+.tray-done-mark{
+  position:absolute;top:-5px;right:-5px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--acc);color:#fff;font-size:8px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
 
 /* ── DONE BANNER with retake ── */
 .done-retake{
@@ -447,17 +459,34 @@ function renderTray() {
   var tray = document.getElementById('sel-tray');
   var list = document.getElementById('tray-list');
   var countEl = document.getElementById('tray-count');
-  if (hasDone) { tray.classList.remove('show'); return; }
+  var labelEl = document.querySelector('#sel-tray .tray-label');
   if (selected.length === 0) {
     tray.classList.remove('show');
     return;
   }
   tray.classList.add('show');
   if (countEl) countEl.textContent = selected.length;
+  if (labelEl) {
+    if (hasDone) {
+      labelEl.innerHTML = '✓ 내가 투표한 <span id="tray-count">' + selected.length + '</span>명';
+      labelEl.style.color = 'var(--acc2)';
+    } else {
+      labelEl.innerHTML = '선택 중 · <span id="tray-count">' + selected.length + '</span>명';
+      labelEl.style.color = '';
+    }
+  }
   list.innerHTML = selected.map(function(id) {
     var c = CHARS.find(function(x){ return x.id === id; });
     if (!c) return '';
     var num = String(c.id).padStart(3,'0');
+    if (hasDone) {
+      // 투표 완료 후 읽기 전용 (X 버튼 없음, 클릭 불가)
+      return '<div class="tray-item tray-item-done" title="내가 투표한 캐릭터">' +
+        '<div class="tray-done-mark">✓</div>' +
+        '<div class="tray-thumb" style="background:linear-gradient(' + c.grad + ')"></div>' +
+        '<div class="tray-code"><span class="tray-code-prefix">BIZOCDOLL</span><span class="tray-code-num">' + num + '</span></div>' +
+      '</div>';
+    }
     return '<div class="tray-item" onclick="toggleChar(' + id + ')" title="클릭하면 선택 취소">' +
       '<div class="tray-x">✕</div>' +
       '<div class="tray-thumb" style="background:linear-gradient(' + c.grad + ')"></div>' +
