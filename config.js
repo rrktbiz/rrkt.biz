@@ -12,15 +12,14 @@ var CONFIG = {
   //    - votes       : 인기 투표 득표수
   //    - characters  : 캐릭터 기본 정보
   //    - APPEARANCES : 등장 기록 아카이브
-  //    - LIKES       : 좋아요
   //
   //  사용법 예시:
   //    fetch(API + '?action=getCharacters')
   //    fetch(API + '?action=getAppearances&code=BIZOC2026001')
-  //    fetch(API + '?action=getLikes&code=BIZOC2026001')
   //    fetch(API + '?action=like&code=BIZOC2026001')
   //    fetch(API + '?action=getVotes')
   //    fetch(API + '?action=vote&ids=[1,2,3]')
+  //    fetch(API + '?action=cancelVote&ids=[1,2,3]')
   // --------------------------------------------------
   API: 'https://script.google.com/macros/s/AKfycbyQ9DiU6MuIZQGue3o12fEKd38HBTFVvSn1KVDpz7Nsqzu7KJDzQCBeRJGZ3vHRwZMg0Q/exec',
 
