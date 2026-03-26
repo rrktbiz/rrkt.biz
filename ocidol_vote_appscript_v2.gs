@@ -27,8 +27,18 @@ function doGet(e) {
       return handleVote(sheet, e.parameter.ids);
     }
 
-    // 기본: 득표 데이터 반환
-    return readVotes(sheet);
+    // action=cancelVote 이면 투표 취소 처리
+    if (e.parameter.action === 'cancelVote') {
+      return handleCancelVote(sheet, e.parameter.ids);
+    }
+
+    // action=getVotes 또는 action 없음 → 득표 데이터 반환
+    if (e.parameter.action === 'getVotes' || !e.parameter.action) {
+      return readVotes(sheet);
+    }
+
+    // 알 수 없는 action
+    return output({ ok: false, error: '알 수 없는 action: ' + e.parameter.action });
 
   } catch (err) {
     return output({ ok: false, error: err.message });
@@ -56,6 +66,40 @@ function handleVote(sheet, idsParam) {
       if (row) {
         var cell = sheet.getRange(row, 2);
         cell.setValue(Number(cell.getValue()) + 1);
+      }
+    }
+
+    return output({ ok: true });
+
+  } catch (err) {
+    return output({ ok: false, error: err.message });
+  } finally {
+    try { lock.releaseLock(); } catch (e2) {}
+  }
+}
+
+function handleCancelVote(sheet, idsParam) {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.tryLock(10000);
+
+    var cancelIds = JSON.parse(decodeURIComponent(idsParam || '[]'));
+    if (!Array.isArray(cancelIds) || cancelIds.length === 0) {
+      throw new Error('취소할 투표 데이터가 없습니다');
+    }
+
+    var data    = sheet.getDataRange().getValues();
+    var idToRow = {};
+    for (var i = 1; i < data.length; i++) {
+      idToRow[String(data[i][0])] = i + 1;
+    }
+
+    for (var j = 0; j < cancelIds.length; j++) {
+      var row = idToRow[String(cancelIds[j])];
+      if (row) {
+        var cell = sheet.getRange(row, 2);
+        var cur  = Number(cell.getValue()) || 0;
+        cell.setValue(Math.max(0, cur - 1)); // 0 아래로 안 내려감
       }
     }
 
