@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 아카이브</title>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Josefin+Sans:wght@100;300&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -15,7 +15,7 @@
   --gray-400: #a3a3a3;
   --gray-600: #525252;
   --gray-900: #111111;
-  --blue: #5a90b0;
+  --blue: #9060c0;
   --fn: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;
 }
 html, body { background: var(--white); color: var(--gray-900); font-family: var(--fn); -webkit-font-smoothing: antialiased; }
@@ -73,32 +73,191 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .btn-register:hover { background: rgba(160,122,200,0.22); transform: scale(1.02); }
 
 /* ── PAGE ── */
-.page { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
-.sec { padding-top: 52px; margin-top: 52px; border-top: 1px solid var(--gray-200); }
-.sec-first { border-top: none; padding-top: 20px; }
+.page { max-width: 1040px; margin: 0 auto; padding: 0 32px 80px; }
+.sec { padding-top: 40px; margin-top: 36px; border-top: 1px solid var(--gray-200); }
+.sec-first { border-top: none; padding-top: 0; margin-top: 28px; }
 .sec-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
 .sec-title { font-size: 20px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; margin-bottom: 6px; }
 .sec-sub { font-size: 13px; color: var(--gray-400); line-height: 1.6; margin-bottom: 22px; }
 
 /* ── CONTROLS ── */
-.controls-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-.filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter-btn {
-  font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 100px;
+/* ── 2단 레이아웃 ── */
+.works-layout {
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: flex-start;
+}
+.works-sidebar {
+  display: flex; flex-direction: column; gap: 0;
+  position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto;
+}
+.sidebar-block {
+  padding: 15px 16px 13px; border-bottom: 1px solid var(--gray-100);
+}
+.sidebar-block:last-child { border-bottom: none; }
+.sidebar-ranking { padding: 0 0 16px; }
+.sidebar-ranking .sidebar-label {
+  height: 54px;
+  display: flex; align-items: center;
+  font-size: 15px; font-weight: 700; color: var(--gray-800);
+  letter-spacing: -0.01em; font-family: var(--fn);
+  padding: 0 2px; margin-bottom: 10px;
+}
+.sidebar-title { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 3px; }
+.sidebar-sub { font-size: 11px; color: var(--gray-400); line-height: 1.5; }
+.sidebar-label {
+  font-size: 12px; font-weight: 700; color: var(--gray-600);
+  letter-spacing: 0.5px; margin-bottom: 10px; font-family: 'Josefin Sans', sans-serif;
+}
+/* 태그 인라인 다닥다닥 */
+.tag-wrap { display: flex; flex-wrap: wrap; gap: 4px; }
+.works-char-search { position: relative; }
+.works-char-search input {
+  width: 100%; padding: 7px 28px 7px 28px;
+  border: 1px solid var(--gray-200); border-radius: 8px;
+  font-size: 13px; font-family: 'DM Mono', 'Courier New', monospace;
+  color: var(--gray-900); background: var(--white); outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s; letter-spacing: 0.3px;
+}
+.works-char-search input:focus { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(144,96,192,0.1); }
+.works-char-search input::placeholder { font-family: var(--fn); letter-spacing: 0; color: var(--gray-400); font-size: 10px; }
+.works-char-search .wcs-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
+.works-char-search .wcs-clear {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  width: 15px; height: 15px; border-radius: 50%; background: var(--gray-200);
+  border: none; cursor: pointer; display: none; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--gray-600); transition: background 0.1s;
+}
+.works-char-search .wcs-clear.show { display: flex; }
+.works-char-search .wcs-clear:hover { background: var(--gray-400); color: #fff; }
+
+/* 오른쪽 태그 바 */
+.result-tags-bar { display: flex; flex-direction: column; gap: 0; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--gray-100); }
+.result-tag-group { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.result-tag-label { font-size: 9px; font-weight: 700; color: var(--gray-400); letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; min-width: 28px; }
+
+/* 오른쪽 결과 */
+.works-result { min-width: 0; }
+.works-result-header-top {
+  display: flex; align-items: center; justify-content: flex-end;
+  margin-bottom: 10px;
+}
+.cast-stat {
+  display: flex; align-items: baseline; gap: 6px;
+  font-size: 20px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.04em; line-height: 1;
+}
+.works-result-title { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; margin-bottom: 3px; }
+.works-result-desc { font-size: 12px; color: var(--gray-400); }
+
+/* 풀 너비 캐릭터 코드 서치바 */
+.works-searchbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; margin-bottom: 14px;
+  border: 2px solid #d4b8f0; border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 2px 14px rgba(160,80,216,0.08);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.works-searchbar:focus-within {
+  border-color: #a060d8; box-shadow: 0 0 0 4px rgba(160,96,216,0.12);
+}
+.works-searchbar input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-size: 18px; font-weight: 400; font-family: 'DM Mono', 'Courier New', monospace;
+  color: var(--gray-900); letter-spacing: 0.5px;
+}
+.works-searchbar input::placeholder { font-family: var(--fn); font-weight: 400; color: #c0a0d8; font-size: 14px; letter-spacing: 0; }
+.searchbar-count {
+  font-size: 13px; font-weight: 500; color: var(--gray-400);
+  white-space: nowrap; flex-shrink: 0; padding: 0 4px;
+  font-family: var(--fn);
+}
+.works-searchbar .wcs-clear {
+  width: 20px; height: 20px; border-radius: 50%; background: var(--gray-200);
+  border: none; cursor: pointer; display: none; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--gray-600); transition: background 0.1s; flex-shrink: 0;
+}
+.works-searchbar .wcs-clear.show { display: flex; }
+.works-searchbar .wcs-clear:hover { background: var(--gray-400); color: #fff; }
+.count-label { font-size: 11px; font-weight: 600; color: var(--gray-400); white-space: nowrap; }
+
+/* 태그 버튼 - 인라인 pill */
+.controls-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.tag-btn {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 100px;
   border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-600);
-  cursor: pointer; transition: all 0.12s; font-family: var(--fn);
+  cursor: pointer; transition: all 0.12s; font-family: var(--fn); user-select: none;
+  white-space: nowrap;
 }
-.filter-btn:hover { border-color: var(--blue); color: var(--blue); }
-.filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-.view-toggle { display: flex; gap: 2px; }
-.view-btn {
-  width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--gray-200);
-  background: var(--white); color: var(--gray-400); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; transition: all 0.1s;
+.tag-btn:hover { border-color: var(--blue); color: var(--blue); }
+.tag-btn.active { background: rgba(144,96,192,0.1); border-color: var(--blue); color: var(--blue); }
+.tag-btn.active::before { content: '✓ '; font-size: 8px; font-weight: 800; }
+.tag-btn.all-btn { border-style: dashed; }
+.tag-btn.all-btn.active { background: var(--blue); color: #fff; border-style: solid; }
+.tag-btn.all-btn.active::before { content: none; }
+
+@media (max-width: 580px) {
+  .works-layout { grid-template-columns: 1fr; }
+  .works-sidebar { position: static; max-height: none; }
+  .sidebar-ranking { display: none; } /* 모바일: 사이드바 랭킹 숨김 */
 }
-.view-btn.active { background: var(--gray-900); color: #fff; border-color: var(--gray-900); }
-.view-btn:hover:not(.active) { border-color: var(--gray-400); color: var(--gray-600); }
-.count-label { font-size: 11px; font-weight: 600; color: var(--gray-400); }
+
+/* ── 모바일 플로팅 랭킹 버튼 ── */
+.ranking-fab {
+  display: none;
+  position: fixed; bottom: 24px; right: 20px; z-index: 500;
+  background: linear-gradient(135deg, #c890f0, #a060d8);
+  color: #fff; border: none; border-radius: 100px;
+  padding: 10px 18px 10px 14px;
+  font-size: 13px; font-weight: 700; font-family: var(--fn);
+  box-shadow: 0 4px 20px rgba(140,70,200,0.4);
+  cursor: pointer; display: none; align-items: center; gap: 7px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ranking-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(140,70,200,0.5); }
+.ranking-fab-icon { font-size: 16px; line-height: 1; }
+
+/* ── 슬라이드업 드로어 ── */
+.ranking-drawer-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(30,10,50,0.4);
+}
+.ranking-drawer-overlay.show { display: block; }
+.ranking-drawer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 601;
+  background: var(--white);
+  border-radius: 20px 20px 0 0;
+  padding: 0 0 env(safe-area-inset-bottom);
+  max-height: 80vh; overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
+  box-shadow: 0 -4px 32px rgba(120,60,180,0.18);
+}
+.ranking-drawer.show { transform: translateY(0); }
+.drawer-handle {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 12px 0 0; cursor: pointer; gap: 8px;
+}
+.drawer-handle-bar {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--gray-200);
+}
+.drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 20px 12px;
+}
+.drawer-title { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+.drawer-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--gray-200); background: transparent;
+  font-size: 12px; color: var(--gray-600); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.drawer-content { padding: 0 20px 24px; }
+
+@media (max-width: 580px) {
+  .ranking-fab { display: flex; }
+}
 
 /* ── GRID ── */
 .works-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
@@ -120,17 +279,17 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .badge-pub {
   position: absolute; top: 8px; right: 8px; font-size: 9px; font-weight: 700;
   padding: 2px 8px; border-radius: 100px; background: rgba(90,144,176,0.15);
-  color: var(--blue); border: 1px solid rgba(90,144,176,0.3);
+  color: var(--blue); border: 1px solid rgba(144,96,192,0.3);
 }
 .work-card-body { padding: 13px 15px 15px; flex: 1; display: flex; flex-direction: column; }
 .work-card-title { font-size: 14px; font-weight: 700; color: var(--gray-900); line-height: 1.35; margin-bottom: 3px; letter-spacing: -0.01em; }
 .work-card-creator { font-size: 11px; color: var(--gray-400); margin-bottom: 9px; }
 .chars-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 9px; }
 .char-chip {
-  font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 100px;
-  background: rgba(90,144,176,0.08); color: var(--blue);
-  border: 1px solid rgba(90,144,176,0.2); letter-spacing: 0.3px;
-  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 9px; font-weight: 300; padding: 2px 7px; border-radius: 100px;
+  background: rgba(144,96,192,0.08); color: var(--blue);
+  border: 1px solid rgba(144,96,192,0.2); letter-spacing: 0.3px;
+  font-family: 'DM Mono', 'Courier New', monospace;
 }
 .work-card-desc { font-size: 11px; color: var(--gray-600); line-height: 1.6; flex: 1; }
 .work-card-foot {
@@ -145,27 +304,30 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .work-link:hover { opacity: 0.7; }
 
 /* ── LIST ── */
-.works-list { display: flex; flex-direction: column; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; }
+.works-list { display: flex; flex-direction: column; }
 .work-list-item {
-  display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center; gap: 10px;
+  padding: 8px 4px;
   border-bottom: 1px solid var(--gray-100); transition: background 0.1s;
 }
 .work-list-item:last-child { border-bottom: none; }
-.work-list-item:hover { background: var(--gray-50); }
+.work-list-item:hover { background: var(--gray-50); border-radius: 6px; }
 .work-list-icon {
   width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
 }
-.work-list-info { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.work-list-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.work-list-title { font-size: 13px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; white-space: nowrap; }
+.work-list-info { min-width: 0; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.work-list-top { display: flex; align-items: center; gap: 5px; min-width: 0; }
+.work-list-title { font-size: 13px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .badge-list-type {
   font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 100px;
-  background: var(--gray-100); color: var(--gray-600); letter-spacing: 0.3px; white-space: nowrap;
+  background: var(--gray-100); color: var(--gray-600); white-space: nowrap; flex-shrink: 0;
 }
-.work-list-creator { font-size: 11px; color: var(--gray-400); white-space: nowrap; }
+.work-list-creator { font-size: 11px; color: var(--gray-400); white-space: nowrap; flex-shrink: 0; }
 .work-list-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.work-list-date { font-size: 10px; color: var(--gray-400); white-space: nowrap; }
+.work-list-date { font-size: 11px; color: var(--gray-400); white-space: nowrap; }
 
 /* ── CHARACTER SEARCH ── */
 .char-search-wrap { position: relative; margin-bottom: 16px; }
@@ -175,10 +337,10 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   font-size: 13px; font-family: var(--fn); color: var(--gray-900);
   background: var(--white); outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
+  font-family: 'DM Mono', 'Courier New', monospace;
   letter-spacing: 0.5px;
 }
-.char-search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(90,144,176,0.12); }
+.char-search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(144,96,192,0.12); }
 .char-search-input::placeholder { font-family: var(--fn); letter-spacing: 0; color: var(--gray-400); }
 .char-search-icon {
   position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
@@ -195,7 +357,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .char-search-hint { font-size: 11px; color: var(--gray-400); margin-bottom: 14px; }
 .char-index-row.hidden { display: none; }
 .char-index-row .char-code-label mark {
-  background: rgba(90,144,176,0.18); color: var(--blue); border-radius: 2px; padding: 0 1px;
+  background: rgba(144,96,192,0.18); color: var(--blue); border-radius: 2px; padding: 0 1px;
 }
 
 /* ── CHARACTER INDEX ── */
@@ -206,8 +368,8 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 }
 .char-index-row:last-child { border-bottom: none; }
 .char-code-label {
-  font-size: 12px; font-weight: 700; color: var(--blue); letter-spacing: 1px;
-  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 12px; font-weight: 400; color: var(--blue); letter-spacing: 1px;
+  font-family: 'DM Mono', 'Courier New', monospace;
   min-width: 110px; flex-shrink: 0;
 }
 .char-works-chips { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
@@ -216,7 +378,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   background: var(--gray-100); color: var(--gray-600); border: 1px solid var(--gray-200);
   white-space: nowrap; transition: all 0.1s; cursor: default;
 }
-.char-work-tag:hover { background: rgba(90,144,176,0.08); color: var(--blue); border-color: rgba(90,144,176,0.3); }
+.char-work-tag:hover { background: rgba(144,96,192,0.08); color: var(--blue); border-color: rgba(144,96,192,0.3); }
 .char-appear-count { font-size: 11px; color: var(--gray-400); flex-shrink: 0; white-space: nowrap; }
 
 /* ── EMPTY ── */
@@ -231,138 +393,119 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 /* ── POPULAR RANKING ── */
 .ranking-section { }
 
-/* TOP 3 포디움 */
-.ranking-top3 {
-  display: flex; align-items: flex-end; justify-content: center;
-  gap: 10px; margin-bottom: 16px;
+/* ── 1위 히어로 (사이드바용 압축) ── */
+.rank-hero {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 12px; border-radius: 11px;
+  background: rgba(144,96,192,0.07); border: 1.5px solid rgba(160,122,200,0.5);
+  margin-bottom: 10px;
 }
-.podium-item {
-  display: flex; flex-direction: column; align-items: center; gap: 0;
-  position: relative;
-}
-.podium-item.rank-1 { order: 2; width: 156px; }
-.podium-item.rank-2 { order: 1; width: 124px; }
-.podium-item.rank-3 { order: 3; width: 108px; }
-
-/* 썸네일 */
-.podium-thumb {
-  width: 100%; aspect-ratio: 1;
-  border-radius: 14px; overflow: hidden;
+.rank-hero-thumb {
+  width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  position: relative;
-  border: 2.5px solid transparent;
+  font-size: 28px; border: 2px solid rgba(160,122,200,0.6); position: relative;
 }
-.rank-1 .podium-thumb { font-size: 48px; border-color: #f5c842; box-shadow: 0 6px 24px rgba(200,160,60,0.28); }
-.rank-2 .podium-thumb { font-size: 34px; border-color: #c0c0d0; box-shadow: 0 3px 12px rgba(0,0,0,0.1); border-radius: 12px; }
-.rank-3 .podium-thumb { font-size: 28px; border-color: #d4956a; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border-radius: 10px; }
-.podium-thumb-num {
-  position: absolute; bottom: 5px; right: 6px;
-  font-size: 8px; font-weight: 800;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
-  color: rgba(100,60,160,0.5);
+.rank-hero-crown {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  font-size: 13px; line-height: 1;
 }
-.podium-crown {
-  font-size: 20px; line-height: 1; margin-bottom: 5px;
+.rank-hero-info { flex: 1; min-width: 0; }
+.rank-hero-label {
+  font-size: 9px; font-weight: 700; color: #9060c0;
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px;
 }
-.rank-2 .podium-crown { font-size: 16px; }
-.rank-3 .podium-crown { font-size: 14px; }
+.rank-hero-code {
+  font-size: 12px; font-weight: 400; color: var(--gray-900);
+  font-family: 'DM Mono', 'Courier New', monospace;
+  letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rank-hero-bar {
+  height: 3px; background: rgba(232,200,66,0.2); border-radius: 100px;
+  margin-top: 5px; overflow: hidden;
+}
+.rank-hero-bar-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg,#c890f0,#a060d8); width: 100%;
+}
+.rank-hero-cnt { font-size: 11px; color: var(--gray-600); margin-top: 3px; }
 
-/* 발판 */
-.podium-base {
-  width: 100%; border-radius: 8px 8px 5px 5px;
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 7px 5px 6px; gap: 1px;
-  margin-top: -1px;
-}
-.rank-1 .podium-base { background: linear-gradient(135deg,#c890f0,#a060d8); min-height: 60px; }
-.rank-2 .podium-base { background: linear-gradient(135deg,#b0b0cc,#8888a8); min-height: 42px; }
-.rank-3 .podium-base { background: linear-gradient(135deg,#e0a870,#c07840); min-height: 30px; }
-.podium-rank-label {
-  font-size: 8px; font-weight: 800; color: rgba(255,255,255,0.8);
-  letter-spacing: 1px; text-transform: uppercase;
-}
-.podium-count-val {
-  font-size: 15px; font-weight: 800; color: #fff; line-height: 1;
-  letter-spacing: -0.03em;
-}
-.rank-2 .podium-count-val, .rank-3 .podium-count-val { font-size: 13px; }
-.podium-count-unit { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.75); }
-.podium-code {
-  font-size: 8px; font-weight: 700; color: #7a50a8;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
-  letter-spacing: 0.3px; text-align: center; margin-top: 5px;
-  word-break: break-all;
-}
-
-/* 4위~ 리스트 */
-.ranking-rest {
-  display: grid; grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden;
-}
-.ranking-rest-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 12px; border-bottom: 1px solid var(--gray-100);
+/* ── 2위~ 리스트 (사이드바용) ── */
+.ranking-list { display: flex; flex-direction: column; }
+.ranking-row {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 0; border-bottom: 1px solid var(--gray-100);
   transition: background 0.1s;
 }
-.ranking-rest-item:nth-last-child(-n+2) { border-bottom: none; }
-.ranking-rest-item:nth-child(odd) { border-right: 1px solid var(--gray-100); }
-.ranking-rest-item:hover { background: var(--gray-50); }
-.rest-thumb {
-  width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 13px;
+.ranking-row:last-child { border-bottom: none; }
+.ranking-row:hover { background: var(--gray-50); border-radius: 5px; }
+.ranking-row.zero { opacity: 1; }
+.r-rank {
+  font-size: 10px; font-weight: 400; color: var(--gray-400);
+  font-family: 'DM Mono', 'Courier New', monospace;
+  width: 14px; text-align: right; flex-shrink: 0;
 }
-.rest-rank {
-  font-size: 10px; font-weight: 800; color: var(--gray-400);
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
-  min-width: 16px; text-align: right; flex-shrink: 0;
+.r-thumb {
+  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
 }
-.rest-code {
-  font-size: 10px; font-weight: 700; color: var(--blue);
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
+.r-code {
+  font-size: 10px; font-weight: 400; color: var(--blue);
+  font-family: 'DM Mono', 'Courier New', monospace;
   flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.rest-count { font-size: 10px; color: var(--gray-400); flex-shrink: 0; white-space: nowrap; }
-
-/* 더보기 */
-.ranking-more-wrap { margin-top: 8px; }
-.ranking-more-btn {
-  width: 100%; padding: 8px; border-radius: 10px;
-  border: 1px dashed var(--gray-200); background: transparent;
-  font-size: 11px; font-weight: 700; color: var(--gray-400);
-  font-family: var(--fn); cursor: pointer; transition: all 0.15s;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
+.r-bar-wrap { width: 36px; height: 3px; background: var(--gray-100); border-radius: 100px; overflow: hidden; flex-shrink: 0; }
+.r-bar { height: 100%; border-radius: 100px; background: linear-gradient(90deg,#c890f0,#e0a0d8); }
+.r-cnt { font-size: 10px; color: var(--gray-400); flex-shrink: 0; width: 16px; text-align: right; }
+.r-open {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 1px solid var(--gray-200); background: transparent;
+  font-size: 9px; color: var(--gray-400); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.1s; font-family: var(--fn);
 }
-.ranking-more-btn:hover { border-color: var(--blue); color: var(--blue); background: rgba(90,144,176,0.04); }
+.r-open:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ── 더보기 ── */
+.ranking-more-wrap { margin-top: 6px; }
+.ranking-more-btn {
+  width: 100%; padding: 5px; border-radius: 8px;
+  border: 1px dashed var(--gray-200); background: transparent;
+  font-size: 10px; font-weight: 700; color: var(--gray-400);
+  font-family: var(--fn); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.ranking-more-btn:hover { border-color: var(--blue); color: var(--blue); }
 .ranking-more-btn .more-arrow { transition: transform 0.2s; display: inline-block; }
 .ranking-more-btn.open .more-arrow { transform: rotate(180deg); }
-.ranking-all-list {
-  display: none; margin-top: 8px;
-  border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden;
-  display: grid; grid-template-columns: 1fr 1fr;
-}
-.ranking-all-list.hidden { display: none !important; }
-.ranking-all-list:not(.hidden) { display: grid; }
+.ranking-all-list { display: flex; flex-direction: column; margin-top: 4px; }
+.ranking-all-list.hidden { display: none; }
 .all-item {
-  display: flex; align-items: center; gap: 7px;
-  padding: 5px 12px; border-bottom: 1px solid var(--gray-100);
-  font-size: 10px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 3px 0; border-bottom: 1px solid var(--gray-100); transition: background 0.1s;
 }
-.all-item:nth-last-child(-n+2) { border-bottom: none; }
-.all-item:nth-child(odd) { border-right: 1px solid var(--gray-100); }
-.all-item:hover { background: var(--gray-50); }
-.all-rank { font-size: 9px; font-weight: 800; color: var(--gray-400); min-width: 16px; text-align: right; flex-shrink: 0; font-family: 'SF Mono','Fira Code','Courier New',monospace; }
-.all-thumb { width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; }
-.all-code { font-size: 10px; font-weight: 700; color: var(--blue); font-family: 'SF Mono','Fira Code','Courier New',monospace; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.all-count { font-size: 9px; color: var(--gray-400); flex-shrink: 0; }
+.all-item:last-child { border-bottom: none; }
+.all-item:hover { background: var(--gray-50); border-radius: 4px; }
+.all-item.zero { opacity: 1; }
+.all-rank { font-size: 8px; font-weight: 400; color: var(--gray-400); min-width: 16px; text-align: right; flex-shrink: 0; font-family: 'DM Mono', 'Courier New', monospace; }
+.all-thumb { width: 27px; height: 27px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.all-code { font-size: 9px; font-weight: 400; color: var(--blue); font-family: 'DM Mono', 'Courier New', monospace; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.all-cnt { font-size: 8px; color: var(--gray-400); flex-shrink: 0; width: 14px; text-align: right; }
+.all-open {
+  width: 14px; height: 14px; border-radius: 4px;
+  border: 1px solid var(--gray-200); background: transparent;
+  font-size: 8px; color: var(--gray-400); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.all-open:hover { border-color: var(--blue); color: var(--blue); }
 
 .ranking-empty {
-  text-align: center; padding: 32px 16px;
-  font-size: 12px; color: var(--gray-400); line-height: 1.9;
+  text-align: center; padding: 16px 8px;
+  font-size: 11px; color: var(--gray-400); line-height: 1.8;
 }
 
 /* ── NOTE ── */
 .note-box {
-  background: rgba(90,144,176,0.05); border: 1px solid rgba(90,144,176,0.18);
+  background: rgba(144,96,192,0.05); border: 1px solid rgba(144,96,192,0.18);
   border-radius: 12px; padding: 16px 20px;
   font-size: 13px; color: var(--gray-600); line-height: 1.85; margin-top: 40px;
 }
@@ -420,68 +563,54 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 
   <!-- 작품 목록 -->
   <div class="sec sec-first">
-    <div class="sec-eyebrow">Works Archive</div>
-    <div class="sec-title">등록 작품 목록</div>
-    <div class="sec-sub">공개 등록을 선택한 창작물만 표시됩니다. 등록은 자발적이며, 소규모 창작은 해당 없습니다.</div>
-
-    <div class="controls-row">
-      <div class="filter-row" id="filter-row">
-        <button class="filter-btn active" onclick="filterWorks('all',this)">전체</button>
-        <button class="filter-btn" onclick="filterWorks('웹툰/만화',this)">웹툰·만화</button>
-        <button class="filter-btn" onclick="filterWorks('웹소설/소설',this)">웹소설·소설</button>
-        <button class="filter-btn" onclick="filterWorks('게임',this)">게임</button>
-        <button class="filter-btn" onclick="filterWorks('일러스트',this)">일러스트</button>
-        <button class="filter-btn" onclick="filterWorks('굿즈',this)">굿즈</button>
-        <button class="filter-btn" onclick="filterWorks('영상',this)">영상</button>
-        <button class="filter-btn" onclick="filterWorks('기타',this)">기타</button>
+    <div class="works-layout">
+      <!-- 왼쪽: 사이드바 (랭킹만) -->
+      <div class="works-sidebar">
+        <div class="sidebar-ranking">
+          <div class="sidebar-label"><span style="font-size:16px;line-height:1;margin-right:7px">🎬</span>캐스팅 인기순위</div>
+          <div class="ranking-section" id="ranking-section"></div>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <span class="count-label" id="count-label">0개</span>
+      <!-- 오른쪽: 검색 + 결과 -->
+      <div class="works-result">
+        <!-- 캐릭터 코드 검색 - 풀 너비 메인 서치바 -->
+        <div class="works-searchbar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="works-char-input" placeholder="캐릭터 코드로 검색 (예: BIZOCDOLL007, 007, 42)" oninput="onWorksCharSearch(this.value)">
+          <span class="searchbar-count" id="count-label"></span>
+          <button class="wcs-clear" id="works-char-clear" onclick="clearWorksCharSearch()">✕</button>
+        </div>
+
+        <!-- 태그 필터 -->
+        <div class="result-tags-bar">
+          <div class="tag-wrap" id="all-tag-row">
+            <button class="tag-btn all-btn active" onclick="resetAllTags(this)">전체</button>
+            <button class="tag-btn" onclick="toggleTypeTag('웹툰/만화',this)">#웹툰·만화</button>
+            <button class="tag-btn" onclick="toggleTypeTag('웹소설/소설',this)">#소설·웹소설</button>
+            <button class="tag-btn" onclick="toggleTypeTag('게임',this)">#게임</button>
+            <button class="tag-btn" onclick="toggleTypeTag('일러스트',this)">#일러스트</button>
+            <button class="tag-btn" onclick="toggleTypeTag('굿즈',this)">#굿즈</button>
+            <button class="tag-btn" onclick="toggleTypeTag('영상',this)">#영상</button>
+            <button class="tag-btn" onclick="toggleTypeTag('기타',this)">#기타</button>
+            <button class="tag-btn" onclick="toggleGenreTag('GL',this)">#GL</button>
+            <button class="tag-btn" onclick="toggleGenreTag('BL',this)">#BL</button>
+            <button class="tag-btn" onclick="toggleGenreTag('NL',this)">#NL</button>
+            <button class="tag-btn" onclick="toggleGenreTag('판타지',this)">#판타지</button>
+            <button class="tag-btn" onclick="toggleGenreTag('일상',this)">#일상</button>
+            <button class="tag-btn" onclick="toggleGenreTag('개그',this)">#개그</button>
+            <button class="tag-btn" onclick="toggleGenreTag('드라마',this)">#드라마</button>
+            <button class="tag-btn" onclick="toggleGenreTag('공포',this)">#공포</button>
+          </div>
+        </div>
+
+        <div id="works-container"></div>
       </div>
     </div>
-
-    <div id="works-container"></div>
   </div>
 
-  <!-- 인기 캐릭터 랭킹 -->
-  <div class="sec">
-    <div class="sec-eyebrow">Popular Characters</div>
-    <div class="sec-title">인기 캐릭터 랭킹 ✦</div>
-    <div class="sec-sub">등록 작품 출연 횟수 기준으로 집계됩니다.</div>
-    <div class="ranking-section" id="ranking-section"></div>
-  </div>
-
-  <!-- 캐릭터별 출연 기록 -->
-  <div class="sec">
-    <div class="sec-eyebrow">Character Index</div>
-    <div class="sec-title">캐릭터별 출연 기록</div>
-    <div class="sec-sub">각 캐릭터가 등장한 공개 등록 작품을 한눈에 확인할 수 있습니다.</div>
-
-    <div class="char-search-wrap">
-      <svg class="char-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      <input
-        class="char-search-input"
-        id="char-search"
-        type="text"
-        placeholder="고유코드 검색 (예: BIZOCDOLL001, 001, 42...)"
-        oninput="onCharSearch(this.value)"
-      />
-      <button class="char-search-clear" id="char-search-clear" onclick="clearCharSearch()" title="초기화">✕</button>
-    </div>
-    <div class="char-search-hint" id="char-search-hint"></div>
-
-    <div class="char-index" id="char-index"></div>
-  </div>
-
-  <div class="note-box">
-    📌 이 아카이브는 <strong>공개 등록을 선택한 작품</strong>만 수록합니다.
-    소규모 개인 창작·SNS 게시물은 등록 없이 자유롭게 만드실 수 있습니다.<br>
-    등록을 원하시면 상단 <strong>작품 등록 폼</strong>을 이용해 주세요.
-  </div>
 
 </div>
+
 
 <script>
 /* ══════════════════════════════════════════════════════════
@@ -544,22 +673,132 @@ const TYPE_META = {
 };
 
 let curFilter = "all";
+let activeTypes = new Set(); // empty = all
+let activeGenres = new Set(); // empty = all
+let worksCharQuery = "";
+
+function resetAllTags(btn){
+  activeTypes.clear(); activeGenres.clear();
+  document.querySelectorAll('#all-tag-row .tag-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWorks();
+}
+
+function toggleTypeTag(type, btn){
+  document.querySelector('#all-tag-row .all-btn')?.classList.remove('active');
+  if(activeTypes.has(type)){ activeTypes.delete(type); btn.classList.remove('active'); }
+  else { activeTypes.add(type); btn.classList.add('active'); }
+  if(activeTypes.size === 0 && activeGenres.size === 0)
+    document.querySelector('#all-tag-row .all-btn')?.classList.add('active');
+  renderWorks();
+}
+
+function toggleGenreTag(genre, btn){
+  document.querySelector('#all-tag-row .all-btn')?.classList.remove('active');
+  if(activeGenres.has(genre)){ activeGenres.delete(genre); btn.classList.remove('active'); }
+  else { activeGenres.add(genre); btn.classList.add('active'); }
+  if(activeTypes.size === 0 && activeGenres.size === 0)
+    document.querySelector('#all-tag-row .all-btn')?.classList.add('active');
+  renderWorks();
+}
+
+function openRankingDrawer(){
+  document.getElementById("ranking-drawer-overlay").classList.add("show");
+  document.getElementById("ranking-drawer").classList.add("show");
+  document.body.style.overflow = "hidden";
+  // 드로어 안에도 랭킹 렌더
+  const src = document.getElementById("ranking-section");
+  const dest = document.getElementById("ranking-drawer-content");
+  if(src && dest) dest.innerHTML = src.innerHTML;
+}
+function closeRankingDrawer(){
+  document.getElementById("ranking-drawer-overlay").classList.remove("show");
+  document.getElementById("ranking-drawer").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function filterByChar(code){
+  // 검색창에 코드 입력
+  const inp = document.getElementById('works-char-input');
+  if(inp){ inp.value = code; }
+  const clearBtn = document.getElementById('works-char-clear');
+  if(clearBtn) clearBtn.classList.add('show');
+  worksCharQuery = code;
+  renderWorks();
+  // 검색결과 영역으로 스크롤
+  document.getElementById('works-container').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function onWorksCharSearch(val){
+  worksCharQuery = val.trim();
+  const clearBtn = document.getElementById('works-char-clear');
+  if(clearBtn) clearBtn.classList.toggle('show', val.length > 0);
+  renderWorks();
+}
+
+function clearWorksCharSearch(){
+  const inp = document.getElementById('works-char-input');
+  if(inp) inp.value = '';
+  worksCharQuery = '';
+  document.getElementById('works-char-clear')?.classList.remove('show');
+  renderWorks();
+}
+
+
 
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
 function getFiltered(){
-  return curFilter === "all" ? WORKS : WORKS.filter(w=>w.type===curFilter);
+  return WORKS.filter(w=>{
+    // 유형 필터
+    if(activeTypes.size > 0 && !activeTypes.has(w.type)) return false;
+    // 장르 필터 (tags 필드가 있으면 사용, 없으면 통과)
+    if(activeGenres.size > 0){
+      const wTags = w.tags || [];
+      if(!wTags.some(t=>activeGenres.has(t))) return false;
+    }
+    // 캐릭터 코드 검색
+    if(worksCharQuery){
+      const q = worksCharQuery.toUpperCase();
+      const isNum = /^\d+$/.test(q);
+      const chars = w.chars || [];
+      const match = chars.some(c=>{
+        if(isNum){ return parseInt(c.replace('BIZOCDOLL',''),10) === parseInt(q,10); }
+        return c.includes(q);
+      });
+      if(!match) return false;
+    }
+    return true;
+  });
 }
 
 function renderWorks(){
   const list = getFiltered();
-  document.getElementById("count-label").textContent = list.length + "개";
+  const countEl = document.getElementById("count-label");
+  if(countEl){
+    if(worksCharQuery){
+      // 캐릭터 검색 중 → 해당 캐릭터 출연 횟수만
+      const q = worksCharQuery.toUpperCase();
+      const isNum = /^\d+$/.test(q);
+      const castCount = list.reduce((sum, w) => {
+        const matched = (w.chars||[]).filter(c => {
+          if(isNum) return parseInt(c.replace('BIZOCDOLL',''),10) === parseInt(q,10);
+          return c.includes(q);
+        }).length;
+        return sum + matched;
+      }, 0);
+      countEl.innerHTML = `<span style="color:#9060c0;font-size:16px;font-weight:800">${castCount}</span><span style="font-size:11px;font-weight:500;color:var(--gray-400);margin-left:3px">회 출연</span>`;
+    } else {
+      const totalCasts = list.reduce((sum, w) => sum + (w.chars||[]).length, 0);
+      countEl.innerHTML = `${list.length}<span style="font-size:11px;font-weight:500;color:var(--gray-400);margin-left:3px">작품</span> <span style="font-size:13px;color:var(--gray-300)">·</span> <span style="color:#9060c0">${totalCasts}</span><span style="font-size:11px;font-weight:500;color:var(--gray-400);margin-left:2px">캐스팅</span>`;
+    }
+  }
   const c = document.getElementById("works-container");
   if(!list.length){
     c.innerHTML = `<div class="empty-state">
       <div class="empty-icon">🎬</div>
       <div class="empty-title">등록된 작품이 없습니다</div>
-      ${curFilter!=="all"?"다른 카테고리를 선택하거나 작품 등록 폼을 이용해 주세요.":"아직 공개 등록된 작품이 없어요. 첫 번째 창작자가 되어 보세요!"}
+      ${(activeTypes.size||activeGenres.size||worksCharQuery)?"필터 조건에 맞는 작품이 없습니다.":"아직 공개 등록된 작품이 없어요. 첫 번째 창작자가 되어 보세요!"}
     </div>`;
     return;
   }
@@ -591,7 +830,6 @@ function listHTML(w){
   const m = TYPE_META[w.type]||TYPE_META["기타"];
   const linkArrow = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>`;
   return `<div class="work-list-item">
-    <div class="work-list-icon" style="background:${m.grad}">${m.icon}</div>
     <div class="work-list-info">
       <div class="work-list-top">
         <span class="work-list-title">${esc(w.title)}</span>
@@ -600,8 +838,8 @@ function listHTML(w){
       </div>
       <div class="chars-row">${(w.chars||[]).map(c=>`<span class="char-chip">${esc(c)}</span>`).join("")}</div>
     </div>
+    <span class="work-list-date">${w.date||""}</span>
     <div class="work-list-right">
-      <span class="work-list-date">${w.date||""}</span>
       ${w.link?`<a class="work-link" href="${esc(w.link)}" target="_blank" rel="noopener">바로가기 ${linkArrow}</a>`:""}
     </div>
   </div>`;
@@ -675,7 +913,6 @@ function renderCharIndex(){
 
 function renderRanking(){
   const countMap = {};
-  // 1~200 전부 0으로 초기화
   for(let i=1; i<=200; i++){
     const code = "BIZOCDOLL" + String(i).padStart(3,"0");
     countMap[code] = 0;
@@ -698,69 +935,64 @@ function renderRanking(){
     "linear-gradient(135deg,#e8f0d0,#c8e8b0)",
     "linear-gradient(135deg,#f0d0f8,#d8c0f0)",
   ];
-  const getEmoji = code => {
-    const n = parseInt(code.replace("BIZOCDOLL",""),10);
-    return emojis[(n-1)%emojis.length];
-  };
-  const getGrad = code => {
-    const n = parseInt(code.replace("BIZOCDOLL",""),10);
-    return thumbGrads[(n-1)%thumbGrads.length];
-  };
-  const getNum = code => String(parseInt(code.replace("BIZOCDOLL",""),10)).padStart(3,"0");
+  const getEmoji = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return emojis[(n-1)%emojis.length]; };
+  const getGrad  = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return thumbGrads[(n-1)%thumbGrads.length]; };
+  const maxCount = sorted[0][1] || 1;
 
-  const top3 = sorted.slice(0,3);
-  const rest = sorted.slice(3,10);
-  const maxCount = sorted[0][1];
-  const crowns = ["👑","🥈","🥉"];
-  const labels = ["1st","2nd","3rd"];
+  const [c1, n1] = sorted[0];
+  let html = `<div class="rank-hero">
+    <div class="rank-hero-thumb" style="background:${getGrad(c1)}">
+      <span class="rank-hero-crown">👑</span>
+      <span>${getEmoji(c1)}</span>
+    </div>
+    <div class="rank-hero-info">
+      <div class="rank-hero-label">1ST PLACE</div>
+      <div class="rank-hero-code">${esc(c1)}</div>
+      <div class="rank-hero-bar"><div class="rank-hero-bar-fill"></div></div>
+      <div class="rank-hero-cnt">총 ${n1}회 출연</div>
+    </div>
+    <button class="r-open" onclick="filterByChar('${esc(c1)}')">↗</button>
+  </div>`;
 
-  let html = `<div class="ranking-top3">`;
-  top3.forEach(([code,cnt],i)=>{
-    html+=`<div class="podium-item rank-${i+1}">
-      <div class="podium-crown">${crowns[i]}</div>
-      <div class="podium-thumb" style="background:${getGrad(code)}">
-        <span>${getEmoji(code)}</span>
-        <span class="podium-thumb-num">#${getNum(code)}</span>
-      </div>
-      <div class="podium-base">
-        <span class="podium-rank-label">${labels[i]}</span>
-        <span class="podium-count-val">${cnt}<span class="podium-count-unit">회</span></span>
-      </div>
-      <div class="podium-code">${code}</div>
+  const rest = sorted.slice(1, 10);
+  const medals = ["🥈","🥉"];
+  html += `<div class="ranking-list">`;
+  rest.forEach(([code, cnt], i) => {
+    const rank = i + 2;
+    const isZero = cnt === 0;
+    const pct = Math.round((cnt/maxCount)*100);
+    const medalOrNum = rank <= 3 ? `<span style="font-size:12px">${medals[i]}</span>` : `<span class="r-rank">${rank}</span>`;
+    html += `<div class="ranking-row${isZero?" zero":""}">
+      ${medalOrNum}
+      <div class="r-thumb" style="background:${getGrad(code)}">${getEmoji(code)}</div>
+      <span class="r-code">${esc(code)}</span>
+      <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
+      <span class="r-cnt">${cnt}</span>
+      <button class="r-open" onclick="filterByChar('${esc(code)}')">↗</button>
     </div>`;
   });
-  html+=`</div>`;
+  html += `</div>`;
 
-  if(rest.length){
-    html+=`<div class="ranking-rest">`;
-    rest.forEach(([code,cnt],i)=>{
-      html+=`<div class="ranking-rest-item">
-        <span class="rest-rank">${i+4}</span>
-        <div class="rest-thumb" style="background:${getGrad(code)}"><span>${getEmoji(code)}</span></div>
-        <span class="rest-code">${code}</span>
-        <span class="rest-count">${cnt}회</span>
-      </div>`;
-    });
-    html+=`</div>`;
-  }
   const allRest = sorted.slice(10);
   if(allRest.length){
-    html+=`<div class="ranking-more-wrap">
+    html += `<div class="ranking-more-wrap">
       <button class="ranking-more-btn" id="ranking-more-btn" onclick="toggleRankingAll()">
         <span class="more-arrow">▾</span>&nbsp; 전체 순위 더보기 (총 ${sorted.length}개 캐릭터)
       </button>
       <div class="ranking-all-list hidden" id="ranking-all-list">`;
     allRest.forEach(([code,cnt],i)=>{
-      html+=`<div class="all-item">
+      const isZero = cnt === 0;
+      html+=`<div class="all-item${isZero?" zero":""}">
         <span class="all-rank">${i+11}</span>
-        <div class="all-thumb" style="background:${getGrad(code)}"><span>${getEmoji(code)}</span></div>
-        <span class="all-code">${code}</span>
-        <span class="all-count">${cnt}회</span>
+        <div class="all-thumb" style="background:${getGrad(code)}">${getEmoji(code)}</div>
+        <span class="all-code">${esc(code)}</span>
+        <span class="all-cnt">${cnt}</span>
+        <button class="all-open" onclick="filterByChar('${esc(code)}')">↗</button>
       </div>`;
     });
-    html+=`</div></div>`;
+    html += `</div></div>`;
   }
-  el.innerHTML=html;
+  el.innerHTML = html;
 }
 
 function toggleRankingAll(){
@@ -770,8 +1002,6 @@ function toggleRankingAll(){
   const isOpen = !list.classList.contains("hidden");
   list.classList.toggle("hidden", isOpen);
   btn.classList.toggle("open", !isOpen);
-  btn.querySelector(".more-arrow").textContent = isOpen ? "▾" : "▴";
-  const total = document.querySelectorAll("#ranking-all-list .all-item").length;
   btn.innerHTML = `<span class="more-arrow">${isOpen?"▾":"▴"}</span>&nbsp; ${isOpen?"전체 순위 더보기":"접기"}`;
 }
 
@@ -779,13 +1009,6 @@ function renderStats(){
   document.getElementById("stat-total").textContent    = WORKS.length;
   document.getElementById("stat-creators").textContent = new Set(WORKS.map(w=>w.creator)).size;
   document.getElementById("stat-chars").textContent    = new Set(WORKS.flatMap(w=>w.chars||[])).size;
-}
-
-function filterWorks(type, btn){
-  curFilter = type;
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderWorks();
 }
 
 renderStats(); renderWorks(); renderRanking(); renderCharIndex();
@@ -981,14 +1204,14 @@ renderStats(); renderWorks(); renderRanking(); renderCharIndex();
 }
 .char-prefix {
   padding: 11px 0 11px 14px;
-  font-size: 12px; font-weight: 700;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
+  font-size: 12px; font-weight: 400;
+  font-family: 'DM Mono', 'Courier New', monospace;
   color: #b8a0cc; letter-spacing: 0.5px; white-space: nowrap; user-select: none;
 }
 .char-prefix-wrap input {
   border: none !important; box-shadow: none !important; border-radius: 0;
   padding: 11px 14px 11px 4px;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
+  font-family: 'DM Mono', 'Courier New', monospace;
   font-size: 13px; font-weight: 700; letter-spacing: 1px;
   color: #9060c0; width: 60px; flex-shrink: 0;
 }
@@ -1017,13 +1240,13 @@ renderStats(); renderWorks(); renderRanking(); renderCharIndex();
 }
 .chip-thumb-num {
   position: absolute; bottom: 4px; right: 5px;
-  font-size: 8px; font-weight: 800;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
+  font-size: 8px; font-weight: 400;
+  font-family: 'DM Mono', 'Courier New', monospace;
   color: rgba(120,70,180,0.6);
 }
 .chip-code {
-  font-size: 8px; font-weight: 700; padding: 4px 4px 3px;
-  font-family: 'SF Mono','Fira Code','Courier New',monospace;
+  font-size: 8px; font-weight: 400; padding: 4px 4px 3px;
+  font-family: 'DM Mono', 'Courier New', monospace;
   color: #9060c0; letter-spacing: 0.3px;
   text-align: center; word-break: break-all; line-height: 1.3; width: 100%;
 }
@@ -1144,9 +1367,9 @@ renderStats(); renderWorks(); renderRanking(); renderCharIndex();
 }
 .info-row { display: flex; gap: 10px; align-items: baseline; font-size: 12px; margin-bottom: 8px; }
 .info-row:last-child { margin-bottom: 0; }
-.info-key { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: #b8a0cc; text-transform: uppercase; min-width: 52px; flex-shrink: 0; padding-top: 2px; }
+.info-key { font-size: 9px; font-weight: 400; letter-spacing: 1px; color: #b8a0cc; text-transform: uppercase; min-width: 52px; flex-shrink: 0; padding-top: 2px; }
 .info-val { font-size: 12px; color: #3a2850; font-weight: 500; line-height: 1.5; }
-.info-val.code-val { font-family: 'SF Mono','Fira Code','Courier New',monospace; font-size: 11px; color: #9060c0; }
+.info-val.code-val { font-family: 'DM Mono', 'Courier New', monospace; font-size: 11px; color: #9060c0; }
 .complete-deco { font-size: 9px; letter-spacing: 5px; color: #b8a0cc; margin-bottom: 18px; position: relative; z-index: 1; }
 .complete-date { font-size: 10px; color: #b8a0cc; letter-spacing: 1px; margin-bottom: 20px; position: relative; z-index: 1; }
 .complete-actions { display: flex; gap: 8px; justify-content: center; position: relative; z-index: 1; }
@@ -1479,5 +1702,26 @@ function resetForm(){
 
 function fEsc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 </script>
+<!-- 모바일 플로팅 랭킹 버튼 -->
+<button class="ranking-fab" id="ranking-fab" onclick="openRankingDrawer()">
+  <span class="ranking-fab-icon">👑</span>
+  인기 랭킹
+</button>
+
+<!-- 슬라이드업 드로어 -->
+<div class="ranking-drawer-overlay" id="ranking-drawer-overlay" onclick="closeRankingDrawer()"></div>
+<div class="ranking-drawer" id="ranking-drawer">
+  <div class="drawer-handle" onclick="closeRankingDrawer()">
+    <div class="drawer-handle-bar"></div>
+  </div>
+  <div class="drawer-header">
+    <span class="drawer-title">👑 인기 캐릭터 랭킹</span>
+    <button class="drawer-close" onclick="closeRankingDrawer()">✕</button>
+  </div>
+  <div class="drawer-content" id="ranking-drawer-content">
+    <!-- renderRanking()으로 채워짐 -->
+  </div>
+</div>
+
 </body>
 </html>
