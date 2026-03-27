@@ -58,8 +58,48 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   color: #9060c0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
   font-size: 16px; line-height: 1; text-decoration: none;
   transition: background 0.15s, transform 0.15s; flex-shrink: 0;
+  position: relative; top: -5px;
 }
 .btn-add-inline:hover { background: rgba(160,122,200,0.25); transform: scale(1.08); }
+
+/* ── ADD BUTTON TOOLTIP ── */
+.btn-add-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-add-tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  background: #7a4fae;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(120,70,180,0.22);
+}
+/* 왼쪽 화살표 (버튼을 향함) */
+.btn-add-tooltip::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #7a4fae;
+}
+.btn-add-wrapper:hover .btn-add-tooltip {
+  opacity: 1;
+  transform: translateY(-70%) translateX(0);
+}
 
 /* ── PAGE ── */
 .page { max-width: 864px; margin: 0 auto; padding: 0 32px 80px; }
@@ -521,7 +561,10 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   <div class="hero-label">BIZ-OC-DOLL · ARCHIVE</div>
   <div class="hero-title-row">
     <span class="hero-title" style="margin-bottom:0;">FILMOGRAPHY</span>
-    <a class="btn-add-inline" href="#" onclick="openFormModal();return false;" title="작품 등록">+</a>
+    <span class="btn-add-wrapper">
+      <span class="btn-add-tooltip">작품 등록</span>
+      <a class="btn-add-inline" href="#" onclick="openFormModal();return false;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </span>
   </div>
   <div class="hero-stats" style="display:none;">
     <div class="hero-stat"><div class="hero-stat-n" id="stat-total">0</div><div class="hero-stat-l">Total Works</div></div>
@@ -534,6 +577,16 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 
   <!-- 작품 목록 -->
   <div class="sec sec-first">
+    <!-- 캐릭터 코드 검색 - 중앙 정렬 메인 서치바 -->
+    <div style="display:flex;justify-content:center;margin-bottom:18px;">
+      <div class="works-searchbar" style="width:566px;max-width:100%;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="works-char-input" placeholder="캐릭터 코드로 검색 (예: BIZOCDOLL007, 007, 42)" oninput="onWorksCharSearch(this.value)">
+        <span class="searchbar-count" id="count-label"></span>
+        <button class="wcs-clear" id="works-char-clear" onclick="clearWorksCharSearch()">✕</button>
+      </div>
+    </div>
+
     <div class="works-layout">
       <!-- 왼쪽: 사이드바 (랭킹만) -->
       <div class="works-sidebar">
@@ -542,16 +595,8 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
           <div class="ranking-section" id="ranking-section"></div>
         </div>
       </div>
-      <!-- 오른쪽: 검색 + 결과 -->
+      <!-- 오른쪽: 필터 + 결과 -->
       <div class="works-result">
-        <!-- 캐릭터 코드 검색 - 풀 너비 메인 서치바 -->
-        <div class="works-searchbar">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="works-char-input" placeholder="캐릭터 코드로 검색 (예: BIZOCDOLL007, 007, 42)" oninput="onWorksCharSearch(this.value)">
-          <span class="searchbar-count" id="count-label"></span>
-          <button class="wcs-clear" id="works-char-clear" onclick="clearWorksCharSearch()">✕</button>
-        </div>
-
         <!-- 태그 필터 -->
         <div class="result-tags-bar">
           <div class="tag-wrap" id="all-tag-row">
