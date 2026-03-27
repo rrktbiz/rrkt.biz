@@ -73,7 +73,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .btn-register:hover { background: rgba(160,122,200,0.22); transform: scale(1.02); }
 
 /* ── PAGE ── */
-.page { max-width: 1040px; margin: 0 auto; padding: 0 32px 80px; }
+.page { max-width: 864px; margin: 0 auto; padding: 0 32px 80px; }
 .sec { padding-top: 40px; margin-top: 36px; border-top: 1px solid var(--gray-200); }
 .sec-first { border-top: none; padding-top: 0; margin-top: 28px; }
 .sec-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
@@ -83,7 +83,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 /* ── CONTROLS ── */
 /* ── 2단 레이아웃 ── */
 .works-layout {
-  display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: flex-start;
+  display: grid; grid-template-columns: 210px 1fr; gap: 24px; align-items: flex-start;
 }
 .works-sidebar {
   display: flex; flex-direction: column; gap: 0;
@@ -1012,6 +1012,63 @@ function renderStats(){
 }
 
 renderStats(); renderWorks(); renderRanking(); renderCharIndex();
+
+/* ── EMBED MODE (캐릭터시트 iframe 연동) ── */
+(function(){
+  const isEmbed = new URLSearchParams(location.search).get('embed') === '1';
+  if(!isEmbed) return;
+
+  // body에 embed 클래스 추가
+  document.body.classList.add('embed-mode');
+
+  // embed 전용 CSS 주입
+  const style = document.createElement('style');
+  style.textContent = `
+    body.embed-mode .hero { display: none !important; }
+    body.embed-mode .works-sidebar { display: none !important; }
+    body.embed-mode .works-layout {
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+    }
+    body.embed-mode .page {
+      padding-top: 20px !important;
+      padding-bottom: 40px !important;
+    }
+    body.embed-mode .sec-first {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      border-top: none !important;
+    }
+    body.embed-mode .sec { border-top: none !important; padding-top: 0 !important; }
+    body.embed-mode .ranking-fab { display: none !important; }
+  `;
+  document.head.appendChild(style);
+})();
+
+/* ── URL HASH AUTO-FILTER (캐릭터시트 연동) ── */
+(function(){
+  const hash = (location.hash||"").replace("#","").trim().toUpperCase();
+  if(!hash) return;
+  // 유효한 BIZOCDOLL 코드인지 확인
+  const isCode = /^BIZOCDOLL\d+$/.test(hash);
+  const isNum  = /^\d+$/.test(hash);
+  if(!isCode && !isNum) return;
+
+  const code = isCode ? hash : ("BIZOCDOLL" + String(parseInt(hash,10)).padStart(3,"0"));
+
+  // 검색창 채우기 + filterByChar 호출
+  requestAnimationFrame(function(){
+    filterByChar(code);
+
+    // 상단 작품 검색창(works-char-input)에도 반영
+    const inp = document.getElementById('works-char-input');
+    if(inp) inp.value = code;
+
+    // 워크스 섹션으로 스크롤
+    const target = document.getElementById('works-container') || document.getElementById('sec-works');
+    if(target) setTimeout(()=>target.scrollIntoView({behavior:'smooth', block:'start'}), 120);
+  });
+})();
 
 /* ── 글리터 ── */
 (function(){
