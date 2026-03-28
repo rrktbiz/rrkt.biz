@@ -29,7 +29,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   padding: 36px 24px 8px;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .glitter-wrap { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .spark { position: absolute; pointer-events: none; opacity: 0.7; }
@@ -551,12 +551,135 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 @media (max-width: 380px) {
   .works-grid { grid-template-columns: 1fr; }
 }
+
+/* ── HERO RANK TICKER ── */
+.hero-rank-widget {
+  position: absolute; top: 18px; left: 18px;
+  cursor: pointer; z-index: 3; width: 162px;
+}
+.hero-rank-box {
+  background: rgba(248,240,255,0.95);
+  border: 0.5px solid rgba(160,96,216,0.28);
+  border-radius: 8px;
+  padding: 0 10px 0 8px;
+  display: flex; align-items: center; gap: 7px;
+  width: 162px; height: 38px;
+  overflow: hidden; position: relative;
+  transition: border-color 0.15s;
+}
+.hero-rank-box:hover { border-color: rgba(160,96,216,0.55); }
+.hero-rank-inner {
+  display: flex; align-items: center; gap: 7px;
+  position: absolute; left: 8px; right: 10px;
+}
+.hero-rank-inner.rank-enter {
+  animation: rankRollIn 0.32s cubic-bezier(0.22,0.9,0.36,1) forwards;
+}
+.hero-rank-inner.rank-leave {
+  animation: rankRollOut 0.24s cubic-bezier(0.55,0,0.8,0.45) forwards;
+}
+@keyframes rankRollIn  { from{transform:translateY(13px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes rankRollOut { from{transform:translateY(0);opacity:1}    to{transform:translateY(-13px);opacity:0} }
+.hero-live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #c890f0; flex-shrink: 0;
+  animation: heroLiveBlink 1.4s ease-in-out infinite;
+}
+@keyframes heroLiveBlink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.hero-rank-num {
+  font-size: 11px; font-weight: 500; color: #8040b8;
+  font-family: 'DM Mono','Courier New',monospace;
+  flex-shrink: 0; width: 14px; text-align: center;
+}
+.hero-rank-thumb {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.hero-rank-info { flex: 1; min-width: 0; }
+.hero-rank-code {
+  font-size: 10px; font-family: 'DM Mono','Courier New',monospace;
+  color: #4a2870; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.hero-rank-sub { font-size: 9px; color: #9060c0; margin-top: 1px; }
+.hero-rank-change { font-size: 9px; flex-shrink: 0; }
+.hero-rank-change.up   { color: #b070e0; }
+.hero-rank-change.same { color: #ccc; }
+.hero-rank-change.down { color: #ccc; }
+.hero-rank-hint {
+  margin-top: 4px; font-size: 9px; color: #b090d0;
+  letter-spacing: 0.3px; padding-left: 2px;
+  display: flex; align-items: center; gap: 4px;
+}
+.hero-rank-hint::before {
+  content: ''; width: 12px; height: 0.5px;
+  background: #d0b0e8; display: block;
+}
+
+/* ── RANKING OVERLAY ── */
+.rank-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(40,20,60,0.45);
+  align-items: center; justify-content: center;
+}
+.rank-overlay.show { display: flex; }
+.rank-overlay-panel {
+  background: var(--white);
+  border-radius: 18px;
+  width: 340px; max-width: calc(100vw - 32px);
+  max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(100,50,160,0.22);
+  animation: overlayIn 0.28s cubic-bezier(0.22,0.9,0.36,1);
+}
+@keyframes overlayIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
+.rank-overlay-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  position: sticky; top: 0; background: var(--white);
+}
+.rank-overlay-title {
+  font-size: 14px; font-weight: 700; color: var(--gray-900);
+  display: flex; align-items: center; gap: 7px;
+}
+.rank-overlay-live {
+  font-size: 9px; font-weight: 600; color: #9060c0;
+  background: rgba(160,96,216,0.1);
+  padding: 2px 8px; border-radius: 100px;
+  display: flex; align-items: center; gap: 4px;
+}
+.rank-overlay-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--gray-200); background: transparent;
+  font-size: 12px; color: var(--gray-600); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.rank-overlay-body { padding: 14px 18px 20px; }
 </style>
 </head>
 <body>
 
 <div class="hero">
   <div class="glitter-wrap" id="glitter"></div>
+
+  <!-- 실시간 순위 티커 -->
+  <div class="hero-rank-widget" id="heroRankWidget" onclick="openRankingOverlay()">
+    <div class="hero-rank-box">
+      <div class="hero-rank-inner" id="heroRankInner">
+        <div class="hero-live-dot"></div>
+        <span class="hero-rank-num" id="hr-num">1</span>
+        <div class="hero-rank-thumb" id="hr-thumb">🎵</div>
+        <div class="hero-rank-info">
+          <div class="hero-rank-code" id="hr-code">BIZOCDOLL007</div>
+          <div class="hero-rank-sub" id="hr-sub">2회 출연</div>
+        </div>
+        <span class="hero-rank-change up" id="hr-change">▲</span>
+      </div>
+    </div>
+    <div class="hero-rank-hint">전체순위 보기</div>
+  </div>
 
   <div class="hero-label">BIZ-OC-DOLL · ARCHIVE</div>
   <div class="hero-title-row">
@@ -587,40 +710,34 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
       </div>
     </div>
 
-    <div class="works-layout">
-      <!-- 왼쪽: 사이드바 (랭킹만) -->
-      <div class="works-sidebar">
-        <div class="sidebar-ranking">
-          <div class="sidebar-label"><span style="font-size:16px;line-height:1;margin-right:7px">🎬</span>캐스팅 인기순위</div>
-          <div class="ranking-section" id="ranking-section"></div>
+    <!-- 필터 + 결과 -->
+    <div class="works-result">
+      <div class="result-tags-bar">
+        <div class="tag-wrap" id="all-tag-row">
+          <button class="tag-btn all-btn active" onclick="resetAllTags(this)">전체</button>
+          <button class="tag-btn" onclick="toggleTypeTag('웹툰/만화',this)">#웹툰·만화</button>
+          <button class="tag-btn" onclick="toggleTypeTag('웹소설/소설',this)">#소설·웹소설</button>
+          <button class="tag-btn" onclick="toggleTypeTag('게임',this)">#게임</button>
+          <button class="tag-btn" onclick="toggleTypeTag('일러스트',this)">#일러스트</button>
+          <button class="tag-btn" onclick="toggleTypeTag('굿즈',this)">#굿즈</button>
+          <button class="tag-btn" onclick="toggleTypeTag('영상',this)">#영상</button>
+          <button class="tag-btn" onclick="toggleTypeTag('기타',this)">#기타</button>
+          <button class="tag-btn" onclick="toggleGenreTag('GL',this)">#GL</button>
+          <button class="tag-btn" onclick="toggleGenreTag('BL',this)">#BL</button>
+          <button class="tag-btn" onclick="toggleGenreTag('NL',this)">#NL</button>
+          <button class="tag-btn" onclick="toggleGenreTag('판타지',this)">#판타지</button>
+          <button class="tag-btn" onclick="toggleGenreTag('일상',this)">#일상</button>
+          <button class="tag-btn" onclick="toggleGenreTag('개그',this)">#개그</button>
+          <button class="tag-btn" onclick="toggleGenreTag('드라마',this)">#드라마</button>
+          <button class="tag-btn" onclick="toggleGenreTag('공포',this)">#공포</button>
         </div>
       </div>
-      <!-- 오른쪽: 필터 + 결과 -->
-      <div class="works-result">
-        <!-- 태그 필터 -->
-        <div class="result-tags-bar">
-          <div class="tag-wrap" id="all-tag-row">
-            <button class="tag-btn all-btn active" onclick="resetAllTags(this)">전체</button>
-            <button class="tag-btn" onclick="toggleTypeTag('웹툰/만화',this)">#웹툰·만화</button>
-            <button class="tag-btn" onclick="toggleTypeTag('웹소설/소설',this)">#소설·웹소설</button>
-            <button class="tag-btn" onclick="toggleTypeTag('게임',this)">#게임</button>
-            <button class="tag-btn" onclick="toggleTypeTag('일러스트',this)">#일러스트</button>
-            <button class="tag-btn" onclick="toggleTypeTag('굿즈',this)">#굿즈</button>
-            <button class="tag-btn" onclick="toggleTypeTag('영상',this)">#영상</button>
-            <button class="tag-btn" onclick="toggleTypeTag('기타',this)">#기타</button>
-            <button class="tag-btn" onclick="toggleGenreTag('GL',this)">#GL</button>
-            <button class="tag-btn" onclick="toggleGenreTag('BL',this)">#BL</button>
-            <button class="tag-btn" onclick="toggleGenreTag('NL',this)">#NL</button>
-            <button class="tag-btn" onclick="toggleGenreTag('판타지',this)">#판타지</button>
-            <button class="tag-btn" onclick="toggleGenreTag('일상',this)">#일상</button>
-            <button class="tag-btn" onclick="toggleGenreTag('개그',this)">#개그</button>
-            <button class="tag-btn" onclick="toggleGenreTag('드라마',this)">#드라마</button>
-            <button class="tag-btn" onclick="toggleGenreTag('공포',this)">#공포</button>
-          </div>
-        </div>
+      <div id="works-container"></div>
+    </div>
 
-        <div id="works-container"></div>
-      </div>
+    <!-- 캐스팅 인기순위 (히어로 티커용 데이터 - 숨김) -->
+    <div style="display:none;">
+      <div class="ranking-section" id="ranking-section"></div>
     </div>
   </div>
 
@@ -1028,6 +1145,57 @@ function renderStats(){
 }
 
 renderStats(); renderWorks(); renderRanking(); renderCharIndex();
+
+/* ── HERO RANK TICKER ── */
+function initHeroRankTicker(){
+  const emojis=["🌸","⭐","🎀","🌙","💫","🍀","🎵","🌈","🦋","💎","🔮","🌺","✨","🎪","🌟"];
+  const grads=["linear-gradient(135deg,#e8d0f8,#f8d0e8)","linear-gradient(135deg,#d0e8f8,#d0f0e8)","linear-gradient(135deg,#f8e8d0,#f8d8b0)","linear-gradient(135deg,#e8f0d0,#c8e8b0)","linear-gradient(135deg,#f0d0f8,#d8c0f0)"];
+  const getEmoji = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return emojis[(n-1)%emojis.length]; };
+  const getGrad  = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return grads[(n-1)%grads.length]; };
+
+  const countMap = {};
+  WORKS.forEach(w=>(w.chars||[]).forEach(c=>{
+    countMap[c] = (countMap[c]||0) + 1;
+  }));
+  const sorted = Object.entries(countMap).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  if(!sorted.length) { document.getElementById("heroRankWidget").style.display="none"; return; }
+
+  const DATA = sorted.map(([code,cnt],i)=>({ rank:i+1, code, cnt, emoji:getEmoji(code), grad:getGrad(code), change: i===0?"up":"same" }));
+  let ptr = 0;
+  const inner = document.getElementById("heroRankInner");
+
+  function fill(item){
+    document.getElementById("hr-num").textContent = item.rank;
+    const th = document.getElementById("hr-thumb");
+    th.textContent = item.emoji; th.style.background = item.grad;
+    document.getElementById("hr-code").textContent = item.code;
+    document.getElementById("hr-sub").textContent = item.cnt + "회 출연";
+    const ch = document.getElementById("hr-change");
+    ch.className = "hero-rank-change";
+    if(item.change==="up"){ ch.classList.add("up"); ch.textContent="▲"; }
+    else if(item.change==="down"){ ch.classList.add("down"); ch.textContent="▼"; }
+    else { ch.classList.add("same"); ch.textContent="—"; }
+  }
+
+  function next(){
+    inner.classList.remove("rank-enter");
+    inner.classList.add("rank-leave");
+    setTimeout(()=>{
+      inner.classList.remove("rank-leave");
+      ptr = (ptr+1) % Math.min(DATA.length, 10);
+      fill(DATA[ptr]);
+      void inner.offsetWidth;
+      inner.classList.add("rank-enter");
+      setTimeout(()=>inner.classList.remove("rank-enter"), 320);
+    }, 240);
+  }
+
+  fill(DATA[0]);
+  inner.classList.add("rank-enter");
+  setTimeout(()=>inner.classList.remove("rank-enter"), 320);
+  setInterval(next, 3000);
+}
+initHeroRankTicker();
 
 /* ── EMBED MODE (캐릭터시트 iframe 연동) ── */
 (function(){
@@ -1795,6 +1963,37 @@ function fEsc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;"
     <!-- renderRanking()으로 채워짐 -->
   </div>
 </div>
+
+<!-- 캐스팅 인기순위 오버레이 -->
+<div class="rank-overlay" id="rankOverlay" onclick="e=>e.target===this&&closeRankingOverlay()">
+  <div class="rank-overlay-panel">
+    <div class="rank-overlay-head">
+      <div class="rank-overlay-title">
+        🎬 캐스팅 인기순위
+        <span class="rank-overlay-live"><span style="width:5px;height:5px;border-radius:50%;background:#c890f0;display:inline-block;animation:heroLiveBlink 1.4s ease-in-out infinite;"></span>LIVE</span>
+      </div>
+      <button class="rank-overlay-close" onclick="closeRankingOverlay()">✕</button>
+    </div>
+    <div class="rank-overlay-body" id="rankOverlayBody"></div>
+  </div>
+</div>
+
+<script>
+function openRankingOverlay(){
+  const src = document.getElementById("ranking-section");
+  const body = document.getElementById("rankOverlayBody");
+  if(src && body) body.innerHTML = src.innerHTML;
+  document.getElementById("rankOverlay").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+function closeRankingOverlay(){
+  document.getElementById("rankOverlay").classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.getElementById("rankOverlay").addEventListener("click", function(e){
+  if(e.target === this) closeRankingOverlay();
+});
+</script>
 
 </body>
 </html>
