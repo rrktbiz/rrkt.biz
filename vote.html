@@ -32,12 +32,6 @@ input{font-family:var(--fn)}
   display:flex;align-items:center;padding:0 16px;gap:12px;
   flex-shrink:0;
 }
-.tb-back{
-  background:transparent;border:1px solid var(--bd);border-radius:6px;
-  color:var(--tx2);font-size:12px;padding:4px 10px;
-  transition:all .12s;text-decoration:none;display:flex;align-items:center;gap:5px;
-}
-.tb-back:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
 .tb-title{font-size:15px;font-weight:700;color:#111;letter-spacing:-.04em}
 .tb-sub{font-size:11px;color:var(--tx3);margin-left:2px}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
@@ -277,10 +271,6 @@ input{font-family:var(--fn)}
 
 <!-- 탑바 -->
 <div id="topbar">
-  <a class="tb-back" href="javascript:history.back()">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    돌아가기
-  </a>
   <div>
     <span class="tb-title">인기 투표</span>
     <span class="tb-sub">biz-OC-doll</span>
