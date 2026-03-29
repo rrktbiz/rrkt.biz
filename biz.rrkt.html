@@ -2837,6 +2837,13 @@ function renderIntro(){
     if(fr) fr.style.display="block";
     return;
   }
+  // doll이 아닌 프로젝트: doll-intro-frame 반드시 숨기고 #content 복원
+  // biz-oc-doll 소개글 보다가 다른 프로젝트 소개글로 이동하면
+  // render()의 iframe 정리 로직이 S.view==="intro"라 iframe을 안 숨기는 버그 방지
+  var _ifr=document.getElementById("doll-intro-frame");
+  if(_ifr) _ifr.style.display="none";
+  var _ct=document.getElementById("content");
+  if(_ct) _ct.style.display="";
   const ws=[100,74,88,60,95,50,82,68,76,55];
   document.getElementById("content").innerHTML=`
     <div class="intro-hero">
