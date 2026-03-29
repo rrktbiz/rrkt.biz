@@ -3227,8 +3227,8 @@ function clickProj(id){
   if(S.activeProj!==id){
     S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;
     // 프로젝트가 바뀌면 project-context 종속 뷰는 반드시 홈으로 리셋
-    // (그대로 두면 이전 프로젝트 상태로 렌더 시도해 크래시 발생)
-    if(["episodes","content","charlist","chardetail"].includes(S.view)) S.view="home";
+    // "intro" 포함: 1차 메뉴 클릭 시 인트로가 뜨는 것을 방지
+    if(["intro","episodes","content","charlist","chardetail"].includes(S.view)) S.view="home";
   }
   const dw={"blood-highschool":240,"x-project":240,"biz-oc-doll":240}[id]||240;
   document.documentElement.style.setProperty("--sm-w",dw+"px");
