@@ -288,11 +288,22 @@ const BIZ_BOT_CONFIG = {
   /* ── 홈피 데이터 자동 수집 ── */
   function _bizBuildContext(){
     try {
-      const projs = (window.PROJECTS||[]).map(p=>
-        `[${p.label}] 태그:${(p.tags||[]).join(',')} / 소개:${p.intro||''}`
+      // const/let 선언 변수는 window에 안 붙으므로 typeof로 안전하게 접근
+      const _P = (typeof PROJECTS !== 'undefined') ? PROJECTS : [];
+      const _V = (typeof VOLUMES  !== 'undefined') ? VOLUMES  : {};
+      const _N = (typeof AUTHOR_NOTE !== 'undefined') ? AUTHOR_NOTE : {};
+
+      // 데이터가 아예 없는 페이지면 빈 문자열 반환 (서브페이지 대응)
+      if(!_P.length && !Object.keys(_V).length){
+        return '【사이트 데이터 없음 — 서브페이지】\n메인 홈피 기준 정보로 안내해주세요.';
+      }
+
+      const projs = _P.map(p=>
+        `[${p.label}] 상태:${p.status||'active'} / 태그:${(p.tags||[]).join(',')} / 소개:${p.intro||''}`
       ).join('\n');
-      const vols = Object.entries(window.VOLUMES||{}).map(([pid, vdata])=>{
-        const proj = (window.PROJECTS||[]).find(p=>p.id===pid);
+
+      const vols = Object.entries(_V).map(([pid, vdata])=>{
+        const proj = _P.find(p=>p.id===pid);
         const name = proj ? proj.label : pid;
         if(Array.isArray(vdata)){
           return vdata.map(v=>{
@@ -300,11 +311,17 @@ const BIZ_BOT_CONFIG = {
             return `[${name}] ${v.label}\n${eps}`;
           }).join('\n');
         }
+        // biz-oc-doll 구조 (categories + episodes 객체)
+        if(vdata && vdata.categories){
+          const cats = vdata.categories.map(c=>`  카테고리: ${c.label} (${c.count}개)`).join('\n');
+          return `[${name}]\n${cats}`;
+        }
         return '';
-      }).join('\n');
-      const note = (window.AUTHOR_NOTE||{}).text || '';
+      }).filter(Boolean).join('\n');
+
+      const note = _N.text || '';
       return `【프로젝트】\n${projs}\n\n【에피소드 목록】\n${vols}\n\n【작가 노트】${note}`;
-    } catch(e){ return ''; }
+    } catch(e){ return '(데이터 로드 오류)'; }
   }
 
   window.bizAsk = function(text){
