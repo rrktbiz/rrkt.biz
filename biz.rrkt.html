@@ -1643,6 +1643,15 @@ function toggleNav(){
     layer.classList.add("open");
     if(!S.navPinned) bd.classList.add("show");
     renderNavItems();
+    if(S.activeProj){
+      const _p=getProj(S.activeProj);
+      const sp=document.getElementById("sub-panel");
+      if(_p&&_p.keepSub&&_p.subType!=='youtube'&&sp){
+        S.hoveredProj=S.activeProj;
+        renderSubPanelContent(S.activeProj);
+        sp.classList.add("visible");
+      }
+    }
   }
 }
 function closeNav(){
@@ -1655,6 +1664,8 @@ function showSubPanel(projId){
   clearTimeout(_navHideTimer);
   const proj = getProj(projId);
   if(!proj || proj.subType==='youtube' || !proj.keepSub) return;
+  const _layer=document.getElementById("nav-layer");
+  if(!_layer||!_layer.classList.contains("open")) return;
   S.hoveredProj=projId;
   const sp=document.getElementById("sub-panel");
   renderSubPanelContent(projId);
@@ -1709,7 +1720,7 @@ function renderNavItems(){
             return `
             <button class="nav-proj-item nav-proj-item-inner ${active?"active":""}"
               style="--acc:${p.acc}"
-              onclick="clickProj('${p.id}');${p.subType!=='youtube'&&p.subType!==undefined&&p.keepSub?`showSubPanel('${p.id}')`:`hideSubPanel()`}">
+              onclick="clickProj('${p.id}')">
               ${folderSvg}
               ${p.label}
             </button>`;
@@ -2091,8 +2102,11 @@ function toggleMobile(){
     if(S.lastMobProj){
       mobShowSub(S.lastMobProj);
     } else {
-      document.getElementById("mob-menu").classList.remove("show-sub");
+      mob.classList.remove("show-sub");
     }
+  } else {
+    // 닫을 때 show-sub 반드시 정리 (hamburger로 닫는 경우 누락되던 버그 수정)
+    mob.classList.remove("show-sub");
   }
   mob.classList.toggle("open");
   bd&&bd.classList.toggle("show",mob.classList.contains("open"));
@@ -2845,15 +2859,20 @@ function renderIntro(){
 /* ── EPISODE LIST ── */
 function renderEpList(){
   const proj=getProj(S.activeProj);
+  if(!proj){S.view="home";render();return;}
   if(proj.subType==="youtube"){renderYtEpList(proj);return;}
   let vol,eps,thumbClass="",synopsis="";
   if(proj.subType==="doll"){
     const dv=VOLUMES["biz-oc-doll"],cat=dv.categories.find(c=>c.id===S.activeDollCat);
+    // activeDollCat이 null이거나 없는 카테고리면 홈으로 안전 복원
+    if(!cat){S.view="home";render();return;}
     eps=dv.episodes[S.activeDollCat]||[];
     vol={label:cat.label,grad:`180deg,#1a2e3a,#5a90b0`,type:"웹툰",tags:[],synopsis:""};
   } else {
     const vols=VOLUMES[proj.id]||[];
-    vol=vols.find(v=>v.id===S.activeVol);if(!vol)return;
+    vol=vols.find(v=>v.id===S.activeVol);
+    // activeVol이 null이거나 없는 볼륨이면 홈으로 안전 복원
+    if(!vol){S.view="home";render();return;}
     eps=vol.episodes;synopsis=vol.synopsis||"";
   }
 
@@ -2968,21 +2987,23 @@ function renderYtEpList(proj){
 /* ── CONTENT VIEW ── */
 function renderContentView(){
   const proj=getProj(S.activeProj);
+  if(!proj){S.view="home";render();return;}
   let vol,eps,epObj,thumbClass="";
   if(proj.subType==="doll"){
     const dv=VOLUMES["biz-oc-doll"],cat=dv.categories.find(c=>c.id===S.activeDollCat);
+    if(!cat){S.view="home";render();return;}
     eps=dv.episodes[S.activeDollCat]||[];
     vol={label:cat.label,grad:"180deg,#1a2e3a,#5a90b0",type:"웹툰",tags:[]};
     epObj=eps.find(e=>e.id===S.activeEp);
   } else {
     const vols=VOLUMES[proj.id]||[];
     vol=vols.find(v=>v.id===S.activeVol);
-    if(!vol)return;
+    if(!vol){S.view="home";render();return;}
     eps=vol.episodes;
     epObj=eps.find(e=>e.id===S.activeEp);
     if(proj.subType==="youtube")thumbClass=" yt";
   }
-  if(!epObj)return;
+  if(!epObj){S.view="episodes";render();return;}
   const epIdx=eps.findIndex(e=>e.id===S.activeEp);
   const prevEp=eps[epIdx-1]||null,nextEp=eps[epIdx+1]||null;
   const isBlood=proj.id==="blood-highschool";
@@ -3196,11 +3217,27 @@ function goRecentWork(projId,volId,epId,dollCatId){
 }
 
 function clickProj(id){
-  if(S.activeProj!==id){S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;}
-  // S.view="intro" 제거 — 프로젝트 클릭 시 상세페이지로 이동하지 않음
+  if(S.activeProj!==id){
+    S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;
+    // 프로젝트가 바뀌면 project-context 종속 뷰는 반드시 홈으로 리셋
+    // (그대로 두면 이전 프로젝트 상태로 렌더 시도해 크래시 발생)
+    if(["episodes","content","charlist","chardetail"].includes(S.view)) S.view="home";
+  }
   const dw={"blood-highschool":240,"x-project":240,"biz-oc-doll":240}[id]||240;
   document.documentElement.style.setProperty("--sm-w",dw+"px");
   closeMobMenu();pushHash();render();
+  // 데스크탑: showSubPanel 우회 — nav-layer.open 가드 없이 콘텐츠 강제 갱신
+  if(window.innerWidth>768){
+    const _proj=getProj(id);
+    const sp=document.getElementById("sub-panel");
+    if(_proj&&_proj.keepSub&&_proj.subType!=='youtube'&&sp){
+      S.hoveredProj=id;
+      renderSubPanelContent(id);
+      sp.classList.add("visible");
+    } else {
+      hideSubPanel();
+    }
+  }
 }
 
 function goIntro(pid){
