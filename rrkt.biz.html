@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>biz.rrkt</title>
+<title>rrkt.biz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
 <script src="config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
@@ -934,7 +934,7 @@ body{top:0!important}
   <button id="menu-toggle" aria-label="메뉴">
     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
   </button>
-  <span id="topbar-logo" onclick="goHome()">biz.rrkt</span>
+  <span id="topbar-logo" onclick="goHome()">rrkt.biz</span>
   <button id="topbar-cal-btn" onclick="goCal()">
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
     작업 캘린더
@@ -964,7 +964,7 @@ body{top:0!important}
   <nav id="nav-panel" onmouseleave="onNavPanelLeave()">
     <div style="padding:14px 16px 10px;border-bottom:1px solid var(--bd)">
       <div style="font-size:9px;font-weight:500;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:5px">Archive</div>
-      <div style="font-size:16px;font-weight:700;color:#111;letter-spacing:-.04em;cursor:pointer" onclick="goHome()">biz.rrkt</div>
+      <div style="font-size:16px;font-weight:700;color:#111;letter-spacing:-.04em;cursor:pointer" onclick="goHome()">rrkt.biz</div>
     </div>
     <div id="nav-items-wrap" style="padding:8px 0"></div>
   </nav>
@@ -2432,7 +2432,7 @@ function renderAbout(){
     <div style="padding:36px 40px;max-width:680px;margin:0 auto">
       <div style="margin-bottom:32px">
         <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">About</div>
-        <div style="font-size:26px;font-weight:700;color:#111;letter-spacing:-.04em">biz.rrkt</div>
+        <div style="font-size:26px;font-weight:700;color:#111;letter-spacing:-.04em">rrkt.biz</div>
       </div>
 
       <!-- 프로젝트 통계 -->
@@ -2705,7 +2705,7 @@ function renderHome(){
     <div class="home-page">
       <div class="home-header" style="position:relative">
         <div style="display:flex;align-items:center;gap:2px">
-          <div class="home-logo-big">biz.rrkt</div>
+          <div class="home-logo-big">rrkt.biz</div>
           <button class="home-chat-btn" onclick="hcToggle()" id="hc-btn" title="안내봇">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 3C6.93 3 3 6.69 3 11c0 2.5 1.17 4.76 3.03 6.32L5 21l4.14-1.87C10.03 19.37 11 19.5 12 19.5c5.07 0 9-3.69 9-8.5S17.07 3 12 3z" stroke="currentColor" stroke-width="1.4" fill="none"/>
@@ -2720,7 +2720,7 @@ function renderHome(){
           <div class="home-chat-hd">
             <div class="home-chat-hd-dot"></div>
             <div>
-              <div class="home-chat-hd-name">biz.rrkt 안내봇</div>
+              <div class="home-chat-hd-name">rrkt.biz 안내봇</div>
               <div class="home-chat-hd-sub">캐릭터·작품 검색 · 이벤트 안내</div>
             </div>
             <button class="home-chat-hd-close" onclick="hcToggle()">✕</button>
@@ -3963,7 +3963,7 @@ function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<
     panel.classList.toggle('open',_hcOpen);
     if(dot) dot.style.display=_hcOpen?'none':'block';
     if(_hcOpen){
-      if(!_hcGreeted){_hcAdd('bot','안녕하세요! 👋 biz.rrkt 안내봇이에요.\n캐릭터나 작품 찾기, 이벤트·연락처 뭐든 물어보세요 🌸');_hcGreeted=true;}
+      if(!_hcGreeted){_hcAdd('bot','안녕하세요! 👋 rrkt.biz 안내봇이에요.\n캐릭터나 작품 찾기, 이벤트·연락처 뭐든 물어보세요 🌸');_hcGreeted=true;}
       setTimeout(()=>{const i=document.getElementById('hc-input');if(i)i.focus();},150);
     }
   };
@@ -4019,7 +4019,7 @@ function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<
     }).filter(Boolean).join('\n');
 
     const eventInfo=cfg.currentEvent?`이벤트: ${cfg.currentEvent.name} (오픈: ${cfg.currentEvent.opens})`:'현재 예정된 이벤트 없음';
-    const sys=`당신은 biz.rrkt 팬사이트 안내봇이에요. 친절하고 귀엽게 이모지를 써서 3문장 이내로 답변하세요.
+    const sys=`당신은 rrkt.biz 팬사이트 안내봇이에요. 친절하고 귀엽게 이모지를 써서 3문장 이내로 답변하세요.
 【프로젝트】\n${projs}\n【에피소드】\n${vols}\n【작가 노트】${_N.text||''}
 【이벤트】${eventInfo}\n【연락처】${cfg.contactLabel||cfg.contactUrl||''}
 규칙: 탐색은 네비게이션(☰) 안내, 모르면 솔직하게, 사용자 언어로`;
