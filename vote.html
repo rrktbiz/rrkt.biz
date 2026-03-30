@@ -84,6 +84,31 @@ input{font-family:var(--fn)}
 .done-text-main{font-size:13px;font-weight:600;color:var(--acc2)}
 .done-text-sub{font-size:11px;color:var(--tx2);margin-top:2px}
 
+/* ── EXTRA VOTE BAR ── */
+#extra-vote-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;
+  background:color-mix(in srgb,#f59e0b 6%,#fff);
+  border-bottom:1px solid color-mix(in srgb,#f59e0b 20%,transparent);
+}
+.extra-vote-label{
+  font-size:11px;color:var(--tx2);line-height:1.4;
+}
+.extra-vote-label strong{
+  display:block;font-size:12px;font-weight:700;color:var(--tx);margin-bottom:1px;
+}
+#extra-vote-btn{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;
+  padding:5px 12px;
+  background:#f59e0b;color:#fff;
+  border:none;border-radius:6px;
+  cursor:pointer;white-space:nowrap;
+  transition:background .12s;flex-shrink:0;
+}
+#extra-vote-btn:hover{background:#d97706}
+#extra-vote-btn svg{flex-shrink:0}
+
 /* ── FILTER BAR ── */
 #filter-bar{
   display:flex;align-items:center;gap:8px;padding:10px 16px;
@@ -310,6 +335,21 @@ input{font-family:var(--fn)}
 
   <!-- 투표 탭 -->
   <div id="vote-page">
+
+    <!-- 추가투표 배너 -->
+    <div id="extra-vote-bar">
+      <div class="extra-vote-label">
+        <strong>추가 투표하기 ☕</strong>
+        후원으로 추가 투표권을 얻을 수 있어요
+      </div>
+      <button id="extra-vote-btn" onclick="window.open('https://ko-fi.com/rrktbiz','_blank')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+        </svg>
+        추가 투표
+      </button>
+    </div>
+
     <div id="filter-bar">
       <input type="text" id="search-input" placeholder="코드 검색... (예: 001)" oninput="onSearch(this.value)">
       <span id="result-count">200명</span>
