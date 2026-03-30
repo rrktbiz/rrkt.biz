@@ -41,6 +41,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #topbar-logo{font-size:15px;font-weight:700;color:#111;letter-spacing:-.04em;cursor:pointer}
 #topbar-logo:hover{opacity:.6}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+#tl-badge{font-size:10px;font-weight:600;padding:3px 7px;border-radius:4px;border:1px solid;transition:opacity .2s,background .2s;opacity:0;pointer-events:none}
+#tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
+#tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
+#tl-badge.show{opacity:1}
 .tb-lang-btn{font-size:11px;font-weight:600;padding:4px 8px;border:1px solid var(--bd);border-radius:5px;background:transparent;color:var(--tx2);transition:all .12s}
 .tb-lang-btn:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
 #topbar-cal-btn{font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s;margin-left:8px}
@@ -956,6 +960,7 @@ body{top:0!important}
     진행 현황
   </button>
   <div class="topbar-right" style="position:relative">
+    <span id="tl-badge"></span>
     <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
       <span id="tb-lang-label">Language</span>
@@ -1819,6 +1824,7 @@ function _tlDeepL(lang, cfg){
     });
     _tlCache[lang] = dict;
     _tlApply(dict);
+    _tlBadge('deepl');
     /* DeepL 성공 시 Google도 함께 구동 (동적 콘텐츠 커버) */
     _tlGoogle(lang);
   })
@@ -1838,7 +1844,13 @@ function _tlApply(dict){
 }
 
 /* ── ② Google Translate 폴백 (기존 동작 그대로) ── */
+function _tlBadge(engine){
+  var el=document.getElementById('tl-badge');if(!el)return;
+  el.className=engine+' show';
+  el.textContent=engine==='deepl'?'DeepL':'Google';
+}
 function _tlGoogle(lang){
+  _tlBadge('google');
   var sel = document.querySelector('.goog-te-combo');
   if(sel){
     sel.value = lang;
