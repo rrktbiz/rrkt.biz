@@ -839,6 +839,73 @@ body{top:0!important}
 .skiptranslate{display:none!important}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
 
+
+/* ── HOME CHAT BTN + PANEL ── */
+.home-chat-btn{
+  background:transparent;border:none;cursor:pointer;
+  padding:4px;border-radius:8px;color:var(--tx2);
+  display:inline-flex;align-items:center;justify-content:center;
+  position:relative;margin-left:10px;vertical-align:middle;
+  transition:color .12s,background .12s;
+}
+.home-chat-btn:hover{color:var(--tx);background:var(--bg)}
+.home-chat-btn svg{width:22px;height:22px}
+.home-chat-dot{
+  position:absolute;top:2px;right:2px;
+  width:8px;height:8px;border-radius:50%;
+  background:#c0392b;border:1.5px solid var(--sb);
+}
+#home-chat-panel{
+  position:absolute;top:calc(100% + 8px);left:0;z-index:500;
+  width:300px;
+  background:var(--sb);border:1px solid var(--bd);
+  border-radius:14px;
+  box-shadow:0 8px 32px #0000001a,0 2px 8px #0000000d;
+  display:flex;flex-direction:column;overflow:hidden;
+  opacity:0;transform:translateY(-6px) scale(.97);
+  pointer-events:none;
+  transition:opacity .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.4,0,.2,1);
+  max-height:420px;
+}
+#home-chat-panel.open{
+  opacity:1;transform:translateY(0) scale(1);
+  pointer-events:all;
+}
+.home-chat-hd{
+  padding:11px 14px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:9px;flex-shrink:0;
+}
+.home-chat-hd-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:hcPulse 2.4s ease-in-out infinite}
+@keyframes hcPulse{0%,100%{opacity:1}50%{opacity:.3}}
+.home-chat-hd-name{font-size:12px;font-weight:700;color:var(--tx)}
+.home-chat-hd-sub{font-size:9px;color:var(--tx3);margin-top:1px}
+.home-chat-hd-close{margin-left:auto;background:transparent;border:none;color:var(--tx3);font-size:16px;cursor:pointer;padding:0 2px;transition:color .12s}
+.home-chat-hd-close:hover{color:var(--tx)}
+.home-chat-msgs{
+  flex:1;overflow-y:auto;padding:12px;
+  display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth;
+  min-height:80px;max-height:220px;
+}
+.home-chat-msgs::-webkit-scrollbar{width:3px}
+.home-chat-msgs::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+.hc-msg{max-width:84%;font-size:11px;line-height:1.55;border-radius:10px;padding:8px 10px;word-break:break-word;white-space:pre-wrap}
+.hc-msg.bot{background:var(--bg);border:1px solid var(--bd);color:var(--tx);align-self:flex-start;border-bottom-left-radius:3px}
+.hc-msg.user{background:var(--tx);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.hc-msg.typing{background:var(--bg);border:1px solid var(--bd);align-self:flex-start;padding:9px 12px;border-bottom-left-radius:3px}
+.hc-dots{display:flex;gap:3px;align-items:center}
+.hc-dots span{width:4px;height:4px;border-radius:50%;background:var(--tx3);display:block;animation:hcDot 1.2s ease-in-out infinite}
+.hc-dots span:nth-child(2){animation-delay:.2s}
+.hc-dots span:nth-child(3){animation-delay:.4s}
+@keyframes hcDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.home-chat-chips{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px;border-top:1px solid var(--bd)}
+.hc-chip{font-size:9px;padding:3px 9px;border:1px solid var(--bd);border-radius:20px;background:var(--sb);color:var(--tx2);cursor:pointer;font-family:var(--fn);transition:all .12s;white-space:nowrap}
+.hc-chip:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
+.home-chat-input-row{padding:8px 10px;border-top:1px solid var(--bd);display:flex;align-items:center;gap:6px;flex-shrink:0}
+#hc-input{flex:1;border:1px solid var(--bd);border-radius:20px;padding:7px 12px;font-size:11px;color:var(--tx);font-family:var(--fn);outline:none;background:var(--bg);transition:border-color .12s}
+#hc-input:focus{border-color:var(--bd2);background:var(--sb)}
+.hc-send{width:28px;height:28px;border-radius:50%;background:var(--tx);color:var(--sb);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .12s}
+.hc-send:hover{opacity:.7}
+
 /* ── Drive 본문 로딩 ── */
 .postype-loading{display:flex;align-items:center;gap:10px;color:var(--tx3);font-size:13px;padding:32px 0}
 .postype-spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--tx3);border-radius:50%;animation:ptSpin .7s linear infinite;flex-shrink:0}
@@ -862,11 +929,19 @@ body{top:0!important}
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="4" height="10" rx="1" fill="currentColor" opacity=".4"/><rect x="5.5" y="5" width="4" height="7" rx="1" fill="currentColor" opacity=".7"/><rect x="10" y="1" width="4" height="11" rx="1" fill="currentColor"/></svg>
     진행 현황
   </button>
-  <div class="topbar-right">
-    <button class="tb-lang-btn" onclick="setLang('en')">EN</button>
-    <button class="tb-lang-btn" onclick="setLang('ja')">JA</button>
-    <button class="tb-lang-btn" onclick="setLang('zh-CN')">ZH</button>
-    <button class="tb-lang-btn" onclick="setLang('ko')">KO</button>
+  <div class="topbar-right" style="position:relative">
+    <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
+      <span id="tb-lang-label">Language</span>
+      <span id="tb-lang-caret" style="font-size:8px;transition:transform .15s;display:inline-block">▼</span>
+    </button>
+    <div id="tb-lang-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--sb);border:1px solid var(--bd);border-radius:10px;z-index:9999;overflow:hidden">
+      <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
+        <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
+        <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
+      </div>
+      <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
+    </div>
   </div>
 </div>
 
@@ -929,7 +1004,7 @@ body{top:0!important}
 <div id="vote-overlay" onclick="if(event.target===this)closeVoteOverlay()" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);align-items:center;justify-content:center;">
   <div style="width:min(860px,96vw);height:min(90vh,900px);background:var(--sb);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 40px #00000030">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--bd);flex-shrink:0;background:var(--sb)">
-      <div style="font-size:13px;font-weight:700;color:var(--tx)">&#9733; 오씨돌 인기 투표</div>
+      <div style="font-size:13px;font-weight:700;color:var(--tx)">VOTE</div>
       <button onclick="closeVoteOverlay()" style="background:transparent;border:none;color:var(--tx3);font-size:22px;line-height:1;padding:0 6px;cursor:pointer">&times;</button>
     </div>
     <iframe id="vote-iframe" style="flex:1;border:none;width:100%;background:var(--sm)"></iframe>
@@ -1621,6 +1696,100 @@ function setLang(lang){
   location.reload();
 }
 
+/* ── TOPBAR LANGUAGE DROPDOWN ── */
+(function(){
+  var ALL_LANGS=[
+    ['Afrikaans','af'],['Albanian','sq'],['Amharic','am'],['Arabic','ar'],['Armenian','hy'],
+    ['Azerbaijani','az'],['Basque','eu'],['Belarusian','be'],['Bengali','bn'],['Bosnian','bs'],
+    ['Bulgarian','bg'],['Catalan','ca'],['Cebuano','ceb'],['Chinese (Simplified)','zh-CN'],
+    ['Chinese (Traditional)','zh-TW'],['Corsican','co'],['Croatian','hr'],['Czech','cs'],
+    ['Danish','da'],['Dutch','nl'],['English','en'],['Esperanto','eo'],['Estonian','et'],
+    ['Finnish','fi'],['French','fr'],['Frisian','fy'],['Galician','gl'],['Georgian','ka'],
+    ['German','de'],['Greek','el'],['Gujarati','gu'],['Haitian Creole','ht'],['Hausa','ha'],
+    ['Hawaiian','haw'],['Hebrew','iw'],['Hindi','hi'],['Hmong','hmn'],['Hungarian','hu'],
+    ['Icelandic','is'],['Igbo','ig'],['Indonesian','id'],['Irish','ga'],['Italian','it'],
+    ['Japanese','ja'],['Javanese','jv'],['Kannada','kn'],['Kazakh','kk'],['Khmer','km'],
+    ['Korean','ko'],['Kurdish','ku'],['Kyrgyz','ky'],['Lao','lo'],['Latin','la'],
+    ['Latvian','lv'],['Lithuanian','lt'],['Luxembourgish','lb'],['Macedonian','mk'],
+    ['Malagasy','mg'],['Malay','ms'],['Malayalam','ml'],['Maltese','mt'],['Maori','mi'],
+    ['Marathi','mr'],['Mongolian','mn'],['Myanmar (Burmese)','my'],['Nepali','ne'],
+    ['Norwegian','no'],['Nyanja (Chichewa)','ny'],['Pashto','ps'],['Persian','fa'],
+    ['Polish','pl'],['Portuguese','pt'],['Punjabi','pa'],['Romanian','ro'],['Russian','ru'],
+    ['Samoan','sm'],['Scots Gaelic','gd'],['Serbian','sr'],['Sesotho','st'],['Shona','sn'],
+    ['Sindhi','sd'],['Sinhala','si'],['Slovak','sk'],['Slovenian','sl'],['Somali','so'],
+    ['Spanish','es'],['Sundanese','su'],['Swahili','sw'],['Swedish','sv'],['Tagalog (Filipino)','tl'],
+    ['Tajik','tg'],['Tamil','ta'],['Telugu','te'],['Thai','th'],['Turkish','tr'],
+    ['Ukrainian','uk'],['Urdu','ur'],['Uzbek','uz'],['Vietnamese','vi'],['Welsh','cy'],
+    ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
+  ];
+  var _sel=null,_open=false;
+  var PRIORITY_CODES=['ko','en','zh-CN','ja'];
+  function _makeItem(l){
+    var name=l[0],code=l[1],isS=_sel===code;
+    var d=document.createElement('div');
+    d.style.cssText='display:flex;align-items:center;padding:8px 14px;cursor:pointer;gap:10px;background:'+(isS?'var(--bg)':'transparent');
+    d.onmouseover=function(){this.style.background='var(--bg)';};
+    d.onmouseout=function(){this.style.background=isS?'var(--bg)':'transparent';};
+    d.onclick=function(){tbLangSelect(code,name);};
+    var n=document.createElement('span');n.style.cssText='font-size:13px;color:var(--tx);flex:1';n.textContent=name;
+    var c=document.createElement('span');c.style.cssText='font-size:11px;color:var(--tx3);font-family:monospace';c.textContent=code;
+    d.appendChild(n);d.appendChild(c);
+    if(isS){var ck=document.createElement('span');ck.style.cssText='font-size:12px;color:#3558c0';ck.textContent='✓';d.appendChild(ck);}
+    return d;
+  }
+  function _render(q){
+    var list=document.getElementById('tb-lang-list');if(!list)return;
+    var f=(q||'').toLowerCase().trim();
+    var filtered=f?ALL_LANGS.filter(function(l){return l[0].toLowerCase().indexOf(f)>-1||l[1].toLowerCase().indexOf(f)>-1}):ALL_LANGS;
+    list.innerHTML='';
+    if(!filtered.length){list.innerHTML='<div style="padding:20px;text-align:center;font-size:12px;color:var(--tx3)">No results</div>';return;}
+    if(!f){
+      var priority=PRIORITY_CODES.map(function(c){return ALL_LANGS.find(function(l){return l[1]===c;});}).filter(Boolean);
+      var rest=filtered.filter(function(l){return PRIORITY_CODES.indexOf(l[1])===-1;});
+      priority.forEach(function(l){list.appendChild(_makeItem(l));});
+      var div=document.createElement('div');div.style.cssText='height:1px;background:var(--bd);margin:4px 0';list.appendChild(div);
+      rest.forEach(function(l){list.appendChild(_makeItem(l));});
+    } else {
+      filtered.forEach(function(l){list.appendChild(_makeItem(l));});
+    }
+  }
+  window.tbLangToggle=function(){
+    _open=!_open;
+    var dd=document.getElementById('tb-lang-dropdown');
+    var btn=document.getElementById('tb-lang-drop-btn');
+    var caret=document.getElementById('tb-lang-caret');
+    if(!dd)return;
+    dd.style.display=_open?'block':'none';
+    if(btn){btn.style.background=_open?'var(--bg)':'transparent';btn.style.color=_open?'var(--tx)':'var(--tx2)';btn.style.borderColor=_open?'var(--bd2)':'var(--bd)';}
+    if(caret)caret.style.transform=_open?'rotate(180deg)':'';
+    if(_open){_render('');setTimeout(function(){var s=document.getElementById('tb-lang-search');if(s)s.focus();},80);}
+  };
+  window.tbLangFilter=function(){var s=document.getElementById('tb-lang-search');_render(s?s.value:'');};
+  window.tbLangSelect=function(code,name){
+    _sel=code;
+    var lbl=document.getElementById('tb-lang-label');if(lbl)lbl.textContent=name;
+    setLang(code);
+    _open=false;
+    var dd=document.getElementById('tb-lang-dropdown');
+    var btn=document.getElementById('tb-lang-drop-btn');
+    var caret=document.getElementById('tb-lang-caret');
+    if(dd)dd.style.display='none';
+    if(btn){btn.style.background='transparent';btn.style.color='var(--tx2)';btn.style.borderColor='var(--bd)';}
+    if(caret)caret.style.transform='';
+  };
+  document.addEventListener('click',function(e){
+    if(_open&&!e.target.closest('#tb-lang-drop-btn')&&!e.target.closest('#tb-lang-dropdown')){
+      _open=false;
+      var dd=document.getElementById('tb-lang-dropdown');
+      var btn=document.getElementById('tb-lang-drop-btn');
+      var caret=document.getElementById('tb-lang-caret');
+      if(dd)dd.style.display='none';
+      if(btn){btn.style.background='transparent';btn.style.color='var(--tx2)';btn.style.borderColor='var(--bd)';}
+      if(caret)caret.style.transform='';
+    }
+  });
+})();
+
 /* ── NAV CATEGORY FOLD STATE ── */
 const NAV_CAT_STATE = { active: true, done: false, archive: false };
 
@@ -1852,7 +2021,7 @@ function renderDollSub(proj){
     <button class="sm-char-link" onclick="goDollChar()">캐릭터 일람 &#9654;</button>
     <button class="sm-char-link" onclick="openArchiveOverlay()">아카이브 &#9654;</button>
     <button class="sm-char-link" onclick="openEventOverlay()">이벤트 &#9654;</button>
-    <button class="sm-char-link" onclick="openVoteOverlay()" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700">&#9733; 인기 투표</button>
+    <button class="sm-char-link" onclick="openVoteOverlay()" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700">인기 투표</button>
     <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid var(--bd)">
       <svg width="54" height="54" viewBox="0 0 54 54" style="flex-shrink:0">
         <circle cx="27" cy="27" r="22" fill="none" stroke="var(--bd)" stroke-width="5"/>
@@ -2502,8 +2671,43 @@ function renderHome(){
 
   document.getElementById("content").innerHTML=`
     <div class="home-page">
-      <div class="home-header">
-        <div class="home-logo-big">biz.rrkt</div>
+      <div class="home-header" style="position:relative">
+        <div style="display:flex;align-items:center;gap:2px">
+          <div class="home-logo-big">biz.rrkt</div>
+          <button class="home-chat-btn" onclick="hcToggle()" id="hc-btn" title="안내봇">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3C6.93 3 3 6.69 3 11c0 2.5 1.17 4.76 3.03 6.32L5 21l4.14-1.87C10.03 19.37 11 19.5 12 19.5c5.07 0 9-3.69 9-8.5S17.07 3 12 3z" stroke="currentColor" stroke-width="1.4" fill="none"/>
+              <circle cx="8.5" cy="11" r="1.1" fill="currentColor"/>
+              <circle cx="12" cy="11" r="1.1" fill="currentColor"/>
+              <circle cx="15.5" cy="11" r="1.1" fill="currentColor"/>
+            </svg>
+            <div class="home-chat-dot" id="hc-dot"></div>
+          </button>
+        </div>
+        <div id="home-chat-panel">
+          <div class="home-chat-hd">
+            <div class="home-chat-hd-dot"></div>
+            <div>
+              <div class="home-chat-hd-name">biz.rrkt 안내봇</div>
+              <div class="home-chat-hd-sub">캐릭터·작품 검색 · 이벤트 안내</div>
+            </div>
+            <button class="home-chat-hd-close" onclick="hcToggle()">✕</button>
+          </div>
+          <div class="home-chat-msgs" id="hc-msgs"></div>
+          <div class="home-chat-chips">
+            <button class="hc-chip" onclick="hcAsk('어떤 프로젝트가 있어?')">📂 프로젝트</button>
+            <button class="hc-chip" onclick="hcAsk('캐릭터 검색하고 싶어요')">🔍 캐릭터</button>
+            <button class="hc-chip" onclick="hcAsk('작가님 연락처 알려줘')">✉️ 연락처</button>
+            <button class="hc-chip" onclick="hcAsk('이벤트 일정 알려줘')">⭐ 이벤트</button>
+          </div>
+          <div class="home-chat-input-row">
+            <input id="hc-input" placeholder="질문을 입력하세요..." autocomplete="off"
+              onkeydown="if(event.key==='Enter')hcSend()">
+            <button class="hc-send" onclick="hcSend()">
+              <svg viewBox="0 0 24 24" fill="none" width="12" height="12"><path d="M5 12l14-8-5 8 5 8-14-8z" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="home-body">
         <!-- ① About card (left) -->
@@ -3734,6 +3938,94 @@ window.openArchiveOverlay = function(){ goArchive(); };
 window.openEventOverlay   = function(){ goEvent();   };
 function goArchive(){ S.view="archive"; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
 function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
+
+/* ── HOME 말풍선 챗봇 로직 ── */
+(function(){
+  let _hcOpen=false,_hcLoading=false,_hcHistory=[],_hcGreeted=false;
+
+  window.hcToggle=function(){
+    _hcOpen=!_hcOpen;
+    const panel=document.getElementById('home-chat-panel');
+    const dot=document.getElementById('hc-dot');
+    if(!panel) return;
+    panel.classList.toggle('open',_hcOpen);
+    if(dot) dot.style.display=_hcOpen?'none':'block';
+    if(_hcOpen){
+      if(!_hcGreeted){_hcAdd('bot','안녕하세요! 👋 biz.rrkt 안내봇이에요.\n캐릭터나 작품 찾기, 이벤트·연락처 뭐든 물어보세요 🌸');_hcGreeted=true;}
+      setTimeout(()=>{const i=document.getElementById('hc-input');if(i)i.focus();},150);
+    }
+  };
+
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&_hcOpen)hcToggle();});
+
+  function _hcAdd(role,text){
+    const box=document.getElementById('hc-msgs');if(!box)return;
+    const div=document.createElement('div');
+    div.className='hc-msg '+role;div.textContent=text;
+    box.appendChild(div);box.scrollTop=box.scrollHeight;
+  }
+  function _hcTyping(show){
+    if(show){
+      const box=document.getElementById('hc-msgs');if(!box)return;
+      const div=document.createElement('div');
+      div.className='hc-msg typing';div.id='hc-typing';
+      div.innerHTML='<div class="hc-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(div);box.scrollTop=box.scrollHeight;
+    } else { const el=document.getElementById('hc-typing');if(el)el.remove(); }
+  }
+
+  window.hcSend=function(){
+    const inp=document.getElementById('hc-input');if(!inp)return;
+    const text=inp.value.trim();if(!text||_hcLoading)return;
+    inp.value='';window.hcAsk(text);
+  };
+
+  window.hcAsk=function(text){
+    if(_hcLoading)return;
+    if(!_hcGreeted){_hcAdd('bot','안녕하세요! 👋 뭐든 물어보세요 🌸');_hcGreeted=true;}
+    _hcAdd('user',text);
+    _hcHistory.push({role:'user',parts:[{text}]});
+    _hcLoading=true;_hcTyping(true);
+
+    const key=(typeof GEMINI_KEY!=='undefined'?GEMINI_KEY:'');
+    if(!key||key.includes('여기에')){
+      _hcTyping(false);_hcLoading=false;
+      _hcAdd('bot','API 키가 설정되지 않았어요 🔧');return;
+    }
+
+    const _P=(typeof PROJECTS!=='undefined')?PROJECTS:[];
+    const _V=(typeof VOLUMES!=='undefined')?VOLUMES:{};
+    const _N=(typeof AUTHOR_NOTE!=='undefined')?AUTHOR_NOTE:{};
+    const cfg=(typeof BIZ_BOT_CONFIG!=='undefined')?BIZ_BOT_CONFIG:{};
+
+    const projs=_P.map(p=>`[${p.label}] 태그:${(p.tags||[]).join(',')} / 소개:${p.intro||''}`).join('\n');
+    const vols=Object.entries(_V).map(([pid,vdata])=>{
+      const proj=_P.find(p=>p.id===pid),name=proj?proj.label:pid;
+      if(Array.isArray(vdata))return vdata.map(v=>`[${name}] ${v.label}\n`+(v.episodes||[]).map(e=>`  ${e.title}(${e.status})`).join('\n')).join('\n');
+      if(vdata&&vdata.categories)return `[${name}]\n`+vdata.categories.map(c=>`  ${c.label}(${c.count}개)`).join('\n');
+      return '';
+    }).filter(Boolean).join('\n');
+
+    const eventInfo=cfg.currentEvent?`이벤트: ${cfg.currentEvent.name} (오픈: ${cfg.currentEvent.opens})`:'현재 예정된 이벤트 없음';
+    const sys=`당신은 biz.rrkt 팬사이트 안내봇이에요. 친절하고 귀엽게 이모지를 써서 3문장 이내로 답변하세요.
+【프로젝트】\n${projs}\n【에피소드】\n${vols}\n【작가 노트】${_N.text||''}
+【이벤트】${eventInfo}\n【연락처】${cfg.contactLabel||cfg.contactUrl||''}
+규칙: 탐색은 네비게이션(☰) 안내, 모르면 솔직하게, 사용자 언어로`;
+
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system_instruction:{parts:[{text:sys}]},contents:_hcHistory.slice(-10)})
+    })
+    .then(r=>r.json())
+    .then(data=>{
+      _hcTyping(false);_hcLoading=false;
+      const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim()||'죄송해요, 오류가 생겼어요 😢';
+      _hcAdd('bot',reply);
+      _hcHistory.push({role:'model',parts:[{text:reply}]});
+    })
+    .catch(()=>{_hcTyping(false);_hcLoading=false;_hcAdd('bot','네트워크 오류가 생겼어요 😢');});
+  };
+})();
 
 </script>
 
