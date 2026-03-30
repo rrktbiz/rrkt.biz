@@ -702,11 +702,14 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob2-cat-item:hover{background:var(--bg)}
 @media(min-width:769px){.mob-menu,.mob-lang-row{display:none!important}}
 .postype-text{white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.9;font-size:17px}
-@media(max-width:768px){.topbar-right{display:none!important}}
 @media(max-width:768px){
   #nav-layer{display:none!important}
   #content{margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px);-webkit-overflow-scrolling:touch;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
   .topbar-right{gap:4px}
+  .tb-btn-txt{display:none!important}
+  #topbar-cal-btn,#topbar-progress-btn{padding:6px 8px;min-width:32px;justify-content:center;gap:0}
+  #tb-lang-drop-btn{padding:5px 8px;gap:4px}
+  #tb-lang-dropdown{width:min(280px,calc(100vw - 16px));right:-4px}
   .home-body{grid-template-columns:1fr}
   .home-about-card{max-width:100%}
   .home-recent-grid{grid-template-columns:1fr}
@@ -953,18 +956,18 @@ body{top:0!important}
   <span id="topbar-logo" onclick="goHome()">rrkt.biz</span>
   <button id="topbar-cal-btn" onclick="goCal()">
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-    작업 캘린더
+    <span class="tb-btn-txt">작업 캘린더</span>
   </button>
   <button id="topbar-progress-btn" onclick="goProgress()" style="font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s;margin-left:0">
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="4" height="10" rx="1" fill="currentColor" opacity=".4"/><rect x="5.5" y="5" width="4" height="7" rx="1" fill="currentColor" opacity=".7"/><rect x="10" y="1" width="4" height="11" rx="1" fill="currentColor"/></svg>
-    진행 현황
+    <span class="tb-btn-txt">진행 현황</span>
   </button>
   <div class="topbar-right" style="position:relative">
     <span id="tl-badge"></span>
     <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
-      <span id="tb-lang-label">Language</span>
-      <span id="tb-lang-caret" style="font-size:8px;transition:transform .15s;display:inline-block">▼</span>
+      <span id="tb-lang-label" class="tb-btn-txt">Language</span>
+      <span id="tb-lang-caret" class="tb-btn-txt" style="font-size:8px;transition:transform .15s;display:inline-block">▼</span>
     </button>
     <div id="tb-lang-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--sb);border:1px solid var(--bd);border-radius:10px;z-index:9999;overflow:hidden">
       <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
