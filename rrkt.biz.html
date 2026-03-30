@@ -298,6 +298,18 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-author-note-text{font-size:12px;color:var(--tx2);line-height:1.75}
 .home-author-note-date{font-size:9px;color:var(--tx3);margin-top:8px}
 
+/* ── HOME TRANSLATION NOTICE ── */
+.home-trans-notice{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--sb);border:1px solid var(--bd);border-radius:10px;
+  padding:13px 16px;margin-bottom:18px;
+}
+.home-trans-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
+.home-trans-text{display:flex;flex-direction:column;gap:4px;min-width:0}
+.home-trans-title{font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
+.home-trans-body{font-size:12px;color:#2a2a3a;line-height:1.75;margin:0}
+.home-trans-body strong{font-weight:700;color:#1a1a1a}
+
 /* ── HOME VISITOR COUNTRY WIDGET ── */
 .vis-widget{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
 .vis-hd{padding:10px 13px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
@@ -2817,6 +2829,13 @@ function renderHome(){
               <svg viewBox="0 0 24 24" fill="none" width="12" height="12"><path d="M5 12l14-8-5 8 5 8-14-8z" fill="currentColor"/></svg>
             </button>
           </div>
+        </div>
+      </div>
+      <div class="home-trans-notice">
+        <span class="home-trans-icon">🌐</span>
+        <div class="home-trans-text">
+          <span class="home-trans-title">번역 안내</span>
+          <p class="home-trans-body">이 페이지는 <strong>DeepL</strong>과 <strong>Google 번역</strong>을 함께 사용합니다. 상단에서 언어를 선택하면 DeepL이 먼저 번역을 시도하고, 월 사용량 초과 등의 이유로 이용할 수 없는 경우 Google 번역으로 자동 전환됩니다. 번역 품질은 DeepL 사용 시 더 자연스러울 수 있습니다.</p>
         </div>
       </div>
       <div class="home-body">
