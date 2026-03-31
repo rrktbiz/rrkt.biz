@@ -176,8 +176,8 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px}
 .home-logo-big{font-size:28px;font-weight:700;color:#111;letter-spacing:-.04em}
 .home-clock{font-size:28px;font-weight:300;color:var(--tx2);letter-spacing:.02em;font-variant-numeric:tabular-nums}
-/* 3-column: status | recent-work | right-panel */
-.home-body{display:grid;grid-template-columns:180px 1fr 220px;gap:18px;align-items:start}
+/* 2-column: recent-work | right-panel (status + visitors) */
+.home-body{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:start}
 /* ── About card (left) ── */
 .home-about-card{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .home-about-card-hd{padding:8px 12px;border-bottom:1px solid var(--bd);font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
@@ -275,25 +275,44 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-recent-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
 
 /* ── HOME HIGHLIGHT CARD ── */
-.home-hl-wrap{padding:10px}
-.home-hl-card{border:1px solid var(--bd);border-radius:9px;overflow:hidden;cursor:pointer;transition:opacity .12s}
-.home-hl-card:hover{opacity:.82}
-.home-hl-thumb{height:72px;display:flex;align-items:flex-end;padding:8px 12px;position:relative}
-.home-hl-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;background:#fff;color:#c0392b}
-.home-hl-vol{font-size:9px;color:#ffffff70}
-.home-hl-body{padding:9px 12px;background:var(--sm);display:flex;align-items:center;justify-content:space-between}
-.home-hl-title{font-size:13px;font-weight:500;color:var(--tx)}
-.home-hl-cta{font-size:11px;color:#3558c0;font-weight:500;flex-shrink:0;margin-left:8px}
+/* ── HOME UPDATES FULL CARD ── */
+.home-fc{position:relative;overflow:hidden}
+.home-fc-bg{position:absolute;inset:0}
+.home-fc-deco{position:absolute;right:0;top:0;bottom:0;width:48%;display:flex;gap:4px;padding:14px 14px 14px 0;pointer-events:none}
+.home-fc-col{display:flex;flex-direction:column;gap:4px;flex:1}
+.home-fc-blk{flex:1;border-radius:5px;border:0.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04)}
+.home-fc-blk.ac{background:var(--fc-ac-bg);border-color:var(--fc-ac-bd)}
+.home-fc-blk.t2{flex:2}.home-fc-blk.t3{flex:3}
+.home-fc-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(6,2,5,0.95) 0%,rgba(6,2,5,0.88) 50%,rgba(6,2,5,0.16) 66%,transparent 100%)}
+.home-fc-inner{position:relative;z-index:2;padding:20px 18px 18px;width:57%}
+.home-fc-series{font-size:9px;font-weight:600;letter-spacing:1.8px;color:rgba(255,255,255,0.42);text-transform:uppercase;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-fc-title{font-size:18px;font-weight:500;color:#fff;line-height:1.3;margin-bottom:5px;letter-spacing:-0.025em}
+.home-fc-meta{font-size:10px;color:rgba(255,255,255,0.38);margin-bottom:12px}
+.home-fc-actions{display:flex;align-items:center;gap:7px;margin-bottom:16px}
+.home-fc-read{font-size:11px;font-weight:500;padding:5px 14px;border-radius:6px;background:#fff;color:#0a0006;border:none;cursor:pointer;font-family:var(--fn)}
+.home-fc-done-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--fc-badge-bg);color:var(--fc-badge-tx)}
+.home-fc-sep{height:1px;background:rgba(255,255,255,0.13);margin-bottom:10px}
+.home-fc-list-hd{font-size:8px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.27);text-transform:uppercase;margin-bottom:7px}
+.home-fc-li{display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.07);cursor:pointer;transition:opacity .12s}
+.home-fc-li:hover{opacity:.65}
+.home-fc-li-last{border-bottom:none}
+.home-fc-li-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.home-fc-li-series{font-size:9px;color:rgba(255,255,255,0.33);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-fc-li-right{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.home-fc-li-date{font-size:9px;color:rgba(255,255,255,0.28)}
+.home-fc-li-badge{font-size:8px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--fc-badge-bg);color:var(--fc-badge-tx)}
+.home-fc-li-title{font-size:12px;font-weight:500;color:rgba(255,255,255,0.9)}
+.home-fc-wip-sep{height:0.5px;background:rgba(255,255,255,0.1);margin:10px 0 8px}
+.home-fc-wip-hd{display:flex;justify-content:space-between;margin-bottom:6px}
+.home-fc-wip-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.25);text-transform:uppercase}
+.home-fc-wip-hint{font-size:8px;color:rgba(255,255,255,0.18)}
+.home-fc-wi{display:flex;align-items:center;gap:6px;padding:4px 0}
+.home-fc-wi-name{font-size:11px;color:rgba(255,255,255,0.45);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-fc-wi-ep{font-size:11px;color:rgba(255,255,255,0.28);flex-shrink:0}
+.home-fc-wi-badge{font-size:8px;font-weight:700;padding:1px 6px;border-radius:3px;background:rgba(200,155,15,0.5);color:#fde490;flex-shrink:0}
 
 /* ── HOME WIP SIMPLE LIST ── */
-.home-wip-hd{padding:8px 14px 7px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
-.home-wip-lbl{font-size:11px;font-weight:500;color:var(--tx3)}
-.home-wip-sub{font-size:10px;color:var(--tx3)}
-.home-wip-list{padding:2px 14px 10px;display:flex;flex-direction:column}
-.home-wip-item{display:flex;align-items:center;gap:0;padding:7px 0;border-bottom:1px solid var(--bd)}
-.home-wip-item:last-child{border-bottom:none}
-.home-wip-proj{font-size:11px;color:var(--tx3);flex:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-wip-title{font-size:12px;color:var(--tx2);flex:1;text-align:center}
+.home-r-empty{padding:28px;text-align:center;font-size:11px;color:var(--tx3)}
 
 /* ── HOME AUTHOR NOTE ── */
 .home-author-note{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
@@ -318,11 +337,11 @@ body.nav-pinned #nav-backdrop{display:none!important}
   background:#e8f0fe;border:1px solid #b5d4f4;border-radius:10px;
   padding:12px 16px;margin-bottom:12px;
 }
-#lang-detect-banner .ldb-text{flex:1;font-size:12px;color:#1a3a6e;line-height:1.6}
+#lang-detect-banner .ldb-text{flex:1;font-size:16px;color:#1a3a6e;line-height:1.6}
 #lang-detect-banner .ldb-btns{display:flex;gap:6px;flex-shrink:0}
-#lang-detect-banner .ldb-yes{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;border:none;background:#1a4c9e;color:#fff;cursor:pointer;transition:background .12s}
-#lang-detect-banner .ldb-yes:hover{background:#1239786}
-#lang-detect-banner .ldb-no{font-size:11px;font-weight:500;padding:5px 10px;border-radius:6px;border:1px solid #b5d4f4;background:transparent;color:#1a4c9e;cursor:pointer;transition:all .12s}
+#lang-detect-banner .ldb-yes{font-size:13px;font-weight:600;padding:5px 12px;border-radius:6px;border:none;background:#1a4c9e;color:#fff;cursor:pointer;transition:background .12s}
+#lang-detect-banner .ldb-yes:hover{background:#123978}
+#lang-detect-banner .ldb-no{font-size:13px;font-weight:500;padding:5px 10px;border-radius:6px;border:1px solid #b5d4f4;background:transparent;color:#1a4c9e;cursor:pointer;transition:all .12s}
 #lang-detect-banner .ldb-no:hover{background:#d0e3fc}
 
 /* ── HOME VISITOR COUNTRY WIDGET ── */
@@ -723,6 +742,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
   #tb-lang-dropdown{width:min(280px,calc(100vw - 16px));right:-4px}
   .home-body{grid-template-columns:1fr}
   .home-about-card{max-width:100%}
+  .home-right{width:100%}
   .home-recent-grid{grid-template-columns:1fr}
   .cal-page{padding:16px 10px 20px;max-width:100%}
   .cal-layout{grid-template-columns:1fr}
@@ -3034,61 +3054,88 @@ function renderHome(){
   </svg>`;
 
   // ── 완료 카드 HTML ──
-  const doneCardsHtml = doneItems.length===0
-    ? `<div class="home-r-empty">완료된 작업이 없습니다</div>`
-    : doneItems.map(w=>{
-        const navCall = w.projId==="biz-oc-doll"
-          ? `goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
-          : `goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
-        const rel=relTime(w.date);
-        return `<div class="home-r-item is-done" style="border-left-color:${w.acc}" onclick="${navCall}" title="${w.title} 바로가기">
-          <div class="home-r-top">
-            <span class="home-r-proj" style="color:${w.acc}">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` <span style="font-weight:400;opacity:.7">${w.volSub}</span>`:''}</span>
-            <span class="home-r-date">${w.date}${rel?` <span class="home-r-reltime">· ${rel}</span>`:''}</span>
-          </div>
-          <div class="home-r-title-row">
-            <span class="home-r-title">${w.title}</span>
-            <span class="home-r-status done">완료</span>
-          </div>
-        </div>`;
-      }).join("");
+  // ── acc 색에서 rgba 추출 헬퍼 ──
+  function hexRgb(hex){
+    if(!hex||hex[0]!=='#') return '180,40,80';
+    const h=hex.replace('#','');
+    const r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+    return `${r},${g},${b}`;
+  }
 
-  // ── 하이라이트 카드 (최신 완료화) ──
-  const hlHtml = latestDone ? (()=>{
-    const grad=getVolGrad(latestDone.projId,latestDone.volId);
-    const navCall = latestDone.projId==="biz-oc-doll"
-      ? `goRecentWork('${latestDone.projId}',null,${latestDone.epId},'${latestDone.dollCatId||""}')`
-      : `goRecentWork('${latestDone.projId}','${latestDone.volId}',${latestDone.epId},null)`;
-    return `<div class="home-hl-wrap">
-      <div class="home-hl-card" onclick="${navCall}">
-        <div class="home-hl-thumb" style="background:linear-gradient(${grad})">
-          <span class="home-hl-badge">완료</span>
-          <span class="home-hl-vol">${latestDone.volType?`[${latestDone.volType}]`:''}${latestDone.proj}${latestDone.volSub?` · ${latestDone.volSub}`:''}</span>
+  // ── 전체 업데이트 풀카드 ──
+  const hlHtml = (()=>{
+    if(!latestDone && doneItems.length===0 && wipItems.length===0)
+      return `<div class="home-r-empty">업데이트가 없습니다</div>`;
+    const ld = latestDone || doneItems[0];
+    const grad = ld ? getVolGrad(ld.projId, ld.volId) : '150deg,#1a1a2e,#2d2d4e';
+    const acc  = ld ? (ld.acc||'#c0392b') : '#c0392b';
+    const rgb  = hexRgb(acc);
+    const navFeat = ld ? (ld.projId==="biz-oc-doll"
+      ? `goRecentWork('${ld.projId}',null,${ld.epId},'${ld.dollCatId||""}')`
+      : `goRecentWork('${ld.projId}','${ld.volId}',${ld.epId},null)`) : '';
+    const relFeat = ld ? relTime(ld.date) : '';
+
+    const listItems = doneItems.slice(1).map((w,i,arr)=>{
+      const nc = w.projId==="biz-oc-doll"
+        ? `goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
+        : `goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
+      const rel = relTime(w.date);
+      const isLast = i===arr.length-1 && wipItems.length===0;
+      return `<div class="home-fc-li${isLast?' home-fc-li-last':''}" onclick="${nc}">
+        <div class="home-fc-li-top">
+          <span class="home-fc-li-series">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` · ${w.volSub}`:''}</span>
+          <div class="home-fc-li-right">
+            ${rel?`<span class="home-fc-li-date">${rel}</span>`:''}
+            <span class="home-fc-li-badge">완료</span>
+          </div>
         </div>
-        <div class="home-hl-body">
-          <span class="home-hl-title">${latestDone.title}</span>
-          <span class="home-hl-cta">읽기 →</span>
-        </div>
+        <div class="home-fc-li-title">${w.title}</div>
+      </div>`;
+    }).join('');
+
+    const wipBlock = wipItems.length===0 ? '' : `
+      <div class="home-fc-wip-sep"></div>
+      <div class="home-fc-wip-hd">
+        <span class="home-fc-wip-lbl">작업중</span>
+        <span class="home-fc-wip-hint">곧 업로드 예정</span>
+      </div>
+      ${wipItems.map(w=>`<div class="home-fc-wi">
+        <span class="home-fc-wi-name">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` ${w.volSub}`:''}</span>
+        <span class="home-fc-wi-ep">${w.title}</span>
+        <span class="home-fc-wi-badge">작업중</span>
+      </div>`).join('')}`;
+
+    const listBlock = listItems ? `
+      <div class="home-fc-sep"></div>
+      <div class="home-fc-list-hd">최근 업데이트</div>
+      ${listItems}` : '';
+
+    return `<div class="home-fc" style="
+      --fc-ac-bg:rgba(${rgb},0.28);
+      --fc-ac-bd:rgba(${rgb},0.22);
+      --fc-badge-bg:rgba(${rgb},0.78);
+      --fc-badge-tx:#fff;">
+      <div class="home-fc-bg" style="background:linear-gradient(${grad})"></div>
+      <div class="home-fc-deco">
+        <div class="home-fc-col"><div class="home-fc-blk ac t3"></div><div class="home-fc-blk"></div></div>
+        <div class="home-fc-col"><div class="home-fc-blk"></div><div class="home-fc-blk ac t2"></div></div>
+        <div class="home-fc-col"><div class="home-fc-blk ac"></div><div class="home-fc-blk t3"></div></div>
+      </div>
+      <div class="home-fc-overlay"></div>
+      <div class="home-fc-inner">
+        ${ld ? `
+        <div class="home-fc-series">${ld.volType?`[${ld.volType}]`:''}${ld.proj}${ld.volSub?` · ${ld.volSub}`:''}</div>
+        <div class="home-fc-title">${ld.title}</div>
+        <div class="home-fc-meta">${ld.date}${relFeat?` · ${relFeat}`:''}</div>
+        <div class="home-fc-actions">
+          <button class="home-fc-read" onclick="${navFeat}">읽기 →</button>
+          <span class="home-fc-done-badge">완료</span>
+        </div>` : ''}
+        ${listBlock}
+        ${wipBlock}
       </div>
     </div>`;
-  })() : '';
-
-  // ── 작업중 심플 리스트 ──
-  const wipHtml = wipItems.length===0 ? '' : `
-    <div class="home-wip-hd">
-      <span class="home-wip-lbl">작업중</span>
-      <span class="home-wip-sub">곧 업로드 예정</span>
-    </div>
-    <div class="home-wip-list">
-      ${wipItems.map(w=>{
-        const rel=relTime(w.date);
-        return `<div class="home-wip-item">
-          <span class="home-wip-proj">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` ${w.volSub}`:''}</span>
-          <span class="home-wip-title">${w.title}</span>
-          <span class="home-r-status wip">작업중</span>
-        </div>`;
-      }).join("")}
-    </div>`;
+  })();
 
   document.getElementById("content").innerHTML=`
     <div class="home-page">
@@ -3145,25 +3192,20 @@ function renderHome(){
         </div>
       </div>
       <div class="home-body">
-        <!-- ① Status card (left) -->
-        <div class="home-about-card">
-          ${buildAuthorStatus()}
-          ${buildFocusWidget()}
-        </div>
-        <!-- ② Updates panel (center) -->
+        <!-- ① Updates panel (left, full width) -->
         <div class="home-recent-panel">
           <div class="home-recent-panel-hd">
             <span class="home-recent-panel-lbl">Updates</span>
             <span style="font-size:9px;color:var(--tx3)">클릭하면 해당 화로 이동</span>
           </div>
           ${hlHtml}
-          <div class="home-recent-body">
-            <div class="home-recent-grid">${doneCardsHtml}</div>
-          </div>
-          ${wipHtml}
         </div>
-        <!-- ③ Right column -->
+        <!-- ② Right column: Status card + Visitors -->
         <div class="home-right">
+          <div class="home-about-card">
+            ${buildAuthorStatus()}
+            ${buildFocusWidget()}
+          </div>
           <div class="vis-widget">
             <div class="vis-hd">
               <span class="vis-hd-lbl">Visitors by country</span>
