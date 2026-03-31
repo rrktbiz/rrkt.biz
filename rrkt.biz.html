@@ -1963,21 +1963,23 @@ function _tlDeepLEpisode(lang, cfg, onDone){
     }
   } catch(e){}
 
-  /* 원본 줄 배열 — 저장된 원본 우선, 없으면 DOM에서 추출 (폴백) */
-  var lines;
-  if(_epOriginalLines){
-    lines = _epOriginalLines;
-  } else {
-    var textEl = el.querySelector('.postype-text');
-    if(!textEl || !textEl.textContent.trim()){
-      console.warn('[DeepL] 본문 없음, 스킵');
-      return;
-    }
-    var originalText = textEl.innerHTML
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<[^>]+>/g, '');
-    lines = originalText.split('\n');
-  }
+  /* 번역 소스: 순KO 파일 우선 fetch → 없으면 _epOriginalLines(한본어) 폴백 */
+  var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
+
+  /* 로딩 표시 */
+  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>DeepL 번역 중…</span></div>';
+
+  var sourcePromise = fetchEpText(pureKoPath)
+    .then(function(t){ return t.split('\n'); })
+    .catch(function(){
+      /* 순KO 파일 없음 → 한본어(_epOriginalLines) 사용 */
+      if(_epOriginalLines) return _epOriginalLines;
+      var textEl = document.querySelector('#postype-body .postype-text');
+      var raw = textEl ? textEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'') : '';
+      return raw.split('\n');
+    });
+
+  sourcePromise.then(function(lines){
 
   /* 빈 줄은 DeepL에 안 보내고 인덱스만 기록 */
   var indices = [], texts = [];
@@ -1986,9 +1988,6 @@ function _tlDeepLEpisode(lang, cfg, onDone){
   });
 
   var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
-
-  /* 로딩 표시 */
-  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>DeepL 번역 중…</span></div>';
 
   /* 50개 초과 시 배치 분할 */
   var BATCH = 50;
@@ -2037,6 +2036,8 @@ function _tlDeepLEpisode(lang, cfg, onDone){
     var restoredHtml = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
     el.innerHTML = '<div class="postype-text notranslate">'+restoredHtml+'</div>';
   });
+
+  }); /* sourcePromise.then 닫기 */
 }
 
 /* ── ② Google Translate 폴백 (기존 동작 그대로) ── */
