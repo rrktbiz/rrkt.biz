@@ -277,31 +277,32 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-fc-blk.ac{background:var(--fc-ac-bg);border-color:var(--fc-ac-bd)}
 .home-fc-blk.t2{flex:2}.home-fc-blk.t3{flex:3}
 .home-fc-overlay{display:none}
-.home-fc-inner{position:relative;z-index:2;padding:20px 18px 18px;width:57%}
+.home-fc-inner{position:relative;z-index:2;padding:20px 18px 18px;width:100%}
 .home-fc-series{font-size:9px;font-weight:600;letter-spacing:1.8px;color:#fff;text-transform:uppercase;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .home-fc-title{font-size:18px;font-weight:500;color:#fff;line-height:1.3;margin-bottom:5px;letter-spacing:-0.025em}
 .home-fc-meta{font-size:10px;color:#fff;margin-bottom:12px}
 .home-fc-actions{display:flex;align-items:center;gap:7px;margin-bottom:16px}
 .home-fc-read{font-size:11px;font-weight:500;padding:5px 14px;border-radius:6px;background:#fff;color:#0a0006;border:none;cursor:pointer;font-family:var(--fn)}
 .home-fc-done-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--fc-badge-bg);color:var(--fc-badge-tx)}
-.home-fc-sep{height:1px;background:rgba(255,255,255,0.35);margin-bottom:10px}
-.home-fc-list-hd{font-size:8px;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase;margin-bottom:7px}
-.home-fc-li{display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.25);cursor:pointer;transition:opacity .12s}
+.home-fc-feat-box{background:rgba(0,0,0,0.22);border-radius:8px;padding:14px 16px;border:0.5px solid rgba(255,255,255,0.1)}
+.home-fc-sep{height:0.5px;background:rgba(255,255,255,0.2);margin:14px 0 10px}
+.home-fc-list-hd{font-size:8px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:8px}
+.home-fc-li{display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.12);cursor:pointer;transition:opacity .12s}
 .home-fc-li:hover{opacity:.7}
 .home-fc-li-last{border-bottom:none}
 .home-fc-li-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.home-fc-li-series{font-size:9px;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-fc-li-series{font-size:9px;color:rgba(255,255,255,0.7);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .home-fc-li-right{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.home-fc-li-date{font-size:9px;color:#fff}
+.home-fc-li-date{font-size:9px;color:rgba(255,255,255,0.6)}
 .home-fc-li-badge{font-size:8px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--fc-badge-bg);color:var(--fc-badge-tx)}
 .home-fc-li-title{font-size:12px;font-weight:500;color:#fff}
-.home-fc-wip-sep{height:0.5px;background:rgba(255,255,255,0.3);margin:10px 0 8px}
+.home-fc-wip-sep{height:0.5px;background:rgba(255,255,255,0.2);margin:14px 0 10px}
 .home-fc-wip-hd{display:flex;justify-content:space-between;margin-bottom:6px}
-.home-fc-wip-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase}
-.home-fc-wip-hint{font-size:8px;color:#fff}
+.home-fc-wip-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.5);text-transform:uppercase}
+.home-fc-wip-hint{font-size:8px;color:rgba(255,255,255,0.4)}
 .home-fc-wi{display:flex;align-items:center;gap:6px;padding:4px 0}
-.home-fc-wi-name{font-size:11px;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-fc-wi-ep{font-size:11px;color:#fff;flex-shrink:0}
+.home-fc-wi-name{font-size:11px;color:rgba(255,255,255,0.7);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-fc-wi-ep{font-size:11px;color:rgba(255,255,255,0.5);flex-shrink:0}
 .home-fc-wi-badge{font-size:8px;font-weight:700;padding:1px 6px;border-radius:3px;background:rgba(200,155,15,0.5);color:#fde490;flex-shrink:0}
 
 /* ── HOME WIP SIMPLE LIST ── */
@@ -1490,9 +1491,9 @@ function buildLastUpdateWidget(){
 
 function buildFocusWidget(){
   const now = new Date();
-  const thisMonStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+  const cutoff = new Date(now - 30*86400000);
   const allEntries = Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w})));
-  const thisMonEntries = allEntries.filter(e=>e.date.startsWith(thisMonStr));
+  const thisMonEntries = allEntries.filter(e=>e.date && new Date(e.date) >= cutoff);
 
   const countMap = {};
   thisMonEntries.forEach(e=>{ countMap[e.projId] = (countMap[e.projId]||0) + 1; });
@@ -1526,7 +1527,7 @@ function buildFocusWidget(){
   return `<div class="focus-widget-inner">
     <div class="focus-widget-hd">
       <span class="focus-widget-lbl">주요 집필 프로젝트</span>
-      <span class="focus-badge">이번 달 기준</span>
+      <span class="focus-badge">최근 30일</span>
     </div>
     ${topLine}${bars}
   </div>`;
@@ -3065,17 +3066,20 @@ function renderHome(){
       </div>`;
     }).join('');
 
+    const wipSlice = wipItems.slice(0, 3);
+    const wipRest  = wipItems.length - 3;
     const wipBlock = wipItems.length===0 ? '' : `
       <div class="home-fc-wip-sep"></div>
       <div class="home-fc-wip-hd">
         <span class="home-fc-wip-lbl">작업중</span>
         <span class="home-fc-wip-hint">곧 업로드 예정</span>
       </div>
-      ${wipItems.map(w=>`<div class="home-fc-wi">
+      ${wipSlice.map(w=>`<div class="home-fc-wi">
         <span class="home-fc-wi-name">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` ${w.volSub}`:''}</span>
         <span class="home-fc-wi-ep">${w.title}</span>
         <span class="home-fc-wi-badge">작업중</span>
-      </div>`).join('')}`;
+      </div>`).join('')}
+      ${wipRest>0?`<div style="font-size:9px;color:rgba(255,255,255,0.35);padding:4px 0 2px">외 ${wipRest}개 더...</div>`:''}`;
 
     const listBlock = listItems ? `
       <div class="home-fc-sep"></div>
@@ -3096,12 +3100,14 @@ function renderHome(){
       <div class="home-fc-overlay"></div>
       <div class="home-fc-inner">
         ${ld ? `
-        <div class="home-fc-series">${ld.volType?`[${ld.volType}]`:''}${ld.proj}${ld.volSub?` · ${ld.volSub}`:''}</div>
-        <div class="home-fc-title">${ld.title}</div>
-        <div class="home-fc-meta">${ld.date}${relFeat?` · ${relFeat}`:''}</div>
-        <div class="home-fc-actions">
-          <button class="home-fc-read" onclick="${navFeat}">읽기 →</button>
-          <span class="home-fc-done-badge">완료</span>
+        <div class="home-fc-feat-box">
+          <div class="home-fc-series">${ld.volType?`[${ld.volType}]`:''}${ld.proj}${ld.volSub?` · ${ld.volSub}`:''}</div>
+          <div class="home-fc-title">${ld.title}</div>
+          <div class="home-fc-meta">${ld.date}${relFeat?` · ${relFeat}`:''}</div>
+          <div class="home-fc-actions">
+            <button class="home-fc-read" onclick="${navFeat}">읽기 →</button>
+            <span class="home-fc-done-badge">완료</span>
+          </div>
         </div>` : ''}
         ${listBlock}
         ${wipBlock}
