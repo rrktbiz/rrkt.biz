@@ -1979,6 +1979,11 @@ function _tlBadge(engine){
   el.className=engine+' show';
   el.textContent=engine==='deepl'?'DeepL':'Google';
 }
+function _tlBadgeReset(){
+  var el=document.getElementById('tl-badge');if(!el)return;
+  el.className='';
+  el.textContent='';
+}
 function _tlGoogle(lang){
   _tlBadge('google');
   var sel = document.querySelector('.goog-te-combo');
@@ -2633,11 +2638,11 @@ function render(){
     const fep = document.getElementById("float-ep-nav");
     if(fep){ fep.classList.remove("visible"); fep.classList.remove("active"); }
   }
-  if(S.view==="home")          renderHome();
-  else if(S.view==="calendar") renderCalendar();
-  else if(S.view==="progress") renderProgress();
-  else if(S.view==="intro")    renderIntro();
-  else if(S.view==="episodes") renderEpList();
+  if(S.view==="home")          { _tlBadgeReset(); renderHome(); }
+  else if(S.view==="calendar") { _tlBadgeReset(); renderCalendar(); }
+  else if(S.view==="progress") { _tlBadgeReset(); renderProgress(); }
+  else if(S.view==="intro")    { _tlBadgeReset(); renderIntro(); }
+  else if(S.view==="episodes") { _tlBadgeReset(); renderEpList(); }
   else if(S.view==="content")  renderContentView();
   else if(S.view==="charlist"||S.view==="chardetail"){
     // iframe 방식 — doll_charlist.html 완전 독립 운영
