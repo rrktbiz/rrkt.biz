@@ -1782,6 +1782,7 @@ setInterval(()=>{const el=document.getElementById("home-clock");if(el)el.textCon
 /* ── 번역 캐시 (DeepL 결과 저장 → 재호출 방지) ── */
 var _tlCache = {};
 var _currentLang = 'ko';
+var _epOriginalLines = null; /* 에피소드 원본 줄 배열 — 재번역 시 사용 */
 
 function setLang(lang){
   _currentLang = lang;
@@ -1962,18 +1963,21 @@ function _tlDeepLEpisode(lang, cfg, onDone){
     }
   } catch(e){}
 
-  /* 원본 텍스트 추출 → 줄 배열로 분리 */
-  var textEl = el.querySelector('.postype-text');
-  if(!textEl || !textEl.textContent.trim()){
-    console.warn('[DeepL] 본문 없음, 스킵');
-    return;
+  /* 원본 줄 배열 — 저장된 원본 우선, 없으면 DOM에서 추출 (폴백) */
+  var lines;
+  if(_epOriginalLines){
+    lines = _epOriginalLines;
+  } else {
+    var textEl = el.querySelector('.postype-text');
+    if(!textEl || !textEl.textContent.trim()){
+      console.warn('[DeepL] 본문 없음, 스킵');
+      return;
+    }
+    var originalText = textEl.innerHTML
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]+>/g, '');
+    lines = originalText.split('\n');
   }
-  var originalText = textEl.innerHTML
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<[^>]+>/g, '');
-
-  /* 줄 단위 배열로 — 빈 줄도 빈 문자열로 보존 */
-  var lines = originalText.split('\n');
 
   /* 빈 줄은 DeepL에 안 보내고 인덱스만 기록 */
   var indices = [], texts = [];
@@ -2029,7 +2033,8 @@ function _tlDeepLEpisode(lang, cfg, onDone){
   .catch(function(err){
     clearTimeout(timer);
     console.warn('[DeepL 본문] 실패:', err.message);
-    var restoredHtml = originalText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    var src = _epOriginalLines ? _epOriginalLines.join('\n') : '';
+    var restoredHtml = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
     el.innerHTML = '<div class="postype-text notranslate">'+restoredHtml+'</div>';
   });
 }
@@ -2044,6 +2049,7 @@ function _tlBadgeReset(){
   var el=document.getElementById('tl-badge');if(!el)return;
   el.className='';
   el.textContent='';
+  _epOriginalLines = null; /* 원본 초기화 */
 }
 function _tlGoogle(lang){
   _tlBadge('google');
@@ -3694,6 +3700,7 @@ async function _loadPostypeContent(textId, acc){
   }
   try{
     const text = await fetchEpText(textId);
+    _epOriginalLines = text.split('\n'); /* ← 원본 줄 배열 저장 */
     el.innerHTML = `<div class="postype-text notranslate">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>`;
     /* 언어 선택 상태면 DeepL 버튼 표시 (자동번역 아님) */
     if(_currentLang && _currentLang !== 'ko'){
