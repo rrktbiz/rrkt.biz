@@ -3195,39 +3195,22 @@ function renderHome(){
         <div class="home-hero-inner">
           <div class="home-hero-top">
             <div class="home-hero-info">
-              <div class="home-hero-name">rrkt<span style="color:#c0392b">.biz</span></div>
               <div class="home-hero-tagline">OC IP 크리에이터 × 웹 플랫폼 개발자<br>캐릭터, 스토리, 그리고 그것을 공유할 플랫폼을 만듭니다.</div>
-              <div class="home-hero-tags">
-                <span class="home-hero-tag acc">BIZ-OC-DOLL</span>
-                <span class="home-hero-tag">웹소설</span>
-                <span class="home-hero-tag">Cloudflare Workers</span>
-                <span class="home-hero-tag">GitHub Pages</span>
-              </div>
             </div>
           </div>
           <hr class="home-hero-divider">
-          <div class="home-hero-stats">
-            <div class="home-hero-stat">
-              <div class="home-hero-stat-n">3</div>
-              <div class="home-hero-stat-l">타겟 시장</div>
+          <div style="margin-bottom:14px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">진행중 프로젝트</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              ${PROJECTS.filter(p=>(p.status||'active')==='active').map(p=>`
+                <div style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);cursor:pointer;transition:background .12s" onmouseover="this.style.background='var(--sm)'" onmouseout="this.style.background='var(--bg)'" onclick="document.getElementById('menu-toggle').click()">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1.5 4.5A1 1 0 012.5 3.5h3.17a1 1 0 01.7.29L7.5 4.91H13.5a1 1 0 011 1V12a1 1 0 01-1 1h-11a1 1 0 01-1-1V4.5z" stroke="${p.acc||'#888'}" stroke-width="1.3" fill="${p.acc||'#888'}22"/></svg>
+                  <span style="font-size:12px;font-weight:500;color:var(--tx)">${p.label}</span>
+                </div>`).join('')}
             </div>
-            <div class="home-hero-stat">
-              <div class="home-hero-stat-n">${PROJECTS.filter(p=>(p.status||'active')==='active').length}</div>
-              <div class="home-hero-stat-l">진행중 IP</div>
-            </div>
-            <div class="home-hero-stat">
-              <div class="home-hero-stat-n">${(()=>{const all=Object.entries(WORK_LOG||{}).flatMap(([,ws])=>ws);return all.filter(w=>w.status==='완료').length;})()}+</div>
-              <div class="home-hero-stat-l">완료 에피소드</div>
-            </div>
-          </div>
-          <div class="home-hero-markets">
-            <span class="home-hero-market-lbl">🌐 운영 시장</span>
-            <span class="home-hero-market" style="background:#e8f4fd;border-color:#b8dcf5;color:#1565c0">EN</span>
-            <span class="home-hero-market" style="background:#fff3e0;border-color:#ffcc80;color:#e65100">中文</span>
-            <span class="home-hero-market" style="background:#fce4ec;border-color:#f8bbd0;color:#880e4f">日本語</span>
           </div>
           <div class="home-hero-cta">
-            <button class="home-hero-btn-p" onclick="document.querySelector('.nav-proj-item')||goProgress()">작업물 보기</button>
+            <button class="home-hero-btn-p" onclick="document.getElementById('menu-toggle').click()">작업물 보기</button>
             <button class="home-hero-btn-s" onclick="goAbout()">비즈니스 문의 →</button>
           </div>
         </div>
