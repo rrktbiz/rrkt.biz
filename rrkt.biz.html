@@ -1721,7 +1721,11 @@ let _visFetched = false;
 function fetchGlobalVisits(){
   if(_visFetched) return;
   _visFetched = true;
-  fetch(VIS_WORKER_URL + '/hit', {method:'POST'})
+  // 본인 브라우저면 /hit 스킵하고 /stats만 조회
+  const isOwner = localStorage.getItem('biz_owner') === '1';
+  const endpoint = isOwner ? '/stats' : '/hit';
+  const method   = isOwner ? 'GET'  : 'POST';
+  fetch(VIS_WORKER_URL + endpoint, {method})
     .then(r=>r.json())
     .then(d=>_renderVisWidget(d))
     .catch(()=>_renderVisWidget(null));
