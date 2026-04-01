@@ -3203,15 +3203,15 @@ function renderHome(){
             <div style="font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">진행중 프로젝트</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               ${PROJECTS.filter(p=>(p.status||'active')==='active').map(p=>`
-                <div style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);cursor:pointer;transition:background .12s" onmouseover="this.style.background='var(--sm)'" onmouseout="this.style.background='var(--bg)'" onclick="document.getElementById('menu-toggle').click()">
+                <div style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);cursor:pointer;transition:background .12s" onmouseover="this.style.background='var(--sm)'" onmouseout="this.style.background='var(--bg)'"
+                  onclick="(function(){const layer=document.getElementById('nav-layer');if(!layer.classList.contains('open')){layer.classList.add('open');document.getElementById('nav-backdrop').classList.add('show');renderNavItems();}setTimeout(function(){showSubPanel('${p.id}');},60);})()">
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1.5 4.5A1 1 0 012.5 3.5h3.17a1 1 0 01.7.29L7.5 4.91H13.5a1 1 0 011 1V12a1 1 0 01-1 1h-11a1 1 0 01-1-1V4.5z" stroke="${p.acc||'#888'}" stroke-width="1.3" fill="${p.acc||'#888'}22"/></svg>
                   <span style="font-size:12px;font-weight:500;color:var(--tx)">${p.label}</span>
                 </div>`).join('')}
             </div>
           </div>
           <div class="home-hero-cta">
-            <button class="home-hero-btn-p" onclick="document.getElementById('menu-toggle').click()">작업물 보기</button>
-            <button class="home-hero-btn-s" onclick="goAbout()">비즈니스 문의 →</button>
+            <button class="home-hero-btn-s" style="flex:1" onclick="goAbout()">비즈니스 문의 →</button>
           </div>
         </div>
       </div>
