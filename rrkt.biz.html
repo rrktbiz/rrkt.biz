@@ -3180,10 +3180,10 @@ function renderHome(){
                 const lastDateStr=sortedDates[sortedDates.length-1]||null;
                 if(!lastDateStr) return '';
                 const days=Math.floor((new Date()-new Date(lastDateStr))/86400000);
-                const txt=days===0?'오늘':days===1?'어제':`${days}일 전`;
-                const unit=days<=1?'':' 전';
+                const txt=days===0?'오늘':days===1?'어제':`${days}`;
+                const unit=days<=1?'':'일 전';
                 return `<span style="font-size:9px;color:var(--tx3)">마지막 업데이트</span>
-                  <span style="font-size:15px;font-weight:300;color:var(--tx);letter-spacing:-0.03em;line-height:1">${days<=1?txt:days}<span style="font-size:10px;font-weight:400;color:var(--tx2)">${days<=1?'':unit.trim()}</span></span>
+                  <span style="font-size:15px;font-weight:300;color:var(--tx);letter-spacing:-0.03em;line-height:1">${txt}<span style="font-size:10px;font-weight:400;color:var(--tx2)">${unit?' '+unit:''}</span></span>
                   <span style="width:1px;height:11px;background:var(--bd);display:inline-block"></span>`;
               })()}
               <span style="font-size:9px;color:var(--tx3)">클릭하면 해당 화로 이동</span>
