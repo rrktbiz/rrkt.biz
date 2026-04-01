@@ -171,6 +171,30 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #nav-backdrop.show{display:block;pointer-events:all;cursor:default}
 body.nav-pinned #nav-backdrop{display:none!important}
 
+/* ── HERO ── */
+.home-hero{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:18px;box-shadow:0 2px 12px #0000000a}
+.home-hero-inner{padding:22px 24px 20px}
+.home-hero-top{display:flex;align-items:flex-start;gap:18px;margin-bottom:16px}
+.home-hero-info{flex:1;min-width:0}
+.home-hero-name{font-size:20px;font-weight:700;color:#111;letter-spacing:-.04em;margin-bottom:4px}
+.home-hero-tagline{font-size:12px;color:var(--tx2);line-height:1.65}
+.home-hero-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.home-hero-tag{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--bg);border:1px solid var(--bd);color:var(--tx3)}
+.home-hero-tag.acc{background:#fff5f5;border-color:#ffd0d0;color:#c0392b}
+.home-hero-divider{border:none;border-top:1px solid var(--bd);margin:0 0 14px}
+.home-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.home-hero-stat{background:var(--bg);padding:12px 0;text-align:center}
+.home-hero-stat-n{font-size:18px;font-weight:700;color:var(--tx);letter-spacing:-.04em;line-height:1}
+.home-hero-stat-l{font-size:9px;color:var(--tx3);margin-top:3px;font-weight:500}
+.home-hero-markets{display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.home-hero-market-lbl{font-size:10px;color:var(--tx3);margin-right:2px}
+.home-hero-market{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid}
+.home-hero-cta{display:flex;gap:8px}
+.home-hero-btn-p{flex:1;background:#111;color:#fff;border:none;border-radius:7px;padding:9px 0;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fn);transition:background .12s}
+.home-hero-btn-p:hover{background:#333}
+.home-hero-btn-s{flex:1;background:transparent;color:var(--tx);border:1px solid var(--bd);border-radius:7px;padding:9px 0;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--fn);transition:all .12s}
+.home-hero-btn-s:hover{border-color:var(--bd2);background:var(--bg)}
+
 /* ── HOME ── */
 .home-page{padding:28px 32px;max-width:950px;margin:0 auto}
 .home-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
@@ -179,7 +203,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 /* 2-column: recent-work | right-panel (status + visitors) */
 .home-body{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:start}
 /* ── About card (left) ── */
-.home-about-card{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.home-about-card{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 12px #0000000a}
 .home-about-card-hd{padding:8px 12px;border-bottom:1px solid var(--bd);font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
 .home-about-avatar-wrap{width:100%;padding:16px;display:flex;justify-content:center;background:var(--bg)}
 .home-about-popart{width:160px;height:160px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 4px 20px #0003,0 0 0 3px #111}
@@ -189,7 +213,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-about-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .home-about-tag{font-size:8px;padding:2px 6px;border-radius:10px;background:var(--bg);border:1px solid var(--bd);color:var(--tx3)}
 /* ── Recent work panel (center) ── */
-.home-recent-panel{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.home-recent-panel{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px #0000000a}
 .home-recent-panel-hd{padding:12px 16px 11px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
 .home-recent-panel-lbl{font-size:12px;font-weight:700;letter-spacing:0.5px;color:var(--tx2);text-transform:none}
 .home-recent-body{padding:8px}
@@ -312,6 +336,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 
 /* ── HOME TRANSLATION NOTICE ── */
 .home-trans-notice{
+  box-shadow:0 2px 12px #0000000a;
   background:var(--sb);border:1px solid var(--bd);border-radius:10px;
   overflow:hidden;margin-bottom:18px;
 }
@@ -343,7 +368,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 #lang-detect-banner .ldb-no:hover{background:#d0e3fc}
 
 /* ── HOME VISITOR COUNTRY WIDGET ── */
-.vis-widget{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.vis-widget{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden;box-shadow:0 2px 12px #0000000a}
 .vis-hd{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
 .vis-hd-lbl{font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--tx3)}
 .vis-hd-total{font-size:13px;font-weight:600;color:var(--tx);font-variant-numeric:tabular-nums}
@@ -2352,8 +2377,8 @@ function renderNavItems(){
 
   document.getElementById("nav-items-wrap").innerHTML=`
     <button class="nav-cal-item ${S.view==="about"&&!S.activeProj?"active":""}" onclick="goAbout()">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><circle cx="7" cy="4.2" r="2.6" fill="#555"/><path d="M1.5 14c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5z" fill="#555"/></svg>
-      About
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#555" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="#555" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Contact
     </button>
     <div class="nav-sep"></div>
     ${catHtml}
@@ -2523,8 +2548,8 @@ function renderMobPanel1(){
   // about
   html+=`<button class="mob-nav-item" onclick="goAbout();closeMobMenu()">
     <span style="display:flex;align-items:center;gap:8px">
-      <svg width="15" height="15" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><circle cx="7" cy="4.2" r="2.6" fill="#555"/><path d="M1.5 14c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5z" fill="#555"/></svg>
-      About
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#555" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="#555" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Contact
     </span>
   </button>`;
 
@@ -2814,30 +2839,42 @@ function goAbout(){S.view="about";S.activeProj=null;if(window.innerWidth<=768)cl
 
 /* ── ABOUT PAGE ── */
 function renderAbout(){
+  const cfg=(typeof BIZ_BOT_CONFIG!=='undefined')?BIZ_BOT_CONFIG:{};
   document.getElementById("content").innerHTML=`
     <div style="padding:36px 40px;max-width:680px;margin:0 auto">
-      <div style="margin-bottom:32px">
-        <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">About</div>
-        <div style="font-size:26px;font-weight:700;color:#111;letter-spacing:-.04em">rrkt.biz</div>
+      <div style="margin-bottom:28px">
+        <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">Contact</div>
+        <div style="font-size:26px;font-weight:700;color:#111;letter-spacing:-.04em">비즈니스 문의</div>
+        <div style="font-size:13px;color:var(--tx2);margin-top:8px;line-height:1.7">콜라보레이션, 라이선싱, 크리에이티브 파트너십 등 비즈니스 관련 문의를 보내주세요.</div>
       </div>
 
-      <!-- 프로젝트 통계 -->
-      <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:20px">
-        <div style="padding:14px 20px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase">Projects</div>
+      <!-- 문의 안내 카드 -->
+      <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:16px">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase">Business Inquiry</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr)">
           ${[
-            {label:"진행중", count: PROJECTS.filter(p=>(p.status||"active")==="active").length, color:"#22c55e"},
-            {label:"보류",   count: PROJECTS.filter(p=>p.status==="archive").length,             color:"#94a3b8"},
-            {label:"완료",   count: PROJECTS.filter(p=>p.status==="done").length,                color:"#64748b"},
+            {label:"콜라보", icon:"🤝"},
+            {label:"라이선싱", icon:"📄"},
+            {label:"파트너십", icon:"🌐"},
           ].map((s,i,arr)=>`
-            <div style="padding:18px 0;text-align:center;${i<arr.length-1?'border-right:1px solid var(--bd)':''}">
-              <div style="font-size:24px;font-weight:700;color:${s.color};line-height:1">${s.count}</div>
-              <div style="font-size:10px;color:var(--tx3);margin-top:4px;font-weight:500">${s.label}</div>
+            <div style="padding:20px 0;text-align:center;${i<arr.length-1?'border-right:1px solid var(--bd)':''}">
+              <div style="font-size:22px;line-height:1;margin-bottom:6px">${s.icon}</div>
+              <div style="font-size:11px;color:var(--tx2);font-weight:500">${s.label}</div>
             </div>`).join("")}
         </div>
       </div>
 
-      <!-- 연락·링크 -->
+      <!-- 타겟 시장 -->
+      <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:16px">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase">Markets</div>
+        <div style="padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap">
+          <span style="font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;background:#e8f4fd;border:1px solid #b8dcf5;color:#1565c0">🇺🇸 English (US)</span>
+          <span style="font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;background:#fff3e0;border:1px solid #ffcc80;color:#e65100">🇨🇳 中文</span>
+          <span style="font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;background:#fce4ec;border:1px solid #f8bbd0;color:#880e4f">🇯🇵 日本語</span>
+        </div>
+      </div>
+
+      <!-- 링크 -->
       <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden">
         <div style="padding:14px 20px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase">Links</div>
         <div style="padding:12px 16px;display:flex;flex-direction:column;gap:4px">
@@ -2847,9 +2884,15 @@ function renderAbout(){
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.6 1H15l-4.9 5.6L16 15h-4.5l-3.1-4.1L4.2 15H1.8l5.2-5.9L1 1h4.6l2.8 3.7L12.6 1z" fill="currentColor"/></svg>
             <span style="font-size:13px">Twitter / X</span>
           </a>
+          <a href="https://ko-fi.com" target="_blank"
+             style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;color:var(--tx);text-decoration:none;transition:background .12s"
+             onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12v7a3 3 0 01-3 3H5a3 3 0 01-3-3V4z" stroke="currentColor" stroke-width="1.3"/><path d="M14 6h.5a2 2 0 010 4H14" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span style="font-size:13px">Ko-fi</span>
+          </a>
           <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;color:var(--tx3);font-size:13px">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.3"/><circle cx="11.5" cy="4.5" r=".8" fill="currentColor"/></svg>
-            링크를 여기에 추가하세요
+            추가 링크를 여기에 넣어주세요
           </div>
         </div>
       </div>
@@ -3145,6 +3188,48 @@ function renderHome(){
         <div class="ldb-btns">
           <button class="ldb-yes" onclick="ldBannerAccept()"></button>
           <button class="ldb-no" onclick="ldBannerDismiss()">No thanks</button>
+        </div>
+      </div>
+      <!-- ── HERO ── -->
+      <div class="home-hero">
+        <div class="home-hero-inner">
+          <div class="home-hero-top">
+            <div class="home-hero-info">
+              <div class="home-hero-name">rrkt<span style="color:#c0392b">.biz</span></div>
+              <div class="home-hero-tagline">OC IP 크리에이터 × 웹 플랫폼 개발자<br>캐릭터, 스토리, 그리고 그것을 공유할 플랫폼을 만듭니다.</div>
+              <div class="home-hero-tags">
+                <span class="home-hero-tag acc">BIZ-OC-DOLL</span>
+                <span class="home-hero-tag">웹소설</span>
+                <span class="home-hero-tag">Cloudflare Workers</span>
+                <span class="home-hero-tag">GitHub Pages</span>
+              </div>
+            </div>
+          </div>
+          <hr class="home-hero-divider">
+          <div class="home-hero-stats">
+            <div class="home-hero-stat">
+              <div class="home-hero-stat-n">3</div>
+              <div class="home-hero-stat-l">타겟 시장</div>
+            </div>
+            <div class="home-hero-stat">
+              <div class="home-hero-stat-n">${PROJECTS.filter(p=>(p.status||'active')==='active').length}</div>
+              <div class="home-hero-stat-l">진행중 IP</div>
+            </div>
+            <div class="home-hero-stat">
+              <div class="home-hero-stat-n">${(()=>{const all=Object.entries(WORK_LOG||{}).flatMap(([,ws])=>ws);return all.filter(w=>w.status==='완료').length;})()}+</div>
+              <div class="home-hero-stat-l">완료 에피소드</div>
+            </div>
+          </div>
+          <div class="home-hero-markets">
+            <span class="home-hero-market-lbl">🌐 운영 시장</span>
+            <span class="home-hero-market" style="background:#e8f4fd;border-color:#b8dcf5;color:#1565c0">EN</span>
+            <span class="home-hero-market" style="background:#fff3e0;border-color:#ffcc80;color:#e65100">中文</span>
+            <span class="home-hero-market" style="background:#fce4ec;border-color:#f8bbd0;color:#880e4f">日本語</span>
+          </div>
+          <div class="home-hero-cta">
+            <button class="home-hero-btn-p" onclick="document.querySelector('.nav-proj-item')||goProgress()">작업물 보기</button>
+            <button class="home-hero-btn-s" onclick="goAbout()">비즈니스 문의 →</button>
+          </div>
         </div>
       </div>
       <div class="home-trans-notice">
