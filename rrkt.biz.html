@@ -344,17 +344,28 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-trans-notice.notice-collapsed{
   background:transparent;border-color:transparent;box-shadow:none;
 }
-.home-trans-notice-wrap{position:relative;margin-bottom:18px}
+.home-trans-notice-wrap{position:relative;margin-bottom:18px;transition:margin-bottom .24s ease}
 .home-notice-toggle{
   position:absolute;top:-11px;right:14px;z-index:2;
   width:22px;height:22px;border-radius:50%;
   background:var(--sb);border:1px solid var(--bd);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:background .12s,border-color .12s;
+  cursor:pointer;transition:background .12s,border-color .12s,top .24s ease,width .24s ease,height .24s ease,border-radius .24s ease,padding .24s ease;
   box-shadow:0 1px 4px #0000000f;
+  overflow:hidden;white-space:nowrap;
 }
 .home-notice-toggle:hover{background:var(--bg);border-color:var(--bd2)}
-.home-notice-toggle svg{transition:transform .24s;display:block}
+.home-notice-toggle svg{transition:transform .24s;display:block;flex-shrink:0}
+.home-notice-toggle.expanded{
+  width:auto;height:auto;border-radius:6px;
+  padding:6px 12px;gap:6px;font-size:12px;font-weight:500;
+  color:var(--tx);top:0;
+}
+.home-notice-toggle .notice-btn-label{
+  display:none;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--tx);
+}
+.home-notice-toggle.expanded .notice-btn-label{display:flex}
+.notice-btn-div{color:var(--bd2);font-weight:300;font-size:11px}
 .home-notice-row{display:flex;align-items:flex-start;gap:14px;padding:16px 20px}
 .home-notice-sep{height:1px;background:var(--bd);margin:0}
 .home-trans-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
@@ -3071,6 +3082,9 @@ function renderHome(){
           <!-- 번역/저작권 안내 -->
           <div class="home-trans-notice-wrap">
             <button class="home-notice-toggle" id="noticeToggle" onclick="toggleNotice()" title="접기/펼치기">
+              <span class="notice-btn-label">
+                번역 안내 <span class="notice-btn-div">/</span> 저작권 안내
+              </span>
               <svg id="noticeChevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--tx2)" stroke-width="1.8">
                 <path d="M2 6.5l3-3 3 3"/>
               </svg>
@@ -4399,14 +4413,22 @@ function rebuildWorkLog(){
     var body=document.getElementById('noticeBody');
     var chev=document.getElementById('noticeChevron');
     var card=document.getElementById('noticeCard');
+    var wrap=document.querySelector('.home-trans-notice-wrap');
+    var btn=document.getElementById('noticeToggle');
     if(!body) return;
     if(_open){
       body.style.maxHeight=body.scrollHeight+'px';
       requestAnimationFrame(function(){body.style.maxHeight='0';});
       chev.style.transform='rotate(180deg)';
-      setTimeout(function(){if(card)card.classList.add('notice-collapsed');},240);
+      setTimeout(function(){
+        if(card) card.classList.add('notice-collapsed');
+        if(wrap) wrap.style.marginBottom='-20px';
+        if(btn)  { btn.style.top='-65px'; btn.classList.add('expanded'); }
+      },240);
     } else {
-      if(card)card.classList.remove('notice-collapsed');
+      if(card) card.classList.remove('notice-collapsed');
+      if(wrap) wrap.style.marginBottom='18px';
+      if(btn)  { btn.style.top='-11px'; btn.classList.remove('expanded'); }
       body.style.maxHeight=body.scrollHeight+'px';
       setTimeout(function(){body.style.maxHeight='';},250);
       chev.style.transform='';
