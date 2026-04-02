@@ -4401,8 +4401,10 @@ function rebuildWorkLog(){
 
 /* ── 번역/저작권 안내 접기 ── */
 (function(){
-  var _open=true;
-  window.toggleNotice=function(){
+  var STORE_KEY='rrkt_notice_open';
+  var _open=localStorage.getItem(STORE_KEY)!=='false';
+
+  function applyState(animate){
     var body=document.getElementById('noticeBody');
     var chev=document.getElementById('noticeChevron');
     var card=document.getElementById('noticeCard');
@@ -4410,24 +4412,46 @@ function rebuildWorkLog(){
     var btn=document.getElementById('noticeToggle');
     if(!body) return;
     if(_open){
-      body.style.maxHeight=body.scrollHeight+'px';
-      requestAnimationFrame(function(){body.style.maxHeight='0';});
-      chev.style.transform='rotate(180deg)';
-      setTimeout(function(){
-        if(card) card.classList.add('notice-collapsed');
-        if(wrap) wrap.style.marginBottom='-20px';
-        if(btn)  { btn.style.top='-65px'; btn.classList.add('expanded'); }
-      },240);
-    } else {
       if(card) card.classList.remove('notice-collapsed');
       if(wrap) wrap.style.marginBottom='18px';
       if(btn)  { btn.style.top='-11px'; btn.classList.remove('expanded'); }
-      body.style.maxHeight=body.scrollHeight+'px';
-      setTimeout(function(){body.style.maxHeight='';},250);
+      if(animate){
+        body.style.maxHeight=body.scrollHeight+'px';
+        setTimeout(function(){body.style.maxHeight='';},250);
+      } else {
+        body.style.maxHeight='';
+      }
       chev.style.transform='';
+    } else {
+      if(animate){
+        body.style.maxHeight=body.scrollHeight+'px';
+        requestAnimationFrame(function(){body.style.maxHeight='0';});
+        chev.style.transform='rotate(180deg)';
+        setTimeout(function(){
+          if(card) card.classList.add('notice-collapsed');
+          if(wrap) wrap.style.marginBottom='-20px';
+          if(btn)  { btn.style.top='-65px'; btn.classList.add('expanded'); }
+        },240);
+      } else {
+        body.style.maxHeight='0';
+        chev.style.transform='rotate(180deg)';
+        if(card) card.classList.add('notice-collapsed');
+        if(wrap) wrap.style.marginBottom='-20px';
+        if(btn)  { btn.style.top='-65px'; btn.classList.add('expanded'); }
+      }
     }
+  }
+
+  window.toggleNotice=function(){
     _open=!_open;
+    localStorage.setItem(STORE_KEY, _open);
+    applyState(true);
   };
+
+  document.addEventListener('DOMContentLoaded',function(){
+    applyState(false);
+  });
+  setTimeout(function(){ applyState(false); }, 0);
 })();
 
 /* ── 투표 오버레이 (iframe) ── */
