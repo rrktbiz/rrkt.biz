@@ -365,6 +365,11 @@ body.nav-pinned #nav-backdrop{display:none!important}
 }
 .home-notice-toggle.expanded .notice-btn-label{display:flex}
 .notice-btn-div{color:var(--bd2);font-weight:300;font-size:11px}
+.notice-btn-icons{display:none;align-items:center;gap:5px;font-size:14px;line-height:1}
+@media(max-width:480px){
+  .home-notice-toggle.expanded .notice-btn-label{display:none}
+  .home-notice-toggle.expanded .notice-btn-icons{display:flex}
+}
 .home-notice-row{display:flex;align-items:flex-start;gap:14px;padding:16px 20px}
 .home-notice-sep{height:1px;background:var(--bd);margin:0}
 .home-trans-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
@@ -742,6 +747,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
   gap:8px;
 }
 .mob-proj-btn:hover{color:var(--tx);background:var(--bg)}
+.mob-proj-btn.active{color:var(--mob-acc,#111);font-weight:600}
 .mob-proj-btn .mob-arr{font-size:12px;color:var(--tx3);flex-shrink:0}
 /* 기존 호환 (사용 안 하지만 오류 방지) */
 .mob-proj-row{display:flex;align-items:center;width:100%;border:none;border-bottom:1px solid var(--bd)}
@@ -2442,13 +2448,6 @@ function setSubTabFn(t){S.subTab=t;if(S.hoveredProj)renderSubPanelContent(S.hove
 function renderMobPanel1(){
   const p1=document.getElementById("mob-panel-1");
   let html="";
-  // lang row
-  html+=`<div class="mob-lang-row">
-    <button class="mob-lang-btn" onclick="setLang('en')">EN</button>
-    <button class="mob-lang-btn" onclick="setLang('ja')">JA</button>
-    <button class="mob-lang-btn" onclick="setLang('zh-CN')">ZH</button>
-    <button class="mob-lang-btn" onclick="setLang('ko')">KO</button>
-  </div>`;
   // about
   html+=`<button class="mob-nav-item" onclick="goAbout();closeMobMenu()">
     <span style="display:flex;align-items:center;gap:8px">
@@ -2481,14 +2480,14 @@ function renderMobPanel1(){
     projs.forEach(p=>{
       const folderIcon = `<svg width="14" height="13" viewBox="0 0 26 22" fill="none" style="flex-shrink:0"><path d="M1 4.5C1 3.4 1.9 2.5 3 2.5H9.5L11 4.5H23C24.1 4.5 25 5.4 25 6.5V18.5C25 19.6 24.1 20.5 23 20.5H3C1.9 20.5 1 19.6 1 18.5V4.5Z" stroke="#888" stroke-width="1.4" fill="none"/></svg>`;
       if(p.subType==='youtube'){
-        html+=`<button class="mob-proj-btn mob-proj-btn-inner" style="color:${p.acc}" onclick="goIntro('${p.id}');closeMobMenu()">
+        html+=`<button class="mob-proj-btn mob-proj-btn-inner" data-pid="${p.id}" data-acc="${p.acc}" onclick="goIntro('${p.id}');closeMobMenu()">
           <span style="display:flex;align-items:center;gap:8px">
             ${folderIcon}
             ${p.label}
           </span>
         </button>`;
       } else {
-        html+=`<button class="mob-proj-btn mob-proj-btn-inner" style="color:${p.acc}" onclick="mobShowSub('${p.id}')">
+        html+=`<button class="mob-proj-btn mob-proj-btn-inner" data-pid="${p.id}" data-acc="${p.acc}" onclick="mobShowSub('${p.id}')">
           <span style="display:flex;align-items:center;gap:8px">
             ${folderIcon}
             ${p.label}
@@ -2510,6 +2509,18 @@ function renderMobPanel1(){
 
 function mobShowSub(projId){
   S.lastMobProj = projId;
+  // 1차 버튼 active 상태 업데이트
+  document.querySelectorAll('.mob-proj-btn-inner').forEach(function(btn){
+    const pid = btn.getAttribute('data-pid');
+    const acc = btn.getAttribute('data-acc');
+    if(pid===projId){
+      btn.classList.add('active');
+      btn.style.setProperty('--mob-acc', acc);
+    } else {
+      btn.classList.remove('active');
+      btn.style.removeProperty('--mob-acc');
+    }
+  });
   const p=PROJECTS.find(pr=>pr.id===projId);
   if(!p) return;
   // 2차 패널 내용 생성
@@ -3141,6 +3152,7 @@ function renderHome(){
               <span class="notice-btn-label">
                 번역 안내 <span class="notice-btn-div">/</span> 저작권 안내
               </span>
+              <span class="notice-btn-icons">🌐<span class="notice-btn-div">/</span>©</span>
               <svg id="noticeChevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--tx2)" stroke-width="1.8" style="transform:${chevRot}">
                 <path d="M2 6.5l3-3 3 3"/>
               </svg>
