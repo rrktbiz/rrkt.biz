@@ -113,6 +113,12 @@ button{font-family:var(--fn);cursor:pointer}
 .archive-modal-close:hover{background:#f0e8f8;color:#7040a0}
 .archive-modal iframe{flex:1;border:none;width:100%;height:100%;display:block}
 
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh}
+  .sheet-wrap{padding:20px 16px 32px}
+}
+
 /* ── WIDTH CONTROL ── */
 .char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
 .char-page-inner.wide{max-width:none}
@@ -419,6 +425,7 @@ window.openChar = function(id){
   renderDetail(id);
   document.getElementById('detail-view').style.display='block';
   document.body.style.overflow='hidden';
+  applyMobDetail();
 };
 window.showList = function(){
   state.activeId=null;
@@ -434,6 +441,51 @@ window.navChar = function(dir){
 
 /* ── INIT ── */
 renderList();
+
+function applyMobDetail(){
+  var mob = document.documentElement.clientWidth < 600;
+  var row     = document.querySelector('.sheet-header-row');
+  var thumb   = document.querySelector('.detail-overlay-inner .sheet-thumb');
+  var hdrText = document.querySelector('.sheet-header-text');
+  var holder  = document.querySelector('.sheet-holder-block');
+  var btns    = document.querySelector('.sheet-action-btns');
+  var overlay = document.querySelector('.detail-overlay-inner');
+  var wrap    = document.querySelector('.sheet-wrap');
+  if(!row) return;
+  if(mob){
+    // 헤더 행: wrap 허용
+    row.style.flexWrap='wrap';
+    row.style.gap='10px 14px';
+    row.style.paddingBottom='14px';
+    row.style.marginBottom='16px';
+    // 썸네일 축소
+    if(thumb){thumb.style.width='52px';thumb.style.height='52px';thumb.style.flexShrink='0';}
+    // CODE 텍스트: 나머지 공간 차지
+    if(hdrText){hdrText.style.flex='1';hdrText.style.minWidth='0';}
+    // HOLDER: 새 줄 전체 너비 (B안)
+    if(holder){holder.style.width='100%';holder.style.padding='0';holder.style.order='3';}
+    // 버튼: 새 줄 가로 나란히 (A안)
+    if(btns){btns.style.width='100%';btns.style.flexDirection='row';btns.style.marginLeft='0';btns.style.gap='8px';btns.style.order='4';}
+    // 버튼 개별
+    Array.from(document.querySelectorAll('.sheet-action-btn')).forEach(function(b){
+      b.style.flex='1';b.style.justifyContent='center';b.style.minWidth='0';
+    });
+    if(overlay){overlay.style.margin='0';overlay.style.borderRadius='0';}
+    if(wrap){wrap.style.padding='20px 16px 32px';}
+  } else {
+    row.style.flexWrap='';row.style.gap='20px';row.style.paddingBottom='20px';row.style.marginBottom='24px';
+    if(thumb){thumb.style.width='80px';thumb.style.height='80px';thumb.style.flexShrink='0';}
+    if(hdrText){hdrText.style.flex='';}
+    if(holder){holder.style.width='';holder.style.padding='12px 20px';holder.style.order='';}
+    if(btns){btns.style.width='';btns.style.flexDirection='column';btns.style.marginLeft='auto';btns.style.gap='7px';btns.style.order='';}
+    Array.from(document.querySelectorAll('.sheet-action-btn')).forEach(function(b){
+      b.style.flex='';b.style.justifyContent='';b.style.minWidth='120px';
+    });
+    if(overlay){overlay.style.margin='40px auto';overlay.style.borderRadius='14px';}
+    if(wrap){wrap.style.padding='32px 32px 48px';}
+  }
+}
+window.addEventListener('resize', applyMobDetail);
 </script>
 </body>
 </html>
