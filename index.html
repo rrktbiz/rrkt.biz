@@ -2715,107 +2715,44 @@ function renderAbout(){
         </button>
         <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">Contact</div>
         <div style="font-size:26px;font-weight:700;color:#111;letter-spacing:-.04em">비즈니스 문의</div>
-        <div style="font-size:13px;color:var(--tx2);margin-top:8px;line-height:1.7">콜라보레이션, 라이선싱, 크리에이티브 파트너십 등 비즈니스 관련 문의를 보내주세요.</div>
+        <div style="font-size:13px;color:var(--tx2);margin-top:8px;line-height:1.8">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
       </div>
 
-      <!-- ── 기업 문의 폼 ── -->
-      <div style="margin-top:0">
-
-        <div style="background:var(--sb);border:1px solid var(--bd);border-radius:14px;overflow:hidden">
-          <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
-
-            <!-- Company + Name -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)">Company</div>
-                <input id="biq-company" type="text" placeholder="회사명"
-                  style="background:var(--sm);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fn);font-size:13px;padding:9px 12px;outline:none;width:100%;transition:border-color .15s"
-                  onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--bd)'" oninput="biqReset()">
-              </div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)">Name</div>
-                <input id="biq-name" type="text" placeholder="담당자 이름"
-                  style="background:var(--sm);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fn);font-size:13px;padding:9px 12px;outline:none;width:100%;transition:border-color .15s"
-                  onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--bd)'" oninput="biqReset()">
-              </div>
-            </div>
-
-            <!-- Email -->
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)">Email</div>
-              <input id="biq-email" type="email" placeholder="business@company.com"
-                style="background:var(--sm);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fn);font-size:13px;padding:9px 12px;outline:none;width:100%;transition:border-color .15s"
-                onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--bd)'" oninput="biqReset()">
-            </div>
-
-            <!-- Category -->
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)">Category</div>
-              <select id="biq-cat" onchange="biqReset()"
-                style="background:var(--sm);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fn);font-size:13px;padding:9px 12px;outline:none;width:100%;appearance:none;cursor:pointer;background-image:url('data:image/svg+xml,%3Csvg width=\\'10\\' height=\\'6\\' viewBox=\\'0 0 10 6\\' fill=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M1 1l4 4 4-4\\' stroke=\\'%23a0a0a0\\' stroke-width=\\'1.5\\' stroke-linecap=\\'round\\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 12px center;background-color:var(--sm)">
-                <option value="" disabled selected>제안 분야 선택</option>
-                <option>광고 · 협찬</option>
-                <option>콘텐츠 협업</option>
-                <option>IP · 라이선스</option>
-                <option>미디어 · 출판</option>
-                <option>기타 비즈니스</option>
-              </select>
-            </div>
-
-            <!-- Proposal File -->
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)">Proposal File <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--bd2)">(선택)</span></div>
-              <div style="position:relative">
-                <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--tx3);pointer-events:none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-                <input id="biq-link" type="url" placeholder="Google Drive 링크"
-                  style="background:var(--sm);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fn);font-size:13px;padding:9px 12px 9px 32px;outline:none;width:100%;transition:border-color .15s"
-                  onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--bd)'" oninput="biqReset()">
-              </div>
-            </div>
-
-            <!-- Message -->
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)">Message</div>
-              <textarea id="biq-msg" placeholder="제안 내용을 간략히 적어주세요" oninput="biqReset()"
-                style="background:var(--sm);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fn);font-size:13px;padding:10px 12px;outline:none;width:100%;resize:vertical;min-height:96px;line-height:1.6;transition:border-color .15s"
-                onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--bd)'"></textarea>
-            </div>
-
-            <!-- AI Screening -->
-            <div id="biq-ai-box" style="background:var(--sm);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;transition:all .3s">
-              <div id="biq-ai-dot" style="width:7px;height:7px;border-radius:50%;background:var(--bd2);flex-shrink:0;margin-top:5px;transition:background .3s"></div>
-              <div>
-                <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:3px">AI Screening</div>
-                <div id="biq-ai-msg" style="font-size:12px;color:var(--tx3);line-height:1.5;transition:color .3s">내용을 입력하면 자동으로 분석합니다</div>
-              </div>
-            </div>
-
-            <!-- Success -->
-            <div id="biq-success" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px 20px;text-align:center">
-              <div style="font-size:18px;margin-bottom:6px">✓</div>
-              <div style="font-size:14px;font-weight:700;color:#15803d;margin-bottom:4px">문의가 전달되었습니다</div>
-              <div style="font-size:12px;color:#16a34a;line-height:1.6">검토 후 회신드리겠습니다. 감사합니다.</div>
-            </div>
-
-            <!-- Submit -->
-            <div id="biq-submit-row" style="display:flex;gap:12px;align-items:center">
-              <button onclick="biqSubmit()"
-                style="flex:1;padding:11px 0;background:var(--tx);color:#fff;border:none;border-radius:9px;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .12s"
-                onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">문의 보내기</button>
-              <div style="font-size:10px;color:var(--bd2);line-height:1.6;text-align:right;flex-shrink:0">이메일 주소는<br>공개되지 않습니다</div>
-            </div>
-
-          </div>
-        </div>
+      <!-- ── 이메일 문의 ── -->
+      <div style="margin-top:0;display:flex;align-items:center;gap:8px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+        <span style="font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',sans-serif">rrkt.biz@proton.me</span>
+        <button onclick="biqCopyEmail(this)" title="복사"
+          style="background:transparent;border:1px solid var(--bd);border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .15s;flex-shrink:0"
+          onmouseover="this.style.background='var(--bg)';this.style.color='var(--tx)';this.style.borderColor='var(--bd2)'"
+          onmouseout="if(!this.dataset.copied){this.style.background='transparent';this.style.color='var(--tx3)';this.style.borderColor='var(--bd)'}">
+          <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          <span class="biq-copy-txt">복사</span>
+        </button>
       </div>
 
     </div>`;
 }
 
 /* ── BUSINESS INQUIRY FORM ── */
-function biqSetAI(state,msg){const box=document.getElementById("biq-ai-box"),dot=document.getElementById("biq-ai-dot"),txt=document.getElementById("biq-ai-msg");if(!box)return;const ok="border:1px solid #bbf7d0;background:#f0fdf4",no="border:1px solid #fecaca;background:#fef2f2",th="border:1px solid #fde68a;background:#fffbeb",def="border:1px solid var(--bd);background:var(--sm)";const s={ok:{b:ok,d:"#22c55e",t:"#16a34a"},no:{b:no,d:"#ef4444",t:"#dc2626"},thinking:{b:th,d:"#f59e0b",t:"#d97706"}}[state]||{b:def,d:"var(--bd2)",t:"var(--tx3)"};box.style.cssText="border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;transition:all .3s;"+s.b;dot.style.background=s.d;dot.style.animation=state==="thinking"?"biqPulse 1s infinite":"";txt.style.color=s.t;txt.textContent=msg;}
-function biqReset(){biqSetAI("","내용을 입력하면 자동으로 분석합니다");}
-async function biqSubmit(){const msg=(document.getElementById("biq-msg")||{}).value||"";if(!msg.trim()){biqSetAI("no","메시지를 입력해주세요");return;}biqSetAI("thinking","AI 분석 중...");const btn=document.querySelector("#biq-submit-row button");if(btn)btn.disabled=true;await new Promise(r=>setTimeout(r,1200));const fanPat=/좋아요|응원|팬|fan|사랑|love|귀여|보고싶|ㅠ|❤|💕|오빠|언니|최애/i,bizSig=/제안|협업|협찬|광고|라이선|기획|미디어|출판|계약|ip|콘텐츠|담당|팀|기업|회사|브랜드/i,company=(document.getElementById("biq-company")||{}).value||"",pass=!fanPat.test(msg)&&(bizSig.test(msg)||!!company.trim()||msg.trim().length>40);if(!pass){biqSetAI("no","팬레터 패턴이 감지되었습니다. 본 창구는 기업 제안 전용입니다.");if(btn)btn.disabled=false;return;}biqSetAI("ok","기업 제안으로 확인되었습니다. 전송 중...");await new Promise(r=>setTimeout(r,600));const sr=document.getElementById("biq-submit-row"),ab=document.getElementById("biq-ai-box"),sc=document.getElementById("biq-success");if(sr)sr.style.display="none";if(ab)ab.style.display="none";if(sc)sc.style.display="block";}
+function biqReset(){}
+function biqCopyEmail(btn){
+  navigator.clipboard.writeText("rrkt.biz@proton.me").then(function(){
+    var svg=btn.querySelector(".biq-copy-svg"),txt=btn.querySelector(".biq-copy-txt");
+    if(svg)svg.outerHTML='<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    if(txt)txt.textContent="완료";
+    btn.style.borderColor="#bbf7d0";btn.style.background="#f0fdf4";btn.style.color="#22c55e";
+    btn.dataset.copied="1";
+    setTimeout(function(){
+      var svg2=btn.querySelector(".biq-copy-svg");
+      if(svg2)svg2.outerHTML='<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      var txt2=btn.querySelector(".biq-copy-txt");
+      if(txt2)txt2.textContent="복사";
+      btn.style.borderColor="var(--bd)";btn.style.background="transparent";btn.style.color="var(--tx3)";
+      delete btn.dataset.copied;
+    },1800);
+  });
+}
 
 function goProgress(){S.view="progress";pushHash();render();}
 
