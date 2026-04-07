@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>biz-OC-doll · 캐릭터 일람</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--sb:#fff;--bd:#e2e2e2;--bd2:#c6c6c6;
+  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
+  --fn:'Inter','Noto Sans KR',sans-serif;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
+button{font-family:var(--fn);cursor:pointer}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+
+/* ── TOP BAR ── */
+.top-bar{padding:10px 20px;background:var(--sb);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10;flex-wrap:wrap}
+.tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:4px 8px;border-radius:5px;transition:all .12s;font-family:var(--fn)}
+.tb-back:hover{background:var(--bg);color:var(--tx)}
+.tb-sep{width:1px;height:14px;background:var(--bd)}
+.tb-crumb{font-size:10px;font-weight:500;color:var(--tx3)}
+.tb-arr{font-size:10px;color:var(--bd2)}
+.tb-cur{font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+
+/* ── CHAR LIST ── */
+.char-page{padding:22px 24px}
+.char-filter-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.char-filter-tabs{display:flex;gap:0;background:var(--sb);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.char-tab{padding:8px 16px;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;border-right:1px solid var(--bd);transition:all .12s}
+.char-tab:last-child{border-right:none}
+.char-tab:hover{background:var(--bg);color:var(--tx)}
+.char-tab.active{background:var(--tx);color:#fff;font-weight:700}
+.char-search{flex:1;min-width:180px;max-width:280px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;font-family:var(--fn);background:var(--sb);color:var(--tx);outline:none;transition:border-color .12s}
+.char-search:focus{border-color:var(--bd2)}
+.char-count{font-size:11px;color:var(--tx3);white-space:nowrap}
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
+.char-card{cursor:pointer;text-align:center}
+.char-card:hover .char-thumb{box-shadow:0 2px 10px #0002;transform:translateY(-2px)}
+.char-thumb{width:100%;aspect-ratio:1;border-radius:8px;border:1px solid var(--bd);overflow:hidden;transition:transform .14s,box-shadow .14s;display:flex;align-items:center;justify-content:center;position:relative;background:#d8d8d8}
+.char-thumb-inner{width:100%;height:100%;filter:grayscale(1);opacity:.6}
+.char-thumb-face{width:100%;height:100%}
+.char-like-overlay{position:absolute;top:6px;right:6px;z-index:2;background:transparent;border:1.5px solid rgba(255,255,255,0.8);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;line-height:1;transition:all .15s;padding:0;padding-top:1.5px;color:rgba(255,255,255,0.15);-webkit-text-stroke:1.2px rgba(255,255,255,0.85)}
+.char-like-overlay:hover{border-color:#fff;transform:scale(1.1);color:rgba(255,255,255,0.2);-webkit-text-stroke:1.2px #fff}
+.char-like-overlay.liked{border-color:rgba(255,255,255,0.4);color:#f43f5e;-webkit-text-stroke:0px}
+.char-name-row{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:5px;gap:1px}
+.char-code-prefix{font-size:9px;font-weight:400;color:var(--tx3);font-family:'Inter',monospace;letter-spacing:.5px}
+.char-code{font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',monospace;letter-spacing:.5px}
+.char-sub{font-size:11px;color:var(--tx3);margin-top:1px}
+.char-empty{grid-column:1/-1;padding:48px 0;text-align:center;font-size:12px;color:var(--tx3)}
+.char-sort-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;background:var(--sb);border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn)}
+.char-sort-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.char-sort-btn.asc .sort-arrow{display:inline-block;transform:scaleY(-1)}
+.sort-arrow{display:inline-block;font-size:10px;transition:transform .15s}
+.char-tab.liked-tab{letter-spacing:.5px}
+
+/* ── SHEET ACTION BTNS ── */
+.sheet-action-btns{margin-left:auto;display:flex;flex-direction:column;gap:7px;align-self:center}
+.sheet-action-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:500;color:var(--tx2);font-family:var(--fn);cursor:pointer;transition:all .12s;min-width:120px;letter-spacing:.3px}
+.sheet-action-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.sheet-action-btn svg{width:13px;height:13px;flex-shrink:0;opacity:.45;transition:opacity .12s}
+.sheet-action-btn:hover svg{opacity:.8}
+
+/* ── CHAR DETAIL ── */
+.sheet-wrap{max-width:800px;margin:0 auto;padding:32px 32px 48px;transition:max-width .2s}
+.detail-overlay-inner.wide .sheet-wrap{max-width:1080px}
+.sheet-meta-right{font-size:10px;color:var(--tx3);letter-spacing:.5px;margin-left:auto;align-self:flex-end}
+
+/* 헤더 행: 썸네일 + 텍스트 */
+.sheet-header-row{display:flex;align-items:center;gap:20px;padding-bottom:20px;margin-bottom:24px}
+.sheet-thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;border:1px solid var(--bd);flex-shrink:0}
+.sheet-thumb-inner{width:100%;height:100%;filter:grayscale(1);opacity:.7}
+.sheet-header-text{display:flex;flex-direction:column;gap:6px}
+.sheet-info-label{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.sheet-info-code{font-size:28px;font-weight:400;color:var(--tx);font-family:'Share Tech Mono',monospace;letter-spacing:1px;line-height:1}
+.sheet-holder-block{padding:12px 20px;display:flex;flex-direction:column;gap:6px;align-self:center}
+.sheet-holder-label{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.sheet-holder-value{font-size:20px;font-weight:400;color:var(--tx);font-family:'Share Tech Mono',monospace}
+
+/* 시트 슬롯 */
+.sheet-slot{min-height:320px;border:1px dashed var(--bd2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.sheet-hint-icon{font-size:22px;opacity:.15}
+.sheet-hint-text{font-size:10px;color:var(--tx3);line-height:1.8;text-align:center}
+
+/* ── EP NAV ── */
+.ep-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 24px;border-top:1px solid var(--bd);background:var(--sb)}
+.ep-nav-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-size:12px;font-weight:500;transition:all .12s;min-width:0;max-width:260px}
+.ep-nav-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.ep-nav-btn.disabled{opacity:.3;cursor:default;pointer-events:none}
+.ep-nav-btn:first-child{justify-self:start}
+.ep-nav-btn:last-child{justify-self:end}
+.ep-nav-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── PAGE SECTIONS ── */
+#list-view{display:block}
+#detail-view{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.45);overflow-y:auto}
+.detail-overlay-inner{background:var(--bg);margin:40px auto;max-width:800px;border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.18);transition:max-width .2s}
+.detail-overlay-inner.wide{max-width:1080px}
+
+/* ── ARCHIVE OVERLAY ── */
+#archive-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}
+#archive-overlay.open{display:flex}
+.archive-modal{width:min(92vw,960px);height:min(90vh,800px);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,0.25);display:flex;flex-direction:column;position:relative}
+.archive-modal-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#faf9fb;border-bottom:1px solid #e8e2f0;flex-shrink:0}
+.archive-modal-title{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#a07ac8;text-transform:uppercase;flex:1}
+.archive-modal-code{font-size:11px;font-family:'Share Tech Mono',monospace;color:#6a4a90;background:rgba(160,122,200,0.1);padding:3px 10px;border-radius:100px;letter-spacing:.5px}
+.archive-modal-close{width:26px;height:26px;border-radius:50%;border:1px solid #e0d8ec;background:transparent;color:#a07ac8;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;font-family:var(--fn)}
+.archive-modal-close:hover{background:#f0e8f8;color:#7040a0}
+.archive-modal iframe{flex:1;border:none;width:100%;height:100%;display:block}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh}
+  .sheet-wrap{padding:20px 16px 32px}
+}
+
+/* ── WIDTH CONTROL ── */
+.char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
+.char-page-inner.wide{max-width:none}
+.width-toggle-btn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:var(--sb);border:1px solid var(--bd);border-radius:7px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn)}
+.width-toggle-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+</style>
+
+<!-- ── LIST VIEW ── -->
+<div id="list-view">
+  <div class="top-bar">
+    <span class="tb-crumb">biz-OC-doll</span>
+    <span class="tb-arr">›</span>
+    <span class="tb-cur">캐릭터 일람</span>
+    <button class="width-toggle-btn" id="width-toggle-btn" onclick="toggleWidth()" title="너비 전환">⇔ <span id="width-toggle-label">전체 너비</span></button>
+  </div>
+  <div class="char-page">
+    <div class="char-page-inner" id="char-page-inner">
+    <div class="char-filter-row">
+      <div class="char-filter-tabs" id="filter-tabs"></div>
+      <input class="char-search" type="text" placeholder="코드 검색..." id="char-search-input" oninput="setSearch(this.value)" />
+      <button class="char-sort-btn" id="sort-btn" onclick="toggleSort()" title="정렬 순서 변경">
+        <span class="sort-arrow">↓</span>
+        <span id="sort-label">최신순</span>
+      </button>
+      <span class="char-count" id="char-count-lbl"></span>
+    </div>
+    <div class="char-grid" id="char-grid"></div>
+    </div><!-- /char-page-inner -->
+  </div>
+</div>
+
+<!-- ── DETAIL VIEW ── -->
+<div id="detail-view" onclick="if(event.target===this)showList()">
+  <div class="detail-overlay-inner">
+  <div class="top-bar">
+    <button class="tb-back" onclick="showList()">← 목록</button>
+    <div class="tb-sep"></div>
+    <span class="tb-crumb">biz-OC-doll</span>
+    <span class="tb-arr">›</span>
+    <span class="tb-crumb">캐릭터 일람</span>
+    <span class="tb-arr">›</span>
+    <span class="tb-cur" id="detail-breadcrumb"></span>
+    <button class="width-toggle-btn" id="sheet-wide-btn" onclick="toggleSheetWidth()" title="시트 너비 전환" style="margin-left:auto">⇔ <span id="sheet-wide-label">넓게 보기</span></button>
+  </div>
+
+  <div class="sheet-wrap">
+    <!-- 헤더 행 -->
+    <div class="sheet-header-row">
+      <div class="sheet-thumb">
+        <div class="sheet-thumb-inner" id="detail-illust-inner"></div>
+      </div>
+      <div class="sheet-header-text">
+        <div class="sheet-info-label">Code</div>
+        <div class="sheet-info-code" id="detail-id-code"></div>
+      </div>
+      <div class="sheet-holder-block">
+        <div class="sheet-holder-label">Holder</div>
+        <div class="sheet-holder-value" id="detail-holder">—</div>
+      </div>
+
+      <div class="sheet-action-btns">
+        <button class="sheet-action-btn" onclick="openArchive()">Archive<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8"/></svg></button>
+        <button class="sheet-action-btn" onclick="alert('episode')">Episode<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8"/></svg></button>
+      </div>
+
+    </div>
+
+    <div class="sheet-slot">
+      <div class="sheet-hint-icon">◻</div>
+      <div class="sheet-hint-text">캐릭터 시트 / 일러스트<br><span style="opacity:.5">visual sheet · reference · SNS</span></div>
+    </div>
+  </div>
+
+  <div class="ep-nav">
+    <button class="ep-nav-btn" id="nav-prev" onclick="navChar(-1)"><span>←</span><span class="ep-nav-title" id="nav-prev-name"></span></button>
+    <div></div>
+    <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title" id="nav-next-name"></span><span>→</span></button>
+  </div>
+  </div><!-- /detail-overlay-inner -->
+</div>
+
+<!-- ── ARCHIVE OVERLAY ── -->
+<div id="archive-overlay" onclick="if(event.target===this)closeArchive()">
+  <div class="archive-modal">
+    <div class="archive-modal-bar">
+      <span class="archive-modal-title">Archive</span>
+      <span class="archive-modal-code" id="archive-modal-code"></span>
+      <button class="archive-modal-close" onclick="closeArchive()" title="닫기">✕</button>
+    </div>
+    <iframe id="archive-iframe" src="" title="Archive"></iframe>
+  </div>
+</div>
+
+<script>
+/* ── DATA ── */
+(function(){
+if(window.CHARACTERS) return;
+  const TYPES=["M","N","F","O"];
+  const TYPE_SEQ=["M","M","M","N","N","F","F","F","O","O"];
+
+  const GRADIENTS=[
+    "135deg,#e0e7ff,#a5b4fc",
+    "135deg,#fce7f3,#f9a8d4",
+    "135deg,#d1fae5,#6ee7b7",
+    "135deg,#fef3c7,#fcd34d",
+    "135deg,#ffe4e6,#fda4af",
+    "135deg,#e0f2fe,#7dd3fc",
+    "135deg,#f3e8ff,#c4b5fd",
+    "135deg,#ecfccb,#a3e635",
+    "135deg,#fff7ed,#fdba74",
+    "135deg,#f0fdf4,#86efac",
+  ];
+
+  window.CHARACTERS = Array.from({length:10},(_,i)=>{
+    const serial=String(i+1).padStart(3,"0");
+    const idCode=`BIZOCDOLL${serial}`;
+    return {id:i+1, type:TYPE_SEQ[i], grad:GRADIENTS[i], idCode, holder:"—"};
+  });
+})();
+
+/* ── STATE ── */
+window.charState = window.charState || { filter:"ALL", search:"", activeId:null, sortDesc:true };
+window.charState.activeId = null;
+const state = window.charState;
+
+/* ── LIKED ── */
+function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem('doll_liked')||'[]'))}catch{return new Set()} }
+function saveLiked(s){ localStorage.setItem('doll_liked', JSON.stringify([...s])) }
+window.toggleLike = function(id, e){
+  e.stopPropagation();
+  const liked = getLiked();
+  liked.has(id) ? liked.delete(id) : liked.add(id);
+  saveLiked(liked);
+  renderList();
+};
+
+/* ── RENDER LIST ── */
+function renderList(){
+  const q = state.search.trim().toLowerCase();
+  const liked = getLiked();
+
+  let filtered = window.CHARACTERS.filter(c=>
+    (state.filter==="ALL" || c.type===state.filter || (state.filter==="♥" && liked.has(c.id))) &&
+    (!q || c.idCode.toLowerCase().includes(q))
+  );
+
+  // 정렬: 최신순(내림차순) / 오래된순(오름차순)
+  filtered = [...filtered].sort((a,b) => state.sortDesc ? b.id - a.id : a.id - b.id);
+
+  // 정렬 버튼 UI 동기화
+  const sortBtn = document.getElementById('sort-btn');
+  const sortLabel = document.getElementById('sort-label');
+  if(sortBtn && sortLabel){
+    sortLabel.textContent = state.sortDesc ? "최신순" : "오래된순";
+    sortBtn.className = "char-sort-btn" + (state.sortDesc ? "" : " asc");
+  }
+
+  const counts={ALL:0,M:0,N:0,F:0,O:0};
+  window.CHARACTERS.forEach(c=>{counts[c.type]++;counts.ALL++;});
+  const likedCount = liked.size;
+
+  const tabs = [
+    {key:"ALL", label:"ALL", count:counts.ALL},
+    {key:"M",   label:"M",  count:counts.M},
+    {key:"N",   label:"N",  count:counts.N},
+    {key:"F",   label:"F",  count:counts.F},
+    {key:"O",   label:"O",  count:counts.O},
+    {key:"♥",   label:"♥",    count:likedCount},
+  ];
+
+  document.getElementById('filter-tabs').innerHTML = tabs.map(t=>`
+    <button class="char-tab ${state.filter===t.key?"active":""} ${t.key==="♥"?"liked-tab":""}" onclick="setFilter('${t.key}')">
+      ${t.label} <span style="font-size:10px;opacity:.5">${t.count}</span>
+    </button>
+  `).join("");
+
+  document.getElementById('char-count-lbl').textContent = filtered.length + "개 표시";
+
+  document.getElementById('char-grid').innerHTML = filtered.length===0
+    ? `<div class="char-empty">${state.filter==="♥" ? "좋아요한 캐릭터가 없습니다 ♥" : "검색 결과 없음"}</div>`
+    : filtered.map(c=>{
+        const isLiked = liked.has(c.id);
+        const face001 = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+          <rect width="100" height="100" fill="#c8dff0"/>
+          <rect width="100" height="100" fill="url(#bg001)"/>
+          <defs>
+            <linearGradient id="bg001" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#b8d8f0"/>
+              <stop offset="100%" stop-color="#e8c8d8"/>
+            </linearGradient>
+            <linearGradient id="hair001" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1a1a2a"/>
+              <stop offset="100%" stop-color="#2e2e42"/>
+            </linearGradient>
+            <clipPath id="clip001"><rect width="100" height="100"/></clipPath>
+          </defs>
+          <g clip-path="url(#clip001)">
+            <ellipse cx="50" cy="120" rx="36" ry="28" fill="#f5c8a0" opacity=".18"/>
+            <ellipse cx="50" cy="115" rx="30" ry="22" fill="#e8b890"/>
+            <ellipse cx="50" cy="68" rx="26" ry="32" fill="#fde8cc"/>
+            <ellipse cx="50" cy="60" rx="24" ry="28" fill="#fde8cc"/>
+            <path d="M26 52 Q28 20 50 16 Q72 20 74 52 Q72 34 50 30 Q28 34 26 52Z" fill="url(#hair001)"/>
+            <ellipse cx="50" cy="14" rx="26" ry="10" fill="#1a1a2a"/>
+            <path d="M24 52 Q22 30 36 22" stroke="#1a1a2a" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <path d="M76 52 Q78 30 64 22" stroke="#1a1a2a" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <path d="M24 46 Q26 26 38 20 Q50 15 62 20 Q74 26 76 46" fill="#1a1a2a"/>
+            <path d="M50 16 Q38 20 30 30 L26 50 Q28 24 50 18 Q72 24 74 50 L70 30 Q62 20 50 16Z" fill="#2a2a3e"/>
+            <ellipse cx="38" cy="56" rx="7" ry="7.5" fill="white"/>
+            <ellipse cx="62" cy="56" rx="7" ry="7.5" fill="white"/>
+            <circle cx="38" cy="57" r="5" fill="#c87840"/>
+            <circle cx="62" cy="57" r="5" fill="#c87840"/>
+            <circle cx="38" cy="57" r="3.5" fill="#2a1a0a"/>
+            <circle cx="62" cy="57" r="3.5" fill="#2a1a0a"/>
+            <circle cx="39.5" cy="55.5" r="1.2" fill="white" opacity=".95"/>
+            <circle cx="63.5" cy="55.5" r="1.2" fill="white" opacity=".95"/>
+            <path d="M32 51 Q38 48.5 44 51" stroke="#3a2a1a" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <path d="M56 51 Q62 48.5 68 51" stroke="#3a2a1a" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <ellipse cx="33" cy="65" rx="4" ry="2" fill="#f0a0a0" opacity=".55"/>
+            <ellipse cx="67" cy="65" rx="4" ry="2" fill="#f0a0a0" opacity=".55"/>
+            <path d="M44 70 Q50 74 56 70" stroke="#d07888" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M46 70 Q50 72 54 70" fill="#e898a8" opacity=".6"/>
+            <ellipse cx="50" cy="62" rx="2" ry="2.5" fill="#fdd8b8" stroke="#e0a888" stroke-width=".5"/>
+            <path d="M42 85 Q50 88 58 85 Q64 90 50 95 Q36 90 42 85Z" fill="#e8b890"/>
+            <path d="M40 84 Q50 92 60 84" fill="#d4a070" opacity=".4"/>
+            <rect x="35" y="92" width="30" height="8" rx="4" fill="#e8c8b0" opacity=".5"/>
+          </g>
+        </svg>`;
+        const thumbContent = c.id === 1
+          ? face001
+          : `<div class="char-thumb-inner" style="background:linear-gradient(${c.grad})"></div>`;
+        return `
+        <div class="char-card" onclick="openChar(${c.id})">
+          <div class="char-thumb">
+            ${thumbContent}
+            <button class="char-like-overlay${isLiked?" liked":""}" onclick="toggleLike(${c.id},event)" title="좋아요">
+              ♥
+            </button>
+          </div>
+          <div class="char-name-row">
+            <span class="char-code-prefix">BIZOCDOLL</span>
+            <span class="char-code">${String(c.id).padStart(3,"0")}</span>
+          </div>
+        </div>`;
+      }).join("");
+}
+
+/* ── RENDER DETAIL ── */
+function renderDetail(id){
+  const c = window.CHARACTERS.find(ch=>ch.id===id);
+  if(!c) return;
+
+  document.getElementById('detail-breadcrumb').textContent = c.idCode;
+  document.getElementById('detail-id-code').textContent = c.idCode;
+  document.getElementById('detail-illust-inner').style.background = `linear-gradient(${c.grad})`;
+  document.getElementById('detail-holder').textContent = c.holder;
+
+  // Prev / Next
+  const idx = window.CHARACTERS.findIndex(ch=>ch.id===c.id);
+  const prev = window.CHARACTERS[idx-1]||null;
+  const next = window.CHARACTERS[idx+1]||null;
+  document.getElementById('nav-prev-name').textContent = prev ? prev.idCode : "없음";
+  document.getElementById('nav-next-name').textContent = next ? next.idCode : "없음";
+  document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
+  document.getElementById('nav-next').className = "ep-nav-btn"+(next?"":" disabled");
+}
+
+
+/* ── ARCHIVE INTEGRATION ── */
+window.openArchive = function(){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  const code = c.idCode; // e.g. "BIZOCDOLL001"
+  document.getElementById('archive-modal-code').textContent = code;
+  const iframe = document.getElementById('archive-iframe');
+  iframe.src = 'archive.html?embed=1#' + code;
+  document.getElementById('archive-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+window.closeArchive = function(){
+  document.getElementById('archive-overlay').classList.remove('open');
+  // iframe src 초기화 (뒤로가기 히스토리 방지)
+  setTimeout(()=>{ document.getElementById('archive-iframe').src = ''; }, 200);
+  document.body.style.overflow = '';
+};
+
+/* ── ACTIONS ── */
+window.toggleSheetWidth = function(){
+  const overlay = document.querySelector('.detail-overlay-inner');
+  const label = document.getElementById('sheet-wide-label');
+  const isWide = overlay.classList.toggle('wide');
+  label.textContent = isWide ? '좁게 보기' : '넓게 보기';
+};
+window.toggleSort = function(){ state.sortDesc = !state.sortDesc; renderList(); };
+window.toggleWidth = function(){
+  const inner = document.getElementById('char-page-inner');
+  const label = document.getElementById('width-toggle-label');
+  const isWide = inner.classList.toggle('wide');
+  label.textContent = isWide ? '좁게 보기' : '전체 너비';
+};
+window.setFilter = function(f){ state.filter=f; renderList(); };
+window.setSearch = function(v){ state.search=v; renderList(); };
+window.openChar = function(id){
+  state.activeId=id;
+  renderDetail(id);
+  document.getElementById('detail-view').style.display='block';
+  document.body.style.overflow='hidden';
+  requestAnimationFrame(applyMobDetail);
+};
+window.showList = function(){
+  state.activeId=null;
+  document.getElementById('detail-view').style.display='none';
+  document.body.style.overflow='';
+  renderList();
+};
+window.navChar = function(dir){
+  const idx=window.CHARACTERS.findIndex(ch=>ch.id===state.activeId);
+  const target=window.CHARACTERS[idx+dir];
+  if(target) openChar(target.id);
+};
+
+/* ── INIT ── */
+renderList();
+
+function applyMobDetail(){
+  var row     = document.querySelector('.sheet-header-row');
+  var thumb   = document.querySelector('.detail-overlay-inner .sheet-thumb');
+  var hdrText = document.querySelector('.sheet-header-text');
+  var holder  = document.querySelector('.sheet-holder-block');
+  var btns    = document.querySelector('.sheet-action-btns');
+  var overlay = document.querySelector('.detail-overlay-inner');
+  var wrap    = document.querySelector('.sheet-wrap');
+  if(!row) return;
+  var w = document.documentElement.clientWidth;
+  var mob = w > 0 && w < 600;
+  if(mob){
+    row.style.flexWrap      = 'wrap';
+    row.style.gap           = '10px 14px';
+    row.style.paddingBottom = '14px';
+    row.style.marginBottom  = '16px';
+    if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }
+    if(hdrText){ hdrText.style.flex='1'; hdrText.style.minWidth='0'; }
+    if(holder){ holder.style.width='100%'; holder.style.padding='0'; holder.style.order='3'; }
+    if(btns){ btns.style.width='100%'; btns.style.flexDirection='row'; btns.style.marginLeft='0'; btns.style.gap='8px'; btns.style.order='4'; }
+    document.querySelectorAll('.sheet-action-btn').forEach(function(b){
+      b.style.flex='1'; b.style.justifyContent='center'; b.style.minWidth='0';
+    });
+    if(overlay){ overlay.style.margin='0'; overlay.style.borderRadius='0'; }
+    if(wrap){ wrap.style.padding='20px 16px 32px'; }
+  } else {
+    row.style.flexWrap=''; row.style.gap='20px'; row.style.paddingBottom='20px'; row.style.marginBottom='24px';
+    if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }
+    if(hdrText){ hdrText.style.flex=''; hdrText.style.minWidth=''; }
+    if(holder){ holder.style.width=''; holder.style.padding='12px 20px'; holder.style.order=''; }
+    if(btns){ btns.style.width=''; btns.style.flexDirection='column'; btns.style.marginLeft='auto'; btns.style.gap='7px'; btns.style.order=''; }
+    document.querySelectorAll('.sheet-action-btn').forEach(function(b){
+      b.style.flex=''; b.style.justifyContent=''; b.style.minWidth='120px';
+    });
+    if(overlay){ overlay.style.margin='40px auto'; overlay.style.borderRadius='14px'; }
+    if(wrap){ wrap.style.padding=''; }
+  }
+}
+window.addEventListener('resize', applyMobDetail);
+</script>
+</body>
+</html>

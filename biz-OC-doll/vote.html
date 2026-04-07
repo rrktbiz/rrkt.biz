@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>VOTE</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== 설정: VOTE_URL 아래 한 줄만 교체하세요 ===== */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --acc:#0ea5e9;--acc2:#0284c7;
+  --bg:#ffffff;--sb:#ffffff;--sm:#fafafa;
+  --bd:#e2e2e2;--bd2:#c6c6c6;
+  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
+  --fn:'Inter','Noto Sans KR',sans-serif;
+}
+html,body{
+  height:100%;overflow:hidden;
+  display:flex;flex-direction:column;
+  background:var(--sm);color:var(--tx);font-family:var(--fn);font-size:14px;-webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+button{font-family:var(--fn);cursor:pointer}
+input{font-family:var(--fn)}
+
+/* ── TOPBAR ── */
+#topbar{
+  height:48px;background:var(--sb);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;padding:0 16px;gap:12px;
+  flex-shrink:0;
+}
+.tb-title{font-size:15px;font-weight:700;color:#111;letter-spacing:-.04em}
+.tb-sub{font-size:11px;color:var(--tx3);margin-left:2px}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sel-badge{
+  font-size:12px;font-weight:600;padding:4px 12px;
+  background:color-mix(in srgb,var(--acc) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--acc) 30%,transparent);
+  border-radius:20px;color:var(--acc2);white-space:nowrap;
+}
+#submit-btn{
+  font-size:11px;font-weight:700;padding:5px 16px;
+  background:var(--acc);color:#fff;border:none;border-radius:6px;
+  transition:background .12s;white-space:nowrap;
+}
+#submit-btn:hover:not(:disabled){background:var(--acc2)}
+#submit-btn:disabled{background:var(--bd);color:var(--tx3);cursor:default}
+
+/* ── TABS ── */
+#tabs{
+  flex-shrink:0;
+  display:flex;border-bottom:1px solid var(--bd);background:var(--sb);padding:0 16px;
+}
+.tab{
+  padding:10px 14px 9px;background:transparent;border:none;
+  border-bottom:2px solid transparent;font-size:13px;font-weight:500;
+  color:var(--tx3);cursor:pointer;transition:color .12s;margin-bottom:-1px;
+}
+.tab:hover{color:var(--tx)}
+.tab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:700}
+
+/* ── CONTENT ── */
+#content{
+  flex:1;min-height:0;
+  overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+
+/* ── DONE BANNER ── */
+#done-banner{
+  display:none;align-items:center;gap:10px;
+  background:color-mix(in srgb,var(--acc) 8%,#fff);
+  border:1px solid color-mix(in srgb,var(--acc) 25%,transparent);
+  border-radius:8px;padding:12px 16px;margin:12px 16px 0;
+}
+#done-banner.show{display:flex}
+.done-check{
+  width:24px;height:24px;border-radius:50%;background:var(--acc);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.done-text-main{font-size:13px;font-weight:600;color:var(--acc2)}
+.done-text-sub{font-size:11px;color:var(--tx2);margin-top:2px}
+
+/* ── EXTRA VOTE BAR ── */
+#extra-vote-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;
+  background:color-mix(in srgb,#f59e0b 6%,#fff);
+  border-bottom:1px solid color-mix(in srgb,#f59e0b 20%,transparent);
+}
+.extra-vote-label{
+  font-size:11px;color:var(--tx2);line-height:1.4;
+}
+.extra-vote-label strong{
+  display:block;font-size:12px;font-weight:700;color:var(--tx);margin-bottom:1px;
+}
+#extra-vote-btn{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;
+  padding:5px 12px;
+  background:#f59e0b;color:#fff;
+  border:none;border-radius:6px;
+  cursor:pointer;white-space:nowrap;
+  transition:background .12s;flex-shrink:0;
+}
+#extra-vote-btn:hover{background:#d97706}
+#extra-vote-btn svg{flex-shrink:0}
+
+/* ── FILTER BAR ── */
+#filter-bar{
+  display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:var(--sb);border-bottom:1px solid var(--bd);flex-wrap:wrap;
+  position:sticky;top:0;z-index:10;
+}
+.filter-btn{
+  font-size:11px;font-weight:600;padding:4px 10px;
+  border:1px solid var(--bd);border-radius:20px;
+  background:transparent;color:var(--tx2);transition:all .12s;
+}
+.filter-btn:hover{border-color:var(--bd2);color:var(--tx)}
+.filter-btn.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+#search-input{
+  flex:1;min-width:100px;max-width:160px;font-size:12px;
+  padding:4px 10px;border:1px solid var(--bd);border-radius:6px;
+  outline:none;color:var(--tx);background:var(--bg);
+}
+#search-input:focus{border-color:var(--acc)}
+#result-count{font-size:11px;color:var(--tx3);margin-left:auto;white-space:nowrap}
+
+/* ── CHAR GRID ── */
+#char-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(115px,1fr));
+  gap:8px;padding:12px 16px;
+}
+.char-card{
+  background:var(--sb);border:1.5px solid var(--bd);border-radius:10px;
+  overflow:hidden;cursor:pointer;
+  transition:transform .12s,border-color .12s,background .12s;
+  user-select:none;-webkit-user-select:none;
+}
+.char-card:hover{transform:translateY(-2px);border-color:var(--bd2)}
+.char-card.voted{
+  border-color:var(--acc);
+  background:color-mix(in srgb,var(--acc) 5%,#fff);
+}
+.card-thumb{
+  aspect-ratio:3/4;position:relative;
+}
+.card-type{
+  position:absolute;top:6px;left:6px;
+  font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;
+}
+.card-check{
+  position:absolute;top:6px;right:6px;
+  width:18px;height:18px;border-radius:50%;background:var(--acc);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .14s;
+}
+.char-card.voted .card-check{opacity:1}
+.card-info{padding:7px 8px 0}
+.card-name{font-size:11px;font-weight:600;color:var(--tx);line-height:1.35;margin-bottom:2px}
+.card-name-prefix{font-weight:300;letter-spacing:.3px;opacity:.7}
+.card-name-num{font-weight:700}
+.card-vcnt{font-size:9px;color:var(--tx3)}
+.card-vcnt span{color:var(--acc);font-weight:700}
+.card-vote-btn{
+  width:100%;padding:5px 0;margin-top:5px;
+  border:none;border-top:1px solid var(--bd);
+  background:transparent;font-size:10px;font-weight:600;color:var(--tx2);
+  transition:all .12s;
+}
+.char-card.voted .card-vote-btn{
+  color:var(--acc);
+  background:color-mix(in srgb,var(--acc) 6%,transparent);
+  border-top-color:color-mix(in srgb,var(--acc) 20%,transparent);
+}
+
+/* ── RANK PAGE ── */
+#rank-page{display:none;padding:12px 16px}
+.rank-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rank-hd-title{font-size:13px;font-weight:700;color:var(--tx)}
+#rank-total{font-size:11px;color:var(--tx3)}
+.rank-reload{
+  font-size:10px;font-weight:600;padding:3px 10px;
+  border:1px solid var(--bd);border-radius:5px;background:transparent;color:var(--tx2);
+  transition:all .12s;
+}
+.rank-reload:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
+#rank-list{display:flex;flex-direction:column;gap:5px}
+.rank-item{
+  background:var(--sb);border:1px solid var(--bd);border-radius:8px;
+  display:flex;align-items:center;gap:10px;padding:9px 12px;
+}
+.rank-num{font-size:16px;font-weight:700;min-width:26px;text-align:center;color:var(--tx3)}
+.rank-num.n1{color:#f59e0b}.rank-num.n2{color:#94a3b8}.rank-num.n3{color:#b45309}
+.rank-thumb{width:34px;height:46px;border-radius:5px;flex-shrink:0}
+.rank-info{flex:1;min-width:0}
+.rank-name{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-row2{display:flex;align-items:center;gap:6px}
+.rank-type{font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff;flex-shrink:0}
+.rank-bar-wrap{flex:1;background:var(--bd);border-radius:3px;height:4px;overflow:hidden}
+.rank-bar{height:4px;border-radius:3px;background:var(--acc);transition:width .4s ease}
+.rank-votes{font-size:13px;font-weight:700;color:var(--tx);flex-shrink:0}
+.rank-empty{padding:48px;text-align:center;font-size:12px;color:var(--tx3);line-height:1.8}
+
+/* ── LOADING ── */
+#loading-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(255,255,255,.8);backdrop-filter:blur(2px);
+  align-items:center;justify-content:center;flex-direction:column;gap:12px;
+}
+#loading-overlay.show{display:flex}
+.spinner{
+  width:28px;height:28px;border:3px solid var(--bd);
+  border-top-color:var(--acc);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:12px;color:var(--tx2)}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  #char-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;padding:10px 12px}
+  #filter-bar{padding:8px 12px}
+  .tb-sub{display:none}
+}
+
+/* ── SELECTION TRAY ── */
+#sel-tray{
+  display:none;flex-shrink:0;
+  background:var(--sb);border-bottom:1px solid var(--bd);
+  padding:8px 16px;gap:8px;flex-direction:column;
+}
+#sel-tray.show{display:flex}
+.tray-label{font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--tx3);text-transform:uppercase}
+#tray-list{
+  display:flex;flex-wrap:wrap;gap:6px;
+  align-items:flex-start;
+}
+.tray-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:var(--sm);border:1px solid var(--bd);border-radius:6px;
+  padding:4px 5px 5px;cursor:pointer;transition:all .12s;position:relative;
+  min-width:38px;
+}
+.tray-item:hover{border-color:#f87171;background:#fff5f5}
+.tray-thumb{
+  width:52px;height:69px;border-radius:4px;flex-shrink:0;
+}
+.tray-code{display:flex;flex-direction:column;align-items:center;gap:0px}
+.tray-code .tray-code-prefix{font-size:8px;font-weight:300;opacity:.55;letter-spacing:.3px;line-height:1.2;color:var(--tx2)}
+.tray-code .tray-code-num{font-size:11px;font-weight:700;color:#000;line-height:1}
+.tray-x{
+  position:absolute;top:-5px;right:-5px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--bd2);color:#fff;font-size:8px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+  transition:background .12s;
+}
+.tray-item:hover .tray-x{background:#f87171}
+.tray-empty{font-size:11px;color:var(--tx3);font-style:italic}
+.tray-item-done{
+  cursor:default;
+  border-color:color-mix(in srgb,var(--acc) 35%,transparent);
+  background:color-mix(in srgb,var(--acc) 6%,var(--sm));
+}
+.tray-item-done:hover{border-color:color-mix(in srgb,var(--acc) 35%,transparent);background:color-mix(in srgb,var(--acc) 6%,var(--sm))}
+.tray-done-mark{
+  position:absolute;top:-5px;right:-5px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--acc);color:#fff;font-size:8px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+
+/* ── DONE BANNER with retake ── */
+.done-retake{
+  margin-left:auto;font-size:11px;font-weight:600;
+  padding:4px 12px;border:1px solid color-mix(in srgb,var(--acc) 35%,transparent);
+  border-radius:6px;background:transparent;color:var(--acc2);
+  cursor:pointer;transition:all .12s;white-space:nowrap;
+}
+.done-retake:hover{background:color-mix(in srgb,var(--acc) 12%,transparent)}
+</style>
+</head>
+<body>
+
+<!-- 로딩 오버레이 -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="loading-txt">투표 제출 중...</div>
+</div>
+
+<!-- 탑바 -->
+<div id="topbar">
+  <div>
+    <span class="tb-title">인기 투표</span>
+    <span class="tb-sub">biz-OC-doll</span>
+  </div>
+  <div class="tb-right">
+    <div class="sel-badge" id="sel-badge">0명 선택</div>
+    <button id="submit-btn" disabled onclick="submitVote()">투표하기</button>
+  </div>
+</div>
+
+<!-- 탭 -->
+<div id="tabs">
+  <button class="tab active" id="tab-vote" onclick="switchTab('vote')">투표하기</button>
+  <button class="tab" id="tab-rank" onclick="switchTab('rank')">순위 보기</button>
+</div>
+
+<!-- 선택 트레이 (고정) -->
+<div id="sel-tray">
+  <div class="tray-label">선택 중 · <span id="tray-count">0</span>명</div>
+  <div id="tray-list"><span class="tray-empty">캐릭터를 선택해주세요</span></div>
+</div>
+
+<!-- 콘텐츠 -->
+<div id="content">
+
+  <!-- 투표 완료 배너 -->
+  <div id="done-banner">
+    <div class="done-check">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg>
+    </div>
+    <div>
+      <div class="done-text-main">투표가 완료됐어요!</div>
+      <div class="done-text-sub">순위 탭에서 현재 순위를 확인해보세요.</div>
+    </div>
+    <button class="done-retake" onclick="retakeVote()">재투표</button>
+  </div>
+
+  <!-- 투표 탭 -->
+  <div id="vote-page">
+
+    <!-- 추가투표 배너 -->
+    <div id="extra-vote-bar">
+      <div class="extra-vote-label">
+        <strong>추가 투표하기 ☕</strong>
+        후원으로 추가 투표권을 얻을 수 있어요
+      </div>
+      <button id="extra-vote-btn" onclick="window.open('https://ko-fi.com/rrktbiz','_blank')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+        </svg>
+        추가 투표
+      </button>
+    </div>
+
+    <div id="filter-bar">
+      <input type="text" id="search-input" placeholder="코드 검색... (예: 001)" oninput="onSearch(this.value)">
+      <span id="result-count">200명</span>
+    </div>
+    <div id="char-grid"></div>
+  </div>
+
+  <!-- 순위 탭 -->
+  <div id="rank-page">
+    <div class="rank-hd">
+      <span class="rank-hd-title">실시간 투표 순위</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="rank-total">총 0표</span>
+        <button class="rank-reload" onclick="reloadRank()">새로고침</button>
+      </div>
+    </div>
+    <div id="rank-list"></div>
+  </div>
+
+</div>
+
+<script src="config.js"></script>
+<script>
+// API 주소는 config.js 에서 불러옵니다
+
+// 캐릭터 데이터
+var GRADS_GRAY = [
+  '160deg,#f0f0f0,#d0d0d0',
+  '160deg,#ebebeb,#c8c8c8',
+  '160deg,#e8e8e8,#c4c4c4',
+  '160deg,#f2f2f2,#d4d4d4',
+  '160deg,#ededed,#cccccc',
+  '160deg,#e6e6e6,#bebebe',
+  '160deg,#f5f5f5,#dedede',
+  '160deg,#eaeaea,#c6c6c6',
+];
+
+// 캐릭터 목록 생성
+var CHARS = [];
+for (var i = 0; i < 200; i++) {
+  CHARS.push({
+    id:   i + 1,
+    code: 'BIZOCDOLL' + String(i + 1).padStart(3, '0'),
+    grad: GRADS_GRAY[i % GRADS_GRAY.length],
+  });
+}
+
+// 상태
+var voteData   = {};
+var selected   = JSON.parse(localStorage.getItem('ocidol_sel') || '[]');
+var hasDone    = localStorage.getItem('ocidol_done') === '1';
+var filterType = 'ALL';
+var searchQ    = '';
+var curTab     = 'vote';
+
+// ---- 초기화 ----
+if (hasDone) {
+  document.getElementById('done-banner').classList.add('show');
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = '투표 완료';
+}
+updateSelBadge();
+renderGrid();
+renderTray();
+loadVoteData();
+
+// ---- 득표 데이터 로드 ----
+function loadVoteData(cb) {
+  fetch(API + '?action=getVotes')
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      if (json.ok) {
+        voteData = json.votes;
+        updateGridCounts();
+        if (cb) cb();
+      }
+    })
+    .catch(function(){});
+}
+
+// ---- 투표 제출 (GET 방식 - CORS 문제 우회) ----
+function submitVote() {
+  if (hasDone || selected.length === 0) return;
+  document.getElementById('loading-overlay').classList.add('show');
+
+  var url = API + '?action=vote&ids=' + encodeURIComponent(JSON.stringify(selected));
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      document.getElementById('loading-overlay').classList.remove('show');
+      if (json.ok) {
+        hasDone = true;
+        localStorage.setItem('ocidol_done', '1');
+        localStorage.setItem('ocidol_sel',  JSON.stringify(selected));
+        selected.forEach(function(id){
+          voteData[id] = (voteData[id] || 0) + 1;
+        });
+        document.getElementById('done-banner').classList.add('show');
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('submit-btn').textContent = '투표 완료';
+        updateGridCounts();
+      } else {
+        alert('오류가 발생했어요: ' + (json.error || '알 수 없는 오류'));
+      }
+    })
+    .catch(function(){
+      document.getElementById('loading-overlay').classList.remove('show');
+      alert('네트워크 오류가 발생했어요. 다시 시도해주세요.');
+    });
+}
+
+// ---- 선택 토글 ----
+function toggleChar(id) {
+  if (hasDone) return;
+  var idx = selected.indexOf(id);
+  if (idx > -1) selected.splice(idx, 1);
+  else           selected.push(id);
+  var card = document.querySelector('.char-card[data-id="' + id + '"]');
+  if (card) {
+    var on = selected.indexOf(id) > -1;
+    card.classList.toggle('voted', on);
+    card.querySelector('.card-vote-btn').textContent = on ? '선택 취소' : '투표';
+  }
+  updateSelBadge();
+}
+
+function updateSelBadge() {
+  var n = selected.length;
+  document.getElementById('sel-badge').textContent = n + '명 선택';
+  var btn = document.getElementById('submit-btn');
+  if (!hasDone) btn.disabled = n === 0;
+  renderTray();
+}
+
+// ---- 선택 트레이 렌더 ----
+function renderTray() {
+  var tray = document.getElementById('sel-tray');
+  var list = document.getElementById('tray-list');
+  var countEl = document.getElementById('tray-count');
+  var labelEl = document.querySelector('#sel-tray .tray-label');
+  if (selected.length === 0) {
+    tray.classList.remove('show');
+    return;
+  }
+  tray.classList.add('show');
+  if (countEl) countEl.textContent = selected.length;
+  if (labelEl) {
+    if (hasDone) {
+      labelEl.innerHTML = '✓ 내가 투표한 <span id="tray-count">' + selected.length + '</span>명';
+      labelEl.style.color = 'var(--acc2)';
+    } else {
+      labelEl.innerHTML = '선택 중 · <span id="tray-count">' + selected.length + '</span>명';
+      labelEl.style.color = '';
+    }
+  }
+  list.innerHTML = selected.map(function(id) {
+    var c = CHARS.find(function(x){ return x.id === id; });
+    if (!c) return '';
+    var num = String(c.id).padStart(3,'0');
+    if (hasDone) {
+      // 투표 완료 후 읽기 전용 (X 버튼 없음, 클릭 불가)
+      return '<div class="tray-item tray-item-done" title="내가 투표한 캐릭터">' +
+        '<div class="tray-done-mark">✓</div>' +
+        '<div class="tray-thumb" style="background:linear-gradient(' + c.grad + ')"></div>' +
+        '<div class="tray-code"><span class="tray-code-prefix">BIZOCDOLL</span><span class="tray-code-num">' + num + '</span></div>' +
+      '</div>';
+    }
+    return '<div class="tray-item" onclick="toggleChar(' + id + ')" title="클릭하면 선택 취소">' +
+      '<div class="tray-x">✕</div>' +
+      '<div class="tray-thumb" style="background:linear-gradient(' + c.grad + ')"></div>' +
+      '<div class="tray-code"><span class="tray-code-prefix">BIZOCDOLL</span><span class="tray-code-num">' + num + '</span></div>' +
+    '</div>';
+  }).join('');
+}
+
+// ---- 재투표 ----
+function retakeVote() {
+  if (!confirm('투표를 취소하고 다시 선택하시겠어요?')) return;
+  var prevSelected = JSON.parse(localStorage.getItem('ocidol_sel') || '[]');
+  if (prevSelected.length === 0) return;
+
+  document.getElementById('loading-overlay').classList.add('show');
+
+  var url = API + '?action=cancelVote&ids=' + encodeURIComponent(JSON.stringify(prevSelected));
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      document.getElementById('loading-overlay').classList.remove('show');
+      if (json.ok) {
+        prevSelected.forEach(function(id){
+          voteData[id] = Math.max(0, (voteData[id] || 0) - 1);
+        });
+        hasDone = false;
+        selected = [];
+        localStorage.removeItem('ocidol_done');
+        localStorage.removeItem('ocidol_sel');
+        document.getElementById('done-banner').classList.remove('show');
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('submit-btn').textContent = '투표하기';
+        updateSelBadge();
+        renderGrid();
+        updateGridCounts();
+      } else {
+        alert('취소 중 오류가 발생했어요: ' + (json.error || '알 수 없는 오류'));
+      }
+    })
+    .catch(function(){
+      document.getElementById('loading-overlay').classList.remove('show');
+      alert('네트워크 오류가 발생했어요. 다시 시도해주세요.');
+    });
+}
+
+// ---- 그리드 렌더 ----
+function renderGrid() {
+  var q = searchQ.toLowerCase();
+  var filtered = CHARS.filter(function(c){
+    return !q || c.code.toLowerCase().includes(q);
+  });
+  document.getElementById('result-count').textContent = filtered.length + '명';
+  document.getElementById('char-grid').innerHTML = filtered.map(function(c){
+    var voted = selected.indexOf(c.id) > -1;
+    var cnt   = voteData[c.id] || 0;
+    return '<div class="char-card' + (voted ? ' voted' : '') + '" data-id="' + c.id + '" onclick="toggleChar(' + c.id + ')">' +
+      '<div class="card-thumb" style="background:linear-gradient(' + c.grad + ')">' +
+        '<div class="card-check">' +
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card-info">' +
+        '<div class="card-name"><span class="card-name-prefix">BIZOCDOLL</span><span class="card-name-num">' + String(c.id).padStart(3,'0') + '</span></div>' +
+        '<div class="card-vcnt">득표 <span id="vcnt-' + c.id + '">' + cnt + '</span></div>' +
+      '</div>' +
+      '<button class="card-vote-btn" onclick="event.stopPropagation();toggleChar(' + c.id + ')">' + (voted ? '선택 취소' : '투표') + '</button>' +
+    '</div>';
+  }).join('');
+}
+
+function updateGridCounts() {
+  CHARS.forEach(function(c){
+    var el = document.getElementById('vcnt-' + c.id);
+    if (el) el.textContent = voteData[c.id] || 0;
+  });
+  if (curTab === 'rank') renderRank();
+}
+
+// ---- 순위 렌더 ----
+function renderRank() {
+  var ranked = CHARS
+    .map(function(c){ return {c:c, cnt: voteData[c.id] || 0}; })
+    .filter(function(x){ return x.cnt > 0; })
+    .sort(function(a,b){ return b.cnt - a.cnt; });
+
+  var total = Object.values(voteData).reduce(function(s,v){ return s + v; }, 0);
+  document.getElementById('rank-total').textContent = '총 ' + total + '표';
+
+  if (ranked.length === 0) {
+    document.getElementById('rank-list').innerHTML =
+      '<div class="rank-empty">아직 투표 기록이 없어요.<br>투표 탭에서 먼저 투표해보세요!</div>';
+    return;
+  }
+
+  var maxCnt = ranked[0].cnt || 1;
+  var rankClrs = ['n1','n2','n3'];
+
+  document.getElementById('rank-list').innerHTML = ranked.map(function(x, i){
+    var c   = x.c;
+    var pct = Math.round((x.cnt / maxCnt) * 100);
+    var nCls = i < 3 ? rankClrs[i] : '';
+    return '<div class="rank-item">' +
+      '<div class="rank-num ' + nCls + '">' + (i+1) + '</div>' +
+      '<div class="rank-thumb" style="background:linear-gradient(' + c.grad + ')"></div>' +
+      '<div class="rank-info">' +
+        '<div class="rank-name"><span style="font-weight:300;opacity:.7;letter-spacing:.3px">BIZOCDOLL</span><span style="font-weight:700">' + String(c.id).padStart(3,'0') + '</span></div>' +
+        '<div class="rank-row2">' +
+          '<div class="rank-bar-wrap"><div class="rank-bar" style="width:' + pct + '%"></div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="rank-votes">' + x.cnt + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function reloadRank() {
+  loadVoteData(renderRank);
+}
+
+function onSearch(v) {
+  searchQ = v;
+  renderGrid();
+}
+
+// ---- 탭 전환 ----
+function switchTab(tab) {
+  curTab = tab;
+  document.getElementById('vote-page').style.display  = tab === 'vote' ? 'block' : 'none';
+  document.getElementById('rank-page').style.display  = tab === 'rank' ? 'block' : 'none';
+  document.getElementById('tab-vote').classList.toggle('active', tab === 'vote');
+  document.getElementById('tab-rank').classList.toggle('active', tab === 'rank');
+  if (tab === 'rank') { loadVoteData(renderRank); }
+}
+</script>
+</body>
+</html>
