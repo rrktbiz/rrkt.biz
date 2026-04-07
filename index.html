@@ -1129,14 +1129,14 @@ body{top:0!important}
 <!-- 캐릭터 일람 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
 <iframe
   id="char-frame"
-  src="doll_charlist.html"
+  src="biz-OC-doll/doll_charlist.html"
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#f5f5f5;"
 ></iframe>
 
 <!-- 인트로 전용 iframe (doll_intro.html 완전 독립 운영) -->
 <iframe
   id="doll-intro-frame"
-  src="doll_intro.html"
+  src="biz-OC-doll/doll_intro.html"
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
@@ -1154,14 +1154,14 @@ body{top:0!important}
 <!-- 아카이브 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
 <iframe
   id="archive-frame"
-  src="archive.html"
+  src="biz-OC-doll/archive.html"
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
 <!-- 이벤트 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
 <iframe
   id="event-frame"
-  src="event.html"
+  src="biz-OC-doll/event.html"
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
@@ -4470,7 +4470,7 @@ window.openVoteOverlay = function(){
   var iframe  = document.getElementById('vote-iframe');
   // getAttribute로 확인 — .src는 브라우저가 절대경로로 바꿔서 비교가 꼬임
   if(!iframe.getAttribute('src')){
-    iframe.setAttribute('src', 'vote.html');
+    iframe.setAttribute('src', 'biz-OC-doll/vote.html');
   }
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
