@@ -2721,7 +2721,7 @@ function render(){
     }
     // 플로팅 네비 완전히 숨기기 (display:none)
     const fep = document.getElementById("float-ep-nav");
-    if(fep){ fep.classList.remove("visible"); fep.classList.remove("active"); }
+    if(fep){ fep.classList.remove("visible"); fep.classList.remove("active"); fep._storyMode=false; }
   }
   if(S.view==="home")          { _tlBadgeReset(); renderHome(); }
   else if(S.view==="calendar") { _tlBadgeReset(); renderCalendar(); }
@@ -2948,6 +2948,20 @@ async function renderStoryContent(){
 
   ct.scrollTop = 0;
 
+  // float-ep-nav 설정
+  const fep = document.getElementById('float-ep-nav');
+  if(fep){
+    fep._storyMode = true;
+    fep._prevStoryIdx = prev ? S.activeStoryEp-1 : null;
+    fep._nextStoryIdx = next ? S.activeStoryEp+1 : null;
+    const prevBtn2 = document.getElementById('fep-prev');
+    const nextBtn2 = document.getElementById('fep-next');
+    if(prevBtn2) prevBtn2.classList.toggle('disabled', !prev);
+    if(nextBtn2) nextBtn2.classList.toggle('disabled', !next);
+    fep.classList.add('active');
+    fep.classList.remove('visible');
+  }
+
   // 스크롤 숨김 (기존 웹소설과 동일 로직)
   (function(){
     if(ct._mobScrollHandler){
@@ -2960,14 +2974,17 @@ async function renderStoryContent(){
     let lastY=0, ticking=false, hidden=false;
     function applyHide(doHide){
       if(hidden===doHide) return; hidden=doHide;
+      const fep2 = document.getElementById('float-ep-nav');
       if(doHide){
         topbarEl.style.transform='translateY(-48px)';
         if(ctb) ctb.style.transform=`translateY(-${ctbH+48}px)`;
         ct.style.marginTop='0'; ct.style.height='100dvh';
+        if(fep2) fep2.classList.add('visible');
       } else {
         topbarEl.style.transform='';
         if(ctb) ctb.style.transform='';
         ct.style.marginTop='48px'; ct.style.height='calc(100dvh - 48px)';
+        if(fep2) fep2.classList.remove('visible');
       }
     }
     function onScroll(){
@@ -4350,8 +4367,16 @@ function hardReset(){
 }
 function floatEpNav(dir){
   const fep = document.getElementById("float-ep-nav");
-  if(dir==="list"){ backToEps(); return; }
   if(!fep) return;
+  // 스토리 모드
+  if(fep._storyMode){
+    if(dir==="list"){ goStory(); return; }
+    const idx = dir==="prev" ? fep._prevStoryIdx : fep._nextStoryIdx;
+    if(idx != null) clickStoryEp(idx);
+    return;
+  }
+  // 웹소설 모드
+  if(dir==="list"){ backToEps(); return; }
   const id = dir==="prev" ? fep._prevEpId : fep._nextEpId;
   if(id != null) clickEp(id);
 }
