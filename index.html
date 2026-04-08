@@ -2922,10 +2922,11 @@ async function renderStoryContent(){
         <div class="doll-cast-num">${c.charNum||'?'}</div>
       </div>`).join('')}</div></div>` : '';
 
-  // DeepL bar (CONFIG.DEEPL 설정된 경우만)
+  // DeepL bar (CONFIG.DEEPL 설정된 경우만, 초기 표시는 _currentLang 기준)
   const _dc = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : null;
+  const _dollBarVisible = _dc && _dc.enabled && _dc.proxyUrl && _currentLang && _currentLang !== 'ko';
   const tlBarHtml = (_dc && _dc.enabled && _dc.proxyUrl)
-    ? `<div id="doll-tl-bar" style="display:flex;align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="deepl-translate-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="deepl-retranslate-btn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
+    ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="deepl-translate-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="deepl-retranslate-btn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
     : '';
 
   // Nav buttons
@@ -2955,6 +2956,7 @@ async function renderStoryContent(){
     </div>`;
 
   window._dollEpIdx = S.activeStoryEp;
+  window._dollOrigBlocks = e.blocks || [];
   ct.scrollTop = 0;
 
   // float-ep-nav 설정
@@ -3137,6 +3139,30 @@ window.onDollDeepLRe = async function(){
   var ep=data.episodes[window._dollEpIdx];
   if(ep) _doDollTranslate(url,cacheKey,ep.blocks||[],dlLang);
 };
+
+/* ── 언어 전환 시 doll DeepL 상태 초기화 ── */
+(function(){
+  var _orig = window.setLang || (typeof setLang === 'function' ? setLang : null);
+  var _wrap = function(lang){
+    /* 번역 바 표시/숨김 */
+    var bar = document.getElementById('doll-tl-bar');
+    if(bar) bar.style.display = (lang && lang !== 'ko') ? 'flex' : 'none';
+    /* 번역 상태 초기화 */
+    var wrap = document.getElementById('doll-blocks-wrap');
+    if(wrap && window._dollOrigBlocks){
+      wrap.innerHTML = bbDoll(window._dollOrigBlocks);
+      wrap.classList.remove('notranslate');
+    }
+    var btn = document.getElementById('deepl-translate-btn');
+    var rbtn = document.getElementById('deepl-retranslate-btn');
+    if(btn){ btn.classList.remove('done'); btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; btn.style.opacity=''; btn.style.pointerEvents=''; }
+    if(rbtn) rbtn.style.display='none';
+    /* 원래 setLang 실행 */
+    if(_orig) _orig(lang);
+  };
+  /* setLang은 function 선언이므로 변수 재할당으로 오버라이드 */
+  window.setLang = _wrap;
+})();
 
 /* ── ABOUT PAGE ── */
 function goAbout(){S.view="about";S.activeProj=null;if(window.innerWidth<=768)closeMobMenu();pushHash();render();}
