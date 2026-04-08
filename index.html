@@ -2942,11 +2942,13 @@ async function renderStoryContent(){
         <div><span class="doll-ep-eyebrow">${e.eyebrow||''}</span>${e.num?`<span class="doll-ep-num"> · ${e.num}</span>`:''}</div>
         <div class="doll-ep-title">${e.title||''}</div>
       </div>
+      <div id="doll-tl-bar" style="display:flex;align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="deepl-translate-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="deepl-retranslate-btn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>
       ${castHtml}
-      ${bbDoll(e.blocks||[])}
+      <div id="doll-blocks-wrap">${bbDoll(e.blocks||[])}</div>
       <div class="reader-nav">${prevBtn}<button class="reader-nav-btn ep-list-btn" onclick="goStory()">목록</button>${nextBtn}</div>
     </div>`;
 
+  window._dollEpIdx = S.activeStoryEp;
   ct.scrollTop = 0;
 
   // float-ep-nav 설정
@@ -2982,12 +2984,12 @@ async function renderStoryContent(){
         topbarEl.style.transform='translateY(-48px)';
         if(ctb) ctb.style.transform=`translateY(-${ctbH+48}px)`;
         ct.style.marginTop='0'; ct.style.height='100dvh';
-        if(fep2) fep2.classList.add('visible');
+        if(fep2) fep2.classList.remove('visible');
       } else {
         topbarEl.style.transform='';
         if(ctb) ctb.style.transform='';
         ct.style.marginTop='48px'; ct.style.height='calc(100dvh - 48px)';
-        if(fep2) fep2.classList.remove('visible');
+        if(fep2) fep2.classList.add('visible');
       }
     }
     function onScroll(){
@@ -3039,9 +3041,93 @@ function bbDoll(blocks){
   }).join('');
 }
 
+/* ── DeepL 번역 — biz-OC-doll 스토리 ── */
+window._dollEpIdx = -1;
 
+window.onDollDeepL = async function(){
+  var btn = document.getElementById('deepl-translate-btn');
+  if(!btn || btn.classList.contains('done')) return;
+  var cfg = (window.SITE_CFG && window.SITE_CFG.deepl) || {};
+  var url = cfg.proxyUrl || localStorage.getItem('biz_deepl_url') || '';
+  if(!url){
+    url = prompt('DeepL 프록시 URL을 입력하세요:');
+    if(!url) return;
+    localStorage.setItem('biz_deepl_url', url);
+  }
+  var cacheKey = 'dl_doll_' + window._dollEpIdx + '_EN';
+  try {
+    var cached = localStorage.getItem(cacheKey);
+    if(cached){
+      var wrap = document.getElementById('doll-blocks-wrap');
+      if(wrap) wrap.innerHTML = bbDoll(JSON.parse(cached));
+      _dollTlDone(); return;
+    }
+  } catch(ex){}
+  var data = await _fetchStoryData();
+  var ep = data.episodes[window._dollEpIdx];
+  if(!ep) return;
+  _doDollTranslate(url, cacheKey, ep.blocks||[]);
+};
+
+function _doDollTranslate(url, cacheKey, blocks){
+  var btn = document.getElementById('deepl-translate-btn');
+  var targets = [];
+  blocks.forEach(function(b, i){
+    if(['system','narration','sfx','speech','thought'].indexOf(b.type) === -1) return;
+    var t = (b.data && b.data.text) ? b.data.text : '';
+    var clean = t.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').trim();
+    if(clean) targets.push({idx:i, text:clean});
+  });
+  if(!targets.length) return;
+  if(btn){ btn.innerHTML = '번역 중…'; btn.style.opacity='0.6'; btn.style.pointerEvents='none'; }
+  var texts = targets.map(function(t){ return t.text; });
+  var BATCH=50; var batches=[];
+  for(var i=0;i<texts.length;i+=BATCH) batches.push(texts.slice(i,i+BATCH));
+  Promise.all(batches.map(function(batch){
+    return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:batch,target_lang:'EN'})})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(d){ return d.translations.map(function(t){ return t.text; }); });
+  })).then(function(results){
+    var translated=[].concat.apply([],results);
+    var tlBlocks=JSON.parse(JSON.stringify(blocks));
+    targets.forEach(function(t,i){ if(translated[i]) tlBlocks[t.idx].data.text=translated[i]; });
+    try { localStorage.setItem(cacheKey, JSON.stringify(tlBlocks)); } catch(ex){}
+    var wrap=document.getElementById('doll-blocks-wrap');
+    if(wrap) wrap.innerHTML=bbDoll(tlBlocks);
+    _dollTlDone();
+  }).catch(function(err){
+    console.warn('[DeepL Doll]', err);
+    if(btn){ btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; btn.style.opacity=''; btn.style.pointerEvents=''; }
+    alert('번역 실패: '+err.message);
+  });
+}
+
+function _dollTlDone(){
+  var btn=document.getElementById('deepl-translate-btn');
+  var rbtn=document.getElementById('deepl-retranslate-btn');
+  if(btn){ btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨'; btn.classList.add('done'); btn.style.opacity=''; btn.style.pointerEvents=''; }
+  if(rbtn) rbtn.style.display='flex';
+}
+
+window.onDollDeepLRe = async function(){
+  var cacheKey='dl_doll_'+window._dollEpIdx+'_EN';
+  try { localStorage.removeItem(cacheKey); } catch(ex){}
+  var btn=document.getElementById('deepl-translate-btn');
+  var rbtn=document.getElementById('deepl-retranslate-btn');
+  if(rbtn) rbtn.style.display='none';
+  if(btn){ btn.classList.remove('done'); btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; }
+  var cfg=(window.SITE_CFG&&window.SITE_CFG.deepl)||{};
+  var url=cfg.proxyUrl||localStorage.getItem('biz_deepl_url')||'';
+  if(!url){ url=prompt('DeepL 프록시 URL:'); if(url) localStorage.setItem('biz_deepl_url',url); }
+  if(!url) return;
+  var data=await _fetchStoryData();
+  var ep=data.episodes[window._dollEpIdx];
+  if(ep) _doDollTranslate(url,'dl_doll_'+window._dollEpIdx+'_EN',ep.blocks||[]);
+};
 
 /* ── ABOUT PAGE ── */
+function goAbout(){S.view="about";S.activeProj=null;if(window.innerWidth<=768)closeMobMenu();pushHash();render();}
+
 function renderAbout(){
   const cfg=(typeof BIZ_BOT_CONFIG!=='undefined')?BIZ_BOT_CONFIG:{};
   document.getElementById("content").innerHTML=`
