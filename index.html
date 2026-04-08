@@ -3151,19 +3151,51 @@ window.onDollDeepLRe=async function(){
 (function(){
   var _orig=typeof setLang==='function'?setLang:null;
   window.setLang=function(lang){
-    /* 번역 바 표시/숨김 */
+    /* 1. 번역 바 표시/숨김 */
     var bar=document.getElementById('doll-tl-bar');
     if(bar) bar.style.display=(lang&&lang!=='ko')?'flex':'none';
-    /* 번역 상태 초기화 — 원본 블록으로 복원 */
+
+    /* 2. 원본 블록 복원 */
     var wrap=_dollWrap();
-    if(wrap&&window._dollOrigBlocks.length){
+    if(wrap&&window._dollOrigBlocks&&window._dollOrigBlocks.length){
       wrap.innerHTML=bbDoll(window._dollOrigBlocks);
       wrap.classList.remove('notranslate');
     }
-    var rbtn=_dollRebtn(); if(rbtn) rbtn.style.display='none';
-    _dollBtnReset(_dollBtn());
-    /* 원래 setLang 실행 */
+
+    /* 3. 버튼 상태: 이 언어의 캐시가 있으면 '번역됨', 없으면 리셋 */
+    var rbtn=_dollRebtn();
+    var dlLang2=(lang==='zh-CN'||lang==='zh-TW')?'ZH':(lang||'').split('-')[0].toUpperCase();
+    var hasDollCache=false;
+    if(lang&&lang!=='ko'){
+      try{ hasDollCache=!!localStorage.getItem('dl_doll_'+window._dollEpIdx+'_'+dlLang2); }catch(e){}
+    }
+    if(hasDollCache){
+      /* 캐시 있음 → 버튼 '번역됨', 재번역 표시 */
+      _dollTlDone();
+      /* 캐시에서 바로 렌더 */
+      try{
+        var cached=localStorage.getItem('dl_doll_'+window._dollEpIdx+'_'+dlLang2);
+        if(cached&&wrap){
+          wrap.innerHTML=bbDoll(JSON.parse(cached));
+          wrap.classList.add('notranslate');
+        }
+      }catch(e){}
+    } else {
+      /* 캐시 없음 → 버튼 리셋 */
+      _dollBtnReset(_dollBtn());
+      if(rbtn) rbtn.style.display='none';
+    }
+
+    /* 4. 원래 setLang 실행 */
     if(_orig) _orig(lang);
+
+    /* 5. 캐시 없는 경우: Google Translate가 doll 블록을 반드시 재번역하도록 강제
+          (_tlCache 히트 시 _tlGoogle 호출 안 됨 → 이걸로 보완) */
+    if(lang&&lang!=='ko'&&!hasDollCache){
+      setTimeout(function(){
+        if(typeof _tlGoogle==='function') _tlGoogle(lang);
+      },150);
+    }
   };
 })();
 
