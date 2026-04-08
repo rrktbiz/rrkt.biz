@@ -1234,6 +1234,16 @@ body{top:0!important}
   </div>
 </div>
 
+<div class="ep-picker-modal hidden" id="doll-ep-picker-modal" onclick="closeDollEpPicker(event)">
+  <div class="ep-picker-inner" onclick="event.stopPropagation()">
+    <div class="ep-picker-hd">
+      <span class="ep-picker-title">에피소드 목록</span>
+      <button class="ep-picker-close" onclick="closeDollEpPickerBtn()">&#10005;</button>
+    </div>
+    <div class="ep-picker-list" id="doll-ep-picker-list"></div>
+  </div>
+</div>
+
 <div id="google_translate_element"></div>
 
 <script>
@@ -2929,13 +2939,7 @@ async function renderStoryContent(){
     ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};justify-content:center;align-items:center;gap:6px;padding:8px 0 16px"><button id="doll-dl-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="doll-dl-rebtn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px;padding:6px 10px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx3);cursor:pointer;transition:all .12s"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
     : '';
 
-  // Nav buttons
-  const prevBtn = prev
-    ? `<button class="reader-nav-btn prev" onclick="clickStoryEp(${S.activeStoryEp-1})">← ${prev.title}</button>`
-    : `<button class="reader-nav-btn prev" style="opacity:.35;cursor:default;font-size:11px;color:var(--tx3)" disabled>✦ 첫 번째 화</button>`;
-  const nextBtn = next
-    ? `<button class="reader-nav-btn next" onclick="clickStoryEp(${S.activeStoryEp+1})">${next.title} →</button>`
-    : `<button class="reader-nav-btn next" style="opacity:.35;cursor:default;font-size:11px;color:var(--tx3)" disabled>마지막 화 ✦</button>`;
+  // Nav buttons (ep-nav 스타일로 직접 렌더링, 변수 불필요)
 
   ct.innerHTML=`
     <div id="content-topbar" style="position:sticky;top:0;z-index:50;background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;transition:transform .28s ease;will-change:transform">
@@ -2952,7 +2956,15 @@ async function renderStoryContent(){
       </div>
       ${castHtml}
       <div id="doll-blocks-wrap">${bbDoll(e.blocks||[])}</div>
-      <div class="reader-nav">${prevBtn}<button class="reader-nav-btn ep-list-btn" onclick="goStory()">목록</button>${nextBtn}</div>
+      <div class="ep-nav-outer"><div class="ep-nav">
+        <button class="ep-nav-btn ${prev?'':'disabled'}" onclick="${prev?`clickStoryEp(${S.activeStoryEp-1})`:''}">
+          <span>←</span><span class="ep-nav-title">${prev?prev.title:'처음 화'}</span>
+        </button>
+        <button class="ep-picker-btn" onclick="openDollEpPicker()">&#9776; 목록</button>
+        <button class="ep-nav-btn ${next?'':'disabled'}" onclick="${next?`clickStoryEp(${S.activeStoryEp+1})`:''}">
+          <span class="ep-nav-title">${next?next.title:'마지막 화'}</span><span>→</span>
+        </button>
+      </div></div>
     </div>`;
 
   window._dollEpIdx = S.activeStoryEp;
@@ -3217,6 +3229,28 @@ window.onDollDeepLRe=async function(){
     }
   };
 })();
+
+/* ── doll 에피소드 목록 피커 ── */
+window.openDollEpPicker = async function(){
+  var modal = document.getElementById('doll-ep-picker-modal');
+  var list  = document.getElementById('doll-ep-picker-list');
+  if(!modal||!list) return;
+  var data = await _fetchStoryData();
+  var eps  = data.episodes||[];
+  var ST   = {done:'완료',wip:'작업중',plan:'예정'};
+  var SC   = {done:'done',wip:'',plan:'plan'};
+  list.innerHTML = eps.map(function(e,i){
+    var cur = i===window._dollEpIdx;
+    return '<div class="ep-picker-item'+(cur?' current':'')+'" onclick="closeDollEpPickerBtn();clickStoryEp('+i+')">'
+      +'<span class="ep-picker-num">'+(e.num||String(i+1))+'</span>'
+      +'<span class="ep-picker-t">'+(e.title||'')+'</span>'
+      +(e.status?'<span class="ep-picker-st '+SC[e.status||'plan']+'">'+(ST[e.status]||'')+'</span>':'')
+      +'</div>';
+  }).join('');
+  modal.classList.remove('hidden');
+};
+window.closeDollEpPicker = function(e){ if(e.target===document.getElementById('doll-ep-picker-modal')) closeDollEpPickerBtn(); };
+window.closeDollEpPickerBtn = function(){ document.getElementById('doll-ep-picker-modal').classList.add('hidden'); };
 
 /* ── ABOUT PAGE ── */
 function goAbout(){S.view="about";S.activeProj=null;if(window.innerWidth<=768)closeMobMenu();pushHash();render();}
