@@ -3063,7 +3063,10 @@ window.onDollDeepL = async function(){
     var cached = localStorage.getItem(cacheKey);
     if(cached){
       var wrap = document.getElementById('doll-blocks-wrap');
-      if(wrap) wrap.innerHTML = bbDoll(JSON.parse(cached));
+      if(wrap){
+        wrap.innerHTML = bbDoll(JSON.parse(cached));
+        wrap.classList.add('notranslate');
+      }
       _dollTlDone(); return;
     }
   } catch(ex){}
@@ -3097,7 +3100,10 @@ function _doDollTranslate(url, cacheKey, blocks, dlLang){
     targets.forEach(function(t,i){ if(translated[i]) tlBlocks[t.idx].data.text=translated[i]; });
     try { localStorage.setItem(cacheKey, JSON.stringify(tlBlocks)); } catch(ex){}
     var wrap=document.getElementById('doll-blocks-wrap');
-    if(wrap) wrap.innerHTML=bbDoll(tlBlocks);
+    if(wrap){
+      wrap.innerHTML=bbDoll(tlBlocks);
+      wrap.classList.add('notranslate'); /* Google Translate 재번역 방지 */
+    }
     _dollTlDone();
   }).catch(function(err){
     console.warn('[DeepL Doll]', err);
@@ -3122,6 +3128,8 @@ window.onDollDeepLRe = async function(){
   var rbtn=document.getElementById('deepl-retranslate-btn');
   if(rbtn) rbtn.style.display='none';
   if(btn){ btn.classList.remove('done'); btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; }
+  var wrap2=document.getElementById('doll-blocks-wrap');
+  if(wrap2) wrap2.classList.remove('notranslate');
   var cfg=(typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
   var url=cfg.proxyUrl||'';
   if(!url) return;
