@@ -2924,7 +2924,7 @@ async function renderStoryContent(){
 
   // DeepL bar (SITE_CFG.deepl 설정된 경우만)
   const _dc = window.SITE_CFG && window.SITE_CFG.deepl;
-  const tlBarHtml = (_dc && _dc.enabled && _dc.proxyUrl)
+  const tlBarHtml = (_dc && _dc.proxyUrl)
     ? `<div id="doll-tl-bar" style="display:flex;align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="deepl-translate-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="deepl-retranslate-btn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
     : '';
 
