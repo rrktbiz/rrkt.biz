@@ -40,7 +40,7 @@
         {
           "type": "narration",
           "data": {
-            "text": "어둑어둑한 공간 눈을 떴다.<div>이곳은 어디란말이냐 숭구리당당 숭당당?</div>",
+            "text": "어둑어둑한 공간 눈을 떴다.<div>이곳은 어디란말이냐&nbsp;</div>",
             "msgs": []
           }
         },
@@ -108,6 +108,14 @@
           "data": {
             "filename": "",
             "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "경찰에게 고소하겠어요! 해라해! 번역이 될지안될지 테스트하는것이다 요놈아"
           }
         }
       ]
