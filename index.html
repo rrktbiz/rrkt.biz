@@ -1051,6 +1051,62 @@ body{top:0!important}
 @keyframes biqPulse{0%,100%{opacity:1}50%{opacity:.25}}
 .postype-error{background:#fff5f5;border:1px solid #ffd0d0;border-radius:8px;padding:16px 20px;color:#c03030;font-size:12px;line-height:1.7}
 .postype-error pre{margin-top:8px;font-size:11px;white-space:pre-wrap;color:#a03030}
+/* ── STORY LIST ── */
+.story-tab-row{display:flex;gap:0;padding:0 24px;border-bottom:1px solid var(--bd);max-width:720px;margin:0 auto}
+.story-tab-btn{padding:10px 20px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;color:var(--tx3);cursor:pointer;font-family:var(--fn);transition:all .15s;white-space:nowrap;margin-bottom:-1px}
+.story-tab-btn:hover{color:var(--tx)}
+.story-tab-btn.active{color:var(--tx);border-bottom-color:var(--tx)}
+.story-ep-card{background:var(--sb);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:border-color .12s,box-shadow .12s}
+.story-ep-card:hover{border-color:var(--bd2);box-shadow:0 2px 10px #0001}
+.story-ep-card.locked{opacity:.5;cursor:default;pointer-events:none}
+.story-ep-thumb{width:72px;height:48px;border-radius:6px;background:linear-gradient(135deg,#1a2e3a,#5a90b0);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#ffffffaa;letter-spacing:.5px}
+
+/* ── STORY BLOCK RENDERER ── */
+.doll-reader-wrap{max-width:700px;margin:20px auto 40px;padding:32px 40px 80px;background:var(--sb);border-radius:12px;box-shadow:0 2px 16px #0000000f}
+.doll-reader-header{padding:16px 0;margin-bottom:4px;text-align:center}
+.doll-ep-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
+.doll-ep-num{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);font-family:monospace}
+.doll-ep-title{font-size:20px;font-weight:700;color:var(--tx);letter-spacing:-.03em;margin-top:4px}
+.doll-cast-wrap{text-align:center;margin-bottom:24px}
+.doll-cast-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:12px}
+.doll-cast{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.doll-cast-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.doll-cast-icon{width:52px;height:52px;border-radius:50%;overflow:hidden;border:1.5px solid #cce4ee;background:#eef6fa;display:flex;align-items:center;justify-content:center}
+.doll-cast-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.doll-cast-num{font-size:12px;font-weight:700;color:var(--tx2);font-family:monospace;letter-spacing:.5px}
+.doll-script-block{margin-bottom:16px}
+.doll-script-img{width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--bd);background:var(--bg)}
+.doll-script-img img{width:100%;display:block;border-radius:7px}
+.doll-script-line{display:flex;align-items:flex-start}
+.doll-line-icon{flex-shrink:0;width:44px;height:44px;border-radius:50%;overflow:hidden;border:1.5px solid #cce4ee;background:#eef6fa;margin-top:14px}
+.doll-line-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.doll-line-icon.hidden{visibility:hidden}
+.doll-line-connector{display:flex;align-items:center;flex-shrink:0;padding-top:30px}
+.doll-tail-speech{width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:9px solid #b8d9e8;position:relative;margin-left:6px}
+.doll-tail-speech::after{content:'';position:absolute;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:9px solid var(--sb);top:-4px;left:3px}
+.doll-tail-thought{display:flex;align-items:center;gap:4px;padding:0 6px}
+.doll-tail-dot{border-radius:50%;background:#b8d9e8}
+.doll-tail-dot1{width:6px;height:6px}
+.doll-tail-dot2{width:9px;height:9px}
+.doll-bubble{flex:1;min-width:0;background:var(--sb);border:2px solid #b8d9e8;border-radius:20px;padding:10px 16px;outline:3px solid #eaf5f9;outline-offset:-5px;box-shadow:2px 3px 0 #b8d9e8}
+.doll-bubble.thought{background:#fafcff;border:2px dashed #b8d9e8;box-shadow:none;outline:none}
+.doll-bubble.thought .doll-line-text{font-style:italic;color:var(--tx2)}
+.doll-line-speaker{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7aaec4;margin-bottom:5px}
+.doll-line-text{font-size:16px;color:var(--tx);line-height:1.9;word-break:keep-all}
+.doll-narration{padding:2px 0 2px 54px}
+.doll-narration .doll-line-text{font-size:15px;color:var(--tx2);font-style:italic;line-height:1.9}
+.doll-system{text-align:center;padding:6px 0}
+.doll-system-text{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--tx);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:5px 16px}
+.doll-sfx{text-align:center;padding:4px 0}
+.doll-sfx-text{font-size:22px;font-weight:400;color:var(--tx);letter-spacing:.08em;line-height:1.4;font-family:'Noto Sans KR',sans-serif}
+.doll-chat{padding:2px 0 2px 54px;display:flex;flex-direction:column;gap:6px}
+.doll-chat-header{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7aaec4;margin-bottom:2px}
+.doll-chat-bubble{display:inline-block;max-width:80%;background:#f0f7ff;border:1.5px solid #b8d9e8;border-radius:4px 16px 16px 16px;padding:8px 14px;font-size:14px;color:var(--tx);line-height:1.75;word-break:keep-all;align-self:flex-start}
+.doll-chat-bubble.right{align-self:flex-end;background:var(--sb);border-color:#cce4ee;border-radius:16px 4px 16px 16px}
+.doll-divider{display:flex;align-items:center;gap:10px;padding:8px 0;color:var(--tx3);font-size:10px;letter-spacing:1px}
+.doll-divider::before,.doll-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
+@media(max-width:480px){.doll-reader-wrap{padding:16px 18px 100px}.doll-line-text{font-size:15px;line-height:2}}
+@media(min-width:769px){.doll-line-text{font-size:17px}.doll-reader-wrap{padding:40px 48px 100px}}
 </style>
 </head>
 <body>
@@ -1165,12 +1221,7 @@ body{top:0!important}
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
-<!-- 스토리 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
-<iframe
-  id="story-frame"
-  src="biz-OC-doll/story.html"
-  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
-></iframe>
+<!-- 스토리 뷰는 SPA로 전환 (#content 사용) -->
 
 <!-- EP PICKER MODAL -->
 <div class="ep-picker-modal hidden" id="ep-picker-modal" onclick="closeEpPicker(event)">
@@ -1727,6 +1778,7 @@ const S={
   view:"home",
   activeProj:null,activeVol:null,activeEp:null,
   activeDollCat:null,
+  activeStoryEp:null,
   subOpen:false,subTab:"ALL",
   calY:new Date().getFullYear(),calM:new Date().getMonth(),selDay:null,calOverview:false,calTimeline:false,calSpan:1,
   homeMiniM:new Date().getMonth(),homeMiniY:new Date().getFullYear(),
@@ -2646,11 +2698,9 @@ function render(){
     if(eventFr) eventFr.style.display = "none";
   }
   var storyFr = document.getElementById("story-frame");
-  if(S.view !== "story"){
-    if(storyFr) storyFr.style.display = "none";
-  }
+  if(storyFr) storyFr.style.display = "none"; // 구버전 호환
   // archive/event 뷰일 때 #content 숨기기
-  if(S.view === "archive" || S.view === "event" || S.view === "story"){
+  if(S.view === "archive" || S.view === "event"){
     if(ct) ct.style.display = "none";
   }
   // 모바일 topbar 리셋 (content view 이탈 시)
@@ -2678,7 +2728,8 @@ function render(){
   else if(S.view==="progress") { _tlBadgeReset(); renderProgress(); }
   else if(S.view==="intro")    { _tlBadgeReset(); renderIntro(); }
   else if(S.view==="episodes") { _tlBadgeReset(); renderEpList(); }
-  else if(S.view==="content")  renderContentView();
+  else if(S.view==="story")         { _tlBadgeReset(); renderStoryList(); }
+  else if(S.view==="story-content") renderStoryContent();
   else if(S.view==="charlist"||S.view==="chardetail"){
     // iframe 방식 — doll_charlist.html 완전 독립 운영
     // #content를 숨기고 char-frame iframe을 보여줌
@@ -2693,14 +2744,202 @@ function render(){
     document.getElementById("content").style.display="none";
     document.getElementById("event-frame").style.display="block";
   }
-  else if(S.view==="story"){
-    document.getElementById("content").style.display="none";
-    document.getElementById("story-frame").style.display="block";
-  }
   else if(S.view==="about")    renderAbout();
 }
 
-function goAbout(){S.view="about";S.activeProj=null;if(window.innerWidth<=768)closeMobMenu();pushHash();render();}
+/* ══ STORY SPA — biz-OC-doll ══ */
+let _storyData = null;
+
+async function _fetchStoryData(){
+  if(_storyData) return _storyData;
+  try{
+    const r = await fetch('biz-OC-doll/story_editor.json');
+    if(!r.ok) throw new Error('fetch failed');
+    _storyData = await r.json();
+  }catch(e){
+    _storyData = {episodes:[]};
+  }
+  return _storyData;
+}
+
+async function renderStoryList(){
+  const ct = document.getElementById('content');
+  ct.innerHTML = `<div style="padding:40px 24px;text-align:center;color:var(--tx3);font-size:13px">불러오는 중…</div>`;
+  const data = await _fetchStoryData();
+  const eps = data.episodes || [];
+  const TAB_LABELS = {main:'메인 스토리', sub:'서브 스토리', event:'이벤트'};
+  const TAB_COLORS = {main:'#5a90b0', sub:'#c07090', event:'#c0a040'};
+  const groups = {main:[], sub:[], event:[]};
+  eps.forEach((e,i)=>{ (groups[e.type]||groups.main).push({...e, _idx:i}); });
+  const existingTabs = ['main','sub','event'].filter(t=>groups[t].length>0);
+  if(!existingTabs.length){
+    ct.innerHTML=`<div style="padding:60px 24px;text-align:center;color:var(--tx3);font-size:13px">스토리 에피소드가 없습니다.</div>`;
+    return;
+  }
+  const activeTab = existingTabs[0];
+  const tabBtns = existingTabs.map(t=>`<button class="story-tab-btn${t===activeTab?' active':''}" onclick="switchStoryTab('${t}')" id="story-tab-${t}">${TAB_LABELS[t]||t}</button>`).join('');
+  const tabContents = existingTabs.map(t=>`
+    <div id="story-tab-content-${t}" style="display:${t===activeTab?'block':'none'};padding:16px 0">
+      ${groups[t].map(e=>{
+        const canRead = e.status==='완료';
+        const stCls = stClass(e.status);
+        const wipStyle = e.status==='작업중'?'background:#F9F4CA;color:#F9CB4C':'';
+        const cl = canRead?'story-ep-card':'story-ep-card locked';
+        const onclick = canRead?`onclick="clickStoryEp(${e._idx})"` :'';
+        return `<div class="${cl}" ${onclick}>
+          <div class="story-ep-thumb" style="background:linear-gradient(135deg,#1a2e3a,${TAB_COLORS[t]||'#5a90b0'})">${e.num||''}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">${e.eyebrow||''}</div>
+            <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title||''}</div>
+            <span class="ep-status-badge ${stCls}" style="${wipStyle}">${e.status}</span>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+
+  ct.innerHTML=`
+    <div style="max-width:720px;margin:0 auto;padding-bottom:40px">
+      <div style="padding:28px 24px 16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">biz-OC-doll</div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:var(--tx)">스토리</div>
+      </div>
+      <div class="story-tab-row">${tabBtns}</div>
+      <div style="padding:0 24px">${tabContents}</div>
+    </div>`;
+}
+
+window.switchStoryTab = function(t){
+  document.querySelectorAll('.story-tab-btn').forEach(b=>b.classList.remove('active'));
+  const btn = document.getElementById('story-tab-'+t);
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('[id^="story-tab-content-"]').forEach(el=>el.style.display='none');
+  const ct = document.getElementById('story-tab-content-'+t);
+  if(ct) ct.style.display='block';
+};
+
+window.clickStoryEp = function(idx){
+  S.view='story-content'; S.activeStoryEp=idx; pushHash(); render();
+};
+
+async function renderStoryContent(){
+  const ct = document.getElementById('content');
+  ct.innerHTML = `<div style="padding:40px 24px;text-align:center;color:var(--tx3);font-size:13px">불러오는 중…</div>`;
+  const data = await _fetchStoryData();
+  const eps = data.episodes || [];
+  const e = eps[S.activeStoryEp];
+  if(!e){ S.view='story'; render(); return; }
+  const prev = eps[S.activeStoryEp-1]||null;
+  const next = eps[S.activeStoryEp+1]||null;
+
+  // Cast HTML
+  const cl = e.castList||[];
+  const castHtml = cl.length ? `<div class="doll-cast-wrap">
+    <div class="doll-cast-label">CAST</div>
+    <div class="doll-cast">${cl.map(c=>`
+      <div class="doll-cast-item">
+        <div class="doll-cast-icon"><img src="biz-OC-doll/images/simple_profile/${c.charNum||'001'}.png" alt="" onerror="this.style.display='none'"></div>
+        <div class="doll-cast-num">${c.charNum||'?'}</div>
+      </div>`).join('')}</div></div>` : '';
+
+  // Nav buttons
+  const prevBtn = prev
+    ? `<button class="reader-nav-btn prev" onclick="clickStoryEp(${S.activeStoryEp-1})">← ${prev.title}</button>`
+    : `<button class="reader-nav-btn prev" style="opacity:.35;cursor:default;font-size:11px;color:var(--tx3)" disabled>✦ 첫 번째 화</button>`;
+  const nextBtn = next
+    ? `<button class="reader-nav-btn next" onclick="clickStoryEp(${S.activeStoryEp+1})">${next.title} →</button>`
+    : `<button class="reader-nav-btn next" style="opacity:.35;cursor:default;font-size:11px;color:var(--tx3)" disabled>마지막 화 ✦</button>`;
+
+  ct.innerHTML=`
+    <div id="content-topbar" style="position:sticky;top:0;z-index:50;background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;transition:transform .28s ease;will-change:transform">
+      <button style="background:transparent;border:none;color:var(--tx3);font-size:13px;padding:5px 8px;border-radius:5px;cursor:pointer;font-family:var(--fn)" onclick="goStory()">← 목록</button>
+      <div style="width:1px;height:14px;background:var(--bd);margin:0 2px"></div>
+      <div style="font-size:12px;font-weight:600;color:var(--tx)">${e.title||'스토리 읽기'}</div>
+    </div>
+    <div id="content-topbar-spacer"></div>
+    <div class="doll-reader-wrap">
+      <div class="doll-reader-header">
+        <div><span class="doll-ep-eyebrow">${e.eyebrow||''}</span>${e.num?`<span class="doll-ep-num"> · ${e.num}</span>`:''}</div>
+        <div class="doll-ep-title">${e.title||''}</div>
+      </div>
+      ${castHtml}
+      ${bbDoll(e.blocks||[])}
+      <div class="reader-nav">${prevBtn}<button class="reader-nav-btn ep-list-btn" onclick="goStory()">목록</button>${nextBtn}</div>
+    </div>`;
+
+  ct.scrollTop = 0;
+
+  // 스크롤 숨김 (기존 웹소설과 동일 로직)
+  (function(){
+    if(ct._mobScrollHandler){
+      ct.removeEventListener('scroll', ct._mobScrollHandler);
+      ct._mobScrollHandler = null;
+    }
+    const topbarEl = document.getElementById('topbar');
+    const ctb = document.getElementById('content-topbar');
+    const ctbH = ctb ? ctb.offsetHeight : 45;
+    let lastY=0, ticking=false, hidden=false;
+    function applyHide(doHide){
+      if(hidden===doHide) return; hidden=doHide;
+      if(doHide){
+        topbarEl.style.transform='translateY(-48px)';
+        if(ctb) ctb.style.transform=`translateY(-${ctbH+48}px)`;
+        ct.style.marginTop='0'; ct.style.height='100dvh';
+      } else {
+        topbarEl.style.transform='';
+        if(ctb) ctb.style.transform='';
+        ct.style.marginTop='48px'; ct.style.height='calc(100dvh - 48px)';
+      }
+    }
+    function onScroll(){
+      if(window.innerWidth>768){applyHide(false);ticking=false;return;}
+      const st=ct.scrollTop;
+      if(st>lastY&&st>60) applyHide(true);
+      else if(st<lastY-10) applyHide(false);
+      lastY=st<=0?0:st; ticking=false;
+    }
+    ct._mobScrollHandler=function(){if(!ticking){requestAnimationFrame(onScroll);ticking=true;}};
+    ct.addEventListener('scroll',ct._mobScrollHandler,{passive:true});
+  })();
+}
+
+/* ── 블록 렌더러 (biz-OC-doll 스토리) ── */
+function bbDoll(blocks){
+  let last=null;
+  return blocks.map(b=>{
+    const d=b.data||{};
+    if(b.type==='cast'){
+      last=null;
+      const ms=d.members||[];
+      if(!ms.length) return '';
+      return `<div class="doll-cast-wrap"><div class="doll-cast-label">Cast</div><div class="doll-cast">${ms.map(m=>`<div class="doll-cast-item"><div class="doll-cast-icon"><img src="biz-OC-doll/images/simple_profile/${m.charNum||'001'}.png" alt="" onerror="this.style.display='none'"></div><div class="doll-cast-num">${m.charNum||'?'}</div></div>`).join('')}</div></div>`;
+    }
+    if(b.type==='scene'){
+      last=null;
+      const s=d.filename?`biz-OC-doll/images/ep_cover_sc/${d.filename}`:'';
+      return `<div class="doll-script-block"><div class="doll-script-img">${s?`<img src="${s}" alt="">`:''}</div></div>`;
+    }
+    if(b.type==='speech'||b.type==='thought'){
+      const sm=d.exprFilename&&d.exprFilename===last; last=d.exprFilename||null;
+      const s=d.exprFilename?`biz-OC-doll/images/simple_profile/${d.exprFilename}`:'';
+      const th=b.type==='thought'?' thought':'';
+      const cn=b.type==='thought'
+        ?`<div class="doll-tail-thought"><div class="doll-tail-dot doll-tail-dot1"></div><div class="doll-tail-dot doll-tail-dot2"></div></div>`
+        :`<div class="doll-tail-speech"></div>`;
+      return `<div class="doll-script-block"><div class="doll-script-line"><div class="doll-line-icon${sm?' hidden':''}"><img src="${s}" alt="" onerror="this.parentNode.style.background='#eef6fa'"></div><div class="doll-line-connector">${cn}</div><div class="doll-bubble${th}"><div class="doll-line-speaker">${d.charNum||''}</div><div class="doll-line-text">${d.text||''}</div></div></div></div>`;
+    }
+    if(b.type==='narration'){last=null;return `<div class="doll-script-block"><div class="doll-narration"><div class="doll-line-text">${d.text||''}</div></div></div>`;}
+    if(b.type==='system'){last=null;return `<div class="doll-script-block"><div class="doll-system"><span class="doll-system-text">${d.text||''}</span></div></div>`;}
+    if(b.type==='sfx'){last=null;return `<div class="doll-script-block"><div class="doll-sfx"><div class="doll-sfx-text">${d.text||''}</div></div></div>`;}
+    if(b.type==='chat'){
+      last=null;
+      return `<div class="doll-script-block"><div class="doll-chat"><div class="doll-chat-header">${d.header||''}</div>${(d.msgs||[]).map(m=>`<div class="doll-chat-bubble${m.dir==='right'?' right':''}">${m.text}</div>`).join('')}</div></div>`;
+    }
+    if(b.type==='divider'){last=null;return `<div class="doll-script-block"><div class="doll-divider">· · ·</div></div>`;}
+    return '';
+  }).join('');
+}
+
+
 
 /* ── ABOUT PAGE ── */
 function renderAbout(){
@@ -4199,6 +4438,8 @@ function stateToHash(){
       return `#proj/biz-oc-doll/doll/${S.activeDollCat}`;
     return `#proj/${S.activeProj}/eps/${S.activeVol}`;
   }
+  if(v === 'story')         return '#story';
+  if(v === 'story-content') return `#story/ep/${S.activeStoryEp}`;
   if(v === 'content'){
     if(S.activeProj === 'biz-oc-doll')
       return `#proj/biz-oc-doll/dolleep/${S.activeDollCat}/${S.activeEp}`;
@@ -4214,6 +4455,10 @@ function applyHash(hash){
   }
   const parts = hash.replace(/^#/,'').split('/');
   const p0 = parts[0];
+  if(p0 === 'story'){
+    if(parts[1]==='ep' && parts[2]!=null){ S.view='story-content'; S.activeStoryEp=parseInt(parts[2]); return; }
+    S.view='story'; S.activeStoryEp=null; return;
+  }
   if(p0 === 'about'){ S.view='about'; return; }
   if(p0 === 'archive'){ S.view='archive'; return; }
   if(p0 === 'event')  { S.view='event';   return; }
@@ -4487,7 +4732,7 @@ window.openArchiveOverlay = function(){ goArchive(); };
 window.openEventOverlay   = function(){ goEvent();   };
 function goArchive(){ S.view="archive"; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
 function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
-function goStory()  { S.view="story";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
+function goStory()  { S.view="story"; S.activeStoryEp=null; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
 
 /* ── HOME 말풍선 챗봇 로직 ── */
 (function(){
