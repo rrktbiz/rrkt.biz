@@ -2434,10 +2434,10 @@ function renderDollSub(proj){
     ${_subHeader(proj)}
     <button class="sm-intro-link" onclick="goIntro('${proj.id}')">프로젝트 소개글 &#9654;</button>
     <button class="sm-char-link" onclick="goDollChar()">캐릭터 일람 &#9654;</button>
-    <button class="sm-char-link" onclick="openArchiveOverlay()">아카이브 &#9654;</button>
-    <button class="sm-char-link" onclick="openEventOverlay()">이벤트 &#9654;</button>
+    <button class="sm-char-link" onclick="goStory()" style="justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리</button>
     <button class="sm-char-link" onclick="openVoteOverlay()" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700">인기 투표</button>
-    <button class="sm-char-link" onclick="goStory()" style="justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리</button>`;
+    <button class="sm-char-link" onclick="openEventOverlay()">이벤트 &#9654;</button>
+    <button class="sm-char-link" onclick="openArchiveOverlay()">아카이브 &#9654;</button>`;
 }
 
 function setSubTabFn(t){S.subTab=t;if(S.hoveredProj)renderSubPanelContent(S.hoveredProj);}
@@ -2536,14 +2536,17 @@ function mobShowSub(projId){
     html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="goDollChar();closeMobMenu()">
       캐릭터 일람 <span>&#9654;</span>
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openArchiveOverlay();closeMobMenu()">
-      아카이브 <span>&#9654;</span>
+    html+=`<button class="mob2-intro-link" style="margin-top:6px;justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:10px" onclick="goStory();closeMobMenu()">
+      <span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리
+    </button>`;
+    html+=`<button class="mob2-intro-link" style="margin-top:6px;background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700" onclick="openVoteOverlay();closeMobMenu()">
+      &#9733; 인기 투표 <span>&#9654;</span>
     </button>`;
     html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openEventOverlay();closeMobMenu()">
       이벤트 <span>&#9654;</span>
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px;background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700" onclick="openVoteOverlay();closeMobMenu()">
-      &#9733; 인기 투표 <span>&#9654;</span>
+    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openArchiveOverlay();closeMobMenu()">
+      아카이브 <span>&#9654;</span>
     </button>`;
   }
   if(p.subType==="youtube"){
@@ -2554,9 +2557,6 @@ function mobShowSub(projId){
 
   // 진행 상황 (doll 제외한 기본 / doll)
   if(p.subType==="doll"){
-    html+=`<button class="mob2-intro-link" style="margin-top:6px;justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:10px" onclick="goStory();closeMobMenu()">
-      <span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리
-    </button>`;
 
   } else if(p.subType!=="youtube"){
     // 기본 (웹소설/웹툰 볼륨 목록)
