@@ -1,0 +1,231 @@
+{
+  "_cover": "",
+  "_banners": {
+    "main": "",
+    "sub": "",
+    "event": ""
+  },
+  "episodes": [
+    {
+      "eyebrow": "MAIN STORY",
+      "title": "테스트를 위한 첫화",
+      "type": "main",
+      "num": "1-1",
+      "status": "wip",
+      "castList": [
+        {
+          "charNum": "001",
+          "exprUrl": "",
+          "exprFilename": ""
+        },
+        {
+          "charNum": "002",
+          "exprUrl": "",
+          "exprFilename": ""
+        },
+        {
+          "charNum": "004",
+          "exprUrl": "",
+          "exprFilename": ""
+        }
+      ],
+      "blocks": [
+        {
+          "type": "system",
+          "data": {
+            "text": "시간 · 장소",
+            "msgs": []
+          }
+        },
+        {
+          "type": "narration",
+          "data": {
+            "text": "어둑어둑한 공간 눈을 떴다.<div>이곳은 어디란말이냐 숭구리당당 숭당당?</div>",
+            "msgs": []
+          }
+        },
+        {
+          "type": "sfx",
+          "data": {
+            "text": "쾅—",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "001",
+            "exprFilename": "001.png",
+            "text": "안녕.",
+            "msgs": []
+          }
+        },
+        {
+          "type": "scene",
+          "data": {
+            "filename": "1-1.png",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "어머 넌 누구니",
+            "msgs": []
+          }
+        },
+        {
+          "type": "thought",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "미소년이다",
+            "msgs": []
+          }
+        },
+        {
+          "type": "thought",
+          "data": {
+            "charNum": "001",
+            "exprFilename": "001.png",
+            "text": "생각 다 들리는뎅..",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "내이름은 블링이 블링소녀블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀&nbsp;&nbsp;",
+            "msgs": []
+          }
+        },
+        {
+          "type": "scene",
+          "data": {
+            "filename": "",
+            "msgs": []
+          }
+        }
+      ]
+    },
+    {
+      "eyebrow": "MAIN STORY",
+      "title": "테스트 두번째",
+      "type": "main",
+      "num": "1-2",
+      "status": "wip",
+      "castList": [
+        {
+          "charNum": "001",
+          "exprUrl": "",
+          "exprFilename": ""
+        }
+      ],
+      "blocks": [
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        }
+      ]
+    },
+    {
+      "eyebrow": "SUB STORY",
+      "title": "이곳엔 무엇을 넣을꼬",
+      "type": "sub",
+      "num": "1-1",
+      "status": "wip",
+      "castList": [
+        {
+          "charNum": "001",
+          "exprUrl": "",
+          "exprFilename": ""
+        },
+        {
+          "charNum": "002",
+          "exprUrl": "images/simple_profile/002.png",
+          "exprFilename": "002.png"
+        },
+        {
+          "charNum": "003",
+          "exprUrl": "images/simple_profile/003.png",
+          "exprFilename": "003.png"
+        },
+        {
+          "charNum": "004",
+          "exprUrl": "images/simple_profile/004.png",
+          "exprFilename": "004.png"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        }
+      ]
+    },
+    {
+      "eyebrow": "EVENT",
+      "title": "제작기간 때우는 용도로 쓰인다더군",
+      "type": "event",
+      "num": "1-1",
+      "status": "plan",
+      "castList": [
+        {
+          "charNum": "001",
+          "exprUrl": "",
+          "exprFilename": ""
+        }
+      ],
+      "blocks": [
+        {
+          "type": "scene",
+          "data": {
+            "filename": "",
+            "msgs": []
+          }
+        }
+      ]
+    }
+  ]
+}
