@@ -2803,7 +2803,8 @@ async function renderStoryList(){
       const statusLabel = (e.status==='done'||e.status==='완료')?'완료':(e.status==='wip'||e.status==='작업중')?'작업중':'예정';
       const wipStyle = (e.status==='작업중'||e.status==='wip')?'background:#F9F4CA;color:#F9CB4C':'';
       const castNums = (e.castList||[]).map(c=>c.charNum).filter(Boolean);
-      const castHtml = castNums.map((n,i)=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:30px;height:30px;border-radius:50%;border:2px solid var(--sb);background:#eef6fa;object-fit:cover;margin-left:${i===0?'0':'-8px'};flex-shrink:0;box-shadow:0 0 0 1px #cce4ee" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
+      const castHtml = castNums.map(n=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:30px;height:30px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;flex-shrink:0" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
+      const castWrap = castHtml ? `<div style="display:flex;align-items:center;gap:6px;margin-top:2px">${castHtml}</div>` : '';
       const onclick = canRead ? `onclick="clickStoryEp(${e._idx})"` : '';
       return `<div class="story-ep-card${canRead?'':' locked'}" ${onclick} data-cast="${castNums.join(',')}">
         <div style="font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:32px;flex-shrink:0">${e.num||''}</div>
@@ -2813,7 +2814,7 @@ async function renderStoryList(){
             <span class="ep-status-badge ${stCls}" style="${wipStyle}">${statusLabel}</span>
           </div>
           <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px">${e.title||''}</div>
-          ${castHtml?`<div style="display:flex;align-items:center;padding-left:2px">${castHtml}</div>`:''}
+          ${castWrap}
         </div>
         ${canRead?`<span style="color:var(--tx3);font-size:14px;flex-shrink:0">›</span>`:''}
       </div>`;
