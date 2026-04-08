@@ -352,8 +352,16 @@ function openEp(i){
   const nextBtn=next?'<button class="reader-nav-btn next" onclick="openEp('+(i+1)+')">'+next.title+' →</button>':'<button class="reader-nav-btn next" style="opacity:.35;cursor:default;font-size:11px;color:var(--tx3)" disabled>마지막 화 ✦</button>';
   document.getElementById('rc').innerHTML='<div class="reader-header"><div class="reader-ep-eyebrow-row"><span class="reader-ep-eyebrow">'+(e.eyebrow||'')+'</span>'+(e.num?'<span class="reader-ep-num"> · '+e.num+'</span>':'')+'</div><div class="reader-ep-title">'+(e.title||'')+'</div></div>'+ch+bb(e.blocks||[])+'<div class="reader-nav">'+prevBtn+'<button class="reader-nav-btn ep-list-btn" onclick="gl()">목록</button>'+nextBtn+'</div>';
   scrollTo(0,0);
+  _curEpIdx=i;
+  _lastScrollY=0;
+  document.getElementById('reader-topbar').classList.remove('hidden');
+  var _fn=document.getElementById('float-nav');
+  _fn.classList.add('active');
+  setTimeout(function(){_fn.classList.add('visible');},50);
+  document.getElementById('fn-prev').classList.toggle('disabled',!EP[i-1]);
+  document.getElementById('fn-next').classList.toggle('disabled',!EP[i+1]);
 }
-function gl(){document.getElementById('list-view').style.display='block';document.getElementById('reader-view').style.display='none';scrollTo(0,0);}
+function gl(){document.getElementById('list-view').style.display='block';document.getElementById('reader-view').style.display='none';scrollTo(0,0);var _fn=document.getElementById('float-nav');_fn.classList.remove('active','visible');document.getElementById('reader-topbar').classList.remove('hidden');}
 function bb(blocks){
   let last=null;
   return blocks.map(b=>{
@@ -368,6 +376,19 @@ function bb(blocks){
     if(b.type==='divider'){last=null;return'<div class="script-block"><div class="script-divider">· · ·</div></div>';}
     return'';
   }).join('');
-}</script>
+}
+let _curEpIdx=-1,_lastScrollY=0;
+function fnPrev(){if(_curEpIdx>0)openEp(_curEpIdx-1);}
+function fnNext(){if(_curEpIdx<EP.length-1)openEp(_curEpIdx+1);}
+window.addEventListener('scroll',function(){
+  if(document.getElementById('reader-view').style.display==='none')return;
+  var cur=window.scrollY;
+  var delta=cur-_lastScrollY;
+  _lastScrollY=cur;
+  var topbar=document.getElementById('reader-topbar');
+  var fn=document.getElementById('float-nav');
+  if(delta>5){topbar.classList.add('hidden');fn.classList.remove('visible');}
+  else if(delta<-5){topbar.classList.remove('hidden');fn.classList.add('visible');}
+},{passive:true});</script>
 </body>
 </html>
