@@ -19,8 +19,6 @@ html{height:100%;overflow:hidden;font-size:14px}
 body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
-/* #app removed - content is direct body child */
-
 /* ── TOPBAR ── */
 #topbar{
   height:48px;flex-shrink:0;
@@ -261,7 +259,6 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-twitter-btn{display:flex;align-items:center;gap:8px;padding:11px 14px;background:#000;color:#fff;border-radius:10px;border:none;font-size:12px;font-weight:500;cursor:pointer;width:100%;justify-content:center}
 .home-twitter-btn:hover{background:#1a1a1a}
 /* ── FOCUS WIDGET ── */
-/* ── FOCUS WIDGET ── */
 .focus-widget-inner{padding:12px 14px 14px}
 .focus-widget-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .focus-widget-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
@@ -283,26 +280,8 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .last-update-dot{width:5px;height:5px;border-radius:50%;background:var(--bd2);flex-shrink:0}
 .last-update-date{font-size:11px;color:var(--tx3)}
 .eval-chip{font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;background:#fff;border:1px solid var(--bd);color:var(--tx2);white-space:nowrap}
-/* legacy - kept for safety */
-.home-about{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
-.home-about-hd{padding:10px 14px 8px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
-.home-about-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-.home-about-avatar{width:48px;height:48px;border-radius:50%;border:1px solid var(--bd);background:linear-gradient(135deg,#e8e8e8,#d0d0d0);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.home-about-row{display:flex;gap:12px;align-items:flex-start}
-.home-recent-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
-
 /* ── HOME UPDATES CARD ── */
 .home-fc{position:relative;overflow:hidden}
-.home-fc-bg{display:none}
-.home-fc-deco{display:none}
-.home-fc-overlay{display:none}
-.home-fc-img-header{display:none}
-.home-fc-inner{position:relative;z-index:2;padding:16px 18px 18px;width:100%}
-.home-fc-series{display:none}
-.home-fc-title{display:none}
-.home-fc-meta{display:none}
-.home-fc-actions{display:none}
-.home-fc-feat-box{display:none}
 .home-fc-sep{height:1px;background:var(--bd);margin:0 0 12px}
 .home-fc-list-hd{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px}
 .home-fc-li{display:flex;flex-direction:column;gap:3px;padding:9px 12px;border-bottom:1px solid var(--bd);cursor:pointer;transition:all .12s;border-left:3px solid transparent;border-radius:0}
@@ -1391,12 +1370,6 @@ const PROJECTS = [
     tags:["보류"]
   },
 ];
-
-const PROJECT_DEFAULT_WIDTHS = {
-  "blood-highschool": 272,
-  "x-project": 272,
-  "biz-oc-doll": 272,
-};
 
 const VOLUMES = {
   "blood-highschool": [
@@ -2840,7 +2813,7 @@ async function renderStoryList(){
         <input id="story-search-${t}" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" onkeydown="onStorySearchKey(event,'${t}')" style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">
         <div id="story-chips-${t}" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>
       </div>
-      <div class="story-tab-row">${existingTabs.map(tb=>`<button class="story-tab-btn${tb===t?' active':''}" onclick="switchStoryTab('${tb}')">${TAB_LABELS[tb]||tb}</button>`).join('')}</div>
+      <div class="story-tab-row">${existingTabs.map(tb=>`<button class="story-tab-btn${tb===t?' active':''}" data-tab="${tb}" onclick="switchStoryTab('${tb}')">${TAB_LABELS[tb]||tb}</button>`).join('')}</div>
       <div id="story-cards-${t}" style="padding:8px 24px 24px">${_buildCards(t)}</div>
     </div>`).join('');
 
@@ -2852,11 +2825,12 @@ async function renderStoryList(){
 
 window.switchStoryTab = function(t){
   document.querySelectorAll('.story-tab-btn').forEach(b=>b.classList.remove('active'));
-  const btn = document.getElementById('story-tab-'+t);
-  if(btn) btn.classList.add('active');
   document.querySelectorAll('[id^="story-tab-content-"]').forEach(el=>el.style.display='none');
   const el = document.getElementById('story-tab-content-'+t);
-  if(el) el.style.display='block';
+  if(el){
+    el.style.display='block';
+    el.querySelectorAll('.story-tab-btn[data-tab="'+t+'"]').forEach(b=>b.classList.add('active'));
+  }
 };
 
 // ── 스토리 캐릭터 검색 칩 ──
@@ -2956,7 +2930,7 @@ async function renderStoryContent(){
       </div>
       ${castHtml}
       <div id="doll-blocks-wrap">${bbDoll(e.blocks||[])}</div>
-      <div class="ep-nav-outer"><div class="ep-nav">
+      <div class="ep-nav-outer" style="border-top:none"><div class="ep-nav">
         <button class="ep-nav-btn ${prev?'':'disabled'}" onclick="${prev?`clickStoryEp(${S.activeStoryEp-1})`:''}">
           <span>←</span><span class="ep-nav-title">${prev?prev.title:'처음 화'}</span>
         </button>
@@ -3285,7 +3259,6 @@ function renderAbout(){
 }
 
 /* ── BUSINESS INQUIRY FORM ── */
-function biqReset(){}
 function biqCopyEmail(btn){
   navigator.clipboard.writeText("rrkt.biz@proton.me").then(function(){
     var svg=btn.querySelector(".biq-copy-svg"),txt=btn.querySelector(".biq-copy-txt");
