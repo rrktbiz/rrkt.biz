@@ -1165,6 +1165,13 @@ body{top:0!important}
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
+<!-- 스토리 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
+<iframe
+  id="story-frame"
+  src="biz-OC-doll/story.html"
+  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
+></iframe>
+
 <!-- EP PICKER MODAL -->
 <div class="ep-picker-modal hidden" id="ep-picker-modal" onclick="closeEpPicker(event)">
   <div class="ep-picker-inner" onclick="event.stopPropagation()">
@@ -2430,16 +2437,7 @@ function renderDollSub(proj){
     <button class="sm-char-link" onclick="openArchiveOverlay()">아카이브 &#9654;</button>
     <button class="sm-char-link" onclick="openEventOverlay()">이벤트 &#9654;</button>
     <button class="sm-char-link" onclick="openVoteOverlay()" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700">인기 투표</button>
-    <div class="doll-banners" style="margin-top:10px">
-      ${dv.categories.map(cat=>`
-        <div class="doll-banner" onclick="clickDollCat('${cat.id}')"
-          style="${S.activeDollCat===cat.id?`outline:2px solid ${proj.acc};border-color:${proj.acc};`:""}">
-          <div class="doll-banner-dot" style="background:${cat.color}"></div>
-          <div class="doll-banner-label">${cat.label}</div>
-          <div class="doll-banner-count">${cat.count}개 수록</div>
-        </div>
-      `).join("")}
-    </div>`;
+    <button class="sm-char-link" onclick="goStory()" style="justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리</button>`;
 }
 
 function setSubTabFn(t){S.subTab=t;if(S.hoveredProj)renderSubPanelContent(S.hoveredProj);}
@@ -2556,17 +2554,9 @@ function mobShowSub(projId){
 
   // 진행 상황 (doll 제외한 기본 / doll)
   if(p.subType==="doll"){
-    const dv=VOLUMES["biz-oc-doll"];
-    // 카테고리 목록
-    html+=`<div class="mob2-cat-list">`;
-    dv.categories.forEach(cat=>{
-      html+=`<div class="mob2-cat-item" onclick="clickDollCat('${cat.id}');closeMobMenu()">
-        <div style="width:10px;height:10px;border-radius:50%;background:${cat.color};flex-shrink:0"></div>
-        <span style="font-size:13px;font-weight:600;flex:1">${cat.label}</span>
-        <span style="font-size:11px;color:var(--tx3)">${cat.count}개</span>
-      </div>`;
-    });
-    html+=`</div>`;
+    html+=`<button class="mob2-intro-link" style="margin-top:6px;justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:10px" onclick="goStory();closeMobMenu()">
+      <span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리
+    </button>`;
 
   } else if(p.subType!=="youtube"){
     // 기본 (웹소설/웹툰 볼륨 목록)
@@ -2655,8 +2645,12 @@ function render(){
   if(S.view !== "event"){
     if(eventFr) eventFr.style.display = "none";
   }
+  var storyFr = document.getElementById("story-frame");
+  if(S.view !== "story"){
+    if(storyFr) storyFr.style.display = "none";
+  }
   // archive/event 뷰일 때 #content 숨기기
-  if(S.view === "archive" || S.view === "event"){
+  if(S.view === "archive" || S.view === "event" || S.view === "story"){
     if(ct) ct.style.display = "none";
   }
   // 모바일 topbar 리셋 (content view 이탈 시)
@@ -2698,6 +2692,10 @@ function render(){
   else if(S.view==="event"){
     document.getElementById("content").style.display="none";
     document.getElementById("event-frame").style.display="block";
+  }
+  else if(S.view==="story"){
+    document.getElementById("content").style.display="none";
+    document.getElementById("story-frame").style.display="block";
   }
   else if(S.view==="about")    renderAbout();
 }
@@ -4489,6 +4487,7 @@ window.openArchiveOverlay = function(){ goArchive(); };
 window.openEventOverlay   = function(){ goEvent();   };
 function goArchive(){ S.view="archive"; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
 function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
+function goStory()  { S.view="story";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
 
 /* ── HOME 말풍선 챗봇 로직 ── */
 (function(){
