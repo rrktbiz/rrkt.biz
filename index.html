@@ -1790,7 +1790,7 @@ const S={
 
 const getProj=id=>PROJECTS.find(p=>p.id===id);
 const ds=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-const stClass=s=>s==="완료"?"done":s==="작업중"?"wip":"plan";
+const stClass=s=>(s==="완료"||s==="done")?"done":(s==="작업중"||s==="wip")?"wip":"plan";
 
 /* ── Global Visitor Counter — Cloudflare Workers ── */
 const VIS_WORKER_URL = 'https://biz-visitor.biz202099.workers.dev';
@@ -2781,9 +2781,10 @@ async function renderStoryList(){
   const tabContents = existingTabs.map(t=>`
     <div id="story-tab-content-${t}" style="display:${t===activeTab?'block':'none'};padding:16px 0">
       ${groups[t].map(e=>{
-        const canRead = e.status==='완료';
+        const canRead = e.status==='완료' || e.status==='done';
         const stCls = stClass(e.status);
-        const wipStyle = e.status==='작업중'?'background:#F9F4CA;color:#F9CB4C':'';
+        const statusLabel = (e.status==='done'||e.status==='완료')?'완료':(e.status==='wip'||e.status==='작업중')?'작업중':'예정';
+        const wipStyle = (e.status==='작업중'||e.status==='wip')?'background:#F9F4CA;color:#F9CB4C':'';
         const cl = canRead?'story-ep-card':'story-ep-card locked';
         const onclick = canRead?`onclick="clickStoryEp(${e._idx})"` :'';
         return `<div class="${cl}" ${onclick}>
@@ -2791,7 +2792,7 @@ async function renderStoryList(){
           <div style="flex:1;min-width:0">
             <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">${e.eyebrow||''}</div>
             <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title||''}</div>
-            <span class="ep-status-badge ${stCls}" style="${wipStyle}">${e.status}</span>
+            <span class="ep-status-badge ${stCls}" style="${wipStyle}">${statusLabel}</span>
           </div>
         </div>`;
       }).join('')}
