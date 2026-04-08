@@ -2728,6 +2728,7 @@ function render(){
   else if(S.view==="progress") { _tlBadgeReset(); renderProgress(); }
   else if(S.view==="intro")    { _tlBadgeReset(); renderIntro(); }
   else if(S.view==="episodes") { _tlBadgeReset(); renderEpList(); }
+  else if(S.view==="content")  renderContentView();
   else if(S.view==="story")         { _tlBadgeReset(); renderStoryList(); }
   else if(S.view==="story-content") renderStoryContent();
   else if(S.view==="charlist"||S.view==="chardetail"){
