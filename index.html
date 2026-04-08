@@ -2767,6 +2767,7 @@ async function renderStoryList(){
   ct.innerHTML = `<div style="padding:40px 24px;text-align:center;color:var(--tx3);font-size:13px">불러오는 중…</div>`;
   const data = await _fetchStoryData();
   const eps = data.episodes || [];
+  const banners = data._banners || {};
   const TAB_LABELS = {main:'메인 스토리', sub:'서브 스토리', event:'이벤트'};
   const TAB_COLORS = {main:'#5a90b0', sub:'#c07090', event:'#c0a040'};
   const groups = {main:[], sub:[], event:[]};
@@ -2777,35 +2778,62 @@ async function renderStoryList(){
     return;
   }
   const activeTab = existingTabs[0];
-  const tabBtns = existingTabs.map(t=>`<button class="story-tab-btn${t===activeTab?' active':''}" onclick="switchStoryTab('${t}')" id="story-tab-${t}">${TAB_LABELS[t]||t}</button>`).join('');
-  const tabContents = existingTabs.map(t=>`
-    <div id="story-tab-content-${t}" style="display:${t===activeTab?'block':'none'};padding:16px 0">
-      ${groups[t].map(e=>{
-        const canRead = e.status==='완료' || e.status==='done';
-        const stCls = stClass(e.status);
-        const statusLabel = (e.status==='done'||e.status==='완료')?'완료':(e.status==='wip'||e.status==='작업중')?'작업중':'예정';
-        const wipStyle = (e.status==='작업중'||e.status==='wip')?'background:#F9F4CA;color:#F9CB4C':'';
-        const cl = canRead?'story-ep-card':'story-ep-card locked';
-        const onclick = canRead?`onclick="clickStoryEp(${e._idx})"` :'';
-        return `<div class="${cl}" ${onclick}>
-          <div class="story-ep-thumb" style="background:linear-gradient(135deg,#1a2e3a,${TAB_COLORS[t]||'#5a90b0'})">${e.num||''}</div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">${e.eyebrow||''}</div>
-            <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title||''}</div>
+
+  function _buildBanner(t){
+    const img = banners[t]||'';
+    if(img) return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:#1a2e3a;overflow:hidden">
+      <img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block">
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.55))">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:#fff">스토리</div>
+      </div></div>`;
+    return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:linear-gradient(135deg,#1a2e3a,${TAB_COLORS[t]||'#5a90b0'});overflow:hidden">
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.4))">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:#fff">스토리</div>
+      </div></div>`;
+  }
+
+  function _buildCards(t){
+    return groups[t].map(e=>{
+      const canRead = e.status==='완료'||e.status==='done';
+      const stCls = stClass(e.status);
+      const typeLabel = TAB_LABELS[e.type]||e.type;
+      const typeColor = TAB_COLORS[e.type]||'#5a90b0';
+      const statusLabel = (e.status==='done'||e.status==='완료')?'완료':(e.status==='wip'||e.status==='작업중')?'작업중':'예정';
+      const wipStyle = (e.status==='작업중'||e.status==='wip')?'background:#F9F4CA;color:#F9CB4C':'';
+      const castNums = (e.castList||[]).map(c=>c.charNum).filter(Boolean);
+      const castHtml = castNums.map(n=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;margin-right:-6px;flex-shrink:0" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
+      const onclick = canRead ? `onclick="clickStoryEp(${e._idx})"` : '';
+      return `<div class="story-ep-card${canRead?'':' locked'}" ${onclick} data-cast="${castNums.join(',')}">
+        <div style="font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:32px;flex-shrink:0">${e.num||''}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid ${typeColor};color:${typeColor};background:${typeColor}18">${typeLabel}</span>
             <span class="ep-status-badge ${stCls}" style="${wipStyle}">${statusLabel}</span>
           </div>
-        </div>`;
-      }).join('')}
+          <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px">${e.title||''}</div>
+          ${castHtml?`<div style="display:flex;align-items:center;padding-left:2px">${castHtml}</div>`:''}
+        </div>
+        ${canRead?`<span style="color:var(--tx3);font-size:14px;flex-shrink:0">›</span>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  const tabBtns = existingTabs.map(t=>`<button class="story-tab-btn${t===activeTab?' active':''}" onclick="switchStoryTab('${t}')" id="story-tab-${t}">${TAB_LABELS[t]||t}</button>`).join('');
+  const tabContents = existingTabs.map(t=>`
+    <div id="story-tab-content-${t}" style="display:${t===activeTab?'block':'none'}">
+      ${_buildBanner(t)}
+      <div style="padding:10px 24px 8px">
+        <input id="story-search-${t}" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" oninput="filterStoryCards('${t}',this.value)" style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">
+      </div>
+      <div id="story-cards-${t}" style="padding:8px 24px 24px">${_buildCards(t)}</div>
     </div>`).join('');
 
   ct.innerHTML=`
     <div style="max-width:720px;margin:0 auto;padding-bottom:40px">
-      <div style="padding:28px 24px 16px">
-        <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">biz-OC-doll</div>
-        <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:var(--tx)">스토리</div>
-      </div>
       <div class="story-tab-row">${tabBtns}</div>
-      <div style="padding:0 24px">${tabContents}</div>
+      ${tabContents}
     </div>`;
 }
 
@@ -2814,8 +2842,23 @@ window.switchStoryTab = function(t){
   const btn = document.getElementById('story-tab-'+t);
   if(btn) btn.classList.add('active');
   document.querySelectorAll('[id^="story-tab-content-"]').forEach(el=>el.style.display='none');
-  const ct = document.getElementById('story-tab-content-'+t);
-  if(ct) ct.style.display='block';
+  const el = document.getElementById('story-tab-content-'+t);
+  if(el) el.style.display='block';
+};
+
+window.filterStoryCards = function(t, val){
+  const q = val.trim();
+  const cards = document.querySelectorAll(`#story-cards-${t} .story-ep-card`);
+  cards.forEach(card=>{
+    const nums = (card.dataset.cast||'').split(',').filter(Boolean);
+    const match = !q || nums.some(n=>n.includes(q));
+    card.style.opacity = match ? '' : '0.2';
+    card.style.pointerEvents = match ? '' : 'none';
+    // 매칭 캐릭터 아이콘 하이라이트
+    card.querySelectorAll('img[data-cast]').forEach(img=>{
+      img.style.outline = (q && img.dataset.cast.includes(q)) ? '2px solid #5a90b0' : '';
+    });
+  });
 };
 
 window.clickStoryEp = function(idx){
