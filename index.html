@@ -2959,7 +2959,9 @@ async function renderStoryContent(){
     if(prevBtn2) prevBtn2.classList.toggle('disabled', !prev);
     if(nextBtn2) nextBtn2.classList.toggle('disabled', !next);
     fep.classList.add('active');
-    fep.classList.remove('visible');
+    // 데스크탑은 즉시 표시, 모바일은 스크롤 핸들러가 제어
+    if(window.innerWidth > 768) fep.classList.add('visible');
+    else fep.classList.remove('visible');
   }
 
   // 스크롤 숨김 (기존 웹소설과 동일 로직)
@@ -4005,6 +4007,18 @@ function renderYtEpList(proj){
 
 /* ── CONTENT VIEW ── */
 function renderContentView(){
+  // story-content에서 남은 인라인 스타일/상태 리셋
+  const _ct = document.getElementById("content");
+  const _tb = document.getElementById("topbar");
+  const _fep = document.getElementById("float-ep-nav");
+  if(_ct){ _ct.style.marginTop="48px"; _ct.style.height="calc(100dvh - 48px)"; }
+  if(_tb) _tb.style.transform="";
+  if(_fep){ _fep._storyMode=false; _fep._prevStoryIdx=null; _fep._nextStoryIdx=null; }
+  if(_ct&&_ct._mobScrollHandler){
+    _ct.removeEventListener("scroll",_ct._mobScrollHandler);
+    _ct._mobScrollHandler=null;
+  }
+
   const proj=getProj(S.activeProj);
   if(!proj){S.view="home";render();return;}
   let vol,eps,epObj,thumbClass="";
