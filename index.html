@@ -2824,8 +2824,9 @@ async function renderStoryList(){
   const tabContents = existingTabs.map(t=>`
     <div id="story-tab-content-${t}" style="display:${t===activeTab?'block':'none'}">
       ${_buildBanner(t)}
-      <div style="padding:10px 24px 8px">
-        <input id="story-search-${t}" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" oninput="filterStoryCards('${t}',this.value)" style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">
+      <div style="padding:10px 24px 6px">
+        <input id="story-search-${t}" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" onkeydown="onStorySearchKey(event,'${t}')" style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">
+        <div id="story-chips-${t}" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>
       </div>
       <div id="story-cards-${t}" style="padding:8px 24px 24px">${_buildCards(t)}</div>
     </div>`).join('');
@@ -2846,17 +2847,51 @@ window.switchStoryTab = function(t){
   if(el) el.style.display='block';
 };
 
-window.filterStoryCards = function(t, val){
-  const q = val.trim();
+// ── 스토리 캐릭터 검색 칩 ──
+const _storyChips = {}; // {tab: Set}
+
+window.onStorySearchKey = function(ev, t){
+  if(ev.key !== 'Enter' && ev.key !== ' ') return;
+  ev.preventDefault();
+  const input = ev.target;
+  const val = input.value.trim();
+  if(!val) return;
+  if(!_storyChips[t]) _storyChips[t] = new Set();
+  _storyChips[t].add(val);
+  input.value = '';
+  _renderStoryChips(t);
+  _applyStoryFilter(t);
+};
+
+function _renderStoryChips(t){
+  const wrap = document.getElementById('story-chips-'+t);
+  if(!wrap) return;
+  const chips = [...(_storyChips[t]||[])];
+  wrap.innerHTML = chips.map(n=>`
+    <span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 12px;background:var(--bg);border:1px solid var(--bd2);border-radius:20px;font-size:11px;font-weight:600;color:var(--tx2)">
+      ${n}
+      <button onclick="removeStoryChip('${t}','${n}')" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:13px;line-height:1;padding:0 0 0 2px">×</button>
+    </span>`).join('');
+}
+
+window.removeStoryChip = function(t, n){
+  if(_storyChips[t]) _storyChips[t].delete(n);
+  _renderStoryChips(t);
+  _applyStoryFilter(t);
+};
+
+function _applyStoryFilter(t){
+  const chips = [...(_storyChips[t]||[])];
   const cards = document.querySelectorAll(`#story-cards-${t} .story-ep-card`);
   cards.forEach(card=>{
     const nums = (card.dataset.cast||'').split(',').filter(Boolean);
-    const match = !q || nums.some(n=>n.includes(q));
+    const match = !chips.length || chips.every(q=>nums.some(n=>n.includes(q)));
     card.style.opacity = match ? '' : '0.2';
     card.style.pointerEvents = match ? '' : 'none';
-    // 매칭 캐릭터 아이콘 하이라이트
     card.querySelectorAll('img[data-cast]').forEach(img=>{
-      img.style.outline = (q && img.dataset.cast.includes(q)) ? '2px solid #5a90b0' : '';
+      const hit = chips.length && chips.some(q=>img.dataset.cast.includes(q));
+      img.style.outline = hit ? '2px solid #5a90b0' : '';
+      img.style.outlineOffset = hit ? '1px' : '';
     });
   });
 };
