@@ -2926,7 +2926,7 @@ async function renderStoryContent(){
   const _dc = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : null;
   const _dollBarVisible = _dc && _dc.enabled && _dc.proxyUrl && _currentLang && _currentLang !== 'ko';
   const tlBarHtml = (_dc && _dc.enabled && _dc.proxyUrl)
-    ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="doll-dl-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="doll-dl-rebtn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px;padding:6px 10px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx3);cursor:pointer;transition:all .12s"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
+    ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};justify-content:center;align-items:center;gap:6px;padding:8px 0 16px"><button id="doll-dl-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="doll-dl-rebtn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px;padding:6px 10px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx3);cursor:pointer;transition:all .12s"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
     : '';
 
   // Nav buttons
@@ -2945,11 +2945,11 @@ async function renderStoryContent(){
     </div>
     <div id="content-topbar-spacer"></div>
     <div class="doll-reader-wrap">
+      ${tlBarHtml}
       <div class="doll-reader-header">
         <div><span class="doll-ep-eyebrow">${e.eyebrow||''}</span>${e.num?`<span class="doll-ep-num"> · ${e.num}</span>`:''}</div>
         <div class="doll-ep-title">${e.title||''}</div>
       </div>
-      ${tlBarHtml}
       ${castHtml}
       <div id="doll-blocks-wrap">${bbDoll(e.blocks||[])}</div>
       <div class="reader-nav">${prevBtn}<button class="reader-nav-btn ep-list-btn" onclick="goStory()">목록</button>${nextBtn}</div>
@@ -2957,6 +2957,7 @@ async function renderStoryContent(){
 
   window._dollEpIdx = S.activeStoryEp;
   window._dollOrigBlocks = e.blocks || [];
+  window._dollOrigTitle = e.title || '';
   ct.scrollTop = 0;
 
   // float-ep-nav 설정
@@ -3087,8 +3088,11 @@ window.onDollDeepL = async function(){
   try{
     var cached=localStorage.getItem(cacheKey);
     if(cached){
+      var obj=JSON.parse(cached);
       var wrap=_dollWrap();
-      if(wrap){ wrap.innerHTML=bbDoll(JSON.parse(cached)); wrap.classList.add('notranslate'); }
+      if(wrap){ wrap.innerHTML=bbDoll(obj.blocks); wrap.classList.add('notranslate'); }
+      var titleEl=document.querySelector('.doll-ep-title');
+      if(titleEl&&obj._title) titleEl.textContent=obj._title;
       _dollTlDone(); return;
     }
   }catch(ex){}
@@ -3096,10 +3100,10 @@ window.onDollDeepL = async function(){
   var data=await _fetchStoryData();
   var ep=data.episodes[window._dollEpIdx];
   if(!ep) return;
-  _doDollTranslate(url,cacheKey,ep.blocks||[],dlLang);
+  _doDollTranslate(url,cacheKey,ep.blocks||[],ep.title||'',dlLang);
 };
 
-function _doDollTranslate(url,cacheKey,blocks,dlLang){
+function _doDollTranslate(url,cacheKey,blocks,origTitle,dlLang){
   var btn=_dollBtn();
   var targets=[];
   blocks.forEach(function(b,i){
@@ -3108,23 +3112,32 @@ function _doDollTranslate(url,cacheKey,blocks,dlLang){
     var clean=t.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').trim();
     if(clean) targets.push({idx:i,text:clean});
   });
-  if(!targets.length) return;
+  /* 제목을 텍스트 배열 맨 앞에 추가 */
+  var titleClean=(origTitle||'').trim();
+  var allTexts=(titleClean?[titleClean]:[] ).concat(targets.map(function(t){return t.text;}));
+  if(!allTexts.length) return;
   if(btn){ btn.innerHTML='번역 중…'; btn.style.opacity='0.6'; btn.style.pointerEvents='none'; }
-  var texts=targets.map(function(t){return t.text;});
   var BATCH=50; var batches=[];
-  for(var i=0;i<texts.length;i+=BATCH) batches.push(texts.slice(i,i+BATCH));
+  for(var i=0;i<allTexts.length;i+=BATCH) batches.push(allTexts.slice(i,i+BATCH));
   Promise.all(batches.map(function(batch){
     return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:batch,target_lang:dlLang||'JA'})})
       .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
       .then(function(d){return d.translations.map(function(t){return t.text;});});
   })).then(function(results){
     var translated=[].concat.apply([],results);
+    /* 첫 번째가 제목 번역 결과 */
+    var offset=titleClean?1:0;
+    var translatedTitle=titleClean?(translated[0]||titleClean):'';
+    var translatedBlocks=translated.slice(offset);
     var tlBlocks=JSON.parse(JSON.stringify(blocks));
-    targets.forEach(function(t,i){if(translated[i])tlBlocks[t.idx].data.text=translated[i];});
-    /* localStorage 저장 → 다음 방문 시 API 재호출 없음 */
-    try{localStorage.setItem(cacheKey,JSON.stringify(tlBlocks));}catch(ex){}
+    targets.forEach(function(t,i){if(translatedBlocks[i])tlBlocks[t.idx].data.text=translatedBlocks[i];});
+    /* localStorage 저장 — 블록 + 제목 함께 */
+    try{localStorage.setItem(cacheKey,JSON.stringify({blocks:tlBlocks,_title:translatedTitle}));}catch(ex){}
+    /* DOM 반영 */
     var wrap=_dollWrap();
     if(wrap){ wrap.innerHTML=bbDoll(tlBlocks); wrap.classList.add('notranslate'); }
+    var titleEl=document.querySelector('.doll-ep-title');
+    if(titleEl&&translatedTitle){ titleEl.textContent=translatedTitle; titleEl.classList.add('notranslate'); }
     _dollTlDone();
   }).catch(function(err){
     console.warn('[DeepL Doll]',err);
@@ -3140,11 +3153,14 @@ window.onDollDeepLRe=async function(){
   var rbtn=_dollRebtn(); if(rbtn) rbtn.style.display='none';
   _dollBtnReset(_dollBtn());
   var wrap=_dollWrap(); if(wrap) wrap.classList.remove('notranslate');
+  /* 제목 원본 복원 */
+  var titleEl=document.querySelector('.doll-ep-title');
+  if(titleEl&&window._dollOrigTitle){ titleEl.textContent=window._dollOrigTitle; titleEl.classList.remove('notranslate'); }
   var cfg=(typeof CONFIG!=='undefined'&&CONFIG.DEEPL)?CONFIG.DEEPL:{};
   var url=cfg.proxyUrl||''; if(!url) return;
   var data=await _fetchStoryData();
   var ep=data.episodes[window._dollEpIdx];
-  if(ep) _doDollTranslate(url,cacheKey,ep.blocks||[],dlLang);
+  if(ep) _doDollTranslate(url,cacheKey,ep.blocks||[],ep.title||'',dlLang);
 };
 
 /* ── 언어 전환 시 doll DeepL 상태 초기화 ── */
@@ -3155,12 +3171,14 @@ window.onDollDeepLRe=async function(){
     var bar=document.getElementById('doll-tl-bar');
     if(bar) bar.style.display=(lang&&lang!=='ko')?'flex':'none';
 
-    /* 2. 원본 블록 복원 */
+    /* 2. 원본 블록 + 제목 복원 */
     var wrap=_dollWrap();
     if(wrap&&window._dollOrigBlocks&&window._dollOrigBlocks.length){
       wrap.innerHTML=bbDoll(window._dollOrigBlocks);
       wrap.classList.remove('notranslate');
     }
+    var titleEl=document.querySelector('.doll-ep-title');
+    if(titleEl&&window._dollOrigTitle){ titleEl.textContent=window._dollOrigTitle; titleEl.classList.remove('notranslate'); }
 
     /* 3. 버튼 상태: 이 언어의 캐시가 있으면 '번역됨', 없으면 리셋 */
     var rbtn=_dollRebtn();
@@ -3174,10 +3192,11 @@ window.onDollDeepLRe=async function(){
       _dollTlDone();
       /* 캐시에서 바로 렌더 */
       try{
-        var cached=localStorage.getItem('dl_doll_'+window._dollEpIdx+'_'+dlLang2);
-        if(cached&&wrap){
-          wrap.innerHTML=bbDoll(JSON.parse(cached));
-          wrap.classList.add('notranslate');
+        var cached2=localStorage.getItem('dl_doll_'+window._dollEpIdx+'_'+dlLang2);
+        if(cached2){
+          var obj2=JSON.parse(cached2);
+          if(wrap){ wrap.innerHTML=bbDoll(obj2.blocks); wrap.classList.add('notranslate'); }
+          if(titleEl&&obj2._title){ titleEl.textContent=obj2._title; titleEl.classList.add('notranslate'); }
         }
       }catch(e){}
     } else {
