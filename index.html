@@ -3056,7 +3056,9 @@ window.onDollDeepL = async function(){
   var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
   var url = cfg.proxyUrl || '';
   if(!url) return;
-  var cacheKey = 'dl_doll_' + window._dollEpIdx + '_EN';
+  var lang = _currentLang || 'ja';
+  var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
+  var cacheKey = 'dl_doll_' + window._dollEpIdx + '_' + dlLang;
   try {
     var cached = localStorage.getItem(cacheKey);
     if(cached){
@@ -3068,10 +3070,10 @@ window.onDollDeepL = async function(){
   var data = await _fetchStoryData();
   var ep = data.episodes[window._dollEpIdx];
   if(!ep) return;
-  _doDollTranslate(url, cacheKey, ep.blocks||[]);
+  _doDollTranslate(url, cacheKey, ep.blocks||[], dlLang);
 };
 
-function _doDollTranslate(url, cacheKey, blocks){
+function _doDollTranslate(url, cacheKey, blocks, dlLang){
   var btn = document.getElementById('deepl-translate-btn');
   var targets = [];
   blocks.forEach(function(b, i){
@@ -3086,7 +3088,7 @@ function _doDollTranslate(url, cacheKey, blocks){
   var BATCH=50; var batches=[];
   for(var i=0;i<texts.length;i+=BATCH) batches.push(texts.slice(i,i+BATCH));
   Promise.all(batches.map(function(batch){
-    return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:batch,target_lang:'EN'})})
+    return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:batch,target_lang:dlLang||'JA'})})
       .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
       .then(function(d){ return d.translations.map(function(t){ return t.text; }); });
   })).then(function(results){
@@ -3112,7 +3114,9 @@ function _dollTlDone(){
 }
 
 window.onDollDeepLRe = async function(){
-  var cacheKey='dl_doll_'+window._dollEpIdx+'_EN';
+  var lang = _currentLang || 'ja';
+  var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
+  var cacheKey='dl_doll_'+window._dollEpIdx+'_'+dlLang;
   try { localStorage.removeItem(cacheKey); } catch(ex){}
   var btn=document.getElementById('deepl-translate-btn');
   var rbtn=document.getElementById('deepl-retranslate-btn');
@@ -3123,7 +3127,7 @@ window.onDollDeepLRe = async function(){
   if(!url) return;
   var data=await _fetchStoryData();
   var ep=data.episodes[window._dollEpIdx];
-  if(ep) _doDollTranslate(url,'dl_doll_'+window._dollEpIdx+'_EN',ep.blocks||[]);
+  if(ep) _doDollTranslate(url,cacheKey,ep.blocks||[],dlLang);
 };
 
 /* ── ABOUT PAGE ── */
