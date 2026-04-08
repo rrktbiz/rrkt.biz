@@ -2926,7 +2926,7 @@ async function renderStoryContent(){
   const _dc = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : null;
   const _dollBarVisible = _dc && _dc.enabled && _dc.proxyUrl && _currentLang && _currentLang !== 'ko';
   const tlBarHtml = (_dc && _dc.enabled && _dc.proxyUrl)
-    ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="deepl-translate-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="deepl-retranslate-btn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
+    ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};align-items:center;gap:6px;padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--bd)"><button id="doll-dl-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="doll-dl-rebtn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px;padding:6px 10px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx3);cursor:pointer;transition:all .12s"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
     : '';
 
   // Nav buttons
@@ -3051,90 +3051,97 @@ function bbDoll(blocks){
 
 /* ── DeepL 번역 — biz-OC-doll 스토리 ── */
 window._dollEpIdx = -1;
+window._dollOrigBlocks = [];
+
+function _dollBtn(){ return document.getElementById('doll-dl-btn'); }
+function _dollRebtn(){ return document.getElementById('doll-dl-rebtn'); }
+function _dollWrap(){ return document.getElementById('doll-blocks-wrap'); }
+
+function _dollBtnReset(btn){
+  if(!btn) return;
+  btn.classList.remove('done');
+  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역';
+  btn.style.cssText='display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s';
+}
+
+function _dollTlDone(){
+  var btn=_dollBtn(), rbtn=_dollRebtn();
+  if(btn){
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
+    btn.classList.add('done');
+    btn.style.cssText='display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #93c5fd;border-radius:6px;background:#dbeafe;color:#1e40af;cursor:default;transition:all .12s';
+  }
+  if(rbtn) rbtn.style.display='flex';
+}
 
 window.onDollDeepL = async function(){
-  var btn = document.getElementById('deepl-translate-btn');
+  var btn=_dollBtn();
   if(!btn || btn.classList.contains('done')) return;
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-  var url = cfg.proxyUrl || '';
-  if(!url) return;
-  var lang = _currentLang || 'ja';
-  var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
-  var cacheKey = 'dl_doll_' + window._dollEpIdx + '_' + dlLang;
-  try {
-    var cached = localStorage.getItem(cacheKey);
+  var cfg=(typeof CONFIG!=='undefined'&&CONFIG.DEEPL)?CONFIG.DEEPL:{};
+  var url=cfg.proxyUrl||''; if(!url) return;
+  var lang=_currentLang||'ja';
+  if(lang==='ko') return;
+  var dlLang=(lang==='zh-CN'||lang==='zh-TW')?'ZH':lang.split('-')[0].toUpperCase();
+  var cacheKey='dl_doll_'+window._dollEpIdx+'_'+dlLang;
+  /* localStorage 캐시 히트 → API 호출 없이 즉시 적용 */
+  try{
+    var cached=localStorage.getItem(cacheKey);
     if(cached){
-      var wrap = document.getElementById('doll-blocks-wrap');
-      if(wrap){
-        wrap.innerHTML = bbDoll(JSON.parse(cached));
-        wrap.classList.add('notranslate');
-      }
+      var wrap=_dollWrap();
+      if(wrap){ wrap.innerHTML=bbDoll(JSON.parse(cached)); wrap.classList.add('notranslate'); }
       _dollTlDone(); return;
     }
-  } catch(ex){}
-  var data = await _fetchStoryData();
-  var ep = data.episodes[window._dollEpIdx];
+  }catch(ex){}
+  /* 캐시 없음 → DeepL API 호출 */
+  var data=await _fetchStoryData();
+  var ep=data.episodes[window._dollEpIdx];
   if(!ep) return;
-  _doDollTranslate(url, cacheKey, ep.blocks||[], dlLang);
+  _doDollTranslate(url,cacheKey,ep.blocks||[],dlLang);
 };
 
-function _doDollTranslate(url, cacheKey, blocks, dlLang){
-  var btn = document.getElementById('deepl-translate-btn');
-  var targets = [];
-  blocks.forEach(function(b, i){
-    if(['system','narration','sfx','speech','thought'].indexOf(b.type) === -1) return;
-    var t = (b.data && b.data.text) ? b.data.text : '';
-    var clean = t.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').trim();
-    if(clean) targets.push({idx:i, text:clean});
+function _doDollTranslate(url,cacheKey,blocks,dlLang){
+  var btn=_dollBtn();
+  var targets=[];
+  blocks.forEach(function(b,i){
+    if(['system','narration','sfx','speech','thought'].indexOf(b.type)===-1) return;
+    var t=(b.data&&b.data.text)?b.data.text:'';
+    var clean=t.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').trim();
+    if(clean) targets.push({idx:i,text:clean});
   });
   if(!targets.length) return;
-  if(btn){ btn.innerHTML = '번역 중…'; btn.style.opacity='0.6'; btn.style.pointerEvents='none'; }
-  var texts = targets.map(function(t){ return t.text; });
+  if(btn){ btn.innerHTML='번역 중…'; btn.style.opacity='0.6'; btn.style.pointerEvents='none'; }
+  var texts=targets.map(function(t){return t.text;});
   var BATCH=50; var batches=[];
   for(var i=0;i<texts.length;i+=BATCH) batches.push(texts.slice(i,i+BATCH));
   Promise.all(batches.map(function(batch){
     return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:batch,target_lang:dlLang||'JA'})})
-      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-      .then(function(d){ return d.translations.map(function(t){ return t.text; }); });
+      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+      .then(function(d){return d.translations.map(function(t){return t.text;});});
   })).then(function(results){
     var translated=[].concat.apply([],results);
     var tlBlocks=JSON.parse(JSON.stringify(blocks));
-    targets.forEach(function(t,i){ if(translated[i]) tlBlocks[t.idx].data.text=translated[i]; });
-    try { localStorage.setItem(cacheKey, JSON.stringify(tlBlocks)); } catch(ex){}
-    var wrap=document.getElementById('doll-blocks-wrap');
-    if(wrap){
-      wrap.innerHTML=bbDoll(tlBlocks);
-      wrap.classList.add('notranslate'); /* Google Translate 재번역 방지 */
-    }
+    targets.forEach(function(t,i){if(translated[i])tlBlocks[t.idx].data.text=translated[i];});
+    /* localStorage 저장 → 다음 방문 시 API 재호출 없음 */
+    try{localStorage.setItem(cacheKey,JSON.stringify(tlBlocks));}catch(ex){}
+    var wrap=_dollWrap();
+    if(wrap){ wrap.innerHTML=bbDoll(tlBlocks); wrap.classList.add('notranslate'); }
     _dollTlDone();
   }).catch(function(err){
-    console.warn('[DeepL Doll]', err);
-    if(btn){ btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; btn.style.opacity=''; btn.style.pointerEvents=''; }
-    alert('번역 실패: '+err.message);
+    console.warn('[DeepL Doll]',err);
+    if(btn){ _dollBtnReset(btn); btn.style.opacity=''; btn.style.pointerEvents=''; }
   });
 }
 
-function _dollTlDone(){
-  var btn=document.getElementById('deepl-translate-btn');
-  var rbtn=document.getElementById('deepl-retranslate-btn');
-  if(btn){ btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨'; btn.classList.add('done'); btn.style.opacity=''; btn.style.pointerEvents=''; }
-  if(rbtn) rbtn.style.display='flex';
-}
-
-window.onDollDeepLRe = async function(){
-  var lang = _currentLang || 'ja';
-  var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
+window.onDollDeepLRe=async function(){
+  var lang=_currentLang||'ja';
+  var dlLang=(lang==='zh-CN'||lang==='zh-TW')?'ZH':lang.split('-')[0].toUpperCase();
   var cacheKey='dl_doll_'+window._dollEpIdx+'_'+dlLang;
-  try { localStorage.removeItem(cacheKey); } catch(ex){}
-  var btn=document.getElementById('deepl-translate-btn');
-  var rbtn=document.getElementById('deepl-retranslate-btn');
-  if(rbtn) rbtn.style.display='none';
-  if(btn){ btn.classList.remove('done'); btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; }
-  var wrap2=document.getElementById('doll-blocks-wrap');
-  if(wrap2) wrap2.classList.remove('notranslate');
-  var cfg=(typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-  var url=cfg.proxyUrl||'';
-  if(!url) return;
+  try{localStorage.removeItem(cacheKey);}catch(ex){}
+  var rbtn=_dollRebtn(); if(rbtn) rbtn.style.display='none';
+  _dollBtnReset(_dollBtn());
+  var wrap=_dollWrap(); if(wrap) wrap.classList.remove('notranslate');
+  var cfg=(typeof CONFIG!=='undefined'&&CONFIG.DEEPL)?CONFIG.DEEPL:{};
+  var url=cfg.proxyUrl||''; if(!url) return;
   var data=await _fetchStoryData();
   var ep=data.episodes[window._dollEpIdx];
   if(ep) _doDollTranslate(url,cacheKey,ep.blocks||[],dlLang);
@@ -3142,26 +3149,22 @@ window.onDollDeepLRe = async function(){
 
 /* ── 언어 전환 시 doll DeepL 상태 초기화 ── */
 (function(){
-  var _orig = window.setLang || (typeof setLang === 'function' ? setLang : null);
-  var _wrap = function(lang){
+  var _orig=typeof setLang==='function'?setLang:null;
+  window.setLang=function(lang){
     /* 번역 바 표시/숨김 */
-    var bar = document.getElementById('doll-tl-bar');
-    if(bar) bar.style.display = (lang && lang !== 'ko') ? 'flex' : 'none';
-    /* 번역 상태 초기화 */
-    var wrap = document.getElementById('doll-blocks-wrap');
-    if(wrap && window._dollOrigBlocks){
-      wrap.innerHTML = bbDoll(window._dollOrigBlocks);
+    var bar=document.getElementById('doll-tl-bar');
+    if(bar) bar.style.display=(lang&&lang!=='ko')?'flex':'none';
+    /* 번역 상태 초기화 — 원본 블록으로 복원 */
+    var wrap=_dollWrap();
+    if(wrap&&window._dollOrigBlocks.length){
+      wrap.innerHTML=bbDoll(window._dollOrigBlocks);
       wrap.classList.remove('notranslate');
     }
-    var btn = document.getElementById('deepl-translate-btn');
-    var rbtn = document.getElementById('deepl-retranslate-btn');
-    if(btn){ btn.classList.remove('done'); btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역'; btn.style.opacity=''; btn.style.pointerEvents=''; }
-    if(rbtn) rbtn.style.display='none';
+    var rbtn=_dollRebtn(); if(rbtn) rbtn.style.display='none';
+    _dollBtnReset(_dollBtn());
     /* 원래 setLang 실행 */
     if(_orig) _orig(lang);
   };
-  /* setLang은 function 선언이므로 변수 재할당으로 오버라이드 */
-  window.setLang = _wrap;
 })();
 
 /* ── ABOUT PAGE ── */
