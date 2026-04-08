@@ -2803,7 +2803,7 @@ async function renderStoryList(){
       const statusLabel = (e.status==='done'||e.status==='완료')?'완료':(e.status==='wip'||e.status==='작업중')?'작업중':'예정';
       const wipStyle = (e.status==='작업중'||e.status==='wip')?'background:#F9F4CA;color:#F9CB4C':'';
       const castNums = (e.castList||[]).map(c=>c.charNum).filter(Boolean);
-      const castHtml = castNums.map(n=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;margin-right:-6px;flex-shrink:0" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
+      const castHtml = castNums.map((n,i)=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:30px;height:30px;border-radius:50%;border:2px solid var(--sb);background:#eef6fa;object-fit:cover;margin-left:${i===0?'0':'-8px'};flex-shrink:0;box-shadow:0 0 0 1px #cce4ee" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
       const onclick = canRead ? `onclick="clickStoryEp(${e._idx})"` : '';
       return `<div class="story-ep-card${canRead?'':' locked'}" ${onclick} data-cast="${castNums.join(',')}">
         <div style="font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:32px;flex-shrink:0">${e.num||''}</div>
@@ -2828,12 +2828,12 @@ async function renderStoryList(){
         <input id="story-search-${t}" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" onkeydown="onStorySearchKey(event,'${t}')" style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">
         <div id="story-chips-${t}" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>
       </div>
+      <div class="story-tab-row">${existingTabs.map(tb=>`<button class="story-tab-btn${tb===t?' active':''}" onclick="switchStoryTab('${tb}')">${TAB_LABELS[tb]||tb}</button>`).join('')}</div>
       <div id="story-cards-${t}" style="padding:8px 24px 24px">${_buildCards(t)}</div>
     </div>`).join('');
 
   ct.innerHTML=`
     <div style="max-width:720px;margin:0 auto;padding-bottom:40px">
-      <div class="story-tab-row">${tabBtns}</div>
       ${tabContents}
     </div>`;
 }
