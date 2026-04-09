@@ -1762,6 +1762,7 @@ const S={
   activeProj:null,activeVol:null,activeEp:null,
   activeDollCat:null,
   activeStoryEp:null,
+  _storyType:null,_storyNum:null,
   subOpen:false,subTab:"ALL",
   calY:new Date().getFullYear(),calM:new Date().getMonth(),selDay:null,calOverview:false,calTimeline:false,calSpan:1,
   homeMiniM:new Date().getMonth(),homeMiniY:new Date().getFullYear(),
@@ -2883,7 +2884,7 @@ function _applyStoryFilter(t){
 };
 
 window.clickStoryEp = function(idx){
-  S.view='story-content'; S.activeStoryEp=idx; pushHash(); render();
+  S.view='story-content'; S.activeStoryEp=idx; S._storyType=null; S._storyNum=null; pushHash(); render();
 };
 
 async function renderStoryContent(){
@@ -2891,6 +2892,13 @@ async function renderStoryContent(){
   ct.innerHTML = `<div style="padding:40px 24px;text-align:center;color:var(--tx3);font-size:13px">불러오는 중…</div>`;
   const data = await _fetchStoryData();
   const eps = data.episodes || [];
+
+  // hash에서 type+num으로 진입한 경우 인덱스 resolve
+  if(S.activeStoryEp === null && S._storyType && S._storyNum){
+    const idx = eps.findIndex(e => e.type === S._storyType && e.num === S._storyNum);
+    if(idx !== -1) S.activeStoryEp = idx;
+  }
+
   const e = eps[S.activeStoryEp];
   if(!e){ S.view='story'; render(); return; }
   const prev = eps[S.activeStoryEp-1]||null;
@@ -4729,23 +4737,32 @@ function stateToHash(){
   const v = S.view;
   if(v === 'home')       return '#home';
   if(v === 'about')      return '#about';
-  if(v === 'archive')    return '#archive';
-  if(v === 'event')      return '#event';
+  if(v === 'archive')    return '#proj/biz-oc-doll/archive';
+  if(v === 'event')      return '#proj/biz-oc-doll/event';
   if(v === 'progress')   return '#progress';
   if(v === 'calendar'){
     if(S.calTimeline) return `#calendar/${S.calY}/timeline`;
     if(S.calOverview) return `#calendar/${S.calY}/overview`;
     return `#calendar/${S.calY}/${S.calM+1}`;
   }
-  if(v === 'charlist')   return '#chars';
+  if(v === 'charlist')   return '#proj/biz-oc-doll/chars';
   if(v === 'intro')      return `#proj/${S.activeProj}/intro`;
   if(v === 'episodes'){
     if(S.activeProj === 'biz-oc-doll' && S.activeDollCat)
       return `#proj/biz-oc-doll/doll/${S.activeDollCat}`;
     return `#proj/${S.activeProj}/eps/${S.activeVol}`;
   }
-  if(v === 'story')         return '#story';
-  if(v === 'story-content') return `#story/ep/${S.activeStoryEp}`;
+  if(v === 'story')         return '#proj/biz-oc-doll/story';
+  if(v === 'story-content'){
+    const _TYPE_SLUG = {main:'main_story', sub:'sub_story', event:'event'};
+    const _eps = _storyData ? (_storyData.episodes||[]) : [];
+    const _ep = S.activeStoryEp !== null ? _eps[S.activeStoryEp] : null;
+    if(_ep && _ep.type && _ep.num){
+      const slug = _TYPE_SLUG[_ep.type] || _ep.type;
+      return `#proj/biz-oc-doll/${slug}/ep/${_ep.num}`;
+    }
+    return `#proj/biz-oc-doll/story/ep/${S.activeStoryEp}`;
+  }
   if(v === 'content'){
     if(S.activeProj === 'biz-oc-doll')
       return `#proj/biz-oc-doll/dolleep/${S.activeDollCat}/${S.activeEp}`;
@@ -4766,8 +4783,6 @@ function applyHash(hash){
     S.view='story'; S.activeStoryEp=null; return;
   }
   if(p0 === 'about'){ S.view='about'; return; }
-  if(p0 === 'archive'){ S.view='archive'; return; }
-  if(p0 === 'event')  { S.view='event';   return; }
   if(p0 === 'calendar'){
     S.view='calendar';
     if(parts[1]) S.calY = parseInt(parts[1]);
@@ -4785,6 +4800,22 @@ function applyHash(hash){
     if(sub === 'doll')    { S.activeDollCat=parts[3]; S.activeEp=null; S.view='episodes'; return; }
     if(sub === 'ep')      { S.activeVol=parts[3]; S.activeEp=parseInt(parts[4]); S.view='content'; return; }
     if(sub === 'dolleep') { S.activeDollCat=parts[3]; S.activeEp=parseInt(parts[4]); S.view='content'; return; }
+    if(sub === 'chars')   { S.view='charlist'; return; }
+    if(sub === 'archive') { S.view='archive'; return; }
+    if(sub === 'event')   { S.view='event'; return; }
+    if(sub === 'story'){
+      if(parts[3]==='ep' && parts[4]!=null){ S.view='story-content'; S.activeStoryEp=parseInt(parts[4]); S._storyType=null; S._storyNum=null; return; }
+      S.view='story'; S.activeStoryEp=null; return;
+    }
+    // type+num 방식: main_story/ep/1-1, sub_story/ep/1-1, event/ep/1-1
+    const _TYPE_REV = {main_story:'main', sub_story:'sub', event:'event'};
+    if(_TYPE_REV[sub] && parts[3]==='ep' && parts[4]!=null){
+      S.view='story-content';
+      S.activeStoryEp=null;
+      S._storyType=_TYPE_REV[sub];
+      S._storyNum=parts[4];
+      return;
+    }
   }
   S.view='home';S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;S.activeChar=null;
 }
