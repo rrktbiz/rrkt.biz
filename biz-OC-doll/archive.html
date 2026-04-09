@@ -1804,19 +1804,21 @@ initHeroRankTicker();
 </div>
 
 <script>
-/* ══ 모달 열기/닫기 ══ */
+/* ══ 팝업창 열기/닫기 ══ */
+let _formPopup = null;
 function openFormModal(){
-  document.getElementById("form-modal-overlay").classList.add("show");
-  document.body.style.overflow = "hidden";
+  const w = 640, h = 720;
+  const left = Math.round(window.screenX + (window.outerWidth - w) / 2);
+  const top  = Math.round(window.screenY + (window.outerHeight - h) / 2);
+  _formPopup = window.open(
+    'archive_form.html',
+    'biz_register',
+    `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`
+  );
+  if(_formPopup) _formPopup.focus();
 }
-function closeFormModal(){
-  document.getElementById("form-modal-overlay").classList.remove("show");
-  document.body.style.overflow = "";
-}
-function closeAllModals(){
-  document.getElementById("complete-overlay").classList.remove("show");
-  closeFormModal();
-}
+function closeFormModal(){ if(_formPopup && !_formPopup.closed){ _formPopup.close(); } }
+function closeAllModals(){ closeFormModal(); }
 
 /* ══ 폼 상태 ══ */
 let selectedTypes = new Set();
