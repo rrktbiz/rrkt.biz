@@ -187,9 +187,10 @@ button{font-family:var(--fn);cursor:pointer}
 
     </div>
 
-    <div class="sheet-slot">
+    <div class="sheet-slot" style="position:relative">
       <div class="sheet-hint-icon">◻</div>
       <div class="sheet-hint-text">캐릭터 시트 / 일러스트<br><span style="opacity:.5">visual sheet · reference · SNS</span></div>
+      <div id="detail-date-badge" style="display:none;position:absolute;top:0;right:0;background:rgba(0,0,0,0.06);padding:4px 10px;font-size:10px;color:var(--tx2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;border-bottom-left-radius:8px">—</div>
     </div>
   </div>
 
@@ -419,6 +420,17 @@ function renderDetail(id){
   document.getElementById('detail-id-code').textContent = c.idCode;
   document.getElementById('detail-illust-inner').style.background = `linear-gradient(${c.grad})`;
   document.getElementById('detail-holder').textContent = c.holder;
+
+  // 날짜 뱃지 (updated 있을 때만 표시)
+  const badge = document.getElementById('detail-date-badge');
+  if(badge){
+    if(c.updated){
+      badge.textContent = c.updated;
+      badge.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
 
   // Prev / Next
   const idx = window.CHARACTERS.findIndex(ch=>ch.id===c.id);
