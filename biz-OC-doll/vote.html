@@ -416,49 +416,46 @@ renderGrid();
 renderTray();
 loadVoteData();
 
-// ---- 득표 데이터 로드 ----
+// ---- 득표 데이터 로드 (15초 타임아웃) ----
 function loadVoteData(cb) {
-  fetch(API + '?action=getVotes')
-    .then(function(r){ return r.json(); })
-    .then(function(json){
-      if (json.ok) {
-        voteData = json.votes;
-        updateGridCounts();
-        if (cb) cb();
-      }
-    })
-    .catch(function(){});
-}
-
-// ---- 투표 제출 (GET 방식 - CORS 문제 우회) ----
-function submitVote() {
-  if (hasDone || selected.length === 0) return;
-  document.getElementById('loading-overlay').classList.add('show');
-
-  var url = API + '?action=vote&ids=' + encodeURIComponent(JSON.stringify(selected));
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(json){
-      document.getElementById('loading-overlay').classList.remove('show');
-      if (json.ok) {
-        hasDone = true;
-        localStorage.setItem('ocidol_done', '1');
-        localStorage.setItem('ocidol_sel',  JSON.stringify(selected));
-        selected.forEach(function(id){
-          voteData[id] = (voteData[id] || 0) + 1;
-        });
-        document.getElementById('done-banner').classList.add('show');
-        document.getElementById('submit-btn').disabled = true;
-        document.getElementById('submit-btn').textContent = '투표 완료';
-        updateGridCounts();
-      } else {
-        alert('오류가 발생했어요: ' + (json.error || '알 수 없는 오류'));
-      }
+  var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 15000) : null;
+  fetch(API + '?action=getVotes', ctrl ? {signal: ctrl.signal} : {})
+    .then(function(r){ return r.text(); })
+    .then(function(txt){
+      if(timer) clearTimeout(timer);
+      try {
+        var json = JSON.parse(txt);
+        if(json && json.votes) { voteData = json.votes; updateGridCounts(); }
+      } catch(e) {}
+      if(cb) cb();
     })
     .catch(function(){
-      document.getElementById('loading-overlay').classList.remove('show');
-      alert('네트워크 오류가 발생했어요. 다시 시도해주세요.');
+      if(timer) clearTimeout(timer);
+      if(cb) cb();
     });
+}
+
+// ---- 투표 제출 (즉시 완료 처리 → 서버에 비동기 전송) ----
+function submitVote() {
+  if (hasDone || selected.length === 0) return;
+
+  // 로컬 즉시 완료 처리
+  hasDone = true;
+  localStorage.setItem('ocidol_done', '1');
+  localStorage.setItem('ocidol_sel',  JSON.stringify(selected));
+  selected.forEach(function(id){
+    voteData[id] = (voteData[id] || 0) + 1;
+  });
+  document.getElementById('done-banner').classList.add('show');
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = '투표 완료';
+  updateGridCounts();
+  updateSelBadge();
+
+  // 서버에 비동기 전송 (응답 기다리지 않음)
+  var url = API + '?action=vote&ids=' + encodeURIComponent(JSON.stringify(selected));
+  fetch(url).catch(function(){});
 }
 
 // ---- 선택 토글 ----
@@ -525,41 +522,30 @@ function renderTray() {
   }).join('');
 }
 
-// ---- 재투표 ----
+// ---- 재투표 (즉시 처리 → 서버에 비동기 전송) ----
 function retakeVote() {
   if (!confirm('투표를 취소하고 다시 선택하시겠어요?')) return;
   var prevSelected = JSON.parse(localStorage.getItem('ocidol_sel') || '[]');
   if (prevSelected.length === 0) return;
 
-  document.getElementById('loading-overlay').classList.add('show');
+  // 로컬 즉시 취소 처리
+  prevSelected.forEach(function(id){
+    voteData[id] = Math.max(0, (voteData[id] || 0) - 1);
+  });
+  hasDone = false;
+  selected = [];
+  localStorage.removeItem('ocidol_done');
+  localStorage.removeItem('ocidol_sel');
+  document.getElementById('done-banner').classList.remove('show');
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = '투표하기';
+  updateSelBadge();
+  renderGrid();
+  updateGridCounts();
 
+  // 서버에 비동기 전송
   var url = API + '?action=cancelVote&ids=' + encodeURIComponent(JSON.stringify(prevSelected));
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(json){
-      document.getElementById('loading-overlay').classList.remove('show');
-      if (json.ok) {
-        prevSelected.forEach(function(id){
-          voteData[id] = Math.max(0, (voteData[id] || 0) - 1);
-        });
-        hasDone = false;
-        selected = [];
-        localStorage.removeItem('ocidol_done');
-        localStorage.removeItem('ocidol_sel');
-        document.getElementById('done-banner').classList.remove('show');
-        document.getElementById('submit-btn').disabled = true;
-        document.getElementById('submit-btn').textContent = '투표하기';
-        updateSelBadge();
-        renderGrid();
-        updateGridCounts();
-      } else {
-        alert('취소 중 오류가 발생했어요: ' + (json.error || '알 수 없는 오류'));
-      }
-    })
-    .catch(function(){
-      document.getElementById('loading-overlay').classList.remove('show');
-      alert('네트워크 오류가 발생했어요. 다시 시도해주세요.');
-    });
+  fetch(url).catch(function(){});
 }
 
 // ---- 그리드 렌더 ----
