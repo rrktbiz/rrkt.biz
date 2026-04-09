@@ -3780,7 +3780,9 @@ function renderCalendar(){
     const buildYearHtml = (yr) => {
       const yearEntries=allEntries.filter(e=>e.date.startsWith(yr));
       const yearCount=yearEntries.length;
-      const navCall=w=>w.projId==="biz-oc-doll"
+      const navCall=w=>w.isChar
+        ?`goDollChar()`
+        :w.projId==="biz-oc-doll"
         ?`goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
         :`goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
       const months=Array.from({length:12},(_,mo)=>{
@@ -3916,7 +3918,7 @@ function renderCalendar(){
         <div>
           <div class="cal-top-row"><button class="cal-nav-btn" onclick="prevMonth()">&#8249;</button><span class="cal-month-lbl">${monthStr}</span><button class="cal-nav-btn" onclick="nextMonth()">&#8250;</button></div>
           <div class="cal-full"><div class="cal-dnames">${DNAMES.map((n,i)=>`<div class="cal-dn ${DCLS[i]}">${n}</div>`).join("")}</div><div class="cal-grid-rows">${cellsHtml}</div></div>
-          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row"><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
+          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?'캐릭터 시트':w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden">
@@ -4658,6 +4660,38 @@ async function loadCharDataFromSheets(){
   }
 }
 
+/* ── 캐릭터 updated 날짜 → WORK_LOG 주입 ── */
+function injectCharDatesIntoWorkLog(){
+  const chars = window._CHAR_DATA || [];
+  const dollProj = PROJECTS.find(p=>p.id==='biz-oc-doll');
+  const acc = dollProj ? dollProj.acc : '#5a90b0';
+  // 기존 char 항목 제거 (중복 방지)
+  Object.keys(WORK_LOG).forEach(k=>{
+    WORK_LOG[k] = WORK_LOG[k].filter(w=>!w.isChar);
+    if(!WORK_LOG[k].length) delete WORK_LOG[k];
+  });
+  chars.forEach(c=>{
+    if(!c.updated) return;
+    // 날짜 정규화: "2026. 4. 9." → "2026-04-09"
+    let dateStr = c.updated;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)){
+      const mm = dateStr.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+      if(!mm) return;
+      dateStr = `${mm[1]}-${mm[2].padStart(2,'0')}-${mm[3].padStart(2,'0')}`;
+    }
+    if(!WORK_LOG[dateStr]) WORK_LOG[dateStr] = [];
+    WORK_LOG[dateStr].push({
+      proj: 'biz-OC-doll',
+      title: c.code,
+      status: c.status || '완료',
+      acc,
+      projId: 'biz-oc-doll',
+      isChar: true,
+      charCode: c.code,
+    });
+  });
+}
+
 /* ── 스토리 에디터 JSON 불러오기 (진행현황 카테고리 카드용) ── */
 async function loadStoryData(){
   try{
@@ -4788,7 +4822,7 @@ loadEpDataFromSheets().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
 });
 loadCharDataFromSheets().then(ok=>{
-  if(ok) render();
+  if(ok){ injectCharDatesIntoWorkLog(); render(); }
 });
 loadStoryData().then(ok=>{
   if(ok) render();
@@ -4797,6 +4831,7 @@ loadStoryData().then(ok=>{
 function rebuildWorkLog(){
   Object.keys(WORK_LOG).forEach(k=>delete WORK_LOG[k]);
   buildWorkLog();
+  injectCharDatesIntoWorkLog();
 }
 
 /* ── 모바일 스와이프 드로어 제스처 ── */
