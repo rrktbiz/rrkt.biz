@@ -187,7 +187,7 @@ button{font-family:var(--fn);cursor:pointer}
 
     </div>
 
-    <div class="sheet-slot" style="position:relative">
+    <div class="sheet-slot" style="position:relative" id="detail-sheet-slot">
       <div class="sheet-hint-icon">◻</div>
       <div class="sheet-hint-text">캐릭터 시트 / 일러스트<br><span style="opacity:.5">visual sheet · reference · SNS</span></div>
       <div id="detail-date-badge" style="display:none;position:absolute;top:0;right:0;background:rgba(0,0,0,0.06);padding:4px 10px;font-size:10px;color:var(--tx2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;border-bottom-left-radius:8px">—</div>
@@ -347,54 +347,9 @@ function renderList(){
     ? `<div class="char-empty">${state.filter==="♥" ? "좋아요한 캐릭터가 없습니다 ♥" : "검색 결과 없음"}</div>`
     : filtered.map(c=>{
         const isLiked = liked.has(c.id);
-        const face001 = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
-          <rect width="100" height="100" fill="#c8dff0"/>
-          <rect width="100" height="100" fill="url(#bg001)"/>
-          <defs>
-            <linearGradient id="bg001" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#b8d8f0"/>
-              <stop offset="100%" stop-color="#e8c8d8"/>
-            </linearGradient>
-            <linearGradient id="hair001" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1a1a2a"/>
-              <stop offset="100%" stop-color="#2e2e42"/>
-            </linearGradient>
-            <clipPath id="clip001"><rect width="100" height="100"/></clipPath>
-          </defs>
-          <g clip-path="url(#clip001)">
-            <ellipse cx="50" cy="120" rx="36" ry="28" fill="#f5c8a0" opacity=".18"/>
-            <ellipse cx="50" cy="115" rx="30" ry="22" fill="#e8b890"/>
-            <ellipse cx="50" cy="68" rx="26" ry="32" fill="#fde8cc"/>
-            <ellipse cx="50" cy="60" rx="24" ry="28" fill="#fde8cc"/>
-            <path d="M26 52 Q28 20 50 16 Q72 20 74 52 Q72 34 50 30 Q28 34 26 52Z" fill="url(#hair001)"/>
-            <ellipse cx="50" cy="14" rx="26" ry="10" fill="#1a1a2a"/>
-            <path d="M24 52 Q22 30 36 22" stroke="#1a1a2a" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <path d="M76 52 Q78 30 64 22" stroke="#1a1a2a" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <path d="M24 46 Q26 26 38 20 Q50 15 62 20 Q74 26 76 46" fill="#1a1a2a"/>
-            <path d="M50 16 Q38 20 30 30 L26 50 Q28 24 50 18 Q72 24 74 50 L70 30 Q62 20 50 16Z" fill="#2a2a3e"/>
-            <ellipse cx="38" cy="56" rx="7" ry="7.5" fill="white"/>
-            <ellipse cx="62" cy="56" rx="7" ry="7.5" fill="white"/>
-            <circle cx="38" cy="57" r="5" fill="#c87840"/>
-            <circle cx="62" cy="57" r="5" fill="#c87840"/>
-            <circle cx="38" cy="57" r="3.5" fill="#2a1a0a"/>
-            <circle cx="62" cy="57" r="3.5" fill="#2a1a0a"/>
-            <circle cx="39.5" cy="55.5" r="1.2" fill="white" opacity=".95"/>
-            <circle cx="63.5" cy="55.5" r="1.2" fill="white" opacity=".95"/>
-            <path d="M32 51 Q38 48.5 44 51" stroke="#3a2a1a" stroke-width="1" fill="none" stroke-linecap="round"/>
-            <path d="M56 51 Q62 48.5 68 51" stroke="#3a2a1a" stroke-width="1" fill="none" stroke-linecap="round"/>
-            <ellipse cx="33" cy="65" rx="4" ry="2" fill="#f0a0a0" opacity=".55"/>
-            <ellipse cx="67" cy="65" rx="4" ry="2" fill="#f0a0a0" opacity=".55"/>
-            <path d="M44 70 Q50 74 56 70" stroke="#d07888" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-            <path d="M46 70 Q50 72 54 70" fill="#e898a8" opacity=".6"/>
-            <ellipse cx="50" cy="62" rx="2" ry="2.5" fill="#fdd8b8" stroke="#e0a888" stroke-width=".5"/>
-            <path d="M42 85 Q50 88 58 85 Q64 90 50 95 Q36 90 42 85Z" fill="#e8b890"/>
-            <path d="M40 84 Q50 92 60 84" fill="#d4a070" opacity=".4"/>
-            <rect x="35" y="92" width="30" height="8" rx="4" fill="#e8c8b0" opacity=".5"/>
-          </g>
-        </svg>`;
-        const thumbContent = c.id === 1
-          ? face001
-          : `<div class="char-thumb-inner" style="background:linear-gradient(${c.grad})"></div>`;
+        const iconNum = String(c.id).padStart(3,'0');
+        const iconSrc = `images/character_sheet/${iconNum}_icon.png`;
+        const thumbContent = `<img src="${iconSrc}" class="char-thumb-face" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="char-thumb-inner" style="display:none;background:linear-gradient(${c.grad})"></div>`;
         return `
         <div class="char-card" onclick="openChar(${c.id})">
           <div class="char-thumb">
@@ -419,9 +374,45 @@ function renderDetail(id){
   document.getElementById('detail-breadcrumb').textContent = c.idCode;
   document.getElementById('detail-id-code').textContent = c.idCode;
   document.getElementById('detail-illust-inner').style.background = `linear-gradient(${c.grad})`;
+  const iconNum2 = String(c.id).padStart(3,'0');
+  const thumbEl = document.getElementById('detail-illust-inner');
+  thumbEl.innerHTML = `<img src="images/character_sheet/${iconNum2}_icon.png" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.remove()">`;
   document.getElementById('detail-holder').textContent = c.holder;
 
-  // 날짜 뱃지 (updated 있을 때만 표시)
+  // sheet-slot 이미지 로드 (sheet.png → sheet2.png 순, 없으면 힌트 유지)
+  const sheetNum = String(c.id).padStart(3,'0');
+  const slot = document.getElementById('detail-sheet-slot');
+  if(slot){
+    // 기존 이미지 제거, 힌트 복원
+    slot.querySelectorAll('img.sheet-img').forEach(el=>el.remove());
+    slot.querySelector('.sheet-hint-icon').style.display='';
+    slot.querySelector('.sheet-hint-text').style.display='';
+
+    function tryLoadSheet(filename, onLoaded){
+      const img = document.createElement('img');
+      img.className = 'sheet-img';
+      img.src = `images/character_sheet/${filename}`;
+      img.style.cssText = 'width:100%;display:block;border-radius:8px';
+      img.onload = ()=>{ slot.prepend(img); onLoaded && onLoaded(); };
+    }
+    // sheet.png 먼저
+    const img1 = document.createElement('img');
+    img1.className = 'sheet-img';
+    img1.src = `images/character_sheet/${sheetNum}_sheet.png`;
+    img1.style.cssText = 'width:100%;display:block;border-radius:8px';
+    img1.onload = ()=>{
+      slot.querySelector('.sheet-hint-icon').style.display='none';
+      slot.querySelector('.sheet-hint-text').style.display='none';
+      slot.prepend(img1);
+      // sheet2.png도 시도
+      const img2 = document.createElement('img');
+      img2.className = 'sheet-img';
+      img2.src = `images/character_sheet/${sheetNum}_sheet2.png`;
+      img2.style.cssText = 'width:100%;display:block;border-radius:8px;margin-top:8px';
+      img2.onload = ()=>{ slot.appendChild(img2); };
+    };
+    slot.appendChild(img1);
+  }
   const badge = document.getElementById('detail-date-badge');
   if(badge){
     if(c.updated){
