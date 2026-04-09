@@ -253,6 +253,7 @@ button{font-family:var(--fn);cursor:pointer}
       if(rows.length < 2) return;
 
       // 헤더: code / type / holder / status / updated
+      // 완료 · 작업중 캐릭터만 표시
       window.CHARACTERS = rows.slice(1)
         .filter(r=>(r[0]||'').trim())
         .map((r,i)=>{
@@ -265,7 +266,8 @@ button{font-family:var(--fn);cursor:pointer}
             status: (r[3]||'').trim(),
             grad:   GRADIENTS[(num-1) % GRADIENTS.length],
           };
-        });
+        })
+        .filter(c=>c.status==='완료' || c.status==='작업중');
 
       renderList(); // 데이터 로드 후 리스트 재렌더
     }catch(e){
