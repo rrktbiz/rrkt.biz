@@ -24,6 +24,16 @@ var CONFIG = {
   API: 'https://script.google.com/macros/s/AKfycbyQ9DiU6MuIZQGue3o12fEKd38HBTFVvSn1KVDpz7Nsqzu7KJDzQCBeRJGZ3vHRwZMg0Q/exec',
 
   // --------------------------------------------------
+  //  Google Sheets ID (공개 CSV 방식 — API 키 불필요)
+  //
+  //  설정 방법:
+  //  1. 구글시트 → 공유 → "링크가 있는 모든 사용자 → 뷰어"로 설정
+  //  2. 시트 URL에서 /d/ 뒤의 ID를 복사해서 아래에 붙여넣기
+  //     예: https://docs.google.com/spreadsheets/d/【여기】/edit
+  // --------------------------------------------------
+  SHEETS_ID: '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk',
+  
+  // --------------------------------------------------
   //  Gemini API 키 (Google AI Studio — 무료)
   //  aistudio.google.com → Get API Key → 복사 후 붙여넣기
   // --------------------------------------------------
@@ -87,3 +97,14 @@ var CONFIG = {
 var API      = CONFIG.API;
 var VOTE_URL    = CONFIG.API;       // vote.html 기존 코드 호환용
 var GEMINI_KEY  = CONFIG.GEMINI_KEY; // 챗봇용
+var SHEETS_ID   = CONFIG.SHEETS_ID;  // 구글시트 ID
+
+// =====================================================
+//  구글시트 CSV URL 생성 헬퍼
+//  사용법: SHEET_CSV('OC-characters')
+// =====================================================
+function SHEET_CSV(tabName){
+  return 'https://docs.google.com/spreadsheets/d/' + CONFIG.SHEETS_ID
+       + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(tabName);
+}
+
