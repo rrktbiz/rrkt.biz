@@ -252,17 +252,17 @@ button{font-family:var(--fn);cursor:pointer}
       });
       if(rows.length < 2) return;
 
-      // 헤더: code / holder / status / updated
+      // 헤더: code / type / holder / status / updated
       window.CHARACTERS = rows.slice(1)
         .filter(r=>(r[0]||'').trim())
         .map((r,i)=>{
-          const code = (r[0]||'').trim(); // BIZOCDOLL001
+          const code = (r[0]||'').trim();
           const num  = parseInt(code.replace('BIZOCDOLL','')) || (i+1);
           return {
             id:     num,
             idCode: code,
-            holder: (r[1]||'—').trim() || '—',
-            status: (r[2]||'').trim(),
+            holder: (r[2]||'—').trim() || '—',
+            status: (r[3]||'').trim(),
             grad:   GRADIENTS[(num-1) % GRADIENTS.length],
           };
         });
