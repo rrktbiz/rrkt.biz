@@ -1246,8 +1246,8 @@ body{top:0!important}
 ══════════════════════════════════════════════════════ */
 
 /* ── Google Sheets 동기화 설정 (API 키 불필요 — 공개 CSV 방식) ── */
-const SHEETS_ID = "19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk";
-/* ↑ 시트를 "링크가 있는 모든 사용자 → 뷰어"로 공개 설정만 하면 됩니다. */
+const SHEETS_ID = CONFIG.SHEETS_ID;
+/* ↑ config.js 의 SHEETS_ID 에 구글시트 ID를 입력하세요. */
 
 /**
  * 에피소드 본문 가져오기 — GitHub Gist / raw URL 직접 fetch
@@ -3636,11 +3636,11 @@ function renderHome(){
                 const cards=activeProjs.map(p=>{
                   let done,wip,plan,total;
                   if(p.id==='biz-oc-doll'){
-                    const dv=VOLUMES['biz-oc-doll'];
-                    const eps=Object.values(dv.episodes).flat();
-                    done=eps.filter(e=>e.status==='완료').length;
-                    wip=eps.filter(e=>e.status==='작업중').length;
-                    total=dv.categories.reduce((s,c)=>s+c.count,0);
+                    // 캐릭터 시트 데이터 기준 (loadCharDataFromSheets 로드 후)
+                    const chars=window._CHAR_DATA||[];
+                    done=chars.filter(c=>c.status==='완료').length;
+                    wip=chars.filter(c=>c.status==='작업중').length;
+                    total=200;
                     plan=total-done-wip;
                   } else {
                     const eps=(VOLUMES[p.id]||[]).filter(v=>v.episodes.length>0).flatMap(v=>v.episodes);
@@ -4703,6 +4703,42 @@ async function loadEpDataFromSheets(){
   }
 }
 
+/* ── 캐릭터 시트 불러오기 (OC-characters 탭 CSV) ── */
+async function loadCharDataFromSheets(){
+  try{
+    const url = SHEET_CSV('OC-characters');
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('CSV fetch 실패 ' + res.status);
+    const csv = await res.text();
+
+    // CSV 파싱 (쉼표+따옴표 처리)
+    const rows = csv.trim().split('\n').map(r=>{
+      const cols=[]; let cur='', inQ=false;
+      for(const ch of r){
+        if(ch==='"'){inQ=!inQ;}
+        else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+        else cur+=ch;
+      }
+      cols.push(cur.trim());
+      return cols;
+    });
+    if(rows.length < 2) return false;
+
+    // 헤더: code / holder / status / updated
+    window._CHAR_DATA = rows.slice(1).map(r=>({
+      code:    (r[0]||'').trim(),
+      holder:  (r[1]||'').trim(),
+      status:  (r[2]||'').trim(),
+      updated: (r[3]||'').trim(),
+    })).filter(c=>c.code);
+
+    return true;
+  }catch(e){
+    console.warn('캐릭터 CSV 불러오기 실패:', e.message);
+    return false;
+  }
+}
+
 // ══════════════════════════════════════════════
 //  # HASH NAVIGATION — history.pushState 방식
 //  pushState는 이벤트를 발생시키지 않으므로
@@ -4818,6 +4854,9 @@ if(location.hash && location.hash.length > 1){
 render();
 loadEpDataFromSheets().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
+});
+loadCharDataFromSheets().then(ok=>{
+  if(ok) render(); // 캐릭터 데이터 로드 후 도넛차트 재렌더
 });
 
 function rebuildWorkLog(){
