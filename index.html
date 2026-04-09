@@ -1111,16 +1111,7 @@ body{top:0!important}
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
-<!-- VOTE OVERLAY (iframe 방식) -->
-<div id="vote-overlay" onclick="if(event.target===this)closeVoteOverlay()" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);align-items:center;justify-content:center;">
-  <div style="width:min(860px,96vw);height:min(90vh,900px);background:var(--sb);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 40px #00000030">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--bd);flex-shrink:0;background:var(--sb)">
-      <div style="font-size:13px;font-weight:700;color:var(--tx)">VOTE</div>
-      <button onclick="closeVoteOverlay()" style="background:transparent;border:none;color:var(--tx3);font-size:22px;line-height:1;padding:0 6px;cursor:pointer">&times;</button>
-    </div>
-    <iframe id="vote-iframe" style="flex:1;border:none;width:100%;background:var(--sm)"></iframe>
-  </div>
-</div>
+<!-- VOTE: 팝업 방식으로 전환 (overlay 제거됨) -->
 
 <!-- 아카이브 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
 <iframe
@@ -5029,25 +5020,23 @@ function rebuildWorkLog(){
   };
 })();
 
-/* ── 투표 오버레이 (iframe) ── */
+/* ── 투표 팝업 (window.open) ── */
+var _votePopup = null;
 window.openVoteOverlay = function(){
-  var overlay = document.getElementById('vote-overlay');
-  var iframe  = document.getElementById('vote-iframe');
-  // getAttribute로 확인 — .src는 브라우저가 절대경로로 바꿔서 비교가 꼬임
-  if(!iframe.getAttribute('src')){
-    iframe.setAttribute('src', 'biz-OC-doll/vote.html');
+  var pw = 900, ph = 720;
+  var left = Math.round((screen.width  - pw) / 2);
+  var top  = Math.round((screen.height - ph) / 2);
+  var features = 'width='+pw+',height='+ph+',left='+left+',top='+top+',resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
+  if(_votePopup && !_votePopup.closed){
+    _votePopup.focus();
+  } else {
+    _votePopup = window.open('biz-OC-doll/vote.html', 'vote_popup', features);
   }
-  overlay.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
 };
 window.closeVoteOverlay = function(){
-  var overlay = document.getElementById('vote-overlay');
-  if(overlay) overlay.style.display = 'none';
-  document.body.style.overflow = '';
+  if(_votePopup && !_votePopup.closed) _votePopup.close();
+  _votePopup = null;
 };
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape') closeVoteOverlay();
-});
 
 /* ── 아카이브 / 이벤트 뷰 전환 ── */
 window.openArchiveOverlay = function(){ goArchive(); };
