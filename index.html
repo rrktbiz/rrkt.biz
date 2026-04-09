@@ -3612,13 +3612,13 @@ function renderHome(){
             </div>
             <!-- 통계 4칸 -->
             ${(()=>{
-              const allEps=PROJECTS.filter(p=>(p.status||'active')==='active').flatMap(p=>{
-                if(p.id==='biz-oc-doll') return Object.values(VOLUMES['biz-oc-doll'].episodes).flat();
-                return (VOLUMES[p.id]||[]).filter(v=>v.episodes.length>0).flatMap(v=>v.episodes);
-              });
-              const done=allEps.filter(e=>e.status==='완료').length;
-              const wip=allEps.filter(e=>e.status==='작업중').length;
-              const plan=allEps.filter(e=>e.status==='예정').length;
+              // 블러드하이스쿨: 에피소드 기준 / biz-OC-doll: 구글시트 캐릭터 기준
+              const bhEps = PROJECTS.filter(p=>(p.status||'active')==='active'&&p.id!=='biz-oc-doll')
+                .flatMap(p=>(VOLUMES[p.id]||[]).filter(v=>v.episodes.length>0).flatMap(v=>v.episodes));
+              const chars = window._CHAR_DATA || [];
+              const done = bhEps.filter(e=>e.status==='완료').length  + chars.filter(c=>c.status==='완료').length;
+              const wip  = bhEps.filter(e=>e.status==='작업중').length + chars.filter(c=>c.status==='작업중').length;
+              const plan = bhEps.filter(e=>e.status==='예정').length  + chars.filter(c=>c.status==='예정').length;
               const sortedDates=Object.keys(WORK_LOG).sort();
               const lastDateStr=sortedDates[sortedDates.length-1]||null;
               const days=lastDateStr?Math.floor((new Date()-new Date(lastDateStr))/86400000):null;
