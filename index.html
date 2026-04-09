@@ -1324,19 +1324,7 @@ const PROJECTS = [
     intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 프로젝트. .",
     tags:["비주얼게임","판타지","OC","자캐","드라마"]
   },
-  {
-    id:"x-project",
-    label:"X project",
-    acc:"#111827", acc2:"#1e3a8a",
-    illust:"",
-    illustDesc:"캐릭터 기반 버추얼 콘텐츠 프로젝트",
-    status:"active",
-    keepSub:true, landOnIntro:true,
-    subType:"youtube",
-    youtubeUrl:"https://youtube.com/@your_channel",
-    intro:"유투브 캐릭터.",
-    tags:["음악","유튜브"]
-  },
+
   /* ── 완료 프로젝트 샘플 (필요 시 수정) ── */
   {
     id:"sample-done-1",
@@ -1434,32 +1422,6 @@ const VOLUMES = {
       {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
     ]},
   ],
-  "x-project": [
-    {id:1, label:"시즌1 Origin", sub:"Origin Arc", grad:"150deg,#000814,#0a1a38,#1e3a8a", type:"그 외", tags:["SF","디스토피아"],
-     coverId:null,
-     synopsis:"X project의 첫 번째 시즌. 붕괴된 세계에서 신호를 쫓는 이야기.",
-     episodes:[
-      {id:1, title:"Ch.1 Origin",   date:null, status:"예정", textId:null},
-      {id:2, title:"Ch.2 Fracture", date:null, status:"예정", textId:null},
-      {id:3, title:"Ch.3 Echo",     date:null, status:"예정", textId:null},
-    ]},
-    {id:2, label:"커버곡 모음 Vol.1", sub:"Cover Songs", grad:"150deg,#0a0a0a,#1a1a2e,#1e3a8a", type:"커버곡", tags:["음악","커버"],
-     coverId:null,
-     synopsis:"X project 아티스트의 커버곡 모음집 첫 번째 볼륨.",
-     episodes:[
-      {id:1, title:"Cover 01 - 제목 미정", date:null, status:"예정", textId:null},
-      {id:2, title:"Cover 02 - 제목 미정", date:null, status:"예정", textId:null},
-      {id:3, title:"Cover 03 - 제목 미정", date:null, status:"예정", textId:null},
-    ]},
-    {id:3, label:"시즌2 Void", sub:"Void Arc", grad:"150deg,#000010,#060628,#1a2a5e", type:"그 외", tags:["SF","미스터리"],
-     coverId:null,
-     synopsis:"두 번째 시즌. 공허 속에서 신호를 발신하는 존재.",
-     episodes:[
-      {id:4, title:"Ch.4 Void",     date:null, status:"예정", textId:null},
-      {id:5, title:"Ch.5 Signal",   date:null, status:"예정", textId:null},
-      {id:6, title:"Ch.6 Collapse", date:null, status:"예정", textId:null},
-    ]},
-  ],
   "biz-oc-doll": {
     categories: [
       {id:"char",   label:"캐릭터스토리", color:"#5a90b0", count:24},
@@ -1484,7 +1446,7 @@ const AUTHOR_NOTE = {
 /* Build work log */
 const WORK_LOG = {};
 function buildWorkLog(){
-  ["blood-highschool","x-project"].forEach(pid=>{
+  ["blood-highschool"].forEach(pid=>{
     const proj = PROJECTS.find(p=>p.id===pid);
     (VOLUMES[pid]||[]).forEach(v=>v.episodes.forEach(e=>{
       if(!e.date)return;
@@ -3662,7 +3624,7 @@ function renderHome(){
               <button onclick="goProgress()" style="font-size:9px;color:var(--tx3);background:transparent;border:none;cursor:pointer;font-family:var(--fn)">전체보기 →</button>
             </div>
             <!-- 도넛+일러스트 3개 가로 -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);align-items:start">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);align-items:stretch">
               ${(()=>{
                 const r=22, circ=2*Math.PI*r;
                 function arc(val,total,offset){
@@ -3670,7 +3632,8 @@ function renderHome(){
                   const len=(val/total)*circ;
                   return `stroke-dasharray="${len.toFixed(1)} ${(circ-len).toFixed(1)}" stroke-dashoffset="${(-offset).toFixed(1)}"`;
                 }
-                return PROJECTS.filter(p=>(p.status||'active')==='active').map(p=>{
+                const activeProjs=PROJECTS.filter(p=>(p.status||'active')==='active');
+                const cards=activeProjs.map(p=>{
                   let done,wip,plan,total;
                   if(p.id==='biz-oc-doll'){
                     const dv=VOLUMES['biz-oc-doll'];
@@ -3714,7 +3677,22 @@ function renderHome(){
                       </div>
                     </div>
                   </div>`;
-                }).join('');
+                });
+                // 3-column grid 빈칸 채우기 — Coming Soon 플레이스홀더
+                const remainder = cards.length % 3;
+                const padCount = remainder === 0 ? 0 : 3 - remainder;
+                for(let i=0;i<padCount;i++){
+                  cards.push(`<div style="background:var(--sb);display:flex;flex-direction:column;">
+                    <div style="position:relative;aspect-ratio:1/1;width:100%;overflow:hidden;border-bottom:1px solid var(--bd);background:var(--sm);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.18"><circle cx="16" cy="16" r="14" stroke="var(--tx)" stroke-width="1.5"/><path d="M10 16h12M16 10v12" stroke="var(--tx)" stroke-width="1.5" stroke-linecap="round"/></svg>
+                      <span style="font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--tx3);opacity:.45">Coming Soon</span>
+                    </div>
+                    <div style="flex:1;padding:16px 10px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+                      <span style="font-size:9px;letter-spacing:.1em;font-weight:600;color:var(--tx3);opacity:.4;text-transform:uppercase">New project</span>
+                    </div>
+                  </div>`);
+                }
+                return cards.join('');
               })()}
             </div>
             <!-- 통계 4칸 -->
@@ -4469,7 +4447,7 @@ function clickProj(id){
     // S.view는 건드리지 않음 — 콘텐츠 영역 유지
     // (archive, charlist, intro 등 현재 보고 있는 화면이 그대로 유지됨)
   }
-  const dw={"blood-highschool":240,"x-project":240,"biz-oc-doll":240}[id]||240;
+  const dw={"blood-highschool":240,"biz-oc-doll":240}[id]||240;
   document.documentElement.style.setProperty("--sm-w",dw+"px");
   closeMobMenu();
   pushHash();
@@ -4687,8 +4665,6 @@ async function loadEpDataFromSheets(){
     // 프로젝트 이름 → ID 매핑
     const projMap = {
       "블러드하이스쿨": "blood-highschool",
-      "X project":      "x-project",
-      "x-project":      "x-project",
       "biz-OC-doll":    "biz-oc-doll",
       "biz-oc-doll":    "biz-oc-doll",
     };
