@@ -21,13 +21,15 @@ button{font-family:var(--fn);cursor:pointer}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 
 /* ── TOP BAR ── */
-.top-bar{padding:10px 20px;background:var(--sb);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10;flex-wrap:wrap}
-.tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:4px 8px;border-radius:5px;transition:all .12s;font-family:var(--fn)}
+.top-bar{padding:10px 20px;background:var(--sb);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10;flex-wrap:nowrap;min-width:0}
+.tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:4px 8px;border-radius:5px;transition:all .12s;font-family:var(--fn);white-space:nowrap;flex-shrink:0}
 .tb-back:hover{background:var(--bg);color:var(--tx)}
-.tb-sep{width:1px;height:14px;background:var(--bd)}
-.tb-crumb{font-size:10px;font-weight:500;color:var(--tx3)}
-.tb-arr{font-size:10px;color:var(--bd2)}
-.tb-cur{font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+.tb-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
+.tb-crumb{font-size:10px;font-weight:500;color:var(--tx3);white-space:nowrap;flex-shrink:0}
+.tb-arr{font-size:10px;color:var(--bd2);flex-shrink:0}
+.tb-cur{font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.tb-crumbs-mid{display:inline-flex;align-items:center;gap:8px;flex-shrink:1;min-width:0}
+@media(max-width:520px){.tb-crumbs-mid{display:none}}
 
 /* ── CHAR LIST ── */
 .char-page{padding:22px 24px}
@@ -91,6 +93,7 @@ button{font-family:var(--fn);cursor:pointer}
 
 /* 시트 슬롯 */
 .sheet-slot{min-height:320px;border:1px dashed var(--bd2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.sheet-slot.has-image{border:none;min-height:0;border-radius:0}
 .sheet-hint-icon{font-size:22px;opacity:.15}
 .sheet-hint-text{font-size:10px;color:var(--tx3);line-height:1.8;text-align:center}
 
@@ -129,7 +132,7 @@ button{font-family:var(--fn);cursor:pointer}
 /* ── WIDTH CONTROL ── */
 .char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
 .char-page-inner.wide{max-width:none}
-.width-toggle-btn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:var(--sb);border:1px solid var(--bd);border-radius:7px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn)}
+.width-toggle-btn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:var(--sb);border:1px solid var(--bd);border-radius:7px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn);flex-shrink:0}
 .width-toggle-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
 </style>
 
@@ -170,10 +173,12 @@ button{font-family:var(--fn);cursor:pointer}
   <div class="top-bar">
     <button class="tb-back" onclick="showList()">← 목록</button>
     <div class="tb-sep"></div>
-    <span class="tb-crumb">biz-OC-doll</span>
-    <span class="tb-arr">›</span>
-    <span class="tb-crumb">캐릭터 일람</span>
-    <span class="tb-arr">›</span>
+    <span class="tb-crumbs-mid">
+      <span class="tb-crumb">biz-OC-doll</span>
+      <span class="tb-arr">›</span>
+      <span class="tb-crumb">캐릭터 일람</span>
+      <span class="tb-arr">›</span>
+    </span>
     <span class="tb-cur" id="detail-breadcrumb"></span>
     <button class="width-toggle-btn" id="sheet-wide-btn" onclick="toggleSheetWidth()" title="시트 너비 전환" style="margin-left:auto">⇔ <span id="sheet-wide-label">넓게 보기</span></button>
   </div>
@@ -415,6 +420,7 @@ function renderDetail(id){
     slot.querySelectorAll('img.sheet-img').forEach(el=>el.remove());
     slot.querySelector('.sheet-hint-icon').style.display='';
     slot.querySelector('.sheet-hint-text').style.display='';
+    slot.classList.remove('has-image');
 
     function tryLoadSheet(filename, onLoaded){
       const img = document.createElement('img');
@@ -431,6 +437,7 @@ function renderDetail(id){
     img1.onload = ()=>{
       slot.querySelector('.sheet-hint-icon').style.display='none';
       slot.querySelector('.sheet-hint-text').style.display='none';
+      slot.classList.add('has-image');
       slot.prepend(img1);
       // sheet2.png도 시도
       const img2 = document.createElement('img');
