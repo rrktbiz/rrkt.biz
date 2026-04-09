@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 캐릭터 일람</title>
+<script src="../config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 
 </head>
@@ -213,30 +214,71 @@ button{font-family:var(--fn);cursor:pointer}
 </div>
 
 <script>
-/* ── DATA ── */
+/* ── DATA — 구글시트 OC-characters 탭 CSV에서 로드 ── */
 (function(){
-if(window.CHARACTERS) return;
-  const TYPES=["M","N","F","O"];
-  const TYPE_SEQ=["M","M","M","N","N","F","F","F","O","O"];
+  if(window.CHARACTERS) return;
+  window.CHARACTERS = []; // 로드 전 빈 배열 (renderList는 fetch 후 다시 호출)
 
   const GRADIENTS=[
-    "135deg,#e0e7ff,#a5b4fc",
-    "135deg,#fce7f3,#f9a8d4",
-    "135deg,#d1fae5,#6ee7b7",
-    "135deg,#fef3c7,#fcd34d",
-    "135deg,#ffe4e6,#fda4af",
-    "135deg,#e0f2fe,#7dd3fc",
-    "135deg,#f3e8ff,#c4b5fd",
-    "135deg,#ecfccb,#a3e635",
-    "135deg,#fff7ed,#fdba74",
-    "135deg,#f0fdf4,#86efac",
+    "135deg,#e0e7ff,#a5b4fc","135deg,#fce7f3,#f9a8d4",
+    "135deg,#d1fae5,#6ee7b7","135deg,#fef3c7,#fcd34d",
+    "135deg,#ffe4e6,#fda4af","135deg,#e0f2fe,#7dd3fc",
+    "135deg,#f3e8ff,#c4b5fd","135deg,#ecfccb,#a3e635",
+    "135deg,#fff7ed,#fdba74","135deg,#f0fdf4,#86efac",
   ];
 
-  window.CHARACTERS = Array.from({length:10},(_,i)=>{
-    const serial=String(i+1).padStart(3,"0");
-    const idCode=`BIZOCDOLL${serial}`;
-    return {id:i+1, type:TYPE_SEQ[i], grad:GRADIENTS[i], idCode, holder:"—"};
-  });
+  async function loadChars(){
+    try{
+      // config.js 의 SHEET_CSV() 헬퍼 사용
+      const url = (typeof SHEET_CSV === 'function')
+        ? SHEET_CSV('OC-characters')
+        : null;
+      if(!url) throw new Error('config.js 미로드');
+
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('CSV fetch 실패 ' + res.status);
+      const csv = await res.text();
+
+      // CSV 파싱
+      const rows = csv.trim().split('\n').map(r=>{
+        const cols=[]; let cur='', inQ=false;
+        for(const ch of r){
+          if(ch==='"'){inQ=!inQ;}
+          else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+          else cur+=ch;
+        }
+        cols.push(cur.trim());
+        return cols;
+      });
+      if(rows.length < 2) return;
+
+      // 헤더: code / holder / status / updated
+      window.CHARACTERS = rows.slice(1)
+        .filter(r=>(r[0]||'').trim())
+        .map((r,i)=>{
+          const code = (r[0]||'').trim(); // BIZOCDOLL001
+          const num  = parseInt(code.replace('BIZOCDOLL','')) || (i+1);
+          return {
+            id:     num,
+            idCode: code,
+            holder: (r[1]||'—').trim() || '—',
+            status: (r[2]||'').trim(),
+            grad:   GRADIENTS[(num-1) % GRADIENTS.length],
+          };
+        });
+
+      renderList(); // 데이터 로드 후 리스트 재렌더
+    }catch(e){
+      console.warn('캐릭터 CSV 불러오기 실패:', e.message);
+      // 폴백: 200개 빈 캐릭터 생성
+      window.CHARACTERS = Array.from({length:200},(_,i)=>({
+        id:i+1, idCode:`BIZOCDOLL${String(i+1).padStart(3,'0')}`,
+        holder:'—', status:'', grad:GRADIENTS[i%GRADIENTS.length],
+      }));
+      renderList();
+    }
+  }
+  loadChars();
 })();
 
 /* ── STATE ── */
