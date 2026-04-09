@@ -190,7 +190,7 @@ button{font-family:var(--fn);cursor:pointer}
     <div class="sheet-slot" style="position:relative" id="detail-sheet-slot">
       <div class="sheet-hint-icon">◻</div>
       <div class="sheet-hint-text">캐릭터 시트 / 일러스트<br><span style="opacity:.5">visual sheet · reference · SNS</span></div>
-      <div id="detail-date-badge" style="display:none;position:absolute;top:0;right:0;background:rgba(0,0,0,0.06);padding:4px 10px;font-size:10px;color:var(--tx2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;border-bottom-left-radius:8px">—</div>
+      <div id="detail-date-badge" style="display:none;position:absolute;top:0;right:0;z-index:10;background:rgba(0,0,0,0.06);padding:4px 10px;font-size:10px;color:var(--tx2);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;border-bottom-left-radius:8px">—</div>
     </div>
   </div>
 
@@ -416,8 +416,17 @@ function renderDetail(id){
   }
   const badge = document.getElementById('detail-date-badge');
   if(badge){
-    if(c.updated){
-      badge.textContent = c.updated;
+    // gviz CSV 날짜 정규화 (2026. 4. 9. → 2026-04-09)
+    function normalizeDate(v){
+      if(!v) return '';
+      if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+      const m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+      if(m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+      return v;
+    }
+    const dateStr = normalizeDate(c.updated);
+    if(dateStr){
+      badge.textContent = dateStr;
       badge.style.display = 'block';
     } else {
       badge.style.display = 'none';
