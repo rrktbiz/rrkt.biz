@@ -4724,12 +4724,13 @@ async function loadCharDataFromSheets(){
     });
     if(rows.length < 2) return false;
 
-    // 헤더: code / holder / status / updated
+    // 헤더: code / type / holder / status / updated
     window._CHAR_DATA = rows.slice(1).map(r=>({
       code:    (r[0]||'').trim(),
-      holder:  (r[1]||'').trim(),
-      status:  (r[2]||'').trim(),
-      updated: (r[3]||'').trim(),
+      type:    (r[1]||'').trim(),
+      holder:  (r[2]||'').trim(),
+      status:  (r[3]||'').trim(),
+      updated: (r[4]||'').trim(),
     })).filter(c=>c.code);
 
     return true;
