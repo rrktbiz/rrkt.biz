@@ -262,6 +262,7 @@ button{font-family:var(--fn);cursor:pointer}
           return {
             id:     num,
             idCode: code,
+            type:   (r[1]||'').trim(),
             holder: (r[2]||'—').trim() || '—',
             status: (r[3]||'').trim(),
             grad:   GRADIENTS[(num-1) % GRADIENTS.length],
