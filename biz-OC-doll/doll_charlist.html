@@ -59,6 +59,12 @@ button{font-family:var(--fn);cursor:pointer}
 .char-sort-btn.asc .sort-arrow{display:inline-block;transform:scaleY(-1)}
 .sort-arrow{display:inline-block;font-size:10px;transition:transform .15s}
 .char-tab.liked-tab{letter-spacing:.5px}
+.sort-dropdown-wrap{position:relative;display:inline-flex}
+.sort-dropdown-menu{display:none;position:absolute;top:calc(100% + 4px);right:0;background:var(--sb);border:1px solid var(--bd);border-radius:8px;overflow:hidden;z-index:50;min-width:100px;box-shadow:0 4px 16px #0001}
+.sort-dropdown-menu.open{display:block}
+.sort-dropdown-item{display:block;width:100%;padding:8px 14px;font-size:12px;font-weight:500;color:var(--tx2);background:transparent;border:none;cursor:pointer;text-align:left;font-family:var(--fn);transition:background .1s}
+.sort-dropdown-item:hover{background:var(--bg);color:var(--tx)}
+.sort-dropdown-item.active{color:var(--tx);font-weight:700}
 
 /* ── SHEET ACTION BTNS ── */
 .sheet-action-btns{margin-left:auto;display:flex;flex-direction:column;gap:7px;align-self:center}
@@ -140,10 +146,17 @@ button{font-family:var(--fn);cursor:pointer}
     <div class="char-filter-row">
       <div class="char-filter-tabs" id="filter-tabs"></div>
       <input class="char-search" type="text" placeholder="코드 검색..." id="char-search-input" oninput="setSearch(this.value)" />
-      <button class="char-sort-btn" id="sort-btn" onclick="toggleSort()" title="정렬 순서 변경">
-        <span class="sort-arrow">↓</span>
-        <span id="sort-label">최신순</span>
-      </button>
+      <div class="sort-dropdown-wrap" id="sort-dropdown-wrap">
+        <button class="char-sort-btn" id="sort-btn" onclick="toggleSortMenu()" title="정렬 순서 변경">
+          <span class="sort-arrow">↓</span>
+          <span id="sort-label">최신순</span>
+        </button>
+        <div class="sort-dropdown-menu" id="sort-dropdown-menu">
+          <button class="sort-dropdown-item active" id="sort-opt-newest" onclick="setSort('newest')">최신순</button>
+          <button class="sort-dropdown-item" id="sort-opt-oldest" onclick="setSort('oldest')">오래된순</button>
+          <button class="sort-dropdown-item" id="sort-opt-popular" onclick="setSort('popular')">인기순</button>
+        </div>
+      </div>
       <span class="char-count" id="char-count-lbl"></span>
     </div>
     <div class="char-grid" id="char-grid"></div>
@@ -286,9 +299,20 @@ button{font-family:var(--fn);cursor:pointer}
 })();
 
 /* ── STATE ── */
-window.charState = window.charState || { filter:"ALL", search:"", activeId:null, sortDesc:true };
+window.charState = window.charState || { filter:"ALL", search:"", activeId:null, sort:"newest" };
 window.charState.activeId = null;
 const state = window.charState;
+window._VOTE_DATA = window._VOTE_DATA || {};
+
+// 투표 데이터 로드
+(function(){
+  const api = (typeof API !== 'undefined' && API && !API.includes('TEST')) ? API : null;
+  if(!api) return;
+  fetch(api + '?action=getVotes')
+    .then(r=>r.json())
+    .then(json=>{ if(json.ok){ window._VOTE_DATA=json.votes; if(state.sort==='popular') renderList(); } })
+    .catch(()=>{});
+})();
 
 /* ── LIKED ── */
 function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem('doll_liked')||'[]'))}catch{return new Set()} }
@@ -311,16 +335,20 @@ function renderList(){
     (!q || c.idCode.toLowerCase().includes(q))
   );
 
-  // 정렬: 최신순(내림차순) / 오래된순(오름차순)
-  filtered = [...filtered].sort((a,b) => state.sortDesc ? b.id - a.id : a.id - b.id);
+  // 정렬
+  if(state.sort==='popular'){
+    filtered = [...filtered].sort((a,b)=>(window._VOTE_DATA[b.id]||0)-(window._VOTE_DATA[a.id]||0));
+  } else {
+    filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
+  }
 
   // 정렬 버튼 UI 동기화
-  const sortBtn = document.getElementById('sort-btn');
   const sortLabel = document.getElementById('sort-label');
-  if(sortBtn && sortLabel){
-    sortLabel.textContent = state.sortDesc ? "최신순" : "오래된순";
-    sortBtn.className = "char-sort-btn" + (state.sortDesc ? "" : " asc");
-  }
+  if(sortLabel) sortLabel.textContent = {newest:'최신순',oldest:'오래된순',popular:'인기순'}[state.sort]||'최신순';
+  ['newest','oldest','popular'].forEach(k=>{
+    const el=document.getElementById('sort-opt-'+k);
+    if(el) el.className='sort-dropdown-item'+(state.sort===k?' active':'');
+  });
 
   const counts={ALL:0,M:0,N:0,F:0,O:0};
   window.CHARACTERS.forEach(c=>{counts[c.type]++;counts.ALL++;});
@@ -468,7 +496,23 @@ window.toggleSheetWidth = function(){
   const isWide = overlay.classList.toggle('wide');
   label.textContent = isWide ? '좁게 보기' : '넓게 보기';
 };
-window.toggleSort = function(){ state.sortDesc = !state.sortDesc; renderList(); };
+window.toggleSortMenu = function(){
+  const menu = document.getElementById('sort-dropdown-menu');
+  if(menu) menu.classList.toggle('open');
+};
+window.setSort = function(val){
+  state.sort = val;
+  const menu = document.getElementById('sort-dropdown-menu');
+  if(menu) menu.classList.remove('open');
+  renderList();
+};
+document.addEventListener('click', function(e){
+  const wrap = document.getElementById('sort-dropdown-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    const menu = document.getElementById('sort-dropdown-menu');
+    if(menu) menu.classList.remove('open');
+  }
+});
 window.toggleWidth = function(){
   const inner = document.getElementById('char-page-inner');
   const label = document.getElementById('width-toggle-label');
