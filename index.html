@@ -3231,14 +3231,18 @@ function renderProgress(){
 
   const bhInner = bhSection("웹소설", novels);
 
-  // biz-OC-doll — 4열 카드 + 캐릭터 200 행
+  // biz-OC-doll — 카테고리 카드 (story_editor.json 연동)
   const ocProj = PROJECTS.find(p=>p.id==="biz-oc-doll");
   const dv = VOLUMES["biz-oc-doll"];
+
+  // 파란색: story_editor.json 기준 (done/wip/plan 카운트)
+  const storyEps = (window._STORY_DATA && window._STORY_DATA.episodes) || [];
+  const statusMap = { done:'완료', wip:'작업중', plan:'예정' };
   const ocCards = dv.categories.map(cat=>{
-    const eps=dv.episodes[cat.id]||[];
-    const total=cat.count;
-    const done=eps.filter(e=>e.status==="완료").length;
-    const wip=eps.filter(e=>e.status==="작업중").length;
+    const eps = storyEps.filter(e=>e.type===cat.id);
+    const total = cat.count;
+    const done  = eps.filter(e=>e.status==='done').length;
+    const wip   = eps.filter(e=>e.status==='wip').length;
     return `<div class="progress-vol-card">
       <div class="progress-vol-card-top">
         <span class="progress-vol-card-label">${cat.label}</span>
@@ -3247,10 +3251,20 @@ function renderProgress(){
       <div class="progress-ep-grid">${cells(total,done,wip,cat.color)}</div>
     </div>`;
   }).join("");
-  const charReg = dv.categories.reduce((s,c)=>s+c.count,0);
-  const charDone = dv.categories.reduce((s,c)=>s+(dv.episodes[c.id]||[]).filter(e=>e.status==="완료").length,0);
-  const charPct = Math.round(charReg/200*100);
-  const charCells = Array.from({length:200},()=>`<div class="progress-ep-cell"></div>`).join("");
+
+  // 빨간색: 구글시트 OC-characters 기준 (캐릭터 200개 달성)
+  const chars = window._CHAR_DATA || [];
+  const charDoneCount = chars.filter(c=>c.status==='완료').length;
+  const charWipCount  = chars.filter(c=>c.status==='작업중').length;
+  const charPct = Math.round(charDoneCount/200*100);
+  const charCells = Array.from({length:200},(_,i)=>{
+    const num = i+1;
+    const c = chars.find(ch=>parseInt((ch.code||'').replace('BIZOCDOLL',''))===num);
+    const st = c ? c.status : '';
+    if(st==='완료')   return `<div class="progress-ep-cell done" style="background:${ocProj.acc}"></div>`;
+    if(st==='작업중') return `<div class="progress-ep-cell wip" style="background:${ocProj.acc}"></div>`;
+    return `<div class="progress-ep-cell"></div>`;
+  }).join("");
 
   document.getElementById("content").innerHTML=`
     <div class="progress-page">
@@ -3274,13 +3288,13 @@ function renderProgress(){
           <div class="progress-proj-hd">
             <div class="progress-proj-dot" style="background:${ocProj.acc}"></div>
             <span class="progress-proj-name">${ocProj.label}</span>
-            <span class="progress-proj-cnt">${charReg} / 200 캐릭터</span>
+            <span class="progress-proj-cnt">${charDoneCount} / 200 캐릭터</span>
           </div>
           <div class="progress-oc-inner">${ocCards}</div>
           <div class="progress-char-row">
             <div class="progress-char-row-top">
               <span class="progress-char-label">캐릭터 200개 달성</span>
-              <span class="progress-char-stat">0/200 (0%)</span>
+              <span class="progress-char-stat">${charDoneCount}/200 (${charPct}%)</span>
             </div>
             <div class="progress-ep-grid">${charCells}</div>
           </div>
@@ -4644,6 +4658,19 @@ async function loadCharDataFromSheets(){
   }
 }
 
+/* ── 스토리 에디터 JSON 불러오기 (진행현황 카테고리 카드용) ── */
+async function loadStoryData(){
+  try{
+    const r = await fetch('biz-OC-doll/story_editor.json');
+    if(!r.ok) throw new Error('fetch failed');
+    window._STORY_DATA = await r.json();
+    return true;
+  }catch(e){
+    console.warn('story_editor.json 불러오기 실패:', e.message);
+    return false;
+  }
+}
+
 // ══════════════════════════════════════════════
 //  # HASH NAVIGATION — history.pushState 방식
 //  pushState는 이벤트를 발생시키지 않으므로
@@ -4761,7 +4788,10 @@ loadEpDataFromSheets().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
 });
 loadCharDataFromSheets().then(ok=>{
-  if(ok) render(); // 캐릭터 데이터 로드 후 도넛차트 재렌더
+  if(ok) render();
+});
+loadStoryData().then(ok=>{
+  if(ok) render();
 });
 
 function rebuildWorkLog(){
