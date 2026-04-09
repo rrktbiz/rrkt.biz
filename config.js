@@ -32,13 +32,6 @@ var CONFIG = {
   //     예: https://docs.google.com/spreadsheets/d/【여기】/edit
   // --------------------------------------------------
   SHEETS_ID: '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk',
-  
-  // --------------------------------------------------
-  //  Gemini API 키 (Google AI Studio — 무료)
-  //  aistudio.google.com → Get API Key → 복사 후 붙여넣기
-  // --------------------------------------------------
-  GEMINI_KEY: 'AIzaSyCaonhj7uHAAmtNbmhvfzAxzOiTPxrRirc',
-
 
   // --------------------------------------------------
   //  DeepL 번역 프록시 (Cloudflare Workers)
@@ -96,8 +89,7 @@ var CONFIG = {
 // =====================================================
 var API      = CONFIG.API;
 var VOTE_URL    = CONFIG.API;       // vote.html 기존 코드 호환용
-var GEMINI_KEY  = CONFIG.GEMINI_KEY; // 챗봇용
-var SHEETS_ID   = CONFIG.SHEETS_ID;  // 구글시트 ID
+// SHEETS_ID 는 각 HTML에서 const 로 선언하므로 여기서 var 선언 안 함
 
 // =====================================================
 //  구글시트 CSV URL 생성 헬퍼
