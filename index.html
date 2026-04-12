@@ -422,7 +422,9 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .cal-mm-dn{text-align:center;font-size:6.5px;font-weight:600;color:var(--tx3);padding:1px 0}
 .cal-mm-dn.s{color:#c03030}.cal-mm-dn.sa{color:#3a5cb0}
 .cal-mm-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:2px;font-size:7.5px;color:var(--tx3)}
-.cal-mm-cell.hw{background:color-mix(in srgb,#c0392b 15%,transparent);color:#c0392b;font-weight:700}
+.cal-mm-cell.hw-bh{background:color-mix(in srgb,#c0392b 15%,transparent);color:#c0392b;font-weight:700}
+.cal-mm-cell.hw-biz{background:color-mix(in srgb,#3a9ed4 15%,transparent);color:#1a7aaa;font-weight:700}
+.cal-mm-cell.hw-both{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 50%,color-mix(in srgb,#3a9ed4 15%,transparent) 50%);color:#7a3a7a;font-weight:700}
 .cal-mm-cell.td{background:#3558c0;color:#fff;font-weight:800;border-radius:50%}
 /* ── TIMELINE VIEW ── */
 .cal-timeline{padding-bottom:32px}
@@ -3683,10 +3685,15 @@ function renderCalendar(){
     let cells="";
     for(let i=0;i<fd;i++) cells+=`<div class="cal-mm-cell"></div>`;
     for(let d=1;d<=days;d++){
-      const ds_=ds(yr,mo,d), hw=!!(WORK_LOG[ds_]&&WORK_LOG[ds_].length);
+      const ds_=ds(yr,mo,d);
+      const _entries=WORK_LOG[ds_]||[];
+      const hasBH=_entries.some(e=>e.projId==="blood-highschool");
+      const hasBiz=_entries.some(e=>e.projId==="biz-oc-doll");
+      const hw=hasBH||hasBiz;
+      const hwCls=hw?(hasBH&&hasBiz?" hw-both":hasBH?" hw-bh":" hw-biz"):"";
       const isToday=yr===_tn.getFullYear()&&mo===_tn.getMonth()&&d===_tn.getDate();
       if(hw) cnt++;
-      cells+=`<div class="cal-mm-cell${hw?" hw":""}${isToday?" td":""}">${d}</div>`;
+      cells+=`<div class="cal-mm-cell${hwCls}${isToday?" td":""}">${d}</div>`;
     }
     return`<div class="cal-mini-month${isCurMo?" cur-month":""}" onclick="goMonth(${yr},${mo})">
       <div class="cal-mm-head"><span class="cal-mm-lbl">${mo+1}월</span><span class="cal-mm-count${cnt?" has":""}">${cnt?cnt+"건":"없음"}</span></div>
