@@ -2692,7 +2692,7 @@ async function renderStoryList(){
       const castHtml = castNums.map(n=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:30px;height:30px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;flex-shrink:0" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
       const castWrap = castHtml ? `<div style="display:flex;align-items:center;gap:6px;margin-top:2px">${castHtml}</div>` : '';
       const dateStr = e.completedDate ? e.completedDate.replace(/-/g,'.') : '';
-      const dateWrap = dateStr ? `<div style="font-size:10px;color:var(--tx3);display:flex;align-items:center;gap:4px;margin-top:5px"><span style="opacity:.45">✓</span>${dateStr}</div>` : '';
+      const dateWrap = dateStr ? `<div style="font-size:10px;color:var(--tx3);display:flex;align-items:center;gap:3px;white-space:nowrap"><span style="opacity:.45">✓</span>${dateStr}</div>` : '';
       const onclick = canRead ? `onclick="clickStoryEp(${e._idx})"` : '';
       return `<div class="story-ep-card${canRead?'':' locked'}" ${onclick} data-cast="${castNums.join(',')}">
         <div style="font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:32px;flex-shrink:0">${e.num||''}</div>
@@ -2702,10 +2702,9 @@ async function renderStoryList(){
             <span class="ep-status-badge ${stCls}" style="${wipStyle}">${statusLabel}</span>
           </div>
           <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px">${e.title||''}</div>
-          ${dateWrap}
           ${castWrap}
         </div>
-        ${canRead?`<span style="color:var(--tx3);font-size:14px;flex-shrink:0">›</span>`:''}
+        ${dateWrap?`<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">${dateWrap}${canRead?`<span style="color:var(--tx3);font-size:14px">›</span>`:''}</div>`:(canRead?`<span style="color:var(--tx3);font-size:14px;flex-shrink:0">›</span>`:'')}
       </div>`;
     }).join('');
   }
