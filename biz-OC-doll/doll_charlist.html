@@ -129,6 +129,21 @@ button{font-family:var(--fn);cursor:pointer}
   .sheet-wrap{padding:20px 16px 32px}
 }
 
+/* ── CASSETTE NAV ARROWS ── */
+.cassette-nav-arrow{
+  display:flex;align-items:center;justify-content:center;
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:72px;
+  background:transparent;border:none;padding:0;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  z-index:5;
+}
+.cassette-nav-arrow.prev{left:8px}
+.cassette-nav-arrow.next{right:8px}
+.cassette-nav-arrow svg{filter:drop-shadow(2px 0 6px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))}
+.cassette-nav-arrow.next svg{filter:drop-shadow(-2px 0 6px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))}
+.cassette-nav-arrow.disabled{opacity:0;pointer-events:none}
+
 /* ── WIDTH CONTROL ── */
 .char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
 .char-page-inner.wide{max-width:none}
@@ -208,6 +223,12 @@ button{font-family:var(--fn);cursor:pointer}
       <div class="sheet-hint-icon">◻</div>
       <div class="sheet-hint-text">캐릭터 시트 / 일러스트<br><span style="opacity:.5">visual sheet · reference · SNS</span></div>
       <div id="detail-date-badge" style="display:none;position:absolute;top:0;right:0;z-index:10;background:rgba(0,0,0,0.06);padding:4px 10px;font-size:10px;color:#000;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;border-bottom-left-radius:8px">—</div>
+      <button class="cassette-nav-arrow prev" id="cassette-prev" onclick="navChar(-1)" aria-label="이전 캐릭터">
+        <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 4L4 22L16 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="cassette-nav-arrow next" id="cassette-next" onclick="navChar(1)" aria-label="다음 캐릭터">
+        <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L16 22L4 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 
@@ -475,6 +496,10 @@ function renderDetail(id){
   document.getElementById('nav-next-name').textContent = next ? next.idCode : "없음";
   document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
   document.getElementById('nav-next').className = "ep-nav-btn"+(next?"":" disabled");
+  const cp = document.getElementById('cassette-prev');
+  const cn = document.getElementById('cassette-next');
+  if(cp) cp.classList.toggle('disabled', !prev);
+  if(cn) cn.classList.toggle('disabled', !next);
 }
 
 
