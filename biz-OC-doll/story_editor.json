@@ -12,6 +12,7 @@
       "type": "main",
       "num": "1-1",
       "status": "done",
+      "completedDate": "2026-04-12",
       "castList": [
         {
           "charNum": "001",
@@ -20,8 +21,8 @@
         },
         {
           "charNum": "002",
-          "exprUrl": "",
-          "exprFilename": ""
+          "exprUrl": "images/simple_profile/002.png",
+          "exprFilename": "002.png"
         },
         {
           "charNum": "004",
@@ -40,7 +41,7 @@
         {
           "type": "narration",
           "data": {
-            "text": "어둑어둑한 공간 눈을 떴다.<div>이곳은 어디란말이냐&nbsp;</div>",
+            "text": "어둑어둑한 공간 눈을 떴다. 너무 어두워서 아무것도 보이지않았다 사람살려 나 이제 지쳤어요 땡벌 이것은 테스트용 나레이션 대사입니다 빨리 1화가 생겨야 여기를 채울텐데 말이죠. 띄어쓰기는 또 더럽게 이상하게 하냐 왜이러는거냐&nbsp;<div>이곳은 어디란말이냐&nbsp;</div><div>이거 왼쪽 너비 늘려야함.</div>",
             "msgs": []
           }
         },
@@ -72,7 +73,7 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "어머 넌 누구니",
+            "text": "어머 넌 누구니 ?표는 나인것같은데 내 독백이랑 말풍선 어떻게 처리할지 고민해봐야함 디자인.. 000은 나겠지 근데 프필사진뭐로해야하는데!!!",
             "msgs": []
           }
         },
@@ -99,7 +100,7 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "내이름은 블링이 블링소녀블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀 블링소녀&nbsp;&nbsp;",
+            "text": "오늘 점심은 뭘 먹어야 잘 먹었다고 소문이 날까? 어제 먹은 메뉴는 기억도 안 나는데 말이야. 세상에는 맛있는 게 너무 많아서 문제라니까. 흩날리는 꽃잎 사이로 지나가는 바람 소리가 유난히 선명하게 들리는 오후입니다. 가끔은 이렇게 멈춰 서서 아무 말이나 뱉어보는 것도 나쁘지 않네요.",
             "msgs": []
           }
         },
@@ -115,7 +116,8 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "경찰에게 고소하겠어요! 해라해! 번역이 될지안될지 테스트하는것이다 요놈아"
+            "text": "번역이 될지안될지 테스트하는것이다 요놈아&nbsp;",
+            "msgs": []
           }
         }
       ]
@@ -126,6 +128,7 @@
       "type": "main",
       "num": "1-2",
       "status": "wip",
+      "completedDate": "",
       "castList": [
         {
           "charNum": "001",
@@ -165,10 +168,11 @@
     },
     {
       "eyebrow": "SUB STORY",
-      "title": "이곳엔 무엇을 넣을꼬",
+      "title": "서브스토리1화",
       "type": "sub",
       "num": "1-1",
       "status": "wip",
+      "completedDate": "",
       "castList": [
         {
           "charNum": "001",
@@ -214,10 +218,11 @@
     },
     {
       "eyebrow": "EVENT",
-      "title": "제작기간 때우는 용도로 쓰인다더군",
+      "title": "이벤트스토리는 보통 제작기간 때우는 용도로 쓰인다더군",
       "type": "event",
       "num": "1-1",
       "status": "plan",
+      "completedDate": "",
       "castList": [
         {
           "charNum": "001",
@@ -230,6 +235,13 @@
           "type": "scene",
           "data": {
             "filename": "",
+            "msgs": []
+          }
+        },
+        {
+          "type": "narration",
+          "data": {
+            "text": "음흠",
             "msgs": []
           }
         }
