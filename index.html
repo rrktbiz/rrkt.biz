@@ -1010,7 +1010,7 @@ body{top:0!important}
 .doll-bubble.thought .doll-line-text{font-style:italic;color:var(--tx2)}
 .doll-line-speaker{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7aaec4;margin-bottom:5px}
 .doll-line-text{font-size:16px;color:var(--tx);line-height:1.9;word-break:keep-all}
-.doll-narration{padding:2px 0 2px 54px}
+.doll-narration{padding:2px 0}
 .doll-narration .doll-line-text{font-size:15px;color:var(--tx2);font-style:italic;line-height:1.9}
 .doll-system{text-align:center;padding:6px 0}
 .doll-system-text{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--tx);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:5px 16px}
@@ -1361,8 +1361,13 @@ const VOLUMES = {
     ],
     episodes:{
       "char":[],
-      "main":[],
-      "sub":[],
+      "main":[
+        {id:1, title:"테스트를 위한 첫화",  date:"2026-04-12", status:"완료"},
+        {id:2, title:"테스트 두번째",        date:null,         status:"작업중"},
+      ],
+      "sub":[
+        {id:1, title:"서브스토리1화",        date:null,         status:"작업중"},
+      ],
       "collab":[],
     }
   },
