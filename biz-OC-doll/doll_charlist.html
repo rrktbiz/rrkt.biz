@@ -351,6 +351,22 @@ window.toggleLike = function(id, e){
   renderList();
 };
 
+/* ── FILTERED LIST HELPER — state 기반 즉시 계산 ── */
+function getFilteredChars(){
+  const q = state.search.trim().toLowerCase();
+  const liked = getLiked();
+  let filtered = window.CHARACTERS.filter(c=>
+    (state.filter==="ALL" || c.type===state.filter || (state.filter==="♥" && liked.has(c.id))) &&
+    (!q || c.idCode.toLowerCase().includes(q))
+  );
+  if(state.sort==='popular'){
+    filtered = [...filtered].sort((a,b)=>(window._VOTE_DATA[b.id]||0)-(window._VOTE_DATA[a.id]||0));
+  } else {
+    filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
+  }
+  return filtered;
+}
+
 /* ── RENDER LIST ── */
 function renderList(){
   const q = state.search.trim().toLowerCase();
@@ -489,8 +505,8 @@ function renderDetail(id){
     }
   }
 
-  // Prev / Next — 현재 필터/정렬 순서 기준
-  const list = window._filteredChars || window.CHARACTERS;
+  // Prev / Next — 현재 필터/정렬 순서 기준 (즉시 계산)
+  const list = getFilteredChars();
   const idx = list.findIndex(ch=>ch.id===c.id);
   const prev = list[idx-1]||null;
   const next = list[idx+1]||null;
@@ -569,7 +585,7 @@ window.showList = function(){
   renderList();
 };
 window.navChar = function(dir){
-  const list = window._filteredChars || window.CHARACTERS;
+  const list = getFilteredChars();
   const idx = list.findIndex(ch=>ch.id===state.activeId);
   const target = list[idx+dir];
   if(target) openChar(target.id);
