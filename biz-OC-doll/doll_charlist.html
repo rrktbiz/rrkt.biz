@@ -395,6 +395,7 @@ function renderList(){
     </button>
   `).join("");
 
+  window._filteredChars = filtered;
   document.getElementById('char-count-lbl').textContent = filtered.length + "개 표시";
 
   document.getElementById('char-grid').innerHTML = filtered.length===0
@@ -488,10 +489,11 @@ function renderDetail(id){
     }
   }
 
-  // Prev / Next
-  const idx = window.CHARACTERS.findIndex(ch=>ch.id===c.id);
-  const prev = window.CHARACTERS[idx-1]||null;
-  const next = window.CHARACTERS[idx+1]||null;
+  // Prev / Next — 현재 필터/정렬 순서 기준
+  const list = window._filteredChars || window.CHARACTERS;
+  const idx = list.findIndex(ch=>ch.id===c.id);
+  const prev = list[idx-1]||null;
+  const next = list[idx+1]||null;
   document.getElementById('nav-prev-name').textContent = prev ? prev.idCode : "없음";
   document.getElementById('nav-next-name').textContent = next ? next.idCode : "없음";
   document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
@@ -567,8 +569,9 @@ window.showList = function(){
   renderList();
 };
 window.navChar = function(dir){
-  const idx=window.CHARACTERS.findIndex(ch=>ch.id===state.activeId);
-  const target=window.CHARACTERS[idx+dir];
+  const list = window._filteredChars || window.CHARACTERS;
+  const idx = list.findIndex(ch=>ch.id===state.activeId);
+  const target = list[idx+dir];
   if(target) openChar(target.id);
 };
 
