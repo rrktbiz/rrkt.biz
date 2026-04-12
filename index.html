@@ -1362,11 +1362,11 @@ const VOLUMES = {
     episodes:{
       "char":[],
       "main":[
-        {id:1, title:"테스트를 위한 첫화",  date:"2026-04-12", status:"완료"},
-        {id:2, title:"테스트 두번째",        date:null,         status:"작업중"},
+        {id:1, num:"1-1", title:"테스트를 위한 첫화",  date:"2026-04-12", status:"완료"},
+        {id:2, num:"1-2", title:"테스트 두번째",        date:null,         status:"작업중"},
       ],
       "sub":[
-        {id:1, title:"서브스토리1화",        date:null,         status:"작업중"},
+        {id:1, num:"1-1", title:"서브스토리1화",        date:null,         status:"작업중"},
       ],
       "collab":[],
     }
@@ -1672,6 +1672,10 @@ const S={
 const getProj=id=>PROJECTS.find(p=>p.id===id);
 const ds=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 const stClass=s=>(s==="완료"||s==="done")?"done":(s==="작업중"||s==="wip")?"wip":"plan";
+/* "2026-04-12" → "2026.04.12" */
+const fmtDate=d=>d?d.replace(/-/g,"."):"";
+/* JSON의 completedDate → VOLUMES episodes의 date 필드로 매핑
+   앞으로 JSON 업데이트 시: VOLUMES["biz-oc-doll"].episodes 배열의 date 값만 갱신하면 됨 */
 
 /* ── Global Visitor Counter — Cloudflare Workers ── */
 const VIS_WORKER_URL = 'https://biz-visitor.biz202099.workers.dev';
@@ -4009,19 +4013,18 @@ function renderEpList(){
         const stCls=stClass(e.status);
         const canRead=e.status==="완료";
         const wipStyle=e.status==="작업중"?`background:#F9F4CA;color:#F9CB4C`:"";
+        const dateStr=fmtDate(e.date);
         return `<div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--bd);${i===0?"border-top:1px solid var(--bd);":""}cursor:${canRead?"pointer":"default"}" ${canRead?`onclick="clickEp(${e.id})" onmouseenter="this.style.background='var(--bg)'" onmouseleave="this.style.background=''"`:""}> 
           <div style="width:120px;aspect-ratio:16/9;flex-shrink:0;border-radius:6px;background:linear-gradient(${vol.grad});border:1px solid var(--bd);position:relative;overflow:hidden">
             <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 6px 4px;background:linear-gradient(to top,#000000a0,transparent)">
-              <span style="font-size:8px;font-weight:600;color:#ffffffcc">EP.${e.id}</span>
+              <span style="font-size:8px;font-weight:600;color:#ffffffcc">${e.num||"EP."+e.id}</span>
             </div>
           </div>
-          <div style="flex:1;min-width:0;display:flex;align-items:center;gap:8px">
-            <div style="font-size:13px;font-weight:500;color:${canRead?"var(--tx)":"var(--tx3)"};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div>
-            <span class="ep-status-badge ${stCls}" style="${wipStyle};flex-shrink:0">${e.status}</span>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:13px;font-weight:600;color:${canRead?"var(--tx)":"var(--tx3)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.title}</div>
+            ${dateStr?`<div style="font-size:10px;color:var(--tx3);display:flex;align-items:center;gap:4px"><span style="opacity:.5">✓</span>${dateStr}</div>`:`<div style="font-size:10px;color:var(--tx3);opacity:.4">${e.status==="작업중"?"작업 중":"공개 예정"}</div>`}
           </div>
-          <div style="display:flex;align-items:center;flex-shrink:0">
-            <span style="font-size:10px;color:var(--tx3)">${e.date||"—"}</span>
-          </div>
+          <span class="ep-status-badge ${stCls}" style="${wipStyle};flex-shrink:0">${e.status}</span>
         </div>`;
       }).join("")}
     </div>
