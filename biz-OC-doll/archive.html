@@ -321,6 +321,18 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   border: 1px solid rgba(144,96,192,0.2); letter-spacing: 0.3px;
   font-family: 'DM Mono', 'Courier New', monospace;
 }
+.char-icon {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  object-fit: cover; border: 1.5px solid rgba(144,96,192,0.25);
+  background: rgba(144,96,192,0.06);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.char-icon:hover {
+  transform: scale(1.12);
+  box-shadow: 0 2px 8px rgba(144,96,192,0.25);
+  border-color: rgba(144,96,192,0.5);
+}
+.chars-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 9px; align-items: center; }
 .work-card-desc { font-size: 11px; color: var(--gray-600); line-height: 1.6; flex: 1; }
 .work-card-foot {
   margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--gray-100);
@@ -954,6 +966,13 @@ function renderWorks(){
   }
   c.innerHTML = `<div class="works-list">${list.map(listHTML).join("")}</div>`;
 }
+function charChip(code){
+  const num = parseInt(code.replace('BIZOCDOLL',''), 10);
+  const padded = String(num).padStart(3,'0');
+  const src = `images/simple_profile/${padded}.png`;
+  return `<img class="char-icon" src="${src}" alt="${esc(code)}" title="${esc(code)}" onerror="this.style.display='none'">`;
+}
+
 function cardHTML(w){
   const m = TYPE_META[w.type]||TYPE_META["기타"];
   const linkArrow = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>`;
@@ -966,7 +985,7 @@ function cardHTML(w){
     <div class="work-card-body">
       <div class="work-card-title">${esc(w.title)}</div>
       <div class="work-card-creator">by ${esc(w.creator)}</div>
-      <div class="chars-row">${(w.chars||[]).map(c=>`<span class="char-chip">${esc(c)}</span>`).join("")}</div>
+      <div class="chars-row">${(w.chars||[]).map(c=>charChip(c)).join("")}</div>
       ${w.desc?`<div class="work-card-desc">${esc(w.desc)}</div>`:""}
       <div class="work-card-foot">
         <span class="work-card-date">${w.date||""}</span>
@@ -986,7 +1005,7 @@ function listHTML(w){
         <span class="badge-list-type">${esc(w.type)}</span>
         <span class="work-list-creator">by ${esc(w.creator)}</span>
       </div>
-      <div class="chars-row">${(w.chars||[]).map(c=>`<span class="char-chip">${esc(c)}</span>`).join("")}</div>
+      <div class="chars-row">${(w.chars||[]).map(c=>charChip(c)).join("")}</div>
     </div>
     <span class="work-list-date">${w.date||""}</span>
     <div class="work-list-right">
