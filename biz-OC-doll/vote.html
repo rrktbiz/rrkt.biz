@@ -537,6 +537,7 @@ input{font-family:var(--fn)}
 <script src="../config.js"></script>
 <script>
 // API 주소는 config.js 에서 불러옵니다
+// 투표 인증 GAS URL · TOKEN 도 config.js 에서 불러옵니다
 
 // 캐릭터 데이터
 var GRADS_GRAY = [
@@ -603,10 +604,14 @@ function loadVoteData(cb) {
 function submitVote() {
   if (hasDone || selected.length === 0) return;
 
+  // 인증 코드 미리 생성해서 저장 (GAS 전송 + 모달에 동일 코드 표시)
+  lastCertCode = genCertCode();
+
   // 로컬 즉시 완료 처리
   hasDone = true;
   localStorage.setItem('ocidol_done', '1');
   localStorage.setItem('ocidol_sel',  JSON.stringify(selected));
+  localStorage.setItem('ocidol_cert', lastCertCode);
   selected.forEach(function(id){
     voteData[id] = (voteData[id] || 0) + 1;
   });
@@ -617,9 +622,12 @@ function submitVote() {
   updateSelBadge();
   showCertModal();
 
-  // 서버에 비동기 전송 (응답 기다리지 않음)
+  // 득표수 서버 전송
   var url = API + '?action=vote&ids=' + encodeURIComponent(JSON.stringify(selected));
   fetch(url).catch(function(){});
+
+  // 인증 시트 GAS 전송
+  sendCertToSheet(lastCertCode, selected);
 }
 
 // ---- 선택 토글 ----
@@ -794,6 +802,26 @@ function onSearch(v) {
 }
 
 // ---- 인증서 모달 ----
+// 현재 세션 인증 코드
+var lastCertCode = localStorage.getItem('ocidol_cert') || '';
+
+// ---- 인증 시트 GAS 전송 ----
+function sendCertToSheet(code, ids) {
+  if (!CERT_GAS_URL) return;
+  var pad = function(n){ return String(n).padStart(2,'0'); };
+  var now = new Date();
+  var dateStr = now.getFullYear() + '.' + pad(now.getMonth()+1) + '.' + pad(now.getDate()) +
+    ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  var charStr = ids.map(function(id){ return String(id).padStart(3,'0'); }).join(', ');
+  var url = CERT_GAS_URL +
+    '?action=cert' +
+    '&token=' + encodeURIComponent(CERT_TOKEN || '') +
+    '&code='  + encodeURIComponent(code) +
+    '&chars=' + encodeURIComponent(charStr) +
+    '&date='  + encodeURIComponent(dateStr);
+  fetch(url).catch(function(){});
+}
+
 function genCertCode() {
   var now = new Date();
   var pad = function(n){ return String(n).padStart(2,'0'); };
@@ -804,14 +832,13 @@ function genCertCode() {
   return 'BZD' + dt + rand;
 }
 function showCertModal() {
-  // 날짜
   var now = new Date();
   var pad = function(n){ return String(n).padStart(2,'0'); };
   var dateStr = now.getFullYear() + '.' + pad(now.getMonth()+1) + '.' + pad(now.getDate()) +
     ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
 
-  // 코드
-  var code = genCertCode();
+  // submitVote에서 생성된 코드 재사용 (없으면 새로 생성)
+  var code = lastCertCode || genCertCode();
   document.getElementById('cert-code-val').textContent = code;
   document.getElementById('cert-date-val').textContent = dateStr;
 
