@@ -700,6 +700,18 @@ function retakeVote() {
   var prevSelected = JSON.parse(localStorage.getItem('ocidol_sel') || '[]');
   if (prevSelected.length === 0) return;
 
+  // 인증 시트에서 기존 코드 행 삭제
+  var prevCode = localStorage.getItem('ocidol_cert') || '';
+  if (prevCode && CERT_GAS_URL) {
+    var delUrl = CERT_GAS_URL +
+      '?action=deleteCert' +
+      '&token=' + encodeURIComponent(CERT_TOKEN || '') +
+      '&code=' + encodeURIComponent(prevCode);
+    fetch(delUrl, { mode: 'no-cors' }).catch(function(){});
+  }
+  lastCertCode = '';
+  localStorage.removeItem('ocidol_cert');
+
   // 득표수 롤백
   prevSelected.forEach(function(id){
     voteData[id] = Math.max(0, (voteData[id] || 0) - 1);
