@@ -1113,6 +1113,13 @@ body{top:0!important}
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
+<!-- 블러드하이스쿨 인트로 전용 iframe -->
+<iframe
+  id="bhs-intro-frame"
+  src="Blood_High_School/bhs_intro.html"
+  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
+></iframe>
+
 <!-- VOTE: 팝업 방식으로 전환 (overlay 제거됨) -->
 
 <!-- 아카이브 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
@@ -2565,6 +2572,7 @@ function render(){
   // charlist iframe 토글: charlist/chardetail이 아니면 iframe 숨기고 #content 복원
   var charFr = document.getElementById("char-frame");
   var introFr = document.getElementById("doll-intro-frame");
+  var bhsIntroFr = document.getElementById("bhs-intro-frame");
   var archiveFr = document.getElementById("archive-frame");
   var eventFr = document.getElementById("event-frame");
   var ct = document.getElementById("content");
@@ -2574,6 +2582,7 @@ function render(){
   }
   if(S.view !== "intro"){
     if(introFr) introFr.style.display = "none";
+    if(bhsIntroFr) bhsIntroFr.style.display = "none";
     if(ct && S.view !== "charlist" && S.view !== "chardetail") ct.style.display = "";
   }
   if(S.view !== "archive"){
@@ -3945,16 +3954,27 @@ function renderIntro(){
   if(proj.id==="biz-oc-doll"){
     // doll_intro.html은 완전 독립 iframe으로 운영
     // 수정할 때 biz_main_v4.html 건드릴 필요 없음
+    var _bhs=document.getElementById("bhs-intro-frame");
+    if(_bhs) _bhs.style.display="none";
     document.getElementById("content").style.display="none";
     var fr=document.getElementById("doll-intro-frame");
     if(fr) fr.style.display="block";
     return;
   }
-  // doll이 아닌 프로젝트: doll-intro-frame 반드시 숨기고 #content 복원
-  // biz-oc-doll 소개글 보다가 다른 프로젝트 소개글로 이동하면
-  // render()의 iframe 정리 로직이 S.view==="intro"라 iframe을 안 숨기는 버그 방지
+  if(proj.id==="blood-highschool"){
+    // bhs_intro.html 완전 독립 iframe으로 운영
+    var _doll=document.getElementById("doll-intro-frame");
+    if(_doll) _doll.style.display="none";
+    document.getElementById("content").style.display="none";
+    var fr=document.getElementById("bhs-intro-frame");
+    if(fr) fr.style.display="block";
+    return;
+  }
+  // 그 외 프로젝트: 두 iframe 모두 숨기고 #content 복원
   var _ifr=document.getElementById("doll-intro-frame");
   if(_ifr) _ifr.style.display="none";
+  var _bhs=document.getElementById("bhs-intro-frame");
+  if(_bhs) _bhs.style.display="none";
   var _ct=document.getElementById("content");
   if(_ct) _ct.style.display="";
   const ws=[100,74,88,60,95,50,82,68,76,55];
