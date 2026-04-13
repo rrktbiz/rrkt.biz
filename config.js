@@ -92,7 +92,7 @@ var CONFIG = {
   //  2. 배포 URL을 아래 CERT_GAS_URL 에 붙여넣기
   //  3. CERT_TOKEN 은 GAS 코드의 SECRET 값과 반드시 일치
   // --------------------------------------------------
-  CERT_GAS_URL: 'https://script.google.com/macros/s/AKfycbyU5j-miycRxKxOV4a5eNYe-ARB0GcQw6yaUOgIY0cVW2WB48MIDM0IqTiqvGD8ad4txg/exec',
+  CERT_GAS_URL: 'https://script.google.com/macros/s/AKfycbx-_XAH_wuJQGqSdztBamIVWuEc7GJXb1xWZaRvHaxH0OTafOLEQpoyzmiSQENkRQy7HQ/exec',
   CERT_TOKEN:   'bzd2026vote',
 
 };
