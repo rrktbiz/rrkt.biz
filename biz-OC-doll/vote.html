@@ -819,7 +819,7 @@ function sendCertToSheet(code, ids) {
     '&code='  + encodeURIComponent(code) +
     '&chars=' + encodeURIComponent(charStr) +
     '&date='  + encodeURIComponent(dateStr);
-  fetch(url).catch(function(){});
+  fetch(url, { mode: 'no-cors' }).catch(function(){});
 }
 
 function genCertCode() {
