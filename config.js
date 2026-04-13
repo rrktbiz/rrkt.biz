@@ -78,17 +78,32 @@ var CONFIG = {
   // --------------------------------------------------
   DEEPL: {
     proxyUrl: 'https://rrktbiz-translate.biz202099.workers.dev',
-    timeout:  5000, // 응답 대기 최대 ms (초과 시 Google 폴백)
-    enabled:  true  // false = DeepL 비활성화, Google만 사용
+    timeout:  5000,
+    enabled:  true
   },
+
+  // --------------------------------------------------
+  //  투표 인증 시트 GAS (별도 스크립트 · 별도 시트)
+  //
+  //  연결된 시트: vote_public_view (인증 코드 기록용)
+  //
+  //  설정 방법:
+  //  1. 해당 GAS 프로젝트 → 배포 → 새 배포 → 웹앱
+  //  2. 배포 URL을 아래 CERT_GAS_URL 에 붙여넣기
+  //  3. CERT_TOKEN 은 GAS 코드의 SECRET 값과 반드시 일치
+  // --------------------------------------------------
+  CERT_GAS_URL: 'https://script.google.com/macros/s/AKfycbyU5j-miycRxKxOV4a5eNYe-ARB0GcQw6yaUOgIY0cVW2WB48MIDM0IqTiqvGD8ad4txg/exec',
+  CERT_TOKEN:   'bzd2026vote',
 
 };
 
 // =====================================================
 //  단축 변수 (HTML에서 API 바로 사용 가능)
 // =====================================================
-var API      = CONFIG.API;
+var API         = CONFIG.API;
 var VOTE_URL    = CONFIG.API;       // vote.html 기존 코드 호환용
+var CERT_GAS_URL = CONFIG.CERT_GAS_URL;
+var CERT_TOKEN   = CONFIG.CERT_TOKEN;
 // SHEETS_ID 는 각 HTML에서 const 로 선언하므로 여기서 var 선언 안 함
 
 // =====================================================
