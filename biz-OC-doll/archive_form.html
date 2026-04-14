@@ -188,7 +188,7 @@ textarea { resize: none; line-height: 1.7; }
   width: 100%; aspect-ratio: 1;
   background: linear-gradient(135deg, #d8eef8, #f8d0e8);
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px; position: relative;
+  font-size: 22px; position: relative; overflow: hidden;
 }
 .chip-thumb-num {
   position: absolute; bottom: 4px; right: 5px;
@@ -795,16 +795,15 @@ function removeChar(code){
 
 function renderChips(){
   const el = document.getElementById("char-chips");
-  // 이모지 팔레트 (번호 기반으로 고정 배정)
-  const emojis = ["🌸","⭐","🎀","🌙","💫","🍀","🎵","🌈","🦋","💎","🔮","🌺","✨","🎪","🌟"];
   el.innerHTML = charList.map(c=>{
     const num = parseInt(c.replace("BIZOCDOLL",""),10);
-    const emoji = emojis[(num-1) % emojis.length];
     const numStr = String(num).padStart(3,"0");
+    const imgSrc = `images/character_sheet/${numStr}_icon.png`;
     return `<div class="char-chip-item">
       <div class="chip-thumb">
-        <span>${emoji}</span>
-        <span class="chip-thumb-num">#${numStr}</span>
+        <img src="${imgSrc}" alt="${c}" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;"
+          onerror="this.style.display='none'">
+        <span class="chip-thumb-num" style="z-index:1;">#${numStr}</span>
       </div>
       <div class="chip-code">${c}</div>
       <span class="chip-del" onclick="removeChar('${c}')">✕ 제거</span>
