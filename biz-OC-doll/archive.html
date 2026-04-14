@@ -1338,15 +1338,31 @@ function renderAll(){
 function buildHashtagFilters(){
   const allTags = new Set();
   WORKS.forEach(w=>(w.tags||[]).forEach(t=>{ if(t) allTags.add(t); }));
-  const wrap = document.getElementById('hashtag-filter-tags');
-  if(!wrap) return;
+
+  // 기존 해시태그 버튼 + 구분선 제거
+  const row = document.getElementById('all-tag-row');
+  if(!row) return;
+  row.querySelectorAll('.hashtag-tag-btn, .hashtag-divider').forEach(el=>el.remove());
+
   const tags = [...allTags].sort();
-  if(!tags.length){ wrap.innerHTML=''; return; }
-  wrap.innerHTML =
-    '<span style="font-size:11px;color:var(--gray-400);display:flex;align-items:center;padding:0 4px;">|</span>' +
-    tags.map(t=>
-      `<button class="tag-btn hashtag-tag-btn" data-genre="${esc(t)}" onclick="toggleGenreTag('${esc(t)}',this)">#${esc(t)}</button>`
-    ).join('');
+  if(!tags.length) return;
+
+  // 구분선
+  const divider = document.createElement('span');
+  divider.className = 'hashtag-divider';
+  divider.style.cssText = 'font-size:11px;color:var(--gray-400);display:flex;align-items:center;padding:0 4px;';
+  divider.textContent = '|';
+  row.appendChild(divider);
+
+  // 해시태그 버튼 직접 추가
+  tags.forEach(t=>{
+    const btn = document.createElement('button');
+    btn.className = 'tag-btn hashtag-tag-btn';
+    btn.dataset.genre = t;
+    btn.textContent = '#' + t;
+    btn.onclick = function(){ toggleGenreTag(t, btn); };
+    row.appendChild(btn);
+  });
 }
 
 loadWorks();
