@@ -752,7 +752,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-lang-btn{font-size:11px;font-weight:600;padding:5px 10px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx2)}
 .mob-lang-btn:hover{background:var(--tx);color:#fff}
 /* 2차 패널 컨텐츠 */
-.mob2-intro-link{display:flex;align-items:center;justify-content:space-between;margin:10px 12px 0;padding:10px 14px;background:#fff;color:var(--tx);border:1px solid var(--bd);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .12s}
+.mob2-intro-link{display:flex;align-items:center;justify-content:space-between;margin:8px 10px 0;padding:10px 14px;background:var(--sb);color:var(--tx);border:1px solid var(--bd);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .12s;width:calc(100% - 20px);box-sizing:border-box}
 .mob2-intro-link:hover{background:var(--bg)}
 .mob2-vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 12px 20px}
 .mob2-vol-card{cursor:pointer;transition:opacity .12s}
@@ -2478,24 +2478,24 @@ function mobShowSub(projId){
     프로젝트 소개글 <span>&#9654;</span>
   </button>`;
   if(p.subType==="doll"){
-    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="goDollChar();closeMobMenu()">
+    html+=`<button class="mob2-intro-link" onclick="goDollChar();closeMobMenu()">
       캐릭터 일람 <span>&#9654;</span>
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px;justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:10px" onclick="goStory();closeMobMenu()">
+    html+=`<button class="mob2-intro-link" style="justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:10px" onclick="goStory();closeMobMenu()">
       <span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px;background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700" onclick="openVoteOverlay();closeMobMenu()">
+    html+=`<button class="mob2-intro-link" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700" onclick="openVoteOverlay();closeMobMenu()">
       &#9733; 인기 투표 <span>&#9654;</span>
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openEventOverlay();closeMobMenu()">
+    html+=`<button class="mob2-intro-link" onclick="openEventOverlay();closeMobMenu()">
       이벤트 <span>&#9654;</span>
     </button>`;
-    html+=`<button class="mob2-intro-link" style="margin-top:6px" onclick="openArchiveOverlay();closeMobMenu()">
+    html+=`<button class="mob2-intro-link" onclick="openArchiveOverlay();closeMobMenu()">
       아카이브 <span>&#9654;</span>
     </button>`;
   }
   if(p.subType==="youtube"){
-    html+=`<a class="mob2-intro-link" style="margin-top:6px;color:#e00;border-color:#fdd;text-decoration:none" href="${p.youtubeUrl||'#'}" target="_blank">
+    html+=`<a class="mob2-intro-link" style="color:#e00;border-color:#fdd;text-decoration:none" href="${p.youtubeUrl||'#'}" target="_blank">
       &#9654; YouTube 채널 바로가기
     </a>`;
   }
