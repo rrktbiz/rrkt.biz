@@ -944,9 +944,12 @@ function renderWorks(){
       <div class="empty-title">등록된 작품이 없습니다</div>
       ${(activeTypes.size||activeGenres.size||worksCharQuery)?"필터 조건에 맞는 작품이 없습니다.":"아직 공개 등록된 작품이 없어요. 첫 번째 창작자가 되어 보세요!"}
     </div>`;
+    buildHashtagFilters();
     return;
   }
   c.innerHTML = `<div class="works-list">${list.map(listHTML).join("")}</div>`;
+  // 필터 바 해시태그 항상 동기화
+  buildHashtagFilters();
 }
 function charChip(code){
   const num = parseInt(code.replace('BIZOCDOLL',''), 10);
