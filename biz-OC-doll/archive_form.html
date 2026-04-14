@@ -854,7 +854,7 @@ async function submitForm(){
     hashtags:   [...hashtagList],
     typeEtc:    document.getElementById("f-type-etc")?.value.trim() || "",
     visibility: visibility,
-    date:       new Date().toISOString().slice(0,7),
+    date:       new Date().toISOString().slice(0,10),
   };
 
   let submitOk = false;
