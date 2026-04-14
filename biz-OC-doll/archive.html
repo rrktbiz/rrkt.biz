@@ -465,6 +465,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
   width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 28px; border: 2px solid rgba(90,144,176,0.6); position: relative;
+  overflow: hidden;
 }
 .rank-hero-crown {
   position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
@@ -508,6 +509,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .r-thumb {
   width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center; font-size: 20px;
+  overflow: hidden;
 }
 .r-code {
   font-size: 10px; font-weight: 400; color: var(--blue);
@@ -548,7 +550,7 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .all-item:hover { background: var(--gray-50); border-radius: 4px; }
 .all-item.zero { opacity: 1; }
 .all-rank { font-size: 8px; font-weight: 400; color: var(--gray-400); min-width: 16px; text-align: right; flex-shrink: 0; font-family: 'DM Mono', 'Courier New', monospace; }
-.all-thumb { width: 27px; height: 27px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.all-thumb { width: 27px; height: 27px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; overflow: hidden; }
 .all-code { font-size: 9px; font-weight: 400; color: var(--blue); font-family: 'DM Mono', 'Courier New', monospace; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .all-cnt { font-size: 8px; color: var(--gray-400); flex-shrink: 0; width: 14px; text-align: right; }
 .all-open {
@@ -1095,16 +1097,16 @@ function renderRanking(){
   const getGrad  = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return thumbGrads[(n-1)%thumbGrads.length]; };
   const maxCount = sorted[0][1] || 1;
 
-  const iconImg = (code, size) => {
+  const iconImg = (code) => {
     const n = String(parseInt(code.replace('BIZOCDOLL',''),10)).padStart(3,'0');
-    return `<img src="images/character_sheet/${n}_icon.png" alt="${code}" style="width:${size}px;height:${size}px;object-fit:cover;border-radius:inherit;" onerror="this.style.display='none'">`;
+    return `<img src="images/character_sheet/${n}_icon.png" alt="${code}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;" onerror="this.style.display='none'">`;
   };
 
   const [c1, n1] = sorted[0];
   let html = `<div class="rank-hero">
     <div class="rank-hero-thumb" style="background:${getGrad(c1)}">
       <span class="rank-hero-crown">👑</span>
-      ${iconImg(c1, 40)}
+      ${iconImg(c1)}
     </div>
     <div class="rank-hero-info">
       <div class="rank-hero-label">1ST PLACE</div>
@@ -1125,7 +1127,7 @@ function renderRanking(){
     const medalOrNum = rank <= 3 ? `<span style="font-size:12px">${medals[i]}</span>` : `<span class="r-rank">${rank}</span>`;
     html += `<div class="ranking-row${isZero?" zero":""}">
       ${medalOrNum}
-      <div class="r-thumb" style="background:${getGrad(code)}">${iconImg(code,26)}</div>
+      <div class="r-thumb" style="background:${getGrad(code)}">${iconImg(code)}</div>
       <span class="r-code">${esc(code)}</span>
       <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
       <span class="r-cnt">${cnt}</span>
@@ -1145,7 +1147,7 @@ function renderRanking(){
       const isZero = cnt === 0;
       html+=`<div class="all-item${isZero?" zero":""}">
         <span class="all-rank">${i+11}</span>
-        <div class="all-thumb" style="background:${getGrad(code)}">${iconImg(code,20)}</div>
+        <div class="all-thumb" style="background:${getGrad(code)}">${iconImg(code)}</div>
         <span class="all-code">${esc(code)}</span>
         <span class="all-cnt">${cnt}</span>
         <button class="all-open" onclick="filterByChar('${esc(code)}')">↗</button>
