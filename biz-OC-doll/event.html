@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이벤트 — biz.rrkt</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Josefin+Sans:wght@100;300&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -22,11 +22,10 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
   border-bottom:1px solid var(--bd);
   background:var(--sb);
 }
-.page-hero-inner{max-width:700px;margin:0 auto}
-.eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px}
-.page-title{font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--tx);margin-bottom:6px;display:flex;align-items:center;gap:10px}
-.page-title-icon{font-size:22px}
-.page-desc{font-size:13px;color:var(--tx2);line-height:1.7}
+.page-hero-inner{max-width:700px;margin:0 auto;text-align:center}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;color:#5a90b0;text-transform:uppercase;margin-bottom:10px}
+.page-title{font-family:'Josefin Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);font-weight:100;color:#3a6a88;letter-spacing:.22em;line-height:1.1;margin-bottom:10px}
+.page-desc{font-size:12px;color:#7aa0b8;line-height:1.75}
 
 /* ── 바디 ── */
 .page-body{padding:28px 40px 60px;max-width:700px;margin:0 auto}
@@ -44,7 +43,7 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
   background:var(--sb);margin-bottom:14px;
 }
 .event-card-banner{
-  height:80px;
+  height:150px;
   display:flex;align-items:center;justify-content:center;
   font-size:28px;position:relative;
 }
@@ -56,8 +55,8 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 .event-status.ongoing{background:#e8f5e9;color:#2e7d32}
 .event-status.upcoming{background:#fff8e1;color:#c77700}
 .event-status.ended{background:#f0f0f0;color:#888}
-.event-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:5px;line-height:1.4}
-.event-period{font-size:11px;color:var(--tx3);margin-bottom:10px}
+.event-title{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px;line-height:1.4}
+.event-period{font-size:15px;color:var(--tx3);margin-bottom:10px}
 .event-desc{font-size:13px;color:var(--tx2);line-height:1.75}
 .event-tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .event-tag{
@@ -65,7 +64,44 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
   background:var(--bg);border:1px solid var(--bd);color:var(--tx3);
 }
 
-/* ── 참여 버튼 ── */
+/* ── 카드 토글 ── */
+.card-toggle{
+  position:absolute;bottom:10px;right:14px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.55);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.7);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .12s;
+  color:var(--tx2);font-size:13px;line-height:1;
+  user-select:none;z-index:2;
+}
+.card-toggle:hover{background:rgba(255,255,255,.8)}
+.card-toggle svg{transition:transform .2s;display:block}
+.event-card.collapsed .card-toggle svg{transform:rotate(180deg)}
+.event-card.collapsed .event-card-inner{display:none}
+
+
+/* ── 카운트다운 ── */
+.banner-countdown{
+  position:absolute;top:12px;left:16px;
+  display:flex;flex-direction:column;gap:1px;
+}
+.cd-remaining-label{font-size:8px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,.85);text-transform:uppercase;text-shadow:0 1px 4px rgba(0,0,0,.25)}
+.cd-nums{display:flex;align-items:baseline;gap:0}
+.cd-block{display:flex;flex-direction:column;align-items:center;padding:0 5px 0 0}
+.cd-num{font-size:18px;font-weight:300;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1;text-shadow:0 1px 6px rgba(0,0,0,.3)}
+.cd-unit{font-size:8px;color:rgba(255,255,255,.75);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,.25)}
+.cd-sep{font-size:14px;font-weight:200;color:rgba(255,255,255,.5);padding-bottom:10px;padding-right:5px}
+
+.title-row{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:10px 50px 10px 20px;
+}
+.title-row .event-title{color:#fff;margin-bottom:0;font-size:17px;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.3)}
+
+
+
+
 .event-btn{
   display:inline-flex;align-items:center;gap:6px;
   margin-top:14px;padding:9px 18px;
@@ -94,7 +130,62 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 .tl-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
 .tl-desc{font-size:11px;color:var(--tx2);line-height:1.6}
 
-/* ── 빈 상태 ── */
+/* ── 탭 ── */
+.tab-bar{
+  border-bottom:1px solid var(--bd);
+  background:var(--sb);
+  padding:0 40px;
+  display:flex;gap:0;
+}
+.tab-bar-inner{
+  max-width:700px;margin:0 auto;width:100%;
+  display:flex;gap:0;justify-content:center;
+}
+.tab-btn{
+  font-size:13px;font-weight:600;color:var(--tx3);
+  padding:10px 22px;border:none;background:none;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  cursor:pointer;font-family:var(--fn);transition:color .12s;
+  letter-spacing:.02em;
+}
+.tab-btn:hover{color:var(--tx2)}
+.tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
+
+/* ── 로그 ── */
+.log-year-block{margin-bottom:36px}
+.log-year-label{
+  font-size:11px;font-weight:700;letter-spacing:1px;color:var(--tx3);
+  text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--bd);
+}
+.log-table{width:100%;border-collapse:collapse}
+.log-table th{
+  font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);
+  text-transform:uppercase;text-align:left;padding:6px 10px;
+  border-bottom:1px solid var(--bd);
+}
+.log-table td{
+  font-size:12px;color:var(--tx2);padding:8px 10px;
+  border-bottom:1px solid var(--bg);vertical-align:middle;
+}
+.log-table tr:hover td{background:var(--sm)}
+.log-rank{font-size:11px;font-weight:700;color:var(--tx3);width:36px}
+.log-rank.top1{color:#c8a000}
+.log-rank.top2{color:#888}
+.log-rank.top3{color:#a0613a}
+.log-char-num{
+  display:inline-block;font-size:10px;font-weight:700;
+  padding:1px 7px;border-radius:10px;
+  background:var(--sm);border:1px solid var(--bd);color:var(--tx3);
+  margin-right:6px;font-variant-numeric:tabular-nums;
+}
+.log-votes{font-size:11px;color:var(--tx3);text-align:right;width:60px}
+.log-empty{
+  text-align:center;padding:40px 20px;
+  color:var(--tx3);font-size:12px;line-height:1.8;
+  border:1px dashed var(--bd2);border-radius:10px;
+}
+
 .empty-state{
   text-align:center;padding:56px 20px;
   border:1px dashed var(--bd2);border-radius:12px;
@@ -109,87 +200,114 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 <div class="page-hero">
   <div class="page-hero-inner">
     <div class="eyebrow">biz-OC-doll · Event</div>
-    <div class="page-title">
-      <span class="page-title-icon">🎉</span>이벤트
-    </div>
-    <div class="page-desc">오씨돌 관련 이벤트, 참여형 기획, 팬아트 행사 등을 안내합니다.</div>
+    <div class="page-title">EVENT</div>
+    <div class="page-desc">이벤트 & 로그 정리페이지</div>
   </div>
 </div>
 
-<div class="page-body">
 
-  <!-- ── 진행 중 이벤트 ── -->
-  <div class="sec-label">진행 중</div>
+<!-- ── 탭 바 ── -->
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" onclick="switchTab('event',this)">이벤트</button>
+    <button class="tab-btn" onclick="switchTab('log',this)">로그</button>
+  </div>
+</div>
+
+<!-- ── 이벤트 패널 ── -->
+<div id="panel-event" class="page-body">
 
   <div class="event-card">
-    <div class="event-card-banner" style="background:linear-gradient(135deg,#cfe3f0,#a4c8e0)">🌟</div>
-    <div class="event-card-inner">
-      <div class="event-status ongoing">진행 중</div>
-      <div class="event-title">이벤트 제목을 입력하세요</div>
-      <div class="event-period">📅 기간 미정</div>
-      <div class="event-desc">이벤트 내용을 여기에 입력하세요. 참여 방법, 상품 안내 등을 자유롭게 작성할 수 있습니다.</div>
-      <div class="event-tag-row">
-        <span class="event-tag">#이벤트</span>
-        <span class="event-tag">#팬아트</span>
+    <div class="event-card-banner" style="background:#adb5bd">📊<div class="card-toggle" onclick="toggleCard(this)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="banner-countdown">
+        <span class="cd-remaining-label">남은 기간</span>
+        <div class="cd-nums">
+          <div class="cd-block">
+            <span class="cd-num" id="cd-d">--</span>
+            <span class="cd-unit">일</span>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-h">--</span>
+            <span class="cd-unit">시간</span>
+          </div>
+          <span class="cd-sep">:</span>
+          <div class="cd-block">
+            <span class="cd-num" id="cd-m">--</span>
+            <span class="cd-unit">분</span>
+          </div>
+        </div>
       </div>
-      <button class="event-btn">✨ 참여하기</button>
+      <div class="title-row">
+        <div class="event-title">[상시이벤트] 투표 인증 결과 시트</div>
+      </div>
     </div>
-  </div>
-
-  <!-- ── 예정 이벤트 ── -->
-  <div class="sec-label">예정</div>
-
-  <div class="event-card">
-    <div class="event-card-banner" style="background:linear-gradient(135deg,#f5f0e8,#e0d0b8)">🎁</div>
     <div class="event-card-inner">
-      <div class="event-status upcoming">예정</div>
-      <div class="event-title">다음 이벤트 — 준비 중</div>
-      <div class="event-period">📅 일정 미정</div>
-      <div class="event-desc">준비 중인 이벤트입니다. 공지를 기다려 주세요!</div>
-      <button class="event-btn disabled">🔔 공지 예정</button>
+      <div class="event-period">📅 투표 기간: 매년 11월 30일 23:59까지 &nbsp;·&nbsp; 🏆 최종 결과 발표: 매년 12월 31일</div>
+      <div class="event-desc">이벤트 주최자분들은 이 시트에서 인증 코드와 투표 캐릭터를 확인하실 수 있습니다.</div>
+      <a href="https://docs.google.com/spreadsheets/d/1HcrF5d9HZZp5mmo2kR1kBH101Kh7vVKBVx7U1t6v11Q/edit?gid=0#gid=0"
+         target="_blank"
+         class="event-btn" style="text-decoration:none">시트 열기 →</a>
     </div>
-  </div>
-
-  <!-- ── 투표 인증 확인 ── -->
-  <div class="sec-label" style="margin-top:36px">투표 인증 확인</div>
-
-  <div style="border:1px solid var(--bd);border-radius:12px;background:var(--sb);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-    <div>
-      <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:4px">투표 인증 결과 시트</div>
-      <div style="font-size:12px;color:var(--tx2);line-height:1.7">이벤트 주최자분들은 이 시트에서<br>인증 코드와 투표 캐릭터를 확인하실 수 있어요.</div>
-    </div>
-    <a href="https://docs.google.com/spreadsheets/d/1HcrF5d9HZZp5mmo2kR1kBH101Kh7vVKBVx7U1t6v11Q/edit?gid=0#gid=0"
-       target="_blank"
-       style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--acc);color:#fff;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity .12s"
-       onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-      📊 시트 열기
-    </a>
-  </div>
-
-  <!-- ── 이벤트 타임라인 ── -->
-  <div class="sec-label" style="margin-top:36px">이벤트 히스토리</div>
-
-  <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">날짜 미정</div>
-      <div class="tl-title">첫 번째 이벤트</div>
-      <div class="tl-desc">이벤트 간단 내용을 입력하세요.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">날짜 미정</div>
-      <div class="tl-title">두 번째 이벤트</div>
-      <div class="tl-desc">이벤트 간단 내용을 입력하세요.</div>
-    </div>
-  </div>
-
-  <!-- ── 안내 ── -->
-  <div style="margin-top:40px;padding:18px 20px;background:var(--sm);border:1px solid var(--bd);border-radius:10px;font-size:12px;color:var(--tx3);line-height:1.8">
-    💡 이 페이지의 내용은 <strong style="color:var(--tx2)">event.html</strong> 파일을 직접 수정하여 자유롭게 채워 주세요.<br>
-    이벤트 카드와 타임라인 블록을 복사해서 원하는 이벤트를 추가하시면 됩니다.
   </div>
 
 </div>
+
+<!-- ── 로그 패널 ── -->
+<div id="panel-log" class="page-body" style="display:none">
+
+  <div class="log-year-block">
+    <div class="log-year-label">인기투표 로그</div>
+    <div class="log-empty">아직 기록된 인기투표 결과가 없습니다.<br>결과 발표 후 이곳에 순위가 기록됩니다.</div>
+  </div>
+
+  <!-- 결과가 생기면 아래 블록을 복사해서 연도별로 추가하세요
+  <div class="log-year-block">
+    <div class="log-year-label">2025년 인기투표 결과</div>
+    <table class="log-table">
+      <thead>
+        <tr>
+          <th>순위</th><th>캐릭터</th><th style="text-align:right">득표</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="log-rank top1">1st</td>
+          <td><span class="log-char-num">042</span>캐릭터 이름</td>
+          <td class="log-votes">999표</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  -->
+
+</div>
+
+<script>
+function tickCountdown() {
+  const now = new Date();
+  const year = (now.getMonth() < 10 || (now.getMonth() === 10 && now.getDate() <= 30)) ? now.getFullYear() : now.getFullYear() + 1;
+  const target = new Date(year, 10, 30, 23, 59, 0);
+  let diff = Math.max(0, target - now);
+  const days = Math.floor(diff / 86400000); diff -= days * 86400000;
+  const hours = Math.floor(diff / 3600000); diff -= hours * 3600000;
+  const mins = Math.floor(diff / 60000);
+  document.getElementById('cd-d').textContent = days;
+  document.getElementById('cd-h').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(mins).padStart(2,'0');
+}
+tickCountdown();
+setInterval(tickCountdown, 30000);
+
+function toggleCard(btn) {
+  btn.closest('.event-card').classList.toggle('collapsed');
+}
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-event').style.display = name === 'event' ? '' : 'none';
+  document.getElementById('panel-log').style.display   = name === 'log'   ? '' : 'none';
+}
+</script>
 </body>
 </html>
