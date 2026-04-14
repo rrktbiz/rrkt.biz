@@ -1193,18 +1193,29 @@ function initHeroRankTicker(){
   let layerA = true;
 
   function fillLayer(s, item){
-    document.getElementById("hr-num-"+s).textContent = item.rank;
-    const th = document.getElementById("hr-thumb-"+s);
-    th.style.background = item.grad;
-    const n = String(parseInt(item.code.replace('BIZOCDOLL',''),10)).padStart(3,'0');
-    th.innerHTML = `<img src="images/character_sheet/${n}_icon.png" alt="${item.code}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" onerror="this.innerHTML='${item.emoji}'">`;
-    document.getElementById("hr-code-"+s).textContent = item.code;
-    document.getElementById("hr-sub-"+s).textContent = item.cnt+"회 출연";
-    const ch = document.getElementById("hr-change-"+s);
-    ch.className = "hero-rank-change";
-    if(item.change==="up"){ ch.classList.add("up"); ch.textContent="▲"; }
-    else if(item.change==="down"){ ch.classList.add("down"); ch.textContent="▼"; }
-    else { ch.classList.add("same"); ch.textContent="—"; }
+    try {
+      document.getElementById("hr-num-"+s).textContent = item.rank;
+
+      // 썸네일: 아이콘 이미지 시도, 실패 시 그라데이션 배경만 표시
+      const th = document.getElementById("hr-thumb-"+s);
+      th.style.background = item.grad;
+      th.textContent = "";  // 기존 내용 초기화
+      const n = String(parseInt(item.code.replace("BIZOCDOLL",""),10)).padStart(3,"0");
+      const img = document.createElement("img");
+      img.src = "images/character_sheet/"+n+"_icon.png";
+      img.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;";
+      img.onerror = function(){ this.style.display="none"; };
+      th.appendChild(img);
+
+      document.getElementById("hr-code-"+s).textContent = item.code;
+      document.getElementById("hr-sub-"+s).textContent = item.cnt+"회 출연";
+
+      const ch = document.getElementById("hr-change-"+s);
+      ch.className = "hero-rank-change";
+      if(item.change==="up"){ ch.classList.add("up"); ch.textContent="▲"; }
+      else if(item.change==="down"){ ch.classList.add("down"); ch.textContent="▼"; }
+      else { ch.classList.add("same"); ch.textContent="—"; }
+    } catch(e){ console.error("fillLayer error:", e); }
   }
 
   function setLayer(el, y, op){
@@ -1341,7 +1352,7 @@ function renderAll(){
   renderWorks();
   renderRanking();
   renderCharIndex();
-  initHeroRankTicker();
+  setTimeout(initHeroRankTicker, 0); // DOM 렌더 완료 후 실행
 }
 
 function buildHashtagFilters(){
