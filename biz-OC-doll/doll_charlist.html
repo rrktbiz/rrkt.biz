@@ -33,7 +33,15 @@ button{font-family:var(--fn);cursor:pointer}
 
 /* ── CHAR LIST ── */
 .char-page{padding:14px 24px 48px}
-.char-filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:nowrap;overflow:visible;}
+.char-filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;overflow:visible;}
+.filter-break{display:none;width:100%;height:0;flex-shrink:0}
+@media(max-width:640px){
+  .filter-break{display:block}
+  .char-filter-tabs{flex-shrink:0}
+  .char-search{max-width:none;flex:1;min-width:0}
+  .char-count{flex-shrink:0}
+  .width-toggle-btn{margin-left:auto;flex-shrink:0}
+}
 .char-filter-tabs{display:flex;gap:0;background:var(--sb);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
 .char-tab{padding:8px 16px;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;border-right:1px solid var(--bd);transition:all .12s}
 .char-tab:last-child{border-right:none}
@@ -170,6 +178,7 @@ button{font-family:var(--fn);cursor:pointer}
     <div class="char-page-inner" id="char-page-inner">
     <div class="char-filter-row">
       <div class="char-filter-tabs" id="filter-tabs"></div>
+      <div class="filter-break"></div>
       <input class="char-search" type="text" placeholder="코드 검색..." id="char-search-input" oninput="setSearch(this.value)" />
       <div class="sort-dropdown-wrap" id="sort-dropdown-wrap">
         <button class="char-sort-btn" id="sort-btn" onclick="toggleSortMenu()" title="정렬 순서 변경">
