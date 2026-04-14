@@ -860,7 +860,12 @@ async function submitForm(){
   let submitOk = false;
   let submitErr = '';
   try {
-    const url = CONFIG.API + '?action=submitArchive&data=' + encodeURIComponent(JSON.stringify(data));
+    // config.js 로드 실패 시 부모창에서 CONFIG 가져오기
+    const _api = (typeof CONFIG !== 'undefined' && CONFIG.API)
+      ? CONFIG.API
+      : (window.opener && window.opener.CONFIG && window.opener.CONFIG.API);
+    if (!_api) throw new Error('CONFIG.API를 찾을 수 없습니다. archive.html을 통해 열어주세요.');
+    const url = _api + '?action=submitArchive&data=' + encodeURIComponent(JSON.stringify(data));
     const res = await fetch(url);
     const json = await res.json();
     if(!json.ok) throw new Error(json.error || 'GAS 오류');
