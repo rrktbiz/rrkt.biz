@@ -857,18 +857,25 @@ async function submitForm(){
     date:       new Date().toISOString().slice(0,7),
   };
 
+  let submitOk = false;
+  let submitErr = '';
   try {
     const url = CONFIG.API + '?action=submitArchive&data=' + encodeURIComponent(JSON.stringify(data));
     const res = await fetch(url);
     const json = await res.json();
-    if(!json.ok) throw new Error(json.error || 'error');
+    if(!json.ok) throw new Error(json.error || 'GAS 오류');
+    submitOk = true;
   } catch(e) {
-    console.warn('API error:', e);
-    // 실패해도 완료 화면은 표시 (시트 저장 실패 알림은 콘솔에만)
+    submitErr = e.message || String(e);
+    console.error('submitArchive 실패:', submitErr);
   }
 
-  btn.disabled = false;
-  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 아카이브에 등재하기`;
+  if(!submitOk){
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 아카이브에 등재하기`;
+    alert('등록 실패: ' + submitErr + '\n\n브라우저 콘솔(F12)에서 자세한 오류를 확인해 주세요.');
+    return;
+  }
 
   // 부모 창(archive.html)에 새로고침 신호
   if(window.opener && window.opener.loadWorks) {
