@@ -858,10 +858,8 @@ async function submitForm(){
   };
 
   try {
-    const res = await fetch(CONFIG.API, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const url = CONFIG.API + '?action=submitArchive&data=' + encodeURIComponent(JSON.stringify(data));
+    const res = await fetch(url);
     const json = await res.json();
     if(!json.ok) throw new Error(json.error || 'error');
   } catch(e) {
