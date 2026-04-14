@@ -695,36 +695,19 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 <div class="hero">
 
 
-  <!-- 실시간 순위 티커: 864px 컨테이너 기준 왼쪽 상단에 고정 -->
+  <!-- 캐스팅 인기순위 버튼 -->
   <div style="position:absolute;inset:0;pointer-events:none;z-index:3;">
     <div style="max-width:864px;margin:0 auto;padding:0 32px;position:relative;height:100%;pointer-events:none;">
-      <div class="hero-rank-widget" id="heroRankWidget" onclick="openRankingOverlay()" style="pointer-events:auto;position:absolute;top:18px;left:32px;">
-        <div class="hero-rank-box">
-          <!-- 레이어 A -->
-          <div class="hero-rank-inner" id="heroRankA" style="position:absolute;left:8px;right:10px;display:flex;align-items:center;gap:7px;">
-            <div class="hero-live-dot"></div>
-            <span class="hero-rank-num" id="hr-num-a">1</span>
-            <div class="hero-rank-thumb" id="hr-thumb-a" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;"></div>
-            <div class="hero-rank-info">
-              <div class="hero-rank-code" id="hr-code-a"></div>
-              <div class="hero-rank-sub" id="hr-sub-a"></div>
-            </div>
-            <span class="hero-rank-change up" id="hr-change-a">▲</span>
-          </div>
-          <!-- 레이어 B -->
-          <div class="hero-rank-inner" id="heroRankB" style="position:absolute;left:8px;right:10px;display:flex;align-items:center;gap:7px;opacity:0;transform:translateY(13px);">
-            <div class="hero-live-dot"></div>
-            <span class="hero-rank-num" id="hr-num-b">1</span>
-            <div class="hero-rank-thumb" id="hr-thumb-b" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;"></div>
-            <div class="hero-rank-info">
-              <div class="hero-rank-code" id="hr-code-b"></div>
-              <div class="hero-rank-sub" id="hr-sub-b"></div>
-            </div>
-            <span class="hero-rank-change up" id="hr-change-b">▲</span>
-          </div>
-        </div>
-        <div class="hero-rank-hint">전체순위 보기</div>
-      </div>
+      <button onclick="openRankingOverlay()" style="pointer-events:auto;position:absolute;top:18px;left:32px;
+        display:flex;align-items:center;gap:6px;
+        padding:6px 14px 6px 10px;border-radius:100px;
+        background:rgba(240,248,255,0.95);border:0.5px solid rgba(90,144,176,0.28);
+        font-size:11px;font-weight:600;color:#3a6a88;
+        cursor:pointer;transition:border-color 0.15s,background 0.15s;
+        font-family:var(--fn);">
+        <span style="width:5px;height:5px;border-radius:50%;background:#8bbdd8;flex-shrink:0;animation:heroLiveBlink 1.4s ease-in-out infinite;display:inline-block;"></span>
+        👑 캐스팅 인기순위
+      </button>
     </div>
   </div>
 
@@ -1176,90 +1159,7 @@ function renderStats(){
 
 // renderAll()은 loadWorks() 안에서 호출됨
 
-/* ── HERO RANK TICKER ── */
-function initHeroRankTicker(){
-  const emojis=["🌸","⭐","🎀","🌙","💫","🍀","🎵","🌈","🦋","💎","🔮","🌺","✨","🎪","🌟"];
-  const grads=["linear-gradient(135deg,#d8eef8,#f8d0e8)","linear-gradient(135deg,#d0e8f8,#d0f0e8)","linear-gradient(135deg,#f8e8d0,#f8d8b0)","linear-gradient(135deg,#e8f0d0,#c8e8b0)","linear-gradient(135deg,#ddeef8,#b8d8ee)"];
-  const getEmoji = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return emojis[(n-1)%emojis.length]; };
-  const getGrad  = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return grads[(n-1)%grads.length]; };
-
-  const countMap = {};
-  WORKS.forEach(w=>(w.chars||[]).forEach(c=>{ countMap[c]=(countMap[c]||0)+1; }));
-  const sorted = Object.entries(countMap).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
-  if(!sorted.length){ document.getElementById("heroRankWidget").style.display="none"; return; }
-
-  const DATA = sorted.map(([code,cnt],i)=>({ rank:i+1, code, cnt, emoji:getEmoji(code), grad:getGrad(code), change:i===0?"up":"same" }));
-  let ptr = 0;
-  let layerA = true;
-
-  function fillLayer(s, item){
-    try {
-      document.getElementById("hr-num-"+s).textContent = item.rank;
-
-      // 썸네일: 아이콘 이미지 시도, 실패 시 그라데이션 배경만 표시
-      const th = document.getElementById("hr-thumb-"+s);
-      th.style.background = item.grad;
-      th.textContent = "";  // 기존 내용 초기화
-      const n = String(parseInt(item.code.replace("BIZOCDOLL",""),10)).padStart(3,"0");
-      const img = document.createElement("img");
-      img.src = "images/character_sheet/"+n+"_icon.png";
-      img.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;";
-      img.onerror = function(){ this.style.display="none"; };
-      th.appendChild(img);
-
-      document.getElementById("hr-code-"+s).textContent = item.code;
-      document.getElementById("hr-sub-"+s).textContent = item.cnt+"회 출연";
-
-      const ch = document.getElementById("hr-change-"+s);
-      ch.className = "hero-rank-change";
-      if(item.change==="up"){ ch.classList.add("up"); ch.textContent="▲"; }
-      else if(item.change==="down"){ ch.classList.add("down"); ch.textContent="▼"; }
-      else { ch.classList.add("same"); ch.textContent="—"; }
-    } catch(e){ console.error("fillLayer error:", e); }
-  }
-
-  function setLayer(el, y, op){
-    el.style.transform = "translateY("+y+"px)";
-    el.style.opacity = op;
-  }
-
-  function easeOut(t){ return 1-Math.pow(1-t,3); }
-  function easeIn(t){ return t*t*t; }
-
-  function tween(dur, fn, done){
-    const t0 = performance.now();
-    (function frame(now){
-      const p = Math.min((now-t0)/dur, 1);
-      fn(p);
-      if(p<1) requestAnimationFrame(frame);
-      else if(done) done();
-    })(t0);
-  }
-
-  const elA = document.getElementById("heroRankA");
-  const elB = document.getElementById("heroRankB");
-
-  fillLayer("a", DATA[0]);
-  setLayer(elA, 0, 1);
-  setLayer(elB, 13, 0);
-
-  function next(){
-    ptr = (ptr+1) % Math.min(DATA.length, 10);
-    const cur  = layerA ? elA : elB;
-    const nxt  = layerA ? elB : elA;
-    const ns   = layerA ? "b" : "a";
-    fillLayer(ns, DATA[ptr]);
-    setLayer(nxt, 13, 0);
-
-    tween(240, t => setLayer(cur, -13*easeIn(t), 1-easeIn(t)));
-    setTimeout(() => tween(320, t => setLayer(nxt, 13*(1-easeOut(t)), easeOut(t))), 80);
-
-    layerA = !layerA;
-  }
-
-  setInterval(next, 3000);
-}
-// initHeroRankTicker()는 renderAll() 안에서 호출됨
+// initHeroRankTicker 제거됨
 
 /* ── EMBED MODE (캐릭터시트 iframe 연동) ── */
 (function(){
@@ -1345,32 +1245,6 @@ async function loadWorks(){
   }
   renderAll();
   buildHashtagFilters();
-
-  // 히어로 티커 초기값 직접 설정
-  (function(){
-    var cm = {};
-    WORKS.forEach(function(w){ (w.chars||[]).forEach(function(c){ cm[c]=(cm[c]||0)+1; }); });
-    var top = Object.entries(cm).filter(function(x){ return x[1]>0; }).sort(function(a,b){ return b[1]-a[1]; });
-    if(!top.length) return;
-    var code = top[0][0], cnt = top[0][1];
-    var num = String(parseInt(code.replace('BIZOCDOLL',''),10)).padStart(3,'0');
-    var elCode = document.getElementById('hr-code-a');
-    var elSub  = document.getElementById('hr-sub-a');
-    var elThumb = document.getElementById('hr-thumb-a');
-    if(elCode)  elCode.textContent  = code;
-    if(elSub)   elSub.textContent   = cnt + '회 출연';
-    if(elThumb){
-      elThumb.innerHTML = '';
-      var img = document.createElement('img');
-      img.src = 'images/character_sheet/' + num + '_icon.png';
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;';
-      img.onerror = function(){ this.remove(); };
-      elThumb.appendChild(img);
-    }
-  })();
-
-  // 롤링 애니메이션
-  setTimeout(initHeroRankTicker, 100);
 }
 
 function renderAll(){
@@ -1378,7 +1252,6 @@ function renderAll(){
   renderWorks();
   renderRanking();
   renderCharIndex();
-  setTimeout(initHeroRankTicker, 0); // DOM 렌더 완료 후 실행
 }
 
 function buildHashtagFilters(){
