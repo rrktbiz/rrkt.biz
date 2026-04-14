@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 아카이브</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Josefin+Sans:wght@100;300&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -334,6 +335,15 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 }
 .chars-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 9px; align-items: center; }
 .work-card-desc { font-size: 11px; color: var(--gray-600); line-height: 1.6; flex: 1; }
+/* ── 해시태그 칩 (카드/리스트) ── */
+.work-hashtags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
+.work-hashtag {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px;
+  background: rgba(224,144,192,0.1); color: #c060a0;
+  border: 1px solid rgba(224,144,192,0.35);
+  cursor: pointer; transition: all 0.1s;
+}
+.work-hashtag:hover { background: rgba(224,144,192,0.22); }
 .work-card-foot {
   margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--gray-100);
   display: flex; align-items: center; justify-content: space-between;
@@ -751,14 +761,8 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
           <button class="tag-btn" onclick="toggleTypeTag('굿즈',this)">#굿즈</button>
           <button class="tag-btn" onclick="toggleTypeTag('영상',this)">#영상</button>
           <button class="tag-btn" onclick="toggleTypeTag('기타',this)">#기타</button>
-          <button class="tag-btn" onclick="toggleGenreTag('GL',this)">#GL</button>
-          <button class="tag-btn" onclick="toggleGenreTag('BL',this)">#BL</button>
-          <button class="tag-btn" onclick="toggleGenreTag('NL',this)">#NL</button>
-          <button class="tag-btn" onclick="toggleGenreTag('판타지',this)">#판타지</button>
-          <button class="tag-btn" onclick="toggleGenreTag('일상',this)">#일상</button>
-          <button class="tag-btn" onclick="toggleGenreTag('개그',this)">#개그</button>
-          <button class="tag-btn" onclick="toggleGenreTag('드라마',this)">#드라마</button>
-          <button class="tag-btn" onclick="toggleGenreTag('공포',this)">#공포</button>
+          <!-- 해시태그 필터 - 시트에서 불러온 태그로 동적 생성 -->
+          <span id="hashtag-filter-tags"></span>
         </div>
       </div>
       <div id="works-container"></div>
@@ -784,42 +788,17 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 
    chars: 사용한 캐릭터 코드 배열 (예: ["BIZOCDOLL001","BIZOCDOLL003"])
 ══════════════════════════════════════════════════════════ */
-const WORKS = [
+/* ★ 테스트 데이터 1개 — 시트에 실제 데이터가 쌓이면 덮어씌워집니다 ★ */
+let WORKS = [
   {
     title:   "달빛 아래서",
     creator: "소소한창작",
     type:    "웹툰/만화",
     chars:   ["BIZOCDOLL007", "BIZOCDOLL023"],
+    tags:    ["판타지"],
     desc:    "두 인형이 달빛 아래 처음 만나는 이야기",
     link:    "https://twitter.com",
     date:    "2025-01",
-  },
-  {
-    title:   "비즈돌 연구소",
-    creator: "꽃잎",
-    type:    "웹소설/소설",
-    chars:   ["BIZOCDOLL042"],
-    desc:    "BIZOCDOLL042가 주인공인 단편 소설",
-    link:    "",
-    date:    "2025-02",
-  },
-  {
-    title:   "봄 굿즈 세트",
-    creator: "petalworks",
-    type:    "굿즈",
-    chars:   ["BIZOCDOLL001", "BIZOCDOLL007", "BIZOCDOLL099"],
-    desc:    "아크릴 키링 3종 세트",
-    link:    "https://twitter.com",
-    date:    "2025-03",
-  },
-  {
-    title:   "인형극",
-    creator: "밤양갱",
-    type:    "일러스트",
-    chars:   ["BIZOCDOLL015"],
-    desc:    "팬아트 일러스트",
-    link:    "",
-    date:    "2025-03",
   },
 ];
 
@@ -998,6 +977,9 @@ function cardHTML(w){
 function listHTML(w){
   const m = TYPE_META[w.type]||TYPE_META["기타"];
   const linkArrow = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>`;
+  const tagHtml = (w.tags||[]).length
+    ? `<div class="work-hashtags">${(w.tags||[]).map(t=>`<span class="work-hashtag" onclick="toggleGenreTag('${esc(t)}',this)">#${esc(t)}</span>`).join("")}</div>`
+    : "";
   return `<div class="work-list-item">
     <div class="work-list-info">
       <div class="work-list-top">
@@ -1006,6 +988,7 @@ function listHTML(w){
         <span class="work-list-creator">by ${esc(w.creator)}</span>
       </div>
       <div class="chars-row">${(w.chars||[]).map(c=>charChip(c)).join("")}</div>
+      ${tagHtml}
     </div>
     <span class="work-list-date">${w.date||""}</span>
     <div class="work-list-right">
@@ -1180,7 +1163,7 @@ function renderStats(){
   document.getElementById("stat-chars").textContent    = new Set(WORKS.flatMap(w=>w.chars||[])).size;
 }
 
-renderStats(); renderWorks(); renderRanking(); renderCharIndex();
+// 데이터 로드 후 renderAll() 에서 호출됨 — loadWorks() 참고
 
 /* ── HERO RANK TICKER ── */
 function initHeroRankTicker(){
@@ -1252,7 +1235,7 @@ function initHeroRankTicker(){
 
   setInterval(next, 3000);
 }
-initHeroRankTicker();
+// initHeroRankTicker() — renderAll() 안에서 호출됨
 
 /* ── EMBED MODE (캐릭터시트 iframe 연동) ── */
 (function(){
@@ -1310,6 +1293,55 @@ initHeroRankTicker();
     if(target) setTimeout(()=>target.scrollIntoView({behavior:'smooth', block:'start'}), 120);
   });
 })();
+
+/* ══════════════════════════════════════════════════════════
+   ★  시트 연동 — 데이터 로드 & 렌더  ★
+══════════════════════════════════════════════════════════ */
+
+async function loadWorks(){
+  try {
+    const res = await fetch(CONFIG.API + '?action=getArchive');
+    const json = await res.json();
+    if(json.ok && Array.isArray(json.data) && json.data.length > 0){
+      WORKS = json.data.map(function(row){
+        return {
+          title:   row.title   || '',
+          creator: row.creator || '',
+          type:    (row.type   || '').split('|')[0] || '기타',
+          chars:   (row.chars  || '').split('|').filter(Boolean),
+          tags:    (row.hashtags || '').split('|').map(t=>t.replace(/^#+/,'').trim()).filter(Boolean),
+          desc:    row.desc    || '',
+          link:    (row.links  || '').split('|').filter(Boolean)[0] || '',
+          date:    row.date    || '',
+        };
+      });
+    }
+  } catch(e){
+    console.warn('[archive] API fetch failed, using test data:', e);
+  }
+  renderAll();
+  buildHashtagFilters();
+}
+
+function renderAll(){
+  renderStats();
+  renderWorks();
+  renderRanking();
+  renderCharIndex();
+  initHeroRankTicker();
+}
+
+function buildHashtagFilters(){
+  const allTags = new Set();
+  WORKS.forEach(w=>(w.tags||[]).forEach(t=>{ if(t) allTags.add(t); }));
+  const wrap = document.getElementById('hashtag-filter-tags');
+  if(!wrap) return;
+  wrap.innerHTML = [...allTags].sort().map(t=>
+    `<button class="tag-btn" onclick="toggleGenreTag('${esc(t)}',this)">#${esc(t)}</button>`
+  ).join('');
+}
+
+loadWorks();
 
 /* ── 글리터 ── */
 (function(){
