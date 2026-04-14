@@ -339,20 +339,20 @@ html, body { background: var(--white); color: var(--gray-900); font-family: var(
 .work-hashtags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .work-hashtag {
   font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 100px;
-  background: rgba(224,144,192,0.1); color: #b04080;
-  border: 1px solid rgba(224,144,192,0.4);
+  background: rgba(90,144,176,0.1); color: #3a6a88;
+  border: 1px solid rgba(90,144,176,0.35);
   cursor: pointer; transition: all 0.1s; font-family: var(--fn);
 }
-.work-hashtag:hover { background: rgba(224,144,192,0.22); border-color: rgba(224,144,192,0.7); }
-.work-hashtag.active { background: rgba(224,144,192,0.28); border-color: #d060a0; }
-/* ── 필터 바 해시태그 버튼 (분홍 계열) ── */
+.work-hashtag:hover { background: rgba(90,144,176,0.2); border-color: rgba(90,144,176,0.6); }
+.work-hashtag.active { background: rgba(90,144,176,0.25); border-color: #5a90b0; }
+/* ── 필터 바 해시태그 버튼 (메인 블루 계열) ── */
 .hashtag-tag-btn {
-  background: rgba(224,144,192,0.08) !important;
-  border-color: rgba(224,144,192,0.45) !important;
-  color: #b04080 !important;
+  background: rgba(90,144,176,0.08) !important;
+  border-color: rgba(90,144,176,0.4) !important;
+  color: #3a6a88 !important;
 }
-.hashtag-tag-btn:hover { background: rgba(224,144,192,0.18) !important; border-color: rgba(224,144,192,0.7) !important; }
-.hashtag-tag-btn.active { background: rgba(224,144,192,0.28) !important; border-color: #d060a0 !important; color: #902060 !important; }
+.hashtag-tag-btn:hover { background: rgba(90,144,176,0.18) !important; border-color: rgba(90,144,176,0.65) !important; }
+.hashtag-tag-btn.active { background: rgba(90,144,176,0.22) !important; border-color: #5a90b0 !important; color: #2a5070 !important; }
 .work-card-foot {
   margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--gray-100);
   display: flex; align-items: center; justify-content: space-between;
@@ -1095,11 +1095,16 @@ function renderRanking(){
   const getGrad  = code => { const n=parseInt(code.replace("BIZOCDOLL",""),10); return thumbGrads[(n-1)%thumbGrads.length]; };
   const maxCount = sorted[0][1] || 1;
 
+  const iconImg = (code, size) => {
+    const n = String(parseInt(code.replace('BIZOCDOLL',''),10)).padStart(3,'0');
+    return `<img src="images/character_sheet/${n}_icon.png" alt="${code}" style="width:${size}px;height:${size}px;object-fit:cover;border-radius:inherit;" onerror="this.style.display='none'">`;
+  };
+
   const [c1, n1] = sorted[0];
   let html = `<div class="rank-hero">
     <div class="rank-hero-thumb" style="background:${getGrad(c1)}">
       <span class="rank-hero-crown">👑</span>
-      <span>${getEmoji(c1)}</span>
+      ${iconImg(c1, 40)}
     </div>
     <div class="rank-hero-info">
       <div class="rank-hero-label">1ST PLACE</div>
@@ -1120,7 +1125,7 @@ function renderRanking(){
     const medalOrNum = rank <= 3 ? `<span style="font-size:12px">${medals[i]}</span>` : `<span class="r-rank">${rank}</span>`;
     html += `<div class="ranking-row${isZero?" zero":""}">
       ${medalOrNum}
-      <div class="r-thumb" style="background:${getGrad(code)}">${getEmoji(code)}</div>
+      <div class="r-thumb" style="background:${getGrad(code)}">${iconImg(code,26)}</div>
       <span class="r-code">${esc(code)}</span>
       <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
       <span class="r-cnt">${cnt}</span>
@@ -1140,7 +1145,7 @@ function renderRanking(){
       const isZero = cnt === 0;
       html+=`<div class="all-item${isZero?" zero":""}">
         <span class="all-rank">${i+11}</span>
-        <div class="all-thumb" style="background:${getGrad(code)}">${getEmoji(code)}</div>
+        <div class="all-thumb" style="background:${getGrad(code)}">${iconImg(code,20)}</div>
         <span class="all-code">${esc(code)}</span>
         <span class="all-cnt">${cnt}</span>
         <button class="all-open" onclick="filterByChar('${esc(code)}')">↗</button>
@@ -1188,7 +1193,9 @@ function initHeroRankTicker(){
   function fillLayer(s, item){
     document.getElementById("hr-num-"+s).textContent = item.rank;
     const th = document.getElementById("hr-thumb-"+s);
-    th.textContent = item.emoji; th.style.background = item.grad;
+    th.style.background = item.grad;
+    const n = String(parseInt(item.code.replace('BIZOCDOLL',''),10)).padStart(3,'0');
+    th.innerHTML = `<img src="images/character_sheet/${n}_icon.png" alt="${item.code}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" onerror="this.innerHTML='${item.emoji}'">`;
     document.getElementById("hr-code-"+s).textContent = item.code;
     document.getElementById("hr-sub-"+s).textContent = item.cnt+"회 출연";
     const ch = document.getElementById("hr-change-"+s);
