@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 작품 등록</title>
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -491,6 +492,22 @@ textarea { resize: none; line-height: 1.7; }
 }
 .link-chip-del:hover { color: #c04080; }
 
+/* ── 해시태그 칩 ── */
+.hashtag-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.hashtag-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px 4px 12px; border-radius: 100px;
+  background: rgba(224,144,192,0.1);
+  border: 1px solid rgba(224,144,192,0.4);
+  font-size: 12px; font-weight: 600; color: #c060a0;
+  font-family: var(--fn);
+}
+.hashtag-chip-del {
+  cursor: pointer; font-size: 10px; color: rgba(192,80,128,0.5);
+  transition: color 0.1s; line-height: 1;
+}
+.hashtag-chip-del:hover { color: #c04080; }
+
 /* ── 입력 에러 ── */
 input.error, textarea.error {
   border-color: #e07090;
@@ -612,6 +629,19 @@ input.error, textarea.error {
       <div class="link-chips" id="link-chips"></div>
     </div>
 
+    <!-- 해시태그 -->
+    <div class="field">
+      <div class="field-label">해시태그 <span style="font-size:10px;color:var(--text-light);font-weight:400;letter-spacing:0;text-transform:none">선택 · 자유 입력</span></div>
+      <div class="field-hint">#을 포함해서 입력하거나 그냥 입력해도 돼요. 엔터 또는 스페이스로 추가합니다.</div>
+      <div class="char-input-row">
+        <input type="text" id="f-tag-input" placeholder="#GL #판타지 #BL ..."
+          maxlength="30"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();addHashtag();}">
+        <button class="char-add-btn" onclick="addHashtag()">+</button>
+      </div>
+      <div class="hashtag-chips" id="hashtag-chips"></div>
+    </div>
+
     <hr class="divider">
 
     <!-- 공개 여부 -->
@@ -663,6 +693,29 @@ input.error, textarea.error {
 let selectedTypes = new Set();
 let charList = [];
 let visibility = "public";
+let hashtagList = [];
+
+/* ── 해시태그 ── */
+function addHashtag(){
+  const input = document.getElementById("f-tag-input");
+  const raw = input.value.trim().replace(/^#+/, '');
+  if(!raw) return;
+  const tag = raw.trim();
+  if(!tag || hashtagList.includes(tag)) { input.value=""; return; }
+  hashtagList.push(tag);
+  input.value = "";
+  renderHashtags();
+}
+function removeHashtag(tag){
+  hashtagList = hashtagList.filter(t=>t!==tag);
+  renderHashtags();
+}
+function renderHashtags(){
+  const el = document.getElementById("hashtag-chips");
+  el.innerHTML = hashtagList.map(t=>`
+    <span class="hashtag-chip">#${esc(t)}<span class="hashtag-chip-del" onclick="removeHashtag('${esc(t)}')">✕</span></span>
+  `).join("");
+}
 
 /* ── 타입 선택 (복수) ── */
 function selectType(btn){
@@ -778,24 +831,51 @@ function validate(){
 }
 
 /* ── 제출 ── */
-function submitForm(){
+async function submitForm(){
   if(!validate()){
-    // 첫 번째 에러 필드로 스크롤
     const errEl = document.querySelector("input.error, textarea.error");
     if(errEl) errEl.scrollIntoView({behavior:"smooth",block:"center"});
     return;
   }
 
+  const btn = document.getElementById("submit-btn");
+  btn.disabled = true;
+  btn.innerHTML = `<span style="opacity:0.7">등록 중...</span>`;
+
   const data = {
-    title:   document.getElementById("f-title").value.trim(),
-    contact: document.getElementById("f-contact").value.trim(),
-    type:    [...selectedTypes],
-    chars:   [...charList],
-    desc:    document.getElementById("f-desc").value.trim(),
-    links:   [...linkList],
-    typeEtc: document.getElementById("f-type-etc")?.value.trim() || "",
+    action:     'submitArchive',
+    title:      document.getElementById("f-title").value.trim(),
+    creator:    document.getElementById("f-creator").value.trim(),
+    contact:    document.getElementById("f-contact").value.trim(),
+    type:       [...selectedTypes],
+    chars:      [...charList],
+    desc:       document.getElementById("f-desc").value.trim(),
+    links:      [...linkList],
+    hashtags:   [...hashtagList],
+    typeEtc:    document.getElementById("f-type-etc")?.value.trim() || "",
     visibility: visibility,
+    date:       new Date().toISOString().slice(0,7),
   };
+
+  try {
+    const res = await fetch(CONFIG.API, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    if(!json.ok) throw new Error(json.error || 'error');
+  } catch(e) {
+    console.warn('API error:', e);
+    // 실패해도 완료 화면은 표시 (시트 저장 실패 알림은 콘솔에만)
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 아카이브에 등재하기`;
+
+  // 부모 창(archive.html)에 새로고침 신호
+  if(window.opener && window.opener.loadWorks) {
+    window.opener.loadWorks();
+  }
 
   showComplete(data);
 }
@@ -828,6 +908,13 @@ function showComplete(data){
       <span class="info-key">Cast</span>
       <span class="info-val code-val">${data.chars.join(" · ")}</span>
     </div>`;
+
+  if(data.hashtags && data.hashtags.length){
+    infoEl.innerHTML += `<div class="info-row">
+      <span class="info-key">Tags</span>
+      <span class="info-val">${data.hashtags.map(t=>'#'+esc(t)).join(" ")}</span>
+    </div>`;
+  }
 
   const overlay = document.getElementById("complete-overlay");
   overlay.classList.add("show");
@@ -886,6 +973,7 @@ function closeComplete(){
   if(etcWrap) etcWrap.classList.remove("show");
   document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
   selectedTypes.clear(); charList=[]; visibility="public";
+  hashtagList=[]; renderHashtags();
   renderChips();
   selectVisibility("public");
 }
