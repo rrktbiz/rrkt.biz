@@ -6,7 +6,7 @@
 <title>rrkt.biz</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
 <script src="config.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700;800&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -2680,12 +2680,12 @@ async function renderStoryList(){
       <img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block">
       <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.55))">
         <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div>
-        <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:#fff">스토리</div>
+        <div style="font-size:clamp(20px,3.5vw,30px);font-weight:100;letter-spacing:0.22em;color:#fff;font-family:'Josefin Sans',sans-serif">STORY</div>
       </div></div>`;
     return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:linear-gradient(135deg,#1a2e3a,${TAB_COLORS[t]||'#5a90b0'});overflow:hidden">
       <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.4))">
         <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div>
-        <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:#fff">스토리</div>
+        <div style="font-size:clamp(20px,3.5vw,30px);font-weight:100;letter-spacing:0.22em;color:#fff;font-family:'Josefin Sans',sans-serif">STORY</div>
       </div></div>`;
   }
 
