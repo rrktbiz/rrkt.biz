@@ -717,9 +717,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-home-btn:hover{background:var(--bg);color:var(--tx)}
 .mob-backdrop.show{display:block}
 /* 모바일 iframe 위 스와이프 엣지 존 — iframe이 터치를 삼켜도 메인 doc이 이벤트를 잡도록 */
-#swipe-edge-zone{position:fixed;top:48px;left:0;width:250px;bottom:0;z-index:65;background:transparent;pointer-events:all;touch-action:pan-y;}
-@media(min-width:769px){#swipe-edge-zone{display:none!important}}
+#swipe-edge-zone{position:fixed;top:48px;left:0;width:250px;bottom:0;z-index:65;background:transparent;pointer-events:none;touch-action:pan-y;}
+body.iframe-view #swipe-edge-zone{pointer-events:all;}
 body:has(#mob-menu.open) #swipe-edge-zone{pointer-events:none;}
+@media(min-width:769px){#swipe-edge-zone{display:none!important}}
 .mob-nav-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--tx2);font-size:12px;font-weight:500;text-align:left;cursor:pointer}
 .mob-nav-item:hover,.mob-nav-item.active{color:var(--tx);background:var(--bg)}
 .mob-nav-item .mob-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:10px}
@@ -2644,6 +2645,11 @@ function render(){
     document.getElementById("event-frame").style.display="block";
   }
   else if(S.view==="about")    renderAbout();
+  // swipe-edge-zone 활성화: iframe이 실제로 떠있는 뷰일 때만
+  var _iframeViews=["charlist","chardetail","archive","event"];
+  var _isIframeView=_iframeViews.indexOf(S.view)!==-1||
+    (S.view==="intro"&&(S.activeProj==="biz-oc-doll"||S.activeProj==="blood-highschool"));
+  document.body.classList.toggle("iframe-view",_isIframeView);
 }
 
 /* ══ STORY SPA — biz-OC-doll ══ */
