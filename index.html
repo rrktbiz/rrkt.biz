@@ -717,9 +717,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-home-btn:hover{background:var(--bg);color:var(--tx)}
 .mob-backdrop.show{display:block}
 /* 모바일 iframe 위 스와이프 엣지 존 — iframe이 터치를 삼켜도 메인 doc이 이벤트를 잡도록 */
-#swipe-edge-zone{position:fixed;top:48px;left:0;width:28px;bottom:0;z-index:65;background:transparent;pointer-events:none;touch-action:pan-y;}
-body.iframe-view #swipe-edge-zone{pointer-events:all;}
-@media(min-width:769px){#swipe-edge-zone{display:none!important}}
+
 .mob-nav-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--tx2);font-size:12px;font-weight:500;text-align:left;cursor:pointer}
 .mob-nav-item:hover,.mob-nav-item.active{color:var(--tx);background:var(--bg)}
 .mob-nav-item .mob-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:10px}
@@ -1091,7 +1089,6 @@ body{top:0!important}
   </div>
 </div>
 <div class="mob-backdrop" id="mob-backdrop" onclick="closeMobMenu()"></div>
-<div id="swipe-edge-zone"></div>
 
 <!-- 플로팅 에피소드 네비 -->
 <div id="float-ep-nav">
@@ -2568,8 +2565,6 @@ function closeMobMenu(){
   mob.classList.remove("show-sub");
   const bd=document.getElementById("mob-backdrop");
   if(bd)bd.classList.remove("show");
-  var ez=document.getElementById('swipe-edge-zone');
-  if(ez) ez.style.pointerEvents=document.body.classList.contains('iframe-view')?'all':'';
 }
 
 /* ── MAIN RENDER ── */
@@ -2646,11 +2641,6 @@ function render(){
     document.getElementById("event-frame").style.display="block";
   }
   else if(S.view==="about")    renderAbout();
-  // swipe-edge-zone 활성화: iframe이 실제로 떠있는 뷰일 때만
-  var _iframeViews=["charlist","chardetail","archive","event"];
-  var _isIframeView=_iframeViews.indexOf(S.view)!==-1||
-    (S.view==="intro"&&(S.activeProj==="biz-oc-doll"||S.activeProj==="blood-highschool"));
-  document.body.classList.toggle("iframe-view",_isIframeView);
 }
 
 /* ══ STORY SPA — biz-OC-doll ══ */
@@ -4939,8 +4929,6 @@ function rebuildWorkLog(){
     }
     mob.classList.add('open');
     if(bd) bd.classList.add('show');
-    var ez=document.getElementById('swipe-edge-zone');
-    if(ez) ez.style.pointerEvents='none';
   }
 
   function snapClose(){
@@ -5042,7 +5030,72 @@ function rebuildWorkLog(){
     snapRestore();
     dragging=false; openDrag=false;
   }, {passive:true});
+
+  /* iframe에서 호출 가능하도록 내부 함수 노출 */
+  window._mobIsOpen    = isMenuOpen;
+  window._mobSnapOpen  = snapOpen;
+  window._mobSnapClose = function(){ snapClose(); };
+  window._mobRestore   = snapRestore;
+  window._mobRawMove   = function(dx, isClosing){
+    var mob=getMob(), w=mob.scrollWidth||130;
+    mob.style.pointerEvents='none';
+    if(isClosing){ mob.style.transition='none'; mob.style.transform='translateX('+Math.min(0,dx)+'px)'; }
+    else { setRawTransform(-w+dx); }
+  };
 })();
+
+/* ── iframe 터치 스와이프 주입 ── */
+(function(){
+  var EDGE=250, OPEN_DIST=55, CLOSE_DIST=55, VEL=0.35;
+  function inject(fr){
+    try{
+      var doc=fr.contentDocument||(fr.contentWindow&&fr.contentWindow.document);
+      if(!doc||!doc.body||doc.__si) return;
+      doc.__si=true;
+      var sx,sy,lx,lt,drag=false,closing=false;
+      doc.addEventListener('touchstart',function(e){
+        if(window.innerWidth>768) return;
+        var t=e.touches[0]; sx=lx=t.clientX; sy=t.clientY; lt=Date.now(); drag=false;
+        closing=window._mobIsOpen&&window._mobIsOpen();
+      },{passive:true});
+      doc.addEventListener('touchmove',function(e){
+        if(window.innerWidth>768) return;
+        var t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+        if(!drag){
+          if(Math.abs(dy)>Math.abs(dx)+6) return;
+          if(!closing&&(sx>EDGE||dx<=6)) return;
+          if(closing&&dx>=-6) return;
+          drag=true;
+        }
+        lx=t.clientX; lt=Date.now();
+        if(window._mobRawMove) window._mobRawMove(t.clientX-sx, closing);
+      },{passive:true});
+      doc.addEventListener('touchend',function(){
+        if(!drag) return;
+        var dx=lx-sx, dt=Date.now()-lt+1, vel=Math.abs(dx)/dt;
+        if(!closing){
+          if(dx>=OPEN_DIST||(dx>10&&vel>=VEL)) window._mobSnapOpen&&window._mobSnapOpen();
+          else window._mobRestore&&window._mobRestore();
+        } else {
+          if(-dx>=CLOSE_DIST||(-dx>10&&vel>=VEL)) window._mobSnapClose&&window._mobSnapClose();
+          else window._mobRestore&&window._mobRestore();
+        }
+        drag=false;
+      },{passive:true});
+      doc.addEventListener('touchcancel',function(){
+        if(drag) window._mobRestore&&window._mobRestore();
+        drag=false;
+      },{passive:true});
+    }catch(ignore){}
+  }
+  var IDS=['char-frame','doll-intro-frame','bhs-intro-frame','archive-frame','event-frame'];
+  IDS.forEach(function(id){
+    var fr=document.getElementById(id);
+    if(!fr) return;
+    fr.addEventListener('load',function(){ inject(fr); });
+    try{ if(fr.contentDocument&&fr.contentDocument.readyState==='complete') inject(fr); }catch(e){}
+  });
+})()
 
 /* ── 번역/저작권 안내 접기 ── */
 (function(){
