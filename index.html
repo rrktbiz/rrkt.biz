@@ -717,9 +717,8 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-home-btn:hover{background:var(--bg);color:var(--tx)}
 .mob-backdrop.show{display:block}
 /* 모바일 iframe 위 스와이프 엣지 존 — iframe이 터치를 삼켜도 메인 doc이 이벤트를 잡도록 */
-#swipe-edge-zone{position:fixed;top:48px;left:0;width:250px;bottom:0;z-index:65;background:transparent;pointer-events:none;touch-action:pan-y;}
+#swipe-edge-zone{position:fixed;top:48px;left:0;width:28px;bottom:0;z-index:65;background:transparent;pointer-events:none;touch-action:pan-y;}
 body.iframe-view #swipe-edge-zone{pointer-events:all;}
-body:has(#mob-menu.open) #swipe-edge-zone{pointer-events:none;}
 @media(min-width:769px){#swipe-edge-zone{display:none!important}}
 .mob-nav-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--tx2);font-size:12px;font-weight:500;text-align:left;cursor:pointer}
 .mob-nav-item:hover,.mob-nav-item.active{color:var(--tx);background:var(--bg)}
@@ -2569,6 +2568,8 @@ function closeMobMenu(){
   mob.classList.remove("show-sub");
   const bd=document.getElementById("mob-backdrop");
   if(bd)bd.classList.remove("show");
+  var ez=document.getElementById('swipe-edge-zone');
+  if(ez) ez.style.pointerEvents=document.body.classList.contains('iframe-view')?'all':'';
 }
 
 /* ── MAIN RENDER ── */
@@ -4938,6 +4939,8 @@ function rebuildWorkLog(){
     }
     mob.classList.add('open');
     if(bd) bd.classList.add('show');
+    var ez=document.getElementById('swipe-edge-zone');
+    if(ez) ez.style.pointerEvents='none';
   }
 
   function snapClose(){
