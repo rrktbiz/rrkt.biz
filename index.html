@@ -2709,7 +2709,7 @@ async function renderStoryList(){
             <span class="ep-status-badge ${stCls}" style="${wipStyle}">${statusLabel}</span>
           </div>
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
-            <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0">${e.title||''}</div>
+            <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${e.title||''}</div>
             ${castHtml?`<div style="display:flex;align-items:center;gap:4px;flex-shrink:0">${castHtml}</div>`:''}
           </div>
         </div>
