@@ -1207,6 +1207,7 @@ async function fetchEpText(url){
  */
 function driveImg(fileId){
   if(!fileId) return null;
+  if(fileId.includes('/') || fileId.startsWith('http')) return fileId;
   return `https://lh3.googleusercontent.com/d/${fileId}`;
 }
 
@@ -1300,7 +1301,7 @@ const PROJECTS = [
 const VOLUMES = {
   "blood-highschool": [
     {id:"novel-1", num:1, label:"[웹소설]블러드하이스쿨 ~용의 부활~", sub:"1부", grad:"150deg,#3a0000,#8b0000,#c0392b", type:"웹소설", tags:["판타지","학원"],
-     coverId:null, // ← Drive 커버 이미지 파일 ID
+     coverId:"Blood_High_School/bhs_novel_prat1_cover.png",
      synopsis:"평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.",
      episodes:[
       {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:null},
@@ -1320,7 +1321,7 @@ const VOLUMES = {
       {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
     ]},
     {id:"novel-2", num:2, label:"[웹소설]블러드하이스쿨 ~류오가편~", sub:"2부", grad:"150deg,#1a0010,#6b0030,#c0304a", type:"웹소설", tags:["판타지","미스터리"],
-     coverId:null,
+     coverId:"Blood_High_School/bhs_novel_prat2_cover.png",
      synopsis:"류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.",
      episodes:[
       {id:1,  title:"1화",  date:null, status:"예정", textId:null},
@@ -1340,7 +1341,7 @@ const VOLUMES = {
       {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
     ]},
     {id:"novel-3", num:3, label:"[웹소설]블러드하이스쿨 3부", sub:"3부", grad:"150deg,#1a0000,#700000,#aa2020", type:"웹소설", tags:["판타지","액션"],
-     coverId:null,
+     coverId:"Blood_High_School/bhs_novel_prat3_cover.png",
      synopsis:"이제 순진하지만은 않은 쿠로. -새로운 종족이 나타난다.",
      episodes:[
       {id:1,  title:"1화",  date:null, status:"예정", textId:null},
