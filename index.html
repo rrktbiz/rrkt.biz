@@ -2675,7 +2675,12 @@ async function renderStoryList(){
   const activeTab = existingTabs[0];
 
   function _buildBanner(t){
-    const img = banners[t]||'';
+    const BANNER_IMGS = {
+      main:  'biz-OC-doll/images/ep_cover_sc/0_banner_main_story.png',
+      sub:   'biz-OC-doll/images/ep_cover_sc/0_banner__character_story.png',
+      event: 'biz-OC-doll/images/ep_cover_sc/0_banner_event_story.png'
+    };
+    const img = banners[t] || BANNER_IMGS[t] || '';
     const tlbl = BANNER_LABELS[t]||'STORY';
     if(img) return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:#1a2e3a;overflow:hidden"><img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.55))"><div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div><div style="font-size:clamp(20px,3.5vw,30px);font-weight:100;letter-spacing:0.22em;color:#fff;font-family:'Josefin Sans',sans-serif">${tlbl}</div></div></div>`;
     return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:linear-gradient(135deg,#1a2e3a,${TAB_COLORS[t]||'#5a90b0'});overflow:hidden"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.4))"><div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div><div style="font-size:clamp(20px,3.5vw,30px);font-weight:100;letter-spacing:0.22em;color:#fff;font-family:'Josefin Sans',sans-serif">${tlbl}</div></div></div>`;
