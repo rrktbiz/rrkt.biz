@@ -4059,7 +4059,7 @@ function renderEpList(){
     document.getElementById("content").innerHTML=`
     <div style="background:var(--sb);padding-top:8px">
     <div class="vol-banner">
-      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad})"></div>
+      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad});position:relative;overflow:hidden">${driveImg(vol.coverId)?`<img src="${driveImg(vol.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}      </div>
       <div style="flex:1">
         <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type||""}</div>
         <div class="vb-title">${vol.label||vol.sub}</div>
@@ -4095,7 +4095,7 @@ function renderEpList(){
   document.getElementById("content").innerHTML=`
     <div style="background:var(--sb);padding-top:8px">
     <div class="vol-banner">
-      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad})"></div>
+      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad});position:relative;overflow:hidden">${driveImg(vol.coverId)?`<img src="${driveImg(vol.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}      </div>
       <div style="flex:1">
         <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type||""}</div>
         <div class="vb-title">${vol.label||vol.sub}</div>
@@ -4133,7 +4133,7 @@ function renderYtEpList(proj){
   document.getElementById("content").innerHTML=`
     <div style="background:var(--sb);padding-top:8px">
     <div class="vol-banner">
-      <div class="vol-banner-thumb yt" style="background:linear-gradient(${vol.grad})"></div>
+      <div class="vol-banner-thumb yt" style="background:linear-gradient(${vol.grad});position:relative;overflow:hidden">${driveImg(vol.coverId)?`<img src="${driveImg(vol.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}      </div>
       <div style="flex:1">
         <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type}</div>
         <div class="vb-title">${vol.label}</div>
