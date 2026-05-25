@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>블러드하이스쿨 — INTRO</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='%23E51937'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='18' font-weight='700' fill='%23fff'>B</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Passion+One:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Passion+One:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -39,33 +39,47 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:3}
 .hero-badge{display:inline-block;background:var(--yellow);color:var(--black);font-family:var(--sfx);font-size:13px;letter-spacing:3px;padding:5px 18px;border:3px solid var(--black);border-radius:4px;box-shadow:4px 4px 0 var(--black);transform:rotate(-1.5deg);margin-bottom:22px;}
 .hero-title{font-family:var(--display);font-size:clamp(52px,10vw,110px);font-weight:900;line-height:.95;color:var(--white);-webkit-text-stroke:3px var(--black);text-shadow:5px 5px 0 var(--black),7px 7px 0 rgba(0,0,0,.2);margin-bottom:8px;}
-.hero-title-kr{font-size:clamp(14px,2.5vw,20px);font-weight:900;color:var(--yellow);letter-spacing:6px;-webkit-text-stroke:1px var(--black);text-shadow:2px 2px 0 var(--black);margin-bottom:28px;}
+.hero-title-kr{font-size:clamp(17px,2.5vw,24px);font-weight:900;color:var(--yellow);letter-spacing:6px;-webkit-text-stroke:1px var(--black);text-shadow:2px 2px 0 var(--black);margin-bottom:28px;}
 .hero-logline{position:relative;display:inline-block;max-width:560px;background:var(--white);border:4px solid var(--black);border-radius:16px;padding:22px 28px;font-size:clamp(13px,1.8vw,16px);font-weight:700;line-height:1.9;color:var(--black);box-shadow:6px 6px 0 var(--black);}
 .hero-logline::before{content:'';position:absolute;bottom:-22px;left:44px;border-left:16px solid transparent;border-right:16px solid transparent;border-top:22px solid var(--black);}
 .hero-logline::after{content:'';position:absolute;bottom:-14px;left:48px;border-left:13px solid transparent;border-right:13px solid transparent;border-top:17px solid var(--white);}
 .hero-logline em{color:var(--red);font-style:normal}
-.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;}
-.hero-tag{font-size:11px;font-weight:900;padding:4px 12px;border:2.5px solid var(--black);border-radius:4px;color:var(--black);background:var(--yellow);box-shadow:2px 2px 0 var(--black);transform:rotate(-.5deg);}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.hero-meta-chip{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.3);border-radius:5px;padding:5px 12px;}
+.hero-meta-label{font-family:var(--sfx);font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.55);}
+.hero-meta-val{font-size:12px;font-weight:900;color:#fff;}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.hero-tag{font-size:13px;font-weight:900;padding:5px 14px;border:2.5px solid var(--black);border-radius:4px;color:var(--black);background:var(--yellow);box-shadow:2px 2px 0 var(--black);transform:rotate(-.5deg);}
 .hero-tag:nth-child(even){transform:rotate(.5deg)}
-.hero-tag:nth-child(3){background:#fff;color:var(--red)}
-.hero-tag:nth-child(5){background:var(--blue);color:#fff}
-.cw-bar{background:#fffbe6;border-bottom:3px solid var(--black);padding:10px 36px;}
-.cw-bar-inner{max-width:700px;margin:0 auto;width:100%;display:flex;align-items:center;gap:10px}
-.cw-icon{font-size:14px;flex-shrink:0}
-.cw-text{font-size:11px;color:#7a5000;line-height:1.6;font-weight:700}
-.cw-label{font-family:var(--sfx);font-size:13px;letter-spacing:2px;color:var(--black);margin-right:8px;}
+.hero-tag.t-white{background:#fff;color:var(--red);}
+.hero-tag.t-blue{background:var(--blue);color:#fff;}
+.hero-tag.t-dark{background:var(--dark);color:var(--yellow);}
+.hero-tag.t-yellow{background:var(--yellow);color:var(--black);}
+
 .tab-wrap{max-width:700px;margin:0 auto;padding:0 28px}
 .tabs{display:flex;gap:10px;margin-top:24px;margin-bottom:0}
-.tab-btn{flex:1;padding:14px 18px;background:var(--white);border:3px solid var(--black);border-radius:6px;font-family:var(--sfx);font-size:18px;letter-spacing:2px;color:var(--black);box-shadow:4px 4px 0 var(--black);transition:all .12s;display:flex;align-items:center;justify-content:center;gap:10px;}
-.tab-btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--black)}
-.tab-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--black)}
-.tab-btn.active{background:var(--black);color:var(--yellow);box-shadow:4px 4px 0 var(--red);}
-.tab-btn.active .tab-badge{background:var(--red);color:#fff;border-color:var(--red)}
-.tab-badge{font-family:var(--fn);font-size:9px;font-weight:900;padding:3px 8px;border-radius:3px;background:var(--yellow);color:var(--black);border:2px solid var(--black);letter-spacing:.5px;}
-.tab-divider{height:4px;background:var(--black);margin-top:16px}
+/* 3. 훅 귀여운 폰트 */
+.hook-cute{font-family:'Noto Sans KR',sans-serif;font-weight:400;font-style:italic;font-size:clamp(18px,3vw,24px);color:#fff;letter-spacing:.05em;display:inline;}
+/* 6. hero-meta 시인성 강화 */
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.hero-meta-chip{display:flex;align-items:center;gap:7px;background:#fff;border:3px solid var(--black);border-radius:6px;padding:6px 14px;box-shadow:3px 3px 0 var(--black);}
+.hero-meta-label{font-family:var(--sfx);font-size:13px;letter-spacing:2px;color:var(--red);}
+.hero-meta-val{font-size:15px;font-weight:900;color:var(--black);}
+/* 5. 탭버튼 눌리는 느낌 강화 */
+.tab-btn{flex:1;padding:16px 18px;background:var(--white);border:3px solid var(--black);border-radius:8px;font-family:var(--sfx);font-size:22px;letter-spacing:2px;color:var(--black);box-shadow:5px 5px 0 var(--black);transition:all .1s;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;position:relative;}
+.tab-btn::after{display:none;}
+.tab-btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--black);}
+.tab-btn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--black);}
+.tab-btn.active{background:var(--black);color:var(--yellow);box-shadow:5px 5px 0 var(--red);}
+.tab-btn.active::after{display:none;}
+.tab-btn.active .tab-badge{background:var(--red);color:#fff;border-color:var(--red);}
+.tab-badge{font-family:var(--fn);font-size:11px;font-weight:900;padding:4px 10px;border-radius:3px;background:var(--yellow);color:var(--black);border:2px solid var(--black);letter-spacing:.5px;}
+/* 8. tab-divider 숨김 */
+.tab-divider{display:none;}
+.tabs{display:flex;gap:10px;margin-top:24px;margin-bottom:22px;}
 .tab-panel{display:none;padding:28px 0 60px}
 .tab-panel.active{display:block}
-.v-sec-label{display:inline-block;font-family:var(--sfx);font-size:14px;letter-spacing:2.5px;background:var(--black);color:var(--white);padding:3px 14px;margin-bottom:14px;}
+.v-sec-label{display:inline-block;font-family:var(--sfx);font-size:22px;letter-spacing:2.5px;background:var(--black);color:var(--white);padding:4px 16px;margin-bottom:14px;border-radius:6px;}
 .v-section{margin-bottom:36px}
 .hook-block{background:var(--dark);border:4px solid var(--black);border-radius:8px;padding:28px 28px 26px;box-shadow:6px 6px 0 var(--black);position:relative;overflow:hidden;}
 .hook-block::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);background-size:7px 7px;pointer-events:none;}
@@ -74,7 +88,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .mood-block{display:flex;flex-direction:column;gap:0;border:3px solid var(--black);border-radius:8px;overflow:hidden;box-shadow:5px 5px 0 var(--black);}
 .mood-line{font-size:14px;font-weight:500;color:var(--tx);line-height:2;padding:10px 18px;border-left:5px solid #ddd;border-bottom:1px solid #eee;background:#fff;}
 .mood-line:last-child{border-bottom:none}
-.mood-line.accent{border-left:5px solid var(--red);background:#fff8f8;font-weight:700;color:var(--dark);}
+.mood-line.accent{border-left:5px solid var(--red);background:#fff8f8;font-weight:500;color:var(--dark);}
 .kw-grid{display:flex;flex-wrap:wrap;gap:8px}
 .kw-chip{font-size:13px;font-weight:900;padding:7px 16px;border:3px solid var(--black);border-radius:5px;background:var(--white);color:var(--black);box-shadow:3px 3px 0 var(--black);transform:rotate(-.5deg);transition:transform .1s;cursor:default;}
 .kw-chip:nth-child(even){transform:rotate(.5deg)}
@@ -84,8 +98,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .preview-hd{padding:10px 18px;border-bottom:3px solid var(--black);background:var(--black);font-family:var(--sfx);font-size:14px;letter-spacing:2px;color:var(--yellow);display:flex;align-items:center;gap:8px;}
 .preview-hd::before{content:'▶';font-size:10px;color:var(--red)}
 .preview-body{padding:22px 24px;background:var(--white)}
-.preview-scene{font-family:var(--sfx);font-size:12px;letter-spacing:2px;color:var(--tx3);margin-bottom:12px;}
-.preview-text{font-size:14px;color:var(--tx);line-height:2.1;font-family:var(--serif);}
+.preview-scene{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--black);margin-bottom:16px;letter-spacing:.02em;line-height:2;}
+.preview-text{font-size:14px;color:var(--tx);line-height:2.1;font-family:var(--fn);}
 .pd-grid{display:flex;flex-direction:column;gap:18px}
 .pd-card{border:4px solid var(--black);border-radius:8px;overflow:hidden;box-shadow:5px 5px 0 var(--black);}
 .pd-card-hd{padding:11px 18px;background:var(--black);border-bottom:3px solid var(--black);display:flex;align-items:center;justify-content:space-between;}
@@ -128,6 +142,13 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 to{opacity:1;transform:scale(1) rotate(0)}}
 60%{opacity:1;transform:scale(.95)}100%{opacity:1;transform:scale(1)}}
 .reveal{}
+.char-list{display:flex;flex-direction:column;gap:12px}
+.char-card{display:flex;gap:0;border:3px solid var(--black);border-radius:7px;overflow:hidden;box-shadow:4px 4px 0 var(--black);}
+.char-img{width:100px;min-width:100px;background:#f0f0f0;border-right:3px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#999;letter-spacing:.3px;text-align:center;line-height:1.6;}
+.char-body{padding:14px 18px;background:var(--white);flex:1}
+.char-name-kr{font-size:17px;font-weight:900;color:var(--black);margin-bottom:6px;letter-spacing:-.3px;}
+.char-desc{font-size:13px;color:var(--tx);line-height:1.85;font-weight:500}
+.char-desc strong{color:var(--red);font-weight:900}
 
 @media(max-width:600px){
   .hero{padding:36px 20px 40px}.cw-bar{padding:10px 20px}.tab-wrap{padding:0 16px}
@@ -150,26 +171,45 @@ to{opacity:1;transform:scale(1) rotate(0)}}
     <h1 class="hero-title">BLOOD<br>HIGH SCHOOL</h1>
     <p class="hero-title-kr">블 러 드 하 이 스 쿨</p>
 
+    <div class="hero-meta">
+      <div class="hero-meta-chip">
+        <span class="hero-meta-label">AGE</span>
+        <span class="hero-meta-val">15세 이용가</span>
+      </div>
+      <div class="hero-meta-chip">
+        <span class="hero-meta-label">FORMAT</span>
+        <span class="hero-meta-val">시즌제</span>
+      </div>
+      <div class="hero-meta-chip">
+        <span class="hero-meta-label">VOLUME</span>
+        <span class="hero-meta-val">시즌당 12화 &middot; 총 N부작 예정</span>
+      </div>
+    </div>
+
     <div class="hero-tags">
-      <span class="hero-tag">다크판타지</span>
-      <span class="hero-tag">학원물</span>
-      <span class="hero-tag">이능력</span>
-      <span class="hero-tag">소년만화</span>
-      <span class="hero-tag">뉴트로</span>
-      <span class="hero-tag">병맛개그</span>
+      <span class="hero-tag t-white">#학원판타지</span>
+      <span class="hero-tag">#인외</span>
+      <span class="hero-tag t-dark">#용</span>
+      <span class="hero-tag">#성장</span>
+      <span class="hero-tag t-blue">#소년만화</span>
+      <span class="hero-tag">#쌍둥이</span>
+      <span class="hero-tag t-white">#여우신령</span>
+      <span class="hero-tag">#음양사</span>
+      <span class="hero-tag t-dark">#가문</span>
+      <span class="hero-tag">#운명</span>
+      <span class="hero-tag t-blue">#청춘</span>
+      <span class="hero-tag">#우정</span>
+      <span class="hero-tag t-white">#각성</span>
+      <span class="hero-tag">#전설</span>
+      <span class="hero-tag t-dark">#옴니버스</span>
+      <span class="hero-tag">#코미디</span>
+      <span class="hero-tag t-blue">#다크판타지</span>
+      <span class="hero-tag">#뉴트로</span>
     </div>
   </div>
 </div>
 
-<div class="cw-bar">
-  <div class="cw-bar-inner">
-    <span class="cw-icon">⚠</span>
-    <p class="cw-text">
-      <span class="cw-label">CONTENT GUIDE</span>
-      약한 폭력 묘사, 가족 사망 언급 포함. 다크 톤 + 개그 낙차 공존. 전연령 가능, 초등 저학년 비추.
-    </p>
-  </div>
-</div>
+
 
 <div class="tab-wrap">
   <div class="tabs">
@@ -180,7 +220,7 @@ to{opacity:1;transform:scale(1) rotate(0)}}
       FOR PD <span class="tab-badge">기획·PD용</span>
     </button>
   </div>
-  <div class="tab-divider"></div>
+
 
   <div class="tab-panel active" id="panel-viewer">
 
@@ -188,58 +228,80 @@ to{opacity:1;transform:scale(1) rotate(0)}}
       <div class="v-sec-label">HOOK</div>
       <div class="hook-block">
         <p class="hook-text">
-          살아남는 게 성적인 학교는 없다.<br>
-          하지만 이 학교엔, 살아있는 게 전설인 학생이 있다.
-          <span class="hook-em">— 성 세인츠 학원, 현재 입학 경쟁률 1위.</span>
+          <span class="hook-cute">내 몸속에 세상을 멸망시킬 수 있는 힘이 <em style="color:var(--yellow);font-style:italic;">메.자.메.루.</em><br>
+          그런데... 난 평범하게 살고 싶어!</span>
+          <span class="hook-em">— 류오 쿠로, 흑룡 각성 직후</span>
         </p>
       </div>
     </div>
 
     <div class="v-section reveal">
-      <div class="v-sec-label">WORLD · MOOD</div>
+      <div class="v-sec-label">LOGLINE</div>
       <div class="mood-block">
-        <p class="mood-line accent">고딕 외벽. 복도 벽엔 용 벽화가 새겨져 있다.</p>
-        <p class="mood-line">장미 정원엔 피 냄새가 섞인다 — 몇 백 년 전 뱀파이어들이 흡혈한 피를 장미에 물들인 취미 때문에.</p>
-        <p class="mood-line">교장은 토끼 인형을 안은 소년이고,</p>
-        <p class="mood-line accent">학생회장은 송곳니를 숨기고 있다.</p>
-        <p class="mood-line">그리고 — 안경 낀 모범생의 혈관 속에선,</p>
-        <p class="mood-line accent">천 년 전 용족 역사를 끝낸 것이 잠들어 있다.</p>
+        <p class="mood-line accent">세상을 멸망시킬 수 있는 흑룡의 힘을 가진 평범한 고등학생이, 자신의 일상을 지키기 위해 싸우는 학원 판타지.</p>
       </div>
     </div>
 
     <div class="v-section reveal">
-      <div class="v-sec-label">KEYWORDS</div>
-      <div class="kw-grid">
-        <span class="kw-chip strong">#용의부활</span>
-        <span class="kw-chip strong">#이중정체성</span>
-        <span class="kw-chip strong">#소꿉친구의비밀</span>
-        <span class="kw-chip">#학원판타지</span>
-        <span class="kw-chip">#뱀파이어</span>
-        <span class="kw-chip">#여우신령</span>
-        <span class="kw-chip">#가문드라마</span>
-        <span class="kw-chip">#BL서브텍스트</span>
-        <span class="kw-chip">#류오가</span>
-        <span class="kw-chip">#병맛개그낙차</span>
-      </div>
-    </div>
-
-    <div class="v-section reveal">
-      <div class="v-sec-label">STORY PREVIEW</div>
+      <div class="v-sec-label">STORY</div>
       <div class="preview-block">
-        <div class="preview-hd">1화 · 장미 정원의 티타임</div>
         <div class="preview-body">
-          <p class="preview-scene">4월. 입학식 당일.</p>
+          <p class="preview-scene">[전설의 용 라크니스.]<br>[그것은 세계를 멸망시킬 수 있는 힘을 가졌다는 어둠의 다크 드래곤.]<br>[천 년의 시간이 지난 지금 눈.을.뜬.다.]</p>
           <p class="preview-text">
-            평범한 고등학생 류오 쿠로.<br>
-            순둥한 얼굴에 안경, 교복 단추는 목 끝까지 잠가놨다.<br>
-            누가 봐도 모범생.<br><br>
-            그런 쿠로를 입학 첫날, 학생회장이 끌어간다.<br>
-            장미 향기가 피어나는 학생회 전용 정원 한가운데 —<br><br>
-            <span style="color:var(--red);font-weight:900">"부디 헌혈… 시테쿠레마센까?"</span><br><br>
-            그 순간, 쿠로 안에서 무언가가 깨어났다.<br>
-            천 년 만에.
+            평범한 모범생 <strong>류오 쿠로</strong>는 성 세인츠 학원에 입학한 첫날, 뱀파이어 학생회장에게 피를 노림당한다. 그 순간 — 자신도 모르는 힘이 폭발하며, 쿠로의 안에서 천 년 동안 잠들어 있던 전설의 흑룡 <strong>라크니스</strong>가 깨어난다.<br><br>
+            뱀파이어의 장미 정원, 미쳐버린 마리오네트 교장, 버려진 성지의 마물, 영원한 1학년을 만드는 흑마법사 — 매주 터지는 기상천외한 사건의 뒤에는 언제나 쿠로의 의지와 상관없이 발동하는 흑룡의 힘이 있었다.<br><br>
+            문제는, <strong style="color:var(--red)">쿠로 자신은 아무것도 기억하지 못한다는 것.</strong><br><br>
+            싸우는 건 싫다. 평범하게 살고 싶을 뿐이다. 하지만 용의 힘이 깨어난 순간부터 세상은 쿠로를 가만두지 않는다. 다가오는 적, 짊어져야 할 가문의 무게, 그리고 그때마다 부서지고 다시 일어서야 하는 선택의 순간들 — 도망치고 싶은 마음과 눈앞의 소중한 것들 사이에서, 이 소년은 과연 자신 안의 힘을 받아들일 수 있을까.<br><br>
+            <span style="color:var(--red);font-weight:900">— 거대한 힘을 품은 소년의 이야기가 지금, 막을 올린다!</span>
           </p>
         </div>
+      </div>
+    </div>
+
+    <div class="v-section reveal">
+      <div class="v-sec-label">CHARACTERS</div>
+      <div class="char-list">
+
+        <div class="char-card">
+          <div class="char-img">100px<br>×<br>130px</div>
+          <div class="char-body">
+            <p class="char-name-kr">류오 쿠로</p>
+            <p class="char-desc">안경 모범생. 겁이 많고 순하지만, 누구보다 상냥한 소년. 자기 안에 잠든 흑룡의 존재를 모른 채 <strong>평범하게 살고 싶어 한다.</strong> 하지만 운명은 그를 가만두지 않는다.</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img">100px<br>×<br>130px</div>
+          <div class="char-body">
+            <p class="char-name-kr">은호</p>
+            <p class="char-desc">쿠로의 소꿉친구. 능글거리고 장난기 많지만 쿠로가 위험에 처하면 <strong>누구보다 먼저 움직인다.</strong> 그에겐 쿠로도 모르는 비밀이 있다.</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img">100px<br>×<br>130px</div>
+          <div class="char-body">
+            <p class="char-name-kr">헤르바켄</p>
+            <p class="char-desc">타국에서 온 유학생이자 전설 오타쿠. 학원의 온갖 전설을 찾아 모험을 떠나자며 쿠로와 은호를 끌고 다닌다. 하지만 밝은 웃음 뒤에 숨긴 <strong>싸늘한 눈빛</strong>의 정체는 —?</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img">100px<br>×<br>130px</div>
+          <div class="char-body">
+            <p class="char-name-kr">류오 시로</p>
+            <p class="char-desc">쿠로의 쌍둥이 동생. 순수하고 아이 같지만, 그 안에 깃든 또 하나의 용 '루멘시아'는 <strong>"오레사마가 세계 최강이다!!"</strong>를 외치며 학원을 박살 내려 한다.</p>
+          </div>
+        </div>
+
+        <div class="char-card">
+          <div class="char-img">100px<br>×<br>130px</div>
+          <div class="char-body">
+            <p class="char-name-kr">류오 미코</p>
+            <p class="char-desc">쿠로의 사촌. 재능과 자존심 모두 하늘을 찌르는 소녀. 당주 자리를 두고 쿠로와 대립하지만, <strong>그녀에겐 그녀만의 절박한 이유</strong>가 있다.</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
