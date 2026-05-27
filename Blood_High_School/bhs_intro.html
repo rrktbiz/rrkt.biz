@@ -155,6 +155,379 @@ to{opacity:1;transform:scale(1) rotate(0)}}
   .page-footer{padding:16px 20px;flex-direction:column;gap:6px;text-align:center}
   .sfx-1,.sfx-2,.sfx-3{display:none}
 }
+
+/* ===== PD DOC SCOPED CSS ===== */
+
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+  .pd-doc {
+    --bg: #fafaf8;
+    --text: #1a1a1a;
+    --accent: #c0392b;
+    --guide-bg: #fff8e1;
+    --guide-border: #ffe082;
+    --guide-text: #6d5c1e;
+    --section-border: #e0ddd6;
+    --table-header: #2c2c2c;
+    --table-alt: #f5f4f0;
+    --muted: #888;
+  }
+
+
+  .pd-doc * { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+  .pd-doc {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.85;
+    font-size: 15px;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 28px 120px;
+  }
+
+
+  .pd-doc .doc-header {
+    border-bottom: 3px solid var(--text);
+    padding-bottom: 20px;
+    margin-bottom: 48px;
+  }
+
+  .pd-doc .doc-header h1 {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  .pd-doc .doc-header .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+
+  .pd-doc .section {
+    margin-bottom: 52px;
+  }
+
+  .pd-doc .section-number {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .pd-doc .section h2 {
+    font-size: 19px;
+    font-weight: 900;
+    border-bottom: 1px solid var(--section-border);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  .pd-doc .section h2 .status {
+    vertical-align: middle;
+  }
+
+
+  .pd-doc .guide {
+    background: var(--guide-bg);
+    border-left: 3px solid var(--guide-border);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--guide-text);
+    line-height: 1.75;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .pd-doc .guide::before {
+    content: '📌 이 카테고리의 역할';
+    display: block;
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+
+  .pd-doc .content {
+    padding: 0;
+  }
+
+  .pd-doc .content p {
+    margin-bottom: 14px;
+  }
+
+  .pd-doc .content h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 28px;
+    margin-bottom: 10px;
+  }
+
+  .pd-doc .content h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: #444;
+  }
+
+  .pd-doc .content ul {
+    margin: 10px 0 14px 20px;
+  }
+
+  .pd-doc .content li {
+    margin-bottom: 6px;
+  }
+
+  .pd-doc .content strong {
+    font-weight: 700;
+  }
+
+
+  .pd-doc 
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 20px;
+    font-size: 14px;
+  }
+
+  .pd-doc th {
+    background: var(--table-header);
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 500;
+    font-size: 13px;
+  }
+
+  .pd-doc td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--section-border);
+    vertical-align: top;
+  }
+
+  .pd-doc tr:nth-child(even) td {
+    background: var(--table-alt);
+  }
+
+
+  .pd-doc .status {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .pd-doc .status.done {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .pd-doc .status.wip {
+    background: #fff3e0;
+    color: #e65100;
+  }
+
+  .pd-doc .status.todo {
+    background: #fce4ec;
+    color: #c62828;
+  }
+
+
+  .pd-doc .placeholder {
+    background: #f0efeb;
+    border: 2px dashed #ccc;
+    padding: 24px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    border-radius: 6px;
+    margin: 12px 0;
+  }
+
+
+  .pd-doc 
+  hr {
+    border: none;
+    border-top: 1px solid var(--section-border);
+    margin: 48px 0;
+  }
+
+
+  .pd-doc .pitch-box {
+    background: var(--text);
+    color: #fff;
+    padding: 28px 24px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.8;
+  }
+
+
+  .pd-doc .char-block {
+    margin-bottom: 22px;
+    padding-left: 14px;
+    border-left: 2px solid var(--section-border);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .pd-doc .char-block .char-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .pd-doc .char-block .char-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .pd-doc .char-block .char-role {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .pd-doc .char-block p {
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+  }
+
+
+  .pd-doc .img-placeholder {
+    border: 2px dashed #bdb8a8;
+    background: repeating-linear-gradient(
+      45deg,
+      #f5f3ed,
+      #f5f3ed 8px,
+      #ecead9 8px,
+      #ecead9 16px
+    );
+    color: #8a8472;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    padding: 8px;
+    line-height: 1.4;
+  }
+
+  .pd-doc .img-placeholder .ph-label {
+    text-transform: uppercase;
+    color: #a09a85;
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .pd-doc .img-placeholder .ph-desc {
+    font-size: 12px;
+    color: #6d6855;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .pd-doc .img-placeholder.cover {
+    aspect-ratio: 3 / 4;
+    width: 200px;
+    margin: 0 auto 24px;
+  }
+
+  .pd-doc .img-placeholder.banner {
+    aspect-ratio: 16 / 7;
+    width: 100%;
+    margin: 24px 0;
+  }
+
+  .pd-doc .img-placeholder.scene {
+    aspect-ratio: 4 / 1;
+    width: 100%;
+    margin: 14px 0 18px;
+  }
+
+  .pd-doc .img-placeholder.character {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: 10px;
+  }
+
+
+  @media (max-width: 600px) {
+    .pd-doc .char-block {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .pd-doc .img-placeholder.character {
+      width: 70px;
+      height: 70px;
+    }
+
+  }
+
+  .pd-doc .deep-dive {
+    margin-top: 32px;
+    border-top: 1px dashed var(--section-border);
+    padding-top: 18px;
+  }
+
+  .pd-doc .deep-dive summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 12px 16px;
+    background: var(--table-alt);
+    border-radius: 4px;
+    list-style: none;
+    user-select: none;
+    color: var(--text);
+    letter-spacing: 0.3px;
+    transition: background 0.2s;
+  }
+
+  .pd-doc .deep-dive summary:hover {
+    background: #ece9df;
+  }
+
+  .pd-doc .deep-dive summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .pd-doc .deep-dive[open] summary {
+    background: var(--text);
+    color: #fff;
+    margin-bottom: 18px;
+  }
+
+  .pd-doc .deep-content {
+    padding: 4px 4px 0;
+  }
+
+  .pd-doc .deep-content h4:first-child {
+    margin-top: 4px;
+  }
+
+
 </style>
 </head>
 <body>
@@ -308,82 +681,500 @@ to{opacity:1;transform:scale(1) rotate(0)}}
   </div>
 
   <div class="tab-panel" id="panel-pd">
-    <div class="pd-grid">
+    <div class="pd-doc">
+<div class="doc-header">
+  <h1>블러드하이스쿨 (블하스) — 기획PD용 기획서</h1>
+  <div class="subtitle">작업용 문서 · 각 카테고리 하단에 가이드 설명 포함</div>
+</div>
 
-      <div class="pd-card reveal">
-        <div class="pd-card-hd"><span class="pd-card-label">CONCEPT</span></div>
-        <div class="pd-card-body">
-          <p class="concept-text">
-            용의 피를 지닌 <span>평범한 소년</span>이 이종족 학원에서
-            봉인된 <span>흑룡으로 각성</span>하며,
-            가문의 업보와 세계의 균형을 짊어지는
-            <span>학원 이능력 다크 판타지</span>.
-          </p>
-        </div>
+<!-- ==================== 1 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 01</div>
+  <h2>작품 기본 정보 <span class="status done">완료</span></h2>
+  
+  <div class="guide">
+PD가 제일 먼저 보는 스펙표. "이거 뭔데? 몇 자야? 어디까지 나와 있어?"를 3초 안에 판단하는 칸. 장르, 분량, 글자 수로 "우리 플랫폼/출판사에 맞는 규격인가"를 확인. 여기서 탈락하면 아래를 안 읽음.
+  </div>
+
+  <div class="content">
+    <div class="img-placeholder cover">
+      <div class="ph-label">Illustration · Reference</div>
+      <div class="ph-desc">메인 비주얼 / 표지<br>(작품 대표 이미지)</div>
+    </div>
+    <table>
+      <tr><th>항목</th><th>내용</th></tr>
+      <tr><td>제목</td><td>블러드하이스쿨 <span style="color:#666;font-weight:400;">(Bloodhighschool · 약칭 BHS)</span></td></tr>
+      <tr><td>장르</td><td>학원 판타지 · 다크 판타지 · 성장 · 소년만화</td></tr>
+      <tr><td>대표코드</td><td><strong>뉴트로 (NEW-TRO)</strong></td></tr>
+      <tr><td>IP 노선</td><td>웹소설(1차 게이트) → 단행본 / 굿즈 / 영상화 / 라이센싱</td></tr>
+      <tr><td>연령 등급</td><td>15세 이용가</td></tr>
+      <tr><td>구조</td><td>시즌제 (시즌당 12화 / 최소 4부작 예정)</td></tr>
+      <tr><td>현재 진행</td><td>2시즌 완결 — 1부 용의 부활편 12화 + 2부 류오가편 12화</td></tr>
+      <tr><td>부가 콘텐츠</td><td>번외편 7편 (가문·캐릭터 사이드 스토리)</td></tr>
+      <tr><td>1화당 글자 수</td><td>4,000~5,000자</td></tr>
+      <tr><td>1화당 체감 분량</td><td>애니메이션 기준 약 10분</td></tr>
+      <tr><td>부당 총 러닝타임</td><td>약 120분 (2시간)</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 2 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 02</div>
+  <h2>기획 의도 — 왜 이 작품인가 <span class="status wip">작업중</span></h2>
+
+  <div class="guide">
+PD의 질문: "이미 비슷한 거 많은데, 이걸 왜 해야 해?" — 이 작품이 시장에서 어떤 빈자리를 차지하는지 설명하는 칸. 작품의 '재미'가 아니라 <strong>'포지셔닝'</strong>을 보여주는 곳. "뉴트로"라는 대표코드가 왜 지금 이 시장에서 작동하는지를 풀어야 함. 동시에 이 작품만의 매력 포인트(Bi가 노린 포인트들)를 여기에 녹여도 좋음. 단, "내가 이게 좋다"가 아니라 "이것이 왜 시장에서 통하는가"의 언어로 포장해야 함.
+  </div>
+
+  <div class="content">
+    <h3>작품의 출발점</h3>
+    <p>본 작품은 명확한 시장 진단에서 출발했습니다. 2000년대 일본 애니메이션의 특유의 호흡 — 가벼움과 무거움이 오가는 연출, 그시절 캐릭터 비주얼, 클리셰를 자각적으로 운용하는 연출 — 을 다시 경험하고 싶어 하는 독자층은 명백히 존재합니다. 그러나 동시대 한국 서브컬처 시장에서 그 갈증을 정조준하는 신작은 거의 부재합니다. 작가는 이 빈자리의 1차 독자로서 자신의 갈증을 그대로 시장의 갈증으로 환산해 본 작품을 기획했습니다.</p>
+
+    <h3>왜 지금 이 시장에서 작동하는가</h3>
+    <p>본 작품의 '뉴트로'는 단순한 향수의 재생이 아니라 <strong>필터링된 향수</strong>의 재구성입니다. 옛 작품 특유의 정서적 좌표 (호흡, 비주얼, 클리셰 운용)는 그대로 가져오되, 동시대 감각으로 보면 거슬리는 요소들 (무조건적인 가족애의 강요, 무조건적인 용서와 화해, 불필요한 가학성, 늘어지는 서사) 은 의도적으로 제거하고 재조립했습니다. "그 시절 그 작품"을 다시 보고 싶지만 막상 펼쳐 보면 요즘 감성과 맞지 않는 부분이 많아 끝까지 가지 못하는 독자층 — 본 작품은 바로 이 아쉬운 부분을 정확히 채워주고자 합니다.</p>
+    <p>이러한 포지셔닝은 현 한국 서브컬처 시장의 주류(회귀·빙의·먼치킨)와 직접 경쟁하지 않고 별도의 좌표에 자리잡습니다.</p>
+
+    <div class="img-placeholder banner">
+      <div class="ph-label">Reference · Banner</div>
+      <div class="ph-desc">뉴트로 분위기를 드러내는 가로 배너<br>(작품의 시각 톤을 한눈에 보여주는 컷)</div>
+    </div>
+
+    <h3>대표코드 '뉴트로'의 정의</h3>
+    <p>본 작품에서 '뉴트로'는 1990~2008(또는~2010)년대 일본 소년 애니의 문법을 지금 시점에서 자각적으로 재구성한다는 의미입니다.</p>
+    <p>단순한 복고 감성이 아니라, 그 시절의 장르 문법 자체를 작품의 기능으로 작동시키는 방식입니다.</p>
+
+    <p>구체적으로 네 가지 층위에서 뉴트로가 작동합니다.</p>
+
+    <h4>① 언어 코드의 의도적 혼종성</h4>
+    <p>본문은 한국어로 쓰이되, 캐릭터 발화와 내레이션에 일본어 라노벨 어휘가 자연스럽게 녹아 있습니다. "잇테키마스", "보쿠", "오레사마", "시즈카니", "요로시쿠", "유루사나이" 등. 이는 번역체가 아니라 작품 고유의 양식입니다. 독자는 이 코드를 통해 즉각적으로 '그 시절 그 장르'의 정서적 좌표에 안착합니다. 동시에 이 코드를 모르는 독자에게는 '독특한 문체'로 기능하여 차별화됩니다.</p>
+    <p>나아가 이 일본어 코드는 <strong>인물별 화법 차별화 시스템</strong>으로 정밀하게 운용됩니다. 쿠로(모범생: 표준어), 은호(능글한 일본어 슬랭), 헤르바켄(일본어 + 영어 혼종의 오타쿠 화법), 미코(아가씨 말투), 아오이(간사이벤) — 다인물 군상극에서 누가 말하고 있는지 화법만으로 즉시 식별 가능하며, 일본어 번역시에도 캐릭터별 톤 변별이 그대로 살아남는 구조입니다.</p>
+
+    <h4>② 콘티형 문장 연출</h4>
+    <p>"텅—!", "벌컥ㅡ!", "댕-! 댕-!" 같은 의성어 컷, "찰랑거리는 장발. 큰 키에 수려한 외모." 식의 등장 컷, "키메 포즈" 같은 자기 인지형 묘사 — 읽는 사람의 머릿속에서 자동으로 애니메이션 화면이 재생되도록 설계되어 있습니다. 작가 본인이 1화당 '애니 10분 분량'으로 환산하고 있다는 점이 이 설계의 의도성을 증명합니다.</p>
+
+    <h4>③ 클리셰의 자각적 운용</h4>
+    <p>쇼타 교장, 미모 학생회장, "오레사마" 라이벌, 토너먼트편, 츳코미·보케 구도, 소꿉친구=신령, 가문 비극 — 모두 '그 시절'의 전형이지만, 작품은 자신이 그것을 쓰고 있음을 알면서 씁니다. 8화에서 헤르바켄이 "문화제에는 밴드부 전설이 있다, 밴드부는 공연 전에 꼭 사고를 당해서 대타로 주인공이 나서는 일본 아니메의 전설이" 라고 말하는 대목이 대표적입니다. 클리셰를 도구로 쓰되 독자에게 윙크하는 이 자각성이 작품의 코미디 리듬과 정서적 밀도를 동시에 만듭니다.</p>
+
+    <h4>④ 비주얼 코드의 시대성</h4>
+    <p>뉴트로의 가장 즉각적인 진입점은 시각입니다. 독자는 본문을 펼치기 전, 표지·일러스트·캐릭터 디자인의 첫 인상만으로 작품의 시대성과 장르를 0초 만에 판단합니다. 본 작품의 캐릭터 비주얼은 2000년대 일본 학원·다크 판타지 라노벨이 축적해 온 시각 문법 — 고딕·양식미·과장된 헤어 실루엣, 코스튬 변주 등 변신 기호의 풍부함 — 을 의도적으로 차용합니다. 이는 진입 장벽을 가장 빠르게 통과시키는 동시에, 굿즈·일러스트집·2차 창작 등 IP 확장 라인에서의 인지도를 미리 확보하는 핵심 장치이기도 합니다.</p>
+
+    <details class="deep-dive">
+      <summary>▼ 세부 작가의 시그니처·메타성 (펼쳐서 보기)</summary>
+      <div class="deep-content">
+        <h4>작가의 시그니처 — 본 작품만의 메시지 결</h4>
+        <p>뉴트로가 작품의 <strong>형식 코드</strong>라면, 다음 세 가지 결은 어느 옛 작품에서도 빌려오지 않은 <strong>작가 고유의 메시지</strong>입니다. 이 결들이 본 작품을 단순 향수 재현물이 아닌 동시대적 작품으로 만듭니다.</p>
+
+        <p><strong>(a) "평범한 내가 힘을 얻는다면" — 그릇으로서의 주인공.</strong> 일반적인 소년만화는 신념·자아·세계관이 단단한 주인공의 계단식 성장을 다룹니다. 본 작품은 정반대 질문에서 출발합니다 — <em>자기확신이 부족하고 자기 세계가 비어 있는 평범한 소년이, 압도적인 힘을 받는다면 어떻게 살 것인가.</em> 쿠로는 옳고 그름을 분간하지 못하는 멍청한 인물이 아닙니다. 선악 판단은 명확하되, 자신을 절대 기준으로 세우지 않는 인물입니다. 이 설계가 구조적 장점이 되는 이유는 두 가지입니다. 첫째, 주인공의 그릇이 비어 있어야 <strong>주변 인물들의 신념·고통·갈등을 작품 안에 그대로 들일 수 있습니다.</strong> 자기확신이 단단한 주인공이 중심에 있으면 다른 인물들은 결국 들러리가 되지만, 쿠로의 비어 있음이 미코의 무너짐도, 아오이의 운명도, 헤르바켄의 복수심도 작품 안에서 자기 자리를 갖게 만듭니다. 본 작품이 다인물 군상극으로 작동하는 구조적 토대입니다. 둘째, 자기확신이 비어 있어야 <strong>"힘을 거부하는 24화"라는 본 작품 고유의 서사 축이 가능해집니다.</strong> 자아가 단단한 주인공은 힘을 받는 즉시 쓰기 시작합니다. 쿠로의 비어 있음만이 "이 힘을 어떻게 쓸 것인가"를 작품 전체에 걸쳐 묻게 만듭니다.</p>
+
+        <p><strong>(b) 비-동화(非同化) 캐릭터 운용 — 정답을 강요하지 않는 군상극.</strong> 본 작품은 캐릭터들 간 무조건적 이해·동화·동료감각으로 갈등을 봉합하지 않습니다. 작품 곳곳에서 동료들의 결단·무너짐·선택은 다른 인물들에게 과한 감화 반응을 끌어내지 않습니다. 미코가 자신의 길 전체를 부정당하고 무너진 뒤, 그녀 곁에 누구도 "괜찮아, 우린 너의 진심을 이해해" 식으로 다가가지 않습니다. 헤르바켄이 가문과 의절했을 때 동료들이 박수 치며 환영하지 않습니다. 아오이의 단명 운명에 대해서도 누구도 "우리가 구해주겠다"고 선언하지 않습니다. 캐릭터들은 각자의 결로 머물고, 작품은 다음으로 넘어갑니다. 일반 소년만화의 <em>"굉장해…! 본받겠어…! 나는 멍청했다…!"</em> 식 과잉 감화 클리셰가 본 작품에는 의도적으로 부재합니다. 이는 작가가 각 캐릭터의 고유한 결을 인정하고 존중한 결과이며, 군상극의 정서적 진정성을 결정짓는 설계입니다. 인물들이 "위태롭고 아슬아슬한 거리"를 유지하면서도 흩어지지 않는 이 균형이 본 작품의 정서적 깊이를 만듭니다.</p>
+
+        <p><strong>(c) 하강(下降) 곡선의 영웅상.</strong> 일반 소년만화 주인공이 <em>약→강·하층→상층</em>의 상승 곡선을 그린다면, 쿠로와 은호는 그 반대 방향의 곡선을 그립니다. 쿠로는 평범한 학생에서 가문의 죄와 업보를 떠안는 당주로 — 외형은 승급처럼 보이지만 실은 더 무거운 짐을 짊어지는 <strong>하강</strong>입니다. 은호는 신령의 자리에서 자발적으로 내려와 인간 소년으로 18년을 살아온 인물 — 명백한 자발적 강하입니다. 이 구조는 종교적 영웅상의 두 원형과 닿아 있습니다. 불교의 <strong>보살(菩薩)</strong>은 자기 깨달음을 미루고 중생 곁에 머물기 위해 인간계로 내려오는 존재입니다. 기독교의 <strong>케노시스(κένωσις, 자기 비움)</strong>는 신적 영광을 비우고 인간의 형상을 취하는 행위입니다. 두 종교 모두에서 "위에서 아래로 내려오는 자발적 강하"가 진정한 영웅성의 표지로 기능합니다. 본 작품의 두 핵심 인물이 이 결을 공유한다는 점은, 본 작품의 영웅상이 동시대 웹소설의 <em>"먼치킨 회귀자가 위로 올라간다"</em>는 상승 욕망과 정반대의 좌표에 있음을 의미합니다. 이는 작품이 1차 타깃(20대 후반~30대 초반)과 정서적으로 호응하는 결정적 지점입니다 — 어른이 되어 다시 보았을 때 깊게 이해되는 형태로 설계된 영웅상.</p>
+
+        <p>또한 본 작품에서 쿠로의 힘은 고립된 자아의 각성이 아니라 타인과의 연결을 통해 발동합니다. 자기 자신이 아닌 곁의 인물을 지키기 위해 투쟁하는 순간들이 본 작품의 정서적 정점을 구성하며, '함께하는 성장'이라는 결의 서사로 작동합니다. 결과적으로 쿠로라는 인물은 과거 소년만화의 낭만적 영웅상을 동시대 감각으로 다시 빚어낸 결과이자, 본 작품이 추구하는 '뉴트로'의 인물 차원 구현이라 할 수 있습니다.</p>
+
+        <h4>셀링 포인트 — 메타성의 누적적 강화 (부 단위로 짙어지는 자기 인지)</h4>
+        <p>본 작품의 메타성은 정적인 코드가 아니라 <strong>부 단위로 누적·강화되는 진화 곡선</strong>으로 설계되어 있습니다. 1부에서는 클리셰의 자각적 운용 — 헤르바켄의 "문화제 밴드부 전설" 식 자기 인지 코미디 — 정도에 머무릅니다. 2부에서는 헤르바켄이 성당의 '그 존재'와 접촉하며, <strong>작품 내부의 인물이 작품 구조 자체를 추적하기 시작</strong>합니다. 3부에서는 신규 등장 인외 캐릭터들이 기존 인물들의 외형·정신을 자기 시대 기준으로 거리감 있게 마주합니다 — 가령 <em>"08년대 유행하던 쿨한 남자 캐릭터 머리스타일은~"</em> 식의 자기 양식 패러디, 혹은 본 작품이 핵심 정서로 삼아온 소년만화적 진정성마저 거리를 두고 바라보는 시선. 작품이 자기 자신의 양식과 정서를 비판적·유희적으로 마주할 수 있다는 것은, 작품이 자기 양식에 갇히지 않는다는 의미입니다. PD 관점에서 이는 IP 수명의 결정적 시그널입니다.</p>
+        <p>나아가 3부 이후 등장할 인외 캐릭터들은 각각 다른 시대정신(대략 2010년대~2026년 이후)을 체화한 인물로 설계되어 있습니다. <strong>캐릭터의 성향과 시대 코드가 일대일로 맞물리는 구조</strong>이며, 신규 캐릭터 한 명의 도입이 곧 새로운 시의성과 새로운 메타 좌표의 추가를 의미합니다. 작품이 자기 양식을 부 단위로 재해석할 수 있다는 점, 즉 메타성의 깊이가 누적되는 IP라는 점에서, 본 작품은 부가 진행될수록 약해지는 것이 아니라 깊어집니다. <em>(부 단위 구조 자체의 확장성 — 전설 키워드 회수, 캐릭터 슬롯의 마케팅 친화도, 독자 진입 시점 다변화 — 은 SECTION 07 참조.)</em></p>
+
+        <p>그리고 이상의 셀링 포인트들이 갖는 가장 본질적인 매력은 — <strong>어떤 독자에게도 사전적으로 익숙하지 않은 결합이며, 어떤 비교 분석으로도 사전 예측되지 않는다는 점</strong>입니다. 매 부가 진행될수록 그 결합이 갱신되어 예측 불가능성이 누적되고, 이는 본 작품이 다른 어떤 작품과도 교환되지 않는 고유한 매혹력으로 작동합니다. 분석으로 다 잡히지 않는 영역이 작품 안에 남아 있다는 것 — 이것이 본 작품을 IP로서 강력하게 만드는 마지막 결입니다.</p>
       </div>
+    </details>
+  </div>
+</div>
 
-      <div class="pd-card reveal">
-        <div class="pd-card-hd"><span class="pd-card-label">GENRE · TARGET</span></div>
-        <div class="pd-card-body">
-          <div class="gt-row">
-            <div class="gt-chip"><span class="gt-chip-label">장르</span><span class="gt-chip-val">학원 이능력 판타지</span></div>
-            <div class="gt-chip"><span class="gt-chip-label">서브</span><span class="gt-chip-val">가문 드라마 / 다크 코미디</span></div>
-            <div class="gt-chip"><span class="gt-chip-label">타겟</span><span class="gt-chip-val">10대 후반 — 20대 초반</span></div>
-          </div>
-          <p class="gt-sub">이능력물·학원물·BL 인접 독자층. 일본풍 설정 선호 독자. 병맛개그와 다크물의 낙차를 즐기는 독자.</p>
-        </div>
+<!-- ==================== 3 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 03</div>
+  <h2>타깃 독자 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "이거 누가 읽어? 돈 내는 사람이 누구야?" — 작품이 좋은지보다 <strong>누가 사는지</strong>를 먼저 봄. 1차/2차/3차로 나누는 이유는 "핵심 구매층 → 확장 가능 층"까지 설계되어 있다는 것을 보여주기 위해. 이게 없으면 "좋은 건 알겠는데 누구한테 팔지?"가 됨.
+  </div>
+
+  <div class="content">
+    <table>
+      <tr><th>구분</th><th>프로필</th></tr>
+      <tr><td><strong>1차 타깃</strong></td><td>20대 후반~30대 초반. 1990~2010년대 일본 애니메이션 경험이 있는 층. "그때 그 감성" 키워드에 즉각 반응.</td></tr>
+      <tr><td><strong>2차 타깃</strong></td><td>10대 후반~20대 초반. J-컬처(애니, 보컬로이드, J-팝) 친화 독자. 옛 애니메이션은 안봤지만 "이런 결의 작품은 처음"이라는 신선함에 유입되는 층.</td></tr>
+      <tr><td><strong>3차 타깃</strong></td><td>캐릭터 IP·일러스트 친화 독자. 본 작품은 인물 비주얼이 <strong>미형 캐릭터 중심</strong>으로 설계되어 시선 점유력이 매우 높습니다. 변신 전후의 외모 차이, 코스튬 변주, 가면·가발 등 변신 기호가 풍부하여 굿즈·일러스트집·2차 창작·비주얼 기반 SNS 화제성에 강한 잠재력을 가집니다.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 4 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 04</div>
+  <h2>로그라인 및 전체 시놉시스 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "끝까지 쓸 수 있는 사람이야? 착지가 되는 이야기야?" — 결말까지 보여줘서 <strong>"완결 능력"</strong>을 증명하는 칸. PD가 가장 오래 읽는 섹션. 독자용과 달리 스포일러를 전부 까야 함.
+  </div>
+
+  <div class="content">
+    <h3>로그라인</h3>
+    <p>세상을 멸망시킬 수 있는 흑룡의 힘을 가진 평범한 고등학생이, 자신의 일상을 지키기 위해 싸우는 학원 판타지.</p>
+
+    <h3>전체 시놉시스 (기승전결, 스포일러 포함)</h3>
+
+    <h4>[기 — 1부(용의 부활편) 1~6화: 용의 부활과 일상]</h4>
+    <p>모범생 류오 쿠로는 성 세인츠 학원에 입학한 첫날, 뱀파이어 학생회장 페렐에게 피를 노림당하고, 그 위기 속에서 안에 잠들어 있던 전설의 흑룡 라크니스가 각성합니다. 소꿉친구 은호는 이 사실을 숨긴 채 쿠로를 지키고, 전학생 헤르바켄은 밝은 전설 오타쿠의 가면 뒤에서 라크니스를 처단할 기회를 노립니다. 쿠로는 미쳐버린 마리오네트 교장(쇼타), 버려진 성지의 마물(루벨), 흑마법사 교사(무라사키) 등 매 화 터지는 사건을 겪으면서도 정작 자신이 라크니스로 변한다는 사실을 기억하지 못합니다. 사촌 미코와의 당주 계승 갈등, 여우 신령의 등장을 통해 쿠로는 비로소 자신의 용족 혈통과 힘의 존재를 인지하게 됩니다.</p>
+
+    <h4>[승 — 1부(용의 부활편) 7~12화: 엇갈린 운명과 균열]</h4>
+    <p>헤르바켄이 본색을 드러내고, 라크니스를 가둔 '단죄의 전시장'에서 두 사람이 직접 대면합니다. 전생의 기억이 없는 라크니스는 자신이 저지른 멸망의 기록 앞에서 처음으로 동요합니다. 수학여행, 문화제 등 학원 이벤트 속에서 쿠로의 쌍둥이 동생 시로(=루멘시아)가 등장하고, "오레사마가 세계 최강"을 선언하며 학교를 토너먼트장으로 만듭니다. 라크니스와 루멘시아의 대결을 통해 1부가 마무리되며, 헤르바켄은 가문과 의절하고 쿠로와 은호의 동료가 됩니다.</p>
+
+    <h4>[전 — 2부(류오가편) 1~10화: 가문의 죄와 파멸]</h4>
+    <p>2학년이 된 쿠로는 당주 계승을 앞두고 류오가의 현실과 마주합니다. 미코와 은호는 독자적으로 류오가의 흑역사 — 전 당주 테츠야가 저주 가문 카게히라가와 결탁해 사람을 죽이고 부를 쌓은 과거 — 를 추적합니다. 쿠로는 카게히라가의 당주 아오이와 우연히 만나 유대를 쌓지만, 아오이의 정체를 모릅니다. 은호와 미코가 카게히라가에 잠입해 아오이와 대면하고, 카게히라가가 3만 명 규모의 교리 집단이며 아오이가 그 지옥의 문지기를 자처하고 있다는 사실을 알게 됩니다. 아오이는 "류오가의 당주에게 테츠야의 정신이 남아있지 않다면 그걸로 됐다"며 복수 대신 용서를 택합니다. 은호는 마침내 쿠로에게 류오가의 모든 죄를 밝히고, 거기에 더해 쿠로의 부모가 가문 내부에 의해 살해당했다는 진실까지 드러납니다. 충격에 무너진 쿠로는 라크니스의 힘을 완전히 받아들이며, 천 년 전 왕국을 멸망시킨 것과 똑같은 "파괴에 의한 구원"을 선포합니다.</p>
+
+    <h4>[결 — 2부(류오가편) 10~12화: 귀환과 재건]</h4>
+    <p>은호는 18년간 쌓아온 신뢰를 모두 걸고 폭주하는 쿠로를 막아섭니다. "나를 먼저 없애"라는 도박에, 쿠로는 은호를 공격하지 못합니다. 라크니스의 파멸의 논리는 은호가 심어둔 '믿음'에 의해 무너지고, 쿠로는 원래의 자신으로 돌아옵니다. 쿠로는 요시유키가 끝내 완수하지 못한 뜻 — 카게히라가를 가문의 일원으로 받아들이는 것 — 을 자신의 결단으로 실행합니다. 류오가는 카게히라가 사람들을 받아들이고, 미코는 류오가에 복귀해 경영을 맡으며, 헤르바켄도 가문에 합류합니다. 쿠로는 은호의 주술로 숨겨져 있던 본래 얼굴이 밝혀지고, 쌍둥이 용신을 마스코트로 한 류오가 부흥제를 개최합니다. 한편 헤르바켄은 성당에서 만난 '그 존재'로부터 용족 전설의 진실에 접근하고 있으며, 라크니스가 번쩍 눈을 뜨는 것으로 다음 시즌을 예고합니다.</p>
+  </div>
+</div>
+
+<!-- ==================== 5 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 05</div>
+  <h2>세계관 및 배경 설정 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "이 세계가 n부작 버틸 만큼 넓어? 설정에 모순은 없어?" — 시놉시스가 "무슨 일이 일어나는가"라면, 세계관은 "왜 그 일이 일어날 수 있는가". 가문 간 정치 구조, 주술 체계 등이 탄탄해야 "3부, 4부도 뽑아낼 수 있겠다"는 판단이 나옴.
+  </div>
+
+  <div class="content">
+    <div class="img-placeholder scene">
+      <div class="ph-label">Reference · Scene</div>
+      <div class="ph-desc">용족 / 류오가 신사 일러스트<br>(천 년 전 용의 강림 또는 류오가 신사 외관)</div>
+    </div>
+    <p><strong>용족과 류오가(龍王家):</strong> 천 년 전 하늘에서 내려온 용들이 황폐한 땅에 축복을 내리고 '신'으로 숭배받으며 왕국을 세웠으나, 힘을 잃고 왕국이 멸망한 뒤 인간 사이에 섞여 용족이라는 사실조차 잊었습니다. 류오가는 그 용족의 피가 흐르는 가문으로, 천 년 만에 라크니스의 힘이 발현됩니다. 겉으로는 신사·온천·요식업을 운영하는 전통 가문이나, 전 당주 테츠야 시대에 자선사업을 가장한 부패와 카게히라가와의 결탁이 있었고, 요시유키가 이를 청산하다 살해당했습니다. 현재는 쿠로의 대에서 재건 중입니다.</p>
+
+    <div class="img-placeholder scene">
+      <div class="ph-label">Reference · Scene</div>
+      <div class="ph-desc">카게히라가 일러스트<br>(저주 가문의 분위기 또는 아오이의 거처)</div>
+    </div>
+    <p><strong>카게히라가(影片家):</strong> 금술(禁術)을 쓰는 야미 가문. 자신의 목숨을 대가로 저주를 실행하는 주술사 집단. 류오가의 테츠야와 결탁해 거대화했으나, 테츠야 사후 버려져 3만 명 규모의 교리 집단으로 변질. 현 당주 아오이는 혈연이 아닌 양자 출신으로, 이 지옥의 문지기를 자처하며 단명의 운명을 안고 있습니다.</p>
+
+    <div class="img-placeholder scene">
+      <div class="ph-label">Reference · Scene</div>
+      <div class="ph-desc">성 세인츠 학원 일러스트<br>(고딕 양식 외관 또는 학원의 7대 전설 분위기)</div>
+    </div>
+    <p><strong>성 세인츠 학원:</strong> 고딕 양식의 외관에 서양식과 일본식이 혼재된 괴짜 학원. 08년도 설립. 복도에는 용의 전설 벽화, 뒤편에는 버려진 성지, 지하에는 비밀 통로가 있습니다. 뱀파이어, 마리오네트, 마물 등이 존재하며 '7대 전설'이라는 형태로 학원의 역사와 연결됩니다.</p>
+
+    <p><strong>가문 간 정치적 긴장:</strong> 류오가는 테츠야 사후 뒷세계와 단절했으나, 과거 류오가를 중심으로 여러 가문이 결탁한 조직의 잔재가 남아 있습니다. 카게히라가는 타 가문과 철저히 선을 그으며 독립 의뢰 방식을 유지해왔으나, 류오가와의 합류로 처음으로 외부와 경계를 허물게 됩니다. 이 움직임은 뒷가문 사이에 "류오가가 카게히라가에 이용당하고 있다"는 소문으로 번지고 있습니다.</p>
+  </div>
+</div>
+
+<!-- ==================== 6 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 06</div>
+  <h2>주요 캐릭터 프로필 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 갈 수 있어?" — 캐릭터를 <strong>상품성</strong>으로 보는 시선. "결핍"을 적는 이유: 결핍이 있어야 성장 아크가 생기고, 성장 아크가 있어야 장기 연재가 가능. 먼치킨은 1권이면 끝.
+  </div>
+
+  <div class="content">
+    <div style="margin-bottom:28px;padding:18px 22px;background:var(--table-alt);border-left:3px solid var(--text);border-radius:0 4px 4px 0;">
+      <div style="font-size:13px;font-weight:700;letter-spacing:0.5px;margin-bottom:8px;">캐릭터 설계 — 갭(Gap) 구조의 일관된 운용</div>
+      <p style="margin:0;font-size:14px;line-height:1.7;">본 작품의 주요 인물은 거의 예외 없이 <strong>겉모습과 본질의 의도적 간극</strong> — 일본 시장에서 '갭모에(ギャップ萌え)'로 검증된 캐릭터 매력 공식 — 으로 설계되어 있습니다. 평범한 모범생 ↔ 세계 최강 흑룡(쿠로), 천진한 동생 ↔ 오레사마 백룡(시로), 미모 학생회장 ↔ 뱀파이어(페렐), 귀여운 어린이 ↔ 마리오네트(교장 쇼타), 밝은 오타쿠 ↔ 복수귀(헤르바켄), 능글한 소꿉친구 ↔ 여우 신령(은호), 느슨한 간사이벤 ↔ 3만 명 통솔 냉혈한 당주(아오이). 
+
+작중 류오가 부흥제 신에서는 이 갭 구조가 작품 안에서 직접 명명됩니다 — "친근하되 마무리에는 용신의 위엄을 보여주는, 이름하야 갭모에 전략". 작품이 자신이 무엇을 하고 있는지 알면서 운용한다는 자기 인지의 또 다른 증거이자, 일본 시장에서의 캐릭터 진입 친화도를 결정적으로 높이는 장치입니다.</p>
+    </div>
+
+    <div class="char-block">
+      <div class="img-placeholder character">쿠로<br>얼굴</div>
+      <div class="char-body">
+        <div class="char-name">류오 쿠로 (주인공)</div>
+        <div class="char-role">류오가 당주 · 흑룡 라크니스의 숙주</div>
+        <p><strong>성격:</strong> 겁 많고 소심하지만 핵심에서는 흔들리지 않는 선량함. 상대를 절대 나쁘게 보지 않는다.</p>
+        <p><strong>서사:</strong> 1부에서는 힘을 거부하고 휘둘리지만, 2부에서 가문의 죄를 알고 한 번 무너진 뒤 힘을 받아들이고 당주로 서는 성장 아크. 먼치킨이 아닌, "힘을 갖고도 어떻게 쓸 것인가"를 고민하는 인물.</p>
+        <p><strong>결핍:</strong> 부모의 부재, 자기 확신의 부족. "나는 아빠처럼 대단하지 못해."</p>
       </div>
+    </div>
 
-      <div class="pd-card reveal">
-        <div class="pd-card-hd"><span class="pd-card-label">CORE SYSTEM</span><span class="pd-card-num">4 PILLARS</span></div>
-        <div class="pd-card-body">
-          <div class="sys-list">
-            <div class="sys-item"><div class="sys-dot"></div><p class="sys-text"><strong>이종족 공존 학원</strong> — 용족·뱀파이어·여우신령 등 초자연 존재가 다니는 성 세인츠 학원. 현대 일본 배경.</p></div>
-            <div class="sys-item"><div class="sys-dot"></div><p class="sys-text"><strong>이중 인격 구조</strong> — 쿠로(평범한 소년) ↔ 라크니스(천 년의 흑룡). 동일 신체, 교차 의식. 각성 시 외형 변화.</p></div>
-            <div class="sys-item"><div class="sys-dot"></div><p class="sys-text"><strong>가문 정치극 병행</strong> — 류오가 vs 카게히라가. 업보, 배신, 재건의 서사. 쿠로의 당주 성장기.</p></div>
-            <div class="sys-item"><div class="sys-dot"></div><p class="sys-text"><strong>2쿨 분리 구조</strong> — 1쿨 옴니버스(에피소드 독립), 2쿨 연속극 전환. 화당 4,000~5,000자, 애니 10분 분량 환산.</p></div>
-          </div>
-        </div>
+    <div class="char-block">
+      <div class="img-placeholder character">시로<br>얼굴</div>
+      <div class="char-body">
+        <div class="char-name">류오 시로 (쌍둥이 동생)</div>
+        <div class="char-role">쿠로의 쌍둥이 · 백룡 루멘시아의 숙주</div>
+        <p><strong>성격:</strong> 천진난만하고 호기심 많은 어린아이의 결. 감정 표현이 솔직하고 직접적이며, 칭찬에 반응이 폭발적이다. 사회적 거리감이 짧아 무엇이든 처음 보는 듯 즐긴다.</p>
+        <p><strong>서사:</strong> 요시유키의 봉인을 거부하고 모습을 감췄던 또 한 명의 용족 쌍둥이. 1부 9화 학원 문화제에서 쿠로 앞에 처음 모습을 드러내며, 안에 깃든 백룡 루멘시아가 형인 라크니스와 정면 대치한다. 1부 말 두 형제의 관계가 정립되며 쿠로 곁에 머무는 인물로 안착.</p>
+        <p><strong>결핍:</strong> 봉인을 거부하고 사라져 있던 존재. 어른의 손길을 받지 못한 채 어린아이의 결을 그대로 유지하고 있다는 점 자체가 결핍의 형태.</p>
       </div>
+    </div>
 
-      <div class="pd-card reveal">
-        <div class="pd-card-hd"><span class="pd-card-label">USP · 차별 포인트</span><span class="pd-card-num">5 POINTS</span></div>
-        <div class="pd-card-body">
-          <div class="usp-list">
-            <div class="usp-item"><span class="usp-num">①</span><p class="usp-text"><strong>개그—다크 낙차 내장</strong> — 귀여운 초등학생 교장, BL 코드 뱀파이어 학생회장과 정통 가문 비극이 같은 작품 안에서 공존.</p></div>
-            <div class="usp-item"><span class="usp-num">②</span><p class="usp-text"><strong>여우신령 보호자 구도</strong> — 천 년 여우신령이 소꿉친구로 위장. 초자연 존재 × 인간 정서의 교차가 감정선 핵심.</p></div>
-            <div class="usp-item"><span class="usp-num">③</span><p class="usp-text"><strong>변신 = 디자인 시스템</strong> — 안경/안대 착용 여부가 인격 전환의 시각 코드. 굿즈·삽화 직결.</p></div>
-            <div class="usp-item"><span class="usp-num">④</span><p class="usp-text"><strong>메타 코미디 내장</strong> — 류오가 부흥제에서 아이돌화·굿즈 전략이 스토리 내부에서 이미 진행됨. IP 확장 사전 설계.</p></div>
-            <div class="usp-item"><span class="usp-num">⑤</span><p class="usp-text"><strong>군상극 스케일</strong> — 단행본 출간 시 캐릭터 설정집 병행 예정. 확장성 높은 세계관.</p></div>
-          </div>
-        </div>
+    <div class="char-block">
+      <div class="img-placeholder character">은호<br>얼굴</div>
+      <div class="char-body">
+        <div class="char-name">은호 (소꿉친구 / 여우 신령)</div>
+        <div class="char-role">쿠로의 보호자 · 트릭스터</div>
+        <p><strong>성격:</strong> 능글맞고 가벼워 보이지만, 쿠로에 관한 일에서는 절대적으로 진지함.</p>
+        <p><strong>서사:</strong> 요시유키의 부탁으로 쿠로의 곁을 지키며 인간 소년으로 살아온 18년. 2부 10화에서 정체가 탄로나며, 18년간의 신뢰를 건 도박으로 폭주한 쿠로를 되돌림.</p>
+        <p><strong>결핍:</strong> 신령이면서 인간의 감정에 얽매여 있다는 모순. "신의 자리에서 내려왔다"는 선택의 무게.</p>
       </div>
+    </div>
 
-      <div class="pd-card newtro reveal">
-        <div class="pd-card-hd"><span class="pd-card-label">NEWTRO · 뉴트로 포인트</span><span class="pd-card-num">KEY CONCEPT</span></div>
-        <div class="pd-card-body">
-          <p class="newtro-intro">블러드하이스쿨은 <em>90년대~00년대 소년만화 문법</em>을 현대적으로 재해석한 뉴트로 작품입니다.</p>
-          <div class="newtro-list">
-            <div class="newtro-item"><span class="newtro-icon">🎌</span><div><p class="newtro-title">일본식 학원물 클리셰 × 의도적 오마주</p><p class="newtro-desc">잇테키마스 인사, 가쿠란, 시시오도시 소리, 나베 파티 — 장르 클리셰를 오마주로 적극 소환. 옛 소년만화 독자에겐 향수, 신규 독자에겐 신선함.</p></div></div>
-            <div class="newtro-item"><span class="newtro-icon">🐉</span><div><p class="newtro-title">용족·뱀파이어·여우신령 — 고전 이능력물 장르 재조합</p><p class="newtro-desc">2000년대 학원 판타지의 황금 조합을 2020년대 감각으로 재구성. "그 시절 감성의 부활"로 포지셔닝 가능.</p></div></div>
-            <div class="newtro-item"><span class="newtro-icon">📺</span><div><p class="newtro-title">애니 분량 단위 설계 + 굿즈·아이돌화 내장</p><p class="newtro-desc">화당 10분 애니 분량 기준, 캐릭터 아이돌 무대·굿즈샵이 스토리 안에 이미 등장. 90년대 미디어믹스 전략을 현대 IP 문법으로 재현.</p></div></div>
-          </div>
-        </div>
+    <div class="char-block">
+      <div class="img-placeholder character">헤르바켄<br>얼굴</div>
+      <div class="char-body">
+        <div class="char-name">헤르바켄 (전학생 / 용살자 가문의 후예)</div>
+        <div class="char-role">라크니스 처단을 위해 잠입한 적대자 · 쿠로의 친구</div>
+        <p><strong>성격:</strong> 겉은 밝은 전설 오타쿠, 속은 복수에 사로잡힌 저주받은 소년.</p>
+        <p><strong>서사:</strong> 복수와 우정 사이에서 방아쇠를 망설이다, 결국 가문과 의절하고 친구의 편에 섬. 2부 이후에는 성당의 '그 존재'로부터 전설의 진실을 추적하는 전설 오타쿠로써의 역할 발휘.</p>
+        <p><strong>결핍:</strong> 가문에 의해 세뇌된 복수심. 우정이라는 감정 자체에 대한 생소함.</p>
       </div>
+    </div>
 
-      <div class="pd-card reveal">
-        <div class="pd-card-hd"><span class="pd-card-label">MARKET · EXPANSION</span></div>
-        <div class="pd-card-body">
-          <div class="market-list">
-            <div class="market-item">옴니버스 구조로 캐릭터 단독 에피소드 확장 용이 — 스핀오프 라인업 자연스럽게 구성 가능</div>
-            <div class="market-item">1쿨 완결 후 2쿨 분리 출간 가능한 단행본 구조 (쿨당 1권 / 200페이지 이하 목표)</div>
-            <div class="market-item">애니 환산 분량으로 기획 — 영상화 피칭 레퍼런스 직접 제시 가능</div>
-            <div class="market-item">컬러 삽화 2장 + 설정집 포함 시 단행본 볼륨 보완 가능</div>
-            <div class="market-item">팬아트·굿즈 생태계 — 쌍둥이 용신 캐릭터가 아이돌 포맷으로 이미 설계됨</div>
-          </div>
-        </div>
+    <div class="char-block">
+      <div class="img-placeholder character">미코<br>얼굴</div>
+      <div class="char-body">
+        <div class="char-name">류오 미코 (사촌 / 당주 경쟁자)</div>
+        <div class="char-role">테츠야의 딸 · 요시유키의 제자 · 류오가 경영 엘리트</div>
+        <p><strong>성격:</strong> 자존심이 하늘을 찌르고 독하지만, 그 독함의 근원은 아버지의 죄에 대한 보상 심리.</p>
+        <p><strong>서사:</strong> 2부에서 아오이에게 "스승보다 아비의 피가 진하다"는 정곡을 찔려 일시적으로 무너지나, 이후 류오가에 복귀해 경영을 주도.</p>
+        <p><strong>결핍:</strong> "테츠야의 딸"이라는 낙인. 인정 욕구.</p>
       </div>
+    </div>
 
+    <div class="char-block">
+      <div class="img-placeholder character">아오이<br>얼굴</div>
+      <div class="char-body">
+        <div class="char-name">카게히라 아오이 (카게히라가 당주)</div>
+        <div class="char-role">저주 가문의 당주 · 쿠로에게는 '같은 젊은 당주'</div>
+        <p><strong>성격:</strong> 겉은 느슨하고 장난스러운 간사이벤, 속은 3만 명의 교리 집단을 통솔하는 냉혈한 지도자.</p>
+        <p><strong>서사:</strong> 복수 대신 용서를 택하고, 류오가의 합류를 받아들임. 단명의 운명을 안고 있으며, 후계를 여동생 유카에게 준비 중.</p>
+        <p><strong>결핍:</strong> 혈연 없이 떠안은 가문의 업보. "죽을 때까지 이곳에 있어야 해."</p>
+      </div>
+    </div>
+
+    <div class="char-block">
+      <div class="img-placeholder character">라크니스<br>루멘시아</div>
+      <div class="char-body">
+        <div class="char-name">라크니스 / 루멘시아 (용의 힘)</div>
+        <div class="char-role">쌍둥이에 깃든 두 용</div>
+        <p><strong>라크니스:</strong> 쿠로에 깃든 흑룡. 무겁고 절제된 성격. 전생에서 왕국을 멸망시킨 이유를 기억하지 못함.</p>
+        <p><strong>루멘시아:</strong> 시로에 깃든 쌍둥이 용. "오레사마" 선언과 함께 폭주하는 코미디 캐릭터이자, 인정에 굶주린 외로운 존재.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 7 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 07</div>
+  <h2>연재 및 전개 구조 — 작가 고유의 호흡 분배 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "연재 주기는? 독자 이탈 없이 유지할 수 있는 구조야?" — 매주 올라오는 각 화가 독자를 붙잡을 수 있는 구조인지를 봄. 블하스의 "1부 옴니버스 → 2부 시리얼" 같은 독특한 호흡이 여기서 어필 포인트가 됨. 숏폼 마케팅 적합성 같은 부가가치도 여기.
+  </div>
+
+  <div class="content">
+    <table>
+      <tr><th>구분</th><th>부제</th><th>화수</th><th>톤</th><th>구조</th></tr>
+      <tr><td>1부</td><td>용의 부활편</td><td>12화</td><td>가벼움, 코미디, 옴니버스</td><td>매 화 사건 해결형. 독립된 에피소드가 캐릭터를 빌드업.</td></tr>
+      <tr><td>2부</td><td>류오가편</td><td>12화</td><td>무거움, 드라마, 시리얼</td><td>주인공 성장 아크의 첫 분기점. 심리전·관계극 중심의 극장판 호흡.</td></tr>
+      <tr><td>3부</td><td>미정</td><td>12화</td><td>가벼움, 코미디</td><td>새로운 인외 캐릭터(아군·적)의 빌드업.</td></tr>
+      <tr><td>4부</td><td>미정</td><td>12화</td><td>웅장함, 본격 판타지</td><td>인외 배틀. 누적된 전설 떡밥의 본격 회수.</td></tr>
+    </table>
+
+    <h3>공개 방식 — 부 단위 일괄 공개 (시즌제 OTT 방식)</h3>
+    <p>본 작품은 회별 주간 연재가 아닌 <strong>부 단위 12화 일괄 공개</strong>를 전제로 기획되었습니다. 한 부가 동시에 열리고, 독자는 자기 호흡으로 한 부를 완주합니다. 회당 결제 모델이 아닌 시즌제 OTT의 호흡을 웹소설에 가져온 방식입니다.</p>
+    <ul>
+      <li><strong>이탈 방지</strong> — 회별 클리프행어 의존도가 낮고, 캐릭터 빌드업이 중간에 끊기지 않음. "다음 화까지 못 기다린다"는 정서가 발생하지 않아 진입 후 완주율이 높음.</li>
+      <li><strong>마케팅·미디어믹스 동시 점화</strong> — "n부 공개!" 한 시점에 화제·SNS·언론 노출이 폭발하며, 동시에 단행본·일러스트집·굿즈·OST 등 미디어믹스 라인이 함께 출시될 수 있음. 12주에 분산되는 주간 연재와 달리, 부 공개 시점이 곧 이벤트이자 패키지 발매일.</li>
+      <li><strong>작가 호흡의 보존</strong> — 톤 시프트, 복선 회수, 정서 곡선이 주간 연재의 임의 분할 없이 설계 그대로 독자에게 전달됨.</li>
+      <li><strong>매출 구조 차별화</strong> — 회당 결제가 아닌 부 단위 패키지·구독 모델 적용 가능. 플랫폼 측에서도 신상품 슬롯으로 활용 가능.</li>
+    </ul>
+
+    <h3>부별 차별화 — 매 부 다른 재미를 약속</h3>
+    <p>본 작품의 핵심 전략은 <strong>부마다 집중 포인트와 재미 코드가 명확히 다르다</strong>는 점입니다. 같은 구조의 반복이 아니라, 한 작품 안에서 장르적 결을 매 부 분기시켜 새로운 진입 시점을 계속 만들어 냅니다.</p>
+
+    <h4>1부 (용의 부활편) — 옴니버스 코미디 / 캐릭터 진입</h4>
+    <p>매 화 독립된 사건으로 캐릭터를 빌드업합니다. 가벼운 톤과 자기 인지형 코미디로 진입 장벽을 낮추는 동시에, 각 에피소드 말미에 진지한 한 장면을 심어 톤 시프트의 복선을 깔아 둡니다.</p>
+    <p>각 에피소드가 독립적이므로 <strong>숏폼 마케팅에 최적화</strong>되어 있습니다. 1~2분 분량의 발췌 영상·웹툰 클립으로 즉시 분할 가능하며, 클립 단위 SNS 전파가 자연스럽습니다.</p>
+
+    <h4>2부 (류오가편) — 드라마·심리전 / 성장의 첫 분기점</h4>
+    <p>주인공의 성장 아크가 비로소 작동하기 시작하는 첫 분기점입니다. 1부와 동일 인물·동일 세계관이지만 톤과 구조가 확연히 달라져, 가문의 죄·캐릭터 간 심리전·정체성의 균열을 중심으로 한 극장판 호흡의 시리얼 드라마로 전환됩니다.</p>
+    <p>심리전과 관계극은 <strong>2차 창작·해석 콘텐츠·리뷰 영상과의 친화도</strong>가 매우 높습니다. 인물 동기 분석, 관계도 도식화, 명장면 컷 모음 등 팬덤 자체 생산 콘텐츠의 동력이 되며, 작품 외부로 회자되는 화제성을 만듭니다. 1부에서 진입한 독자에게 작품의 정서적 깊이를 증명하며 팬덤 결속력을 형성합니다.</p>
+
+    <h4>3·4부 — "전설" 키워드의 확장성</h4>
+    <p>3부와 4부는 작품의 핵심 키워드인 <strong>"전설"</strong>을 본격적으로 회수·확장하는 구간입니다. 1·2부에 누적된 떡밥 — 천 년 전 용족의 멸망의 원인, 학원의 7대 전설,  라크니스의 전생 — 은 모두 3·4부 이후의 동력으로 설계되어 있으며, "전설"이라는 추상적·확장 가능한 키워드는 5부 이후로도 무한 확장 가능한 IP 자산입니다. <em>(각 부의 신규 캐릭터가 시대정신을 체화하며 작품의 메타성 자체를 진화시키는 결은 SECTION 02 정밀 매력 포인트 참조.)</em></p>
+    <ul>
+      <li><strong>신규 캐릭터 슬롯이 부마다 열림</strong> — 새로운 인외 캐릭터(아군·적)가 매 부 등장. 굿즈·일러스트·2차 창작 라인이 정기적으로 재충전됨.</li>
+      <li><strong>독자 진입 시점의 다변화</strong> — 3부에서 톤이 다시 가벼워지므로 신규 독자가 진입할 두 번째 관문이 열림. "n부부터 봐도 된다"는 구조.</li>
+      <li><strong>확장 가능성의 시각화</strong> — 4부의 본격 판타지 톤은 학원물 외피를 졸업한 세계관 확장의 첫 단추. 5부 이후 IP 확장 — 외전, 스핀오프, 신규 작품 분기 — 의 토양이 됨.</li>
+    </ul>
+
+    <p style="margin-top:24px;">매 부가 독립적 재미를 지니면서도 다음 부로의 동력이 누적되는 구조이며, 부 단위 일괄 공개 방식이 이 설계의 완성도를 그대로 독자에게 전달합니다.</p>
+  </div>
+</div>
+
+<!-- ==================== 8 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 08</div>
+  <h2>비교 IP (Comp Titles) <span class="status wip">작업중</span></h2>
+
+  <div class="guide">
+PD의 질문: "비슷한 성공 사례가 있어? 시장에서 검증된 라인이야?" — 직접 비교작이 아니라 <strong>"이 독자층이 좋아할 만한 기존 IP"</strong>를 보여주는 칸. PD가 윗선에 보고할 때 "흑집사+나루토 라인"이라고 한 줄로 설명할 수 있게 해주는 무기.
+  </div>
+
+  <div class="content">
+    <h3>비교 IP — 부분 좌표의 집합</h3>
+    <p>본 작품은 <strong>'뉴트로 + 일본 학원 라노벨의 질감 + 가문 다크 판타지 + 한국어 웹소설 포맷'</strong>의 조합으로 설계되어, 모든 축이 동시에 일치하는 선행 비교작이 사실상 부재합니다. 이 사실은 양면적입니다.</p>
+
+    <div style="margin: 16px 0 28px; padding: 18px 22px; background: var(--table-alt); border-radius: 4px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.5px;color:var(--muted);margin-bottom:10px;">양면성</div>
+      <ul style="margin: 0;">
+        <li><strong>단점</strong> — 시장에서 즉시 검증된 흥행 라인에 정확히 올릴 수 없음. "OO과 OO의 결합"이라는 한 줄 공식이 깔끔하게 떨어지지 않음.</li>
+        <li><strong>장점</strong> — 좌표 자체가 비어 있어 선점이 가능. 작품 정체성 자체가 시장의 '유일 좌표'로 자리잡을 수 있음.</li>
+      </ul>
+    </div>
+
+    <h3>부분 일치 좌표</h3>
+    <p>각 비교 IP는 본 작품과 한두 차원에서 겹치지만, 모든 차원이 결합된 본 작품의 좌표를 그대로 점유한 사례는 없습니다. 아래는 PD가 윗선에 보고할 때 "이 작품은 OO의 X면과 OO의 Y면을 가진다"식으로 활용할 수 있는 좌표 묶음입니다.</p>
+    <table>
+      <tr><th>작품</th><th>겹치는 좌표</th></tr>
+      <tr><td><strong>흑집사</strong> (枢やな)</td><td>양식미 + 코미디 리듬 + 가문 비극의 조합</td></tr>
+      <tr><td><strong>은혼</strong> (소라치 히데아키)</td><td>장르 클리셰의 자각적 운용. 가벼움-진중함의 폭넓은 톤 시프트. 다인물 군상극의 정서적 결</td></tr>
+      <tr><td><strong>나루토</strong></td><td>가문의 업보와 다음 세대의 극복이라는 구조</td></tr>
+      <tr><td><strong>청의 엑소시스트</strong></td><td>학원물 + 인외 배틀 + 미형 캐릭터 라인. 3·4부의 톤과 연결</td></tr>
+    </table>
+
+    <div style="margin-top:24px;padding:20px 22px;background:var(--text);color:#fff;border-radius:4px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--guide-border);margin-bottom:10px;">⭐ 핵심 어필</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:10px;">"어디서 본 듯한데, 어디서 본 건지는 떠오르지 않는다."</div>
+      <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:#e8e6df;">위 표의 비교 IP들은 본 작품의 일부 좌표와 겹치지만, <strong style="color:#fff;">본 작품을 보고 곧장 떠오르는 단 하나의 원작은 존재하지 않습니다.</strong> 옛 일본 애니의 익숙한 요소들이 작품 전반에 녹아 있되, 어느 한 작품의 직접 차용·오마주·파쿠리(パクリ)로 환원되지 않는 구조입니다.</p>
+      <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:#e8e6df;">특히 한국 웹소설 시장 내에서도 본 작품과 동일 좌표를 점유하는 직접 비교군은 확인되지 않습니다 — 회귀·빙의·먼치킨 계열이 주류인 시장에서 <strong style="color:#fff;">'일본 학원 라노벨의 결을 자각적으로 재구성한 한국어 웹소설'</strong>이라는 좌표는 비어 있으며, 작품이 진입 즉시 카테고리를 정의할 수 있는 자리에 있습니다.</p>
+      <p style="margin:0;font-size:14px;line-height:1.7;color:#e8e6df;">"이거 OO 같다"는 한 줄 라벨이 붙지 않고 단일 IP의 그림자에 갇히지 않는다는 점 — 이는 본 작품을 <strong style="color:#fff;">독립된 작품으로 인식하게 만드는 가장 본질적인 강점</strong>입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 9 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 09</div>
+  <h2>확장성 및 출간 계획 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "웹소설 말고 뭘 더 할 수 있어? 2차 수익은?" — 한 IP에서 몇 갈래의 수익 라인이 나오는지를 보는 칸. 단행본, 굿즈, 애니, 웹툰 등. "1화당 10분 분량으로 이미 환산해 뒀다"는 것은 애니화 전환 비용이 낮다는 증거가 됨.
+  </div>
+
+  <div class="content">
+    <h3>IP 게이트 전략 — 웹소설을 1차 매체로 선택한 이유</h3>
+    <p>본 작품은 단일 매체가 아니라 <strong>IP 프로젝트로 설계</strong>되었으며, 1차 게이트로 웹소설을 선택했습니다. 웹소설은 ① 빠른 작품 구축이 가능하고, ② 동시에 작가가 비주얼 레퍼런스(캐릭터 시트·컨셉 아트)를 함께 축적할 수 있는 매체이기 때문입니다. 결과적으로 글과 비주얼 레퍼런스가 함께 완성되어, 영상화·웹툰화 단계에서 프로 외주가 받아들 <strong>디렉션 자산이 작품 안에 이미 들어 있는 IP 패키지</strong>가 됩니다.</p>
+
+    <div style="margin-bottom:24px;padding:20px 22px;background:var(--text);color:#fff;border-radius:4px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--guide-border);margin-bottom:8px;">🎯 PRIORITY STRATEGY</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:10px;">해외(일본) 수출 우선</div>
+      <p style="margin:0;font-size:14px;line-height:1.7;color:#e8e6df;">본 작품은 기획 단계부터 일본 시장을 1차 타깃으로 설계되었습니다. 국내 흥행보다 일본·해외 진입을 우선순위로 두며, 이를 위한 다국어 인프라가 작가 운영 사이트(rrkt.biz)에서 <strong style="color:#fff;">이미 실행 중</strong>입니다.</p>
+    </div>
+
+    <h4>다국어 운영 — 이미 작동 중인 사전 인프라</h4>
+    <ul>
+      <li><strong>한본어판</strong> — 일본어 차용 코드가 그대로 살아 있는 작품 원문 양식. 본 작품 정체성의 원본.</li>
+      <li><strong>한국어판</strong> — 한국 독자용 가독성 보완 버전.</li>
+      <li><strong>일본어판</strong> — 일본 시장 진입을 위한 번역본. 작품 코드가 본래 일본 라노벨 문법을 정조준하므로 번역 마찰이 작음.</li>
+      <li><strong>글로벌 접근성</strong> — 구글 번역 환경 호환 세팅으로 비한·일 해외 독자도 즉시 접근 가능.</li>
+    </ul>
+    <p>일본 시장 진입은 통상 번역·로컬라이즈 비용과 코드 미스매치가 가장 큰 진입 장벽이지만, 본 작품은 ① 코드 자체가 일본 라노벨 문법 기반이고 ② 번역 인프라가 사전에 구축되어 있어 진입 비용이 본질적으로 낮습니다.</p>
+
+    <h3>작가 제공 자료 (Asset Bundle)</h3>
+    <p>본 작품의 비주얼 자산은 작가 본인이 캐릭터 시트·컨셉 아트의 형태로 직접 축적합니다. 작가는 캐릭터 디자인·일러스트 제작 경험을 가진 멀티 크리에이터이지만, <strong>최종 영상화·웹툰화 단계의 비주얼 제작은 프로 일러스트레이터·웹툰 작가의 손에 맡겨지는 것을 전제</strong>로 합니다. 작가가 제공하는 자산은 그 자체로 최종 결과물이 아니라 <strong>레퍼런스·디렉션 가이드</strong>로 기능합니다.</p>
+
+    <div style="margin: 16px 0 20px; padding: 18px 22px; background: var(--table-alt); border-radius: 4px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.5px;color:var(--muted);margin-bottom:10px;">제공 자료</div>
+      <ul style="margin: 0 0 16px;">
+        <li>웹소설 본편 24화 + 번외편 7편 (텍스트 완본)</li>
+        <li>캐릭터 시트 <span style="color:var(--muted);font-size:13px;">— 작가 직접 작업 / 레퍼런스용</span></li>
+        <li>비주얼 레퍼런스 <span style="color:var(--muted);font-size:13px;">— 작가 직접 작업 / 톤·복식·세계관 시각화</span></li>
+        <li>컨셉 아트 <span style="color:var(--muted);font-size:13px;">— 작가 직접 작업 / 프로 외주의 디렉션 가이드</span></li>
+      </ul>
+      <div style="font-size:12px;font-weight:700;letter-spacing:0.5px;color:var(--muted);margin-bottom:8px;">PD 관점 효과</div>
+      <ul style="margin: 0;">
+        <li><strong>외주 톤 일관성 확보</strong> — 작품의 시각 톤이 텍스트 작가의 머릿속에 이미 명확히 시각화되어 있어, 프로 외주가 톤을 잡아내는 시간이 단축됨.</li>
+        <li><strong>미디어믹스 의사결정 가속</strong> — PD·투자자가 "이 작품을 영상화·웹툰화하면 어떻게 보일지"를 머릿속으로 시뮬레이션할 필요 없이, 작가 레퍼런스로 즉시 판단 가능.</li>
+        <li><strong>코어와 비주얼의 정합성</strong> — 텍스트와 비주얼이 같은 머리에서 나왔기 때문에 IP 전 영역에 걸친 톤 표류 위험이 낮음.</li>
+      </ul>
+    </div>
+
+    <h3>확장 가능 미디어 (Expansion Lines)</h3>
+    <p>본 작품의 설계 특성상 다음 IP 라인이 모두 가능합니다. 모든 라인이 동시에 가야 한다는 의미가 아니라, <strong>선택 가능한 옵션이 넓다</strong>는 뜻입니다.</p>
+
+    <h4>단행본</h4>
+    <ul>
+      <li>부당 1권. 권당 약 8만자, 200페이지 이하 소장형 설계.</li>
+      <li>출간 확정 시 <strong>라이트노벨 형식</strong>으로 본문 곳곳에 일러스트가 삽입된 구성으로 작업 예정.</li>
+      <li>삽화·설정집·번외편 수록으로 일반 웹소설 단행본(12만자 기준)과의 페이지 차이를 보완.</li>
+    </ul>
+
+    <h4>캐릭터 굿즈·일러스트집</h4>
+    <ul>
+      <li>인물 비주얼이 미형 중심으로 설계되어 시선 점유력이 매우 높음. (변신 전후 외모 차이, 코스튬 변주, 가면·가발 등 시각 기호 풍부)</li>
+      <li>일러스트집·아크릴 스탠드·캐릭터 굿즈 등 소장형 상품 친화도 높음.</li>
+    </ul>
+
+    <h4>애니메이션·웹툰</h4>
+    <ul>
+      <li>1화당 10분 분량으로 작가가 이미 환산 → 애니메이션·웹툰 전환 비용이 낮음.</li>
+      <li>콘티형 문장 연출이 그대로 연출 노트로 기능.</li>
+      <li>1부 12화 × 10분 = 120분 (극장판 1편 분량)으로의 재편집도 가능.</li>
+    </ul>
+
+    <h4>일본형 미디어믹스 (실사·무대)</h4>
+    <ul>
+      <li>일본 라노벨·만화 IP의 전형적 확장 라인 — <strong>B급 실사영화·2.5차원 뮤지컬·무대극</strong> — 의 잠재 가능성 있음.</li>
+      <li>작품의 양식미·코스튬·캐릭터 비주얼이 이미 무대 연출에 가까운 톤으로 설계되어 있어, 무대화 적합성이 일반 웹소설 대비 높음.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== 10 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 10</div>
+  <h2>리스크와 대응 <span class="status done">완료</span></h2>
+
+  <div class="guide">
+PD의 질문: "이거 망할 수 있는 이유는? 그건 어떻게 막을 건데?" — PD는 좋은 점보다 <strong>터질 수 있는 지점</strong>을 먼저 봄. 작가가 스스로 리스크를 짚고 대응책까지 제시하면 "자기 작품을 객관적으로 본다"는 신뢰가 생김. 이게 없으면 PD가 직접 리스크를 찾게 되고 인상이 안 좋아짐.
+  </div>
+
+  <div class="content">
+    <h4>리스크 1 — 작품 전반의 진입 장벽 누적</h4>
+    <p>일본어 차용 코드, 다수의 캐릭터 동시 등장, 다층적 가문 구조, 한국 웹소설 주류와 다른 톤 — 이 요소들이 누적되어 첫 진입의 부담이 될 수 있음. 한국 웹소설 플랫폼의 추천 알고리즘이 회귀·빙의·먼치킨 중심으로 학습되어 있어, 본 작품이 자연 노출에서 후순위로 밀릴 가능성도 동반.</p>
+    <p><strong>→ 대응:</strong> 작품 정체성의 핵심이므로 코드는 약화하지 않음. 1화 도입부에서 일본어 코드의 톤을 10줄 이내에 학습시키는 현재 구조 유지 — "잇테키마스~" → "오하요!" → "코라~!" 세 번이면 독자가 언어 룰을 체득. 캐릭터는 1부에서 쿠로·은호·헤르바켄 3인방으로 압축하고 화 단위 순차 투입. 단행본 설정집 동봉과 작가 운영 팬사이트로 보완. 마케팅은 플랫폼 알고리즘 의존이 아닌 SNS·일러스트·해외 채널 직접 노출로 우회.</p>
+    <p><strong>차선책:</strong> 일본어 코드 거부감이 한국 시장 진입의 결정적 장벽으로 작동할 경우, SECTION 09에서 명시한 다국어 인프라 중 <strong>한국어판을 메인 진입로로 운용</strong> 가능. 한국어판은 일본어 차용을 최소화한 가독성 보완 버전이므로, 일본어 코드에 부담을 느끼는 독자층에게도 작품 코어(캐릭터·서사·뉴트로 코드)를 그대로 전달할 수 있음. 한본어 원본 → 일본 시장, 한국어판 → 한국 시장의 <strong>이원 운용</strong>이 가능한 구조.</p>
+
+    <h4>리스크 2 — 2부 톤 시프트의 양방향 리스크</h4>
+    <p>2부의 무게감은 입소문 무기인 동시에 양방향 리스크를 가짐.</p>
+    <ul>
+      <li><strong>(a)</strong> 1부의 가벼움에 진입한 독자가 2부 드라마톤을 부담스러워 이탈할 가능성.</li>
+      <li><strong>(b)</strong> 2부에서 작품의 자기 재해석이 본격화되며 뉴트로 색채가 더 짙어져, 매니악한 작품으로 인식될 가능성.</li>
+    </ul>
+    <p><strong>→ 대응:</strong> (a)에 대해서는 1부 후반의 시리얼 복선이 사전 예고로 기능하여 톤 시프트의 충격을 흡수. (b)에 대해서는 3부에서 다시 1부 결의 가벼움으로 톤을 풀어 신규 진입 통로를 여는 4부 구조 설계가 완충 장치. 매 부마다 톤이 달라지는 곡선 자체가 작품의 호흡 설계이며, 어느 한 톤에도 갇히지 않음.</p>
+
+    <h4>리스크 3 — 부 단위 일괄 공개의 매출 구조 검증 부재</h4>
+    <p>한국 웹소설 매출 모델은 회당 결제·연재 기반. 부 단위 일괄 공개는 시장에 검증된 수익 데이터가 부재하므로, 플랫폼 측이 즉시 수용하기 어려울 수 있음. (SECTION 07에서 제시한 시즌제 OTT 모델의 운영 리스크.)</p>
+    <p><strong>→ 대응:</strong> 일괄 공개는 작품 호흡을 가장 충실히 전달하는 <strong>이상적 형태</strong>이며 강제 조건이 아님. 회별 연재 후 부 종료 시점에 일괄 재공개하는 <strong>하이브리드 모델</strong> 적용 가능.</p>
+
+    <h4>리스크 4 — 다국어 운영의 작가 부담과 번역 품질</h4>
+    <p>현재 작가 단독으로 한본어/한국어/일본어 3종 + 구글 번역 호환 환경을 운영. 장기 연재 시 작가 번아웃 리스크. 일본어 번역 품질이 네이티브 수준이 아닐 경우 일본 시장에서 오히려 역효과 가능. (SECTION 09에서 제시한 다국어 인프라의 운영 비용 측면.)</p>
+    <p><strong>→ 대응:</strong> 출간·라이센싱 단계에서 일본 측 번역가·감수자 협업으로 전환. 작가는 한본어 원문 집필에 집중하고, 한국어판·일본어판은 출간사 측 전문 인력 매칭으로 분담. 현재 작가 자체 운영은 <strong>"사전 인프라 증명"</strong>의 역할이며, 정식 출간 단계에서는 전문 분업으로 자연스럽게 전환 가능.</p>
+  </div>
+</div>
+
+<!-- ==================== 11 ==================== -->
+<div class="section">
+  <div class="section-number">SECTION 11</div>
+  <h2>한 줄 피칭 <span class="status wip">완료</span></h2>
+
+  <div class="guide">
+이건 PD가 쓰는 게 아니라 <strong>PD가 윗선에 가져가는 무기</strong>. "이거 뭔데?"라고 물으면 이 한 줄을 그대로 읽으면 끝나도록 설계된 서비스 칸. Bi의 홈페이지에 올리는 용도라면, 방문자가 이 기획서를 한 줄로 기억하고 나가는 문장이 됨.
+  </div>
+
+  <div class="content">
+    <div class="pitch-box">
+      "추억의 일본 애니메이션 감성을 동시대 감각으로 재구성한 — 한본어 뉴트로 웹소설."
+    </div>
+  </div>
+</div>
     </div>
   </div>
 </div>
