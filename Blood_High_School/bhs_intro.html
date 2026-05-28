@@ -77,7 +77,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 /* 8. tab-divider 숨김 */
 .tab-divider{display:none;}
 .tabs{display:flex;gap:10px;margin-top:24px;margin-bottom:22px;}
-.tab-panel{display:none;padding:28px 0 60px}
+.tab-panel{display:none;padding:28px 0 16px}
 .tab-panel.active{display:block}
 .v-sec-label{display:inline-block;font-family:var(--sfx);font-size:22px;letter-spacing:2.5px;background:var(--black);color:var(--white);padding:4px 16px;margin-bottom:14px;border-radius:6px;}
 .v-section{margin-bottom:36px}
@@ -183,7 +183,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
     font-size: 15px;
     max-width: 780px;
     margin: 0 auto;
-    padding: 60px 28px 120px;
+    padding: 60px 28px 16px;
   }
 
 
@@ -450,6 +450,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
   .pd-doc .char-block .char-body {
     flex: 1;
     min-width: 0;
+    background: transparent;
   }
 
   .pd-doc .char-block .char-name {
