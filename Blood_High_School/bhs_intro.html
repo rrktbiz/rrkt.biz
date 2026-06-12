@@ -705,12 +705,77 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
     flex-shrink: 0;
   }
 
+/* ===== SPOILER MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal-box{background:#fff;border:4px solid #111;border-radius:10px;box-shadow:8px 8px 0 #111;max-width:400px;width:100%;overflow:hidden;transform:translateY(14px);transition:transform .2s;}
+.modal-overlay.show .modal-box{transform:translateY(0);}
+.modal-hd{background:#111;padding:16px 20px;display:flex;align-items:center;gap:10px;}
+.modal-hd-icon{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;background:#E51937;color:#fff;padding:4px 9px;border-radius:3px;}
+.modal-hd-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:1.5px;color:#FFD23F;}
+.modal-body{padding:22px 20px 8px;}
+.modal-body p{font-size:14px;color:#222;line-height:1.85;margin-bottom:10px;}
+.modal-body .modal-warn{font-size:12px;color:#888;line-height:1.7;}
+.modal-btns{display:flex;gap:10px;padding:16px 20px 20px;}
+.modal-btn-cancel{flex:1;padding:11px;background:#fff;border:3px solid #111;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;color:#111;box-shadow:3px 3px 0 #111;cursor:pointer;transition:transform .1s,box-shadow .1s;}
+.modal-btn-cancel:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111;}
+.modal-btn-cancel:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+.modal-btn-confirm{flex:2;padding:11px;background:#E51937;border:3px solid #111;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:900;color:#fff;box-shadow:3px 3px 0 #111;cursor:pointer;transition:transform .1s,box-shadow .1s;}
+.modal-btn-confirm:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111;}
+.modal-btn-confirm:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+
+/* ===== PASSWORD OVERLAY (deep-dive 위에 씌우는 방식) ===== */
+.dd-locked .deep-content{display:none;}
+.dd-pw-prompt{margin-top:0;border:2px dashed #111;border-top:none;border-radius:0 0 4px 4px;background:#fff;padding:18px 20px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+.dd-pw-row{display:flex;gap:8px;width:100%;align-items:center;}
+.dd-pw-input{flex:1;padding:9px 12px;border:2.5px solid #111;border-radius:4px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;letter-spacing:4px;color:#111;outline:none;box-shadow:2px 2px 0 #111;transition:border-color .15s;}
+.dd-pw-input:focus{border-color:#E51937;}
+.dd-pw-input::placeholder{letter-spacing:1px;font-weight:400;color:#bbb;}
+.dd-pw-btn{padding:9px 18px;background:#111;border:2.5px solid #111;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:#FFD23F;cursor:pointer;box-shadow:2px 2px 0 #555;transition:background .15s;}
+.dd-pw-btn:hover{background:#333;}
+.dd-pw-hint{font-size:11px;color:#aaa;font-weight:500;}
+.dd-pw-error{font-size:12px;color:#E51937;font-weight:700;display:none;}
+.dd-pw-error.show{display:block;}
+/* deep-dive-wrap: 비밀번호 잠금 대체 구조 */
+.pd-doc .deep-dive-wrap{margin-top:32px;}
+.pd-doc .deep-dive-summary{
+  cursor:pointer;user-select:none;display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border:2px dashed #111;border-radius:4px;
+  background:#fff;transition:background .15s;
+}
+.pd-doc .deep-dive-summary:hover{background:#111;}
+.pd-doc .deep-dive-summary:hover .dd-title{color:#FFD23F;}
+.pd-doc .deep-dive-summary:hover .dd-sub{color:#aaa;}
+.pd-doc .deep-dive-summary:hover .dd-cta{color:#FFD23F;}
+.pd-doc .deep-dive-summary:hover .dd-divider{background:#444;}
+.pd-doc .deep-dive-wrap .dd-pw-prompt{border:2px dashed #111;border-top:none;border-radius:0 0 4px 4px;}
+.pd-doc .deep-dive-wrap .deep-content{border:2px dashed #111;border-top:none;border-radius:0 0 4px 4px;background:#fff;padding:24px 22px;}
+
+
 
 </style>
 </head>
 <body>
 
 
+
+<!-- ===== SPOILER WARNING MODAL ===== -->
+<div class="modal-overlay" id="spoilerModal">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <span class="modal-hd-icon">WARNING</span>
+      <span class="modal-hd-title">스포일러 주의</span>
+    </div>
+    <div class="modal-body">
+      <p><strong>IP 기획서 (FOR PD)</strong> 탭에는 작품 전체의 줄거리·결말·반전을 포함한 상세 스포일러가 담겨 있습니다.</p>
+      <p class="modal-warn">작품을 먼저 읽고 싶으신 분께는 독자용 탭을 권장합니다.<br>PD 및 기획 목적으로 열람하시는 분은 아래 확인을 눌러 주세요.</p>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="closeModal()">돌아가기</button>
+      <button class="modal-btn-confirm" onclick="confirmPdTab()">스포일러 포함 — 계속 보기 ▶</button>
+    </div>
+  </div>
+</div>
 
 <div class="hero">
   <div class="hero-lines" id="heroLines"></div>
@@ -755,7 +820,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
     <button class="tab-btn active" onclick="switchTab('viewer',this)">
       FOR VIEWER <span class="tab-badge">독자용</span>
     </button>
-    <button class="tab-btn" onclick="switchTab('pd',this)">
+    <button class="tab-btn" onclick="openPdModal(this)">
       FOR PD <span class="tab-badge">IP 기획서</span>
     </button>
   </div>
@@ -918,17 +983,25 @@ PD의 질문: "이미 비슷한 거 많은데, 이걸 왜 해야 해?" — 이 �
     <h4 data-num="③">비주얼 코드의 시대성</h4>
     <p>뉴트로의 가장 즉각적인 진입점은 시각입니다. 독자는 본문을 펼치기 전, 표지·일러스트·캐릭터 디자인의 첫 인상만으로 작품의 시대성과 장르를 0초 만에 판단합니다. 본 작품의 캐릭터 비주얼은 2000년대 일본 학원·다크 판타지 애니가 축적해 온 비주얼 — 고딕·양식미·과장된 헤어 실루엣, 코스튬 변주 등 변신 기호의 풍부함 — 을 의도적으로 차용합니다. 이는 진입 장벽을 가장 빠르게 통과시키는 동시에, 굿즈·일러스트집·2차 창작 등 IP 확장 라인에서의 인지도를 미리 확보하는 핵심 장치이기도 합니다.</p>
 
-    <details class="deep-dive">
-      <summary>
+    <div class="deep-dive-wrap" id="authorSignature">
+      <div class="deep-dive-summary" onclick="handleSignatureClick(event)">
         <span class="dd-stamp">AUTHOR<br>SIGN.</span>
         <span class="dd-divider"></span>
         <span class="dd-mid">
           <span class="dd-title">작가의 시그니처</span>
           <span class="dd-sub">이 작품을 더 파헤쳐보고 싶은 분께 — 작품의 코어와 IP 가능성이 가장 밀도 있게 담겨 있습니다.</span>
         </span>
-        <span class="dd-cta">더 파헤치기 ▼</span>
-      </summary>
-      <div class="deep-content">
+        <span class="dd-cta" id="signatureCta">더 파헤치기 ▼</span>
+      </div>
+      <div class="dd-pw-prompt" id="ddPwPrompt" style="display:none;">
+        <span class="dd-pw-hint">🔒 이 섹션은 잠겨 있습니다. 비밀번호를 입력해 주세요.</span>
+        <div class="dd-pw-row">
+          <input class="dd-pw-input" type="password" id="ddPwInput" placeholder="비밀번호" maxlength="20" onkeydown="if(event.key==='Enter')checkSignaturePw()">
+          <button class="dd-pw-btn" onclick="checkSignaturePw()">확인</button>
+        </div>
+        <span class="dd-pw-error" id="ddPwError">비밀번호가 틀렸습니다.</span>
+      </div>
+      <div class="deep-content" id="signatureContent" style="display:none;">
         <h4>작가의 시그니처 — 본 작품만의 메시지 결</h4>
         <p>뉴트로가 작품의 <strong>형식 코드</strong>라면, 다음 세 가지 결은 어느 옛 작품에서도 빌려오지 않은 <strong>작가 고유의 메시지</strong>입니다. 이 결들이 본 작품을 단순 향수 재현물이 아닌 동시대적 작품으로 만듭니다.</p>
 
@@ -956,7 +1029,7 @@ PD의 질문: "이미 비슷한 거 많은데, 이걸 왜 해야 해?" — 이 �
 
         <p>결과적으로 이 결합은 <strong>사전적으로 익숙하지 않으며 비교 분석으로도 예측되지 않습니다.</strong> 매 부 갱신되며 예측 불가능성이 누적되고, 작품은 자기 양식을 점점 더 깊이 마주하게 됩니다. 즉 부가 진행될수록 본 작품의 핵심 코드인 <strong>뉴트로 — '옛 양식의 자각적 재구성'</strong> 은 약해지는 것이 아니라 더 선명해지고, 메타성의 진화 자체가 뉴트로를 갱신하는 엔진으로 작동합니다. 분석으로 다 잡히지 않는 영역이 작품 안에 남아 있다는 것, 그리고 그 영역마저 뉴트로의 진화로 흡수된다는 것 — 이것이 본 작품을 IP로서 강력하게 만드는 마지막 결입니다.</p>
       </div>
-    </details>
+    </div>
   </div>
 </div>
 
@@ -1422,6 +1495,37 @@ PD의 질문: "이거 망할 수 있는 이유는? 그건 어떻게 막을 건�
 </div>
 
 <script>
+/* ===== 탭 전환 ===== */
+var _pdTabBtn = null;
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ===== PD 탭 — 스포일러 경고 모달 ===== */
+function openPdModal(btn){
+  _pdTabBtn = btn;
+  var overlay = document.getElementById('spoilerModal');
+  overlay.classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('spoilerModal').classList.remove('show');
+  document.body.style.overflow='';
+  _pdTabBtn = null;
+}
+function confirmPdTab(){
+  var btn = _pdTabBtn;
+  closeModal();
+  if(btn) switchTab('pd', btn);
+}
+document.getElementById('spoilerModal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+/* ===== 가이드 토글 ===== */
 function toggleGuide(btn){
   var arrow=btn.querySelector('.guide-arrow');
   var row=btn.closest('.section-h2-row');
@@ -1439,22 +1543,60 @@ function toggleGuide(btn){
     arrow.style.transform='rotate(0deg)';
   }
 }
-document.addEventListener('DOMContentLoaded',function(){
-  var details=document.querySelectorAll('.deep-dive');
-  details.forEach(function(d){
-    d.addEventListener('toggle',function(){
-      var cta=d.querySelector('.dd-cta');
-      if(!cta)return;
-      cta.textContent=d.open?'접기 ▲':'더 파헤치기 ▼';
-    });
-  });
-});
-function switchTab(id,btn){
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+id).classList.add('active');
-  btn.classList.add('active');
+
+/* ===== 작가의 시그니처 — 비밀번호 잠금 ===== */
+var _signatureUnlocked = false;
+var _signatureOpen = false;
+
+function handleSignatureClick(e){
+  e.preventDefault();
+  e.stopPropagation();
+  if(_signatureUnlocked){
+    _toggleSignatureContent();
+    return;
+  }
+  var prompt = document.getElementById('ddPwPrompt');
+  var isVisible = prompt.style.display !== 'none';
+  if(isVisible){
+    prompt.style.display = 'none';
+  } else {
+    prompt.style.display = 'flex';
+    setTimeout(function(){ document.getElementById('ddPwInput').focus(); }, 60);
+  }
 }
+
+function _toggleSignatureContent(){
+  var content = document.getElementById('signatureContent');
+  var cta = document.getElementById('signatureCta');
+  _signatureOpen = !_signatureOpen;
+  content.style.display = _signatureOpen ? 'block' : 'none';
+  cta.textContent = _signatureOpen ? '접기 ▲' : '더 파헤치기 ▼';
+}
+
+function checkSignaturePw(){
+  var val = document.getElementById('ddPwInput').value;
+  var errEl = document.getElementById('ddPwError');
+  if(val === '2008'){
+    _signatureUnlocked = true;
+    document.getElementById('ddPwPrompt').style.display = 'none';
+    errEl.classList.remove('show');
+    _signatureOpen = false;
+    _toggleSignatureContent();
+    document.getElementById('signatureCta').textContent = '접기 ▲';
+  } else {
+    errEl.classList.add('show');
+    document.getElementById('ddPwInput').value = '';
+    document.getElementById('ddPwInput').focus();
+  }
+}
+
+/* ===== DOMContentLoaded ===== */
+document.addEventListener('DOMContentLoaded',function(){
+  /* deep-dive toggle listener 제거 (이미 onclick으로 처리) */
+  /* 시그니처 content 초기 숨김 확인 */
+  var sc = document.getElementById('signatureContent');
+  if(sc) sc.style.display = 'none';
+});
 </script>
 </body>
 </html>
