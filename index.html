@@ -234,6 +234,12 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-r-status.wip{background:#fff9e0;color:#d4a017}
 .home-r-status.plan{background:var(--bg);color:var(--tx3);border:1px solid var(--bd)}
 .home-r-empty{padding:28px;text-align:center;font-size:11px;color:var(--tx3)}
+/* 홈 Project Report 카드 클릭 가능 */
+.home-proj-card{cursor:pointer;transition:transform .14s ease,box-shadow .14s ease;position:relative}
+.home-proj-card .proj-thumb-img{transition:transform .3s ease}
+.home-proj-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.10);z-index:2}
+.home-proj-card:hover .proj-thumb-img{transform:scale(1.04)}
+.home-proj-card:hover .proj-illust-overlay::after{content:"소개글 보기 →";position:absolute;top:10px;right:10px;font-size:9px;font-weight:600;letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.42);padding:3px 8px;border-radius:20px;backdrop-filter:blur(2px)}
 /* ── Right column ── */
 .home-right{display:flex;flex-direction:column;gap:14px}
 .home-mini-cal{background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
@@ -2720,6 +2726,9 @@ function render(){
     if(introFr) introFr.style.display = "none";
     if(bhsIntroFr) bhsIntroFr.style.display = "none";
     if(ct && S.view !== "charlist" && S.view !== "chardetail") ct.style.display = "";
+    // 소개글 화면을 벗어나면 암호 잠금 게이트도 반드시 닫는다
+    // (틀린 암호 입력 후 다른 화면으로 이동해도 게이트가 남던 버그 수정)
+    if(typeof _dollGateHide === "function") _dollGateHide();
   }
   if(S.view !== "archive"){
     if(archiveFr) archiveFr.style.display = "none";
@@ -3716,9 +3725,9 @@ function renderHome(){
                   const pct=total?Math.round(done/total*100):0;
                   const doneLen=(done/Math.max(total,1))*circ;
                   const illustSlot = p.illust
-                    ? `<img src="${p.illust}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
+                    ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
                     : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
-                  return `<div style="background:var(--sb);display:flex;flex-direction:column;">
+                  return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기" style="background:var(--sb);display:flex;flex-direction:column;">
                     <div style="position:relative;aspect-ratio:1/1;width:100%;overflow:hidden;border-bottom:1px solid var(--bd)">
                       ${illustSlot}
                       <div class="proj-illust-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(10px,2vw,20px) clamp(10px,2vw,20px) clamp(12px,2.2vw,22px)">
