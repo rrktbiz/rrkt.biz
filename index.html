@@ -42,6 +42,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tl-badge{font-size:10px;font-weight:600;padding:3px 7px;border-radius:4px;border:1px solid;transition:opacity .2s,background .2s;opacity:0;pointer-events:none}
 #tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
 #tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
+#tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.show{opacity:1}
 .tb-lang-btn{font-size:11px;font-weight:600;padding:4px 8px;border:1px solid var(--bd);border-radius:5px;background:transparent;color:var(--tx2);transition:all .12s}
 .tb-lang-btn:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
@@ -1896,21 +1897,39 @@ function setLang(lang){
     return;
   }
 
+  /* DeepL 설정 확인 */
+  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
+
+  /* ── 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리) ── */
+  if(S.view === 'content'){
+    _updateEpLangBtns(lang);
+    /* 일본어 선택 → 번역하지 않고 일본어 원본 파일을 본문에 직접 표시 (UI만 구글 번역) */
+    if(lang === 'ja'){
+      _tlShowJpOriginal();
+      if(_tlCache[lang]) _tlApply(_tlCache[lang]); /* UI 캐시 있으면 즉시 적용 */
+      _tlGoogle(lang);
+      return;
+    }
+    /* 그 외 외국어 → 일본어 파일을 원문으로 DeepL 번역(자동), UI도 구글 번역 */
+    if(cfg.enabled && cfg.proxyUrl){
+      _tlShowDeepLBtn(lang, cfg);
+      var _ck='dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+lang;
+      var _has=false; try{ _has=!!localStorage.getItem(_ck); }catch(e){}
+      /* 캐시 없으면 자동으로 한 번 번역 (소스=일본어 파일) */
+      if(!_has && typeof onDeepLBtnClick==='function') onDeepLBtnClick();
+      if(_tlCache[lang]) _tlApply(_tlCache[lang]); /* UI 캐시 즉시 적용 */
+      _tlGoogle(lang);
+    } else {
+      /* DeepL 미설정 → 순한국어 기준 구글 번역 */
+      _tlLoadPureKoAndGoogle(lang);
+    }
+    return;
+  }
+
   /* 캐시 히트 → 즉시 적용 (API 호출 없음) */
   if(_tlCache[lang]){
     _tlApply(_tlCache[lang]);
     _updateEpLangBtns(lang);
-    return;
-  }
-
-  /* DeepL 설정 확인 */
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-
-  /* 본문 뷰어 열려있으면 → DeepL 버튼 표시, 자동번역 안 함 */
-  if(S.view === 'content' && cfg.enabled && cfg.proxyUrl){
-    _updateEpLangBtns(lang);
-    _tlShowDeepLBtn(lang, cfg);
-    _tlGoogle(lang);
     return;
   }
 
@@ -2065,20 +2084,27 @@ function _tlDeepLEpisode(lang, cfg, onDone){
     }
   } catch(e){}
 
-  /* 번역 소스: 순KO 파일 우선 fetch → 없으면 _epOriginalLines(한본어) 폴백 */
+  /* 번역 소스 우선순위: 일본어 파일 → 순한국어 파일 → 화면 원본(한본어)
+     (일본어 번역본이 가장 정확하므로 모든 외국어 번역의 기준으로 사용) */
+  var jpPath     = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'jp');
   var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
 
   /* 로딩 표시 */
   el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>DeepL 번역 중…</span></div>';
 
-  var sourcePromise = fetchEpText(pureKoPath)
+  var sourcePromise = fetchEpText(jpPath)
     .then(function(t){ return t.split('\n'); })
     .catch(function(){
-      /* 순KO 파일 없음 → 한본어(_epOriginalLines) 사용 */
-      if(_epOriginalLines) return _epOriginalLines;
-      var textEl = document.querySelector('#postype-body .postype-text');
-      var raw = textEl ? textEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'') : '';
-      return raw.split('\n');
+      /* 일본어 파일 없음 → 순한국어 파일 폴백 */
+      return fetchEpText(pureKoPath)
+        .then(function(t){ return t.split('\n'); })
+        .catch(function(){
+          /* 둘 다 없음 → 화면 원본(한본어) 사용 */
+          if(_epOriginalLines) return _epOriginalLines;
+          var textEl = document.querySelector('#postype-body .postype-text');
+          var raw = textEl ? textEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'') : '';
+          return raw.split('\n');
+        });
     });
 
   sourcePromise.then(function(lines){
@@ -2133,12 +2159,17 @@ function _tlDeepLEpisode(lang, cfg, onDone){
   })
   .catch(function(err){
     clearTimeout(timer);
-    console.warn('[DeepL 본문] 실패:', err.message);
-    var src = _epOriginalLines ? _epOriginalLines.join('\n') : '';
-    var restoredHtml = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-    /* DeepL 실패 시 원본 복원 — notranslate 없이 두어 구글 폴백 번역 허용 */
-    el.innerHTML = '<div class="postype-text">'+restoredHtml+'</div>';
-    if(typeof _tlGoogle==='function' && _currentLang && _currentLang!=='ko') _tlGoogle(_currentLang);
+    console.warn('[DeepL 본문] 실패 → 순한국어 기준 구글 폴백:', err.message);
+    /* DeepL 실패 시: 순한국어 본문을 표시하고 구글이 번역하도록 (구글은 한국어 소스가 안정적)
+       순한국어 파일이 없으면 화면 원본(한본어) 사용 */
+    var koFallbackPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
+    fetchEpText(koFallbackPath).catch(function(){
+      return _epOriginalLines ? _epOriginalLines.join('\n') : '';
+    }).then(function(srcText){
+      var restoredHtml = (srcText||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+      el.innerHTML = '<div class="postype-text">'+restoredHtml+'</div>';
+      if(typeof _tlGoogle==='function' && _currentLang && _currentLang!=='ko') _tlGoogle(_currentLang);
+    });
   });
 
   }); /* sourcePromise.then 닫기 */
@@ -2148,7 +2179,7 @@ function _tlDeepLEpisode(lang, cfg, onDone){
 function _tlBadge(engine){
   var el=document.getElementById('tl-badge');if(!el)return;
   el.className=engine+' show';
-  el.textContent=engine==='deepl'?'DeepL':'Google';
+  el.textContent = engine==='deepl' ? 'DeepL' : (engine==='jp' ? '日本語版' : 'Google');
 }
 function _tlBadgeReset(){
   var el=document.getElementById('tl-badge');if(!el)return;
@@ -2178,6 +2209,52 @@ function _tlGoogle(lang){
   document.cookie='googtrans=/ko/'+lang+';path=/';
   document.cookie='googtrans=/ko/'+lang+';path=/;domain=.'+location.hostname;
   location.reload();
+}
+
+/* ── 본문 DeepL 버튼 숨김 ── */
+function _tlHideDeepLBtns(){
+  var b=document.getElementById('deepl-translate-btn');  if(b) b.style.display='none';
+  var r=document.getElementById('deepl-retranslate-btn');if(r) r.style.display='none';
+}
+
+/* ── 일본어 선택: 번역하지 않고 일본어 원본 파일을 본문에 직접 표시 ── */
+function _tlShowJpOriginal(){
+  var el = document.getElementById('postype-body');
+  if(!el) return;
+  _tlHideDeepLBtns();
+  var jpPath     = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'jp');
+  var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
+  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>日本語版を読み込み中…</span></div>';
+  fetchEpText(jpPath).then(function(text){
+    var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    /* 일본어 원본은 그대로 — 구글이 다시 번역하지 않도록 notranslate */
+    el.innerHTML = '<div class="postype-text notranslate">'+html+'</div>';
+    _tlBadge('jp');
+  }).catch(function(){
+    /* 일본어 파일 없음 → 순한국어 표시 후 구글이 일본어로 번역 (notranslate 없음) */
+    fetchEpText(pureKoPath).then(function(text){
+      var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+      el.innerHTML = '<div class="postype-text">'+html+'</div>';
+      if(typeof _tlGoogle==='function') _tlGoogle('ja');
+    }).catch(function(){
+      /* 둘 다 없음 → 화면 원본 유지, 구글 번역 시도 */
+      if(typeof _tlGoogle==='function') _tlGoogle('ja');
+    });
+  });
+}
+
+/* ── DeepL 미사용 시: 순한국어 본문을 표시하고 구글 번역 (한본어 대신 순한국어 기준) ── */
+function _tlLoadPureKoAndGoogle(lang){
+  var el = document.getElementById('postype-body');
+  if(!el){ if(typeof _tlGoogle==='function') _tlGoogle(lang); return; }
+  var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
+  fetchEpText(pureKoPath).then(function(text){
+    var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    el.innerHTML = '<div class="postype-text">'+html+'</div>';
+    if(typeof _tlGoogle==='function') _tlGoogle(lang);
+  }).catch(function(){
+    if(typeof _tlGoogle==='function') _tlGoogle(lang);
+  });
 }
 
 /* ── TOPBAR LANGUAGE DROPDOWN ── */
