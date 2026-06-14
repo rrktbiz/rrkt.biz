@@ -1902,27 +1902,9 @@ function setLang(lang){
 
   /* ── 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리) ── */
   if(S.view === 'content'){
-    _updateEpLangBtns(lang);
-    /* 일본어 선택 → 번역하지 않고 일본어 원본 파일을 본문에 직접 표시 (UI만 구글 번역) */
-    if(lang === 'ja'){
-      _tlShowJpOriginal();
-      if(_tlCache[lang]) _tlApply(_tlCache[lang]); /* UI 캐시 있으면 즉시 적용 */
-      _tlGoogle(lang);
-      return;
-    }
-    /* 그 외 외국어 → 일본어 파일을 원문으로 DeepL 번역(자동), UI도 구글 번역 */
-    if(cfg.enabled && cfg.proxyUrl){
-      _tlShowDeepLBtn(lang, cfg);
-      var _ck='dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+lang;
-      var _has=false; try{ _has=!!localStorage.getItem(_ck); }catch(e){}
-      /* 캐시 없으면 자동으로 한 번 번역 (소스=일본어 파일) */
-      if(!_has && typeof onDeepLBtnClick==='function') onDeepLBtnClick();
-      if(_tlCache[lang]) _tlApply(_tlCache[lang]); /* UI 캐시 즉시 적용 */
-      _tlGoogle(lang);
-    } else {
-      /* DeepL 미설정 → 순한국어 기준 구글 번역 */
-      _tlLoadPureKoAndGoogle(lang);
-    }
+    _renderEpForLang(lang);                          /* 본문: 언어 전용 렌더 */
+    if(_tlCache[lang]) _tlApply(_tlCache[lang]);     /* UI 캐시 있으면 즉시 적용 */
+    _tlGoogle(lang);                                 /* UI(메뉴 등) 구글 번역 */
     return;
   }
 
@@ -2189,13 +2171,13 @@ function _tlBadgeReset(){
   _updateEpLangBtns('ko'); /* 버튼 복원 */
 }
 
-/* ── 번역 모드에 따라 에피소드 언어 버튼 표시 제어 ── */
+/* ── 번역 모드에 따라 에피소드 언어 버튼 표시 제어 ──
+   번역 중에는 소스 파일 선택 버튼(한본어/순KO/JA)을 모두 숨김 (번역이 소스 선택을 대체) */
 function _updateEpLangBtns(lang){
-  var btnKo  = document.querySelector('.ep-lang-btn[data-lang="ko"]');
-  var btnJa  = document.querySelector('.ep-lang-btn[data-lang="jp"]');
   var isTranslating = lang && lang !== 'ko';
-  if(btnKo) btnKo.style.display = isTranslating ? 'none' : '';
-  if(btnJa) btnJa.style.display = isTranslating ? 'none' : '';
+  document.querySelectorAll('.ep-lang-btn').forEach(function(b){
+    b.style.display = isTranslating ? 'none' : '';
+  });
 }
 function _tlGoogle(lang){
   _tlBadge('google');
@@ -4464,9 +4446,36 @@ function setEpLang(lang){
   _loadPostypeContent(epPath, proj.acc);
 }
 
+/* ── 현재 번역 언어에 맞춰 에피소드 본문 렌더 (단일 진입점) ──
+   ja → 일본어 원본 파일 직접 표시 / 그 외 외국어 → 일본어 소스 DeepL 번역(실패 시 순한국어→구글) */
+function _renderEpForLang(lang){
+  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
+  _updateEpLangBtns(lang);
+  if(!lang || lang === 'ko') return; /* 호출측에서 ko는 일반 로드 처리 */
+  if(lang === 'ja'){ _tlShowJpOriginal(); return; }
+  if(cfg.enabled && cfg.proxyUrl){
+    _tlShowDeepLBtn(lang, cfg);
+    var ck = 'dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+lang;
+    var has=false; try{ has=!!localStorage.getItem(ck); }catch(e){}
+    /* 캐시 없으면 자동으로 한 번 DeepL 번역 (소스=일본어 파일) */
+    if(!has && typeof onDeepLBtnClick==='function') onDeepLBtnClick();
+  } else {
+    /* DeepL 미설정 → 순한국어 기준 구글 번역 */
+    _tlLoadPureKoAndGoogle(lang);
+  }
+}
+
 async function _loadPostypeContent(textId, acc){
   const el = document.getElementById("postype-body");
   if(!el) return;
+  /* 전역 번역(구글 언어)이 활성화된 채 본문에 진입/이동한 경우:
+     한본어를 그대로 띄워 구글이 잘못 번역하는 것을 막고, 언어 전용 렌더로 위임 */
+  if(_currentLang && _currentLang !== 'ko'){
+    _renderEpForLang(_currentLang);
+    return;
+  }
+  /* ko(번역 안 함): DeepL 버튼 숨기고 선택된 소스 파일 그대로 표시 */
+  _tlHideDeepLBtns();
   if(!textId){
     el.innerHTML = '<div class="postype-hint">본문 파일이 없습니다.<br><small style="color:#bbb">레포의 <code>texts/</code> 폴더에 해당 txt 파일을 올려주세요.</small></div>';
     return;
@@ -4474,16 +4483,7 @@ async function _loadPostypeContent(textId, acc){
   try{
     const text = await fetchEpText(textId);
     _epOriginalLines = text.split('\n'); /* ← 원본 줄 배열 저장 */
-    /* notranslate 제거 → 구글 번역이 본문도 번역하도록 허용 (DeepL 결과물에만 notranslate 유지) */
     el.innerHTML = `<div class="postype-text">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>`;
-    /* 언어 선택 상태면 DeepL 버튼 표시 (자동번역 아님) */
-    if(_currentLang && _currentLang !== 'ko'){
-      var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-      if(cfg.enabled && cfg.proxyUrl){
-        _updateEpLangBtns(_currentLang);
-        _tlShowDeepLBtn(_currentLang, cfg);
-      }
-    }
   } catch(err){
     el.innerHTML = `<div class="postype-error"><strong>본문 파일을 찾을 수 없습니다</strong><br><small style="color:#a03030">${textId}</small><br><pre>${err.message}</pre></div>`;
   }
@@ -4996,6 +4996,17 @@ window.addEventListener('popstate', function(){
   closeMobMenu();
   render();
 });
+
+// ── 구글 번역 쿠키가 남아 있으면 현재 언어 복원 ──
+// (페이지 리로드/새로고침 후에도 본문이 한본어를 구글로 잘못 번역하지 않고 언어 전용 렌더를 타도록)
+(function(){
+  try{
+    var m = document.cookie.match(/googtrans=\/[^/]+\/([^;]+)/);
+    if(m && m[1] && decodeURIComponent(m[1]) !== 'ko'){
+      _currentLang = decodeURIComponent(m[1]);
+    }
+  }catch(e){}
+})();
 
 // ── 시작: URL 해시가 있으면 해당 상태로 복원, 없으면 홈 ──
 if(location.hash && location.hash.length > 1){
