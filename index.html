@@ -1165,7 +1165,8 @@ body{top:0!important}
     <div class="dig-title">비즈오씨돌 프로젝트 소개</div>
     <div class="dig-sub">아직 오픈 전인 소개글이에요.<br>암호를 입력하면 볼 수 있어요.</div>
     <input id="doll-gate-input" class="dig-input" type="password" placeholder="암호 입력" autocomplete="off"
-      onkeydown="if(event.key==='Enter')unlockDollIntro()">
+      oninput="var m=document.getElementById('doll-gate-msg');if(m)m.textContent='';this.classList.remove('err');"
+      onkeydown="if(event.key==='Enter'&&!event.isComposing&&event.keyCode!==229)unlockDollIntro()">
     <p id="doll-gate-msg" class="dig-msg"></p>
     <button class="dig-btn" onclick="unlockDollIntro()">열기</button>
   </div>
@@ -5182,8 +5183,14 @@ function _dollGateHide(){
 window.unlockDollIntro = function(){
   var inp = document.getElementById('doll-gate-input');
   var msg = document.getElementById('doll-gate-msg');
-  var val = inp ? inp.value.trim() : '';
-  if(val === DOLL_GATE_PW){
+  var raw = inp ? inp.value : '';
+  /* 한글 자모 분해(NFD) 대응: NFC로 정규화 후 비교 */
+  var val = (raw.normalize ? raw.normalize('NFC') : raw).trim();
+  var pw  = DOLL_GATE_PW.normalize ? DOLL_GATE_PW.normalize('NFC') : DOLL_GATE_PW;
+  /* IME 입력이 까다로운 경우를 위해 숫자만으로도 허용 (예: '2050') */
+  var valDigits = val.replace(/[^0-9]/g,'');
+  var pwDigits  = pw.replace(/[^0-9]/g,'');
+  if(val === pw || (pwDigits && valDigits === pwDigits)){
     try { sessionStorage.setItem('doll_intro_unlocked','1'); } catch(e){}
     if(msg) msg.textContent='';
     _dollGateRefresh();
