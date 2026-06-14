@@ -1025,6 +1025,47 @@ body{top:0!important}
 .doll-divider::before,.doll-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
 @media(max-width:480px){.doll-reader-wrap{padding:16px 18px 100px;margin:0}.doll-line-text{font-size:15px;line-height:2}}
 @media(min-width:769px){.doll-line-text{font-size:17px}.doll-reader-wrap{padding:40px 48px 100px}}
+/* ── biz-OC-doll 소개글 암호 잠금 게이트 ── */
+#doll-intro-frame.locked{filter:blur(11px) saturate(.85);pointer-events:none;transition:filter .35s ease}
+#doll-intro-gate{
+  display:none;position:fixed;top:48px;left:0;right:0;bottom:0;z-index:65;
+  align-items:center;justify-content:center;padding:24px;
+  background:linear-gradient(160deg,rgba(238,246,250,.78),rgba(255,255,255,.62));
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  font-family:var(--fn);
+}
+#doll-intro-gate.show{display:flex}
+.dig-card{
+  width:100%;max-width:340px;background:#fff;border:1px solid #cce4ee;
+  border-radius:18px;padding:30px 26px 26px;text-align:center;
+  box-shadow:0 14px 40px rgba(120,174,196,.28),0 0 0 4px rgba(184,217,232,.18);
+}
+.dig-badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;
+  letter-spacing:1.6px;text-transform:uppercase;color:#7aaec4;
+  background:#eef6fa;border:1px solid #cce4ee;border-radius:20px;padding:4px 12px;margin-bottom:16px;
+}
+.dig-lock{
+  width:56px;height:56px;margin:0 auto 14px;border-radius:50%;
+  background:#eef6fa;border:1.5px solid #b8d9e8;display:flex;align-items:center;justify-content:center;color:#7aaec4;
+}
+.dig-title{font-size:16px;font-weight:700;color:var(--tx);letter-spacing:-.02em;margin-bottom:6px}
+.dig-sub{font-size:12px;color:var(--tx3);line-height:1.7;margin-bottom:18px}
+.dig-input{
+  width:100%;height:42px;border:1.5px solid #cce4ee;border-radius:10px;
+  padding:0 14px;font-size:14px;font-family:var(--fn);color:var(--tx);outline:none;
+  text-align:center;letter-spacing:1px;transition:border-color .12s;
+}
+.dig-input:focus{border-color:#7aaec4}
+.dig-input.err{border-color:#e09aa6;animation:digShake .3s}
+@keyframes digShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.dig-msg{min-height:16px;font-size:11px;color:#d06b7a;margin:8px 0 0;text-align:center}
+.dig-btn{
+  width:100%;height:42px;margin-top:14px;border:none;border-radius:10px;
+  background:#7aaec4;color:#fff;font-size:14px;font-weight:700;font-family:var(--fn);
+  cursor:pointer;transition:background .12s;
+}
+.dig-btn:hover{background:#6a9fb6}
 </style>
 </head>
 <body>
@@ -1114,7 +1155,21 @@ body{top:0!important}
   style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
 ></iframe>
 
-<!-- 블러드하이스쿨 인트로 전용 iframe -->
+<!-- biz-OC-doll 소개글 암호 잠금 게이트 -->
+<div id="doll-intro-gate" aria-hidden="true">
+  <div class="dig-card">
+    <span class="dig-badge">&#128274; 오픈 전 · LOCKED</span>
+    <div class="dig-lock">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="dig-title">비즈오씨돌 프로젝트 소개</div>
+    <div class="dig-sub">아직 오픈 전인 소개글이에요.<br>암호를 입력하면 볼 수 있어요.</div>
+    <input id="doll-gate-input" class="dig-input" type="password" placeholder="암호 입력" autocomplete="off"
+      onkeydown="if(event.key==='Enter')unlockDollIntro()">
+    <p id="doll-gate-msg" class="dig-msg"></p>
+    <button class="dig-btn" onclick="unlockDollIntro()">열기</button>
+  </div>
+</div>
 <iframe
   id="bhs-intro-frame"
   src="Blood_High_School/bhs_intro.html"
@@ -1193,12 +1248,31 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
  */
 async function fetchEpText(url){
   if(!url) throw new Error("URL 없음");
-  const res = await fetch(url);
-  if(!res.ok){
-    if(res.status === 404) throw new Error(`파일을 찾을 수 없음 (404)\nURL: ${url}`);
+  /* 후보 경로 생성: 에피소드 번호 zero-padding 유무를 모두 시도.
+     (볼륨별 파일명 규칙이 달라도 대응 — 예: novel-1-01 vs novel-2-1) */
+  var suffixRe = /-(\d+)(_pure_ko\.txt|_jp\.txt|\.txt)$/;
+  var candidates = [url];
+  var m = url.match(suffixRe);
+  if(m){
+    var n = parseInt(m[1], 10);
+    [String(n).padStart(2,'0'), String(n)].forEach(function(variant){
+      var alt = url.replace(suffixRe, '-'+variant+'$2');
+      if(candidates.indexOf(alt) === -1) candidates.push(alt);
+    });
+  }
+  var lastUrl = url, lastStatus = 0;
+  for(var i=0; i<candidates.length; i++){
+    lastUrl = candidates[i];
+    var res;
+    try { res = await fetch(candidates[i]); }
+    catch(netErr){ continue; } /* 네트워크 오류 → 다음 후보 */
+    if(res.ok) return await res.text();
+    lastStatus = res.status;
+    if(res.status === 404) continue; /* 없으면 다음 후보 시도 */
     throw new Error(`불러오기 실패 (HTTP ${res.status})`);
   }
-  return await res.text();
+  if(lastStatus === 404) throw new Error(`파일을 찾을 수 없음 (404)\nURL: ${lastUrl}`);
+  throw new Error(`불러오기 실패`);
 }
 
 /**
@@ -1324,25 +1398,25 @@ const VOLUMES = {
      coverId:"Blood_High_School/bhs_novel_prat2_cover.png",
      synopsis:"류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.",
      episodes:[
-      {id:1,  title:"1화",  date:null, status:"예정", textId:null},
-      {id:2,  title:"2화",  date:null, status:"예정", textId:null},
-      {id:3,  title:"3화",  date:null, status:"예정", textId:null},
-      {id:4,  title:"4화",  date:null, status:"예정", textId:null},
-      {id:5,  title:"5화",  date:null, status:"예정", textId:null},
-      {id:6,  title:"6화",  date:null, status:"예정", textId:null},
-      {id:7,  title:"7화",  date:null, status:"예정", textId:null},
-      {id:8,  title:"8화",  date:null, status:"예정", textId:null},
-      {id:9,  title:"9화",  date:null, status:"예정", textId:null},
-      {id:10, title:"10화", date:null, status:"예정", textId:null},
-      {id:11, title:"11화", date:null, status:"예정", textId:null},
-      {id:12, title:"12화", date:null, status:"예정", textId:null},
+      {id:1,  title:"류오가편 1화",  date:null, status:"예정", textId:null},
+      {id:2,  title:"류오가편 2화",  date:null, status:"예정", textId:null},
+      {id:3,  title:"류오가편 3화",  date:null, status:"예정", textId:null},
+      {id:4,  title:"류오가편 4화",  date:null, status:"예정", textId:null},
+      {id:5,  title:"류오가편 5화",  date:null, status:"예정", textId:null},
+      {id:6,  title:"류오가편 6화",  date:null, status:"예정", textId:null},
+      {id:7,  title:"류오가편 7화",  date:null, status:"예정", textId:null},
+      {id:8,  title:"류오가편 8화",  date:null, status:"예정", textId:null},
+      {id:9,  title:"류오가편 9화",  date:null, status:"예정", textId:null},
+      {id:10, title:"류오가편 10화", date:null, status:"예정", textId:null},
+      {id:11, title:"류오가편 11화", date:null, status:"예정", textId:null},
+      {id:12, title:"류오가편 12화", date:null, status:"예정", textId:null},
       {id:13, title:"번외 1화", date:null, status:"예정", textId:null},
       {id:14, title:"번외 2화", date:null, status:"예정", textId:null},
       {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
     ]},
     {id:"novel-3", num:3, label:"[웹소설]블러드하이스쿨 3부", sub:"3부", grad:"150deg,#1a0000,#700000,#aa2020", type:"웹소설", tags:["판타지","액션"],
      coverId:"Blood_High_School/bhs_novel_prat3_cover.png",
-     synopsis:"이제 순진하지만은 않은 쿠로. -새로운 종족이 나타난다.",
+     synopsis:"새로운 종족이 나타난다.",
      episodes:[
       {id:1,  title:"1화",  date:null, status:"예정", textId:null},
       {id:2,  title:"2화",  date:null, status:"예정", textId:null},
@@ -2061,7 +2135,9 @@ function _tlDeepLEpisode(lang, cfg, onDone){
     console.warn('[DeepL 본문] 실패:', err.message);
     var src = _epOriginalLines ? _epOriginalLines.join('\n') : '';
     var restoredHtml = src.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-    el.innerHTML = '<div class="postype-text notranslate">'+restoredHtml+'</div>';
+    /* DeepL 실패 시 원본 복원 — notranslate 없이 두어 구글 폴백 번역 허용 */
+    el.innerHTML = '<div class="postype-text">'+restoredHtml+'</div>';
+    if(typeof _tlGoogle==='function' && _currentLang && _currentLang!=='ko') _tlGoogle(_currentLang);
   });
 
   }); /* sourcePromise.then 닫기 */
@@ -3957,10 +4033,12 @@ function renderIntro(){
     document.getElementById("content").style.display="none";
     var fr=document.getElementById("doll-intro-frame");
     if(fr) fr.style.display="block";
+    _dollGateRefresh(); /* 잠금 상태면 블러+게이트, 해제됐으면 그대로 노출 */
     return;
   }
   if(proj.id==="blood-highschool"){
     // bhs_intro.html 완전 독립 iframe으로 운영
+    _dollGateHide();
     var _doll=document.getElementById("doll-intro-frame");
     if(_doll) _doll.style.display="none";
     document.getElementById("content").style.display="none";
@@ -3969,6 +4047,7 @@ function renderIntro(){
     return;
   }
   // 그 외 프로젝트: 두 iframe 모두 숨기고 #content 복원
+  _dollGateHide();
   var _ifr=document.getElementById("doll-intro-frame");
   if(_ifr) _ifr.style.display="none";
   var _bhs=document.getElementById("bhs-intro-frame");
@@ -4317,7 +4396,8 @@ async function _loadPostypeContent(textId, acc){
   try{
     const text = await fetchEpText(textId);
     _epOriginalLines = text.split('\n'); /* ← 원본 줄 배열 저장 */
-    el.innerHTML = `<div class="postype-text notranslate">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>`;
+    /* notranslate 제거 → 구글 번역이 본문도 번역하도록 허용 (DeepL 결과물에만 notranslate 유지) */
+    el.innerHTML = `<div class="postype-text">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>`;
     /* 언어 선택 상태면 DeepL 버튼 표시 (자동번역 아님) */
     if(_currentLang && _currentLang !== 'ko'){
       var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
@@ -5071,6 +5151,46 @@ window.openVoteOverlay = function(){
 window.closeVoteOverlay = function(){
   if(_votePopup && !_votePopup.closed) _votePopup.close();
   _votePopup = null;
+};
+
+/* ── biz-OC-doll 소개글 암호 잠금 ── */
+var DOLL_GATE_PW = '2050년';
+function _dollGateUnlocked(){
+  try { return sessionStorage.getItem('doll_intro_unlocked') === '1'; } catch(e){ return false; }
+}
+function _dollGateRefresh(){
+  var fr = document.getElementById('doll-intro-frame');
+  var gate = document.getElementById('doll-intro-gate');
+  if(!fr || !gate) return;
+  if(_dollGateUnlocked()){
+    fr.classList.remove('locked');
+    gate.classList.remove('show');
+    gate.setAttribute('aria-hidden','true');
+  } else {
+    fr.classList.add('locked');
+    gate.classList.add('show');
+    gate.setAttribute('aria-hidden','false');
+    var msg = document.getElementById('doll-gate-msg'); if(msg) msg.textContent='';
+    var inp = document.getElementById('doll-gate-input');
+    if(inp){ inp.value=''; setTimeout(function(){ try{inp.focus();}catch(e){} }, 60); }
+  }
+}
+function _dollGateHide(){
+  var gate = document.getElementById('doll-intro-gate');
+  if(gate){ gate.classList.remove('show'); gate.setAttribute('aria-hidden','true'); }
+}
+window.unlockDollIntro = function(){
+  var inp = document.getElementById('doll-gate-input');
+  var msg = document.getElementById('doll-gate-msg');
+  var val = inp ? inp.value.trim() : '';
+  if(val === DOLL_GATE_PW){
+    try { sessionStorage.setItem('doll_intro_unlocked','1'); } catch(e){}
+    if(msg) msg.textContent='';
+    _dollGateRefresh();
+  } else {
+    if(msg) msg.textContent='암호가 올바르지 않아요.';
+    if(inp){ inp.classList.add('err'); setTimeout(function(){ inp.classList.remove('err'); }, 350); try{inp.select();}catch(e){} }
+  }
 };
 
 /* ── 아카이브 / 이벤트 뷰 전환 ── */
