@@ -820,10 +820,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
       </div>
       <div class="hero-cta">
         <div class="hero-cta-label">작품 보러가기</div>
-        <a class="cta-btn cta-1" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-1">
+        <a class="cta-btn cta-1" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-1" onclick="return bhsGoNovel(event,'novel-1')">
           <span class="cta-part">PART 01</span><span class="cta-go">1부 &rarr;</span>
         </a>
-        <a class="cta-btn cta-2" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-2">
+        <a class="cta-btn cta-2" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-2" onclick="return bhsGoNovel(event,'novel-2')">
           <span class="cta-part">PART 02</span><span class="cta-go">2부 &rarr;</span>
         </a>
       </div>
@@ -948,10 +948,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
       <div class="v-cta">
         <div class="v-cta-label">지금 바로 작품 보러가기</div>
         <div class="v-cta-btns">
-          <a class="cta-btn cta-1" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-1">
+          <a class="cta-btn cta-1" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-1" onclick="return bhsGoNovel(event,'novel-1')">
             <span class="cta-part">PART 01</span><span class="cta-go">1부 &rarr;</span>
           </a>
-          <a class="cta-btn cta-2" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-2">
+          <a class="cta-btn cta-2" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-2" onclick="return bhsGoNovel(event,'novel-2')">
             <span class="cta-part">PART 02</span><span class="cta-go">2부 &rarr;</span>
           </a>
         </div>
@@ -1717,6 +1717,42 @@ document.addEventListener('DOMContentLoaded',function(){
   var sc = document.getElementById('signatureContent');
   if(sc) sc.style.display = 'none';
 });
+
+/* ============================================================
+   작품 보러가기 CTA — 상단바 중복 버그 수정
+   이 파일은 부모(index.html) 안의 iframe으로 떠 있다.
+   링크를 그냥 풀 URL로 열면 iframe '안에서' 사이트 전체가
+   다시 로드되어 상단바가 두 개로 겹친다.
+   → 클릭 시 부모 창을 직접 라우팅하고 iframe은 부모 render()가
+      알아서 숨긴다. (부모와 same-origin일 때)
+   → 단독 열람/타 도메인이면 최상위 창을 풀 URL로 이동(fallback).
+   ============================================================ */
+function bhsGoNovel(ev, vol){
+  var hash = '#proj/blood-highschool/eps/' + vol;
+  // 1) iframe 안 + 부모가 same-origin SPA → 부모를 직접 라우팅
+  try {
+    var top = window.top;
+    if (top && top !== window.self && typeof top.applyHash === 'function') {
+      if (ev && ev.preventDefault) ev.preventDefault();
+      try {
+        if (top.history && top.history.pushState) top.history.pushState(null, '', hash);
+        else top.location.hash = hash;
+      } catch(e){ top.location.hash = hash; }
+      top.applyHash(hash);
+      if (typeof top.render === 'function') top.render();
+      try { top.scrollTo(0, 0); } catch(e){}
+      return false;
+    }
+  } catch(e){ /* cross-origin 접근 차단 → 아래 fallback */ }
+  // 2) 단독 실행 / 타 도메인 → 최상위 창을 풀 URL로 이동
+  try {
+    if (ev && ev.preventDefault) ev.preventDefault();
+    window.top.location.href = 'https://rrktbiz.github.io/rrkt.biz/' + hash;
+    return false;
+  } catch(e){
+    return true; // 최후 fallback: a 태그 기본 동작
+  }
+}
 </script>
 </body>
 </html>
