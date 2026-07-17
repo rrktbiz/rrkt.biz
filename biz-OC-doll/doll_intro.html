@@ -119,6 +119,24 @@ html, body {
 .dash-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .dash-list li { font-size: 15px; color: var(--gray-600); line-height: 1.55; }
 
+/* WORLD LINK — 세계관으로 넘어가는 진입점. 버튼이 아니라 문장으로, 톤 전환을 예고 */
+.world-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--blue);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  padding-left: 16px;
+  border-left: 2px solid rgba(90,144,176,0.35);
+  transition: gap 0.2s ease, border-color 0.2s ease;
+}
+.world-link:hover { gap: 11px; border-left-color: var(--blue); }
+.world-link svg { flex-shrink: 0; transition: transform 0.2s ease; }
+.world-link:hover svg { transform: translateX(2px); }
+
 /* GUIDE */
 .guide-pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--gray-200); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
 .guide-cell { background: var(--white); padding: 24px; }
@@ -160,6 +178,78 @@ html, body {
 .creator-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
 .creator-label-ko { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 14px; }
 .creator-text { font-size: 15px; color: var(--gray-600); line-height: 1.8; font-weight: 400; }
+
+/* WORLD OVERLAY — 세계관을 별도 레이어(풀스크린)로 띄우는 컨테이너 */
+.world-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: #fff;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.34,1.2,0.64,1);
+}
+.world-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  border: none;
+  font-size: 18px;
+  color: var(--gray-600);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.world-close:hover { background: var(--gray-200); }
+
+/* WORLDVIEW — 인트로와 의도적으로 다른 톤. 여백 넓고, 문장 짧고, 장식 최소화 */
+.world-sec {
+  padding: 96px 24px 100px;
+  background:
+    radial-gradient(ellipse 500px 300px at 15% 10%, rgba(185,210,230,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 500px 300px at 85% 90%, rgba(210,195,230,0.16) 0%, transparent 100%),
+    linear-gradient(180deg, #fbfcfd 0%, #f6f3f8 50%, #fbfcfd 100%);
+  min-height: 100vh;
+}
+.world-inner { max-width: 560px; margin: 0 auto; }
+.world-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; text-align: center; margin-bottom: 20px; }
+.world-title { font-family: 'Josefin Sans', sans-serif; font-weight: 100; font-size: clamp(22px, 4vw, 30px); letter-spacing: 0.18em; text-align: center; color: #4a5560; margin-bottom: 10px; }
+.world-tagline { text-align: center; font-size: 15px; color: var(--gray-600); font-style: italic; line-height: 1.8; margin-bottom: 72px; }
+.world-block { margin-bottom: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(90,144,176,0.14); }
+.world-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.world-block-title { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; color: var(--blue); text-transform: uppercase; text-align: center; margin-bottom: 18px; }
+.world-block-body { font-size: 16px; color: var(--gray-600); line-height: 2; text-align: center; font-weight: 300; }
+.world-image-slot {
+  margin: 28px auto 0;
+  max-width: 460px;
+  min-height: 180px;
+  border: 1px dashed rgba(90,144,176,0.35);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+  background: rgba(255,255,255,0.4);
+}
+.world-cta { text-align: center; margin-top: 8px; }
+.world-cta-text { font-size: 17px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.02em; }
+
+@media (max-width: 580px) {
+  .world-sec { padding: 64px 20px 72px; }
+  .world-block { margin-bottom: 44px; padding-bottom: 44px; }
+  .world-tagline { margin-bottom: 52px; }
+}
 
 /* MODAL */
 #biz-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
@@ -255,7 +345,7 @@ html, body {
   <div class="hero-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL</div>
   <div class="hero-sub">
     <span class="hero-hashtag">#비즈돌</span>
-    <span class="hero-hashtag">#캐릭터배우</span>
+    <span class="hero-hashtag">#내오씨돌</span>
     <span class="hero-hashtag">#BOD</span>
     <span class="hero-hashtag">#자캐</span>
     <span class="hero-hashtag">#OC</span>
@@ -293,27 +383,32 @@ html, body {
       <div class="concept-item">
         <div class="concept-num">01 · WHAT</div>
         <div class="concept-content">
-          <div class="concept-title">"배우"로 정의된 인형</div>
-          <div class="concept-body">한 작품의 캐릭터가 아닙니다. 웹툰, 게임, 일러스트, 소설 — 어떤 무대든 오르고, 작품마다 새로운 역할을 맡습니다. 거쳐간 작품이 쌓일수록, 이 인형의 존재는 더 깊어집니다.</div>
+          <div class="concept-title">코드를 가진 오씨돌, 당신과 만나다</div>
+          <div class="concept-body">이름도 성격도 말투도 아직 없습니다. 주어진 건 코드 하나뿐. 이 오씨돌을 완성하는 건 당신입니다.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="concept-num">02 · HOW</div>
         <div class="concept-content">
-          <div class="concept-title">공식은 뼈대만 세운다</div>
-          <div class="concept-body">공식은 기본값을 제공하고, 창작자가 어떻게 활용하느냐에 따라 캐릭터만의 결이 자연스럽게 생깁니다. 수많은 손을 거치며, 이야기는 계속 이어집니다.</div>
+          <div class="concept-title">다르게 만나면, 다른 오씨돌이 된다</div>
+          <div class="concept-body">같은 코드를 가진 오씨돌이 다른 사람을 만난다면, 전혀 다른 오씨돌이 됩니다. 백 명이 만나면 백 개의 오씨돌이 태어나는 셈입니다. 정답은 없습니다. 이름을 지어주세요. 성격을 정해주세요. 어떤 이야기 속에 데려다 놓아도, 무엇으로 만들어도 좋습니다.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="concept-num">03 · YOUR MOVE</div>
         <div class="concept-content">
-          <div class="concept-title">당신의 창작이 이 인형의 이력이 된다</div>
-          <div class="concept-body">누구나 이 인형을 쓸 수 있습니다. 웹툰, 게임, 굿즈, 소설 — 형태는 상관없습니다. 당신이 만드는 작품이 이 캐릭터의 새로운 커리어가 됩니다. 그 권리는 전부 당신의 것입니다.</div>
+          <div class="concept-title">이름을 붙이는 순간, 당신의 것</div>
+          <div class="concept-body">당신이 이름 붙인 순간부터, 이 오씨돌은 당신의 것입니다. 그림으로 그리든, 글로 쓰든, 무엇으로 만들든 그 권리는 전부 당신에게 있습니다.</div>
         </div>
       </div>
     </div>
 
-    <p class="intent-quote">이 인형들은 당신이 부를 때, 그 무대 위에 섭니다.</p>
+    <p class="intent-quote">코드로 태어난 오씨돌이, 당신이 부르는 이름으로 완성됩니다.</p>
+
+    <a class="world-link" href="#worldview" onclick="openWorldOverlay();return false;">
+      오씨돌은, 어디서 왔을까?
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
   </div>
 
   <!-- 가이드라인 -->
@@ -368,11 +463,11 @@ html, body {
       <div class="restrict-item">
         <div class="restrict-num">2</div>
         <div>
-          <div class="restrict-title">종교적 오용 방지 <span style="font-weight:400;font-size:13px;color:var(--gray-400)">(배우와 홍보물 구분)</span></div>
+          <div class="restrict-title">종교적 오용 방지 <span style="font-weight:400;font-size:13px;color:var(--gray-400)">(창작물과 홍보물 구분)</span></div>
           <div class="restrict-body" style="margin-top:8px">
             <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
               <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#e8f5e9;color:#2e7d32;flex-shrink:0;margin-top:2px">O 허용</span>
-              <span>캐릭터가 각종 콘텐츠(웹소설, 웹툰, 일러스트, 영상, 게임 등) 및 미디어 서사 내에서 종교적 설정(사제, 수녀, 불교 신자 등)을 연기하거나 관련 복식을 착용하는 창작 행위. 그로 인한 3차 창작도 허용합니다.</span>
+              <span>캐릭터가 각종 콘텐츠(웹소설, 웹툰, 일러스트, 영상, 게임 등) 및 미디어 서사 내에서 종교적 설정(사제, 수녀, 불교 신자 등)으로 등장하거나 관련 복식을 착용하는 창작 행위. 그로 인한 3차 창작도 허용합니다.</span>
             </div>
             <div style="display:flex;gap:8px;align-items:flex-start">
               <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#fff0f0;color:#c62828;flex-shrink:0;margin-top:2px">X 금지</span>
@@ -427,6 +522,43 @@ html, body {
 
 </div>
 
+<!-- 세계관 (풀스크린 오버레이) -->
+<div class="world-overlay" id="world-overlay">
+  <button class="world-close" onclick="closeWorldOverlay()">×</button>
+  <div class="world-sec" id="worldview">
+    <div class="world-inner">
+      <div class="world-eyebrow">WORLDVIEW</div>
+      <div class="world-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL 세계관</div>
+      <p class="world-tagline">결핍, 고통, 흔들림이 없는 세계.</p>
+
+      <div class="world-block">
+        <div class="world-block-title">오씨돌이란</div>
+        <div class="world-block-body">먼 미래의 이 세계는, 인간은 20%. 오씨돌은 80%.<br>인간은 오씨돌에게 케어를 받으며, 영혼의 미세한 결핍을 채워주는 존재와 함께 살아가고 있다.</div>
+        <!-- 이미지 자리: 오씨돌/인간 비율, 케어 이미지 등 -->
+        <div class="world-image-slot">이미지 자리</div>
+      </div>
+
+      <div class="world-block">
+        <div class="world-block-title">두 개의 별</div>
+        <div class="world-block-body">인류는 두 개의 행성, 여자별과 남자별로 분리되어 있다.<br>서로 다른 바이러스 때문에 재결합이 불가능한 구조다.<br>각 행성에는 그 행성 인간에 대응하는 오씨돌이 배치되어 있다.</div>
+        <!-- 이미지 자리: 두 행성 일러스트 등 -->
+        <div class="world-image-slot">이미지 자리</div>
+      </div>
+
+      <div class="world-block">
+        <div class="world-block-title">전담</div>
+        <div class="world-block-body">모든 인간에게는 평생 함께하는 전담 오씨돌이 있다.<br><br>이 관계는 부모도, 연인도, 친구도 아니다.<br>세상 어떤 이름으로도 정의되지 않는, 오직 둘만의 관계.<br><br>영혼의 미세한 결핍을 채워주는 존재.</div>
+        <!-- 이미지 자리: 전담 오씨돌과 인간의 관계 이미지 등 -->
+        <div class="world-image-slot">이미지 자리</div>
+      </div>
+
+      <div class="world-cta">
+        <div class="world-cta-text">당신의 전담 오씨돌을 고르세요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL -->
 <div id="biz-overlay" onclick="if(event.target===this)closeBizModal()">
   <div id="biz-modal">
@@ -476,6 +608,30 @@ function closeBizModal() {
   md.style.opacity = '0';
   setTimeout(() => { document.getElementById('biz-overlay').style.display = 'none'; }, 220);
 }
+
+/* ── 세계관 풀스크린 레이어 ── */
+function openWorldOverlay() {
+  var ov = document.getElementById('world-overlay');
+  ov.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  ov.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    ov.style.opacity = '1';
+    ov.style.transform = 'translateY(0)';
+  }));
+}
+function closeWorldOverlay() {
+  var ov = document.getElementById('world-overlay');
+  ov.style.opacity = '0';
+  ov.style.transform = 'translateY(24px)';
+  document.body.style.overflow = '';
+  setTimeout(() => { ov.style.display = 'none'; }, 260);
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('world-overlay').style.display === 'block') {
+    closeWorldOverlay();
+  }
+});
 /* ── 등록 폼 팝업 (window.open) ── */
 var _formPopup = null;
 function openFormPopup() {
