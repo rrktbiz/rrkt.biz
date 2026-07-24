@@ -133,12 +133,23 @@ input{font-family:var(--fn)}
 /* ── 좋아요 담기 ── */
 #like-import-btn{
   display:none;align-items:center;gap:5px;font-size:11px;font-weight:700;
-  padding:4px 12px;border:1px solid #f2c2cd;border-radius:20px;
+  padding:5px 12px;border:1px solid #f2c2cd;border-radius:6px;
   background:#fff5f7;color:#e0526d;transition:all .12s;white-space:nowrap;cursor:pointer;
 }
 #like-import-btn:hover{background:#ffe9ee;border-color:#eaa4b4}
 #like-import-btn.show{display:inline-flex}
 #like-import-btn .lh{font-size:12px;line-height:1}
+#like-import-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:#e0526d;color:#fff;font-size:10px;font-weight:700;line-height:1;
+}
+@media(max-width:600px){
+  #topbar{gap:8px;padding:0 12px}
+  .tb-right{gap:6px}
+  #like-import-btn{padding:5px 9px}
+  #like-import-btn .lb{display:none}
+}
 
 #like-modal{
   display:none;position:fixed;inset:0;z-index:320;
@@ -445,6 +456,9 @@ input{font-family:var(--fn)}
   </div>
   <div class="tb-right">
     <div class="sel-badge" id="sel-badge">0명 선택</div>
+    <button id="like-import-btn" onclick="openLikeImport()" title="캐릭터 일람에서 좋아요(♥)한 캐릭터를 그대로 담아옵니다">
+      <span class="lh">&hearts;</span><span class="lb">좋아요대로 담기</span><span id="like-import-count">0</span>
+    </button>
     <button id="submit-btn" disabled onclick="submitVote()">투표하기</button>
   </div>
 </div>
@@ -515,9 +529,6 @@ input{font-family:var(--fn)}
 
     <div id="filter-bar">
       <input type="text" id="search-input" placeholder="코드 검색... (예: 001)" oninput="onSearch(this.value)">
-      <button id="like-import-btn" onclick="openLikeImport()" title="캐릭터 일람에서 좋아요한 캐릭터를 담아옵니다">
-        <span class="lh">&hearts;</span> 좋아요 담기 <span id="like-import-count">0</span>
-      </button>
       <span id="result-count">200명</span>
     </div>
     <div id="char-grid"></div>
@@ -782,14 +793,32 @@ document.addEventListener('keydown', function(e){
   if (e.key === 'Escape') closeLikeImport();
 });
 
-// 다른 탭·iframe에서 좋아요가 바뀌면 버튼 숫자도 따라 갱신
+// ── 좋아요 변경 감지 ──
+// storage 이벤트는 브라우저·상황(같은 탭 안의 iframe 등)에 따라 안 올 수 있어서,
+// 값 자체를 짧은 주기로 대조하는 방식을 같이 씁니다. 키 하나만 읽어서 부담은 거의 없습니다.
+var _lastLikedRaw = null;
+function checkLikedChanged() {
+  var raw;
+  try { raw = localStorage.getItem('doll_liked') || '[]'; }
+  catch (e) { return; }
+  if (raw === _lastLikedRaw) return;
+  _lastLikedRaw = raw;
+  refreshLikeBtn();
+}
+try { _lastLikedRaw = localStorage.getItem('doll_liked') || '[]'; } catch (e) {}
+setInterval(checkLikedChanged, 700);
+
 window.addEventListener('storage', function(e){
-  if (e.key === 'doll_liked') refreshLikeBtn();
+  if (e.key === 'doll_liked') checkLikedChanged();
 });
-// 투표 페이지로 돌아왔을 때 최신 좋아요 반영
-window.addEventListener('focus', refreshLikeBtn);
+window.addEventListener('focus', checkLikedChanged);
+window.addEventListener('pageshow', checkLikedChanged);
 document.addEventListener('visibilitychange', function(){
-  if (!document.hidden) refreshLikeBtn();
+  if (!document.hidden) checkLikedChanged();
+});
+// 부모(SPA)에서 탭을 전환했을 때 알려줄 수 있도록 창구 하나 열어둡니다
+window.addEventListener('message', function(e){
+  if (e && e.data === 'refresh-liked') checkLikedChanged();
 });
 
 
