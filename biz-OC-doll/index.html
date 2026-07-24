@@ -20,7 +20,6 @@ button{font-family:var(--fn);cursor:pointer}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 
-/* ── 앱 셸 ── */
 #app{display:flex;flex-direction:column;height:100%}
 
 /* ── 상단바 ── */
@@ -46,21 +45,16 @@ button{font-family:var(--fn);cursor:pointer}
   white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;z-index:19;
 }
 #tabbar::-webkit-scrollbar{display:none}
-.tab{
-  flex-shrink:0;padding:0 16px;background:transparent;border:none;
-  border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--tx3);
-  transition:color .12s,border-color .12s;
-}
+.tab{flex-shrink:0;padding:0 16px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--tx3);transition:color .12s,border-color .12s}
 .tab:hover{color:var(--tx)}
 .tab.active{color:var(--blue-d);border-bottom-color:var(--blue-d);font-weight:700}
 
-/* ── 패널 영역 ── */
+/* ── 패널 ── */
 #stage{flex:1;position:relative;min-height:0;background:var(--bg)}
 .panel{position:absolute;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
 .panel.active{display:block}
 .panel iframe{width:100%;height:100%;border:none;display:block;background:var(--bg)}
 
-/* 로딩 */
 .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:3;transition:opacity .25s}
 .loading.gone{opacity:0;pointer-events:none}
 .spin{width:22px;height:22px;border:2px solid var(--bd);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
@@ -74,7 +68,7 @@ button{font-family:var(--fn);cursor:pointer}
 .gate-title{font-family:'Josefin Sans',sans-serif;font-weight:100;letter-spacing:.2em;font-size:clamp(22px,4vw,30px);color:#4a5560;margin-bottom:22px}
 .gate-q{font-size:13px;color:var(--tx2);line-height:1.8;margin-bottom:18px}
 .gate-row{display:flex;gap:8px;align-items:center}
-#gate-input{padding:9px 14px;border:1px solid rgba(90,144,176,.35);border-radius:100px;font-size:13px;font-family:var(--fn);background:rgba(255,255,255,.75);color:var(--tx);outline:none;width:180px;text-align:center;transition:border-color .15s,transform .12s}
+#gate-input{padding:9px 14px;border:1px solid rgba(90,144,176,.35);border-radius:100px;font-size:13px;font-family:var(--fn);background:rgba(255,255,255,.75);color:var(--tx);outline:none;width:180px;text-align:center;transition:border-color .15s}
 #gate-input:focus{border-color:var(--blue)}
 #gate-input.err{border-color:#d93025;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
@@ -82,43 +76,125 @@ button{font-family:var(--fn);cursor:pointer}
 .gate-btn:hover{background:rgba(90,144,176,.12)}
 #gate-msg{font-size:12px;color:#d93025;height:18px;margin-top:12px}
 
-/* ── 스토리 탭 (네이티브) ── */
-.story-wrap{padding:0 0 48px}
-.story-banner{position:relative;width:100%;aspect-ratio:32/9;max-height:240px;background:linear-gradient(135deg,#1a2e3a,var(--blue));overflow:hidden}
+/* ══════ 스토리 — 목록 ══════ */
+#story-list{max-width:720px;margin:0 auto;padding-bottom:40px}
+.story-banner{position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:linear-gradient(135deg,#1a2e3a,var(--blue));overflow:hidden}
 .story-banner img{width:100%;height:100%;object-fit:cover;display:block}
-.story-banner-txt{position:absolute;bottom:0;left:0;right:0;padding:18px 22px;background:linear-gradient(transparent,rgba(0,0,0,.5))}
-.story-banner-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:5px}
-.story-banner-title{font-family:'Josefin Sans',sans-serif;font-weight:100;letter-spacing:.22em;font-size:clamp(18px,3.2vw,28px);color:#fff}
-.story-tabs{display:flex;gap:0;padding:0 22px;border-bottom:1px solid var(--bd);overflow-x:auto;white-space:nowrap;scrollbar-width:none}
-.story-tabs::-webkit-scrollbar{display:none}
-.story-tab{flex-shrink:0;padding:11px 14px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:12px;font-weight:500;color:var(--tx3);transition:all .12s}
-.story-tab.active{color:var(--tx);border-bottom-color:var(--tx);font-weight:700}
-.story-list{padding:14px 22px 0;display:flex;flex-direction:column;gap:8px}
-.ep-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--bd);border-radius:10px;background:var(--sb);transition:border-color .12s,transform .12s}
-.ep-card.readable{cursor:pointer}
-.ep-card.readable:hover{border-color:var(--bd2);transform:translateY(-1px)}
-.ep-card.locked{opacity:.55}
-.ep-num{font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:30px;flex-shrink:0}
-.ep-body{flex:1;min-width:0}
-.ep-badges{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap}
-.ep-type{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid;}
-.ep-status{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px}
-.ep-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ep-cast{display:flex;align-items:center;gap:4px;margin-top:5px}
-.ep-cast img{width:26px;height:26px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;flex-shrink:0}
-.ep-date{font-size:10px;color:var(--tx3);white-space:nowrap;flex-shrink:0}
-.story-empty{padding:60px 22px;text-align:center;font-size:13px;color:var(--tx3);line-height:1.9}
+.story-banner-txt{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.55))}
+.story-banner-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px}
+.story-banner-title{font-family:'Josefin Sans',sans-serif;font-weight:100;letter-spacing:.22em;font-size:clamp(20px,3.5vw,30px);color:#fff}
+.story-tab-row{display:flex;gap:0;padding:0 24px;border-bottom:1px solid var(--bd);max-width:720px;margin:0 auto;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.story-tab-row::-webkit-scrollbar{display:none}
+.story-tab-btn{flex-shrink:0;padding:10px 20px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;color:var(--tx3);transition:all .15s;white-space:nowrap;margin-bottom:-1px}
+.story-tab-btn:hover{color:var(--tx)}
+.story-tab-btn.active{color:var(--tx);border-bottom-color:var(--tx)}
+.story-ep-card{background:var(--sb);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:border-color .12s,box-shadow .12s}
+.story-ep-card:hover{border-color:var(--bd2);box-shadow:0 2px 10px #0001}
+.story-ep-card.locked{opacity:.5;cursor:default;pointer-events:none}
+.ep-status-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.ep-status-badge.done{background:#ffe4e4;color:#c0392b}
+.ep-status-badge.wip{background:#F9F4CA;color:#F9CB4C}
+.ep-status-badge.plan{background:#f0f0f0;color:#aaa}
 
-/* 안내 배너 */
-.build-note{margin:16px 22px 0;padding:12px 16px;border:1px dashed var(--bd2);border-radius:10px;background:var(--sm);font-size:12px;color:var(--tx3);line-height:1.75}
-.build-note b{color:var(--tx2)}
+/* ══════ 스토리 — 리더 ══════ */
+#story-reader{display:none}
+#story-reader.show{display:block}
+.reader-topbar{position:sticky;top:0;z-index:50;background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px}
+.reader-topbar button{background:transparent;border:none;color:var(--tx3);font-size:13px;padding:5px 8px;border-radius:5px}
+.reader-topbar button:hover{color:var(--tx);background:var(--sm)}
+.doll-reader-wrap{max-width:700px;margin:20px auto 40px;padding:32px 40px 80px;background:var(--sb);border-radius:12px}
+.doll-reader-header{padding:16px 0;margin-bottom:4px;text-align:center}
+.doll-ep-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
+.doll-ep-num{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);font-family:monospace}
+.doll-ep-title{font-size:20px;font-weight:700;color:var(--tx);letter-spacing:-.03em;margin-top:4px}
+.doll-cast-wrap{text-align:center;margin-bottom:24px}
+.doll-cast-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:12px}
+.doll-cast{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.doll-cast-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.doll-cast-icon{width:52px;height:52px;border-radius:50%;overflow:hidden;border:1.5px solid #cce4ee;background:#eef6fa;display:flex;align-items:center;justify-content:center}
+.doll-cast-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.doll-cast-num{font-size:12px;font-weight:700;color:var(--tx2);font-family:monospace;letter-spacing:.5px}
+.doll-script-block{margin-bottom:16px}
+.doll-script-img{width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--bd);background:var(--bg)}
+.doll-script-img img{width:100%;display:block;border-radius:7px}
+.doll-script-line{display:flex;align-items:flex-start}
+.doll-line-icon{flex-shrink:0;width:44px;height:44px;border-radius:50%;overflow:hidden;border:1.5px solid #cce4ee;background:#eef6fa;margin-top:14px}
+.doll-line-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.doll-line-icon.hidden{visibility:hidden}
+.doll-line-connector{display:flex;align-items:center;flex-shrink:0;padding-top:30px}
+.doll-tail-speech{width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:9px solid #b8d9e8;position:relative;margin-left:6px}
+.doll-tail-speech::after{content:'';position:absolute;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:9px solid var(--sb);top:-4px;left:3px}
+.doll-tail-thought{display:flex;align-items:center;gap:4px;padding:0 6px}
+.doll-tail-dot{border-radius:50%;background:#b8d9e8}
+.doll-tail-dot1{width:6px;height:6px}
+.doll-tail-dot2{width:9px;height:9px}
+.doll-bubble{flex:1;min-width:0;background:var(--sb);border:2px solid #b8d9e8;border-radius:20px;padding:10px 16px;outline:3px solid #eaf5f9;outline-offset:-5px;box-shadow:2px 3px 0 #b8d9e8}
+.doll-bubble.thought{background:#fafcff;border:2px dashed #b8d9e8;outline:none}
+.doll-bubble.thought .doll-line-text{font-style:italic;color:var(--tx2)}
+.doll-line-speaker{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7aaec4;margin-bottom:5px}
+.doll-line-text{font-size:16px;color:var(--tx);line-height:1.9;word-break:keep-all}
+.doll-narration{padding:2px 0}
+.doll-narration .doll-line-text{font-size:15px;color:var(--tx2);font-style:italic;line-height:1.9}
+.doll-system{text-align:center;padding:6px 0}
+.doll-system-text{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--tx);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:5px 16px}
+.doll-sfx{text-align:center;padding:4px 0}
+.doll-sfx-text{font-size:22px;font-weight:400;color:var(--tx);letter-spacing:.08em;line-height:1.4;font-family:'Noto Sans KR',sans-serif}
+.doll-chat{padding:2px 0 2px 54px;display:flex;flex-direction:column;gap:6px}
+.doll-chat-header{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7aaec4;margin-bottom:2px}
+.doll-chat-bubble{display:inline-block;max-width:80%;background:#f0f7ff;border:1.5px solid #b8d9e8;border-radius:4px 16px 16px 16px;padding:8px 14px;font-size:14px;color:var(--tx);line-height:1.75;word-break:keep-all;align-self:flex-start}
+.doll-chat-bubble.right{align-self:flex-end;background:var(--sb);border-color:#cce4ee;border-radius:16px 4px 16px 16px}
+.doll-divider{display:flex;align-items:center;gap:10px;padding:8px 0;color:var(--tx3);font-size:10px;letter-spacing:1px}
+.doll-divider::before,.doll-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* 화 이동 */
+.ep-nav-outer{background:var(--sb);padding-bottom:32px}
+.ep-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px clamp(12px,3vw,24px);max-width:700px;margin:0 auto;width:100%;min-width:0}
+.ep-nav-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-size:12px;font-weight:500;transition:all .12s;min-width:0;max-width:260px}
+.ep-nav-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.ep-nav-btn.disabled{opacity:.3;cursor:default;pointer-events:none}
+.ep-nav-btn:first-child{justify-self:start}
+.ep-nav-btn:last-child{justify-self:end}
+.ep-nav-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ep-picker-btn{justify-self:center;display:flex;align-items:center;gap:5px;padding:8px 16px;background:var(--sb);border:1px solid var(--bd2);border-radius:7px;font-size:11px;font-weight:600;color:var(--tx2);transition:all .12s;white-space:nowrap}
+.ep-picker-btn:hover{background:var(--bg);color:var(--tx)}
+
+/* 에피소드 피커 */
+#ep-picker{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;padding:24px}
+#ep-picker.hidden{display:none}
+.ep-picker-inner{width:100%;max-width:420px;max-height:70vh;background:var(--sb);border:1px solid var(--bd);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.ep-picker-hd{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.ep-picker-title{font-size:14px;font-weight:700}
+.ep-picker-close{background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1}
+.ep-picker-close:hover{color:var(--tx)}
+.ep-picker-list{overflow-y:auto;flex:1}
+.ep-picker-item{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s}
+.ep-picker-item:last-child{border-bottom:none}
+.ep-picker-item:hover{background:var(--sm)}
+.ep-picker-item.current{background:#eef6fa;font-weight:600}
+.ep-picker-item.locked{opacity:.45;pointer-events:none}
+.ep-picker-num{font-size:10px;color:var(--tx3);font-weight:500;min-width:28px;font-family:monospace}
+.ep-picker-t{font-size:13px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ep-picker-st{margin-left:auto;font-size:9px;font-weight:700;flex-shrink:0}
+.ep-picker-st.done{color:#c0392b}
+.ep-picker-st.plan{color:var(--tx3)}
+.ep-picker-st.wip{color:#c9a227}
+
+.story-empty{padding:60px 24px;text-align:center;font-size:13px;color:var(--tx3);line-height:2}
+.story-empty code{background:var(--sm);border:1px solid var(--bd);border-radius:4px;padding:1px 6px;font-size:11px;color:var(--tx2)}
 
 @media(max-width:600px){
   :root{--h-tab:42px}
   #tabbar{padding:0 8px}
   .tab{padding:0 12px;font-size:12px}
-  .story-list,.story-tabs,.build-note{padding-left:16px;padding-right:16px}
-  .build-note{margin-left:16px;margin-right:16px}
+  .story-tab-row{padding:0 16px}
+}
+@media(max-width:480px){
+  .doll-reader-wrap{padding:16px 18px 100px;margin:0}
+  .doll-line-text{font-size:15px;line-height:2}
+}
+@media(min-width:769px){
+  .doll-line-text{font-size:17px}
+  .doll-reader-wrap{padding:40px 48px 100px}
 }
 </style>
 </head>
@@ -126,7 +202,6 @@ button{font-family:var(--fn);cursor:pointer}
 
 <div id="app">
 
-  <!-- 상단바 -->
   <div id="topbar">
     <a class="tb-back" href="../index.html">← rrkt.biz</a>
     <div class="tb-sep"></div>
@@ -136,7 +211,6 @@ button{font-family:var(--fn);cursor:pointer}
     </div>
   </div>
 
-  <!-- 탭바 -->
   <div id="tabbar">
     <button class="tab active" data-tab="intro">소개</button>
     <button class="tab" data-tab="chars">캐릭터</button>
@@ -146,7 +220,6 @@ button{font-family:var(--fn);cursor:pointer}
     <button class="tab" data-tab="event">이벤트</button>
   </div>
 
-  <!-- 패널 -->
   <div id="stage">
 
     <div class="panel active" id="panel-intro">
@@ -164,7 +237,12 @@ button{font-family:var(--fn);cursor:pointer}
     </div>
 
     <div class="panel" id="panel-chars"></div>
-    <div class="panel" id="panel-story"></div>
+
+    <div class="panel" id="panel-story">
+      <div id="story-list"></div>
+      <div id="story-reader"></div>
+    </div>
+
     <div class="panel" id="panel-vote"></div>
     <div class="panel" id="panel-archive"></div>
     <div class="panel" id="panel-event"></div>
@@ -172,73 +250,80 @@ button{font-family:var(--fn);cursor:pointer}
   </div>
 </div>
 
+<!-- 에피소드 목록 피커 -->
+<div id="ep-picker" class="hidden" onclick="if(event.target===this)closeEpPicker()">
+  <div class="ep-picker-inner">
+    <div class="ep-picker-hd">
+      <span class="ep-picker-title">에피소드 목록</span>
+      <button class="ep-picker-close" onclick="closeEpPicker()">×</button>
+    </div>
+    <div class="ep-picker-list" id="ep-picker-list"></div>
+  </div>
+</div>
+
 <script>
-/* ══════════════════════════════════════════
-   biz-OC-doll SPA 셸
-   - 탭 전환은 새로고침 없음 (해시 라우팅)
-   - 각 탭은 기존 파일을 iframe으로 지연 로드
-   - 한 번 연 탭은 살아있음 → 상태(스크롤·필터) 유지
-   ══════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   biz-OC-doll SPA
+   - 탭 전환·에피소드 읽기 모두 새로고침 없음
+   - 소개/캐릭터/투표/아카이브/이벤트 = 기존 파일 iframe 지연 로드
+   - 스토리 = story_editor.json 직접 렌더 (네이티브)
+   ══════════════════════════════════════════════════ */
 
 var TABS = {
-  intro:   { src:'doll_intro.html',    gated:true  },
-  chars:   { src:'doll_charlist.html'              },
-  story:   { native:true                           },
-  vote:    { src:'vote.html'                       },
-  archive: { src:'archive.html'                    },
-  event:   { src:'event.html'                      }
+  intro:   { src:'doll_intro.html',   gated:true },
+  chars:   { src:'doll_charlist.html'            },
+  story:   { native:true                         },
+  vote:    { src:'vote.html'                     },
+  archive: { src:'archive.html'                  },
+  event:   { src:'event.html'                    }
 };
 var DEFAULT_TAB = 'intro';
 var GATE_PW = '2050년';
 var current = null;
 
-/* ── 라우팅 ── */
-function tabFromHash(){
-  var h = (location.hash || '').replace(/^#\/?/, '');
-  return TABS[h] ? h : DEFAULT_TAB;
+/* ── 라우팅: #/tab  또는  #/story/3 ── */
+function parseHash(){
+  var raw = (location.hash || '').replace(/^#\/?/, '');
+  var parts = raw.split('/');
+  var tab = TABS[parts[0]] ? parts[0] : DEFAULT_TAB;
+  var ep = (tab === 'story' && parts[1] !== undefined && parts[1] !== '') ? parseInt(parts[1], 10) : null;
+  return { tab: tab, ep: (isNaN(ep) ? null : ep) };
 }
 
 function go(tab, push){
   if(!TABS[tab]) tab = DEFAULT_TAB;
-  if(tab === current) return;
-  current = tab;
-
   document.querySelectorAll('.tab').forEach(function(b){
     b.classList.toggle('active', b.dataset.tab === tab);
   });
   document.querySelectorAll('.panel').forEach(function(p){
     p.classList.toggle('active', p.id === 'panel-' + tab);
   });
-
+  var changed = (tab !== current);
+  current = tab;
   if(push !== false && location.hash !== '#/' + tab){
     history.pushState(null, '', '#/' + tab);
   }
-  mount(tab);
+  if(changed) mount(tab);
+  else if(tab === 'intro') refreshGate();
 
   var btn = document.querySelector('.tab[data-tab="' + tab + '"]');
   if(btn && btn.scrollIntoView) btn.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
 }
 
-/* ── 지연 마운트 ── */
 function mount(tab){
   var cfg = TABS[tab];
   var panel = document.getElementById('panel-' + tab);
-  if(!cfg || !panel || panel.dataset.mounted === '1') {
-    if(tab === 'intro') refreshGate();
-    return;
-  }
+  if(!cfg || !panel) return;
 
   if(cfg.native){
-    panel.dataset.mounted = '1';
-    if(tab === 'story') renderStory(panel);
+    if(panel.dataset.mounted !== '1'){
+      panel.dataset.mounted = '1';
+      if(tab === 'story') renderStoryList();
+    }
     return;
   }
-
-  if(cfg.gated && !unlocked()){
-    refreshGate();
-    return; /* 잠금 해제 전에는 iframe 자체를 안 만듦 */
-  }
-
+  if(cfg.gated && !unlocked()){ refreshGate(); return; }
+  if(panel.dataset.mounted === '1') return;
   panel.dataset.mounted = '1';
 
   var load = document.createElement('div');
@@ -252,31 +337,36 @@ function mount(tab){
   fr.addEventListener('load', function(){
     load.classList.add('gone');
     setTimeout(function(){ if(load.parentNode) load.parentNode.removeChild(load); }, 300);
-    hookScroll(fr);
+    hookScroll(fr.contentWindow, fr.contentDocument);
   });
   panel.appendChild(fr);
 }
 
-/* ── 상단바 자동 숨김 (iframe 내부 스크롤 연동) ── */
-var lastY = 0;
-function hookScroll(fr){
+/* ── 상단바 자동 숨김 ── */
+function hookScroll(win, doc){
   try{
-    var doc = fr.contentDocument;
-    var win = fr.contentWindow;
-    if(!doc || !win) return;
+    if(!win || !doc) return;
     var bar = document.getElementById('topbar');
-    lastY = 0;
+    var lastY = 0;
     win.addEventListener('scroll', function(){
       if(window.innerWidth > 768){ bar.classList.remove('hidden'); return; }
       var y = win.scrollY || doc.documentElement.scrollTop || 0;
-      if(y > lastY && y > 70)      bar.classList.add('hidden');
-      else if(y < lastY - 10)      bar.classList.remove('hidden');
-      lastY = y;
+      if(y > lastY && y > 70)  bar.classList.add('hidden');
+      else if(y < lastY - 10)  bar.classList.remove('hidden');
+      lastY = y <= 0 ? 0 : y;
     }, {passive:true});
-  }catch(e){
-    /* file:// 로 직접 열면 브라우저가 iframe 접근을 막습니다.
-       서버(또는 rrkt.biz)에 올리면 정상 작동합니다. */
-  }
+  }catch(e){ /* file:// 로 열면 브라우저가 막습니다 */ }
+}
+function hookPanelScroll(panel){
+  var bar = document.getElementById('topbar');
+  var lastY = 0;
+  panel.addEventListener('scroll', function(){
+    if(window.innerWidth > 768){ bar.classList.remove('hidden'); return; }
+    var y = panel.scrollTop;
+    if(y > lastY && y > 70)  bar.classList.add('hidden');
+    else if(y < lastY - 10)  bar.classList.remove('hidden');
+    lastY = y <= 0 ? 0 : y;
+  }, {passive:true});
 }
 
 /* ── 소개 암호 게이트 ── */
@@ -286,9 +376,8 @@ function unlocked(){
 function refreshGate(){
   var gate = document.getElementById('gate');
   if(!gate) return;
-  if(unlocked()){
-    gate.classList.remove('show');
-  }else{
+  if(unlocked()){ gate.classList.remove('show'); }
+  else{
     gate.classList.add('show');
     var inp = document.getElementById('gate-input');
     if(inp){ inp.value=''; setTimeout(function(){ try{inp.focus();}catch(e){} }, 80); }
@@ -312,99 +401,314 @@ function unlockIntro(){
   }
 }
 
-/* ── 스토리 탭 (story_editor.json 직접 읽기) ── */
-var TYPE_LABEL = {main:'메인스토리', sub:'캐릭터스토리', event:'이벤트스토리'};
-var TYPE_COLOR = {main:'#5a90b0', sub:'#c07090', event:'#c0a040'};
-var BANNER_IMG = {
-  main:'images/ep_cover_sc/0_banner_main_story.png',
-  sub:'images/ep_cover_sc/0_banner__character_story.png',
-  event:'images/ep_cover_sc/0_banner_event_story.png'
-};
-var BANNER_TXT = {main:'MAIN STORY', sub:'CHARACTER STORY', event:'EVENT STORY'};
+/* ══════ 스토리 데이터 ══════ */
+var _storyData = null;
+var _storyErr = null;
 
-async function renderStory(panel){
-  panel.innerHTML = '<div class="loading"><div class="spin"></div></div>';
-  var data;
+async function fetchStory(){
+  if(_storyData) return _storyData;
   try{
-    var r = await fetch('story_editor.json');
-    if(!r.ok) throw new Error('fetch ' + r.status);
-    data = await r.json();
+    var r = await fetch('story_editor.json', {cache:'no-cache'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    _storyData = await r.json();
+    _storyErr = null;
   }catch(e){
-    panel.innerHTML =
-      '<div class="story-empty">스토리 데이터를 불러오지 못했습니다.<br>' +
-      '<span style="font-size:11px;opacity:.7">story_editor.json 이 같은 폴더에 있는지 확인해 주세요.</span></div>';
+    _storyErr = e;
+    _storyData = null;
+  }
+  return _storyData;
+}
+
+var TAB_LABELS  = {main:'메인스토리', sub:'캐릭터스토리', event:'이벤트스토리'};
+var BANNER_TXT  = {main:'MAIN STORY', sub:'CHARACTER STORY', event:'EVENT STORY'};
+var TAB_COLORS  = {main:'#5a90b0', sub:'#c07090', event:'#c0a040'};
+var BANNER_IMGS = {
+  main:  'images/ep_cover_sc/0_banner_main_story.png',
+  sub:   'images/ep_cover_sc/0_banner__character_story.png',
+  event: 'images/ep_cover_sc/0_banner_event_story.png'
+};
+function stClass(s){ return (s==='완료'||s==='done') ? 'done' : (s==='작업중'||s==='wip') ? 'wip' : 'plan'; }
+function stLabel(s){ return (s==='완료'||s==='done') ? '완료' : (s==='작업중'||s==='wip') ? '작업중' : '예정'; }
+function canRead(e){ return e.status==='완료' || e.status==='done'; }
+
+var _storyChips = {};
+
+/* ── 스토리 목록 ── */
+async function renderStoryList(){
+  var listEl = document.getElementById('story-list');
+  var readEl = document.getElementById('story-reader');
+  readEl.classList.remove('show');
+  listEl.style.display = 'block';
+  listEl.innerHTML = '<div class="loading" style="position:static;height:220px"><div class="spin"></div></div>';
+
+  var data = await fetchStory();
+  if(!data){
+    listEl.innerHTML =
+      '<div class="story-empty">스토리 데이터를 불러오지 못했습니다.' +
+      '<br><span style="font-size:12px">1. <code>story_editor.json</code> 이 이 파일과 같은 폴더에 있는지' +
+      '<br>2. 파일을 더블클릭(<code>file://</code>)해서 열지 않았는지' +
+      '<br><span style="font-size:11px;opacity:.75">브라우저는 file:// 에서 JSON 읽기를 막습니다. 서버에 올리거나 로컬 서버로 열어야 보여요.</span>' +
+      '<br><span style="font-size:11px;opacity:.6">(' + (_storyErr ? _storyErr.message : 'unknown') + ')</span></span></div>';
     return;
   }
 
   var eps = data.episodes || [];
+  var banners = data._banners || {};
   var groups = {main:[], sub:[], event:[]};
   eps.forEach(function(e, i){ (groups[e.type] || groups.main).push(Object.assign({}, e, {_idx:i})); });
   var types = ['main','sub','event'].filter(function(t){ return groups[t].length > 0; });
 
   if(!types.length){
-    panel.innerHTML = '<div class="story-empty">아직 등록된 에피소드가 없습니다.</div>';
+    listEl.innerHTML = '<div class="story-empty">스토리 에피소드가 없습니다.</div>';
     return;
   }
+  var activeTab = types[0];
 
-  var html = '<div class="story-wrap">';
-  html += '<div class="story-tabs">' + types.map(function(t, i){
-    return '<button class="story-tab' + (i===0?' active':'') + '" data-st="' + t + '">' + (TYPE_LABEL[t]||t) + '</button>';
-  }).join('') + '</div>';
+  function banner(t){
+    var img = banners[t] || BANNER_IMGS[t] || '';
+    var bg = 'linear-gradient(135deg,#1a2e3a,' + (TAB_COLORS[t]||'#5a90b0') + ')';
+    return '<div class="story-banner" style="background:' + bg + '">' +
+      (img ? '<img src="' + img + '" onerror="this.style.display=\'none\'">' : '') +
+      '<div class="story-banner-txt">' +
+        '<div class="story-banner-eyebrow">BIZ-OC-DOLL · STORY</div>' +
+        '<div class="story-banner-title">' + (BANNER_TXT[t]||'STORY') + '</div>' +
+      '</div></div>';
+  }
 
-  types.forEach(function(t, i){
-    var img = (data._banners && data._banners[t]) || BANNER_IMG[t] || '';
-    html += '<div class="story-sec" data-st="' + t + '" style="display:' + (i===0?'block':'none') + '">';
-    html += '<div class="story-banner">' +
-              (img ? '<img src="' + img + '" onerror="this.style.display=\'none\'">' : '') +
-              '<div class="story-banner-txt">' +
-                '<div class="story-banner-eyebrow">BIZ-OC-DOLL · STORY</div>' +
-                '<div class="story-banner-title">' + (BANNER_TXT[t]||'STORY') + '</div>' +
-              '</div></div>';
-    html += '<div class="story-list">' + groups[t].map(epCard).join('') + '</div>';
-    html += '<div class="build-note"><b>이 탭은 아직 목록까지만 이식했습니다.</b><br>' +
-            '에피소드 본문 읽기 화면은 다음 단계에서 옮깁니다. 지금은 목록이 제대로 나오는지만 확인해 주세요.</div>';
-    html += '</div>';
-  });
-  html += '</div>';
-  panel.innerHTML = html;
+  function cards(t){
+    return groups[t].map(function(e){
+      var read = canRead(e);
+      var color = TAB_COLORS[e.type] || '#5a90b0';
+      var cast = (e.castList||[]).map(function(c){ return c.charNum; }).filter(Boolean);
+      var castHtml = cast.map(function(n){
+        return '<img src="images/simple_profile/' + n + '.png" data-cast="' + n + '" ' +
+               'style="width:30px;height:30px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;flex-shrink:0" ' +
+               'onerror="this.style.opacity=.4">';
+      }).join('');
+      var date = e.completedDate ? e.completedDate.replace(/-/g, '.') : '';
+      var wipStyle = (e.status==='작업중'||e.status==='wip') ? 'background:#F9F4CA;color:#c9a227' : '';
+      return '<div class="story-ep-card' + (read?'':' locked') + '" data-cast="' + cast.join(',') + '"' +
+             (read ? ' onclick="openEp(' + e._idx + ')"' : '') + '>' +
+        '<div style="font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:32px;flex-shrink:0">' + (e.num||'') + '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">' +
+            '<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid ' + color + ';color:' + color + ';background:' + color + '18">' + (TAB_LABELS[e.type]||e.type||'') + '</span>' +
+            '<span class="ep-status-badge ' + stClass(e.status) + '" style="' + wipStyle + '">' + stLabel(e.status) + '</span>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;min-width:0">' +
+            '<div style="font-size:14px;font-weight:600;color:' + (read?'var(--tx)':'var(--tx3)') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">' + (e.title||'') + '</div>' +
+            (castHtml ? '<div style="display:flex;align-items:center;gap:4px;flex-shrink:0">' + castHtml + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+        (date ? '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">' +
+                  '<div style="font-size:10px;color:var(--tx3);white-space:nowrap"><span style="opacity:.45">✓</span> ' + date + '</div>' +
+                  (read ? '<span style="color:var(--tx3);font-size:14px">›</span>' : '') +
+                '</div>'
+              : (read ? '<span style="color:var(--tx3);font-size:14px;flex-shrink:0">›</span>' : '')) +
+      '</div>';
+    }).join('');
+  }
 
-  panel.querySelectorAll('.story-tab').forEach(function(b){
-    b.addEventListener('click', function(){
-      var t = b.dataset.st;
-      panel.querySelectorAll('.story-tab').forEach(function(x){ x.classList.toggle('active', x === b); });
-      panel.querySelectorAll('.story-sec').forEach(function(s){ s.style.display = (s.dataset.st === t) ? 'block' : 'none'; });
+  listEl.innerHTML = types.map(function(t){
+    return '<div id="story-sec-' + t + '" style="display:' + (t===activeTab?'block':'none') + '">' +
+      banner(t) +
+      '<div style="padding:10px 24px 6px">' +
+        '<input id="story-search-' + t + '" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" ' +
+        'onkeydown="onStorySearchKey(event,\'' + t + '\')" ' +
+        'style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">' +
+        '<div id="story-chips-' + t + '" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>' +
+      '</div>' +
+      '<div class="story-tab-row">' + types.map(function(tb){
+        return '<button class="story-tab-btn' + (tb===t?' active':'') + '" onclick="switchStoryTab(\'' + tb + '\')">' + (TAB_LABELS[tb]||tb) + '</button>';
+      }).join('') + '</div>' +
+      '<div id="story-cards-' + t + '" style="padding:8px 24px 24px">' + cards(t) + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+window.switchStoryTab = function(t){
+  document.querySelectorAll('[id^="story-sec-"]').forEach(function(el){ el.style.display = 'none'; });
+  var el = document.getElementById('story-sec-' + t);
+  if(el) el.style.display = 'block';
+};
+
+/* ── 캐릭터 번호 검색 칩 ── */
+window.onStorySearchKey = function(ev, t){
+  if(ev.key !== 'Enter' && ev.key !== ' ') return;
+  ev.preventDefault();
+  var input = ev.target;
+  var val = input.value.trim();
+  if(!val) return;
+  if(!_storyChips[t]) _storyChips[t] = new Set();
+  _storyChips[t].add(val);
+  input.value = '';
+  renderChips(t); applyFilter(t);
+};
+function renderChips(t){
+  var wrap = document.getElementById('story-chips-' + t);
+  if(!wrap) return;
+  wrap.innerHTML = Array.from(_storyChips[t]||[]).map(function(n){
+    return '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 12px;background:var(--bg);border:1px solid var(--bd2);border-radius:20px;font-size:11px;font-weight:600;color:var(--tx2)">' +
+      n + '<button onclick="removeChip(\'' + t + '\',\'' + n + '\')" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:13px;line-height:1;padding:0 0 0 2px">×</button></span>';
+  }).join('');
+}
+window.removeChip = function(t, n){
+  if(_storyChips[t]) _storyChips[t].delete(n);
+  renderChips(t); applyFilter(t);
+};
+function applyFilter(t){
+  var chips = Array.from(_storyChips[t]||[]);
+  document.querySelectorAll('#story-cards-' + t + ' .story-ep-card').forEach(function(card){
+    var nums = (card.dataset.cast||'').split(',').filter(Boolean);
+    var match = !chips.length || chips.every(function(q){ return nums.some(function(n){ return n.indexOf(q) !== -1; }); });
+    card.style.opacity = match ? '' : '0.2';
+    card.style.pointerEvents = match ? '' : 'none';
+    card.querySelectorAll('img[data-cast]').forEach(function(img){
+      var hit = chips.length && chips.some(function(q){ return img.dataset.cast.indexOf(q) !== -1; });
+      img.style.outline = hit ? '2px solid #5a90b0' : '';
+      img.style.outlineOffset = hit ? '1px' : '';
     });
   });
 }
 
-function epCard(e){
-  var done = (e.status === '완료' || e.status === 'done');
-  var wip  = (e.status === '작업중' || e.status === 'wip');
-  var label = done ? '완료' : wip ? '작업중' : '예정';
-  var stStyle = done ? 'background:#e8f3ec;color:#2e7d52'
-              : wip  ? 'background:#F9F4CA;color:#b5871a'
-              :        'background:#f0f0f0;color:#999';
-  var color = TYPE_COLOR[e.type] || '#5a90b0';
-  var cast = (e.castList || []).map(function(c){ return c.charNum; }).filter(Boolean);
-  var castHtml = cast.length
-    ? '<div class="ep-cast">' + cast.map(function(n){
-        return '<img src="images/simple_profile/' + n + '.png" onerror="this.style.opacity=.35">';
-      }).join('') + '</div>' : '';
-  var date = e.completedDate ? e.completedDate.replace(/-/g, '.') : '';
+/* ══════ 스토리 리더 ══════ */
+var _epIdx = -1;
 
-  return '<div class="ep-card ' + (done ? 'readable' : 'locked') + '">' +
-    '<div class="ep-num">' + (e.num || '') + '</div>' +
-    '<div class="ep-body">' +
-      '<div class="ep-badges">' +
-        '<span class="ep-type" style="border-color:' + color + ';color:' + color + ';background:' + color + '18">' + (TYPE_LABEL[e.type] || e.type || '') + '</span>' +
-        '<span class="ep-status" style="' + stStyle + '">' + label + '</span>' +
-      '</div>' +
-      '<div class="ep-title" style="' + (done ? '' : 'color:var(--tx3)') + '">' + (e.title || '') + '</div>' +
-      castHtml +
+window.openEp = function(idx, push){
+  _epIdx = idx;
+  if(push !== false) history.pushState(null, '', '#/story/' + idx);
+  renderReader(idx);
+};
+window.backToStoryList = function(){
+  history.pushState(null, '', '#/story');
+  document.getElementById('story-reader').classList.remove('show');
+  document.getElementById('story-list').style.display = 'block';
+  document.getElementById('panel-story').scrollTop = 0;
+};
+
+async function renderReader(idx){
+  var listEl = document.getElementById('story-list');
+  var readEl = document.getElementById('story-reader');
+  var data = await fetchStory();
+  if(!data) return;
+  var eps = data.episodes || [];
+  var e = eps[idx];
+  if(!e){ backToStoryList(); return; }
+
+  var prev = eps[idx-1] || null;
+  var next = eps[idx+1] || null;
+
+  var cl = e.castList || [];
+  var castHtml = cl.length
+    ? '<div class="doll-cast-wrap"><div class="doll-cast-label">CAST</div><div class="doll-cast">' +
+      cl.map(function(c){
+        return '<div class="doll-cast-item"><div class="doll-cast-icon">' +
+          '<img src="images/simple_profile/' + (c.charNum||'001') + '.png" alt="" onerror="this.style.display=\'none\'">' +
+          '</div><div class="doll-cast-num">' + (c.charNum||'?') + '</div></div>';
+      }).join('') + '</div></div>'
+    : '';
+
+  readEl.innerHTML =
+    '<div class="reader-topbar">' +
+      '<button onclick="backToStoryList()">← 목록</button>' +
+      '<div style="width:1px;height:14px;background:var(--bd);margin:0 2px"></div>' +
+      '<div style="font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (e.title||'스토리 읽기') + '</div>' +
     '</div>' +
-    (date ? '<div class="ep-date">✓ ' + date + '</div>' : '') +
-  '</div>';
+    '<div class="doll-reader-wrap">' +
+      '<div class="doll-reader-header">' +
+        '<div><span class="doll-ep-eyebrow">' + (e.eyebrow||'') + '</span>' +
+        (e.num ? '<span class="doll-ep-num"> · ' + e.num + '</span>' : '') + '</div>' +
+        '<div class="doll-ep-title">' + (e.title||'') + '</div>' +
+      '</div>' +
+      castHtml +
+      '<div id="doll-blocks-wrap">' + bbDoll(e.blocks||[]) + '</div>' +
+      '<div class="ep-nav-outer"><div class="ep-nav">' +
+        '<button class="ep-nav-btn ' + (prev?'':'disabled') + '" ' + (prev?'onclick="openEp(' + (idx-1) + ')"':'') + '>' +
+          '<span>←</span><span class="ep-nav-title">' + (prev ? prev.title : '처음 화') + '</span></button>' +
+        '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; 목록</button>' +
+        '<button class="ep-nav-btn ' + (next?'':'disabled') + '" ' + (next?'onclick="openEp(' + (idx+1) + ')"':'') + '>' +
+          '<span class="ep-nav-title">' + (next ? next.title : '마지막 화') + '</span><span>→</span></button>' +
+      '</div></div>' +
+    '</div>';
+
+  listEl.style.display = 'none';
+  readEl.classList.add('show');
+  document.getElementById('panel-story').scrollTop = 0;
 }
+
+/* ── 블록 렌더러 ── */
+function bbDoll(blocks){
+  var last = null;
+  return blocks.map(function(b){
+    var d = b.data || {};
+    if(b.type === 'cast'){
+      last = null;
+      var ms = d.members || [];
+      if(!ms.length) return '';
+      return '<div class="doll-cast-wrap"><div class="doll-cast-label">Cast</div><div class="doll-cast">' +
+        ms.map(function(m){
+          return '<div class="doll-cast-item"><div class="doll-cast-icon">' +
+            '<img src="images/simple_profile/' + (m.charNum||'001') + '.png" alt="" onerror="this.style.display=\'none\'">' +
+            '</div><div class="doll-cast-num">' + (m.charNum||'?') + '</div></div>';
+        }).join('') + '</div></div>';
+    }
+    if(b.type === 'scene'){
+      last = null;
+      var s = d.filename ? 'images/ep_cover_sc/' + d.filename : '';
+      return '<div class="doll-script-block"><div class="doll-script-img">' +
+        (s ? '<img src="' + s + '" alt="">' : '') + '</div></div>';
+    }
+    if(b.type === 'speech' || b.type === 'thought'){
+      var same = d.exprFilename && d.exprFilename === last;
+      last = d.exprFilename || null;
+      var img = d.exprFilename ? 'images/simple_profile/' + d.exprFilename : '';
+      var th = (b.type === 'thought') ? ' thought' : '';
+      var conn = (b.type === 'thought')
+        ? '<div class="doll-tail-thought"><div class="doll-tail-dot doll-tail-dot1"></div><div class="doll-tail-dot doll-tail-dot2"></div></div>'
+        : '<div class="doll-tail-speech"></div>';
+      return '<div class="doll-script-block"><div class="doll-script-line">' +
+        '<div class="doll-line-icon' + (same?' hidden':'') + '"><img src="' + img + '" alt="" onerror="this.parentNode.style.background=\'#eef6fa\'"></div>' +
+        '<div class="doll-line-connector">' + conn + '</div>' +
+        '<div class="doll-bubble' + th + '"><div class="doll-line-speaker">' + (d.charNum||'') + '</div>' +
+        '<div class="doll-line-text">' + (d.text||'') + '</div></div></div></div>';
+    }
+    if(b.type === 'narration'){ last = null;
+      return '<div class="doll-script-block"><div class="doll-narration"><div class="doll-line-text">' + (d.text||'') + '</div></div></div>'; }
+    if(b.type === 'system'){ last = null;
+      return '<div class="doll-script-block"><div class="doll-system"><span class="doll-system-text">' + (d.text||'') + '</span></div></div>'; }
+    if(b.type === 'sfx'){ last = null;
+      return '<div class="doll-script-block"><div class="doll-sfx"><div class="doll-sfx-text">' + (d.text||'') + '</div></div></div>'; }
+    if(b.type === 'chat'){ last = null;
+      return '<div class="doll-script-block"><div class="doll-chat"><div class="doll-chat-header">' + (d.header||'') + '</div>' +
+        (d.msgs||[]).map(function(m){
+          return '<div class="doll-chat-bubble' + (m.dir==='right'?' right':'') + '">' + m.text + '</div>';
+        }).join('') + '</div></div>'; }
+    if(b.type === 'divider'){ last = null;
+      return '<div class="doll-script-block"><div class="doll-divider">· · ·</div></div>'; }
+    return '';
+  }).join('');
+}
+
+/* ── 에피소드 피커 ── */
+window.openEpPicker = async function(){
+  var data = await fetchStory();
+  if(!data) return;
+  var eps = data.episodes || [];
+  document.getElementById('ep-picker-list').innerHTML = eps.map(function(e, i){
+    var read = canRead(e);
+    return '<div class="ep-picker-item' + (i === _epIdx ? ' current' : '') + (read ? '' : ' locked') + '"' +
+      (read ? ' onclick="closeEpPicker();openEp(' + i + ')"' : '') + '>' +
+      '<span class="ep-picker-num">' + (e.num || (i+1)) + '</span>' +
+      '<span class="ep-picker-t">' + (e.title||'') + '</span>' +
+      '<span class="ep-picker-st ' + stClass(e.status) + '">' + stLabel(e.status) + '</span>' +
+    '</div>';
+  }).join('');
+  document.getElementById('ep-picker').classList.remove('hidden');
+};
+window.closeEpPicker = function(){ document.getElementById('ep-picker').classList.add('hidden'); };
+document.addEventListener('keydown', function(ev){
+  if(ev.key === 'Escape') closeEpPicker();
+});
 
 /* ── 등록 폼 팝업 ── */
 var _formPopup = null;
@@ -420,16 +724,33 @@ function openForm(){
 document.querySelectorAll('.tab').forEach(function(b){
   b.addEventListener('click', function(){ go(b.dataset.tab); });
 });
-window.addEventListener('popstate', function(){ go(tabFromHash(), false); });
+
+window.addEventListener('popstate', function(){
+  var h = parseHash();
+  go(h.tab, false);
+  if(h.tab === 'story'){
+    if(h.ep !== null) openEp(h.ep, false);
+    else{
+      document.getElementById('story-reader').classList.remove('show');
+      document.getElementById('story-list').style.display = 'block';
+    }
+  }
+});
+
 window.addEventListener('resize', function(){
   if(window.innerWidth > 768) document.getElementById('topbar').classList.remove('hidden');
 });
 
+document.querySelectorAll('.panel').forEach(hookPanelScroll);
+
 (function init(){
-  var t = tabFromHash();
+  var h = parseHash();
   current = null;
-  go(t, false);
-  if(!location.hash) history.replaceState(null, '', '#/' + t);
+  go(h.tab, false);
+  if(h.tab === 'story' && h.ep !== null){
+    setTimeout(function(){ openEp(h.ep, false); }, 0);
+  }
+  if(!location.hash) history.replaceState(null, '', '#/' + h.tab);
 })();
 </script>
 </body>
