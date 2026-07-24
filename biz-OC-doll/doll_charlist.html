@@ -83,6 +83,20 @@ button{font-family:var(--fn);cursor:pointer}
 .sheet-action-btn svg{width:13px;height:13px;flex-shrink:0;opacity:.45;transition:opacity .12s}
 .sheet-action-btn:hover svg{opacity:.8}
 
+/* ── 좋아요 버튼 (상세 시트) ── */
+.sheet-action-btn.like-btn .like-heart{font-size:15px;line-height:1;flex-shrink:0;color:var(--tx3);transition:color .12s,transform .12s}
+.sheet-action-btn.like-btn:hover .like-heart{color:#f4869b}
+.sheet-action-btn.like-btn.liked{border-color:#f2c2cd;background:#fff5f7;color:#e0526d}
+.sheet-action-btn.like-btn.liked:hover{background:#ffe9ee;border-color:#eaa4b4;color:#e0526d}
+.sheet-action-btn.like-btn.liked .like-heart{color:#f43f5e}
+.sheet-action-btn.like-btn.pop .like-heart{animation:likePop .34s ease}
+@keyframes likePop{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.45)}
+  60%{transform:scale(.92)}
+  100%{transform:scale(1)}
+}
+
 /* ── CHAR DETAIL ── */
 .sheet-wrap{max-width:800px;margin:0 auto;padding:32px 32px 48px;transition:max-width .2s}
 .detail-overlay-inner.wide .sheet-wrap{max-width:1080px}
@@ -231,6 +245,9 @@ button{font-family:var(--fn);cursor:pointer}
       </div>
 
       <div class="sheet-action-btns">
+        <button class="sheet-action-btn like-btn" id="detail-like-btn" onclick="toggleLikeDetail()" title="이 캐릭터를 좋아요">
+          <span>좋아요</span><span class="like-heart" id="detail-like-heart">&#9825;</span>
+        </button>
         <button class="sheet-action-btn" onclick="alert('episode')">Episode<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8"/></svg></button>
       </div>
 
@@ -535,6 +552,41 @@ function renderDetail(id){
   const cn = document.getElementById('cassette-next');
   if(cp) cp.classList.toggle('disabled', !prev);
   if(cn) cn.classList.toggle('disabled', !next);
+
+  updateDetailLikeBtn();
+}
+
+/* ── 상세 시트 좋아요 ── */
+function updateDetailLikeBtn(){
+  const btn = document.getElementById('detail-like-btn');
+  if(!btn) return;
+  const on = state.activeId != null && getLiked().has(state.activeId);
+  btn.classList.toggle('liked', on);
+  const heart = document.getElementById('detail-like-heart');
+  if(heart) heart.innerHTML = on ? '&#9829;' : '&#9825;';
+  btn.title = on ? '좋아요 취소' : '이 캐릭터를 좋아요';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+window.toggleLikeDetail = function(){
+  const id = state.activeId;
+  if(id == null) return;
+  const liked = getLiked();
+  const willLike = !liked.has(id);
+  willLike ? liked.add(id) : liked.delete(id);
+  saveLiked(liked);
+  updateDetailLikeBtn();
+
+  /* 켤 때만 하트 튀는 연출 */
+  const btn = document.getElementById('detail-like-btn');
+  if(btn && willLike){
+    btn.classList.remove('pop');
+    void btn.offsetWidth;   /* 애니메이션 재시작 */
+    btn.classList.add('pop');
+  }
+
+  /* 뒤에 있는 목록 그리드도 같이 갱신 (♥ 필터·개수 반영) */
+  renderList();
 }
 
 
