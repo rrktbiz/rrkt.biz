@@ -27,7 +27,7 @@ button{font-family:var(--fn);cursor:pointer}
 #topbar{
   height:var(--h-top);flex-shrink:0;background:var(--sb);border-bottom:1px solid var(--bd);
   display:flex;align-items:center;gap:10px;padding:0 16px;
-  transition:margin-top .26s ease;z-index:20;
+  transition:margin-top .26s ease;z-index:100;
 }
 #topbar.hidden{margin-top:calc(var(--h-top) * -1)}
 .tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:5px 8px;border-radius:6px;transition:all .12s;white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
@@ -67,15 +67,17 @@ body{top:0 !important}
 #tabbar{
   height:var(--h-tab);flex-shrink:0;background:var(--sb);border-bottom:1px solid var(--bd);
   display:flex;align-items:stretch;padding:0 12px;overflow-x:auto;overflow-y:hidden;
-  white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;z-index:19;
+  white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;z-index:90;
+  transition:margin-top .26s ease;
 }
+#tabbar.hidden{margin-top:calc(var(--h-tab) * -1)}
 #tabbar::-webkit-scrollbar{display:none}
 .tab{flex-shrink:0;padding:0 16px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--tx3);transition:color .12s,border-color .12s}
 .tab:hover{color:var(--tx)}
 .tab.active{color:var(--blue-d);border-bottom-color:var(--blue-d);font-weight:700}
 
 /* ── 패널 ── */
-#stage{flex:1;position:relative;min-height:0;background:var(--bg)}
+#stage{flex:1;position:relative;min-height:0;background:var(--bg);z-index:1}
 .panel{position:absolute;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
 .panel.active{display:block}
 .panel iframe{width:100%;height:100%;border:none;display:block;background:var(--bg)}
@@ -124,7 +126,8 @@ body{top:0 !important}
 /* ══════ 스토리 — 리더 ══════ */
 #story-reader{display:none}
 #story-reader.show{display:block}
-.reader-topbar{position:sticky;top:0;z-index:50;background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px}
+.reader-topbar{position:sticky;top:0;z-index:50;background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;transition:transform .26s ease;will-change:transform}
+.reader-topbar.hidden{transform:translateY(-110%)}
 .reader-topbar button{background:transparent;border:none;color:var(--tx3);font-size:13px;padding:5px 8px;border-radius:5px}
 .reader-topbar button:hover{color:var(--tx);background:var(--sm)}
 .doll-reader-wrap{max-width:700px;margin:20px auto 40px;padding:32px 40px 80px;background:var(--sb);border-radius:12px}
@@ -340,6 +343,7 @@ function go(tab, push){
   if(push !== false && location.hash !== '#/' + tab){
     history.pushState(null, '', '#/' + tab);
   }
+  setBarsHidden(false);
   if(changed) mount(tab);
   else if(tab === 'intro') refreshGate();
 
@@ -379,30 +383,41 @@ function mount(tab){
   panel.appendChild(fr);
 }
 
-/* ── 상단바 자동 숨김 ── */
+/* ── 상단바 자동 숨김 (상단바 + 탭바 + 리더 상단바 모두) ── */
+var _barsHidden = false;
+function setBarsHidden(hide){
+  if(_barsHidden === hide) return;
+  _barsHidden = hide;
+  var top = document.getElementById('topbar');
+  var tabs = document.getElementById('tabbar');
+  var rt = document.querySelector('#story-reader.show .reader-topbar');
+  if(top)  top.classList.toggle('hidden', hide);
+  if(tabs) tabs.classList.toggle('hidden', hide);
+  if(rt)   rt.classList.toggle('hidden', hide);
+  /* 리더가 아닌 탭으로 갔을 때 남아있는 리더 상단바 정리 */
+  if(!hide){
+    document.querySelectorAll('.reader-topbar.hidden').forEach(function(el){ el.classList.remove('hidden'); });
+  }
+}
+function _onScrollY(y, lastRef){
+  if(window.innerWidth > 768){ setBarsHidden(false); lastRef.y = 0; return; }
+  if(y > lastRef.y && y > 70)      setBarsHidden(true);
+  else if(y < lastRef.y - 10)      setBarsHidden(false);
+  lastRef.y = y <= 0 ? 0 : y;
+}
 function hookScroll(win, doc){
   try{
     if(!win || !doc) return;
-    var bar = document.getElementById('topbar');
-    var lastY = 0;
+    var ref = {y:0};
     win.addEventListener('scroll', function(){
-      if(window.innerWidth > 768){ bar.classList.remove('hidden'); return; }
-      var y = win.scrollY || doc.documentElement.scrollTop || 0;
-      if(y > lastY && y > 70)  bar.classList.add('hidden');
-      else if(y < lastY - 10)  bar.classList.remove('hidden');
-      lastY = y <= 0 ? 0 : y;
+      _onScrollY(win.scrollY || doc.documentElement.scrollTop || 0, ref);
     }, {passive:true});
   }catch(e){ /* file:// 로 열면 브라우저가 막습니다 */ }
 }
 function hookPanelScroll(panel){
-  var bar = document.getElementById('topbar');
-  var lastY = 0;
+  var ref = {y:0};
   panel.addEventListener('scroll', function(){
-    if(window.innerWidth > 768){ bar.classList.remove('hidden'); return; }
-    var y = panel.scrollTop;
-    if(y > lastY && y > 70)  bar.classList.add('hidden');
-    else if(y < lastY - 10)  bar.classList.remove('hidden');
-    lastY = y <= 0 ? 0 : y;
+    _onScrollY(panel.scrollTop, ref);
   }, {passive:true});
 }
 
@@ -617,6 +632,7 @@ window.openEp = function(idx, push){
   renderReader(idx);
 };
 window.backToStoryList = function(){
+  setBarsHidden(false);
   history.pushState(null, '', '#/story');
   document.getElementById('story-reader').classList.remove('show');
   document.getElementById('story-list').style.display = 'block';
@@ -672,6 +688,7 @@ async function renderReader(idx){
   listEl.style.display = 'none';
   readEl.classList.add('show');
   document.getElementById('panel-story').scrollTop = 0;
+  setBarsHidden(false);
 
   _dollOrigBlocks = e.blocks || [];
   _dollOrigTitle  = e.title || '';
@@ -1139,7 +1156,7 @@ window.addEventListener('popstate', function(){
 });
 
 window.addEventListener('resize', function(){
-  if(window.innerWidth > 768) document.getElementById('topbar').classList.remove('hidden');
+  if(window.innerWidth > 768) setBarsHidden(false);
 });
 
 document.querySelectorAll('.panel').forEach(hookPanelScroll);
