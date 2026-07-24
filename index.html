@@ -27,14 +27,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
   position:fixed;top:0;left:0;right:0;z-index:100;
   transition:transform .28s ease;
 }
-#menu-toggle{
-  background:transparent;border:none;width:32px;height:32px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  border-radius:6px;transition:background .12s;
-  cursor:pointer;user-select:none;-webkit-user-select:none;
-  outline:none;
-}
-#menu-toggle:hover{background:var(--bg)}
 .bar{width:18px;height:2px;background:var(--tx);border-radius:2px;flex-shrink:0;display:block}
 #topbar-logo{font-size:15px;font-weight:700;color:#111;letter-spacing:-.04em;cursor:pointer}
 #topbar-logo:hover{opacity:.6}
@@ -50,102 +42,17 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #topbar-cal-btn:hover{background:var(--bg);color:var(--tx)}
 
 /* ── FLOATING NAV ── */
-#nav-layer{
-  position:fixed;top:48px;left:0;
-  display:flex;z-index:200;
-  pointer-events:none;
-  height:calc(100vh - 48px);
-  height:calc(100dvh - 48px);
-}
-#nav-panel{
-  width:200px;
-  background:var(--sb);
-  border-right:1px solid var(--bd);
-  box-shadow:4px 4px 20px #0000001a;
-  border-radius:0;
-  display:flex;flex-direction:column;
-  overflow-y:auto;
-  height:100%;
-  pointer-events:all;
-  transform:translateX(-210px);
-  transition:transform .22s cubic-bezier(.4,0,.2,1);
-}
-#nav-layer.open #nav-panel{transform:translateX(0)}
-#sub-panel-wrap{display:flex;align-items:stretch;visibility:hidden;opacity:0;transition:opacity .16s ease;height:100%}
-#nav-layer.open #sub-panel-wrap{visibility:visible;opacity:1}
 
 /* Sub panel */
-#sub-panel{
-  width:var(--sm-w);
-  background:var(--sm);
-  border-right:1px solid var(--bd);
-  box-shadow:4px 4px 20px #0000001a;
-  border-radius:0;
-  display:flex;flex-direction:column;
-  height:100%;
-  pointer-events:all;
-  opacity:0;transform:translateX(-8px);
-  transition:opacity .16s ease, transform .16s ease;
-  visibility:hidden;
-}
-#sub-panel.visible{opacity:1;transform:translateX(0);visibility:visible}
 
 
 #sm-inner{flex:1;overflow-y:auto;min-width:0}
 
 /* Nav items */
-.nav-proj-item{
-  display:flex;align-items:center;
-  width:100%;padding:11px 16px;
-  background:transparent;border:none;border-left:2px solid transparent;
-  color:var(--tx2);font-size:13px;font-weight:400;text-align:left;
-  transition:all .12s;gap:8px;
-}
-.nav-proj-item:hover{color:var(--tx);background:var(--bg)}
-.nav-proj-item.active{color:var(--acc,#111);border-left-color:var(--acc,#111);background:color-mix(in srgb,var(--acc,#888) 7%,transparent);font-weight:600}
-.nav-proj-dot{display:none}
-.nav-cal-item{display:flex;align-items:center;gap:7px;width:100%;padding:10px 16px;background:transparent;border:none;color:var(--tx2);font-size:12px;text-align:left;transition:all .12s}
-.nav-cal-item:hover{background:var(--bg);color:var(--tx)}
-.nav-cal-item.active{color:var(--tx);font-weight:500;background:var(--bg)}
-.nav-sep{height:1px;background:var(--bd);margin:4px 10px}
-.nav-lang-section{padding:10px;border-top:1px solid var(--bd);margin-top:auto}
-.nav-lang-lbl{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:6px}
-.nav-lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.nav-lang-btn{font-size:11px;font-weight:600;padding:6px 4px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx2);transition:all .12s;text-align:center}
-.nav-lang-btn:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
 
 /* Sub panel header */
-.sm-hd{padding:12px 14px 10px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--sm);z-index:2}
-.sm-hd-left{display:flex;flex-direction:column;gap:1px}
-.sm-proj-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
-.sm-proj-name{font-size:16px;font-weight:700}
-.sm-hd-btns{display:flex;align-items:center;gap:6px}
-.sm-pin-btn{
-  background:transparent;border:1px solid var(--bd);border-radius:5px;
-  color:var(--tx3);font-size:10px;font-weight:600;padding:3px 8px;
-  transition:all .12s;display:flex;align-items:center;gap:3px;
-}
-.sm-pin-btn:hover{border-color:var(--bd2);color:var(--tx)}
-.sm-pin-btn.on{background:var(--tx);color:#fff;border-color:var(--tx)}
-.sm-x{background:transparent;border:none;color:var(--tx3);font-size:16px;padding:0 4px;line-height:1;transition:color .12s}
-.sm-x:hover{color:var(--tx)}
 
 /* Intro/char links */
-.sm-intro-link{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:10px 12px 0;padding:9px 12px;background:#fff;color:var(--tx);border:1px solid var(--bd);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;transition:background .12s;width:calc(100% - 24px)}
-.sm-intro-link:hover{background:var(--bg)}
-.sm-char-link{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:5px 12px 0;padding:9px 12px;background:#fff;color:var(--tx);border:1px solid var(--bd);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;transition:background .12s;width:calc(100% - 24px)}
-.sm-char-link:hover{background:var(--bg)}
-.sm-yt-link{display:flex;align-items:center;gap:8px;margin:5px 12px 0;padding:9px 12px;background:#fff;color:#e00;border:1px solid #fdd;border-radius:7px;font-size:12px;font-weight:500;width:calc(100% - 24px)}
-.sm-yt-link:hover{background:#fff5f5}
-.sm-stats{display:flex;border-bottom:1px solid var(--bd);margin-top:10px}
-.sm-stat{flex:1;padding:10px 0;text-align:center;border-right:1px solid var(--bd)}
-.sm-stat:last-child{border-right:none}
-.sm-stat-n{font-size:16px;font-weight:700}
-.sm-stat-l{font-size:9px;font-weight:600;letter-spacing:.8px;color:var(--tx3);margin-top:1px;text-transform:uppercase}
-.sm-tabs{display:flex;border-bottom:1px solid var(--bd);padding:0 12px}
-.sm-tab{padding:10px 11px 9px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--tx3);transition:color .12s,border-color .12s;margin-bottom:-1px}
-.sm-tab:hover{color:var(--tx)}
-.sm-tab.active{color:var(--tacc,#111);border-bottom-color:var(--tacc,#111);font-weight:700}
 .vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:13px 11px}
 .vol-card{cursor:pointer;transition:transform .14s ease}
 .vol-card:hover{transform:translateY(-2px)}
@@ -166,8 +73,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 /* ── CONTENT ── */
 #content{display:block;margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);transition:margin-top .28s ease,height .28s ease;padding-bottom:env(safe-area-inset-bottom,0px)}
-#nav-backdrop{display:none;position:fixed;inset:0;top:48px;z-index:150;pointer-events:none}
-#nav-backdrop.show{display:block;pointer-events:all;cursor:default}
 body.nav-pinned #nav-backdrop{display:none!important}
 
 /* ── HERO ── */
@@ -625,76 +530,15 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .ep-nav-btn:first-child{justify-self:start}
 .ep-nav-btn:last-child{justify-self:end}
 .ep-nav-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ep-picker-btn{justify-self:center;display:flex;align-items:center;gap:5px;padding:8px 16px;background:var(--sb);border:1px solid var(--bd2);border-radius:7px;font-size:11px;font-weight:600;color:var(--tx2);transition:all .12s;white-space:nowrap}
-.ep-picker-btn:hover{background:var(--bg);color:var(--tx)}
 /* Episode picker modal */
-.ep-picker-modal{
-  position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;
-  background:#00000050;
-}
-.ep-picker-modal.hidden{display:none}
-.ep-picker-inner{
-  background:var(--sb);border-radius:14px;box-shadow:0 8px 40px #0000002a;
-  width:min(480px,90vw);max-height:70vh;display:flex;flex-direction:column;overflow:hidden;
-}
-.ep-picker-hd{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
-.ep-picker-title{font-size:14px;font-weight:700}
-.ep-picker-close{background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1;transition:color .12s}
-.ep-picker-close:hover{color:var(--tx)}
-.ep-picker-list{overflow-y:auto;flex:1}
-.ep-picker-item{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s}
-.ep-picker-item:last-child{border-bottom:none}
-.ep-picker-item:hover{background:var(--bg)}
-.ep-picker-item.current{background:color-mix(in srgb,var(--curr-acc,#888) 8%,transparent);font-weight:600}
-.ep-picker-num{font-size:10px;color:var(--tx3);font-weight:500;min-width:28px}
-.ep-picker-t{font-size:13px;color:var(--tx)}
-.ep-picker-st{margin-left:auto;font-size:9px;font-weight:700}
-.ep-picker-st.done{color:#c0392b}.ep-picker-st.plan{color:var(--tx3)}
 
 
 
 /* ── MOBILE ── */
-.mob-menu{
-  display:flex;
-  position:fixed;top:48px;left:0;bottom:0;
-  width:130px;
-  background:var(--sb);
-  border-right:1px solid var(--bd);
-  box-shadow:4px 0 24px #0000001a;
-  z-index:300;
-  overflow:hidden;
-  transform:translateX(-105%);
-  transition:transform .24s cubic-bezier(.4,0,.2,1), width .22s cubic-bezier(.4,0,.2,1);
-  pointer-events:none;
-  will-change:transform;
-}
-.mob-menu.open{transform:translateX(0);pointer-events:all;}
 /* 두 패널을 가로로 배치 */
-.mob-panel-wrap{
-  display:flex;
-  width:100%;
-  height:100%;
-}
 /* 1차 패널 */
-.mob-panel-1{
-  width:130px;min-width:120px;
-  height:100%;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  flex-shrink:0;
-  border-right:1px solid var(--bd);
-  display:flex;flex-direction:column;
-}
 /* 2차 패널 */
-.mob-panel-2{
-  width:200px;max-width:200px;flex-shrink:0;
-  height:100%;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  background:var(--sm,#fafafa);
-  display:none;
-}
 /* 1차 메뉴가 열린 상태에서 2차 패널 표시 */
-.mob-menu.show-sub{width:auto;max-width:340px}
-.mob-menu.show-sub .mob-panel-2{display:block}
 /* 2차 패널 헤더 */
 .mob-sub2-hd{
   display:flex;align-items:center;gap:10px;
@@ -722,7 +566,6 @@ body.nav-pinned #nav-backdrop{display:none!important}
   flex-shrink:0;
 }
 .mob-home-btn:hover{background:var(--bg);color:var(--tx)}
-.mob-backdrop.show{display:block}
 .mob-nav-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--tx2);font-size:12px;font-weight:500;text-align:left;cursor:pointer}
 .mob-nav-item:hover,.mob-nav-item.active{color:var(--tx);background:var(--bg)}
 .mob-nav-item .mob-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:10px}
@@ -759,23 +602,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .mob-lang-btn{font-size:11px;font-weight:600;padding:5px 10px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx2)}
 .mob-lang-btn:hover{background:var(--tx);color:#fff}
 /* 2차 패널 컨텐츠 */
-.mob2-intro-link{display:flex;align-items:center;justify-content:space-between;margin:8px 10px 0;padding:10px 14px;background:var(--sb);color:var(--tx);border:1px solid var(--bd);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .12s;width:calc(100% - 20px);box-sizing:border-box}
-.mob2-intro-link:hover{background:var(--bg)}
-.mob2-vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 12px 20px}
-.mob2-vol-card{cursor:pointer;transition:opacity .12s}
-.mob2-vol-card:hover{opacity:.75}
-.mob2-vol-thumb{aspect-ratio:3/4;border-radius:7px;border:1px solid var(--bd);position:relative;overflow:hidden;margin-bottom:6px}
-.mob2-vol-badge{position:absolute;top:5px;right:5px;font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px}
-.mob2-vol-type{position:absolute;top:5px;left:5px;font-size:8px;font-weight:600;padding:2px 5px;border-radius:3px;background:#00000060;color:#fff}
-.mob2-vol-title{font-size:11px;font-weight:500;color:var(--tx);line-height:1.4}
 
-.mob2-cat-list{display:flex;flex-direction:column;gap:8px;padding:10px 12px 20px}
-.mob2-cat-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#fff;border:1px solid var(--bd);border-radius:8px;cursor:pointer;transition:background .12s}
-.mob2-cat-item:hover{background:var(--bg)}
 @media(min-width:769px){.mob-menu,.mob-lang-row{display:none!important}}
 .postype-text{white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.9;font-size:17px}
 @media(max-width:768px){
-  #nav-layer{display:none!important}
   #content{margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px);-webkit-overflow-scrolling:touch;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
   .topbar-right{gap:4px}
   .tb-btn-txt{display:none!important}
@@ -814,44 +644,6 @@ body.nav-pinned #nav-backdrop{display:none!important}
 }
 
 /* ── 플로팅 에피소드 네비 (모바일 읽기 뷰) ── */
-#float-ep-nav{
-  position:fixed;
-  bottom:20px;right:16px;
-  z-index:200;
-  display:none;
-  align-items:center;gap:6px;
-  background:var(--sb);
-  border:1px solid var(--bd);
-  border-radius:30px;
-  box-shadow:0 4px 16px #00000018;
-  padding:6px 8px;
-  opacity:0;
-  transform:translateY(12px);
-  pointer-events:none;
-  transition:opacity .22s ease, transform .22s ease;
-}
-#float-ep-nav.active{
-  display:flex;
-}
-#float-ep-nav.visible{
-  opacity:1;transform:translateY(0);pointer-events:all;
-}
-.fep-btn{
-  background:transparent;border:none;
-  width:34px;height:34px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;color:var(--tx2);cursor:pointer;
-  transition:background .12s,color .12s;flex-shrink:0;
-}
-.fep-btn:hover{background:var(--bg);color:var(--tx)}
-.fep-btn.disabled{opacity:.3;pointer-events:none}
-.fep-mid{
-  font-size:11px;font-weight:600;color:var(--tx2);
-  padding:0 6px;cursor:pointer;white-space:nowrap;
-  transition:color .12s;
-}
-.fep-mid:hover{color:var(--tx)}
-.fep-div{width:1px;height:18px;background:var(--bd);flex-shrink:0}
 
 /* ── PROGRESS PAGE ── */
 .progress-page{padding:22px 32px;max-width:1020px;margin:0 auto}
@@ -879,40 +671,9 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .progress-char-stat{font-size:10px;color:var(--tx3)}
 
 /* ── NAV FOLDER STRUCTURE ── */
-.nav-cat-header{
-  display:flex;align-items:center;gap:5px;
-  padding:8px 12px 5px 10px;
-  width:100%;text-align:left;
-  background:transparent;border:none;outline:none;
-  cursor:pointer;user-select:none;-webkit-user-select:none;
-  transition:background .1s;
-}
-.nav-cat-header:hover{background:var(--bg)}
-.nav-cat-arrow{
-  font-size:7px;color:var(--tx3);
-  transition:transform .18s cubic-bezier(.4,0,.2,1);
-  flex-shrink:0;line-height:1;
-  display:inline-block;
-}
-.nav-cat-label{
-  font-size:11px;font-weight:500;
-  letter-spacing:.2px;color:var(--tx2);
-}
-.nav-cat-count{
-  font-size:10px;color:var(--tx3);
-  font-weight:400;letter-spacing:0;
-  flex:1;
-}
-.nav-cat-body{overflow:hidden;transition:max-height .22s cubic-bezier(.4,0,.2,1)}
-.nav-cat-body.collapsed{display:none}
 /* 상태별 점 색상 */
-.nav-proj-dot.active-dot{background:#22c55e}
-.nav-proj-dot.done-dot{background:#94a3b8}
-.nav-proj-dot.archive-dot{background:#94a3b8}
 /* 프로젝트 아이템 들여쓰기 */
-.nav-proj-item-inner{padding-left:22px!important}
 /* 검색 없을 때 빈 카테고리 메시지 */
-.nav-cat-empty{padding:6px 22px 10px;font-size:11px;color:var(--tx3);font-style:italic}
 
 /* ── MOBILE NAV FOLDER ── */
 .mob-cat-header{
@@ -965,6 +726,11 @@ body.nav-pinned #nav-backdrop{display:none!important}
 body{top:0!important}
 .skiptranslate{display:none!important}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
+#contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+#contact-overlay.hidden{display:none}
+.contact-card{position:relative;background:var(--sb);border:1px solid var(--bd);border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026}
+.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--bd);border-radius:6px;color:var(--tx2);cursor:pointer;transition:all .12s}
+.contact-close:hover{background:var(--bg);border-color:var(--bd2)}
 
 
 
@@ -1033,7 +799,6 @@ body{top:0!important}
 @media(max-width:480px){.doll-reader-wrap{padding:16px 18px 100px;margin:0}.doll-line-text{font-size:15px;line-height:2}}
 @media(min-width:769px){.doll-line-text{font-size:17px}.doll-reader-wrap{padding:40px 48px 100px}}
 /* ── biz-OC-doll 소개글 암호 잠금 게이트 ── */
-#doll-intro-frame.locked{filter:blur(11px) saturate(.85);pointer-events:none;transition:filter .35s ease}
 #doll-intro-gate{
   display:none;position:fixed;top:48px;left:0;right:0;bottom:0;z-index:65;
   align-items:center;justify-content:center;padding:24px;
@@ -1042,53 +807,16 @@ body{top:0!important}
   font-family:var(--fn);
 }
 #doll-intro-gate.show{display:flex}
-.dig-card{
-  width:100%;max-width:340px;background:#fff;border:1px solid #cce4ee;
-  border-radius:18px;padding:30px 26px 26px;text-align:center;
-  box-shadow:0 14px 40px rgba(120,174,196,.28),0 0 0 4px rgba(184,217,232,.18);
-}
-.dig-badge{
-  display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;
-  letter-spacing:1.6px;text-transform:uppercase;color:#7aaec4;
-  background:#eef6fa;border:1px solid #cce4ee;border-radius:20px;padding:4px 12px;margin-bottom:16px;
-}
-.dig-lock{
-  width:56px;height:56px;margin:0 auto 14px;border-radius:50%;
-  background:#eef6fa;border:1.5px solid #b8d9e8;display:flex;align-items:center;justify-content:center;color:#7aaec4;
-}
-.dig-title{font-size:16px;font-weight:700;color:var(--tx);letter-spacing:-.02em;margin-bottom:6px}
-.dig-sub{font-size:12px;color:var(--tx3);line-height:1.7;margin-bottom:18px}
-.dig-input{
-  width:100%;height:42px;border:1.5px solid #cce4ee;border-radius:10px;
-  padding:0 14px;font-size:14px;font-family:var(--fn);color:var(--tx);outline:none;
-  text-align:center;letter-spacing:1px;transition:border-color .12s;
-}
-.dig-input:focus{border-color:#7aaec4}
-.dig-input.err{border-color:#e09aa6;animation:digShake .3s}
 @keyframes digShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.dig-msg{min-height:16px;font-size:11px;color:#d06b7a;margin:8px 0 0;text-align:center}
-.dig-btn{
-  width:100%;height:42px;margin-top:14px;border:none;border-radius:10px;
-  background:#7aaec4;color:#fff;font-size:14px;font-weight:700;font-family:var(--fn);
-  cursor:pointer;transition:background .12s;
-}
-.dig-btn:hover{background:#6a9fb6}
 </style>
 </head>
 <body>
 <!-- TOPBAR -->
 <div id="topbar">
-  <button id="menu-toggle" aria-label="메뉴">
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-  </button>
   <span id="topbar-logo" onclick="goHome()">rrkt.biz</span>
   <button id="topbar-cal-btn" onclick="goCal()">
     <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
     <span class="tb-btn-txt">작업 캘린더</span>
-  </button>
-  <button id="topbar-progress-btn" onclick="goProgress()" style="font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s;margin-left:0">
-    <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="4" height="10" rx="1" fill="currentColor" opacity=".4"/><rect x="5.5" y="5" width="4" height="7" rx="1" fill="currentColor" opacity=".7"/><rect x="10" y="1" width="4" height="11" rx="1" fill="currentColor"/></svg>
-    <span class="tb-btn-txt">진행 현황</span>
   </button>
   <div class="topbar-right" style="position:relative">
     <span id="tl-badge"></span>
@@ -1107,119 +835,31 @@ body{top:0!important}
   </div>
 </div>
 
-<!-- DESKTOP FLOATING NAV -->
-<div id="nav-layer">
-  <nav id="nav-panel" onmouseleave="onNavPanelLeave()">
-    <div style="padding:14px 16px 10px;border-bottom:1px solid var(--bd)">
-      <div style="font-size:9px;font-weight:500;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:5px">Archive</div>
-      <div style="font-size:16px;font-weight:700;color:#111;letter-spacing:-.04em;cursor:pointer" onclick="goHome()">rrkt.biz</div>
-    </div>
-    <div id="nav-items-wrap" style="padding:8px 0"></div>
-  </nav>
-  <div id="sub-panel-wrap" style="display:flex;align-items:stretch">
-    <div id="sub-panel" onmouseenter="onSubPanelEnter()" onmouseleave="onSubPanelLeave()">
-      <div id="sm-inner"></div>
-    </div>
-    
-  </div>
-</div>
-<div id="nav-backdrop" onclick="closeNav()"></div>
 
-<!-- MOBILE MENU -->
-<div class="mob-menu" id="mob-menu">
-  <div class="mob-panel-wrap" id="mob-panel-wrap">
-    <!-- 1차 패널 -->
-    <div class="mob-panel-1" id="mob-panel-1"></div>
-    <!-- 2차 패널 -->
-    <div class="mob-panel-2" id="mob-panel-2"></div>
-  </div>
-</div>
-<div class="mob-backdrop" id="mob-backdrop" onclick="closeMobMenu()"></div>
 
-<!-- 플로팅 에피소드 네비 -->
-<div id="float-ep-nav">
-  <button class="fep-btn" id="fep-prev" onclick="floatEpNav('prev')">&#8249;</button>
-  <div class="fep-div"></div>
-  <span class="fep-mid" onclick="floatEpNav('list')" data-i18n="ep_list">목록</span>
-  <div class="fep-div"></div>
-  <button class="fep-btn" id="fep-next" onclick="floatEpNav('next')">&#8250;</button>
-</div>
 
 <!-- MAIN CONTENT -->
 <main id="content"></main>
 
-<!-- 캐릭터 일람 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
-<iframe
-  id="char-frame"
-  src="biz-OC-doll/doll_charlist.html"
-  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#f5f5f5;"
-></iframe>
-
-<!-- 인트로 전용 iframe (doll_intro.html 완전 독립 운영) -->
-<iframe
-  id="doll-intro-frame"
-  src="biz-OC-doll/doll_intro.html"
-  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
-></iframe>
-
-<!-- biz-OC-doll 소개글 암호 잠금 게이트 -->
-<div id="doll-intro-gate" aria-hidden="true">
-  <div class="dig-card">
-    <span class="dig-badge">&#128274; 오픈 전 · LOCKED</span>
-    <div class="dig-lock">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+<div id="contact-overlay" class="hidden" onclick="if(event.target===this)closeContactOverlay()">
+  <div class="contact-card">
+    <button class="contact-close" onclick="closeContactOverlay()" aria-label="닫기">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">Contact</div>
+    <div style="font-size:22px;font-weight:700;color:#111;letter-spacing:-.04em">비즈니스 문의</div>
+    <div style="font-size:13px;color:var(--tx2);margin-top:8px;line-height:1.8">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
+    <div style="margin-top:20px;display:flex;align-items:center;gap:8px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      <span style="font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',sans-serif">rrkt.biz@proton.me</span>
+      <button onclick="biqCopyEmail(this)" title="복사"
+        style="background:transparent;border:1px solid var(--bd);border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .15s;flex-shrink:0"
+        onmouseover="this.style.background='var(--bg)';this.style.color='var(--tx)';this.style.borderColor='var(--bd2)'"
+        onmouseout="if(!this.dataset.copied){this.style.background='transparent';this.style.color='var(--tx3)';this.style.borderColor='var(--bd)'}">
+        <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <span class="biq-copy-txt">복사</span>
+      </button>
     </div>
-    <div class="dig-title">비즈오씨돌 프로젝트 소개</div>
-    <div class="dig-sub">아직 오픈 전인 소개글이에요.<br>암호를 입력하면 볼 수 있어요.</div>
-    <input id="doll-gate-input" class="dig-input" type="password" placeholder="암호 입력" autocomplete="off"
-      oninput="var m=document.getElementById('doll-gate-msg');if(m)m.textContent='';this.classList.remove('err');"
-      onkeydown="if(event.key==='Enter'&&!event.isComposing&&event.keyCode!==229)unlockDollIntro()">
-    <p id="doll-gate-msg" class="dig-msg"></p>
-    <button class="dig-btn" onclick="unlockDollIntro()">열기</button>
-  </div>
-</div>
-<iframe
-  id="bhs-intro-frame"
-  src="Blood_High_School/bhs_intro.html"
-  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
-></iframe>
-
-<!-- VOTE: 팝업 방식으로 전환 (overlay 제거됨) -->
-
-<!-- 아카이브 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
-<iframe
-  id="archive-frame"
-  src="biz-OC-doll/archive.html"
-  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
-></iframe>
-
-<!-- 이벤트 전용 iframe (항상 DOM에 상주, show/hide로 전환) -->
-<iframe
-  id="event-frame"
-  src="biz-OC-doll/event.html"
-  style="display:none;position:fixed;top:48px;left:0;right:0;bottom:0;width:100%;height:calc(100dvh - 48px);border:none;z-index:60;background:#fff;"
-></iframe>
-
-<!-- 스토리 뷰는 SPA로 전환 (#content 사용) -->
-
-<!-- EP PICKER MODAL -->
-<div class="ep-picker-modal hidden" id="ep-picker-modal" onclick="closeEpPicker(event)">
-  <div class="ep-picker-inner" onclick="event.stopPropagation()">
-    <div class="ep-picker-hd">
-      <span class="ep-picker-title" id="ep-picker-title" data-i18n="ep_picker_title">에피소드 목록</span>
-      <button class="ep-picker-close" onclick="closeEpPickerBtn()">&#10005;</button>
-    </div>
-    <div class="ep-picker-list" id="ep-picker-list"></div>
-  </div>
-</div>
-
-<div class="ep-picker-modal hidden" id="doll-ep-picker-modal" onclick="closeDollEpPicker(event)">
-  <div class="ep-picker-inner" onclick="event.stopPropagation()">
-    <div class="ep-picker-hd">
-      <span class="ep-picker-title">에피소드 목록</span>
-      <button class="ep-picker-close" onclick="closeDollEpPickerBtn()">&#10005;</button>
-    </div>
-    <div class="ep-picker-list" id="doll-ep-picker-list"></div>
   </div>
 </div>
 
@@ -1254,45 +894,10 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
  * 에피소드 본문 가져오기 — GitHub Gist / raw URL 직접 fetch
  * @param {string} url  — GitHub raw URL (textId 에 입력한 값)
  */
-async function fetchEpText(url){
-  if(!url) throw new Error("URL 없음");
-  /* 후보 경로 생성: 에피소드 번호 zero-padding 유무를 모두 시도.
-     (볼륨별 파일명 규칙이 달라도 대응 — 예: novel-1-01 vs novel-2-1) */
-  var suffixRe = /-(\d+)(_pure_ko\.txt|_jp\.txt|\.txt)$/;
-  var candidates = [url];
-  var m = url.match(suffixRe);
-  if(m){
-    var n = parseInt(m[1], 10);
-    [String(n).padStart(2,'0'), String(n)].forEach(function(variant){
-      var alt = url.replace(suffixRe, '-'+variant+'$2');
-      if(candidates.indexOf(alt) === -1) candidates.push(alt);
-    });
-  }
-  var lastUrl = url, lastStatus = 0;
-  for(var i=0; i<candidates.length; i++){
-    lastUrl = candidates[i];
-    var res;
-    try { res = await fetch(candidates[i]); }
-    catch(netErr){ continue; } /* 네트워크 오류 → 다음 후보 */
-    if(res.ok) return await res.text();
-    lastStatus = res.status;
-    if(res.status === 404) continue; /* 없으면 다음 후보 시도 */
-    throw new Error(`불러오기 실패 (HTTP ${res.status})`);
-  }
-  if(lastStatus === 404) throw new Error(`파일을 찾을 수 없음 (404)\nURL: ${lastUrl}`);
-  throw new Error(`불러오기 실패`);
-}
-
 /**
  * Drive 이미지 URL 생성 — <img src=""> 에 바로 사용
  * @param {string|null} fileId
  */
-function driveImg(fileId){
-  if(!fileId) return null;
-  if(fileId.includes('/') || fileId.startsWith('http')) return fileId;
-  return `https://lh3.googleusercontent.com/d/${fileId}`;
-}
-
 /* ── Click sound (Windows XP style) ── */
 (function(){
   let _ctx=null;
@@ -1462,10 +1067,6 @@ const VOLUMES = {
   },
 };
 
-/* ── 작가 노트 — 여기 텍스트를 직접 수정하세요 ── */
-const AUTHOR_NOTE = {
-  text: "활발하게 작업하고 있어요. 곧 새 내용을 올릴게요.",
-};
 
 /* Build work log */
 const WORK_LOG = {};
@@ -1489,260 +1090,6 @@ function buildWorkLog(){
 buildWorkLog();
 
 /* ── AUTHOR STATUS WIDGET ── */
-function buildLastUpdateWidget(){
-  const sortedDates = Object.keys(WORK_LOG).sort();
-  const lastDateStr = sortedDates[sortedDates.length-1] || null;
-  if(!lastDateStr) return `<div class="last-update-widget">
-    <div class="last-update-hd">마지막 업데이트</div>
-    <div class="last-update-body">
-      <div class="last-update-num-row">
-        <span class="last-update-num">—</span>
-      </div>
-      <div class="last-update-dot-row">
-        <div class="last-update-dot"></div>
-        <span class="last-update-date">기록 없음</span>
-      </div>
-    </div>
-  </div>`;
-  const daysSince = Math.floor((new Date() - new Date(lastDateStr)) / 86400000);
-  let numDisplay, unitDisplay;
-  if(daysSince === 0){ numDisplay = "오늘"; unitDisplay = ""; }
-  else if(daysSince === 1){ numDisplay = "어제"; unitDisplay = ""; }
-  else { numDisplay = daysSince; unitDisplay = "일 전"; }
-  return `<div class="last-update-widget">
-    <div class="last-update-hd">마지막 업데이트</div>
-    <div class="last-update-body">
-      <div class="last-update-num-row">
-        <span class="last-update-num">${numDisplay}</span>
-        ${unitDisplay ? `<span class="last-update-unit">${unitDisplay}</span>` : ''}
-      </div>
-      <div class="last-update-dot-row">
-        <div class="last-update-dot"></div>
-        <span class="last-update-date">${lastDateStr} 업로드</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-
-function buildFocusWidget(){
-  const now = new Date();
-  const cutoff = new Date(now - 30*86400000);
-  const allEntries = Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w})));
-  const thisMonEntries = allEntries.filter(e=>e.date && new Date(e.date) >= cutoff);
-
-  const countMap = {};
-  thisMonEntries.forEach(e=>{ countMap[e.projId] = (countMap[e.projId]||0) + 1; });
-  const sorted = PROJECTS
-    .filter(p=>(p.status||"active")==="active")
-    .map(p=>({...p, count: countMap[p.id]||0}))
-    .sort((a,b)=>b.count-a.count);
-  const maxCount = sorted[0].count || 1;
-  const hasData = thisMonEntries.length > 0;
-
-  let topLine = "";
-  if(hasData){
-    const top = sorted.find(p=>p.count>0);
-    const lastChar = top.label.charCodeAt(top.label.length-1);
-    const particle = (lastChar-0xAC00)%28 !== 0 ? "을" : "를";
-    topLine = `<div style="font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:8px">현재 <strong style="color:var(--tx)">${top.label}</strong>${particle} 중점으로 집필하고 있어요.</div>`;
-  }
-
-  const bars = sorted.map(p=>{
-    const pct = hasData ? Math.round((p.count/maxCount)*100) : 0;
-    const cntHtml = p.count > 0
-      ? `<span style="font-size:11px;font-weight:700;color:var(--tx)">${p.count}</span>`
-      : `<span style="font-size:11px;color:var(--tx3)">—</span>`;
-    return `<div class="focus-row">
-      <div class="focus-lbl">${p.label}</div>
-      <div class="focus-bar-wrap"><div class="focus-bar" style="width:${pct}%;background:${p.acc}"></div></div>
-      <div class="focus-cnt">${cntHtml}</div>
-    </div>`;
-  }).join("");
-
-  return `<div class="focus-widget-inner">
-    <div class="focus-widget-hd">
-      <span class="focus-widget-lbl">주요 집필 프로젝트</span>
-      <span class="focus-badge">최근 30일</span>
-    </div>
-    ${topLine}${bars}
-  </div>`;
-}
-
-
-function buildEvalWidget(mode, y, m){
-  // mode: "month" | "year" | "timeline"
-  const now = new Date();
-  const allEntries = Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w})));
-
-  // ── 범위별 데이터 분기 ──
-  let scopeEntries, scopeLabel, emoji, title, msg, sub="", chips=[], bgColor;
-
-  if(mode==="month"){
-    // 📅 해당 월 평가
-    const moStr = `${y}-${String(m+1).padStart(2,"0")}`;
-    const prevDate = new Date(y, m-1, 1);
-    const prevMonStr = `${prevDate.getFullYear()}-${String(prevDate.getMonth()+1).padStart(2,"0")}`;
-    scopeEntries = allEntries.filter(e=>e.date.startsWith(moStr));
-    const prevCnt = allEntries.filter(e=>e.date.startsWith(prevMonStr)).length;
-    const cnt = scopeEntries.length;
-    const done = scopeEntries.filter(e=>e.status==="완료").length;
-    const doneRate = cnt ? Math.round(done/cnt*100) : 0;
-    const isThisMon = y===now.getFullYear()&&m===now.getMonth();
-    const diff = cnt - prevCnt;
-    scopeLabel = `${y}년 ${m+1}월`;
-
-    // 연속 작업일 (이번 달만 의미 있음)
-    let streak=0;
-    if(isThisMon){
-      for(let i=0;i<31;i++){
-        const d=new Date(now); d.setDate(d.getDate()-i);
-        if(d.getMonth()!==m||d.getFullYear()!==y) break;
-        const dStr=ds(d.getFullYear(),d.getMonth(),d.getDate());
-        if(WORK_LOG[dStr]) streak++;
-        else if(i>0) break;
-      }
-    }
-
-    // 마지막 작업
-    const monDates = Object.keys(WORK_LOG).filter(d=>d.startsWith(moStr)).sort();
-    const lastInMon = monDates[monDates.length-1]||null;
-
-    if(cnt===0){
-      emoji="📭"; title=`${m+1}월 기록 없음`;
-      msg=isThisMon?"이번 달은 아직 작업 기록이 없어요. 하나 올려볼까요?":`${m+1}월에는 작업이 없었던 달이에요.`;
-      bgColor="linear-gradient(135deg,#fafafa,#f3f4f6)";
-    } else if(streak>=5){
-      emoji="🔥"; title=`${streak}일 연속 작업 중!`;
-      msg=`이번 달 흐름 완벽해요. ${cnt}건 기록 중이에요.`;
-      bgColor="linear-gradient(135deg,#f0fdf4,#dcfce7)";
-    } else if(cnt>=10){
-      emoji="💪"; title=`이번 달 ${cnt}건!`;
-      msg=`${m+1}월 작업량이 상당히 많아요. 완료율은 ${doneRate}%예요.`;
-      bgColor="linear-gradient(135deg,#eff6ff,#dbeafe)";
-    } else if(diff>0&&prevCnt>0){
-      emoji="📈"; title=`지난달보다 ${diff}건 더`;
-      msg=`${prevCnt}건 → ${cnt}건으로 늘었어요. 좋은 흐름이에요!`;
-      bgColor="linear-gradient(135deg,#f0fdf4,#dcfce7)";
-    } else if(diff<0&&prevCnt>0){
-      emoji="📉"; title=`지난달보다 ${Math.abs(diff)}건 감소`;
-      msg=`${prevCnt}건 → ${cnt}건. 다음 달엔 더 채워볼 수 있어요.`;
-      bgColor="linear-gradient(135deg,#fef9f0,#fef3c7)";
-    } else {
-      emoji="📋"; title=`${m+1}월 ${cnt}건`;
-      msg=doneRate>=50?`완료율 ${doneRate}%로 절반 이상 마무리됐어요.`:`작업 ${cnt}건 중 ${done}건 완료됐어요.`;
-      bgColor="linear-gradient(135deg,#f5f3ff,#ede9fe)";
-    }
-    chips=[
-      cnt?`${m+1}월 ${cnt}건`:"",
-      doneRate?`완료율 ${doneRate}%`:"",
-      prevCnt&&diff!==0?(diff>0?`+${diff}건 ↑`:`${diff}건 ↓`):"",
-      streak>=2?`${streak}일 연속`:"",
-    ].filter(Boolean);
-
-  } else if(mode==="year"){
-    // 📆 해당 연도 평가
-    const yrStr = String(y);
-    scopeEntries = allEntries.filter(e=>e.date.startsWith(yrStr));
-    const prevYrEntries = allEntries.filter(e=>e.date.startsWith(String(y-1)));
-    const cnt = scopeEntries.length;
-    const done = scopeEntries.filter(e=>e.status==="완료").length;
-    const doneRate = cnt ? Math.round(done/cnt*100) : 0;
-    const prevCnt = prevYrEntries.length;
-    const diff = cnt - prevCnt;
-    const isThisYear = y===now.getFullYear();
-
-    // 가장 바쁜 달
-    const byMonth = Array.from({length:12},(_,mo)=>({mo, cnt:scopeEntries.filter(e=>e.date.startsWith(`${y}-${String(mo+1).padStart(2,"0")}`)).length}));
-    const busiestMo = byMonth.reduce((a,b)=>b.cnt>a.cnt?b:a,{mo:0,cnt:0});
-    const activeMos = byMonth.filter(b=>b.cnt>0).length;
-
-    if(cnt===0){
-      emoji="📭"; title=`${y}년 기록 없음`;
-      msg=isThisYear?`${y}년 아직 기록이 없어요. 올해 첫 작업을 남겨볼까요?`:`${y}년에는 기록된 작업이 없어요.`;
-      bgColor="linear-gradient(135deg,#fafafa,#f3f4f6)";
-    } else if(cnt>=50){
-      emoji="🏆"; title=`${y}년 ${cnt}건 달성!`;
-      msg=`연간 작업량이 정말 많아요. ${activeMos}개월 동안 활발히 작업했네요.`;
-      bgColor="linear-gradient(135deg,#fefce8,#fef08a33)";
-    } else if(cnt>=20){
-      emoji="🌟"; title=`${y}년 ${cnt}건`;
-      msg=`${activeMos}개월에 걸쳐 꾸준히 쌓았어요. 완료율 ${doneRate}%예요.`;
-      bgColor="linear-gradient(135deg,#f0fdf4,#dcfce7)";
-    } else if(diff>0&&prevCnt>0){
-      emoji="📈"; title=`${y-1}년보다 ${diff}건 증가`;
-      msg=`${prevCnt}건 → ${cnt}건. 올해 더 활발하게 작업하고 있어요!`;
-      bgColor="linear-gradient(135deg,#eff6ff,#dbeafe)";
-    } else if(diff<0&&prevCnt>0){
-      emoji="📉"; title=`${y-1}년보다 ${Math.abs(diff)}건 감소`;
-      msg=`${prevCnt}건 → ${cnt}건. 내년엔 더 채워나갈 수 있어요.`;
-      bgColor="linear-gradient(135deg,#fef9f0,#fef3c7)";
-    } else {
-      emoji="📆"; title=`${y}년 ${cnt}건`;
-      msg=busiestMo.cnt>0?`${busiestMo.mo+1}월이 가장 바쁜 달이었어요 (${busiestMo.cnt}건).`:`${activeMos}개월에 걸쳐 작업이 기록됐어요.`;
-      bgColor="linear-gradient(135deg,#f5f3ff,#ede9fe)";
-    }
-    chips=[
-      cnt?`${y}년 ${cnt}건`:"",
-      doneRate?`완료율 ${doneRate}%`:"",
-      activeMos?`${activeMos}개월 활동`:"",
-      prevCnt&&diff!==0?(diff>0?`전년比 +${diff}건`:`전년比 ${diff}건`):"",
-    ].filter(Boolean);
-
-  } else {
-    // 📊 전체 타임라인 평가
-    const cnt = allEntries.length;
-    const done = allEntries.filter(e=>e.status==="완료").length;
-    const doneRate = cnt ? Math.round(done/cnt*100) : 0;
-    const years = [...new Set(allEntries.map(e=>e.date.slice(0,4)))].sort();
-    const activeYears = years.length;
-    const avgPerYear = activeYears ? Math.round(cnt/activeYears) : 0;
-    const sortedDs = Object.keys(WORK_LOG).sort();
-    const lastWork = sortedDs[sortedDs.length-1]||null;
-    const daysSince = lastWork ? Math.floor((now-new Date(lastWork))/86400000) : null;
-
-    if(cnt===0){
-      emoji="📝"; title="아직 기록 없음";
-      msg="첫 작업을 등록하면 전체 통계를 분석해드려요.";
-      bgColor="linear-gradient(135deg,#fafafa,#f3f4f6)";
-    } else if(cnt>=100){
-      emoji="🎖️"; title=`누적 ${cnt}건!`;
-      msg=`${activeYears}년에 걸쳐 ${cnt}건을 쌓아왔어요. 정말 대단한 작업량이에요.`;
-      bgColor="linear-gradient(135deg,#fefce8,#fef08a33)";
-    } else if(doneRate>=60){
-      emoji="✨"; title=`완료율 ${doneRate}%`;
-      msg=`전체 ${cnt}건 중 ${done}건 완료. 마무리 습관이 훌륭해요.`;
-      bgColor="linear-gradient(135deg,#f0fdf4,#dcfce7)";
-    } else if(activeYears>=2){
-      emoji="📊"; title=`${activeYears}년 기록`;
-      msg=`연평균 ${avgPerYear}건. 꾸준히 기록해온 작업 히스토리예요.`;
-      bgColor="linear-gradient(135deg,#eff6ff,#dbeafe)";
-    } else {
-      emoji="📊"; title=`전체 ${cnt}건`;
-      msg=`완료 ${done}건 · 진행 중 ${cnt-done}건. 지금까지의 작업 히스토리예요.`;
-      bgColor="linear-gradient(135deg,#f5f3ff,#ede9fe)";
-    }
-    chips=[
-      `전체 ${cnt}건`,
-      doneRate?`완료율 ${doneRate}%`:"",
-      activeYears?`${activeYears}년 기록`:"",
-      avgPerYear?`연평균 ${avgPerYear}건`:"",
-      daysSince===0?"오늘 작업":daysSince===1?"어제 작업":daysSince!==null?`${daysSince}일 전 작업`:"",
-    ].filter(Boolean);
-  }
-
-  return`<div class="eval-widget" style="background:${bgColor}">
-    <div class="eval-banner">
-      <div class="eval-emoji">${emoji}</div>
-      <div class="eval-text">
-        <div class="eval-title">${title}</div>
-        <div class="eval-msg">${msg}${sub?` <span style="opacity:.65">${sub}</span>`:""}</div>
-      </div>
-    </div>
-    ${chips.length?`<div class="eval-chips">${chips.map(c=>`<span class="eval-chip">${c}</span>`).join("")}</div>`:""}
-  </div>`;
-}
-
 const S={
   view:"home",
   activeProj:null,activeVol:null,activeEp:null,
@@ -1906,22 +1253,12 @@ function setLang(lang){
   /* DeepL 설정 확인 */
   var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
 
-  /* ── 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리) ── */
-  if(S.view === 'content'){
-    _renderEpForLang(lang);                          /* 본문: 언어 전용 렌더 */
-    if(_tlCache[lang]) _tlApply(_tlCache[lang]);     /* UI 캐시 있으면 즉시 적용 */
-    _tlGoogle(lang);                                 /* UI(메뉴 등) 구글 번역 */
-    return;
-  }
-
   /* 캐시 히트 → 즉시 적용 (API 호출 없음) */
   if(_tlCache[lang]){
     _tlApply(_tlCache[lang]);
-    _updateEpLangBtns(lang);
     return;
   }
 
-  _updateEpLangBtns(lang);
   if(cfg.enabled && cfg.proxyUrl){
     _tlDeepL(lang, cfg);
   } else {
@@ -1985,183 +1322,9 @@ function _tlApply(dict){
   });
 }
 
-/* ── 에피소드 본문 DeepL 버튼 표시/숨김 ── */
-function _tlShowDeepLBtn(lang, cfg){
-  var btn = document.getElementById('deepl-translate-btn');
-  var rbtn = document.getElementById('deepl-retranslate-btn');
-  if(!btn) return;
-  /* ko로 돌아가면 숨김 */
-  if(!lang || lang === 'ko'){
-    btn.style.display = 'none';
-    if(rbtn) rbtn.style.display = 'none';
-    return;
-  }
-  /* 이미 캐시된 번역이 있으면 완료 상태로 바로 표시 */
-  var cacheKey = 'dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+lang;
-  var cached = false;
-  try { cached = !!localStorage.getItem(cacheKey); } catch(e){}
-  btn.style.display = 'flex';
-  if(cached){
-    btn.className = 'done';
-    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
-    btn.onclick = null;
-    if(rbtn) rbtn.style.display = 'flex';
-    /* 캐시 있으면 본문도 바로 적용 */
-    _tlDeepLEpisode(lang, cfg);
-  } else {
-    btn.className = '';
-    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역';
-    btn.onclick = function(){ onDeepLBtnClick(); };
-    if(rbtn) rbtn.style.display = 'none';
-  }
-}
 
-window.onDeepLBtnClick = function(){
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-  if(!cfg.enabled || !cfg.proxyUrl || !_currentLang || _currentLang === 'ko') return;
-  var btn = document.getElementById('deepl-translate-btn');
-  var rbtn = document.getElementById('deepl-retranslate-btn');
-  if(btn){ btn.style.opacity='0.5'; btn.style.pointerEvents='none'; }
-  _tlDeepLEpisode(_currentLang, cfg, function(){
-    if(!btn) return;
-    btn.style.opacity='';
-    btn.style.pointerEvents='';
-    btn.className='done';
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
-    btn.onclick=null;
-    if(rbtn) rbtn.style.display='flex';
-  });
-};
 
-window.onDeepLRetranslateClick = function(){
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-  if(!cfg.enabled || !cfg.proxyUrl || !_currentLang || _currentLang === 'ko') return;
-  /* 캐시 삭제 */
-  var cacheKey = 'dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+_currentLang;
-  try { localStorage.removeItem(cacheKey); } catch(e){}
-  /* 버튼 초기화 */
-  var btn = document.getElementById('deepl-translate-btn');
-  var rbtn = document.getElementById('deepl-retranslate-btn');
-  if(rbtn){ rbtn.style.opacity='0.5'; rbtn.style.pointerEvents='none'; }
-  if(btn){ btn.style.opacity='0.5'; btn.style.pointerEvents='none'; }
-  _tlDeepLEpisode(_currentLang, cfg, function(){
-    if(btn){
-      btn.style.opacity=''; btn.style.pointerEvents='';
-      btn.className='done';
-      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
-      btn.onclick=null;
-    }
-    if(rbtn){ rbtn.style.opacity=''; rbtn.style.pointerEvents=''; }
-  });
-};
 
-/* ── 에피소드 본문 DeepL 번역 (localStorage 캐시) ── */
-function _tlDeepLEpisode(lang, cfg, onDone){
-  var el = document.getElementById('postype-body');
-  if(!el) return;
-
-  var cacheKey = 'dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+lang;
-
-  /* localStorage 캐시 히트 → 바로 적용 */
-  try {
-    var cached = localStorage.getItem(cacheKey);
-    if(cached){
-      el.innerHTML = '<div class="postype-text notranslate">'+cached+'</div>';
-      _tlBadge('deepl');
-      return;
-    }
-  } catch(e){}
-
-  /* 번역 소스 우선순위: 일본어 파일 → 순한국어 파일 → 화면 원본(한본어)
-     (일본어 번역본이 가장 정확하므로 모든 외국어 번역의 기준으로 사용) */
-  var jpPath     = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'jp');
-  var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
-
-  /* 로딩 표시 */
-  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>DeepL 번역 중…</span></div>';
-
-  var sourcePromise = fetchEpText(jpPath)
-    .then(function(t){ return t.split('\n'); })
-    .catch(function(){
-      /* 일본어 파일 없음 → 순한국어 파일 폴백 */
-      return fetchEpText(pureKoPath)
-        .then(function(t){ return t.split('\n'); })
-        .catch(function(){
-          /* 둘 다 없음 → 화면 원본(한본어) 사용 */
-          if(_epOriginalLines) return _epOriginalLines;
-          var textEl = document.querySelector('#postype-body .postype-text');
-          var raw = textEl ? textEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'') : '';
-          return raw.split('\n');
-        });
-    });
-
-  sourcePromise.then(function(lines){
-
-  /* 빈 줄은 DeepL에 안 보내고 인덱스만 기록 */
-  var indices = [], texts = [];
-  lines.forEach(function(l, i){
-    if(l.trim()){ indices.push(i); texts.push(l); }
-  });
-
-  var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
-
-  /* 50개 초과 시 배치 분할 */
-  var BATCH = 50;
-  var batches = [];
-  for(var i=0; i<texts.length; i+=BATCH){
-    batches.push(texts.slice(i, i+BATCH));
-  }
-
-  var ctrl = new AbortController();
-  var timer = setTimeout(function(){ ctrl.abort(); }, cfg.timeout || 15000);
-
-  Promise.all(batches.map(function(batch){
-    return fetch(cfg.proxyUrl, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ text: batch, target_lang: dlLang }),
-      signal: ctrl.signal
-    }).then(function(res){
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      return res.json();
-    }).then(function(data){
-      return data.translations.map(function(t){ return t.text; });
-    });
-  }))
-  .then(function(results){
-    clearTimeout(timer);
-    /* 배치 결과 합치기 */
-    var translated = [].concat.apply([], results);
-    /* 원본 줄 구조에 번역 삽입 */
-    var output = lines.slice();
-    indices.forEach(function(origIdx, ti){
-      output[origIdx] = translated[ti] || lines[origIdx];
-    });
-    var html = output
-      .map(function(l){ return l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); })
-      .join('<br>');
-    el.innerHTML = '<div class="postype-text notranslate">'+html+'</div>';
-    _tlBadge('deepl');
-    try { localStorage.setItem(cacheKey, html); } catch(e){}
-    if(typeof onDone === 'function') onDone();
-  })
-  .catch(function(err){
-    clearTimeout(timer);
-    console.warn('[DeepL 본문] 실패 → 순한국어 기준 구글 폴백:', err.message);
-    /* DeepL 실패 시: 순한국어 본문을 표시하고 구글이 번역하도록 (구글은 한국어 소스가 안정적)
-       순한국어 파일이 없으면 화면 원본(한본어) 사용 */
-    var koFallbackPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
-    fetchEpText(koFallbackPath).catch(function(){
-      return _epOriginalLines ? _epOriginalLines.join('\n') : '';
-    }).then(function(srcText){
-      var restoredHtml = (srcText||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-      el.innerHTML = '<div class="postype-text">'+restoredHtml+'</div>';
-      if(typeof _tlGoogle==='function' && _currentLang && _currentLang!=='ko') _tlGoogle(_currentLang);
-    });
-  });
-
-  }); /* sourcePromise.then 닫기 */
-}
 
 /* ── ② Google Translate 폴백 (기존 동작 그대로) ── */
 function _tlBadge(engine){
@@ -2174,17 +1337,8 @@ function _tlBadgeReset(){
   el.className='';
   el.textContent='';
   _epOriginalLines = null; /* 원본 초기화 */
-  _updateEpLangBtns('ko'); /* 버튼 복원 */
 }
 
-/* ── 번역 모드에 따라 에피소드 언어 버튼 표시 제어 ──
-   번역 중에는 소스 파일 선택 버튼(한본어/순KO/JA)을 모두 숨김 (번역이 소스 선택을 대체) */
-function _updateEpLangBtns(lang){
-  var isTranslating = lang && lang !== 'ko';
-  document.querySelectorAll('.ep-lang-btn').forEach(function(b){
-    b.style.display = isTranslating ? 'none' : '';
-  });
-}
 function _tlGoogle(lang){
   _tlBadge('google');
   var sel = document.querySelector('.goog-te-combo');
@@ -2200,50 +1354,10 @@ function _tlGoogle(lang){
 }
 
 /* ── 본문 DeepL 버튼 숨김 ── */
-function _tlHideDeepLBtns(){
-  var b=document.getElementById('deepl-translate-btn');  if(b) b.style.display='none';
-  var r=document.getElementById('deepl-retranslate-btn');if(r) r.style.display='none';
-}
 
 /* ── 일본어 선택: 번역하지 않고 일본어 원본 파일을 본문에 직접 표시 ── */
-function _tlShowJpOriginal(){
-  var el = document.getElementById('postype-body');
-  if(!el) return;
-  _tlHideDeepLBtns();
-  var jpPath     = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'jp');
-  var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
-  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>日本語版を読み込み中…</span></div>';
-  fetchEpText(jpPath).then(function(text){
-    var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-    /* 일본어 원본은 그대로 — 구글이 다시 번역하지 않도록 notranslate */
-    el.innerHTML = '<div class="postype-text notranslate">'+html+'</div>';
-    _tlBadge('jp');
-  }).catch(function(){
-    /* 일본어 파일 없음 → 순한국어 표시 후 구글이 일본어로 번역 (notranslate 없음) */
-    fetchEpText(pureKoPath).then(function(text){
-      var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-      el.innerHTML = '<div class="postype-text">'+html+'</div>';
-      if(typeof _tlGoogle==='function') _tlGoogle('ja');
-    }).catch(function(){
-      /* 둘 다 없음 → 화면 원본 유지, 구글 번역 시도 */
-      if(typeof _tlGoogle==='function') _tlGoogle('ja');
-    });
-  });
-}
 
 /* ── DeepL 미사용 시: 순한국어 본문을 표시하고 구글 번역 (한본어 대신 순한국어 기준) ── */
-function _tlLoadPureKoAndGoogle(lang){
-  var el = document.getElementById('postype-body');
-  if(!el){ if(typeof _tlGoogle==='function') _tlGoogle(lang); return; }
-  var pureKoPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, 'pure_ko');
-  fetchEpText(pureKoPath).then(function(text){
-    var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-    el.innerHTML = '<div class="postype-text">'+html+'</div>';
-    if(typeof _tlGoogle==='function') _tlGoogle(lang);
-  }).catch(function(){
-    if(typeof _tlGoogle==='function') _tlGoogle(lang);
-  });
-}
 
 /* ── TOPBAR LANGUAGE DROPDOWN ── */
 (function(){
@@ -2342,986 +1456,35 @@ function _tlLoadPureKoAndGoogle(lang){
 /* ── NAV CATEGORY FOLD STATE ── */
 const NAV_CAT_STATE = { active: true, done: false, archive: false };
 
-function toggleNavCat(cat) {
-  NAV_CAT_STATE[cat] = !NAV_CAT_STATE[cat];
-  renderNavItems();
-}
-
 /* ── NAV STATE ── */
 let _navHideTimer=null;
-function toggleNav(){
-  const layer=document.getElementById("nav-layer");
-  const bd=document.getElementById("nav-backdrop");
-  if(layer.classList.contains("open")){
-    layer.classList.remove("open");
-    hideSubPanel();
-    S.navPinned=false;
-    document.body.classList.remove("nav-pinned");
-    bd.classList.remove("show");
-  } else {
-    layer.classList.add("open");
-    if(!S.navPinned) bd.classList.add("show");
-    renderNavItems();
-    if(S.activeProj){
-      const _p=getProj(S.activeProj);
-      const sp=document.getElementById("sub-panel");
-      if(_p&&_p.keepSub&&_p.subType!=='youtube'&&sp){
-        S.hoveredProj=S.activeProj;
-        renderSubPanelContent(S.activeProj);
-        sp.classList.add("visible");
-      }
-    }
-  }
-}
-function closeNav(){
-  if(S.navPinned)return;
-  document.getElementById("nav-layer").classList.remove("open");
-  document.getElementById("nav-backdrop").classList.remove("show");
-  hideSubPanel();
-}
-function showSubPanel(projId){
-  clearTimeout(_navHideTimer);
-  const proj = getProj(projId);
-  if(!proj || proj.subType==='youtube' || !proj.keepSub) return;
-  const _layer=document.getElementById("nav-layer");
-  if(!_layer||!_layer.classList.contains("open")) return;
-  S.hoveredProj=projId;
-  const sp=document.getElementById("sub-panel");
-  renderSubPanelContent(projId);
-  sp.classList.add("visible");
-}
-function hideSubPanel(){
-  if(S.navPinned)return;
-  const sp=document.getElementById("sub-panel");
-  sp.classList.remove("visible");
-  S.hoveredProj=null;
-}
-function onNavPanelLeave(){}
-function onSubPanelEnter(){}
-function onSubPanelLeave(){}
-function setPinned(v){
-  S.navPinned=v;
-  document.querySelector(".sm-pin-btn")?.classList.toggle("on",v);
-  document.body.classList.toggle("nav-pinned",v);
-  if(v){
-    // Hide backdrop so content is clickable
-    document.getElementById("nav-backdrop").classList.remove("show");
-  } else {
-    closeNav();
-  }
-}
-
-function renderNavItems(){
-  // 검색어 유지
-  const CAT_DEFS = [
-    { key:"active",  label:"진행중",  dotCls:"active-dot" },
-    { key:"archive", label:"보류",    dotCls:"archive-dot"},
-    { key:"done",    label:"완료",    dotCls:"done-dot"   },
-  ];
-
-  let catHtml = "";
-
-  CAT_DEFS.forEach(cat => {
-    const projs = PROJECTS.filter(p => (p.status || "active") === cat.key);
-    if(!projs.length) return;
-    const isOpen = NAV_CAT_STATE[cat.key];
-    catHtml += `
-      <div>
-        <button class="nav-cat-header" onclick="toggleNavCat('${cat.key}')">
-          <span class="nav-cat-arrow" style="transform:rotate(${isOpen?"0":"-90deg"})">▼</span>
-          <span class="nav-cat-label">${cat.label}</span>
-          <span class="nav-cat-count">(${projs.length})</span>
-        </button>
-        <div class="nav-cat-body ${isOpen?"":"collapsed"}">
-          ${projs.map(p=>{
-            const active = S.activeProj===p.id;
-            const folderSvg = `<svg width="14" height="13" viewBox="0 0 26 22" fill="none" style="flex-shrink:0"><path d="M1 4.5C1 3.4 1.9 2.5 3 2.5H9.5L11 4.5H23C24.1 4.5 25 5.4 25 6.5V18.5C25 19.6 24.1 20.5 23 20.5H3C1.9 20.5 1 19.6 1 18.5V4.5Z" stroke="#888" stroke-width="1.4" fill="none"/></svg>`;
-            return `
-            <button class="nav-proj-item nav-proj-item-inner ${active?"active":""}"
-              style="--acc:${p.acc}"
-              onclick="clickProj('${p.id}')">
-              ${folderSvg}
-              ${p.label}
-            </button>`;
-          }).join("")}
-        </div>
-      </div>`;
-  });
-
-  document.getElementById("nav-items-wrap").innerHTML=`
-    <button class="nav-cal-item ${S.view==="about"&&!S.activeProj?"active":""}" onclick="goAbout()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#555" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="#555" stroke-width="1.8" stroke-linecap="round"/></svg>
-      Contact
-    </button>
-    <div class="nav-sep"></div>
-    ${catHtml}
-  `;
-}
-
-function renderSubPanelContent(projId){
-  const proj=getProj(projId);
-  if(!proj)return;
-  if(proj.subType==="doll") renderDollSub(proj);
-  else if(proj.subType==="youtube") renderYtSub(proj);
-  else renderDefaultSub(proj);
-}
-
-function _subHeader(proj){
-  return `
-    <div class="sm-hd">
-      <div class="sm-hd-left">
-        <div class="sm-proj-lbl">Project</div>
-        <div class="sm-proj-name" style="color:${proj.acc}">${proj.label}</div>
-      </div>
-      <div class="sm-hd-btns">
-        <button class="sm-pin-btn ${S.navPinned?"on":""}" onclick="setPinned(${!S.navPinned})">
-          ${S.navPinned?"📌 고정됨":"📌 고정"}
-        </button>
-        <button class="sm-x" onclick="closeNav()">&#10005;</button>
-      </div>
-    </div>`;
-}
-
-function renderDefaultSub(proj){
-  const vols=VOLUMES[proj.id]||[];
-  const hasNovel=vols.some(v=>v.type==="웹소설");
-  const tabs=["ALL",...(hasNovel?["웹소설"]:[])].flat();
-  const filtered=S.subTab==="ALL"?vols:vols.filter(v=>v.type===S.subTab);
-  document.getElementById("sm-inner").innerHTML=`
-    ${_subHeader(proj)}
-    <button class="sm-intro-link" onclick="goIntro('${proj.id}')">프로젝트 소개글 &#9654;</button>
-    <div class="sm-tabs">
-      ${tabs.map(t=>`<button class="sm-tab ${S.subTab===t?"active":""}" style="--tacc:${proj.acc}" onclick="setSubTabFn('${t}')">${t}</button>`).join("")}
-    </div>
-    <div class="vol-grid">
-      ${filtered.map(v=>{
-        const wip=v.episodes.some(e=>e.status==="작업중");
-        const plan=v.episodes.every(e=>e.status==="예정");
-        const sel=S.activeVol===v.id&&S.activeProj===proj.id;
-        const badge=wip?`<div class="vol-badge" style="background:${proj.acc};color:#fff">UP</div>`:plan?`<div class="vol-badge" style="background:#e0e0e0;color:#999">TBD</div>`:"";
-        return `<div class="vol-card" onclick="clickVol('${proj.id}','${v.id}')" style="${sel?`outline:2px solid ${proj.acc};border-radius:8px`:""}">
-          <div class="vol-thumb" style="background:linear-gradient(${v.grad})">${badge}<div class="vol-type-chip">${v.type}</div>${driveImg(v.coverId)?`<img src="${driveImg(v.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}${!v.coverId?`<div class="vol-num">${v.label}</div>`:""}</div>
-          <div class="vol-title">${v.label}</div>
-        </div>`;
-      }).join("")}
-    </div>`;
-}
-
-function renderYtSub(proj){
-  document.getElementById("sm-inner").innerHTML=`
-    ${_subHeader(proj)}
-    <button class="sm-intro-link" onclick="goIntro('${proj.id}')">프로젝트 소개글 &#9654;</button>
-    <a href="${proj.youtubeUrl||"#"}" target="_blank" class="sm-yt-link" style="text-decoration:none">&#9654; YouTube 채널 바로가기</a>`;
-}
-
-function renderDollSub(proj){
-  const dv=VOLUMES["biz-oc-doll"];
-  document.getElementById("sm-inner").innerHTML=`
-    ${_subHeader(proj)}
-    <button class="sm-intro-link" onclick="goIntro('${proj.id}')">프로젝트 소개글 &#9654;</button>
-    <button class="sm-char-link" onclick="goDollChar()">캐릭터 일람 &#9654;</button>
-    <button class="sm-char-link" onclick="goStory()" style="justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리</button>
-    <button class="sm-char-link" onclick="openVoteOverlay()" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700">인기 투표</button>
-    <button class="sm-char-link" onclick="openEventOverlay()">이벤트 &#9654;</button>
-    <button class="sm-char-link" onclick="openArchiveOverlay()">아카이브 &#9654;</button>`;
-}
-
-function setSubTabFn(t){S.subTab=t;if(S.hoveredProj)renderSubPanelContent(S.hoveredProj);}
-
 /* ── MOBILE MENU ── */
-function renderMobPanel1(){
-  const p1=document.getElementById("mob-panel-1");
-  let html="";
-  // about
-  html+=`<button class="mob-nav-item" onclick="goAbout();closeMobMenu()">
-    <span style="display:flex;align-items:center;gap:8px">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#555" stroke-width="1.8"/><path d="M8 10h8M8 14h5" stroke="#555" stroke-width="1.8" stroke-linecap="round"/></svg>
-      Contact
-    </span>
-  </button>`;
-
-  // ── 폴더 카테고리 구조 ──
-  const MOB_CAT_DEFS = [
-    { key:"active",  label:"진행중", dotColor:"#22c55e" },
-    { key:"archive", label:"보류",   dotColor:"#94a3b8" },
-    { key:"done",    label:"완료",   dotColor:"#94a3b8" },
-  ];
-  MOB_CAT_DEFS.forEach(cat=>{
-    const projs = PROJECTS.filter(p=>(p.status||"active")===cat.key);
-    if(!projs.length) return;
-    const isOpen = NAV_CAT_STATE[cat.key];
-    html+=`<button class="mob-cat-header" onclick="
-      NAV_CAT_STATE['${cat.key}']=!NAV_CAT_STATE['${cat.key}'];
-      var bd=this.nextElementSibling;
-      bd.classList.toggle('collapsed',!NAV_CAT_STATE['${cat.key}']);
-      this.querySelector('.mob-cat-arrow').style.transform=NAV_CAT_STATE['${cat.key}']?'rotate(0)':'rotate(-90deg)';
-    ">
-      <span class="mob-cat-arrow" style="transform:rotate(${isOpen?"0":"-90deg"})">▼</span>
-      <span class="mob-cat-label">${cat.label}</span>
-      <span class="mob-cat-count">(${projs.length})</span>
-    </button>
-    <div class="mob-cat-body ${isOpen?"":"collapsed"}">`;
-    projs.forEach(p=>{
-      const folderIcon = `<svg width="14" height="13" viewBox="0 0 26 22" fill="none" style="flex-shrink:0"><path d="M1 4.5C1 3.4 1.9 2.5 3 2.5H9.5L11 4.5H23C24.1 4.5 25 5.4 25 6.5V18.5C25 19.6 24.1 20.5 23 20.5H3C1.9 20.5 1 19.6 1 18.5V4.5Z" stroke="#888" stroke-width="1.4" fill="none"/></svg>`;
-      if(p.subType==='youtube'){
-        html+=`<button class="mob-proj-btn mob-proj-btn-inner" data-pid="${p.id}" data-acc="${p.acc}" onclick="goIntro('${p.id}');closeMobMenu()">
-          <span style="display:flex;align-items:center;gap:8px">
-            ${folderIcon}
-            ${p.label}
-          </span>
-        </button>`;
-      } else {
-        html+=`<button class="mob-proj-btn mob-proj-btn-inner" data-pid="${p.id}" data-acc="${p.acc}" onclick="mobShowSub('${p.id}')">
-          <span style="display:flex;align-items:center;gap:8px">
-            ${folderIcon}
-            ${p.label}
-          </span>
-          <span class="mob-arr">&#8250;</span>
-        </button>`;
-      }
-    });
-    html+=`</div>`;
-  });
-
-  // 맨 아래 처음으로 버튼
-  html+=`<button class="mob-home-btn" onclick="hardReset()">
-    <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 6.5V13h4V9h4v4h4V6.5L7 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-    처음으로
-  </button>`;
-  p1.innerHTML=html;
-}
-
-function mobShowSub(projId){
-  S.lastMobProj = projId;
-  // 1차 버튼 active 상태 업데이트
-  document.querySelectorAll('.mob-proj-btn-inner').forEach(function(btn){
-    const pid = btn.getAttribute('data-pid');
-    const acc = btn.getAttribute('data-acc');
-    if(pid===projId){
-      btn.classList.add('active');
-      btn.style.setProperty('--mob-acc', acc);
-    } else {
-      btn.classList.remove('active');
-      btn.style.removeProperty('--mob-acc');
-    }
-  });
-  const p=PROJECTS.find(pr=>pr.id===projId);
-  if(!p) return;
-  // 2차 패널 내용 생성
-  const p2=document.getElementById("mob-panel-2");
-  let html=`<div class="mob-sub2-hd">
-    <span class="mob-sub2-title" style="color:${p.acc}">${p.label}</span>
-    <button class="mob-sub2-x" onclick="closeMobMenu()">&#10005;</button>
-  </div>`;
-
-  // 소개글 / 캐릭터 버튼
-  html+=`<button class="mob2-intro-link" onclick="goIntro('${p.id}');closeMobMenu()">
-    프로젝트 소개글 <span>&#9654;</span>
-  </button>`;
-  if(p.subType==="doll"){
-    html+=`<button class="mob2-intro-link" onclick="goDollChar();closeMobMenu()">
-      캐릭터 일람 <span>&#9654;</span>
-    </button>`;
-    html+=`<button class="mob2-intro-link" style="justify-content:flex-start;padding-top:16px;padding-bottom:16px;gap:10px" onclick="goStory();closeMobMenu()">
-      <span style="width:8px;height:8px;border-radius:50%;background:#5a90b0;flex-shrink:0;display:inline-block"></span>스토리
-    </button>`;
-    html+=`<button class="mob2-intro-link" style="background:#5a90b0;color:#fff;border-color:#5a90b0;font-weight:700" onclick="openVoteOverlay();closeMobMenu()">
-      &#9733; 인기 투표 <span>&#9654;</span>
-    </button>`;
-    html+=`<button class="mob2-intro-link" onclick="openEventOverlay();closeMobMenu()">
-      이벤트 <span>&#9654;</span>
-    </button>`;
-    html+=`<button class="mob2-intro-link" onclick="openArchiveOverlay();closeMobMenu()">
-      아카이브 <span>&#9654;</span>
-    </button>`;
-  }
-  if(p.subType==="youtube"){
-    html+=`<a class="mob2-intro-link" style="color:#e00;border-color:#fdd;text-decoration:none" href="${p.youtubeUrl||'#'}" target="_blank">
-      &#9654; YouTube 채널 바로가기
-    </a>`;
-  }
-
-  // 진행 상황 (doll 제외한 기본 / doll)
-  if(p.subType==="doll"){
-
-  } else if(p.subType!=="youtube"){
-    // 기본 (웹소설/웹툰 볼륨 목록)
-    const vols=VOLUMES[p.id]||[];
-    // 볼륨 그리드
-    html+=`<div class="mob2-vol-grid">`;
-    vols.forEach(v=>{
-      const wip=v.episodes.some(e=>e.status==="작업중");
-      const plan=v.episodes.every(e=>e.status==="예정");
-      const badge=wip?`<div class="mob2-vol-badge" style="background:${p.acc};color:#fff">UP</div>`:
-                  plan?`<div class="mob2-vol-badge" style="background:#e0e0e0;color:#999">TBD</div>`:"";
-      html+=`<div class="mob2-vol-card" onclick="clickVol('${p.id}','${v.id}');closeMobMenu()">
-        <div class="mob2-vol-thumb" style="background:linear-gradient(${v.grad})">
-          ${badge}
-          <div class="mob2-vol-type">${v.type}</div>
-          ${driveImg(v.coverId)?`<img src="${driveImg(v.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}
-          ${!v.coverId?`<div style="position:absolute;bottom:0;left:0;right:0;padding:14px 7px 6px;background:linear-gradient(to top,#00000075,transparent);font-size:9px;font-weight:600;color:#ffffffb0">${v.label}</div>`:""}
-        </div>
-        <div class="mob2-vol-title">${v.label}</div>
-      </div>`;
-    });
-    html+=`</div>`;
-  }
-
-  p2.innerHTML=html;
-  // 1차 메뉴 유지 + 2차 패널 오른쪽에 표시
-  document.getElementById("mob-menu").classList.add("show-sub");
-}
-
-function mobHideSub(){
-  document.getElementById("mob-menu").classList.remove("show-sub");
-}
-
-function renderMobMenu(){
-  renderMobPanel1();
-  // 2차 패널은 mobShowSub 호출 시 채움
-}
-
-function mobToggleSub(id){document.getElementById(id)?.classList.toggle("open");}
-function toggleMobile(){
-  const mob=document.getElementById("mob-menu");
-  const bd=document.getElementById("mob-backdrop");
-  if(!mob.classList.contains("open")){
-    renderMobMenu();
-    // 마지막으로 열었던 2차 패널이 있으면 복원
-    if(S.lastMobProj){
-      mobShowSub(S.lastMobProj);
-    } else {
-      mob.classList.remove("show-sub");
-    }
-  } else {
-    // 닫을 때 show-sub 반드시 정리 (hamburger로 닫는 경우 누락되던 버그 수정)
-    mob.classList.remove("show-sub");
-  }
-  mob.classList.toggle("open");
-  bd&&bd.classList.toggle("show",mob.classList.contains("open"));
-}
-function closeMobMenu(){
-  const mob=document.getElementById("mob-menu");
-  mob.classList.remove("open");
-  mob.classList.remove("show-sub");
-  const bd=document.getElementById("mob-backdrop");
-  if(bd)bd.classList.remove("show");
-}
-
 /* ── MAIN RENDER ── */
 function render(){
-  renderNavItems();
-  // charlist iframe 토글: charlist/chardetail이 아니면 iframe 숨기고 #content 복원
-  var charFr = document.getElementById("char-frame");
-  var introFr = document.getElementById("doll-intro-frame");
-  var bhsIntroFr = document.getElementById("bhs-intro-frame");
-  var archiveFr = document.getElementById("archive-frame");
-  var eventFr = document.getElementById("event-frame");
   var ct = document.getElementById("content");
-  if(S.view !== "charlist" && S.view !== "chardetail"){
-    if(charFr) charFr.style.display = "none";
-    if(ct) ct.style.display = "";
+  if(ct){
+    ct.style.display = "";
+    ct.style.marginTop = "48px";
+    ct.style.height = "calc(100dvh - 48px)";
   }
-  if(S.view !== "intro"){
-    if(introFr) introFr.style.display = "none";
-    if(bhsIntroFr) bhsIntroFr.style.display = "none";
-    if(ct && S.view !== "charlist" && S.view !== "chardetail") ct.style.display = "";
-    // 소개글 화면을 벗어나면 암호 잠금 게이트도 반드시 닫는다
-    // (틀린 암호 입력 후 다른 화면으로 이동해도 게이트가 남던 버그 수정)
-    if(typeof _dollGateHide === "function") _dollGateHide();
-  }
-  if(S.view !== "archive"){
-    if(archiveFr) archiveFr.style.display = "none";
-  }
-  if(S.view !== "event"){
-    if(eventFr) eventFr.style.display = "none";
-  }
-  var storyFr = document.getElementById("story-frame");
-  if(storyFr) storyFr.style.display = "none"; // 구버전 호환
-  // archive/event 뷰일 때 #content 숨기기
-  if(S.view === "archive" || S.view === "event"){
-    if(ct) ct.style.display = "none";
-  }
-  // 모바일 topbar 리셋 (content view 이탈 시)
-  if(S.view !== "content"){
-    const tb = document.getElementById("topbar");
-    if(tb) tb.style.transform = "";
-    const ctb = document.getElementById("content-topbar");
-    if(ctb) ctb.style.transform = "";
-    const ct = document.getElementById("content");
-    if(ct){
-      ct.style.marginTop = "48px";
-      ct.style.height = "calc(100vh - 48px)";
-      ct.style.height = "calc(100dvh - 48px)";
-      if(ct._mobScrollHandler){
-        ct.removeEventListener("scroll", ct._mobScrollHandler);
-        ct._mobScrollHandler = null;
-      }
-    }
-    // 플로팅 네비 완전히 숨기기 (display:none)
-    const fep = document.getElementById("float-ep-nav");
-    if(fep){ fep.classList.remove("visible"); fep.classList.remove("active"); fep._storyMode=false; }
-  }
-  if(S.view==="home")          { _tlBadgeReset(); renderHome(); }
-  else if(S.view==="calendar") { _tlBadgeReset(); renderCalendar(); }
-  else if(S.view==="progress") { _tlBadgeReset(); renderProgress(); }
-  else if(S.view==="intro")    { _tlBadgeReset(); renderIntro(); }
-  else if(S.view==="episodes") { _tlBadgeReset(); renderEpList(); }
-  else if(S.view==="content")  renderContentView();
-  else if(S.view==="story")         { _tlBadgeReset(); renderStoryList(); }
-  else if(S.view==="story-content") renderStoryContent();
-  else if(S.view==="charlist"||S.view==="chardetail"){
-    // iframe 방식 — doll_charlist.html 완전 독립 운영
-    // #content를 숨기고 char-frame iframe을 보여줌
-    document.getElementById("content").style.display="none";
-    document.getElementById("char-frame").style.display="block";
-  }
-  else if(S.view==="archive"){
-    document.getElementById("content").style.display="none";
-    document.getElementById("archive-frame").style.display="block";
-  }
-  else if(S.view==="event"){
-    document.getElementById("content").style.display="none";
-    document.getElementById("event-frame").style.display="block";
-  }
-  else if(S.view==="about")    renderAbout();
+  var tb = document.getElementById("topbar");
+  if(tb) tb.style.transform = "";
+  if(S.view==="calendar")   { _tlBadgeReset(); renderCalendar(); }
+  else                      { _tlBadgeReset(); renderHome(); }
 }
 
-/* ══ STORY SPA — biz-OC-doll ══ */
-let _storyData = null;
-
-async function _fetchStoryData(){
-  if(_storyData) return _storyData;
-  try{
-    const r = await fetch('biz-OC-doll/story_editor.json');
-    if(!r.ok) throw new Error('fetch failed');
-    _storyData = await r.json();
-  }catch(e){
-    _storyData = {episodes:[]};
-  }
-  return _storyData;
+/* ── BUSINESS INQUIRY OVERLAY ── */
+function openContactOverlay(){
+  const ov=document.getElementById("contact-overlay");
+  if(ov) ov.classList.remove("hidden");
 }
-
-async function renderStoryList(){
-  const ct = document.getElementById('content');
-  ct.innerHTML = `<div style="padding:40px 24px;text-align:center;color:var(--tx3);font-size:13px">불러오는 중…</div>`;
-  const data = await _fetchStoryData();
-  const eps = data.episodes || [];
-  const banners = data._banners || {};
-  const TAB_LABELS = {main:'메인스토리', sub:'캐릭터스토리', event:'이벤트스토리'};
-  const BANNER_LABELS = {main:'MAIN STORY', sub:'CHARACTER STORY', event:'EVENT STORY'};
-  const TAB_COLORS = {main:'#5a90b0', sub:'#c07090', event:'#c0a040'};
-  const groups = {main:[], sub:[], event:[]};
-  eps.forEach((e,i)=>{ (groups[e.type]||groups.main).push({...e, _idx:i}); });
-  const existingTabs = ['main','sub','event'].filter(t=>groups[t].length>0);
-  if(!existingTabs.length){
-    ct.innerHTML=`<div style="padding:60px 24px;text-align:center;color:var(--tx3);font-size:13px">스토리 에피소드가 없습니다.</div>`;
-    return;
-  }
-  const activeTab = existingTabs[0];
-
-  function _buildBanner(t){
-    const BANNER_IMGS = {
-      main:  'biz-OC-doll/images/ep_cover_sc/0_banner_main_story.png',
-      sub:   'biz-OC-doll/images/ep_cover_sc/0_banner__character_story.png',
-      event: 'biz-OC-doll/images/ep_cover_sc/0_banner_event_story.png'
-    };
-    const img = banners[t] || BANNER_IMGS[t] || '';
-    const tlbl = BANNER_LABELS[t]||'STORY';
-    if(img) return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:#1a2e3a;overflow:hidden"><img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.55))"><div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div><div style="font-size:clamp(20px,3.5vw,30px);font-weight:100;letter-spacing:0.22em;color:#fff;font-family:'Josefin Sans',sans-serif">${tlbl}</div></div></div>`;
-    return `<div style="position:relative;width:100%;aspect-ratio:32/9;max-height:260px;background:linear-gradient(135deg,#1a2e3a,${TAB_COLORS[t]||'#5a90b0'});overflow:hidden"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(transparent,rgba(0,0,0,.4))"><div style="font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:6px">BIZ-OC-DOLL · STORY</div><div style="font-size:clamp(20px,3.5vw,30px);font-weight:100;letter-spacing:0.22em;color:#fff;font-family:'Josefin Sans',sans-serif">${tlbl}</div></div></div>`;
-  }
-
-  function _buildCards(t){
-    return groups[t].map(e=>{
-      const canRead = e.status==='완료'||e.status==='done';
-      const stCls = stClass(e.status);
-      const typeLabel = TAB_LABELS[e.type]||e.type;
-      const typeColor = TAB_COLORS[e.type]||'#5a90b0';
-      const statusLabel = (e.status==='done'||e.status==='완료')?'완료':(e.status==='wip'||e.status==='작업중')?'작업중':'예정';
-      const wipStyle = (e.status==='작업중'||e.status==='wip')?'background:#F9F4CA;color:#F9CB4C':'';
-      const castNums = (e.castList||[]).map(c=>c.charNum).filter(Boolean);
-      const castHtml = castNums.map(n=>`<img src="biz-OC-doll/images/simple_profile/${n}.png" data-cast="${n}" style="width:30px;height:30px;border-radius:50%;border:1.5px solid #cce4ee;background:#eef6fa;object-fit:cover;flex-shrink:0" onerror="this.style.background='#dde8f0';this.style.opacity='.6'">`).join('');
-      const castWrap = castHtml ? `<div style="display:flex;align-items:center;gap:6px;margin-top:2px">${castHtml}</div>` : '';
-      const dateStr = e.completedDate ? e.completedDate.replace(/-/g,'.') : '';
-      const dateWrap = dateStr ? `<div style="font-size:10px;color:var(--tx3);display:flex;align-items:center;gap:3px;white-space:nowrap"><span style="opacity:.45">✓</span>${dateStr}</div>` : '';
-      const onclick = canRead ? `onclick="clickStoryEp(${e._idx})"` : '';
-      return `<div class="story-ep-card${canRead?'':' locked'}" ${onclick} data-cast="${castNums.join(',')}">
-        <div style="font-family:monospace;font-size:11px;font-weight:700;color:var(--tx3);min-width:32px;flex-shrink:0">${e.num||''}</div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid ${typeColor};color:${typeColor};background:${typeColor}18">${typeLabel}</span>
-            <span class="ep-status-badge ${stCls}" style="${wipStyle}">${statusLabel}</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;min-width:0">
-            <div style="font-size:14px;font-weight:600;color:${canRead?'var(--tx)':'var(--tx3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${e.title||''}</div>
-            ${castHtml?`<div style="display:flex;align-items:center;gap:4px;flex-shrink:0">${castHtml}</div>`:''}
-          </div>
-        </div>
-        ${dateWrap?`<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">${dateWrap}${canRead?`<span style="color:var(--tx3);font-size:14px">›</span>`:''}</div>`:(canRead?`<span style="color:var(--tx3);font-size:14px;flex-shrink:0">›</span>`:'')}
-      </div>`;
-    }).join('');
-  }
-
-  const tabBtns = existingTabs.map(t=>`<button class="story-tab-btn${t===activeTab?' active':''}" onclick="switchStoryTab('${t}')" id="story-tab-${t}">${TAB_LABELS[t]||t}</button>`).join('');
-  const tabContents = existingTabs.map(t=>`
-    <div id="story-tab-content-${t}" style="display:${t===activeTab?'block':'none'}">
-      ${_buildBanner(t)}
-      <div style="padding:10px 24px 6px">
-        <input id="story-search-${t}" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" onkeydown="onStorySearchKey(event,'${t}')" style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">
-        <div id="story-chips-${t}" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>
-      </div>
-      <div class="story-tab-row">${existingTabs.map(tb=>`<button class="story-tab-btn${tb===t?' active':''}" data-tab="${tb}" onclick="switchStoryTab('${tb}')">${TAB_LABELS[tb]||tb}</button>`).join('')}</div>
-      <div id="story-cards-${t}" style="padding:8px 24px 24px">${_buildCards(t)}</div>
-    </div>`).join('');
-
-  ct.innerHTML=`
-    <div style="max-width:720px;margin:0 auto;padding-bottom:40px">
-      ${tabContents}
-    </div>`;
+function closeContactOverlay(){
+  const ov=document.getElementById("contact-overlay");
+  if(ov) ov.classList.add("hidden");
 }
-
-window.switchStoryTab = function(t){
-  document.querySelectorAll('.story-tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('[id^="story-tab-content-"]').forEach(el=>el.style.display='none');
-  const el = document.getElementById('story-tab-content-'+t);
-  if(el){
-    el.style.display='block';
-    el.querySelectorAll('.story-tab-btn[data-tab="'+t+'"]').forEach(b=>b.classList.add('active'));
-  }
-};
-
-// ── 스토리 캐릭터 검색 칩 ──
-const _storyChips = {}; // {tab: Set}
-
-window.onStorySearchKey = function(ev, t){
-  if(ev.key !== 'Enter' && ev.key !== ' ') return;
-  ev.preventDefault();
-  const input = ev.target;
-  const val = input.value.trim();
-  if(!val) return;
-  if(!_storyChips[t]) _storyChips[t] = new Set();
-  _storyChips[t].add(val);
-  input.value = '';
-  _renderStoryChips(t);
-  _applyStoryFilter(t);
-};
-
-function _renderStoryChips(t){
-  const wrap = document.getElementById('story-chips-'+t);
-  if(!wrap) return;
-  const chips = [...(_storyChips[t]||[])];
-  wrap.innerHTML = chips.map(n=>`
-    <span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 12px;background:var(--bg);border:1px solid var(--bd2);border-radius:20px;font-size:11px;font-weight:600;color:var(--tx2)">
-      ${n}
-      <button onclick="removeStoryChip('${t}','${n}')" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:13px;line-height:1;padding:0 0 0 2px">×</button>
-    </span>`).join('');
-}
-
-window.removeStoryChip = function(t, n){
-  if(_storyChips[t]) _storyChips[t].delete(n);
-  _renderStoryChips(t);
-  _applyStoryFilter(t);
-};
-
-function _applyStoryFilter(t){
-  const chips = [...(_storyChips[t]||[])];
-  const cards = document.querySelectorAll(`#story-cards-${t} .story-ep-card`);
-  cards.forEach(card=>{
-    const nums = (card.dataset.cast||'').split(',').filter(Boolean);
-    const match = !chips.length || chips.every(q=>nums.some(n=>n.includes(q)));
-    card.style.opacity = match ? '' : '0.2';
-    card.style.pointerEvents = match ? '' : 'none';
-    card.querySelectorAll('img[data-cast]').forEach(img=>{
-      const hit = chips.length && chips.some(q=>img.dataset.cast.includes(q));
-      img.style.outline = hit ? '2px solid #5a90b0' : '';
-      img.style.outlineOffset = hit ? '1px' : '';
-    });
-  });
-};
-
-window.clickStoryEp = function(idx){
-  S.view='story-content'; S.activeStoryEp=idx; S._storyType=null; S._storyNum=null; pushHash(); render();
-};
-
-async function renderStoryContent(){
-  const ct = document.getElementById('content');
-  ct.innerHTML = `<div style="padding:40px 24px;text-align:center;color:var(--tx3);font-size:13px">불러오는 중…</div>`;
-  const data = await _fetchStoryData();
-  const eps = data.episodes || [];
-
-  // hash에서 type+num으로 진입한 경우 인덱스 resolve
-  if(S.activeStoryEp === null && S._storyType && S._storyNum){
-    const idx = eps.findIndex(e => e.type === S._storyType && e.num === S._storyNum);
-    if(idx !== -1) S.activeStoryEp = idx;
-  }
-
-  const e = eps[S.activeStoryEp];
-  if(!e){ S.view='story'; render(); return; }
-  const prev = eps[S.activeStoryEp-1]||null;
-  const next = eps[S.activeStoryEp+1]||null;
-
-  // Cast HTML
-  const cl = e.castList||[];
-  const castHtml = cl.length ? `<div class="doll-cast-wrap">
-    <div class="doll-cast-label">CAST</div>
-    <div class="doll-cast">${cl.map(c=>`
-      <div class="doll-cast-item">
-        <div class="doll-cast-icon"><img src="biz-OC-doll/images/simple_profile/${c.charNum||'001'}.png" alt="" onerror="this.style.display='none'"></div>
-        <div class="doll-cast-num">${c.charNum||'?'}</div>
-      </div>`).join('')}</div></div>` : '';
-
-  // DeepL bar (CONFIG.DEEPL 설정된 경우만, 초기 표시는 _currentLang 기준)
-  const _dc = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : null;
-  const _dollBarVisible = _dc && _dc.enabled && _dc.proxyUrl && _currentLang && _currentLang !== 'ko';
-  const tlBarHtml = (_dc && _dc.enabled && _dc.proxyUrl)
-    ? `<div id="doll-tl-bar" style="display:${_dollBarVisible?'flex':'none'};justify-content:center;align-items:center;gap:6px;padding:8px 0 16px"><button id="doll-dl-btn" onclick="onDollDeepL()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button><button id="doll-dl-rebtn" onclick="onDollDeepLRe()" style="display:none;align-items:center;gap:4px;padding:6px 10px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx3);cursor:pointer;transition:all .12s"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button></div>`
-    : '';
-
-  // Nav buttons (ep-nav 스타일로 직접 렌더링, 변수 불필요)
-
-  ct.innerHTML=`
-    <div id="content-topbar" style="position:sticky;top:0;z-index:50;background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;transition:transform .28s ease;will-change:transform">
-      <button style="background:transparent;border:none;color:var(--tx3);font-size:13px;padding:5px 8px;border-radius:5px;cursor:pointer;font-family:var(--fn)" onclick="goStory()">← 목록</button>
-      <div style="width:1px;height:14px;background:var(--bd);margin:0 2px"></div>
-      <div style="font-size:12px;font-weight:600;color:var(--tx)">${e.title||'스토리 읽기'}</div>
-    </div>
-    <div id="content-topbar-spacer"></div>
-    <div class="doll-reader-wrap">
-      ${tlBarHtml}
-      <div class="doll-reader-header">
-        <div><span class="doll-ep-eyebrow">${e.eyebrow||''}</span>${e.num?`<span class="doll-ep-num"> · ${e.num}</span>`:''}</div>
-        <div class="doll-ep-title">${e.title||''}</div>
-      </div>
-      ${castHtml}
-      <div id="doll-blocks-wrap">${bbDoll(e.blocks||[])}</div>
-      <div class="ep-nav-outer" style="border-top:none"><div class="ep-nav">
-        <button class="ep-nav-btn ${prev?'':'disabled'}" onclick="${prev?`clickStoryEp(${S.activeStoryEp-1})`:''}">
-          <span>←</span><span class="ep-nav-title">${prev?prev.title:'처음 화'}</span>
-        </button>
-        <button class="ep-picker-btn" onclick="openDollEpPicker()">&#9776; 목록</button>
-        <button class="ep-nav-btn ${next?'':'disabled'}" onclick="${next?`clickStoryEp(${S.activeStoryEp+1})`:''}">
-          <span class="ep-nav-title">${next?next.title:'마지막 화'}</span><span>→</span>
-        </button>
-      </div></div>
-    </div>`;
-
-  window._dollEpIdx = S.activeStoryEp;
-  window._dollOrigBlocks = e.blocks || [];
-  window._dollOrigTitle = e.title || '';
-  ct.scrollTop = 0;
-
-  // float-ep-nav 설정
-  const fep = document.getElementById('float-ep-nav');
-  if(fep){
-    fep._storyMode = true;
-    fep._prevStoryIdx = prev ? S.activeStoryEp-1 : null;
-    fep._nextStoryIdx = next ? S.activeStoryEp+1 : null;
-    const prevBtn2 = document.getElementById('fep-prev');
-    const nextBtn2 = document.getElementById('fep-next');
-    if(prevBtn2) prevBtn2.classList.toggle('disabled', !prev);
-    if(nextBtn2) nextBtn2.classList.toggle('disabled', !next);
-    fep.classList.add('active');
-    // 데스크탑은 즉시 표시, 모바일은 스크롤 핸들러가 제어
-    if(window.innerWidth > 768) fep.classList.add('visible');
-    else fep.classList.remove('visible');
-  }
-
-  // 스크롤 숨김 (기존 웹소설과 동일 로직)
-  (function(){
-    if(ct._mobScrollHandler){
-      ct.removeEventListener('scroll', ct._mobScrollHandler);
-      ct._mobScrollHandler = null;
-    }
-    const topbarEl = document.getElementById('topbar');
-    const ctb = document.getElementById('content-topbar');
-    const ctbH = ctb ? ctb.offsetHeight : 45;
-    let lastY=0, ticking=false, hidden=false;
-    function applyHide(doHide){
-      if(hidden===doHide) return; hidden=doHide;
-      const fep2 = document.getElementById('float-ep-nav');
-      if(doHide){
-        topbarEl.style.transform='translateY(-48px)';
-        if(ctb) ctb.style.transform=`translateY(-${ctbH+48}px)`;
-        ct.style.marginTop='0'; ct.style.height='100dvh';
-        if(fep2) fep2.classList.remove('visible');
-      } else {
-        topbarEl.style.transform='';
-        if(ctb) ctb.style.transform='';
-        ct.style.marginTop='48px'; ct.style.height='calc(100dvh - 48px)';
-        if(fep2) fep2.classList.add('visible');
-      }
-    }
-    function onScroll(){
-      if(window.innerWidth>768){applyHide(false);ticking=false;return;}
-      const st=ct.scrollTop;
-      if(st>lastY&&st>60) applyHide(true);
-      else if(st<lastY-10) applyHide(false);
-      lastY=st<=0?0:st; ticking=false;
-    }
-    ct._mobScrollHandler=function(){if(!ticking){requestAnimationFrame(onScroll);ticking=true;}};
-    ct.addEventListener('scroll',ct._mobScrollHandler,{passive:true});
-  })();
-}
-
-/* ── 블록 렌더러 (biz-OC-doll 스토리) ── */
-function bbDoll(blocks){
-  let last=null;
-  return blocks.map(b=>{
-    const d=b.data||{};
-    if(b.type==='cast'){
-      last=null;
-      const ms=d.members||[];
-      if(!ms.length) return '';
-      return `<div class="doll-cast-wrap"><div class="doll-cast-label">Cast</div><div class="doll-cast">${ms.map(m=>`<div class="doll-cast-item"><div class="doll-cast-icon"><img src="biz-OC-doll/images/simple_profile/${m.charNum||'001'}.png" alt="" onerror="this.style.display='none'"></div><div class="doll-cast-num">${m.charNum||'?'}</div></div>`).join('')}</div></div>`;
-    }
-    if(b.type==='scene'){
-      last=null;
-      const s=d.filename?`biz-OC-doll/images/ep_cover_sc/${d.filename}`:'';
-      return `<div class="doll-script-block"><div class="doll-script-img">${s?`<img src="${s}" alt="">`:''}</div></div>`;
-    }
-    if(b.type==='speech'||b.type==='thought'){
-      const sm=d.exprFilename&&d.exprFilename===last; last=d.exprFilename||null;
-      const s=d.exprFilename?`biz-OC-doll/images/simple_profile/${d.exprFilename}`:'';
-      const th=b.type==='thought'?' thought':'';
-      const cn=b.type==='thought'
-        ?`<div class="doll-tail-thought"><div class="doll-tail-dot doll-tail-dot1"></div><div class="doll-tail-dot doll-tail-dot2"></div></div>`
-        :`<div class="doll-tail-speech"></div>`;
-      return `<div class="doll-script-block"><div class="doll-script-line"><div class="doll-line-icon${sm?' hidden':''}"><img src="${s}" alt="" onerror="this.parentNode.style.background='#eef6fa'"></div><div class="doll-line-connector">${cn}</div><div class="doll-bubble${th}"><div class="doll-line-speaker">${d.charNum||''}</div><div class="doll-line-text">${d.text||''}</div></div></div></div>`;
-    }
-    if(b.type==='narration'){last=null;return `<div class="doll-script-block"><div class="doll-narration"><div class="doll-line-text">${d.text||''}</div></div></div>`;}
-    if(b.type==='system'){last=null;return `<div class="doll-script-block"><div class="doll-system"><span class="doll-system-text">${d.text||''}</span></div></div>`;}
-    if(b.type==='sfx'){last=null;return `<div class="doll-script-block"><div class="doll-sfx"><div class="doll-sfx-text">${d.text||''}</div></div></div>`;}
-    if(b.type==='chat'){
-      last=null;
-      return `<div class="doll-script-block"><div class="doll-chat"><div class="doll-chat-header">${d.header||''}</div>${(d.msgs||[]).map(m=>`<div class="doll-chat-bubble${m.dir==='right'?' right':''}">${m.text}</div>`).join('')}</div></div>`;
-    }
-    if(b.type==='divider'){last=null;return `<div class="doll-script-block"><div class="doll-divider">· · ·</div></div>`;}
-    return '';
-  }).join('');
-}
-
-/* ── DeepL 번역 — biz-OC-doll 스토리 ── */
-window._dollEpIdx = -1;
-window._dollOrigBlocks = [];
-
-function _dollBtn(){ return document.getElementById('doll-dl-btn'); }
-function _dollRebtn(){ return document.getElementById('doll-dl-rebtn'); }
-function _dollWrap(){ return document.getElementById('doll-blocks-wrap'); }
-
-function _dollBtnReset(btn){
-  if(!btn) return;
-  btn.classList.remove('done');
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역';
-  btn.style.cssText='display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;cursor:pointer;transition:all .12s';
-}
-
-function _dollTlDone(){
-  var btn=_dollBtn(), rbtn=_dollRebtn();
-  if(btn){
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
-    btn.classList.add('done');
-    btn.style.cssText='display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;font-family:var(--fn);border:1px solid #93c5fd;border-radius:6px;background:#dbeafe;color:#1e40af;cursor:default;transition:all .12s';
-  }
-  if(rbtn) rbtn.style.display='flex';
-}
-
-window.onDollDeepL = async function(){
-  var btn=_dollBtn();
-  if(!btn || btn.classList.contains('done')) return;
-  var cfg=(typeof CONFIG!=='undefined'&&CONFIG.DEEPL)?CONFIG.DEEPL:{};
-  var url=cfg.proxyUrl||''; if(!url) return;
-  var lang=_currentLang||'ja';
-  if(lang==='ko') return;
-  var dlLang=(lang==='zh-CN'||lang==='zh-TW')?'ZH':lang.split('-')[0].toUpperCase();
-  var cacheKey='dl_doll_'+window._dollEpIdx+'_'+dlLang;
-  /* localStorage 캐시 히트 → API 호출 없이 즉시 적용 */
-  try{
-    var cached=localStorage.getItem(cacheKey);
-    if(cached){
-      var obj=JSON.parse(cached);
-      var wrap=_dollWrap();
-      if(wrap){ wrap.innerHTML=bbDoll(obj.blocks); wrap.classList.add('notranslate'); }
-      var titleEl=document.querySelector('.doll-ep-title');
-      if(titleEl&&obj._title) titleEl.textContent=obj._title;
-      _dollTlDone(); return;
-    }
-  }catch(ex){}
-  /* 캐시 없음 → DeepL API 호출 */
-  var data=await _fetchStoryData();
-  var ep=data.episodes[window._dollEpIdx];
-  if(!ep) return;
-  _doDollTranslate(url,cacheKey,ep.blocks||[],ep.title||'',dlLang);
-};
-
-function _doDollTranslate(url,cacheKey,blocks,origTitle,dlLang){
-  var btn=_dollBtn();
-  var targets=[];
-  blocks.forEach(function(b,i){
-    if(['system','narration','sfx','speech','thought'].indexOf(b.type)===-1) return;
-    var t=(b.data&&b.data.text)?b.data.text:'';
-    var clean=t.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').trim();
-    if(clean) targets.push({idx:i,text:clean});
-  });
-  /* 제목을 텍스트 배열 맨 앞에 추가 */
-  var titleClean=(origTitle||'').trim();
-  var allTexts=(titleClean?[titleClean]:[] ).concat(targets.map(function(t){return t.text;}));
-  if(!allTexts.length) return;
-  if(btn){ btn.innerHTML='번역 중…'; btn.style.opacity='0.6'; btn.style.pointerEvents='none'; }
-  var BATCH=50; var batches=[];
-  for(var i=0;i<allTexts.length;i+=BATCH) batches.push(allTexts.slice(i,i+BATCH));
-  Promise.all(batches.map(function(batch){
-    return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:batch,target_lang:dlLang||'JA'})})
-      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
-      .then(function(d){return d.translations.map(function(t){return t.text;});});
-  })).then(function(results){
-    var translated=[].concat.apply([],results);
-    /* 첫 번째가 제목 번역 결과 */
-    var offset=titleClean?1:0;
-    var translatedTitle=titleClean?(translated[0]||titleClean):'';
-    var translatedBlocks=translated.slice(offset);
-    var tlBlocks=JSON.parse(JSON.stringify(blocks));
-    targets.forEach(function(t,i){if(translatedBlocks[i])tlBlocks[t.idx].data.text=translatedBlocks[i];});
-    /* localStorage 저장 — 블록 + 제목 함께 */
-    try{localStorage.setItem(cacheKey,JSON.stringify({blocks:tlBlocks,_title:translatedTitle}));}catch(ex){}
-    /* DOM 반영 */
-    var wrap=_dollWrap();
-    if(wrap){ wrap.innerHTML=bbDoll(tlBlocks); wrap.classList.add('notranslate'); }
-    var titleEl=document.querySelector('.doll-ep-title');
-    if(titleEl&&translatedTitle){ titleEl.textContent=translatedTitle; titleEl.classList.add('notranslate'); }
-    _dollTlDone();
-  }).catch(function(err){
-    console.warn('[DeepL Doll]',err);
-    if(btn){ _dollBtnReset(btn); btn.style.opacity=''; btn.style.pointerEvents=''; }
-  });
-}
-
-window.onDollDeepLRe=async function(){
-  var lang=_currentLang||'ja';
-  var dlLang=(lang==='zh-CN'||lang==='zh-TW')?'ZH':lang.split('-')[0].toUpperCase();
-  var cacheKey='dl_doll_'+window._dollEpIdx+'_'+dlLang;
-  try{localStorage.removeItem(cacheKey);}catch(ex){}
-  var rbtn=_dollRebtn(); if(rbtn) rbtn.style.display='none';
-  _dollBtnReset(_dollBtn());
-  var wrap=_dollWrap(); if(wrap) wrap.classList.remove('notranslate');
-  /* 제목 원본 복원 */
-  var titleEl=document.querySelector('.doll-ep-title');
-  if(titleEl&&window._dollOrigTitle){ titleEl.textContent=window._dollOrigTitle; titleEl.classList.remove('notranslate'); }
-  var cfg=(typeof CONFIG!=='undefined'&&CONFIG.DEEPL)?CONFIG.DEEPL:{};
-  var url=cfg.proxyUrl||''; if(!url) return;
-  var data=await _fetchStoryData();
-  var ep=data.episodes[window._dollEpIdx];
-  if(ep) _doDollTranslate(url,cacheKey,ep.blocks||[],ep.title||'',dlLang);
-};
-
-/* ── 언어 전환 시 doll DeepL 상태 초기화 ── */
-(function(){
-  var _orig=typeof setLang==='function'?setLang:null;
-  window.setLang=function(lang){
-    /* 1. 번역 바 표시/숨김 */
-    var bar=document.getElementById('doll-tl-bar');
-    if(bar) bar.style.display=(lang&&lang!=='ko')?'flex':'none';
-
-    /* 2. 원본 블록 + 제목 복원 */
-    var wrap=_dollWrap();
-    if(wrap&&window._dollOrigBlocks&&window._dollOrigBlocks.length){
-      wrap.innerHTML=bbDoll(window._dollOrigBlocks);
-      wrap.classList.remove('notranslate');
-    }
-    var titleEl=document.querySelector('.doll-ep-title');
-    if(titleEl&&window._dollOrigTitle){ titleEl.textContent=window._dollOrigTitle; titleEl.classList.remove('notranslate'); }
-
-    /* 3. 버튼 상태: 이 언어의 캐시가 있으면 '번역됨', 없으면 리셋 */
-    var rbtn=_dollRebtn();
-    var dlLang2=(lang==='zh-CN'||lang==='zh-TW')?'ZH':(lang||'').split('-')[0].toUpperCase();
-    var hasDollCache=false;
-    if(lang&&lang!=='ko'){
-      try{ hasDollCache=!!localStorage.getItem('dl_doll_'+window._dollEpIdx+'_'+dlLang2); }catch(e){}
-    }
-    if(hasDollCache){
-      /* 캐시 있음 → 버튼 '번역됨', 재번역 표시 */
-      _dollTlDone();
-      /* 캐시에서 바로 렌더 */
-      try{
-        var cached2=localStorage.getItem('dl_doll_'+window._dollEpIdx+'_'+dlLang2);
-        if(cached2){
-          var obj2=JSON.parse(cached2);
-          if(wrap){ wrap.innerHTML=bbDoll(obj2.blocks); wrap.classList.add('notranslate'); }
-          if(titleEl&&obj2._title){ titleEl.textContent=obj2._title; titleEl.classList.add('notranslate'); }
-        }
-      }catch(e){}
-    } else {
-      /* 캐시 없음 → 버튼 리셋 */
-      _dollBtnReset(_dollBtn());
-      if(rbtn) rbtn.style.display='none';
-    }
-
-    /* 4. 원래 setLang 실행 */
-    if(_orig) _orig(lang);
-
-    /* 5. 캐시 없는 경우: Google Translate가 doll 블록을 반드시 재번역하도록 강제
-          (_tlCache 히트 시 _tlGoogle 호출 안 됨 → 이걸로 보완) */
-    if(lang&&lang!=='ko'&&!hasDollCache){
-      setTimeout(function(){
-        if(typeof _tlGoogle==='function') _tlGoogle(lang);
-      },150);
-    }
-  };
-})();
-
-/* ── doll 에피소드 목록 피커 ── */
-window.openDollEpPicker = async function(){
-  var modal = document.getElementById('doll-ep-picker-modal');
-  var list  = document.getElementById('doll-ep-picker-list');
-  if(!modal||!list) return;
-  var data = await _fetchStoryData();
-  var eps  = data.episodes||[];
-  var ST   = {done:'완료',wip:'작업중',plan:'예정'};
-  var SC   = {done:'done',wip:'',plan:'plan'};
-  list.innerHTML = eps.map(function(e,i){
-    var cur = i===window._dollEpIdx;
-    return '<div class="ep-picker-item'+(cur?' current':'')+'" onclick="closeDollEpPickerBtn();clickStoryEp('+i+')">'
-      +'<span class="ep-picker-num">'+(e.num||String(i+1))+'</span>'
-      +'<span class="ep-picker-t">'+(e.title||'')+'</span>'
-      +(e.status?'<span class="ep-picker-st '+SC[e.status||'plan']+'">'+(ST[e.status]||'')+'</span>':'')
-      +'</div>';
-  }).join('');
-  modal.classList.remove('hidden');
-};
-window.closeDollEpPicker = function(e){ if(e.target===document.getElementById('doll-ep-picker-modal')) closeDollEpPickerBtn(); };
-window.closeDollEpPickerBtn = function(){ document.getElementById('doll-ep-picker-modal').classList.add('hidden'); };
-
-/* ── ABOUT PAGE ── */
-function goAbout(){S.view="about";S.activeProj=null;if(window.innerWidth<=768)closeMobMenu();pushHash();render();}
-
-function renderAbout(){
-  const cfg=(typeof BIZ_BOT_CONFIG!=='undefined')?BIZ_BOT_CONFIG:{};
-  document.getElementById("content").innerHTML=`
-    <div style="padding:36px 40px;max-width:950px;margin:0 auto">
-      <div style="margin-bottom:28px">
-        <button onclick="S.view='home';pushHash();render();" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:transparent;border:1px solid var(--bd);border-radius:6px;color:var(--tx2);cursor:pointer;transition:all .12s;margin-bottom:12px" onmouseover="this.style.background='var(--bg)';this.style.borderColor='var(--bd2)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--bd)'">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">Contact</div>
-        <div style="font-size:26px;font-weight:700;color:#111;letter-spacing:-.04em">비즈니스 문의</div>
-        <div style="font-size:13px;color:var(--tx2);margin-top:8px;line-height:1.8">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
-      </div>
-
-      <!-- ── 이메일 문의 ── -->
-      <div style="margin-top:0;display:flex;align-items:center;gap:8px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
-        <span style="font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',sans-serif">rrkt.biz@proton.me</span>
-        <button onclick="biqCopyEmail(this)" title="복사"
-          style="background:transparent;border:1px solid var(--bd);border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .15s;flex-shrink:0"
-          onmouseover="this.style.background='var(--bg)';this.style.color='var(--tx)';this.style.borderColor='var(--bd2)'"
-          onmouseout="if(!this.dataset.copied){this.style.background='transparent';this.style.color='var(--tx3)';this.style.borderColor='var(--bd)'}">
-          <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          <span class="biq-copy-txt">복사</span>
-        </button>
-      </div>
-
-    </div>`;
-}
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape") closeContactOverlay();
+});
 
 /* ── BUSINESS INQUIRY FORM ── */
 function biqCopyEmail(btn){
@@ -3342,126 +1505,7 @@ function biqCopyEmail(btn){
   });
 }
 
-function goProgress(){S.view="progress";pushHash();render();}
-
 /* ── PROGRESS PAGE ── */
-function renderProgress(){
-  function cells(total, done, wip, color){
-    return Array.from({length:total},(_,i)=>{
-      if(i<done) return `<div class="progress-ep-cell done" style="background:${color}"></div>`;
-      if(i<done+wip) return `<div class="progress-ep-cell wip" style="background:${color}"></div>`;
-      return `<div class="progress-ep-cell"></div>`;
-    }).join("");
-  }
-
-  // 블러드하이스쿨 — 3열, 웹소설/웹툰 구분
-  const bhProj = PROJECTS.find(p=>p.id==="blood-highschool");
-  const bhVols = VOLUMES["blood-highschool"]||[];
-  const bhTotalAll = bhVols.reduce((s,v)=>s+v.episodes.length,0);
-  const bhDoneAll  = bhVols.reduce((s,v)=>s+v.episodes.filter(e=>e.status==="완료").length,0);
-
-  function bhCard(v){
-    const total=v.episodes.length;
-    const done=v.episodes.filter(e=>e.status==="완료").length;
-    const wip=v.episodes.filter(e=>e.status==="작업중").length;
-    return `<div class="progress-vol-card">
-      <div class="progress-vol-card-top">
-        <span class="progress-vol-card-label">${v.sub||v.label}</span>
-        <span class="progress-vol-card-stat">${done}/${total}</span>
-      </div>
-      <div class="progress-ep-grid">${cells(total,done,wip,bhProj.acc)}</div>
-    </div>`;
-  }
-
-  const novels  = bhVols.filter(v=>v.type==="웹소설" && v.episodes.length>0);
-
-  function bhSection(label, vols){
-    if(!vols.length) return "";
-    return `
-      <div style="padding:10px 11px 4px;display:flex;align-items:center;gap:8px">
-        <span style="font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--tx3);text-transform:uppercase">${label}</span>
-        <div style="flex:1;height:1px;background:var(--bd)"></div>
-      </div>
-      <div style="padding:4px 9px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
-        ${vols.map(v=>bhCard(v)).join("")}
-      </div>`;
-  }
-
-  const bhInner = bhSection("웹소설", novels);
-
-  // biz-OC-doll — 카테고리 카드 (story_editor.json 연동)
-  const ocProj = PROJECTS.find(p=>p.id==="biz-oc-doll");
-  const dv = VOLUMES["biz-oc-doll"];
-
-  // 파란색: story_editor.json 기준 (done/wip/plan 카운트)
-  const storyEps = (window._STORY_DATA && window._STORY_DATA.episodes) || [];
-  const statusMap = { done:'완료', wip:'작업중', plan:'예정' };
-  const ocCards = dv.categories.map(cat=>{
-    const eps = storyEps.filter(e=>e.type===cat.id);
-    const total = cat.count;
-    const done  = eps.filter(e=>e.status==='done').length;
-    const wip   = eps.filter(e=>e.status==='wip').length;
-    return `<div class="progress-vol-card">
-      <div class="progress-vol-card-top">
-        <span class="progress-vol-card-label">${cat.label}</span>
-        <span class="progress-vol-card-stat">${done}/${total}</span>
-      </div>
-      <div class="progress-ep-grid">${cells(total,done,wip,cat.color)}</div>
-    </div>`;
-  }).join("");
-
-  // 빨간색: 구글시트 OC-characters 기준 (캐릭터 200개 달성)
-  const chars = window._CHAR_DATA || [];
-  const charDoneCount = chars.filter(c=>c.status==='완료').length;
-  const charWipCount  = chars.filter(c=>c.status==='작업중').length;
-  const charPct = Math.round(charDoneCount/200*100);
-  const charCells = Array.from({length:200},(_,i)=>{
-    const num = i+1;
-    const c = chars.find(ch=>parseInt((ch.code||'').replace('BIZOCDOLL',''))===num);
-    const st = c ? c.status : '';
-    if(st==='완료')   return `<div class="progress-ep-cell done" style="background:${ocProj.acc}"></div>`;
-    if(st==='작업중') return `<div class="progress-ep-cell wip" style="background:${ocProj.acc}"></div>`;
-    return `<div class="progress-ep-cell"></div>`;
-  }).join("");
-
-  document.getElementById("content").innerHTML=`
-    <div class="progress-page">
-      <div class="progress-page-title">진행 현황</div>
-      <!-- 주요 집필 프로젝트 위젯 -->
-      <div class="home-about-card" style="margin-bottom:16px;max-width:340px">
-        ${buildFocusWidget()}
-      </div>
-      <div class="progress-outer-grid">
-
-        <div class="progress-proj-block">
-          <div class="progress-proj-hd">
-            <div class="progress-proj-dot" style="background:${bhProj.acc}"></div>
-            <span class="progress-proj-name">${bhProj.label}</span>
-            <span class="progress-proj-cnt">${bhDoneAll} / ${bhTotalAll}화</span>
-          </div>
-          ${bhInner}
-        </div>
-
-        <div class="progress-proj-block">
-          <div class="progress-proj-hd">
-            <div class="progress-proj-dot" style="background:${ocProj.acc}"></div>
-            <span class="progress-proj-name">${ocProj.label}</span>
-            <span class="progress-proj-cnt">${charDoneCount} / 200 캐릭터</span>
-          </div>
-          <div class="progress-oc-inner">${ocCards}</div>
-          <div class="progress-char-row">
-            <div class="progress-char-row-top">
-              <span class="progress-char-label">캐릭터 200개 달성</span>
-              <span class="progress-char-stat">${charDoneCount}/200 (${charPct}%)</span>
-            </div>
-            <div class="progress-ep-grid">${charCells}</div>
-          </div>
-        </div>
-
-      </div>
-    </div>`;
-}
-
 /* ── HOME ── */
 function renderHome(){
   const now=new Date();
@@ -3538,66 +1582,6 @@ function renderHome(){
     return `${r},${g},${b}`;
   }
 
-  // ── 전체 업데이트 풀카드 ──
-  const hlHtml = (()=>{
-    if(!latestDone && doneItems.length===0 && wipItems.length===0)
-      return `<div class="home-r-empty">업데이트가 없습니다</div>`;
-    const ld = latestDone || doneItems[0];
-    const grad = ld ? getVolGrad(ld.projId, ld.volId) : '150deg,#1a1a2e,#2d2d4e';
-    const acc  = ld ? (ld.acc||'#c0392b') : '#c0392b';
-    const rgb  = hexRgb(acc);
-    const navFeat = ld ? (ld.projId==="biz-oc-doll"
-      ? `goRecentWork('${ld.projId}',null,${ld.epId},'${ld.dollCatId||""}')`
-      : `goRecentWork('${ld.projId}','${ld.volId}',${ld.epId},null)`) : '';
-    const relFeat = ld ? relTime(ld.date) : '';
-
-    // ld도 리스트에 포함
-    const allDoneItems = ld ? [ld, ...doneItems.slice(1)] : doneItems;
-    const listItems = allDoneItems.map((w,i,arr)=>{
-      const nc = w.projId==="biz-oc-doll"
-        ? `goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
-        : `goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
-      const rel = relTime(w.date);
-      const isLast = i===arr.length-1 && wipItems.length===0;
-      return `<div class="home-fc-li${isLast?' home-fc-li-last':''}" style="border-left-color:${w.acc||'#c0392b'}" onclick="${nc}">
-        <div class="home-fc-li-top">
-          <span class="home-fc-li-series" style="color:${w.acc||'#c0392b'}">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` · ${w.volSub}`:''}</span>
-          <div class="home-fc-li-right">
-            ${rel?`<span class="home-fc-li-date">${rel}</span>`:''}
-            <span class="home-fc-li-badge">완료</span>
-          </div>
-        </div>
-        <div class="home-fc-li-title">${w.title}</div>
-      </div>`;
-    }).join('');
-
-    const wipSlice = wipItems.slice(0, 3);
-    const wipRest  = wipItems.length - 3;
-    const wipBlock = wipItems.length===0 ? '' : `
-      <div class="home-fc-wip-sep"></div>
-      <div class="home-fc-wip-hd">
-        <span class="home-fc-wip-lbl">작업중</span>
-        <span class="home-fc-wip-hint">곧 업로드 예정</span>
-      </div>
-      ${wipSlice.map(w=>`<div class="home-fc-wi">
-        <span class="home-fc-wi-name">${w.volType?`[${w.volType}]`:''}${w.proj}${w.volSub?` ${w.volSub}`:''}</span>
-        <span class="home-fc-wi-ep">${w.title}</span>
-        <span class="home-fc-wi-badge">작업중</span>
-      </div>`).join('')}
-      ${wipRest>0?`<div style="font-size:9px;color:var(--tx3);padding:6px 10px 2px">외 ${wipRest}개 더...</div>`:''}`;
-
-    const listBlock = listItems ? `
-      <div class="home-fc-list-hd">최근 업데이트</div>
-      ${listItems}` : '';
-
-    return `<div class="home-fc">
-      <div class="home-fc-img-header"></div>
-      <div class="home-fc-inner">
-        ${listBlock}
-        ${wipBlock}
-      </div>
-    </div>`;
-  })();
 
   document.getElementById("content").innerHTML=`
     <div class="home-page">
@@ -3633,7 +1617,7 @@ function renderHome(){
 
 
 </div>
-                  <button class="home-hero-btn-p" style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;font-size:11px;flex:unset" onclick="goAbout()">
+                  <button class="home-hero-btn-p" style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;font-size:11px;flex:unset" onclick="openContactOverlay()">
                     <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
                     비즈니스 문의
                   </button>
@@ -3686,119 +1670,22 @@ function renderHome(){
             </div>
           </div>`;
           })()}
-          <!-- 진행 현황 + Project Report -->
-          <div style="background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px #0000000a">
-            <!-- 헤더 -->
-            <div style="padding:10px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
-              <div style="display:flex;align-items:baseline;gap:8px">
-                <span style="font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--tx3)">Project Report</span>
-                <span style="font-size:10px;color:var(--tx3);font-style:italic">for the business</span>
-              </div>
-              <button onclick="goProgress()" style="font-size:9px;color:var(--tx3);background:transparent;border:none;cursor:pointer;font-family:var(--fn)">전체보기 →</button>
-            </div>
-            <!-- 도넛+일러스트 3개 가로 -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);align-items:stretch">
-              ${(()=>{
-                const r=22, circ=2*Math.PI*r;
-                function arc(val,total,offset){
-                  if(!total||!val) return '';
-                  const len=(val/total)*circ;
-                  return `stroke-dasharray="${len.toFixed(1)} ${(circ-len).toFixed(1)}" stroke-dashoffset="${(-offset).toFixed(1)}"`;
-                }
-                const activeProjs=PROJECTS.filter(p=>(p.status||'active')==='active');
-                const cards=activeProjs.map(p=>{
-                  let done,wip,plan,total;
-                  if(p.id==='biz-oc-doll'){
-                    // 캐릭터 시트 데이터 기준 (loadCharDataFromSheets 로드 후)
-                    const chars=window._CHAR_DATA||[];
-                    done=chars.filter(c=>c.status==='완료').length;
-                    wip=chars.filter(c=>c.status==='작업중').length;
-                    total=200;
-                    plan=total-done-wip;
-                  } else {
-                    const eps=(VOLUMES[p.id]||[]).filter(v=>v.episodes.length>0).flatMap(v=>v.episodes);
-                    done=eps.filter(e=>e.status==='완료').length;
-                    wip=eps.filter(e=>e.status==='작업중').length;
-                    total=eps.length;
-                    plan=total-done-wip;
-                  }
-                  const pct=total?Math.round(done/total*100):0;
-                  const doneLen=(done/Math.max(total,1))*circ;
-                  const illustSlot = p.illust
-                    ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
-                    : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
-                  return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기" style="background:var(--sb);display:flex;flex-direction:column;">
-                    <div style="position:relative;aspect-ratio:1/1;width:100%;overflow:hidden;border-bottom:1px solid var(--bd)">
-                      ${illustSlot}
-                      <div class="proj-illust-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(10px,2vw,20px) clamp(10px,2vw,20px) clamp(12px,2.2vw,22px)">
-                        <div style="font-size:clamp(13px,2.4vw,30px);font-weight:400;color:#fff;text-shadow:0 1px 6px #0009;line-height:1.2;margin-bottom:clamp(2px,.4vw,6px)">${p.label}</div>
-                        <div style="font-size:clamp(10px,1.5vw,18px);font-weight:400;color:rgba(255,255,255,.85);text-shadow:0 1px 4px #0007;line-height:1.4">${p.illustDesc||''}</div>
-                      </div>
-                    </div>
-                    <div style="padding:16px 10px 12px;display:flex;flex-direction:column;align-items:center;gap:8px">
-                      <svg width="58" height="58" viewBox="0 0 54 54">
-                        <circle cx="27" cy="27" r="${r}" fill="none" stroke="var(--bd)" stroke-width="5"/>
-                        <circle cx="27" cy="27" r="${r}" fill="none" stroke="#F9CB4C" stroke-width="5" ${arc(wip,total,doneLen)} stroke-linecap="butt" transform="rotate(-90 27 27)"/>
-                        <circle cx="27" cy="27" r="${r}" fill="none" stroke="${p.acc}" stroke-width="5" ${arc(done,total,0)} stroke-linecap="butt" transform="rotate(-90 27 27)"/>
-                        <text x="27" y="31" text-anchor="middle" font-family="var(--fn)" font-size="11" font-weight="700" fill="var(--tx)">${pct}%</text>
-                      </svg>
-                      <div style="font-size:10px;font-weight:600;color:var(--tx);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;padding:0 4px">${p.label}</div>
-                      <div style="display:flex;gap:6px;justify-content:center">
-                        <span style="font-size:9px;color:var(--tx3);display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:${p.acc};display:inline-block"></span>${done}</span>
-                        <span style="font-size:9px;color:var(--tx3);display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:#F9CB4C;display:inline-block"></span>${wip}</span>
-                        <span style="font-size:9px;color:var(--tx3);display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:var(--bd2);display:inline-block"></span>${plan}</span>
-                      </div>
-                    </div>
-                  </div>`;
-                });
-                // 3-column grid 빈칸 채우기 — Coming Soon 플레이스홀더
-                const remainder = cards.length % 3;
-                const padCount = remainder === 0 ? 0 : 3 - remainder;
-                for(let i=0;i<padCount;i++){
-                  cards.push(`<div style="background:var(--sb);display:flex;flex-direction:column;">
-                    <div style="position:relative;aspect-ratio:1/1;width:100%;overflow:hidden;border-bottom:1px solid var(--bd);background:var(--sm);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.18"><circle cx="16" cy="16" r="14" stroke="var(--tx)" stroke-width="1.5"/><path d="M10 16h12M16 10v12" stroke="var(--tx)" stroke-width="1.5" stroke-linecap="round"/></svg>
-                      <span style="font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--tx3);opacity:.45">Coming Soon</span>
-                    </div>
-                    <div style="flex:1;padding:16px 10px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
-                      <span style="font-size:9px;letter-spacing:.1em;font-weight:600;color:var(--tx3);opacity:.4;text-transform:uppercase">New project</span>
-                    </div>
-                  </div>`);
-                }
-                return cards.join('');
-              })()}
-            </div>
-            <!-- 통계 4칸 -->
+          <!-- 프로젝트 이미지 카드 (별도 묶음) -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px">
             ${(()=>{
-              // 블러드하이스쿨: 에피소드 기준 / biz-OC-doll: 구글시트 캐릭터 기준
-              const bhEps = PROJECTS.filter(p=>(p.status||'active')==='active'&&p.id!=='biz-oc-doll')
-                .flatMap(p=>(VOLUMES[p.id]||[]).filter(v=>v.episodes.length>0).flatMap(v=>v.episodes));
-              const chars = window._CHAR_DATA || [];
-              const done = bhEps.filter(e=>e.status==='완료').length  + chars.filter(c=>c.status==='완료').length;
-              const wip  = bhEps.filter(e=>e.status==='작업중').length + chars.filter(c=>c.status==='작업중').length;
-              const plan = bhEps.filter(e=>e.status==='예정').length  + chars.filter(c=>c.status==='예정').length;
-              const sortedDates=Object.keys(WORK_LOG).sort();
-              const lastDateStr=sortedDates[sortedDates.length-1]||null;
-              const days=lastDateStr?Math.floor((new Date()-new Date(lastDateStr))/86400000):null;
-              const dayTxt=days===null?'—':days===0?'오늘':days===1?'어제':`${days}일 전`;
-              return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);border-top:1px solid var(--bd)">
-                <div style="background:var(--sb);padding:12px 14px">
-                  <div style="font-size:16px;font-weight:700;color:var(--tx);letter-spacing:-.03em;line-height:1;margin-bottom:3px">${dayTxt}</div>
-                  <div style="font-size:9px;color:var(--tx3)">마지막 업데이트</div>
-                </div>
-                <div style="background:var(--sb);padding:12px 14px">
-                  <div style="font-size:20px;font-weight:700;color:#c0392b;letter-spacing:-.04em;line-height:1;margin-bottom:3px">${done}</div>
-                  <div style="font-size:9px;color:var(--tx3)">완료</div>
-                </div>
-                <div style="background:var(--sb);padding:12px 14px">
-                  <div style="font-size:20px;font-weight:700;color:#F9CB4C;letter-spacing:-.04em;line-height:1;margin-bottom:3px">${wip}</div>
-                  <div style="font-size:9px;color:var(--tx3)">작업중</div>
-                </div>
-                <div style="background:var(--sb);padding:12px 14px">
-                  <div style="font-size:20px;font-weight:700;color:var(--tx3);letter-spacing:-.04em;line-height:1;margin-bottom:3px">${plan}</div>
-                  <div style="font-size:9px;color:var(--tx3)">예정</div>
-                </div>
-              </div>`;
+              const activeProjs=PROJECTS.filter(p=>(p.status||'active')==='active');
+              return activeProjs.map(p=>{
+                const illustSlot = p.illust
+                  ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
+                  : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
+                return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기" style="position:relative;aspect-ratio:1.3/1;width:100%;overflow:hidden;border-radius:12px;border:1px solid var(--bd);cursor:pointer">
+                  ${illustSlot}
+                  <div class="proj-illust-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(10px,2vw,20px) clamp(10px,2vw,20px) clamp(12px,2.2vw,22px)">
+                    <div style="font-size:clamp(13px,2.4vw,30px);font-weight:400;color:#fff;text-shadow:0 1px 6px #0009;line-height:1.2;margin-bottom:clamp(2px,.4vw,6px)">${p.label}</div>
+                    <div style="font-size:clamp(10px,1.5vw,18px);font-weight:400;color:rgba(255,255,255,.85);text-shadow:0 1px 4px #0007;line-height:1.4">${p.illustDesc||''}</div>
+                  </div>
+                </div>`;
+              }).join('');
             })()}
           </div>
 
@@ -4092,590 +1979,42 @@ function renderCalendar(){
 }
 
 /* ── INTRO ── */
-function renderIntro(){
-  const proj=getProj(S.activeProj);
-  if(proj.id==="biz-oc-doll"){
-    // doll_intro.html은 완전 독립 iframe으로 운영
-    // 수정할 때 biz_main_v4.html 건드릴 필요 없음
-    var _bhs=document.getElementById("bhs-intro-frame");
-    if(_bhs) _bhs.style.display="none";
-    document.getElementById("content").style.display="none";
-    var fr=document.getElementById("doll-intro-frame");
-    if(fr) fr.style.display="block";
-    _dollGateRefresh(); /* 잠금 상태면 블러+게이트, 해제됐으면 그대로 노출 */
-    return;
-  }
-  if(proj.id==="blood-highschool"){
-    // bhs_intro.html 완전 독립 iframe으로 운영
-    _dollGateHide();
-    var _doll=document.getElementById("doll-intro-frame");
-    if(_doll) _doll.style.display="none";
-    document.getElementById("content").style.display="none";
-    var fr=document.getElementById("bhs-intro-frame");
-    if(fr) fr.style.display="block";
-    return;
-  }
-  // 그 외 프로젝트: 두 iframe 모두 숨기고 #content 복원
-  _dollGateHide();
-  var _ifr=document.getElementById("doll-intro-frame");
-  if(_ifr) _ifr.style.display="none";
-  var _bhs=document.getElementById("bhs-intro-frame");
-  if(_bhs) _bhs.style.display="none";
-  var _ct=document.getElementById("content");
-  if(_ct) _ct.style.display="";
-  const ws=[100,74,88,60,95,50,82,68,76,55];
-  document.getElementById("content").innerHTML=`
-    <div class="intro-hero">
-      <div class="intro-hero-inner">
-        <div class="intro-eyebrow" style="color:${proj.acc2||proj.acc}">${proj.label}</div>
-        <div class="intro-title">${proj.label}</div>
-        <div class="intro-desc">${proj.intro}</div>
-        <div class="intro-tags">${proj.tags.map(t=>`<span class="intro-tag" style="color:${proj.acc};background:color-mix(in srgb,${proj.acc} 10%,transparent)">${t}</span>`).join("")}</div>
-      </div>
-    </div>
-    <div class="intro-body">
-      <div class="intro-sec">개요</div>
-      ${ws.slice(0,4).map(w=>`<div class="intro-ph" style="width:${w}%;background:color-mix(in srgb,${proj.acc} 10%,#e4e4e4)"></div>`).join("")}
-      <div class="intro-sec">상세 내용</div>
-      ${ws.map(w=>`<div class="intro-ph" style="width:${w}%;background:color-mix(in srgb,${proj.acc} 7%,#e4e4e4)"></div>`).join("")}
-      <div class="cb-hint">프로젝트 상세 소개글 / 이미지를 이곳에 등록하세요</div>
-    </div>`;
-}
-
 /* ── EPISODE LIST ── */
-function renderEpList(){
-  const proj=getProj(S.activeProj);
-  if(!proj){S.view="home";render();return;}
-  if(proj.subType==="youtube"){renderYtEpList(proj);return;}
-  let vol,eps,thumbClass="",synopsis="";
-  if(proj.subType==="doll"){
-    const dv=VOLUMES["biz-oc-doll"],cat=dv.categories.find(c=>c.id===S.activeDollCat);
-    // activeDollCat이 null이거나 없는 카테고리면 홈으로 안전 복원
-    if(!cat){S.view="home";render();return;}
-    eps=dv.episodes[S.activeDollCat]||[];
-    vol={label:cat.label,grad:`180deg,#1a2e3a,#5a90b0`,type:"웹툰",tags:[],synopsis:""};
-  } else {
-    const vols=VOLUMES[proj.id]||[];
-    vol=vols.find(v=>v.id===S.activeVol);
-    // activeVol이 null이거나 없는 볼륨이면 홈으로 안전 복원
-    if(!vol){S.view="home";render();return;}
-    eps=vol.episodes;synopsis=vol.synopsis||"";
-  }
-
-  // 웹툰 타입: 16:9 썸네일 리스트
-  if(vol.type==="웹툰"){
-    document.getElementById("content").innerHTML=`
-    <div style="background:var(--sb);padding-top:8px">
-    <div class="vol-banner">
-      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad});position:relative;overflow:hidden">${driveImg(vol.coverId)?`<img src="${driveImg(vol.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}      </div>
-      <div style="flex:1">
-        <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type||""}</div>
-        <div class="vb-title">${vol.label||vol.sub}</div>
-        <div class="vb-sub">${eps.length}화 수록</div>
-        ${synopsis?`<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div><div class="vb-synopsis-text">${synopsis}</div></div>`:`<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div><div class="vb-synopsis-text" style="color:#ccc">줄거리를 입력하세요</div></div>`}
-      </div>
-    </div>
-    </div>
-    <div style="display:flex;flex-direction:column;width:calc(100% - 40px);max-width:700px;margin:0 auto;padding-bottom:24px">
-      ${eps.map((e,i)=>{
-        const stCls=stClass(e.status);
-        const canRead=e.status==="완료";
-        const wipStyle=e.status==="작업중"?`background:#F9F4CA;color:#F9CB4C`:"";
-        const dateStr=fmtDate(e.date);
-        return `<div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--bd);${i===0?"border-top:1px solid var(--bd);":""}cursor:${canRead?"pointer":"default"}" ${canRead?`onclick="clickEp(${e.id})" onmouseenter="this.style.background='var(--bg)'" onmouseleave="this.style.background=''"`:""}> 
-          <div style="width:120px;aspect-ratio:16/9;flex-shrink:0;border-radius:6px;background:linear-gradient(${vol.grad});border:1px solid var(--bd);position:relative;overflow:hidden">
-            <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 6px 4px;background:linear-gradient(to top,#000000a0,transparent)">
-              <span style="font-size:8px;font-weight:600;color:#ffffffcc">${e.num||"EP."+e.id}</span>
-            </div>
-          </div>
-          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
-            <div style="font-size:13px;font-weight:600;color:${canRead?"var(--tx)":"var(--tx3)"};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.title}</div>
-            ${dateStr?`<div style="font-size:10px;color:var(--tx3);display:flex;align-items:center;gap:4px"><span style="opacity:.5">✓</span>${dateStr}</div>`:`<div style="font-size:10px;color:var(--tx3);opacity:.4">${e.status==="작업중"?"작업 중":"공개 예정"}</div>`}
-          </div>
-          <span class="ep-status-badge ${stCls}" style="${wipStyle};flex-shrink:0">${e.status}</span>
-        </div>`;
-      }).join("")}
-    </div>
-    ${buildVolNav(proj, vol)}`;
-    return;
-  }
-
-  document.getElementById("content").innerHTML=`
-    <div style="background:var(--sb);padding-top:8px">
-    <div class="vol-banner">
-      <div class="vol-banner-thumb${thumbClass}" style="background:linear-gradient(${vol.grad});position:relative;overflow:hidden">${driveImg(vol.coverId)?`<img src="${driveImg(vol.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}      </div>
-      <div style="flex:1">
-        <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type||""}</div>
-        <div class="vb-title">${vol.label||vol.sub}</div>
-        <div class="vb-sub">${eps.length}화 수록</div>
-        ${synopsis?`<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div><div class="vb-synopsis-text">${synopsis}</div></div>`:`<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div><div class="vb-synopsis-text" style="color:#ccc">줄거리를 입력하세요</div></div>`}
-      </div>
-    </div>
-    </div>
-    <div class="ep-board">
-      <div class="ep-board-head"><span>#</span><span>제목</span><span style="text-align:right">날짜</span><span></span></div>
-      ${eps.map(e=>{
-        const pid=S.activeProj, vid=S.activeVol;
-        const stCls=stClass(e.status);
-        const wipStyle=e.status==="작업중"?`background:#F9F4CA;color:#F9CB4C`:"";
-        const canRead=e.status==="완료";
-        return `<div class="ep-row${canRead?"":" ep-row-locked"}" ${canRead?`onclick="clickEp(${e.id})"`:""}>
-          <span class="ep-num">${e.id}</span>
-          <span class="ep-title-col">
-            <span class="ep-title-text">${e.title}</span>
-            <span class="ep-status-badge ${stCls}" style="${wipStyle}">${e.status}</span>
-          </span>
-          <span class="ep-date-col">${e.date||"&mdash;"}</span>
-        </div>`;
-      }).join("")}
-    </div>
-    ${buildVolNav(proj, vol)}`;
-}
-
 /* ── YOUTUBE EP LIST ── */
-function renderYtEpList(proj){
-  const vols=VOLUMES[proj.id]||[];
-  const vol=vols.find(v=>v.id===S.activeVol);
-  if(!vol)return;
-  const eps=vol.episodes;
-  document.getElementById("content").innerHTML=`
-    <div style="background:var(--sb);padding-top:8px">
-    <div class="vol-banner">
-      <div class="vol-banner-thumb yt" style="background:linear-gradient(${vol.grad});position:relative;overflow:hidden">${driveImg(vol.coverId)?`<img src="${driveImg(vol.coverId)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy">`:""}      </div>
-      <div style="flex:1">
-        <div class="vb-lbl" style="color:${proj.acc}">${proj.label} &middot; ${vol.type}</div>
-        <div class="vb-title">${vol.label}</div>
-        <div class="vb-sub">${eps.length}편 수록</div>
-        ${vol.synopsis?`<div class="vb-synopsis"><div class="vb-synopsis-lbl">소개</div><div class="vb-synopsis-text">${vol.synopsis}</div></div>`:""}
-      </div>
-    </div>
-    </div>
-    <div class="yt-ep-list">
-      ${eps.map(e=>`
-        <div class="yt-ep-item" onclick="clickEp(${e.id})">
-          <div class="yt-ep-thumb" style="background:linear-gradient(${vol.grad})">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
-              <div style="width:36px;height:36px;border-radius:50%;background:#ffffff22;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px">&#9654;</div>
-            </div>
-          </div>
-          <div class="yt-ep-info">
-            <div class="yt-ep-num">${proj.label}</div>
-            <div class="yt-ep-title">${e.title}</div>
-            <div class="yt-ep-meta">${e.date||"날짜 미정"}</div>
-            <div class="yt-ep-status ${stClass(e.status)}">${e.status}</div>
-          </div>
-        </div>
-      `).join("")}
-    </div>`;
-}
-
 /* ── CONTENT VIEW ── */
-function renderContentView(){
-  // story-content에서 남은 인라인 스타일/상태 리셋
-  const _ct = document.getElementById("content");
-  const _tb = document.getElementById("topbar");
-  const _fep = document.getElementById("float-ep-nav");
-  if(_ct){ _ct.style.marginTop="48px"; _ct.style.height="calc(100dvh - 48px)"; }
-  if(_tb) _tb.style.transform="";
-  if(_fep){ _fep._storyMode=false; _fep._prevStoryIdx=null; _fep._nextStoryIdx=null; }
-  if(_ct&&_ct._mobScrollHandler){
-    _ct.removeEventListener("scroll",_ct._mobScrollHandler);
-    _ct._mobScrollHandler=null;
-  }
-
-  const proj=getProj(S.activeProj);
-  if(!proj){S.view="home";render();return;}
-  let vol,eps,epObj,thumbClass="";
-  if(proj.subType==="doll"){
-    const dv=VOLUMES["biz-oc-doll"],cat=dv.categories.find(c=>c.id===S.activeDollCat);
-    if(!cat){S.view="home";render();return;}
-    eps=dv.episodes[S.activeDollCat]||[];
-    vol={label:cat.label,grad:"180deg,#1a2e3a,#5a90b0",type:"웹툰",tags:[]};
-    epObj=eps.find(e=>e.id===S.activeEp);
-  } else {
-    const vols=VOLUMES[proj.id]||[];
-    vol=vols.find(v=>v.id===S.activeVol);
-    if(!vol){S.view="home";render();return;}
-    eps=vol.episodes;
-    epObj=eps.find(e=>e.id===S.activeEp);
-    if(proj.subType==="youtube")thumbClass=" yt";
-  }
-  if(!epObj){S.view="episodes";render();return;}
-  const epIdx=eps.findIndex(e=>e.id===S.activeEp);
-  const prevEp=eps[epIdx-1]||null,nextEp=eps[epIdx+1]||null;
-  const isBlood=proj.id==="blood-highschool";
-  const ws=[100,84,92,67,97,58,88,74,80,54,93,69];
-
-  document.getElementById("content").innerHTML=`
-    <div id="content-topbar" style="background:var(--sb);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:8px;position:fixed;top:48px;left:0;right:0;z-index:99;transition:transform .28s ease;will-change:transform;">
-      <button class="tb-back" onclick="backToEps()">&larr; 목록</button>
-      <div class="tb-sep"></div>
-      <span class="tb-crumb">${proj.label}</span><span class="tb-arr">&#8250;</span>
-      <span class="tb-crumb">${vol.label}</span><span class="tb-arr">&#8250;</span>
-      <span class="tb-cur">${epObj.title}</span>
-      <div style="margin-left:auto;display:flex;gap:4px;flex-shrink:0">
-        <button class="ep-lang-btn ${S.epLang==='ko'?'active':''}" data-lang="ko" onclick="setEpLang('ko')">한본어</button>
-        <button class="ep-lang-btn ${S.epLang==='pure_ko'?'active':''}" data-lang="pure_ko" onclick="setEpLang('pure_ko')">순KO</button>
-        <button class="ep-lang-btn ${S.epLang==='jp'?'active':''}" data-lang="jp" onclick="setEpLang('jp')">JA</button>
-      </div>
-    </div>
-    <div id="content-topbar-spacer"></div>
-    <div class="postype-wrap">
-      <div class="postype-header">
-        <div class="postype-series-lbl" onclick="backToEps()">${proj.label} &middot; ${vol.label}</div>
-        <div class="postype-title">${epObj.title}</div>
-        <div class="postype-meta">
-          ${epObj.date?`<span class="postype-date">${epObj.date}</span>`:""}
-          <span class="postype-status-badge" style="${
-            epObj.status==='완료' ? 'background:#ffe4e4;color:#c0392b' :
-            epObj.status==='작업중' ? `background:#F9F4CA;color:#F9CB4C` :
-            'background:#f0f0f0;color:#aaa'
-          }">${epObj.status}</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:12px">
-        <button id="deepl-translate-btn" onclick="onDeepLBtnClick()" style="margin-top:0">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
-          DeepL로 번역
-        </button>
-        <button id="deepl-retranslate-btn" onclick="onDeepLRetranslateClick()" style="margin-top:0;margin-left:0">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
-          재번역
-        </button>
-        </div>
-      </div>
-      <div class="postype-body" id="postype-body">
-        <div class="postype-loading">
-          <div class="postype-spinner"></div>
-          <span>불러오는 중…</span>
-        </div>
-      </div>
-    </div>
-    <div class="ep-nav-outer"><div class="ep-nav">
-      <button class="ep-nav-btn ${prevEp?"":"disabled"}" onclick="${prevEp?`clickEp(${prevEp.id})`:""}">
-        <span>&#8592;</span><span class="ep-nav-title">${prevEp?prevEp.title:"처음 화"}</span>
-      </button>
-      ${isBlood?`<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; 에피소드 목록</button>`:`<div></div>`}
-      <button class="ep-nav-btn ${nextEp?"":"disabled"}" onclick="${nextEp?`clickEp(${nextEp.id})`:""}">
-        <span class="ep-nav-title">${nextEp?nextEp.title:"마지막 화"}</span><span>&#8594;</span>
-      </button>
-    </div>
-    </div>`;
-
-  // 본문 로드 — textId 있으면 그대로, 없으면 언어 + 폴더 구조 자동 생성
-  const _textPath = epObj.textId || _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, S.epLang);
-  _loadPostypeContent(_textPath, proj.acc);
-
-  // ── 플로팅 네비 버튼 상태 세팅 ──
-  (function(){
-    const fep = document.getElementById("float-ep-nav");
-    if(!fep) return;
-    const prevBtn = document.getElementById("fep-prev");
-    const nextBtn = document.getElementById("fep-next");
-    if(prevBtn) prevBtn.classList.toggle("disabled", !prevEp);
-    if(nextBtn) nextBtn.classList.toggle("disabled", !nextEp);
-    // 읽기뷰 진입 시 display:flex 활성화, visible은 아직 안 붙임
-    fep.classList.add("active");
-    fep.classList.remove("visible");
-    fep._prevEpId = prevEp ? prevEp.id : null;
-    fep._nextEpId = nextEp ? nextEp.id : null;
-  })();
-
-  // ── 모바일 전용: 스크롤 시 상단 자동 숨김/표시 ──
-  (function(){
-    const contentEl = document.getElementById("content");
-    const topbarEl  = document.getElementById("topbar");
-
-    const ctb    = document.getElementById("content-topbar");
-    const spacer = document.getElementById("content-topbar-spacer");
-    const ctbH   = ctb ? ctb.offsetHeight : 45;
-    if(spacer){ spacer.style.transition="height .28s ease"; spacer.style.overflow="hidden"; spacer.style.height=ctbH+"px"; }
-
-    let lastScrollY = 0, ticking = false, hidden = false;
-
-    function _applyHide(doHide){
-      if(hidden === doHide) return;
-      hidden = doHide;
-      const bar = document.getElementById("content-topbar");
-      const sp  = document.getElementById("content-topbar-spacer");
-      const fep = document.getElementById("float-ep-nav");
-      if(doHide){
-        topbarEl.style.transform = "translateY(-48px)";
-        if(bar) bar.style.transform = `translateY(-${ctbH+48}px)`;
-        contentEl.style.marginTop = "0";
-        contentEl.style.height = "100dvh";
-        if(sp) sp.style.height = "0";
-        if(fep) fep.classList.remove("visible");
-      } else {
-        topbarEl.style.transform = "";
-        if(bar) bar.style.transform = "";
-        contentEl.style.marginTop = "48px";
-        contentEl.style.height = "calc(100dvh - 48px)";
-        if(sp) sp.style.height = ctbH+"px";
-        if(fep) fep.classList.add("visible");
-      }
-    }
-
-    function _onMobScroll(){
-      // 매 스크롤마다 모바일 여부 재확인 — 데스크탑에선 즉시 리셋 후 종료
-      if(window.innerWidth > 768){
-        _applyHide(false);
-        ticking = false;
-        return;
-      }
-      const st = contentEl.scrollTop;
-      if(st > lastScrollY && st > 60)    _applyHide(true);
-      else if(st < lastScrollY - 10)     _applyHide(false);
-      lastScrollY = st <= 0 ? 0 : st;
-      ticking = false;
-    }
-    contentEl._mobScrollHandler = function(){
-      if(!ticking){ requestAnimationFrame(_onMobScroll); ticking=true; }
-    };
-    contentEl.addEventListener("scroll", contentEl._mobScrollHandler, {passive:true});
-  })();
-}
-
 /* ── 에피소드 언어별 경로 자동 생성 ── */
-function _resolveEpPath(projId, volId, epId, lang){
-  const base = `${projId}-${volId}-${String(epId).padStart(2,'0')}`;
-  if(lang === 'pure_ko') return `./texts_pure_ko/${base}_pure_ko.txt`;
-  if(lang === 'jp')      return `./texts_jp/${base}_jp.txt`;
-  return `./texts/${base}.txt`; // 기본: 한본어
-}
-
-function setEpLang(lang){
-  S.epLang = lang;
-  // 버튼 활성 상태 업데이트
-  document.querySelectorAll('.ep-lang-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
-  // 본문 즉시 리로드
-  const proj = getProj(S.activeProj);
-  const epPath = _resolveEpPath(S.activeProj, S.activeVol, S.activeEp, lang);
-  _loadPostypeContent(epPath, proj.acc);
-}
-
-/* ── 현재 번역 언어에 맞춰 에피소드 본문 렌더 (단일 진입점) ──
-   ja → 일본어 원본 파일 직접 표시 / 그 외 외국어 → 일본어 소스 DeepL 번역(실패 시 순한국어→구글) */
-function _renderEpForLang(lang){
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-  _updateEpLangBtns(lang);
-  if(!lang || lang === 'ko') return; /* 호출측에서 ko는 일반 로드 처리 */
-  if(lang === 'ja'){ _tlShowJpOriginal(); return; }
-  if(cfg.enabled && cfg.proxyUrl){
-    _tlShowDeepLBtn(lang, cfg);
-    var ck = 'dl_ep_'+S.activeProj+'_'+S.activeVol+'_'+S.activeEp+'_'+lang;
-    var has=false; try{ has=!!localStorage.getItem(ck); }catch(e){}
-    /* 캐시 없으면 자동으로 한 번 DeepL 번역 (소스=일본어 파일) */
-    if(!has && typeof onDeepLBtnClick==='function') onDeepLBtnClick();
-  } else {
-    /* DeepL 미설정 → 순한국어 기준 구글 번역 */
-    _tlLoadPureKoAndGoogle(lang);
-  }
-}
-
-async function _loadPostypeContent(textId, acc){
-  const el = document.getElementById("postype-body");
-  if(!el) return;
-  /* 전역 번역(구글 언어)이 활성화된 채 본문에 진입/이동한 경우:
-     한본어를 그대로 띄워 구글이 잘못 번역하는 것을 막고, 언어 전용 렌더로 위임 */
-  if(_currentLang && _currentLang !== 'ko'){
-    _renderEpForLang(_currentLang);
-    return;
-  }
-  /* ko(번역 안 함): DeepL 버튼 숨기고 선택된 소스 파일 그대로 표시 */
-  _tlHideDeepLBtns();
-  if(!textId){
-    el.innerHTML = '<div class="postype-hint">본문 파일이 없습니다.<br><small style="color:#bbb">레포의 <code>texts/</code> 폴더에 해당 txt 파일을 올려주세요.</small></div>';
-    return;
-  }
-  try{
-    const text = await fetchEpText(textId);
-    _epOriginalLines = text.split('\n'); /* ← 원본 줄 배열 저장 */
-    el.innerHTML = `<div class="postype-text">${text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>`;
-  } catch(err){
-    el.innerHTML = `<div class="postype-error"><strong>본문 파일을 찾을 수 없습니다</strong><br><small style="color:#a03030">${textId}</small><br><pre>${err.message}</pre></div>`;
-  }
-}
-
-/* ── EPISODE PICKER ── */
-function openEpPicker(){
-  const proj=getProj(S.activeProj);
-  const vols=VOLUMES[proj.id]||[];
-  const vol=vols.find(v=>v.id===S.activeVol);
-  if(!vol)return;
-  const eps=vol.episodes;
-  document.getElementById("ep-picker-title").textContent=vol.label+" 에피소드 목록";
-  document.getElementById("ep-picker-list").innerHTML=eps.map(e=>`
-    <div class="ep-picker-item ${e.id===S.activeEp?"current":""}" style="--curr-acc:${proj.acc}" onclick="pickEp(${e.id})">
-      <span class="ep-picker-num">${e.id}</span>
-      <span class="ep-picker-t">${e.title}</span>
-      <span class="ep-picker-st ${stClass(e.status)}" style="${e.status==="작업중"?`color:#F9CB4C`:""}">${e.status}</span>
-    </div>`).join("");
-  document.getElementById("ep-picker-modal").classList.remove("hidden");
-}
-function pickEp(id){closeEpPickerBtn();clickEp(id);}
-function closeEpPicker(e){if(e.target===document.getElementById("ep-picker-modal"))closeEpPickerBtn();}
-function closeEpPickerBtn(){document.getElementById("ep-picker-modal").classList.add("hidden");}
-
 /* ── HANDLERS ── */
 function goHome(){
-  S.view="home";S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;
-  // 데스크탑 nav 닫기
-  const layer=document.getElementById("nav-layer");
-  if(layer){layer.classList.remove("open");}
-  const bd=document.getElementById("nav-backdrop");
-  if(bd){bd.classList.remove("show");}
-  const sp=document.getElementById("sub-panel");
-  if(sp){sp.classList.remove("visible");}
-  S.navPinned=false;
-  document.body.classList.remove("nav-pinned");
-  S.hoveredProj=null;
-  // 모바일 메뉴 닫기
-  closeMobMenu();
-  // 콘텐츠 스크롤 최상단으로
+  S.view="home";S.activeProj=null;
   const ct=document.getElementById("content");
   if(ct){ct.scrollTop=0;}
   pushHash();render();
 }
-function goCal(){S.view="calendar";S.activeProj=null;closeMobMenu();pushHash();render();}
+function goCal(){S.view="calendar";S.activeProj=null;pushHash();render();}
 
-function goRecentWork(projId,volId,epId,dollCatId){
-  S.activeProj=projId;S.activeEp=epId;
-  if(projId==="biz-oc-doll"){
-    S.activeDollCat=dollCatId||null;
-    S.activeVol=null;
-  } else {
-    S.activeVol=volId;S.activeDollCat=null;
-  }
-  S.view="content";pushHash();render();
+/* ── 프로젝트별 독립 사이트 진입 ── */
+const PROJECT_SITES = {
+  "blood-highschool": "Blood_High_School/index.html",
+  "biz-oc-doll":      "biz-OC-doll/index.html",
+};
+function goSite(pid, hash){
+  const base = PROJECT_SITES[pid];
+  if(!base) return;
+  location.href = base + (hash || "");
 }
-
-function clickProj(id){
-  if(S.activeProj!==id){
-    S.activeProj=id;S.subTab="ALL";S.activeVol=null;S.activeEp=null;S.activeDollCat=null;
-    // S.view는 건드리지 않음 — 콘텐츠 영역 유지
-    // (archive, charlist, intro 등 현재 보고 있는 화면이 그대로 유지됨)
-  }
-  const dw={"blood-highschool":240,"biz-oc-doll":240}[id]||240;
-  document.documentElement.style.setProperty("--sm-w",dw+"px");
-  closeMobMenu();
-  pushHash();
-  // 전체 render() 대신 1차 메뉴 하이라이트만 갱신 — 콘텐츠 영역 불변
-  renderNavItems();
-  // 데스크탑 2차 메뉴 갱신
-  if(window.innerWidth>768){
-    const _proj=getProj(id);
-    const sp=document.getElementById("sub-panel");
-    if(_proj&&_proj.keepSub&&_proj.subType!=='youtube'&&sp){
-      S.hoveredProj=id;
-      renderSubPanelContent(id);
-      sp.classList.add("visible");
-    } else {
-      hideSubPanel();
-    }
-  }
+function goIntro(pid){ goSite(pid, pid === "blood-highschool" ? "#intro" : "#/intro"); }
+function goDollChar(){ goSite("biz-oc-doll", "#/chars"); }
+function goRecentWork(projId, volId, epId){
+  if(projId === "biz-oc-doll"){ goSite("biz-oc-doll", "#/story"); return; }
+  goSite(projId, volId ? ("#" + volId + (epId ? "/" + epId : "")) : "");
 }
-
-function goIntro(pid){
-  if(pid)S.activeProj=pid;
-  S.view="intro";pushHash();render();
-}
-
-/* ── VOL NAV helpers ── */
-function buildVolNav(proj, vol){
-  // doll은 볼륨 구조가 없으므로 스킵
-  const allVols = VOLUMES[proj.id] || [];
-  if(!Array.isArray(allVols)) return '';
-  const sameType = allVols.filter(v => v.type === vol.type);
-  const idx = sameType.findIndex(v => v.id === vol.id);
-  const prev = sameType[idx - 1] || null;
-  const next = sameType[idx + 1] || null;
-  const hasPrev = !!prev, hasNext = !!next;
-
-  // 목록 아이템
-  const items = sameType.map(v => {
-    const isCur = v.id === vol.id;
-    return `<div class="vol-picker-item${isCur?' current':''}" style="--vpick-acc:${proj.acc}"
-      onclick="goVol('${proj.id}','${v.id}');closeVolPicker()">
-      <span class="vol-picker-label">${v.label||v.sub}</span>
-      <span class="vol-picker-type">${v.type}</span>
-    </div>`;
-  }).join('');
-
-  const modal = `<div id="vol-picker-modal" class="vol-picker-modal hidden" onclick="if(event.target===this)closeVolPicker()">
-    <div class="vol-picker-inner">
-      <div class="vol-picker-hd">
-        <span class="vol-picker-title">${vol.type} 목록</span>
-        <button class="vol-picker-close" onclick="closeVolPicker()">&#10005;</button>
-      </div>
-      <div class="vol-picker-list">${items}</div>
-    </div>
-  </div>`;
-
-  const bar = `<div class="vol-nav-outer">
-    ${modal}
-    <div class="vol-nav-bar">
-      <button class="vol-nav-btn prev${hasPrev?'':' disabled'}"
-        onclick="${hasPrev?`goVol('${proj.id}','${prev.id}')`:''}" >
-        <span>&#8592;</span>
-        <span class="vol-nav-btn-title">${hasPrev ? (prev.sub||prev.label) : '이전권 없음'}</span>
-      </button>
-      <button class="vol-list-btn" onclick="openVolPicker()">
-        목록 <span style="font-size:10px;opacity:.7">${idx+1} / ${sameType.length}</span> &#9660;
-      </button>
-      <button class="vol-nav-btn next${hasNext?'':' disabled'}" style="justify-self:end"
-        onclick="${hasNext?`goVol('${proj.id}','${next.id}')`:''}" >
-        <span class="vol-nav-btn-title">${hasNext ? (next.sub||next.label) : '다음권 없음'}</span>
-        <span>&#8594;</span>
-      </button>
-    </div>
-  </div>`;
-
-  return bar;
-}
-window.openVolPicker = function(){ const m=document.getElementById('vol-picker-modal'); if(m) m.classList.remove('hidden'); };
-window.closeVolPicker = function(){ const m=document.getElementById('vol-picker-modal'); if(m) m.classList.add('hidden'); };
-window.goVol = function(projId, volId){ S.activeProj=projId; S.activeVol=volId; S.activeEp=null; S.view='episodes'; pushHash(); render(); const c=document.getElementById('content'); if(c) c.scrollTop=0; };
-
-function clickVol(pid,volId){
-  S.activeProj=pid;S.activeVol=volId;S.activeEp=null;S.view="episodes";pushHash();render();
-  const c=document.getElementById("content");if(c)c.scrollTop=0;
-}
-function clickEp(epId){
-  const vols=VOLUMES[S.activeProj]||[];
-  const vol=Array.isArray(vols)?vols.find(v=>v.id===S.activeVol):null;
-  const ep=vol?.episodes?.find(e=>e.id===epId);
-  if(ep&&ep.status!=="완료") return;
-  S.activeEp=epId;S.view="content";pushHash();render();
-}
-function clickDollCat(catId){S.activeProj="biz-oc-doll";S.activeDollCat=catId;S.activeEp=null;S.view="episodes";pushHash();render();}
-function goDollChar(){S.view="charlist";pushHash();render();}
-function backToEps(){S.activeEp=null;S.view="episodes";pushHash();render();}
-function backToIntro(){S.view="intro";pushHash();render();}
 
 function hardReset(){
   S.view='home';S.activeProj=null;S.activeVol=null;S.activeEp=null;
   S.activeDollCat=null;S.activeChar=null;S.lastMobProj=null;
   S.subOpen=false;S.subTab='ALL';
   try{ history.replaceState(null,'','#home'); }catch(e){}
-  closeMobMenu();
   render();
-}
-function floatEpNav(dir){
-  const fep = document.getElementById("float-ep-nav");
-  if(!fep) return;
-  // 스토리 모드
-  if(fep._storyMode){
-    if(dir==="list"){ goStory(); return; }
-    const idx = dir==="prev" ? fep._prevStoryIdx : fep._nextStoryIdx;
-    if(idx != null) clickStoryEp(idx);
-    return;
-  }
-  // 웹소설 모드
-  if(dir==="list"){ backToEps(); return; }
-  const id = dir==="prev" ? fep._prevEpId : fep._nextEpId;
-  if(id != null) clickEp(id);
 }
 function selectDay(d){S.selDay=S.selDay===d?null:d;renderCalendar();}
 function prevMonth(){if(S.calM===0){S.calM=11;S.calY--;}else S.calM--;S.selDay=null;pushHash();renderCalendar();}
@@ -4733,21 +2072,6 @@ function miniNext(){if(S.homeMiniM===11){S.homeMiniM=0;S.homeMiniY++;}else S.hom
 
 
 
-/* hamburger → mobile */
-document.getElementById("menu-toggle").addEventListener("click",function(e){
-  if(window.innerWidth<=768){e.stopPropagation();toggleMobile();return;}
-  toggleNav();
-});
-
-/* backdrop 클릭 시 메뉴 닫기 */
-document.getElementById("nav-backdrop").addEventListener("click",function(){
-  if(!S.navPinned) closeNav();
-});
-
-/* 콘텐츠 클릭 시 메뉴 닫기 (backdrop 대체) */
-document.getElementById("content").addEventListener("click",function(){
-  if(!S.navPinned) closeNav();
-});
 
 /* ── Sheets 불러오기 (공개 CSV — API 키 불필요) ── */
 async function loadEpDataFromSheets(){
@@ -4886,18 +2210,6 @@ function injectCharDatesIntoWorkLog(){
 }
 
 /* ── 스토리 에디터 JSON 불러오기 (진행현황 카테고리 카드용) ── */
-async function loadStoryData(){
-  try{
-    const r = await fetch('biz-OC-doll/story_editor.json');
-    if(!r.ok) throw new Error('fetch failed');
-    window._STORY_DATA = await r.json();
-    return true;
-  }catch(e){
-    console.warn('story_editor.json 불러오기 실패:', e.message);
-    return false;
-  }
-}
-
 // ══════════════════════════════════════════════
 //  # HASH NAVIGATION — history.pushState 방식
 //  pushState는 이벤트를 발생시키지 않으므로
@@ -4906,89 +2218,33 @@ async function loadStoryData(){
 
 function stateToHash(){
   const v = S.view;
-  if(v === 'home')       return '#home';
-  if(v === 'about')      return '#about';
-  if(v === 'archive')    return '#proj/biz-oc-doll/archive';
-  if(v === 'event')      return '#proj/biz-oc-doll/event';
-  if(v === 'progress')   return '#progress';
-  if(v === 'calendar'){
+  if(v === "calendar"){
     if(S.calTimeline) return `#calendar/${S.calY}/timeline`;
     if(S.calOverview) return `#calendar/${S.calY}/overview`;
     return `#calendar/${S.calY}/${S.calM+1}`;
   }
-  if(v === 'charlist')   return '#proj/biz-oc-doll/chars';
-  if(v === 'intro')      return `#proj/${S.activeProj}/intro`;
-  if(v === 'episodes'){
-    if(S.activeProj === 'biz-oc-doll' && S.activeDollCat)
-      return `#proj/biz-oc-doll/doll/${S.activeDollCat}`;
-    return `#proj/${S.activeProj}/eps/${S.activeVol}`;
-  }
-  if(v === 'story')         return '#proj/biz-oc-doll/story';
-  if(v === 'story-content'){
-    const _TYPE_SLUG = {main:'main_story', sub:'sub_story', event:'event'};
-    const _eps = _storyData ? (_storyData.episodes||[]) : [];
-    const _ep = S.activeStoryEp !== null ? _eps[S.activeStoryEp] : null;
-    if(_ep && _ep.type && _ep.num){
-      const slug = _TYPE_SLUG[_ep.type] || _ep.type;
-      return `#proj/biz-oc-doll/${slug}/ep/${_ep.num}`;
-    }
-    return `#proj/biz-oc-doll/story/ep/${S.activeStoryEp}`;
-  }
-  if(v === 'content'){
-    if(S.activeProj === 'biz-oc-doll')
-      return `#proj/biz-oc-doll/dolleep/${S.activeDollCat}/${S.activeEp}`;
-    return `#proj/${S.activeProj}/ep/${S.activeVol}/${S.activeEp}`;
-  }
-  return '#home';
+  return "#home";
 }
 
 function applyHash(hash){
-  if(!hash || hash === '#' || hash === '#home'){
-    S.view='home';S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;S.activeChar=null;
-    return;
-  }
-  const parts = hash.replace(/^#/,'').split('/');
+  if(!hash || hash === "#" || hash === "#home"){ S.view="home"; S.activeProj=null; return; }
+  const parts = hash.replace(/^#/,"").split("/");
   const p0 = parts[0];
-  if(p0 === 'story'){
-    if(parts[1]==='ep' && parts[2]!=null){ S.view='story-content'; S.activeStoryEp=parseInt(parts[2]); return; }
-    S.view='story'; S.activeStoryEp=null; return;
-  }
-  if(p0 === 'about'){ S.view='about'; return; }
-  if(p0 === 'calendar'){
-    S.view='calendar';
+  if(p0 === "about"){ setTimeout(openContactOverlay,0); return; }
+  if(p0 === "calendar"){
+    S.view="calendar";
     if(parts[1]) S.calY = parseInt(parts[1]);
-    if(parts[2] === 'overview'){ S.calOverview=true; S.calTimeline=false; }
-    else if(parts[2] === 'timeline'){ S.calTimeline=true; S.calOverview=false; }
+    if(parts[2] === "overview"){ S.calOverview=true; S.calTimeline=false; }
+    else if(parts[2] === "timeline"){ S.calTimeline=true; S.calOverview=false; }
     else if(parts[2]){ S.calM=parseInt(parts[2])-1; S.calOverview=false; S.calTimeline=false; }
     return;
   }
-  if(p0 === 'progress') { S.view='progress'; return; }
-  if(p0 === 'proj'){
-    const pid = parts[1]; S.activeProj = pid;
-    const sub = parts[2];
-    if(sub === 'intro')   { S.view='intro'; return; }
-    if(sub === 'eps')     { S.activeVol=parts[3]; S.activeEp=null; S.view='episodes'; return; }
-    if(sub === 'doll')    { S.activeDollCat=parts[3]; S.activeEp=null; S.view='episodes'; return; }
-    if(sub === 'ep')      { S.activeVol=parts[3]; S.activeEp=parseInt(parts[4]); S.view='content'; return; }
-    if(sub === 'dolleep') { S.activeDollCat=parts[3]; S.activeEp=parseInt(parts[4]); S.view='content'; return; }
-    if(sub === 'chars')   { S.view='charlist'; return; }
-    if(sub === 'archive') { S.view='archive'; return; }
-    if(sub === 'event')   { S.view='event'; return; }
-    if(sub === 'story'){
-      if(parts[3]==='ep' && parts[4]!=null){ S.view='story-content'; S.activeStoryEp=parseInt(parts[4]); S._storyType=null; S._storyNum=null; return; }
-      S.view='story'; S.activeStoryEp=null; return;
-    }
-    // type+num 방식: main_story/ep/1-1, sub_story/ep/1-1, event/ep/1-1
-    const _TYPE_REV = {main_story:'main', sub_story:'sub', event:'event'};
-    if(_TYPE_REV[sub] && parts[3]==='ep' && parts[4]!=null){
-      S.view='story-content';
-      S.activeStoryEp=null;
-      S._storyType=_TYPE_REV[sub];
-      S._storyNum=parts[4];
-      return;
-    }
+  /* 구버전 #proj/... 링크 → 해당 프로젝트 사이트로 이관 */
+  if(p0 === "proj" && parts[1]){
+    const site = (typeof PROJECT_SITES!=="undefined") ? PROJECT_SITES[parts[1]] : null;
+    if(site){ location.replace(site); return; }
   }
-  S.view='home';S.activeProj=null;S.activeVol=null;S.activeEp=null;S.activeDollCat=null;S.activeChar=null;
+  S.view="home"; S.activeProj=null;
 }
 
 // pushState는 이벤트를 발생시키지 않으므로 메뉴에 영향 없음
@@ -5002,7 +2258,6 @@ function pushHash(){
 // 뒤로가기/앞으로가기 버튼 — popstate만 감지 (hashchange 아님)
 window.addEventListener('popstate', function(){
   applyHash(location.hash);
-  closeMobMenu();
   render();
 });
 
@@ -5028,151 +2283,12 @@ loadEpDataFromSheets().then(ok=>{
 loadCharDataFromSheets().then(ok=>{
   if(ok){ injectCharDatesIntoWorkLog(); render(); }
 });
-loadStoryData().then(ok=>{
-  if(ok) render();
-});
 
 function rebuildWorkLog(){
   Object.keys(WORK_LOG).forEach(k=>delete WORK_LOG[k]);
   buildWorkLog();
   injectCharDatesIntoWorkLog();
 }
-
-/* ── 모바일 스와이프 드로어 제스처 ── */
-(function(){
-  const EDGE_ZONE  = 250;   // 화면 왼쪽 가장자리에서 스와이프 시작 인식 범위(px)
-  const OPEN_DIST  = 55;   // 열기 확정 최소 이동거리(px)
-  const CLOSE_DIST = 55;   // 닫기 확정 최소 이동거리(px)
-  const VEL_THRESH = 0.35; // 빠른 플릭 속도 임계값(px/ms)
-
-  let startX=0, startY=0, lastX=0, lastT=0;
-  let dragging=false, openDrag=false;
-
-  function getMob(){ return document.getElementById('mob-menu'); }
-  function getBd(){  return document.getElementById('mob-backdrop'); }
-  function isMenuOpen(){ return getMob().classList.contains('open'); }
-
-  function setRawTransform(px){
-    const mob = getMob();
-    const w   = mob.scrollWidth || 130;
-    const clamped = Math.min(0, Math.max(-w, px));
-    mob.style.transition = 'none';
-    mob.style.transform  = 'translateX('+clamped+'px)';
-  }
-
-  function snapOpen(){
-    const mob=getMob(), bd=getBd();
-    mob.style.transition=''; mob.style.transform='';
-    renderMobMenu();
-    if(S.lastMobProj){
-      mobShowSub(S.lastMobProj);
-    } else {
-      mob.classList.remove('show-sub');
-    }
-    mob.classList.add('open');
-    if(bd) bd.classList.add('show');
-  }
-
-  function snapClose(){
-    const mob=getMob();
-    mob.style.transition=''; mob.style.transform='';
-    closeMobMenu();
-  }
-
-  function snapRestore(){
-    const mob=getMob();
-    mob.style.transition=''; mob.style.transform='';
-  }
-
-  document.addEventListener('touchstart', function(e){
-    if(window.innerWidth > 768) return;
-    var t = e.touches[0];
-    startX = lastX = t.clientX;
-    startY = t.clientY;
-    lastT  = Date.now();
-    dragging  = false;
-    openDrag  = false;
-
-    if(!isMenuOpen() && t.clientX <= EDGE_ZONE){
-      openDrag = true;
-      // 인라인 스타일은 실제 드래그가 확인될 때(touchmove)까지 건드리지 않음
-    }
-  }, {passive:true});
-
-  document.addEventListener('touchmove', function(e){
-    if(window.innerWidth > 768) return;
-    var t   = e.touches[0];
-    var dx  = t.clientX - startX;
-    var dy  = t.clientY - startY;
-
-    if(!dragging){
-      if(Math.abs(dy) > Math.abs(dx) + 6) return;
-      if(openDrag  && dx >  6){ 
-        dragging=true;
-        // 드래그 확정 시점에 인라인 스타일 설정
-        var mob2=getMob();
-        mob2.style.transition='none';
-        mob2.style.pointerEvents='none';
-      }
-      else if(isMenuOpen() && dx < -6){ dragging=true; }
-      else return;
-    }
-
-    lastX = t.clientX;
-    lastT = Date.now();
-
-    var mob = getMob();
-    var w   = mob.scrollWidth || 130;
-    if(!isMenuOpen()){
-      setRawTransform(-w + dx);
-      mob.style.pointerEvents='none';
-    } else {
-      setRawTransform(Math.min(0, dx));
-    }
-  }, {passive:true});
-
-  document.addEventListener('touchend', function(e){
-    if(window.innerWidth > 768) return;
-    if(!dragging){
-      // touchstart가 인라인 스타일을 설정했을 수 있으므로 반드시 초기화
-      var mob=getMob();
-      mob.style.transform='';
-      mob.style.transition='';
-      mob.style.pointerEvents='';
-      dragging=false; openDrag=false;
-      return;
-    }
-
-    var dx  = lastX - startX;
-    var dt  = Date.now() - lastT + 1;
-    var vel = Math.abs(dx) / dt;
-    var mob = getMob();
-    mob.style.pointerEvents='';
-
-    if(!isMenuOpen()){
-      if(dx >= OPEN_DIST || (dx > 10 && vel >= VEL_THRESH)){
-        snapOpen();
-      } else {
-        snapClose();
-      }
-    } else {
-      if(-dx >= CLOSE_DIST || (-dx > 10 && vel >= VEL_THRESH)){
-        snapClose();
-      } else {
-        snapRestore();
-      }
-    }
-    dragging=false; openDrag=false;
-  }, {passive:true});
-
-  document.addEventListener('touchcancel', function(){
-    if(!dragging) return;
-    var mob=getMob();
-    mob.style.pointerEvents='';
-    snapRestore();
-    dragging=false; openDrag=false;
-  }, {passive:true});
-})();
 
 /* ── 번역/저작권 안내 접기 ── */
 (function(){
@@ -5232,76 +2348,6 @@ function rebuildWorkLog(){
     }
   };
 })();
-
-/* ── 투표 팝업 (window.open) ── */
-var _votePopup = null;
-window.openVoteOverlay = function(){
-  var pw = 900, ph = 720;
-  var left = Math.round((screen.width  - pw) / 2);
-  var top  = Math.round((screen.height - ph) / 2);
-  var features = 'width='+pw+',height='+ph+',left='+left+',top='+top+',resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
-  if(_votePopup && !_votePopup.closed){
-    _votePopup.focus();
-  } else {
-    _votePopup = window.open('biz-OC-doll/vote.html', 'vote_popup', features);
-  }
-};
-window.closeVoteOverlay = function(){
-  if(_votePopup && !_votePopup.closed) _votePopup.close();
-  _votePopup = null;
-};
-
-/* ── biz-OC-doll 소개글 암호 잠금 ── */
-var DOLL_GATE_PW = '2050년';
-function _dollGateUnlocked(){
-  try { return sessionStorage.getItem('doll_intro_unlocked') === '1'; } catch(e){ return false; }
-}
-function _dollGateRefresh(){
-  var fr = document.getElementById('doll-intro-frame');
-  var gate = document.getElementById('doll-intro-gate');
-  if(!fr || !gate) return;
-  if(_dollGateUnlocked()){
-    fr.classList.remove('locked');
-    gate.classList.remove('show');
-    gate.setAttribute('aria-hidden','true');
-  } else {
-    fr.classList.add('locked');
-    gate.classList.add('show');
-    gate.setAttribute('aria-hidden','false');
-    var msg = document.getElementById('doll-gate-msg'); if(msg) msg.textContent='';
-    var inp = document.getElementById('doll-gate-input');
-    if(inp){ inp.value=''; setTimeout(function(){ try{inp.focus();}catch(e){} }, 60); }
-  }
-}
-function _dollGateHide(){
-  var gate = document.getElementById('doll-intro-gate');
-  if(gate){ gate.classList.remove('show'); gate.setAttribute('aria-hidden','true'); }
-}
-window.unlockDollIntro = function(){
-  var inp = document.getElementById('doll-gate-input');
-  var msg = document.getElementById('doll-gate-msg');
-  var raw = inp ? inp.value : '';
-  /* 한글 자모 분해(NFD) 대응: NFC로 정규화 후 비교 */
-  var val = (raw.normalize ? raw.normalize('NFC') : raw).trim();
-  var pw  = DOLL_GATE_PW.normalize ? DOLL_GATE_PW.normalize('NFC') : DOLL_GATE_PW;
-  if(val === pw){
-    try { sessionStorage.setItem('doll_intro_unlocked','1'); } catch(e){}
-    if(msg) msg.textContent='';
-    _dollGateRefresh();
-  } else {
-    if(msg) msg.textContent='암호가 올바르지 않아요.';
-    if(inp){ inp.classList.add('err'); setTimeout(function(){ inp.classList.remove('err'); }, 350); try{inp.select();}catch(e){} }
-  }
-};
-
-/* ── 아카이브 / 이벤트 뷰 전환 ── */
-window.openArchiveOverlay = function(){ goArchive(); };
-window.openEventOverlay   = function(){ goEvent();   };
-function goArchive(){ S.view="archive"; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
-function goEvent()  { S.view="event";   S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
-function goStory()  { S.view="story"; S.activeStoryEp=null; S.activeProj=null; if(window.innerWidth<=768) closeMobMenu(); pushHash(); render(); }
-
-
 
 </script>
 
