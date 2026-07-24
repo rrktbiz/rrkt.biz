@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll</title>
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../config.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -37,6 +38,30 @@ button{font-family:var(--fn);cursor:pointer}
 .tb-mini{font-size:11px;color:var(--tx3);border:1px solid var(--bd);background:transparent;border-radius:6px;padding:5px 10px;transition:all .12s}
 .tb-mini:hover{background:var(--sm);color:var(--tx)}
 @media(max-width:520px){.tb-mini{display:none}}
+
+/* ── 번역 뱃지 · 언어 드롭다운 ── */
+#tl-badge{font-size:10px;font-weight:600;padding:3px 7px;border-radius:4px;border:1px solid;transition:opacity .2s,background .2s;opacity:0;pointer-events:none}
+#tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
+#tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
+#tl-badge.show{opacity:1}
+#tb-lang-drop-btn{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;transition:all .12s;white-space:nowrap}
+#tb-lang-drop-btn:hover{background:var(--sm);color:var(--tx)}
+#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--sb);border:1px solid var(--bd);border-radius:10px;z-index:9999;overflow:hidden;box-shadow:0 10px 34px rgba(0,0,0,.12)}
+@media(max-width:420px){
+  #tb-lang-dropdown{width:min(280px,calc(100vw - 24px))}
+  #tb-lang-drop-btn .tb-btn-txt{display:none}
+}
+/* 구글 번역 위젯 잔재 숨김 */
+.goog-te-banner-frame,.skiptranslate{display:none !important}
+body{top:0 !important}
+#google_translate_element{display:none}
+
+/* 스토리 리더 DeepL 바 */
+#doll-tl-bar{display:none;justify-content:center;align-items:center;gap:6px;padding:8px 0 16px}
+#doll-dl-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;font-size:11px;font-weight:600;border:1px solid #b5d4f4;border-radius:6px;background:#e8f0fe;color:#1a4c9e;transition:all .12s}
+#doll-dl-btn.done{border-color:#93c5fd;background:#dbeafe;color:#1e40af;cursor:default}
+#doll-dl-rebtn{display:none;align-items:center;gap:4px;padding:6px 10px;font-size:11px;font-weight:600;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx3);transition:all .12s}
+#doll-dl-rebtn:hover{color:var(--tx);border-color:var(--bd2)}
 
 /* ── 탭바 ── */
 #tabbar{
@@ -206,8 +231,20 @@ button{font-family:var(--fn);cursor:pointer}
     <a class="tb-back" href="../index.html">← rrkt.biz</a>
     <div class="tb-sep"></div>
     <span class="tb-title">B&#x131;Z-OC-D<span>O</span>LL</span>
-    <div class="tb-right">
-      <button class="tb-mini" onclick="openForm()">창작 등록</button>
+    <div class="tb-right" style="position:relative">
+      <span id="tl-badge"></span>
+      <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
+        <span id="tb-lang-label" class="tb-btn-txt">Language</span>
+        <span id="tb-lang-caret" class="tb-btn-txt" style="font-size:8px;transition:transform .15s;display:inline-block">&#9660;</span>
+      </button>
+      <div id="tb-lang-dropdown">
+        <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
+          <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
+          <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
+        </div>
+        <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
+      </div>
     </div>
   </div>
 
@@ -615,6 +652,7 @@ async function renderReader(idx){
       '<div style="font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (e.title||'스토리 읽기') + '</div>' +
     '</div>' +
     '<div class="doll-reader-wrap">' +
+      tlBarHtml() +
       '<div class="doll-reader-header">' +
         '<div><span class="doll-ep-eyebrow">' + (e.eyebrow||'') + '</span>' +
         (e.num ? '<span class="doll-ep-num"> · ' + e.num + '</span>' : '') + '</div>' +
@@ -634,6 +672,10 @@ async function renderReader(idx){
   listEl.style.display = 'none';
   readEl.classList.add('show');
   document.getElementById('panel-story').scrollTop = 0;
+
+  _dollOrigBlocks = e.blocks || [];
+  _dollOrigTitle  = e.title || '';
+  syncDollTlBar();
 }
 
 /* ── 블록 렌더러 ── */
@@ -710,15 +752,374 @@ document.addEventListener('keydown', function(ev){
   if(ev.key === 'Escape') closeEpPicker();
 });
 
-/* ── 등록 폼 팝업 ── */
-var _formPopup = null;
-function openForm(){
-  var w = 900, h = 720;
-  var l = Math.round((screen.width - w) / 2), t = Math.round((screen.height - h) / 2);
-  var f = 'width='+w+',height='+h+',left='+l+',top='+t+',resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
-  if(_formPopup && !_formPopup.closed) _formPopup.focus();
-  else _formPopup = window.open('archive_form.html', 'form_popup', f);
+/* ══════════════════════════════════════════════════
+   번역 — 기존 index.html에서 이식
+   · 상단바 언어 드롭다운 (Google Translate)
+   · 스토리 본문은 DeepL (config.js 의 CONFIG.DEEPL 필요)
+   ══════════════════════════════════════════════════ */
+
+var _currentLang = 'ko';
+var _dollOrigBlocks = [];
+var _dollOrigTitle  = '';
+
+function _dlCfg(){ return (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {}; }
+
+/* ── 번역 뱃지 ── */
+function _tlBadge(engine){
+  var el = document.getElementById('tl-badge'); if(!el) return;
+  el.className = engine + ' show';
+  el.textContent = (engine === 'deepl') ? 'DeepL' : 'Google';
 }
+function _tlBadgeReset(){
+  var el = document.getElementById('tl-badge'); if(!el) return;
+  el.className = ''; el.textContent = '';
+}
+
+/* ── Google Translate ── */
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
+}
+function _tlGoogle(lang){
+  _tlBadge('google');
+  var sel = document.querySelector('.goog-te-combo');
+  if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
+  /* 위젯 미로드 시 쿠키 방식 */
+  document.cookie = 'googtrans=/ko/' + lang + ';path=/';
+  document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  location.reload();
+}
+
+/* ── iframe 탭에도 번역 적용 (같은 출처일 때만) ── */
+function _injectGT(fr){
+  try{
+    var d = fr.contentDocument, w = fr.contentWindow;
+    if(!d || !w || w.__gtInjected) return;
+    w.__gtInjected = true;
+    var slot = d.createElement('div');
+    slot.id = 'google_translate_element';
+    slot.style.display = 'none';
+    d.body.appendChild(slot);
+    w.googleTranslateElementInit = function(){
+      new w.google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
+    };
+    var sc = d.createElement('script');
+    sc.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    d.body.appendChild(sc);
+  }catch(e){}
+}
+function _setIframeLang(fr, lang, tries){
+  tries = tries || 0;
+  try{
+    var d = fr.contentDocument; if(!d) return;
+    var sel = d.querySelector('.goog-te-combo');
+    if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
+  }catch(e){ return; }
+  if(tries < 20) setTimeout(function(){ _setIframeLang(fr, lang, tries + 1); }, 350);
+}
+function _applyLangToIframes(lang){
+  document.querySelectorAll('.panel iframe').forEach(function(fr){
+    if(lang === 'ko') return;
+    _injectGT(fr);
+    _setIframeLang(fr, lang);
+  });
+}
+
+/* ── 언어 전환 진입점 ── */
+function setLang(lang){
+  _currentLang = lang;
+
+  if(lang === 'ko'){
+    document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    location.reload();
+    return;
+  }
+
+  /* 스토리 본문: 원본 복원 후 버튼 상태 재계산 */
+  var wrap = document.getElementById('doll-blocks-wrap');
+  if(wrap && _dollOrigBlocks.length){
+    wrap.innerHTML = bbDoll(_dollOrigBlocks);
+    wrap.classList.remove('notranslate');
+  }
+  var titleEl = document.querySelector('.doll-ep-title');
+  if(titleEl && _dollOrigTitle){ titleEl.textContent = _dollOrigTitle; titleEl.classList.remove('notranslate'); }
+
+  syncDollTlBar();
+  _tlGoogle(lang);
+  _applyLangToIframes(lang);
+}
+
+/* ══ 스토리 본문 DeepL ══ */
+function _dlLangCode(lang){
+  return (lang === 'zh-CN' || lang === 'zh-TW') ? 'ZH' : (lang || '').split('-')[0].toUpperCase();
+}
+function _dollCacheKey(){ return 'dl_doll_' + _epIdx + '_' + _dlLangCode(_currentLang); }
+
+function tlBarHtml(){
+  var cfg = _dlCfg();
+  if(!cfg.enabled || !cfg.proxyUrl) return '';
+  return '<div id="doll-tl-bar">' +
+    '<button id="doll-dl-btn" onclick="onDollDeepL()">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>' +
+      ' DeepL로 번역</button>' +
+    '<button id="doll-dl-rebtn" onclick="onDollDeepLRe()">' +
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>' +
+      ' 재번역</button>' +
+  '</div>';
+}
+
+function _dollBtn(){   return document.getElementById('doll-dl-btn'); }
+function _dollRebtn(){ return document.getElementById('doll-dl-rebtn'); }
+function _dollWrap(){  return document.getElementById('doll-blocks-wrap'); }
+
+function _dollBtnReset(){
+  var b = _dollBtn(); if(!b) return;
+  b.classList.remove('done');
+  b.style.opacity = ''; b.style.pointerEvents = '';
+  b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역';
+}
+function _dollTlDone(){
+  var b = _dollBtn(), r = _dollRebtn();
+  if(b){
+    b.classList.add('done');
+    b.style.opacity = ''; b.style.pointerEvents = '';
+    b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
+  }
+  if(r) r.style.display = 'flex';
+  _tlBadge('deepl');
+}
+
+/* 언어·에피소드가 바뀔 때 바 상태 동기화 */
+function syncDollTlBar(){
+  var bar = document.getElementById('doll-tl-bar');
+  if(!bar) return;
+  var on = _currentLang && _currentLang !== 'ko';
+  bar.style.display = on ? 'flex' : 'none';
+  if(!on){ _dollBtnReset(); var r0 = _dollRebtn(); if(r0) r0.style.display = 'none'; return; }
+
+  var cached = null;
+  try{ cached = localStorage.getItem(_dollCacheKey()); }catch(e){}
+  if(cached){
+    try{
+      var obj = JSON.parse(cached);
+      var wrap = _dollWrap();
+      if(wrap){ wrap.innerHTML = bbDoll(obj.blocks); wrap.classList.add('notranslate'); }
+      var t = document.querySelector('.doll-ep-title');
+      if(t && obj._title){ t.textContent = obj._title; t.classList.add('notranslate'); }
+      _dollTlDone();
+      return;
+    }catch(e){}
+  }
+  _dollBtnReset();
+  var r = _dollRebtn(); if(r) r.style.display = 'none';
+}
+
+window.onDollDeepL = async function(){
+  var btn = _dollBtn();
+  if(!btn || btn.classList.contains('done')) return;
+  var cfg = _dlCfg();
+  var url = cfg.proxyUrl || ''; if(!url) return;
+  if(!_currentLang || _currentLang === 'ko') return;
+
+  var key = _dollCacheKey();
+  try{
+    var cached = localStorage.getItem(key);
+    if(cached){
+      var obj = JSON.parse(cached);
+      var wrap = _dollWrap();
+      if(wrap){ wrap.innerHTML = bbDoll(obj.blocks); wrap.classList.add('notranslate'); }
+      var t = document.querySelector('.doll-ep-title');
+      if(t && obj._title) t.textContent = obj._title;
+      _dollTlDone(); return;
+    }
+  }catch(e){}
+
+  var data = await fetchStory(); if(!data) return;
+  var ep = (data.episodes || [])[_epIdx]; if(!ep) return;
+  _doDollTranslate(url, key, ep.blocks || [], ep.title || '', _dlLangCode(_currentLang));
+};
+
+window.onDollDeepLRe = async function(){
+  var key = _dollCacheKey();
+  try{ localStorage.removeItem(key); }catch(e){}
+  var r = _dollRebtn(); if(r) r.style.display = 'none';
+  _dollBtnReset();
+  var wrap = _dollWrap();
+  if(wrap && _dollOrigBlocks.length){ wrap.innerHTML = bbDoll(_dollOrigBlocks); wrap.classList.remove('notranslate'); }
+  var t = document.querySelector('.doll-ep-title');
+  if(t && _dollOrigTitle){ t.textContent = _dollOrigTitle; t.classList.remove('notranslate'); }
+  var cfg = _dlCfg();
+  var url = cfg.proxyUrl || ''; if(!url) return;
+  var data = await fetchStory(); if(!data) return;
+  var ep = (data.episodes || [])[_epIdx]; if(!ep) return;
+  _doDollTranslate(url, key, ep.blocks || [], ep.title || '', _dlLangCode(_currentLang));
+};
+
+function _doDollTranslate(url, cacheKey, blocks, origTitle, dlLang){
+  var btn = _dollBtn();
+  var targets = [];
+  blocks.forEach(function(b, i){
+    if(['system','narration','sfx','speech','thought'].indexOf(b.type) === -1) return;
+    var t = (b.data && b.data.text) ? b.data.text : '';
+    var clean = t.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').trim();
+    if(clean) targets.push({idx:i, text:clean});
+  });
+  var titleClean = (origTitle || '').trim();
+  var allTexts = (titleClean ? [titleClean] : []).concat(targets.map(function(t){ return t.text; }));
+  if(!allTexts.length) return;
+
+  if(btn){ btn.innerHTML = '번역 중…'; btn.style.opacity = '0.6'; btn.style.pointerEvents = 'none'; }
+
+  var BATCH = 50, batches = [];
+  for(var i = 0; i < allTexts.length; i += BATCH) batches.push(allTexts.slice(i, i + BATCH));
+
+  Promise.all(batches.map(function(batch){
+    return fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({text:batch, target_lang: dlLang || 'JA'})
+    }).then(function(r){
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(d){
+      return d.translations.map(function(t){ return t.text; });
+    });
+  })).then(function(results){
+    var translated = [].concat.apply([], results);
+    var offset = titleClean ? 1 : 0;
+    var tlTitle = titleClean ? (translated[0] || titleClean) : '';
+    var tlBody = translated.slice(offset);
+    var tlBlocks = JSON.parse(JSON.stringify(blocks));
+    targets.forEach(function(t, i){ if(tlBody[i]) tlBlocks[t.idx].data.text = tlBody[i]; });
+    try{ localStorage.setItem(cacheKey, JSON.stringify({blocks:tlBlocks, _title:tlTitle})); }catch(e){}
+    var wrap = _dollWrap();
+    if(wrap){ wrap.innerHTML = bbDoll(tlBlocks); wrap.classList.add('notranslate'); }
+    var titleEl = document.querySelector('.doll-ep-title');
+    if(titleEl && tlTitle){ titleEl.textContent = tlTitle; titleEl.classList.add('notranslate'); }
+    _dollTlDone();
+  }).catch(function(err){
+    console.warn('[DeepL doll]', err);
+    _dollBtnReset();
+  });
+}
+
+/* ══ 상단바 언어 드롭다운 ══ */
+(function(){
+  var ALL_LANGS=[
+    ['Afrikaans','af'],['Albanian','sq'],['Amharic','am'],['Arabic','ar'],['Armenian','hy'],
+    ['Azerbaijani','az'],['Basque','eu'],['Belarusian','be'],['Bengali','bn'],['Bosnian','bs'],
+    ['Bulgarian','bg'],['Catalan','ca'],['Cebuano','ceb'],['Chinese (Simplified)','zh-CN'],
+    ['Chinese (Traditional)','zh-TW'],['Corsican','co'],['Croatian','hr'],['Czech','cs'],
+    ['Danish','da'],['Dutch','nl'],['English','en'],['Esperanto','eo'],['Estonian','et'],
+    ['Finnish','fi'],['French','fr'],['Frisian','fy'],['Galician','gl'],['Georgian','ka'],
+    ['German','de'],['Greek','el'],['Gujarati','gu'],['Haitian Creole','ht'],['Hausa','ha'],
+    ['Hawaiian','haw'],['Hebrew','iw'],['Hindi','hi'],['Hmong','hmn'],['Hungarian','hu'],
+    ['Icelandic','is'],['Igbo','ig'],['Indonesian','id'],['Irish','ga'],['Italian','it'],
+    ['Japanese','ja'],['Javanese','jv'],['Kannada','kn'],['Kazakh','kk'],['Khmer','km'],
+    ['Korean','ko'],['Kurdish','ku'],['Kyrgyz','ky'],['Lao','lo'],['Latin','la'],
+    ['Latvian','lv'],['Lithuanian','lt'],['Luxembourgish','lb'],['Macedonian','mk'],
+    ['Malagasy','mg'],['Malay','ms'],['Malayalam','ml'],['Maltese','mt'],['Maori','mi'],
+    ['Marathi','mr'],['Mongolian','mn'],['Myanmar (Burmese)','my'],['Nepali','ne'],
+    ['Norwegian','no'],['Nyanja (Chichewa)','ny'],['Pashto','ps'],['Persian','fa'],
+    ['Polish','pl'],['Portuguese','pt'],['Punjabi','pa'],['Romanian','ro'],['Russian','ru'],
+    ['Samoan','sm'],['Scots Gaelic','gd'],['Serbian','sr'],['Sesotho','st'],['Shona','sn'],
+    ['Sindhi','sd'],['Sinhala','si'],['Slovak','sk'],['Slovenian','sl'],['Somali','so'],
+    ['Spanish','es'],['Sundanese','su'],['Swahili','sw'],['Swedish','sv'],['Tagalog (Filipino)','tl'],
+    ['Tajik','tg'],['Tamil','ta'],['Telugu','te'],['Thai','th'],['Turkish','tr'],
+    ['Ukrainian','uk'],['Urdu','ur'],['Uzbek','uz'],['Vietnamese','vi'],['Welsh','cy'],
+    ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
+  ];
+  var _sel = null, _open = false;
+  var PRIORITY = ['ko','en','zh-CN','ja'];
+
+  function item(l){
+    var name = l[0], code = l[1], isS = (_sel === code);
+    var d = document.createElement('div');
+    d.style.cssText = 'display:flex;align-items:center;padding:8px 14px;cursor:pointer;gap:10px;background:' + (isS ? 'var(--sm)' : 'transparent');
+    d.onmouseover = function(){ this.style.background = 'var(--sm)'; };
+    d.onmouseout  = function(){ this.style.background = isS ? 'var(--sm)' : 'transparent'; };
+    d.onclick = function(){ tbLangSelect(code, name); };
+    var n = document.createElement('span');
+    n.style.cssText = 'font-size:13px;color:var(--tx);flex:1'; n.textContent = name;
+    var c = document.createElement('span');
+    c.style.cssText = 'font-size:11px;color:var(--tx3);font-family:monospace'; c.textContent = code;
+    d.appendChild(n); d.appendChild(c);
+    if(isS){ var ck = document.createElement('span'); ck.style.cssText = 'font-size:12px;color:#3558c0'; ck.textContent = '✓'; d.appendChild(ck); }
+    return d;
+  }
+  function render(q){
+    var list = document.getElementById('tb-lang-list'); if(!list) return;
+    var f = (q || '').toLowerCase().trim();
+    var filtered = f ? ALL_LANGS.filter(function(l){
+      return l[0].toLowerCase().indexOf(f) > -1 || l[1].toLowerCase().indexOf(f) > -1;
+    }) : ALL_LANGS;
+    list.innerHTML = '';
+    if(!filtered.length){
+      list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--tx3)">No results</div>';
+      return;
+    }
+    if(!f){
+      PRIORITY.map(function(c){
+        return ALL_LANGS.filter(function(l){ return l[1] === c; })[0];
+      }).filter(Boolean).forEach(function(l){ list.appendChild(item(l)); });
+      var div = document.createElement('div');
+      div.style.cssText = 'height:1px;background:var(--bd);margin:4px 0';
+      list.appendChild(div);
+      filtered.filter(function(l){ return PRIORITY.indexOf(l[1]) === -1; }).forEach(function(l){ list.appendChild(item(l)); });
+    }else{
+      filtered.forEach(function(l){ list.appendChild(item(l)); });
+    }
+  }
+  function close(){
+    _open = false;
+    var dd = document.getElementById('tb-lang-dropdown');
+    var btn = document.getElementById('tb-lang-drop-btn');
+    var caret = document.getElementById('tb-lang-caret');
+    if(dd) dd.style.display = 'none';
+    if(btn){ btn.style.background = 'transparent'; btn.style.color = 'var(--tx2)'; btn.style.borderColor = 'var(--bd)'; }
+    if(caret) caret.style.transform = '';
+  }
+  window.tbLangToggle = function(){
+    _open = !_open;
+    var dd = document.getElementById('tb-lang-dropdown');
+    var btn = document.getElementById('tb-lang-drop-btn');
+    var caret = document.getElementById('tb-lang-caret');
+    if(!dd) return;
+    dd.style.display = _open ? 'block' : 'none';
+    if(btn){
+      btn.style.background = _open ? 'var(--sm)' : 'transparent';
+      btn.style.color = _open ? 'var(--tx)' : 'var(--tx2)';
+      btn.style.borderColor = _open ? 'var(--bd2)' : 'var(--bd)';
+    }
+    if(caret) caret.style.transform = _open ? 'rotate(180deg)' : '';
+    if(_open){ render(''); setTimeout(function(){ var s = document.getElementById('tb-lang-search'); if(s) s.focus(); }, 80); }
+  };
+  window.tbLangFilter = function(){
+    var s = document.getElementById('tb-lang-search');
+    render(s ? s.value : '');
+  };
+  window.tbLangSelect = function(code, name){
+    _sel = code;
+    var lbl = document.getElementById('tb-lang-label');
+    if(lbl) lbl.textContent = name;
+    close();
+    setLang(code);
+  };
+  document.addEventListener('click', function(e){
+    if(_open && !e.target.closest('#tb-lang-drop-btn') && !e.target.closest('#tb-lang-dropdown')) close();
+  });
+
+  /* 새로고침 후에도 선택 언어 라벨 유지 (googtrans 쿠키 기준) */
+  var m = document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/);
+  if(m && m[1] && m[1] !== 'ko'){
+    _currentLang = m[1];
+    _sel = m[1];
+    var found = ALL_LANGS.filter(function(l){ return l[1] === m[1]; })[0];
+    var lbl0 = document.getElementById('tb-lang-label');
+    if(lbl0 && found) lbl0.textContent = found[0];
+    _tlBadge('google');
+  }
+})();
 
 /* ── 초기화 ── */
 document.querySelectorAll('.tab').forEach(function(b){
@@ -753,5 +1154,8 @@ document.querySelectorAll('.panel').forEach(hookPanelScroll);
   if(!location.hash) history.replaceState(null, '', '#/' + h.tab);
 })();
 </script>
+
+<div id="google_translate_element"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
