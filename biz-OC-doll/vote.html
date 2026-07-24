@@ -130,6 +130,42 @@ input{font-family:var(--fn)}
 #search-input:focus{border-color:var(--acc)}
 #result-count{font-size:11px;color:var(--tx3);margin-left:auto;white-space:nowrap}
 
+/* ── 좋아요 담기 ── */
+#like-import-btn{
+  display:none;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  padding:4px 12px;border:1px solid #f2c2cd;border-radius:20px;
+  background:#fff5f7;color:#e0526d;transition:all .12s;white-space:nowrap;cursor:pointer;
+}
+#like-import-btn:hover{background:#ffe9ee;border-color:#eaa4b4}
+#like-import-btn.show{display:inline-flex}
+#like-import-btn .lh{font-size:12px;line-height:1}
+
+#like-modal{
+  display:none;position:fixed;inset:0;z-index:320;
+  background:rgba(0,0,0,.34);align-items:center;justify-content:center;padding:22px;
+}
+#like-modal.show{display:flex}
+.like-inner{
+  width:100%;max-width:340px;background:var(--sb);border:1px solid var(--bd);
+  border-radius:16px;padding:22px 20px 18px;box-shadow:0 18px 50px rgba(0,0,0,.2);
+}
+.like-title{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px}
+.like-title b{color:#e0526d}
+.like-sub{font-size:12px;color:var(--tx3);line-height:1.6;margin-bottom:16px}
+.like-opt{
+  display:block;width:100%;text-align:left;margin-bottom:8px;
+  padding:11px 14px;border:1px solid var(--bd);border-radius:10px;
+  background:transparent;transition:all .12s;cursor:pointer;
+}
+.like-opt:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 6%,transparent)}
+.like-opt-t{display:block;font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px}
+.like-opt-d{display:block;font-size:11px;color:var(--tx3);line-height:1.5}
+.like-cancel{
+  width:100%;margin-top:4px;padding:9px 0;border:none;background:transparent;
+  font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;border-radius:8px;transition:all .12s;
+}
+.like-cancel:hover{background:var(--sm);color:var(--tx)}
+
 /* ── CHAR GRID ── */
 #char-grid{
   display:grid;
@@ -419,6 +455,23 @@ input{font-family:var(--fn)}
   <button class="tab" id="tab-rank" onclick="switchTab('rank')">순위 보기</button>
 </div>
 
+<!-- 좋아요 담기 모달 -->
+<div id="like-modal" onclick="if(event.target===this)closeLikeImport()">
+  <div class="like-inner">
+    <div class="like-title">좋아요한 <b id="like-modal-count">0</b>명 담기</div>
+    <div class="like-sub">지금 선택 중인 <b id="like-modal-cur">0</b>명과 어떻게 할까요?</div>
+    <button class="like-opt" onclick="applyLikeImport('merge')">
+      <span class="like-opt-t">기존 선택에 추가</span>
+      <span class="like-opt-d" id="like-merge-note">지금 담긴 건 그대로 두고 겹치지 않는 것만 더해요</span>
+    </button>
+    <button class="like-opt" onclick="applyLikeImport('replace')">
+      <span class="like-opt-t">좋아요 목록으로 교체</span>
+      <span class="like-opt-d">지금 담긴 걸 비우고 좋아요한 캐릭터만 담아요</span>
+    </button>
+    <button class="like-cancel" onclick="closeLikeImport()">취소</button>
+  </div>
+</div>
+
 <!-- 선택 트레이 (고정) -->
 <div id="sel-tray">
   <div class="tray-label">선택 중 · <span id="tray-count">0</span>명</div>
@@ -462,6 +515,9 @@ input{font-family:var(--fn)}
 
     <div id="filter-bar">
       <input type="text" id="search-input" placeholder="코드 검색... (예: 001)" oninput="onSearch(this.value)">
+      <button id="like-import-btn" onclick="openLikeImport()" title="캐릭터 일람에서 좋아요한 캐릭터를 담아옵니다">
+        <span class="lh">&hearts;</span> 좋아요 담기 <span id="like-import-count">0</span>
+      </button>
       <span id="result-count">200명</span>
     </div>
     <div id="char-grid"></div>
@@ -578,6 +634,7 @@ if (hasDone) {
 updateSelBadge();
 renderGrid();
 renderTray();
+refreshLikeBtn();
 loadVoteData();
 
 // ---- 득표 데이터 로드 (15초 타임아웃) ----
@@ -651,7 +708,90 @@ function updateSelBadge() {
   var btn = document.getElementById('submit-btn');
   if (!hasDone) btn.disabled = n === 0;
   renderTray();
+  refreshLikeBtn();
 }
+
+// ══ 좋아요 → 트레이 담기 ══
+// 캐릭터 일람(doll_charlist.html)이 localStorage['doll_liked'] 에 저장한 id 배열을 읽어옵니다.
+// 같은 도메인이면 iframe 안이든 밖이든 그대로 공유됩니다.
+function getLikedIds() {
+  try {
+    var raw = JSON.parse(localStorage.getItem('doll_liked') || '[]');
+    if (!Array.isArray(raw)) return [];
+    var valid = {};
+    CHARS.forEach(function(c){ valid[c.id] = true; });
+    var out = [], seen = {};
+    raw.forEach(function(v){
+      var id = parseInt(v, 10);
+      if (!isNaN(id) && valid[id] && !seen[id]) { seen[id] = true; out.push(id); }
+    });
+    return out;
+  } catch (e) { return []; }
+}
+
+// 버튼 노출 여부 — 좋아요가 있고, 아직 투표 전일 때만
+function refreshLikeBtn() {
+  var btn = document.getElementById('like-import-btn');
+  if (!btn) return;
+  var liked = getLikedIds();
+  if (hasDone || liked.length === 0) { btn.classList.remove('show'); return; }
+  btn.classList.add('show');
+  var cnt = document.getElementById('like-import-count');
+  if (cnt) cnt.textContent = liked.length;
+}
+
+function openLikeImport() {
+  var liked = getLikedIds();
+  if (hasDone || liked.length === 0) return;
+  document.getElementById('like-modal-count').textContent = liked.length;
+  document.getElementById('like-modal-cur').textContent = selected.length;
+
+  var adds = liked.filter(function(id){ return selected.indexOf(id) === -1; }).length;
+  var note = document.getElementById('like-merge-note');
+  if (note) {
+    note.textContent = adds > 0
+      ? '지금 담긴 건 그대로 두고 ' + adds + '명이 새로 추가돼요'
+      : '이미 전부 담겨 있어서 바뀌는 게 없어요';
+  }
+  document.getElementById('like-modal').classList.add('show');
+}
+
+function closeLikeImport() {
+  var m = document.getElementById('like-modal');
+  if (m) m.classList.remove('show');
+}
+
+function applyLikeImport(mode) {
+  if (hasDone) { closeLikeImport(); return; }
+  var liked = getLikedIds();
+  if (liked.length === 0) { closeLikeImport(); return; }
+
+  if (mode === 'replace') {
+    selected = liked.slice();
+  } else {
+    liked.forEach(function(id){
+      if (selected.indexOf(id) === -1) selected.push(id);
+    });
+  }
+  closeLikeImport();
+  renderGrid();
+  updateSelBadge();
+}
+
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') closeLikeImport();
+});
+
+// 다른 탭·iframe에서 좋아요가 바뀌면 버튼 숫자도 따라 갱신
+window.addEventListener('storage', function(e){
+  if (e.key === 'doll_liked') refreshLikeBtn();
+});
+// 투표 페이지로 돌아왔을 때 최신 좋아요 반영
+window.addEventListener('focus', refreshLikeBtn);
+document.addEventListener('visibilitychange', function(){
+  if (!document.hidden) refreshLikeBtn();
+});
+
 
 // ---- 선택 트레이 렌더 ----
 function renderTray() {
