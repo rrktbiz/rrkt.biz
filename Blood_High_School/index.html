@@ -787,36 +787,43 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 /* ══════════════════════════════════════════
    SPA 상단바 (2단) — biz-OC-doll 배치와 동일
    ══════════════════════════════════════════ */
-#bhs-topbar{position:sticky;top:0;z-index:300;background:#fff;border-bottom:3px solid var(--black);}
-.bt-r1{display:flex;align-items:center;gap:10px;padding:9px 18px;border-bottom:1px solid #ececec;}
+#bhs-topbar{position:sticky;top:0;z-index:300;background:#fff;border-bottom:1px solid #ececec;}
+.bt-r1{display:flex;align-items:center;padding:9px 18px;border-bottom:1px solid #ececec;}
+.bt-r1-left{display:flex;align-items:center;gap:10px;min-width:0;}
 .bt-back{display:flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--tx3);font-size:12px;font-weight:700;padding:4px 7px;border-radius:4px;transition:background .12s,color .12s;}
 .bt-back:hover{background:#f2f2f2;color:var(--tx);}
 .bt-sep{width:1px;height:14px;background:#ddd;}
 .bt-brand{font-size:12px;font-weight:900;letter-spacing:2.5px;color:var(--tx);}
 .bt-lang{margin-left:auto;position:relative;display:flex;align-items:center;gap:8px;}
-#tl-badge{font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;border:1.5px solid;transition:opacity .2s;opacity:0;pointer-events:none;white-space:nowrap;}
+#tl-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:10px;border:1px solid;transition:opacity .2s;opacity:0;pointer-events:none;white-space:nowrap;}
 #tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
 #tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.show{opacity:1}
-#tb-lang-drop-btn{display:flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--black);border-radius:5px;font-size:11px;font-weight:700;color:var(--tx);padding:5px 11px;box-shadow:2px 2px 0 var(--black);transition:transform .1s,box-shadow .1s;white-space:nowrap;}
-#tb-lang-drop-btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--black);}
-#tb-lang-drop-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--black);}
-#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;width:280px;background:#fff;border:2.5px solid var(--black);border-radius:8px;box-shadow:4px 4px 0 var(--black);z-index:9999;overflow:hidden;}
-.tb-lang-hd{padding:12px 14px 10px;border-bottom:1.5px solid #e8e8e8;}
-.tb-lang-hd-t{font-size:12px;font-weight:900;color:var(--tx);margin-bottom:8px;}
-#tb-lang-search{width:100%;padding:6px 10px;border:1.5px solid #ddd;border-radius:5px;font-size:12px;background:#fff;color:var(--tx);outline:none;font-family:var(--fn);}
-#tb-lang-search:focus{border-color:var(--black);}
+#tb-lang-drop-btn{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-drop-btn:hover{background:#f7f7f7;border-color:#c6c6c6;color:#1a1a1a;}
+
+#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;z-index:9999;overflow:hidden;font-family:'Inter','Noto Sans KR',sans-serif;}
+.tb-lang-hd{padding:12px 14px 10px;border-bottom:1px solid #ececec;}
+.tb-lang-hd-t{font-size:11px;font-weight:600;letter-spacing:.5px;color:#a0a0a0;text-transform:uppercase;margin-bottom:8px;}
+#tb-lang-search{width:100%;padding:7px 10px;border:1px solid #e2e2e2;border-radius:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-search:focus{border-color:#c6c6c6;}
 #tb-lang-list{max-height:260px;overflow-y:auto;}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
-.bt-tabs{display:flex;gap:24px;padding:0 18px;}
-.bt-tab{position:relative;background:none;border:none;font-size:13px;font-weight:700;color:var(--tx3);padding:11px 2px 10px;transition:color .12s;}
-.bt-tab:hover{color:var(--tx2);}
-.bt-tab.active{color:var(--red);font-weight:900;}
-.bt-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:3px;background:var(--red);}
+.bt-tabs{display:flex;gap:6px;padding:6px 14px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.bt-tabs::-webkit-scrollbar{display:none;}
+.bt-tab{position:relative;background:none;border:none;font-size:20px;font-weight:700;color:var(--tx3);padding:7px 16px;border-radius:7px;white-space:nowrap;transition:color .12s,background .12s;}
+.bt-tab:hover{color:var(--tx);background:#f3f3f3;}
+.bt-tab.active{background:none;color:#111;font-weight:800;}
+.bt-tab.active:hover{background:#f3f3f3;color:#111;}
+.bt-tab.disabled{color:#d2d2d2;cursor:default;pointer-events:none;}
+.bt-tab.disabled:hover{color:#d2d2d2;background:none;}
+
 @media(max-width:620px){
-  .bt-r1{padding:8px 13px;} .bt-tabs{padding:0 13px;gap:20px;}
+  .bt-r1-left{padding:8px 0 8px 13px;} .bt-tabs{padding:5px 10px 7px;gap:4px;}
+  .bt-tab{font-size:17px;padding:6px 12px;}
   .bt-brand{letter-spacing:1.4px;font-size:11px;}
+  #tb-lang-drop-btn{padding:5px 8px;gap:4px}
   #tb-lang-dropdown{width:min(280px,calc(100vw - 26px));right:-2px;}
 }
 
@@ -842,6 +849,11 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .vb-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px}
 #view-story .vb-title{font-size:17px;font-weight:700;margin-bottom:3px}
 #view-story .vb-sub{font-size:12px;color:var(--tx2);margin-bottom:9px}
+#view-story .vb-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+#view-story .vb-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:12px;background:#f5f5f5;border:1px solid var(--bd);color:var(--tx2)}
+#view-story .vsec-row{display:flex;gap:8px;max-width:700px;width:calc(100% - 40px);margin:4px auto 0}
+#view-story .vsec-btn{flex:1;padding:8px 8px;background:var(--sb);border:1px solid var(--bd);border-radius:8px;font-size:14px;font-weight:600;color:var(--tx2);transition:all .12s}
+#view-story .vsec-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
 #view-story .vb-synopsis{margin-top:12px;padding:0;background:transparent;border-radius:0;border:none}
 #view-story .vb-synopsis-lbl{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px}
 #view-story .vb-synopsis-text{font-size:12px;color:var(--tx2);line-height:1.7}
@@ -949,6 +961,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .ep-picker-t{font-size:13px;color:#1a1a1a}
 .ep-picker-st{margin-left:auto;font-size:9px;font-weight:700}
 .ep-picker-st.done{color:#c0392b}.ep-picker-st.plan{color:#a0a0a0}
+
 @media(max-width:768px){
   #view-story .tb-crumb,#view-story .tb-arr,#view-story .tb-sep{display:none!important}
   #view-story .tb-cur{max-width:calc(100vw - 150px)}
@@ -962,9 +975,11 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 <!-- ===== SPA 상단바 (2단) ===== -->
 <div id="bhs-topbar">
   <div class="bt-r1">
-    <button class="bt-back" onclick="bhsBackToSite()">&larr; rrkt.biz</button>
-    <span class="bt-sep"></span>
-    <span class="bt-brand">BLOOD&middot;HIGH&middot;SCHOOL</span>
+    <div class="bt-r1-left">
+      <button class="bt-back" onclick="bhsBackToSite()">&larr; rrkt.biz</button>
+      <span class="bt-sep"></span>
+      <span class="bt-brand">BLOOD&middot;HIGH&middot;SCHOOL</span>
+    </div>
     <div class="bt-lang">
       <span id="tl-badge"></span>
       <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
@@ -981,9 +996,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
       </div>
     </div>
   </div>
-  <div class="bt-tabs">
-    <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGo('intro')">인트로</button>
-    <button class="bt-tab"        id="bt-tab-story" onclick="bhsGo('story')">스토리</button>
+  <div class="bt-tabs" id="bt-tabs">
+    <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGo('intro')">소개</button>
   </div>
 </div>
 
@@ -1023,10 +1037,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
       </div>
       <div class="hero-cta">
         <div class="hero-cta-label">작품 보러가기</div>
-        <a class="cta-btn cta-1" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-1" onclick="return bhsGoNovel(event,'novel-1')">
+        <a class="cta-btn cta-1" href="#novel-1" onclick="return bhsGoNovel(event,'novel-1')">
           <span class="cta-part">PART 01</span><span class="cta-go">1부 &rarr;</span>
         </a>
-        <a class="cta-btn cta-2" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-2" onclick="return bhsGoNovel(event,'novel-2')">
+        <a class="cta-btn cta-2" href="#novel-2" onclick="return bhsGoNovel(event,'novel-2')">
           <span class="cta-part">PART 02</span><span class="cta-go">2부 &rarr;</span>
         </a>
       </div>
@@ -1151,10 +1165,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
       <div class="v-cta">
         <div class="v-cta-label">지금 바로 작품 보러가기</div>
         <div class="v-cta-btns">
-          <a class="cta-btn cta-1" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-1" onclick="return bhsGoNovel(event,'novel-1')">
+          <a class="cta-btn cta-1" href="#novel-1" onclick="return bhsGoNovel(event,'novel-1')">
             <span class="cta-part">PART 01</span><span class="cta-go">1부 &rarr;</span>
           </a>
-          <a class="cta-btn cta-2" href="https://rrktbiz.github.io/rrkt.biz/#proj/blood-highschool/eps/novel-2" onclick="return bhsGoNovel(event,'novel-2')">
+          <a class="cta-btn cta-2" href="#novel-2" onclick="return bhsGoNovel(event,'novel-2')">
             <span class="cta-part">PART 02</span><span class="cta-go">2부 &rarr;</span>
           </a>
         </div>
@@ -1838,6 +1852,8 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
 var BHS_VOLUMES = [
   {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:'1부',
    label:'블러드하이스쿨 ~용의 부활~', type:'웹소설',
+   available:true, tags:['#학원판타지','#용의혈통','#각성','#스쿨라이프','#인외배틀','#다크판타지'],
+   links:{ chars:'', lookbook:'', notes:'' },
    cover:'Blood_High_School/bhs_novel_prat1_cover.png',
    synopsis:'평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.',
    episodes:[
@@ -1859,6 +1875,8 @@ var BHS_VOLUMES = [
    ]},
   {id:'novel-2', grad:'150deg,#1a0010,#6b0030,#c0304a', num:2, part:'PART 02', sub:'2부',
    label:'블러드하이스쿨 ~류오가편~', type:'웹소설',
+   available:true, tags:['#가문의비밀','#업보','#멸망의왕','#형제서사','#피의계승','#다크판타지'],
+   links:{ chars:'', lookbook:'', notes:'' },
    cover:'Blood_High_School/bhs_novel_prat2_cover.png',
    synopsis:'류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.',
    episodes:[
@@ -1880,8 +1898,33 @@ var BHS_VOLUMES = [
    ]},
   {id:'novel-3', grad:'150deg,#1a0000,#700000,#aa2020', num:3, part:'PART 03', sub:'3부',
    label:'블러드하이스쿨 3부', type:'웹소설',
+   available:false, tags:['#신종족','#공개예정'],
+   links:{ chars:'', lookbook:'', notes:'' },
    cover:'Blood_High_School/bhs_novel_prat3_cover.png',
    synopsis:'새로운 종족이 나타난다.',
+   episodes:[
+     {id:1,  title:'1화',  date:null, status:'예정'},
+     {id:2,  title:'2화',  date:null, status:'예정'},
+     {id:3,  title:'3화',  date:null, status:'예정'},
+     {id:4,  title:'4화',  date:null, status:'예정'},
+     {id:5,  title:'5화',  date:null, status:'예정'},
+     {id:6,  title:'6화',  date:null, status:'예정'},
+     {id:7,  title:'7화',  date:null, status:'예정'},
+     {id:8,  title:'8화',  date:null, status:'예정'},
+     {id:9,  title:'9화',  date:null, status:'예정'},
+     {id:10, title:'10화', date:null, status:'예정'},
+     {id:11, title:'11화', date:null, status:'예정'},
+     {id:12, title:'12화', date:null, status:'예정'},
+     {id:13, title:'번외 1화', date:null, status:'예정'},
+     {id:14, title:'번외 2화', date:null, status:'예정'},
+     {id:15, title:'번외 3화', date:null, status:'예정'}
+   ]},
+  {id:'novel-4', grad:'150deg,#0d0018,#3a1060,#7040b0', num:4, part:'PART 04', sub:'4부',
+   label:'블러드하이스쿨 4부', type:'웹소설',
+   available:false, tags:['#본격판타지','#떡밥회수','#공개예정'],
+   links:{ chars:'', lookbook:'', notes:'' },
+   cover:'Blood_High_School/bhs_novel_prat4_cover.png',
+   synopsis:'학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다.',
    episodes:[
      {id:1,  title:'1화',  date:null, status:'예정'},
      {id:2,  title:'2화',  date:null, status:'예정'},
@@ -1950,26 +1993,40 @@ function bhsGo(view, volId, epId, noPush){
   bhsRender();
 }
 function bhsPushHash(){
-  var h = '#intro';
-  if(BS.view === 'story'){
-    h = '#story';
-    if(BS.vol) h += '/' + BS.vol;
-    if(BS.vol && BS.ep) h += '/' + BS.ep;
+  var t = '#intro';
+  if(BS.view === 'vol' && BS.vol){
+    t = '#' + BS.vol;
+    if(BS.ep) t += '/' + BS.ep;
   }
-  if(location.hash !== h){ try{ history.pushState(null,'',h); }catch(e){ location.hash = h; } }
+  if(location.hash !== t){ try{ history.pushState(null,'',t); }catch(e){ location.hash = t; } }
 }
 function bhsApplyHash(){
-  var h = (location.hash || '').replace(/^#/,'');
-  var p = h.split('/').filter(Boolean);
-  if(p[0] === 'story'){
-    BS.view = 'story';
-    BS.vol = p[1] && bhsVol(p[1]) ? p[1] : null;
-    BS.ep  = p[2] ? parseInt(p[2],10) : null;
+  var p = (location.hash || '').replace(/^#/,'').split('/').filter(Boolean);
+  var v = p[0] ? bhsVol(p[0]) : null;
+  if(v && v.available !== false){
+    BS.view = 'vol'; BS.vol = v.id; BS.ep = p[1] ? parseInt(p[1],10) : null;
   } else {
     BS.view = 'intro'; BS.vol = null; BS.ep = null;
   }
 }
 window.addEventListener('popstate', function(){ bhsApplyHash(); bhsRender(); });
+
+/* ── 상단 탭 생성 (소개 / 1부 / 2부 / 3부 / 4부) ── */
+function bhsBuildTabs(){
+  var wrap = document.getElementById('bt-tabs');
+  if(!wrap) return;
+  wrap.querySelectorAll('.bt-tab[data-vol]').forEach(function(b){ b.remove(); });
+  BHS_VOLUMES.forEach(function(v){
+    var b = document.createElement('button');
+    b.className = 'bt-tab' + (v.available === false ? ' disabled' : '');
+    b.id = 'bt-tab-' + v.id;
+    b.dataset.vol = v.id;
+    b.textContent = v.sub;
+    if(v.available === false){ b.disabled = true; b.title = '공개 예정'; }
+    else b.onclick = function(){ bhsGo('vol', v.id); };
+    wrap.appendChild(b);
+  });
+}
 
 function bhsBackToSite(){
   location.href = BHS_ROOT + 'index.html#proj/blood-highschool/intro';
@@ -1980,25 +2037,33 @@ function bhsRender(){
   var intro = document.getElementById('view-intro');
   var story = document.getElementById('view-story');
   var ti = document.getElementById('bt-tab-intro');
-  var ts = document.getElementById('bt-tab-story');
-  if(BS.view === 'story'){
+  if(BS.view === 'vol' && BS.vol){
     intro.style.display = 'none';
     story.classList.add('on');
-    ti.classList.remove('active'); ts.classList.add('active');
-    if(!BS.vol) BS.vol = BHS_VOLUMES[0].id;
+    ti.classList.remove('active');
+    document.querySelectorAll('.bt-tab[data-vol]').forEach(function(b){
+      b.classList.toggle('active', b.dataset.vol === BS.vol && !b.disabled);
+    });
     if(BS.ep) bhsRenderReader();
     else      bhsRenderEpList();
   } else {
     story.classList.remove('on');
     intro.style.display = '';
-    ts.classList.remove('active'); ti.classList.add('active');
+    document.querySelectorAll('.bt-tab[data-vol]').forEach(function(b){ b.classList.remove('active'); });
+    ti.classList.add('active');
   }
   window.scrollTo(0,0);
 }
 
+/* ── 섹션 버튼 링크 — 주소는 BHS_VOLUMES[].links 에 채워 넣으세요 ── */
+window.bhsOpenLink = function(url){
+  if(!url){ console.warn('[BHS] 아직 주소가 지정되지 않은 버튼입니다.'); return; }
+  location.href = url;
+};
+
 /* ── 볼륨 네비 (rrkt buildVolNav 이식) ── */
 function bhsBuildVolNav(vol){
-  var sameType = BHS_VOLUMES.filter(function(v){ return v.type === vol.type; });
+  var sameType = BHS_VOLUMES.filter(function(v){ return v.type === vol.type && v.available !== false; });
   var idx = sameType.findIndex(function(v){ return v.id === vol.id; });
   var prev = sameType[idx-1] || null, next = sameType[idx+1] || null;
 
@@ -2028,13 +2093,15 @@ function bhsBuildVolNav(vol){
 }
 window.bhsOpenVolPicker  = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.remove('hidden'); };
 window.bhsCloseVolPicker = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.add('hidden'); };
-window.bhsGoVol = function(volId){ bhsGo('story', volId); };
+window.bhsGoVol = function(volId){ bhsGo('vol', volId); };
 
 /* ── 에피소드 목록 (rrkt renderEpList 이식) ── */
 function bhsRenderEpList(){
   var v = bhsVol(BS.vol);
   if(!v){ BS.vol = BHS_VOLUMES[0].id; v = bhsVol(BS.vol); }
   var eps = v.episodes;
+  var tags = (v.tags || []).map(function(t){ return '<span class="vb-tag">' + bhsEsc(t) + '</span>'; }).join('');
+  var lk = v.links || {};
 
   document.getElementById('st-wrap').innerHTML =
       '<div style="background:var(--sb);padding-top:8px">'
@@ -2048,13 +2115,19 @@ function bhsRenderEpList(){
     + '<div class="vb-sub">' + eps.length + '화 수록</div>'
     + '<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div>'
     + '<div class="vb-synopsis-text">' + bhsEsc(v.synopsis) + '</div></div>'
-    + '</div></div></div>'
+    + (tags ? '<div class="vb-tags">' + tags + '</div>' : '')
+    + '</div></div>'
+    + '<div class="vsec-row">'
+    + '<button class="vsec-btn" onclick="bhsOpenLink(\'' + (lk.chars    || '') + '\')">등장인물</button>'
+    + '<button class="vsec-btn" onclick="bhsOpenLink(\'' + (lk.lookbook || '') + '\')">룩북</button>'
+    + '<button class="vsec-btn" onclick="bhsOpenLink(\'' + (lk.notes    || '') + '\')">제작노트</button>'
+    + '</div></div>'
     + '<div class="ep-board">'
     + '<div class="ep-board-head"><span>#</span><span>제목</span><span style="text-align:right">날짜</span></div>'
     + eps.map(function(e){
         var ok = bhsCanRead(e);
         var wip = e.status === '작업중' ? 'background:#F9F4CA;color:#F9CB4C' : '';
-        return '<div class="ep-row' + (ok?'':' ep-row-locked') + '"' + (ok?' onclick="bhsGo(\'story\',\''+v.id+'\','+e.id+')"':'') + '>'
+        return '<div class="ep-row' + (ok?'':' ep-row-locked') + '"' + (ok?' onclick="bhsGo(\'vol\',\''+v.id+'\','+e.id+')"':'') + '>'
              + '<span class="ep-num">' + e.id + '</span>'
              + '<span class="ep-title-col"><span class="ep-title-text">' + bhsEsc(e.title) + '</span>'
              + '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + e.status + '</span></span>'
@@ -2068,16 +2141,16 @@ function bhsRenderEpList(){
 /* ── 본문 뷰 (rrkt renderContentView 이식) ── */
 function bhsRenderReader(){
   var v = bhsVol(BS.vol);
-  if(!v){ bhsGo('story'); return; }
+  if(!v){ bhsGo('intro'); return; }
   var eps = v.episodes;
   var idx = eps.findIndex(function(e){ return e.id === BS.ep; });
-  if(idx === -1){ bhsGo('story', v.id); return; }
+  if(idx === -1){ bhsGo('vol', v.id); return; }
   var e = eps[idx];
   var prev = eps[idx-1] || null, next = eps[idx+1] || null;
 
   document.getElementById('st-wrap').innerHTML =
       '<div id="content-topbar">'
-    + '<button class="tb-back" onclick="bhsGo(\'story\',\'' + v.id + '\')">&larr; 목록</button>'
+    + '<button class="tb-back" onclick="bhsGo(\'vol\',\'' + v.id + '\')">&larr; 목록</button>'
     + '<div class="tb-sep"></div>'
     + '<span class="tb-crumb">블러드하이스쿨</span><span class="tb-arr">&#8250;</span>'
     + '<span class="tb-crumb">' + bhsEsc(v.label) + '</span><span class="tb-arr">&#8250;</span>'
@@ -2089,7 +2162,7 @@ function bhsRenderReader(){
     + '</div></div>'
     + '<div class="postype-wrap">'
     + '<div class="postype-header">'
-    + '<div class="postype-series-lbl" onclick="bhsGo(\'story\',\'' + v.id + '\')">블러드하이스쿨 &middot; ' + bhsEsc(v.label) + '</div>'
+    + '<div class="postype-series-lbl" onclick="bhsGo(\'vol\',\'' + v.id + '\')">블러드하이스쿨 &middot; ' + bhsEsc(v.label) + '</div>'
     + '<div class="postype-title">' + bhsEsc(e.title) + '</div>'
     + '<div class="postype-meta">'
     + (e.date ? '<span class="postype-date">' + e.date + '</span>' : '')
@@ -2108,10 +2181,10 @@ function bhsRenderReader(){
     + '<div class="postype-loading"><div class="postype-spinner"></div><span>불러오는 중…</span></div>'
     + '</div></div>'
     + '<div class="ep-nav-outer"><div class="ep-nav">'
-    + '<button class="ep-nav-btn ' + (prev?'':'disabled') + '"' + (prev?' onclick="bhsGo(\'story\',\''+v.id+'\','+prev.id+')"':'') + '>'
+    + '<button class="ep-nav-btn ' + (prev?'':'disabled') + '"' + (prev?' onclick="bhsGo(\'vol\',\''+v.id+'\','+prev.id+')"':'') + '>'
     + '<span>&#8592;</span><span class="ep-nav-title">' + (prev ? bhsEsc(prev.title) : '처음 화') + '</span></button>'
     + '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; 에피소드 목록</button>'
-    + '<button class="ep-nav-btn ' + (next?'':'disabled') + '"' + (next?' onclick="bhsGo(\'story\',\''+v.id+'\','+next.id+')"':'') + '>'
+    + '<button class="ep-nav-btn ' + (next?'':'disabled') + '"' + (next?' onclick="bhsGo(\'vol\',\''+v.id+'\','+next.id+')"':'') + '>'
     + '<span class="ep-nav-title">' + (next ? bhsEsc(next.title) : '마지막 화') + '</span><span>&#8594;</span></button>'
     + '</div></div>'
     + '<div class="ep-picker-modal hidden" id="ep-picker-modal" onclick="closeEpPicker(event)">'
@@ -2139,7 +2212,7 @@ function openEpPicker(){
 function pickEp(id){
   var e = bhsVol(BS.vol).episodes.find(function(x){ return x.id === id; });
   closeEpPickerBtn();
-  if(e && bhsCanRead(e)) bhsGo('story', BS.vol, id);
+  if(e && bhsCanRead(e)) bhsGo('vol', BS.vol, id);
 }
 function closeEpPicker(ev){ if(ev.target === document.getElementById('ep-picker-modal')) closeEpPickerBtn(); }
 function closeEpPickerBtn(){ var m=document.getElementById('ep-picker-modal'); if(m) m.classList.add('hidden'); }
@@ -2196,7 +2269,7 @@ function setLang(lang){
   var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
 
   /* 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리) */
-  if(BS.view === 'story' && BS.vol && BS.ep){
+  if(BS.view === 'vol' && BS.vol && BS.ep){
     _renderEpForLang(lang);
     if(_tlCache[lang]) _tlApply(_tlCache[lang]);
     _tlGoogle(lang);
@@ -2486,7 +2559,7 @@ window.onDeepLRetranslateClick = function(){
     var n=document.createElement('span');n.style.cssText='font-size:13px;color:var(--tx);flex:1';n.textContent=name;
     var c=document.createElement('span');c.style.cssText='font-size:11px;color:var(--tx3);font-family:monospace';c.textContent=code;
     d.appendChild(n);d.appendChild(c);
-    if(isS){var ck=document.createElement('span');ck.style.cssText='font-size:12px;color:var(--red);font-weight:900';ck.textContent='✓';d.appendChild(ck);}
+    if(isS){var ck=document.createElement('span');ck.style.cssText='font-size:12px;color:#1a1a1a;font-weight:700';ck.textContent='✓';d.appendChild(ck);}
     return d;
   }
   function _render(q){
@@ -2499,7 +2572,7 @@ window.onDeepLRetranslateClick = function(){
       var priority=PRIORITY_CODES.map(function(c){return ALL_LANGS.find(function(l){return l[1]===c;});}).filter(Boolean);
       var rest=filtered.filter(function(l){return PRIORITY_CODES.indexOf(l[1])===-1;});
       priority.forEach(function(l){list.appendChild(_makeItem(l));});
-      var div=document.createElement('div');div.style.cssText='height:1.5px;background:#e8e8e8;margin:4px 0';list.appendChild(div);
+      var div=document.createElement('div');div.style.cssText='height:1px;background:#ececec;margin:4px 0';list.appendChild(div);
       rest.forEach(function(l){list.appendChild(_makeItem(l));});
     } else {
       filtered.forEach(function(l){list.appendChild(_makeItem(l));});
@@ -2550,7 +2623,7 @@ window.onDeepLRetranslateClick = function(){
 /* ══════ 인트로 CTA → 내부 스토리 라우팅 (기존 함수 대체) ══════ */
 function bhsGoNovel(ev, volId){
   if(ev && ev.preventDefault) ev.preventDefault();
-  bhsGo('story', volId);
+  bhsGo('vol', volId);
   return false;
 }
 
@@ -2604,10 +2677,11 @@ async function bhsLoadSheet(){
 /* ══════ 부트 ══════ */
 document.addEventListener('DOMContentLoaded', function(){
   if(_currentLang && _currentLang !== 'ko' && typeof tbLangSetLabel === 'function') tbLangSetLabel(_currentLang);
+  bhsBuildTabs();
   bhsApplyHash();
   bhsRender();
   bhsLoadSheet().then(function(ok){
-    if(ok && BS.view === 'story' && !BS.ep) bhsRender();
+    if(ok && BS.view === 'vol' && !BS.ep) bhsRender();
   });
 });
 </script>
@@ -2730,32 +2804,8 @@ document.addEventListener('DOMContentLoaded',function(){
       알아서 숨긴다. (부모와 same-origin일 때)
    → 단독 열람/타 도메인이면 최상위 창을 풀 URL로 이동(fallback).
    ============================================================ */
-function bhsGoNovel(ev, vol){
-  var hash = '#proj/blood-highschool/eps/' + vol;
-  // 1) iframe 안 + 부모가 same-origin SPA → 부모를 직접 라우팅
-  try {
-    var top = window.top;
-    if (top && top !== window.self && typeof top.applyHash === 'function') {
-      if (ev && ev.preventDefault) ev.preventDefault();
-      try {
-        if (top.history && top.history.pushState) top.history.pushState(null, '', hash);
-        else top.location.hash = hash;
-      } catch(e){ top.location.hash = hash; }
-      top.applyHash(hash);
-      if (typeof top.render === 'function') top.render();
-      try { top.scrollTo(0, 0); } catch(e){}
-      return false;
-    }
-  } catch(e){ /* cross-origin 접근 차단 → 아래 fallback */ }
-  // 2) 단독 실행 / 타 도메인 → 최상위 창을 풀 URL로 이동
-  try {
-    if (ev && ev.preventDefault) ev.preventDefault();
-    window.top.location.href = 'https://rrktbiz.github.io/rrkt.biz/' + hash;
-    return false;
-  } catch(e){
-    return true; // 최후 fallback: a 태그 기본 동작
-  }
-}
+/* 옛 iframe-부모 라우팅 bhsGoNovel — 완전 독립 SPA 전환으로 폐기.
+   실제 라우팅은 위쪽 bhsGoNovel(ev,volId){ bhsGo('vol',volId) } 가 담당. */
 </script>
 <div id="google_translate_element"></div>
 
