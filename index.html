@@ -19,26 +19,14 @@ html{height:100%;overflow:hidden;font-size:14px}
 body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
-/* ── TOPBAR ── */
-#topbar{
-  height:48px;flex-shrink:0;
-  background:var(--sb);border-bottom:1px solid var(--bd);
-  display:flex;align-items:center;padding:0 16px;gap:14px;
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  transition:transform .28s ease;
-}
-.bar{width:18px;height:2px;background:var(--tx);border-radius:2px;flex-shrink:0;display:block}
-#topbar-logo{font-size:15px;font-weight:700;color:#111;letter-spacing:-.04em;cursor:pointer}
-#topbar-logo:hover{opacity:.6}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+/* ── HOME HEADER CONTROLS ── */
+.topbar-right{display:flex;align-items:center;gap:8px}
 #tl-badge{font-size:10px;font-weight:600;padding:3px 7px;border-radius:4px;border:1px solid;transition:opacity .2s,background .2s;opacity:0;pointer-events:none}
 #tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
 #tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.show{opacity:1}
-.tb-lang-btn{font-size:11px;font-weight:600;padding:4px 8px;border:1px solid var(--bd);border-radius:5px;background:transparent;color:var(--tx2);transition:all .12s}
-.tb-lang-btn:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
-#topbar-cal-btn{font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s;margin-left:8px}
+#topbar-cal-btn{font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s}
 #topbar-cal-btn:hover{background:var(--bg);color:var(--tx)}
 
 /* ── FLOATING NAV ── */
@@ -72,11 +60,11 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .doll-banner-count{font-size:11px;color:var(--tx3);margin-top:auto}
 
 /* ── CONTENT ── */
-#content{display:block;margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);transition:margin-top .28s ease,height .28s ease;padding-bottom:env(safe-area-inset-bottom,0px)}
+#content{display:block;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);padding-bottom:env(safe-area-inset-bottom,0px)}
 body.nav-pinned #nav-backdrop{display:none!important}
 
 /* ── HERO ── */
-.home-hero{background:var(--sb);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:18px;box-shadow:0 2px 12px #0000000a}
+.home-hero{background:var(--sb);border:1px solid #fff;border-radius:12px;overflow:hidden;margin-bottom:18px;position:relative}
 .home-hero-inner{padding:22px 24px 20px}
 .home-hero-top{display:flex;align-items:flex-start;gap:18px;margin-bottom:16px}
 .home-hero-info{flex:1;min-width:0}
@@ -100,9 +88,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-hero-btn-s:hover{border-color:var(--bd2);background:var(--bg)}
 
 /* ── HOME ── */
-.home-page{padding:20px 18px;max-width:950px;margin:0 auto}
+.home-page{padding:40px 18px 20px;max-width:950px;margin:0 auto}
 .home-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
-.home-logo-big{font-size:28px;font-weight:700;color:#111;letter-spacing:-.04em;padding-left:10px}
+.home-logo-big{font-size:28px;font-weight:700;color:#111;letter-spacing:-.04em;padding-left:10px;transition:opacity .12s}
+.home-logo-big:hover{opacity:.65}
 .home-clock{font-size:28px;font-weight:300;color:var(--tx2);letter-spacing:.02em;font-variant-numeric:tabular-nums}
 /* 2-column: recent-work | right-panel (status + visitors) */
 .home-body{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:start}
@@ -606,10 +595,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
 @media(min-width:769px){.mob-menu,.mob-lang-row{display:none!important}}
 .postype-text{white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.9;font-size:17px}
 @media(max-width:768px){
-  #content{margin-top:48px;height:calc(100vh - 48px);height:calc(100dvh - 48px);-webkit-overflow-scrolling:touch;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
+  #content{-webkit-overflow-scrolling:touch;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
   .topbar-right{gap:4px}
   .tb-btn-txt{display:none!important}
-  #topbar-cal-btn,#topbar-progress-btn{padding:6px 8px;min-width:32px;justify-content:center;gap:0}
+  #topbar-cal-btn{padding:6px 8px;min-width:32px;justify-content:center;gap:0}
   #tb-lang-drop-btn{padding:5px 8px;gap:4px}
   #tb-lang-dropdown{width:min(280px,calc(100vw - 16px));right:-4px}
   .home-body{grid-template-columns:1fr}
@@ -798,46 +787,9 @@ body{top:0!important}
 .doll-divider::before,.doll-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
 @media(max-width:480px){.doll-reader-wrap{padding:16px 18px 100px;margin:0}.doll-line-text{font-size:15px;line-height:2}}
 @media(min-width:769px){.doll-line-text{font-size:17px}.doll-reader-wrap{padding:40px 48px 100px}}
-/* ── biz-OC-doll 소개글 암호 잠금 게이트 ── */
-#doll-intro-gate{
-  display:none;position:fixed;top:48px;left:0;right:0;bottom:0;z-index:65;
-  align-items:center;justify-content:center;padding:24px;
-  background:linear-gradient(160deg,rgba(238,246,250,.78),rgba(255,255,255,.62));
-  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
-  font-family:var(--fn);
-}
-#doll-intro-gate.show{display:flex}
-@keyframes digShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 </style>
 </head>
 <body>
-<!-- TOPBAR -->
-<div id="topbar">
-  <span id="topbar-logo" onclick="goHome()">rrkt.biz</span>
-  <button id="topbar-cal-btn" onclick="goCal()">
-    <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-    <span class="tb-btn-txt">작업 캘린더</span>
-  </button>
-  <div class="topbar-right" style="position:relative">
-    <span id="tl-badge"></span>
-    <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
-      <span id="tb-lang-label" class="tb-btn-txt">Language</span>
-      <span id="tb-lang-caret" class="tb-btn-txt" style="font-size:8px;transition:transform .15s;display:inline-block">▼</span>
-    </button>
-    <div id="tb-lang-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--sb);border:1px solid var(--bd);border-radius:10px;z-index:9999;overflow:hidden">
-      <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
-        <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
-        <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
-      </div>
-      <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
-    </div>
-  </div>
-</div>
-
-
-
-
 <!-- MAIN CONTENT -->
 <main id="content"></main>
 
@@ -1462,13 +1414,7 @@ let _navHideTimer=null;
 /* ── MAIN RENDER ── */
 function render(){
   var ct = document.getElementById("content");
-  if(ct){
-    ct.style.display = "";
-    ct.style.marginTop = "48px";
-    ct.style.height = "calc(100dvh - 48px)";
-  }
-  var tb = document.getElementById("topbar");
-  if(tb) tb.style.transform = "";
+  if(ct) ct.style.display = "";
   if(S.view==="calendar")   { _tlBadgeReset(); renderCalendar(); }
   else                      { _tlBadgeReset(); renderHome(); }
 }
@@ -1585,8 +1531,29 @@ function renderHome(){
 
   document.getElementById("content").innerHTML=`
     <div class="home-page">
-      <div class="home-header" style="position:relative">
-        <div class="home-logo-big">rrkt.biz</div>
+      <div class="home-header" style="position:relative;display:flex;align-items:center;gap:12px;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="home-logo-big" onclick="goHome()" style="cursor:pointer">rrkt.biz</div>
+          <button id="topbar-cal-btn" onclick="goCal()">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <span class="tb-btn-txt">작업 캘린더</span>
+          </button>
+        </div>
+        <div class="topbar-right" style="position:relative">
+          <span id="tl-badge"></span>
+          <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
+            <span id="tb-lang-label" class="tb-btn-txt">Language</span>
+            <span id="tb-lang-caret" class="tb-btn-txt" style="font-size:8px;transition:transform .15s;display:inline-block">▼</span>
+          </button>
+          <div id="tb-lang-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--sb);border:1px solid var(--bd);border-radius:10px;z-index:9999;overflow:hidden">
+            <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
+              <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
+              <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
+            </div>
+            <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
+          </div>
+        </div>
       </div>
       <div id="lang-detect-banner">
         <div class="ldb-text"></div>
@@ -1678,7 +1645,7 @@ function renderHome(){
                 const illustSlot = p.illust
                   ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
                   : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
-                return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기" style="position:relative;aspect-ratio:1.3/1;width:100%;overflow:hidden;border-radius:12px;border:1px solid var(--bd);cursor:pointer">
+                return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기" style="position:relative;aspect-ratio:1.6/1;width:100%;overflow:hidden;border-radius:12px;border:1px solid var(--bd);cursor:pointer">
                   ${illustSlot}
                   <div class="proj-illust-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(10px,2vw,20px) clamp(10px,2vw,20px) clamp(12px,2.2vw,22px)">
                     <div style="font-size:clamp(13px,2.4vw,30px);font-weight:400;color:#fff;text-shadow:0 1px 6px #0009;line-height:1.2;margin-bottom:clamp(2px,.4vw,6px)">${p.label}</div>
@@ -1923,6 +1890,10 @@ function renderCalendar(){
 
   document.getElementById("content").innerHTML=`
     <div class="cal-page">
+      <button onclick="goHome()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;margin-bottom:16px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s" onmouseover="this.style.background='var(--bg)';this.style.borderColor='var(--bd2)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--bd)'">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        홈으로
+      </button>
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
         <div style="flex-shrink:0">
           <div class="cal-page-title" style="margin-bottom:10px">작업 캘린더</div>
