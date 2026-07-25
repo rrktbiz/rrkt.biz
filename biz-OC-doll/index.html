@@ -592,7 +592,7 @@ function hookPanelScroll(panel){
 
 /* ── 소개 암호 게이트 ── */
 function unlocked(){
-  try{ return sessionStorage.getItem('doll_intro_unlocked') === '1'; }catch(e){ return false; }
+  try{ return localStorage.getItem('doll_intro_unlocked') === '1'; }catch(e){ return false; }
 }
 function refreshGate(){
   var gate = document.getElementById('gate');
@@ -612,7 +612,7 @@ function unlockIntro(){
   var val = (raw.normalize ? raw.normalize('NFC') : raw).trim();
   var pw  = GATE_PW.normalize ? GATE_PW.normalize('NFC') : GATE_PW;
   if(val === pw){
-    try{ sessionStorage.setItem('doll_intro_unlocked','1'); }catch(e){}
+    try{ localStorage.setItem('doll_intro_unlocked','1'); }catch(e){}
     if(msg) msg.textContent = '';
     document.getElementById('gate').classList.remove('show');
     mount('intro');
