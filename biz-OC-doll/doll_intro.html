@@ -119,6 +119,26 @@ html, body {
 .dash-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .dash-list li { font-size: 15px; color: var(--gray-600); line-height: 1.55; }
 
+/* WORLD PEEK — 세계관 압축 요약. 전문은 스토리 탭 EP.00 으로 넘긴다 */
+.world-peek {
+  margin-top: 40px;
+  padding: 26px 28px 24px;
+  border-radius: 16px;
+  background: linear-gradient(150deg, #f2f7fa 0%, #f4f2f8 100%);
+  border: 1px solid rgba(90,144,176,0.14);
+}
+.world-peek-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+.world-peek-tagline { font-size: 17px; font-weight: 300; font-style: italic; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 18px; }
+.world-peek-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+.world-peek-list li { font-size: 14px; color: var(--gray-600); line-height: 1.65; padding-left: 13px; position: relative; }
+.world-peek-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; border-radius: 50%; background: rgba(90,144,176,0.5); }
+.world-peek-list b { color: var(--gray-900); font-weight: 700; }
+@media (max-width: 600px) {
+  .world-peek { padding: 22px 20px 20px; }
+  .world-peek-tagline { font-size: 15px; }
+  .world-peek-list li { font-size: 13px; }
+}
+
 /* WORLD LINK — 세계관으로 넘어가는 진입점. 버튼이 아니라 문장으로, 톤 전환을 예고 */
 .world-link {
   display: inline-flex;
@@ -179,77 +199,34 @@ html, body {
 .creator-label-ko { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 14px; }
 .creator-text { font-size: 15px; color: var(--gray-600); line-height: 1.8; font-weight: 400; }
 
-/* WORLD OVERLAY — 세계관을 별도 레이어(풀스크린)로 띄우는 컨테이너 */
-.world-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 998;
-  background: #fff;
-  overflow-y: auto;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.34,1.2,0.64,1);
+/* CREATOR CARD — 제작자 프로필. 팬/창작자 대상이라 '비즈니스 문의'가 아닌 '제작자' 톤 */
+.creator-card {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 28px; padding: 18px 20px;
+  border: 1px solid var(--gray-200); border-radius: 14px;
+  background: var(--gray-50);
 }
-.world-close {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--gray-100);
-  border: none;
-  font-size: 18px;
-  color: var(--gray-600);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
+.creator-card-thumb { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1px solid var(--gray-200); background: var(--white); }
+.creator-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.creator-card-body { flex: 1; min-width: 0; }
+.creator-card-name { font-size: 14px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; margin-bottom: 3px; }
+.creator-card-tagline { font-size: 12px; color: var(--gray-600); line-height: 1.6; margin-bottom: 8px; }
+.creator-card-mail { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; }
+.creator-card-mail:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+  .creator-card { gap: 13px; padding: 15px 16px; }
+  .creator-card-thumb { width: 44px; height: 44px; }
 }
-.world-close:hover { background: var(--gray-200); }
 
-/* WORLDVIEW — 인트로와 의도적으로 다른 톤. 여백 넓고, 문장 짧고, 장식 최소화 */
-.world-sec {
-  padding: 96px 24px 100px;
-  background:
-    radial-gradient(ellipse 500px 300px at 15% 10%, rgba(185,210,230,0.18) 0%, transparent 100%),
-    radial-gradient(ellipse 500px 300px at 85% 90%, rgba(210,195,230,0.16) 0%, transparent 100%),
-    linear-gradient(180deg, #fbfcfd 0%, #f6f3f8 50%, #fbfcfd 100%);
-  min-height: 100vh;
-}
-.world-inner { max-width: 560px; margin: 0 auto; }
-.world-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; text-align: center; margin-bottom: 20px; }
-.world-title { font-family: 'Josefin Sans', sans-serif; font-weight: 100; font-size: clamp(22px, 4vw, 30px); letter-spacing: 0.18em; text-align: center; color: #4a5560; margin-bottom: 10px; }
-.world-tagline { text-align: center; font-size: 15px; color: var(--gray-600); font-style: italic; line-height: 1.8; margin-bottom: 72px; }
-.world-block { margin-bottom: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(90,144,176,0.14); }
-.world-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.world-block-title { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; color: var(--blue); text-transform: uppercase; text-align: center; margin-bottom: 18px; }
-.world-block-body { font-size: 16px; color: var(--gray-600); line-height: 2; text-align: center; font-weight: 300; }
-.world-image-slot {
-  margin: 28px auto 0;
-  max-width: 460px;
-  min-height: 180px;
-  border: 1px dashed rgba(90,144,176,0.35);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  color: var(--gray-400);
-  background: rgba(255,255,255,0.4);
-}
-.world-cta { text-align: center; margin-top: 8px; }
-.world-cta-text { font-size: 17px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.02em; }
 
-@media (max-width: 580px) {
-  .world-sec { padding: 64px 20px 72px; }
-  .world-block { margin-bottom: 44px; padding-bottom: 44px; }
-  .world-tagline { margin-bottom: 52px; }
-}
+/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
+.site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--font)}
+.site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
+.sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
+.sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+.sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
+.sf-links a:hover{text-decoration:underline}
 
 /* MODAL */
 #biz-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
@@ -405,10 +382,20 @@ html, body {
 
     <p class="intent-quote">공식은 시작만 합니다. 비즈오씨돌은 팬들의 이름과 이야기로 살아갑니다.</p>
 
-    <a class="world-link" href="#worldview" onclick="openWorldOverlay();return false;">
-      비즈오씨돌의 핵심 세계관
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-    </a>
+    <!-- 세계관 압축 요약 — 전문은 스토리 탭(EP.00)으로 -->
+    <div class="world-peek">
+      <div class="world-peek-eyebrow">WORLDVIEW</div>
+      <p class="world-peek-tagline">결핍, 고통, 흔들림이 없는 세계.</p>
+      <ul class="world-peek-list">
+        <li><b>인간 20% · 비즈오씨돌 80%</b> — 인간은 비즈오씨돌에게 케어를 받으며 살아간다.</li>
+        <li><b>두 개의 별</b> — 인류는 여자별과 남자별로 분리되어 있고, 재결합은 불가능하다.</li>
+        <li><b>전속</b> — 모든 인간에게는 평생 함께하는 단 하나의 비즈오씨돌이 있다.</li>
+      </ul>
+      <a class="world-link" href="#/story" onclick="goWorldview();return false;">
+        비즈오씨돌의 핵심 세계관 — 전문 보기
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
   </div>
 
   <!-- 가이드라인 -->
@@ -518,45 +505,23 @@ html, body {
       제작자 노트
     </div>
     <div class="creator-text">이 프로젝트를 운영하면서 제작자의 모든 역량은 캐릭터를 출시에만 씁니다. 불필요한 운영에 에너지를 쓰지 않기 위한 선택입니다. 이 프로젝트에는 종료 시점이 없습니다. 캐릭터는 계속 나옵니다. </div>
-  </div>
 
-</div>
-
-<!-- 세계관 (풀스크린 오버레이) -->
-<div class="world-overlay" id="world-overlay">
-  <button class="world-close" onclick="closeWorldOverlay()">×</button>
-  <div class="world-sec" id="worldview">
-    <div class="world-inner">
-      <div class="world-eyebrow">WORLDVIEW</div>
-      <div class="world-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL 세계관</div>
-      <p class="world-tagline">결핍, 고통, 흔들림이 없는 세계.</p>
-
-      <div class="world-block">
-        <div class="world-block-title">비즈오씨돌이란</div>
-        <div class="world-block-body">먼 미래의 이 세계는, 인간은 20%. 비즈오씨돌은 80%.<br>인간은 비즈오씨돌에게 케어를 받으며 함께 살아가고 있다.</div>
-        <!-- 이미지 자리: 비즈오씨돌/인간 비율, 케어 이미지 등 -->
-        <div class="world-image-slot">이미지 자리</div>
+    <!-- 제작자 프로필 — 페이지 최하단. 다 읽은 사람이 발견하는 자리 -->
+    <div class="creator-card">
+      <div class="creator-card-thumb">
+        <img src="../profile.png" alt="BIZ" onerror="this.style.display='none'">
       </div>
-
-      <div class="world-block">
-        <div class="world-block-title">두 개의 별</div>
-        <div class="world-block-body">인류는 두 개의 행성, 여자별과 남자별로 분리되어 있다.<br>서로 다른 바이러스 때문에 재결합이 불가능한 구조다.<br>각 행성에는 그 행성 인간에 대응하는 비즈오씨돌이 배치되어 있다.</div>
-        <!-- 이미지 자리: 두 행성 일러스트 등 -->
-        <div class="world-image-slot">이미지 자리</div>
-      </div>
-
-      <div class="world-block">
-        <div class="world-block-title">전속</div>
-        <div class="world-block-body">모든 인간에게는 평생 함께하는 전속 비즈오씨돌이 있다.<br><br>이 관계는 부모도, 연인도, 친구도 아니다.<br>세상 어떤 이름으로도 정의되지 않는, 오직 둘만의 관계.<br><br>영혼의 결핍을 채워주는 존재.</div>
-        <!-- 이미지 자리: 전속 비즈오씨돌과 인간의 관계 이미지 등 -->
-        <div class="world-image-slot">이미지 자리</div>
-      </div>
-
-      <div class="world-cta">
-        <div class="world-cta-text">당신의 전속 비즈오씨돌을 고르세요.</div>
+      <div class="creator-card-body">
+        <div class="creator-card-name">BIZ</div>
+        <div class="creator-card-tagline">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
+        <a class="creator-card-mail" href="mailto:rrkt.biz@proton.me">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          rrkt.biz@proton.me
+        </a>
       </div>
     </div>
   </div>
+
 </div>
 
 <!-- MODAL -->
@@ -609,29 +574,19 @@ function closeBizModal() {
   setTimeout(() => { document.getElementById('biz-overlay').style.display = 'none'; }, 220);
 }
 
-/* ── 세계관 풀스크린 레이어 ── */
-function openWorldOverlay() {
-  var ov = document.getElementById('world-overlay');
-  ov.style.display = 'block';
-  document.body.style.overflow = 'hidden';
-  ov.scrollTop = 0;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    ov.style.opacity = '1';
-    ov.style.transform = 'translateY(0)';
-  }));
+/* ── 세계관 전문으로 이동 ──
+   이 파일은 bizocdollindex.html 안에서 iframe 으로 열립니다.
+   부모가 있으면 postMessage 로 스토리 탭(EP.00) 전환을 요청하고,
+   단독으로 열린 경우에는 인덱스 페이지의 스토리 탭으로 직접 이동합니다. */
+function goWorldview() {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'biz-doll-go', target: 'worldview' }, '*');
+      return;
+    }
+  } catch (e) {}
+  window.location.href = 'bizocdollindex.html#/story/world';
 }
-function closeWorldOverlay() {
-  var ov = document.getElementById('world-overlay');
-  ov.style.opacity = '0';
-  ov.style.transform = 'translateY(24px)';
-  document.body.style.overflow = '';
-  setTimeout(() => { ov.style.display = 'none'; }, 260);
-}
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && document.getElementById('world-overlay').style.display === 'block') {
-    closeWorldOverlay();
-  }
-});
 /* ── 등록 폼 팝업 (window.open) ── */
 var _formPopup = null;
 function openFormPopup() {
@@ -757,5 +712,19 @@ function openFormPopup() {
   window.addEventListener('resize', draw);
 })();
 </script>
+
+<!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
+<div class="site-footer">
+  <div class="site-footer-inner">
+    <span class="sf-copy">&copy; BIZ. All rights reserved.</span>
+    <span class="sf-sep"></span>
+    <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
+    <span class="sf-links">
+      <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
+      <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
+    </span>
+  </div>
+</div>
+
 </body>
 </html>
