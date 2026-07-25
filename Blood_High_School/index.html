@@ -2420,6 +2420,57 @@ function bhsBackToSite(){
   location.href = BHS_ROOT + 'index.html';
 }
 
+/* ── 모바일: 좌우 스와이프로 소개/1부/2부/3부/4부 탭 전환 ── */
+function bhsSetupSwipeTabs(){
+  if(!window.matchMedia('(max-width: 768px)').matches) return;
+
+  var startX = 0, startY = 0, tracking = false;
+  var THRESHOLD = 60;     // 스와이프 인정 최소 가로 이동(px)
+  var MAX_VERTICAL = 60;  // 세로 스크롤과 구분하기 위한 허용치(px)
+
+  function tabOrder(){
+    // ['intro', novel-1, novel-2, ...] 중 공개된(available) 항목만
+    var order = ['intro'];
+    BHS_VOLUMES.forEach(function(v){ if(v.available !== false) order.push(v.id); });
+    return order;
+  }
+  function currentIndex(order){
+    if(BS.view === 'intro') return 0;
+    return order.indexOf(BS.vol);
+  }
+
+  document.body.addEventListener('touchstart', function(e){
+    if(e.touches.length !== 1) return;
+    // 상단 탭바 자체 스크롤, 리더 내부(회차 보는 중)는 스와이프 탭전환 제외
+    if(e.target.closest('.bt-tabs') || BS.ep) { tracking = false; return; }
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    tracking = true;
+  }, {passive:true});
+
+  document.body.addEventListener('touchend', function(e){
+    if(!tracking) return;
+    tracking = false;
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) < THRESHOLD || Math.abs(dy) > MAX_VERTICAL) return;
+
+    var order = tabOrder();
+    var idx = currentIndex(order);
+    if(idx === -1) return;
+
+    if(dx < 0 && idx < order.length - 1){
+      // 왼쪽으로 스와이프 → 다음 탭
+      var nextId = order[idx + 1];
+      if(nextId === 'intro') bhsGo('intro'); else bhsGo('vol', nextId);
+    } else if(dx > 0 && idx > 0){
+      // 오른쪽으로 스와이프 → 이전 탭
+      var prevId = order[idx - 1];
+      if(prevId === 'intro') bhsGo('intro'); else bhsGo('vol', prevId);
+    }
+  }, {passive:true});
+}
+
 /* ══════ 렌더 ══════ */
 function bhsRender(){
   var intro = document.getElementById('view-intro');
@@ -3337,6 +3388,7 @@ document.addEventListener('DOMContentLoaded', function(){
   bhsSyncTopbarH();
   bhsApplyHash();
   bhsRender();
+  bhsSetupSwipeTabs();
   /* 웹폰트 적용 후 상단바 높이가 바뀔 수 있어 한 번 더 실측 */
   window.addEventListener('load', bhsSyncTopbarH);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(bhsSyncTopbarH);
