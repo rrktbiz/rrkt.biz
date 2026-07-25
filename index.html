@@ -1584,6 +1584,37 @@ function renderHome(){
       </div>
       <!-- ── 단일 컬럼 ── -->
       <div style="display:flex;flex-direction:column;gap:14px">
+          <!-- 프로젝트 이미지 카드 (별도 묶음) -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,210px));gap:18px 16px;margin-bottom:12px;justify-content:center">
+            ${(()=>{
+              const activeProjs=PROJECTS.filter(p=>(p.status||'active')==='active');
+              return activeProjs.map(p=>{
+                const illustSlot = p.illust
+                  ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
+                  : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
+                return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기">
+                  <div class="home-proj-thumb">${illustSlot}</div>
+                  <div class="home-proj-title">${p.label}</div>
+                </div>`;
+              }).join('');
+            })()}
+          </div>
+
+          <!-- 3행: Visitors (숨김 — 카운터 기능/데이터 수집은 유지, 화면 노출만 제거) -->
+          <div class="vis-widget" style="display:none">
+            <div class="vis-hd">
+              <span class="vis-hd-lbl">Visitors by country</span>
+              <span class="vis-hd-total" id="vis-total">—</span>
+            </div>
+            <div class="vis-list" id="vis-list">
+              <div style="padding:14px 0;text-align:center;font-size:10px;color:var(--tx3)">loading...</div>
+            </div>
+            <div class="vis-ft">
+              <span class="vis-ft-l"><span class="vis-dot"></span><span id="vis-country-count">—</span> countries</span>
+              <span style="font-size:9px;color:var(--tx3)">all time</span>
+            </div>
+          </div>
+
           <!-- HERO -->
           <div class="home-hero" style="margin-bottom:0">
             <div class="home-hero-inner">
@@ -1659,37 +1690,6 @@ function renderHome(){
             </div>
           </div>`;
           })()}
-          <!-- 프로젝트 이미지 카드 (별도 묶음) -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,210px));gap:18px 16px;margin-bottom:12px;justify-content:center">
-            ${(()=>{
-              const activeProjs=PROJECTS.filter(p=>(p.status||'active')==='active');
-              return activeProjs.map(p=>{
-                const illustSlot = p.illust
-                  ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
-                  : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
-                return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기">
-                  <div class="home-proj-thumb">${illustSlot}</div>
-                  <div class="home-proj-title">${p.label}</div>
-                </div>`;
-              }).join('');
-            })()}
-          </div>
-
-          <!-- 3행: Visitors -->
-          <div class="vis-widget">
-            <div class="vis-hd">
-              <span class="vis-hd-lbl">Visitors by country</span>
-              <span class="vis-hd-total" id="vis-total">—</span>
-            </div>
-            <div class="vis-list" id="vis-list">
-              <div style="padding:14px 0;text-align:center;font-size:10px;color:var(--tx3)">loading...</div>
-            </div>
-            <div class="vis-ft">
-              <span class="vis-ft-l"><span class="vis-dot"></span><span id="vis-country-count">—</span> countries</span>
-              <span style="font-size:9px;color:var(--tx3)">all time</span>
-            </div>
-          </div>
-
           <!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
           <div class="site-footer">
             <div class="site-footer-inner">
