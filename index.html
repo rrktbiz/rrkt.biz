@@ -715,6 +715,20 @@ body.nav-pinned #nav-backdrop{display:none!important}
 body{top:0!important}
 .skiptranslate{display:none!important}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
+
+/* 번역 안내 각주 — 언어를 궁금해하는 바로 그 순간에만 보이게 */
+.tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
+.tb-lang-note b{color:#5f5f5f;font-weight:600}
+
+/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
+.site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--fn)}
+.site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
+.sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
+.sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+.sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
+.sf-links a:hover{text-decoration:underline}
+
 #contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #contact-overlay.hidden{display:none}
 .contact-card{position:relative;background:var(--sb);border:1px solid var(--bd);border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026}
@@ -1552,6 +1566,10 @@ function renderHome(){
               <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
             </div>
             <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
+            <div class="tb-lang-note">
+              <b>DeepL 우선</b> · 한도 초과 시 <b>Google 번역</b> 자동 전환<br>
+              정식 번역은 <b>한 &rarr; 영 &rarr; 일 &rarr; 중</b> 순서로 제공될 예정입니다.
+            </div>
           </div>
         </div>
       </div>
@@ -1594,7 +1612,9 @@ function renderHome(){
           </div>
           <!-- 번역/저작권 안내 -->
           ${(()=>{
-            const closed=localStorage.getItem('rrkt_notice_open')==='false';
+            /* 기본 접힘. 허브는 시스템 전체를 설명하는 곳이지만
+               첫 화면을 안내문이 차지하지 않도록 사용자가 편 적이 있을 때만 펼친다 */
+            const closed=localStorage.getItem('rrkt_notice_open')!=='true';
             const wrapMb=closed?'margin-bottom:-20px':'margin-bottom:18px';
             const cardCls=closed?' notice-collapsed':'';
             const bodyStyle=closed?'max-height:0':'';
@@ -1670,6 +1690,20 @@ function renderHome(){
               <span style="font-size:9px;color:var(--tx3)">all time</span>
             </div>
           </div>
+
+          <!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
+          <div class="site-footer">
+            <div class="site-footer-inner">
+              <span class="sf-copy">&copy; BIZ. All rights reserved.</span>
+              <span class="sf-sep"></span>
+              <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
+              <span class="sf-links">
+                <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
+                <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
+              </span>
+            </div>
+          </div>
+          
       </div>
     </div>`;
   // 렌더 후 글로벌 방문자 수 비동기 로드
