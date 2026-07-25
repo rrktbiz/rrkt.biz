@@ -1225,6 +1225,30 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
   #view-story .ep-nav-btn{padding:6px 8px}
 }
 
+/* ══════════════════════════════════════════
+   읽기 뷰 상단바 — 좁은 화면에서 "← 목록" 이 두 줄로 접히던 문제
+   flex 아이템이 줄바꿈으로 찌그러지지 않게 고정하고,
+   남는 폭은 제목(.tb-cur)이 흡수해서 말줄임 처리하도록
+   ══════════════════════════════════════════ */
+#view-story .tb-back,
+#view-story .ep-lang-btn,
+#view-story .rd-fs-toggle{white-space:nowrap;flex-shrink:0}
+
+@media(max-width:768px){
+  #view-story #content-topbar{padding:9px 12px;gap:6px}
+  /* 고정 max-width 대신 남은 공간만큼만 차지 → 버튼이 밀려나지 않음 */
+  #view-story .tb-cur{flex:1 1 auto;min-width:0;max-width:none}
+  #view-story .tb-back{padding:4px 6px}
+  #view-story .ep-lang-btn{padding:3px 6px}
+  #view-story .rd-fs-toggle{padding:2px 6px}
+  #view-story .rd-fs-sep{margin:0 3px 0 1px}
+}
+@media(max-width:400px){
+  /* 언어 버튼이 3개라 더 좁은 기기에선 한 단계 더 압축 */
+  #view-story .ep-lang-btn{font-size:9.5px;padding:3px 5px}
+  #view-story .tb-back{font-size:11.5px}
+}
+
 </style>
 </head>
 <body>
