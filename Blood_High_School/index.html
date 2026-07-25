@@ -900,6 +900,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story.on{display:block;}
 #view-story button{font-family:var(--fn);cursor:pointer;}
 
+#view-intro,#view-story{transition:transform .32s cubic-bezier(.22,1,.36,1),opacity .32s cubic-bezier(.22,1,.36,1);}
+#view-intro.bhs-anim-enter-right,#view-story.bhs-anim-enter-right{transform:translateX(24px);opacity:0;}
+#view-intro.bhs-anim-enter-left,#view-story.bhs-anim-enter-left{transform:translateX(-24px);opacity:0;}
+
 /* ── 볼륨 배너 ── */
 #view-story .vol-banner{display:flex;gap:20px;padding:20px 0 8px;align-items:flex-start;background:var(--sb);max-width:700px;margin:0 auto;width:calc(100% - 40px)}
 #view-story .vol-banner-thumb{width:150px;height:200px;border-radius:8px;flex-shrink:0;border:1px solid var(--bd)}
@@ -1281,7 +1285,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
     </div>
   </div>
   <div class="bt-tabs" id="bt-tabs">
-    <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGo('intro')">소개</button>
+    <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGoAnimated('intro')">소개</button>
   </div>
 </div>
 
@@ -2380,6 +2384,45 @@ function bhsGo(view, volId, epId, noPush){
   if(!noPush) bhsPushHash();
   bhsRender();
 }
+
+/* ── 탭 순서(소개/각 부) — 공개된 항목만, 스와이프·애니메이션 공용 ── */
+function bhsTabOrder(){
+  var order = ['intro'];
+  BHS_VOLUMES.forEach(function(v){ if(v.available !== false) order.push(v.id); });
+  return order;
+}
+function bhsTabIndex(order){
+  if(BS.view === 'intro') return 0;
+  return order.indexOf(BS.vol);
+}
+
+/* ── 모바일: 탭 전환 시 슬라이드 애니메이션과 함께 이동 ── */
+function bhsGoAnimated(view, volId){
+  if(!window.matchMedia('(max-width: 768px)').matches){
+    if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
+    return;
+  }
+  var order = bhsTabOrder();
+  var fromIdx = bhsTabIndex(order);
+  var toId = view === 'intro' ? 'intro' : volId;
+  var toIdx = order.indexOf(toId);
+  var dir = (toIdx > fromIdx) ? 1 : -1;
+
+  if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
+
+  var target = (BS.view === 'intro') ? document.getElementById('view-intro') : document.getElementById('view-story');
+  if(!target) return;
+  var enterClass = dir > 0 ? 'bhs-anim-enter-right' : 'bhs-anim-enter-left';
+  target.classList.remove('bhs-anim-enter-left','bhs-anim-enter-right');
+  void target.offsetWidth;
+  target.classList.add(enterClass);
+  void target.offsetWidth;
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      target.classList.remove(enterClass);
+    });
+  });
+}
 function bhsPushHash(){
   var t = '#intro';
   if(BS.view === 'vol' && BS.vol){
@@ -2411,7 +2454,7 @@ function bhsBuildTabs(){
     b.dataset.vol = v.id;
     b.textContent = v.sub;
     if(v.available === false){ b.disabled = true; b.title = '공개 예정'; }
-    else b.onclick = function(){ bhsGo('vol', v.id); };
+    else b.onclick = function(){ bhsGoAnimated('vol', v.id); };
     wrap.appendChild(b);
   });
 }
@@ -2427,17 +2470,6 @@ function bhsSetupSwipeTabs(){
   var startX = 0, startY = 0, tracking = false;
   var THRESHOLD = 60;     // 스와이프 인정 최소 가로 이동(px)
   var MAX_VERTICAL = 60;  // 세로 스크롤과 구분하기 위한 허용치(px)
-
-  function tabOrder(){
-    // ['intro', novel-1, novel-2, ...] 중 공개된(available) 항목만
-    var order = ['intro'];
-    BHS_VOLUMES.forEach(function(v){ if(v.available !== false) order.push(v.id); });
-    return order;
-  }
-  function currentIndex(order){
-    if(BS.view === 'intro') return 0;
-    return order.indexOf(BS.vol);
-  }
 
   document.body.addEventListener('touchstart', function(e){
     if(e.touches.length !== 1) return;
@@ -2455,18 +2487,18 @@ function bhsSetupSwipeTabs(){
     var dy = e.changedTouches[0].clientY - startY;
     if(Math.abs(dx) < THRESHOLD || Math.abs(dy) > MAX_VERTICAL) return;
 
-    var order = tabOrder();
-    var idx = currentIndex(order);
+    var order = bhsTabOrder();
+    var idx = bhsTabIndex(order);
     if(idx === -1) return;
 
     if(dx < 0 && idx < order.length - 1){
       // 왼쪽으로 스와이프 → 다음 탭
       var nextId = order[idx + 1];
-      if(nextId === 'intro') bhsGo('intro'); else bhsGo('vol', nextId);
+      if(nextId === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', nextId);
     } else if(dx > 0 && idx > 0){
       // 오른쪽으로 스와이프 → 이전 탭
       var prevId = order[idx - 1];
-      if(prevId === 'intro') bhsGo('intro'); else bhsGo('vol', prevId);
+      if(prevId === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', prevId);
     }
   }, {passive:true});
 }
