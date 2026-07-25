@@ -788,13 +788,13 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
    SPA 상단바 (2단) — biz-OC-doll 배치와 동일
    ══════════════════════════════════════════ */
 #bhs-topbar{position:sticky;top:0;z-index:300;background:#fff;border-bottom:1px solid #ececec;}
-.bt-r1{display:flex;align-items:center;padding:9px 18px;border-bottom:1px solid #ececec;}
-.bt-r1-left{display:flex;align-items:center;gap:10px;min-width:0;}
-.bt-back{display:flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--tx3);font-size:12px;font-weight:700;padding:4px 7px;border-radius:4px;transition:background .12s,color .12s;}
+.bt-r1{display:flex;align-items:center;height:46px;padding:0 16px;border-bottom:1px solid #ececec;}
+.bt-r1-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1;overflow:hidden;}
+.bt-back{display:flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--tx3);font-size:12px;font-weight:700;padding:5px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;transition:background .12s,color .12s;}
 .bt-back:hover{background:#f2f2f2;color:var(--tx);}
-.bt-sep{width:1px;height:14px;background:#ddd;}
-.bt-brand{font-family:'Barlow Condensed',var(--fn);font-size:14px;font-weight:800;letter-spacing:0.5px;color:var(--tx);}
-.bt-lang{margin-left:auto;position:relative;display:flex;align-items:center;gap:8px;}
+.bt-sep{width:1px;height:14px;background:#ddd;flex-shrink:0;}
+.bt-brand{font-family:'Barlow Condensed',var(--fn);font-size:14px;font-weight:800;letter-spacing:0.5px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bt-lang{margin-left:auto;padding-left:10px;position:relative;display:flex;align-items:center;gap:6px;flex-shrink:0;}
 
 #tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
 #tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
@@ -859,32 +859,34 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.show{opacity:1}
-#tb-lang-drop-btn{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-drop-btn{display:flex;align-items:center;justify-content:center;gap:6px;height:28px;padding:0 10px;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;font-size:12px;font-weight:500;line-height:1;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0;font-family:'Inter','Noto Sans KR',sans-serif;}
 #tb-lang-drop-btn:hover{background:#f7f7f7;border-color:#c6c6c6;color:#1a1a1a;}
 
-#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;z-index:9999;overflow:hidden;font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;width:280px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;z-index:9999;overflow:hidden;box-shadow:0 10px 34px rgba(0,0,0,.12);font-family:'Inter','Noto Sans KR',sans-serif;}
 .tb-lang-hd{padding:12px 14px 10px;border-bottom:1px solid #ececec;}
 .tb-lang-hd-t{font-size:11px;font-weight:600;letter-spacing:.5px;color:#a0a0a0;text-transform:uppercase;margin-bottom:8px;}
 #tb-lang-search{width:100%;padding:7px 10px;border:1px solid #e2e2e2;border-radius:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:'Inter','Noto Sans KR',sans-serif;}
 #tb-lang-search:focus{border-color:#c6c6c6;}
 #tb-lang-list{max-height:260px;overflow-y:auto;}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
-.bt-tabs{display:flex;gap:6px;padding:6px 14px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.bt-tabs{display:flex;align-items:stretch;height:44px;padding:0 12px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .bt-tabs::-webkit-scrollbar{display:none;}
-.bt-tab{position:relative;background:none;border:none;font-size:20px;font-weight:700;color:var(--tx3);padding:7px 16px;border-radius:7px;white-space:nowrap;transition:color .12s,background .12s;}
-.bt-tab:hover{color:var(--tx);background:#f3f3f3;}
-.bt-tab.active{background:none;color:#111;font-weight:800;}
-.bt-tab.active:hover{background:#f3f3f3;color:#111;}
+.bt-tab{position:relative;flex-shrink:0;background:none;border:none;border-bottom:2.5px solid transparent;font-size:15px;font-weight:700;color:var(--tx3);padding:0 14px;white-space:nowrap;transition:color .12s,border-color .12s;}
+.bt-tab:hover{color:var(--tx);}
+.bt-tab.active{color:#111;font-weight:800;border-bottom-color:var(--red);}
 .bt-tab.disabled{color:#d2d2d2;cursor:default;pointer-events:none;}
-.bt-tab.disabled:hover{color:#d2d2d2;background:none;}
+.bt-tab.disabled:hover{color:#d2d2d2;}
 
 @media(max-width:620px){
-  .bt-r1-left{padding:8px 0 8px 13px;} .bt-tabs{padding:5px 10px 7px;gap:4px;}
-  .bt-tab{font-size:17px;padding:6px 12px;}
+  .bt-r1{padding:0 13px;}
+  .bt-tabs{padding:0 9px;}
+  .bt-tab{font-size:14px;padding:0 11px;}
   .bt-brand{letter-spacing:0.3px;font-size:13px;}
-  #tb-lang-drop-btn{width:28px;height:28px;padding:0;justify-content:center;gap:0}
+}
+@media(max-width:480px){
+  #tb-lang-drop-btn{width:30px;padding:0;gap:0}
   #tb-lang-label,#tb-lang-caret{display:none}
-  #tb-lang-dropdown{width:min(280px,calc(100vw - 26px));right:-2px;}
+  #tb-lang-dropdown{width:min(280px,calc(100vw - 26px));right:0;}
 }
 
 
@@ -1046,7 +1048,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       </button>
       <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
         <span id="tb-lang-label">Language</span>
         <span id="tb-lang-caret" style="font-size:8px;transition:transform .15s;display:inline-block">&#9660;</span>
       </button>
