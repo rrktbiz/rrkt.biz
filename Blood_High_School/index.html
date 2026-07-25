@@ -1100,6 +1100,68 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
   #view-story .vol-banner-thumb{width:110px;height:147px}
 }
 
+/* ══════════════════════════════════════════
+   읽기 뷰 크롬 자동 숨김 (rrkt 이식)
+   — 모바일에서 아래로 스크롤 시 상단바 + 본문 상단바 숨김
+   ══════════════════════════════════════════ */
+#bhs-topbar{
+  transition:transform .28s ease;
+  will-change:transform;
+}
+/* 본문 상단바를 상단바 바로 아래에 고정 (--bhs-tbh 는 JS가 실측값으로 갱신) */
+#view-story #content-topbar{
+  position:sticky;
+  top:var(--bhs-tbh,91px);
+  z-index:250;
+  transition:transform .28s ease;
+  will-change:transform;
+}
+
+/* ── 플로팅 에피소드 네비 (읽기 뷰) ── */
+#float-ep-nav{
+  position:fixed;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  right:16px;
+  z-index:200;
+  display:none;
+  align-items:center;gap:6px;
+  background:#fff;
+  border:1px solid #e2e2e2;
+  border-radius:30px;
+  box-shadow:0 4px 16px #00000018;
+  padding:6px 8px;
+  opacity:0;
+  transform:translateY(12px);
+  pointer-events:none;
+  font-family:'Inter','Noto Sans KR',sans-serif;
+  transition:opacity .22s ease, transform .22s ease;
+}
+#float-ep-nav.active{display:flex}
+#float-ep-nav.visible{opacity:1;transform:translateY(0);pointer-events:all}
+.fep-btn{
+  background:transparent;border:none;
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:#5f5f5f;cursor:pointer;
+  transition:background .12s,color .12s;flex-shrink:0;
+}
+.fep-btn:hover{background:#f5f5f5;color:#1a1a1a}
+.fep-btn.disabled{opacity:.3;pointer-events:none}
+.fep-mid{
+  font-size:11px;font-weight:600;color:#5f5f5f;
+  padding:0 6px;cursor:pointer;white-space:nowrap;
+  transition:color .12s;
+}
+.fep-mid:hover{color:#1a1a1a}
+.fep-div{width:1px;height:18px;background:#e2e2e2;flex-shrink:0}
+
+@media(max-width:768px){
+  /* rrkt 모바일 본문 여백 */
+  #view-story .postype-wrap{padding:20px 20px 48px}
+  /* 플로팅 네비가 하단 에피소드 네비를 가리지 않도록 */
+  #view-story .ep-nav-outer{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+}
+
 </style>
 </head>
 <body>
@@ -2043,6 +2105,15 @@ PD의 질문: "이거 망할 수 있는 이유는? 그건 어떻게 막을 건�
   <div class="st-wrap" id="st-wrap"></div>
 </div>
 
+<!-- ===== 플로팅 에피소드 네비 (읽기 뷰 전용) ===== -->
+<div id="float-ep-nav">
+  <button class="fep-btn" id="fep-prev" onclick="bhsFloatEpNav('prev')" aria-label="이전 화">&#8249;</button>
+  <div class="fep-div"></div>
+  <span class="fep-mid" onclick="bhsFloatEpNav('list')">목록</span>
+  <div class="fep-div"></div>
+  <button class="fep-btn" id="fep-next" onclick="bhsFloatEpNav('next')" aria-label="다음 화">&#8250;</button>
+</div>
+
 <script>
 /* ══════════════════════════════════════════════════════
    블러드하이스쿨 독립 SPA — 스토리 모듈
@@ -2306,15 +2377,21 @@ function bhsRender(){
     document.querySelectorAll('.bt-tab[data-vol]').forEach(function(b){
       b.classList.toggle('active', b.dataset.vol === BS.vol && !b.disabled);
     });
-    if(BS.ep) bhsRenderReader();
-    else      bhsRenderEpList();
+    if(BS.ep){
+      bhsRenderReader();
+    } else {
+      bhsResetChrome(); bhsHideFloatNav();
+      bhsRenderEpList();
+    }
   } else {
     story.classList.remove('on');
     intro.style.display = '';
     document.querySelectorAll('.bt-tab[data-vol]').forEach(function(b){ b.classList.remove('active'); });
     ti.classList.add('active');
+    bhsResetChrome(); bhsHideFloatNav();
   }
   window.scrollTo(0,0);
+  BHS_SC.lastY = 0;
 }
 
 /* ── 섹션 버튼 링크 — 주소는 BHS_VOLUMES[].links 에 채워 넣으세요 ── */
@@ -2448,6 +2525,110 @@ function bhsRenderEpList(){
     + BHS_FOOTER_HTML;
 }
 
+/* ══════════════════════════════════════════════════════
+   읽기 뷰 크롬 자동 숨김 + 플로팅 에피소드 네비 (rrkt 이식)
+   rrkt 는 #content 컨테이너 스크롤, BHS 는 window 스크롤이므로
+   sticky + transform 방식으로 옮겼습니다.
+   ══════════════════════════════════════════════════════ */
+var BHS_SC = { attached:false, lastY:0, ticking:false, hidden:false };
+
+/* 상단바 실측 높이를 CSS 변수로 반영 (2단 구성이라 폰트/폭에 따라 달라짐) */
+function bhsSyncTopbarH(){
+  var tb = document.getElementById('bhs-topbar');
+  if(!tb) return 91;
+  var h = tb.offsetHeight || 91;
+  document.documentElement.style.setProperty('--bhs-tbh', h + 'px');
+  return h;
+}
+
+function bhsIsReading(){ return BS.view === 'vol' && !!BS.ep; }
+
+function bhsApplyHide(doHide){
+  if(BHS_SC.hidden === doHide) return;
+  BHS_SC.hidden = doHide;
+  var tb  = document.getElementById('bhs-topbar');
+  var ctb = document.getElementById('content-topbar');
+  var fep = document.getElementById('float-ep-nav');
+  if(doHide){
+    var tbH  = tb  ? tb.offsetHeight  : 91;
+    var ctbH = ctb ? ctb.offsetHeight : 45;
+    if(tb)  tb.style.transform  = 'translateY(-' + tbH + 'px)';
+    if(ctb) ctb.style.transform = 'translateY(-' + (tbH + ctbH) + 'px)';
+    if(fep) fep.classList.remove('visible');
+  } else {
+    if(tb)  tb.style.transform  = '';
+    if(ctb) ctb.style.transform = '';
+    if(fep && fep.classList.contains('active')) fep.classList.add('visible');
+  }
+}
+
+/* 상태를 강제로 원복 (뷰 전환·에피소드 이동 시) */
+function bhsResetChrome(){
+  BHS_SC.hidden = false;
+  BHS_SC.lastY  = 0;
+  var tb  = document.getElementById('bhs-topbar');
+  var ctb = document.getElementById('content-topbar');
+  if(tb)  tb.style.transform  = '';
+  if(ctb) ctb.style.transform = '';
+}
+
+function bhsOnReaderScroll(){
+  BHS_SC.ticking = false;
+  /* 읽기 뷰가 아니거나 데스크탑이면 항상 노출 */
+  if(!bhsIsReading() || window.innerWidth > 768){ bhsApplyHide(false); return; }
+  var st = window.pageYOffset || document.documentElement.scrollTop || 0;
+  if(st > BHS_SC.lastY && st > 60)        bhsApplyHide(true);   /* 내리는 중 → 숨김 */
+  else if(st < BHS_SC.lastY - 10)         bhsApplyHide(false);  /* 올리는 중 → 표시 */
+  BHS_SC.lastY = st <= 0 ? 0 : st;
+}
+
+function bhsAttachReaderScroll(){
+  bhsSyncTopbarH();
+  if(BHS_SC.attached) return;
+  window.addEventListener('scroll', function(){
+    if(!BHS_SC.ticking){ requestAnimationFrame(bhsOnReaderScroll); BHS_SC.ticking = true; }
+  }, {passive:true});
+  window.addEventListener('resize', function(){
+    bhsSyncTopbarH();
+    if(window.innerWidth > 768) bhsApplyHide(false);
+  });
+  /* 모바일 주소창 높이 변화 대응 */
+  window.addEventListener('orientationchange', function(){ setTimeout(bhsSyncTopbarH, 200); });
+  BHS_SC.attached = true;
+}
+
+/* 읽기 뷰 진입 시 플로팅 네비 상태 세팅 */
+function bhsSetupFloatNav(volId, prev, next){
+  var fep = document.getElementById('float-ep-nav');
+  if(!fep) return;
+  fep._vol    = volId;
+  fep._prevEp = prev ? prev.id : null;
+  fep._nextEp = next ? next.id : null;
+  var pb = document.getElementById('fep-prev');
+  var nb = document.getElementById('fep-next');
+  if(pb) pb.classList.toggle('disabled', !prev);
+  if(nb) nb.classList.toggle('disabled', !next);
+  fep.classList.add('active');
+  /* rrkt 와 동일: 진입 직후엔 숨김. 아래로 내렸다가 다시 위로 올릴 때 나타남 */
+  fep.classList.remove('visible');
+}
+
+function bhsHideFloatNav(){
+  var fep = document.getElementById('float-ep-nav');
+  if(!fep) return;
+  fep.classList.remove('visible');
+  fep.classList.remove('active');
+  fep._prevEp = fep._nextEp = null;
+}
+
+window.bhsFloatEpNav = function(dir){
+  var fep = document.getElementById('float-ep-nav');
+  if(!fep) return;
+  if(dir === 'list'){ bhsGo('vol', fep._vol || BS.vol); return; }
+  var id = dir === 'prev' ? fep._prevEp : fep._nextEp;
+  if(id != null) bhsGo('vol', fep._vol || BS.vol, id);
+};
+
 /* ── 본문 뷰 (rrkt renderContentView 이식) ── */
 function bhsRenderReader(){
   var v = bhsVol(BS.vol);
@@ -2502,6 +2683,11 @@ function bhsRenderReader(){
     + '<div class="ep-picker-hd"><span class="ep-picker-title" id="ep-picker-title">에피소드 목록</span>'
     + '<button class="ep-picker-close" onclick="closeEpPickerBtn()">&#10005;</button></div>'
     + '<div class="ep-picker-list" id="ep-picker-list"></div></div></div>';
+
+  /* ── 크롬 자동 숨김 + 플로팅 네비 ── */
+  bhsResetChrome();
+  bhsSetupFloatNav(v.id, prev, next);
+  bhsAttachReaderScroll();
 
   bhsLoadText(v.id, e.id);
 }
@@ -2988,8 +3174,12 @@ async function bhsLoadSheet(){
 document.addEventListener('DOMContentLoaded', function(){
   if(_currentLang && _currentLang !== 'ko' && typeof tbLangSetLabel === 'function') tbLangSetLabel(_currentLang);
   bhsBuildTabs();
+  bhsSyncTopbarH();
   bhsApplyHash();
   bhsRender();
+  /* 웹폰트 적용 후 상단바 높이가 바뀔 수 있어 한 번 더 실측 */
+  window.addEventListener('load', bhsSyncTopbarH);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(bhsSyncTopbarH);
   bhsLoadSheet().then(function(ok){
     if(ok && BS.view === 'vol' && !BS.ep) bhsRender();
   });
