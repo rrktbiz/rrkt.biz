@@ -166,9 +166,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .market-list{display:flex;flex-direction:column;gap:8px}
 .market-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--tx2);line-height:1.7;font-weight:500;padding:10px 16px;border:3px solid var(--black);border-radius:6px;background:#fff;box-shadow:3px 3px 0 var(--black);}
 .market-item::before{content:'→';color:var(--red);flex-shrink:0;font-size:14px;font-weight:900;}
-.page-footer{border-top:4px solid var(--black);padding:20px 36px;background:var(--black);display:flex;align-items:center;justify-content:space-between;}
-.footer-logo{font-family:var(--sfx);font-size:18px;letter-spacing:3px;color:var(--yellow)}
-.footer-note{font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
 .reveal{}
 .char-list{display:flex;flex-direction:column;gap:12px}
 .char-card{display:flex;gap:0;border:3px solid var(--black);border-radius:7px;overflow:hidden;box-shadow:4px 4px 0 var(--black);}
@@ -180,7 +177,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 @media(max-width:600px){
   .hero{padding:36px 20px 40px}.cw-bar{padding:10px 20px}.tab-wrap{padding:0 16px}
-  .page-footer{padding:16px 20px;flex-direction:column;gap:6px;text-align:center}
   .sfx-1,.sfx-2,.sfx-3{display:none}
 }
 
@@ -3377,11 +3373,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
-
-<div class="page-footer">
-  <span class="footer-logo">BLOOD HIGH SCHOOL</span>
-  <span class="footer-note">© biz/rrkt — 무단 복제·배포 금지</span>
-</div>
 
 <script>
 /* ===== 탭 전환 ===== */
