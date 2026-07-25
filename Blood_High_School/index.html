@@ -1155,11 +1155,74 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .fep-mid:hover{color:#1a1a1a}
 .fep-div{width:1px;height:18px;background:#e2e2e2;flex-shrink:0}
 
+/* ══════════════════════════════════════════
+   본문 글자 크기 조절
+   — 실제 크기는 JS 가 #view-story 에 --rd-fs / --rd-lh 로 주입
+   ══════════════════════════════════════════ */
+#view-story{--rd-fs:17px;--rd-lh:1.9}
+#view-story .postype-body{font-size:var(--rd-fs);line-height:var(--rd-lh)}
+#view-story .postype-text{font-size:var(--rd-fs);line-height:var(--rd-lh)}
+
+#view-story #rd-fs-wrap{position:relative;display:inline-flex;align-items:center;flex-shrink:0}
+#view-story .rd-fs-sep{width:1px;height:14px;background:var(--bd);margin:0 5px 0 3px;flex-shrink:0}
+#view-story .rd-fs-toggle{
+  font-size:12px;font-weight:700;line-height:1.4;
+  padding:2px 8px;border:1px solid var(--bd);border-radius:5px;
+  background:transparent;color:var(--tx3);transition:all .12s;
+}
+#view-story .rd-fs-toggle:hover{background:var(--bg);color:var(--tx);border-color:var(--bd2)}
+#view-story .rd-fs-toggle.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+
+#rd-fs-panel{
+  position:absolute;top:calc(100% + 9px);right:0;
+  width:186px;padding:12px;
+  background:#fff;border:1px solid #e2e2e2;border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.13);
+  z-index:400;font-family:'Inter','Noto Sans KR',sans-serif;
+  text-align:left;
+}
+#rd-fs-panel.hidden{display:none}
+.rd-fs-hd{font-size:9px;font-weight:700;letter-spacing:1.2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:9px}
+.rd-fs-row{display:flex;align-items:center;gap:8px}
+.rd-fs-btn{
+  width:32px;height:32px;flex-shrink:0;
+  border:1px solid #e2e2e2;border-radius:7px;background:#fff;color:#1a1a1a;
+  font-size:15px;font-weight:600;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:all .12s;
+}
+.rd-fs-btn:hover:not(:disabled){background:#f5f5f5;border-color:#c6c6c6}
+.rd-fs-btn:disabled{opacity:.28;cursor:default}
+.rd-fs-val{flex:1;text-align:center;font-size:13px;font-weight:700;color:#1a1a1a;font-variant-numeric:tabular-nums}
+.rd-fs-val small{font-size:10px;font-weight:500;color:#a0a0a0;margin-left:1px}
+.rd-fs-bar{margin-top:10px;height:4px;border-radius:4px;background:#eee;overflow:hidden}
+.rd-fs-bar span{display:block;height:100%;width:0;background:#111;border-radius:4px;transition:width .18s ease}
+.rd-fs-reset{
+  width:100%;margin-top:10px;padding:6px 0;border:none;border-radius:6px;
+  background:#f5f5f5;color:#5f5f5f;font-size:10.5px;font-weight:600;transition:all .12s;
+}
+.rd-fs-reset:hover{background:#ececec;color:#1a1a1a}
+
+/* 데스크탑에서도 긴 화 제목이 가운데 버튼을 침범하지 않도록 그리드 칸에 가둠 */
+#view-story .ep-nav-btn{max-width:min(260px,100%);overflow:hidden}
+
 @media(max-width:768px){
   /* rrkt 모바일 본문 여백 */
   #view-story .postype-wrap{padding:20px 20px 48px}
   /* 플로팅 네비가 하단 에피소드 네비를 가리지 않도록 */
   #view-story .ep-nav-outer{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+
+  /* ── 하단 에피소드 네비 겹침 해결 (rrkt 모바일 규칙) ──
+     justify-self:start/end 인 버튼이 max-content 로 부풀어
+     가운데 "에피소드 목록" 버튼 위로 넘쳐 겹치던 문제 */
+  #view-story .ep-nav{padding:10px 12px;gap:8px}
+  #view-story .ep-nav-btn{max-width:100%;padding:6px 10px;font-size:11px;overflow:hidden}
+  #view-story .ep-picker-btn{padding:6px 11px;font-size:10.5px}
+}
+@media(max-width:420px){
+  /* 아주 좁은 화면: 가운데 버튼을 "≡ 목록" 으로 축약 */
+  #view-story .epb-long{display:none}
+  #view-story .ep-nav{gap:6px}
+  #view-story .ep-nav-btn{padding:6px 8px}
 }
 
 </style>
@@ -2555,6 +2618,7 @@ function bhsApplyHide(doHide){
     if(tb)  tb.style.transform  = 'translateY(-' + tbH + 'px)';
     if(ctb) ctb.style.transform = 'translateY(-' + (tbH + ctbH) + 'px)';
     if(fep) fep.classList.remove('visible');
+    if(window.bhsFsClose) bhsFsClose();   /* 상단바가 접히면 크기 패널도 닫기 */
   } else {
     if(tb)  tb.style.transform  = '';
     if(ctb) ctb.style.transform = '';
@@ -2597,6 +2661,94 @@ function bhsAttachReaderScroll(){
   BHS_SC.attached = true;
 }
 
+/* ══════════════════════════════════════════════════════
+   본문 글자 크기 조절
+   — 크기에 맞춰 줄간격도 함께 조정 (크게 키울수록 살짝 좁게)
+   — localStorage 저장, 화 이동/번역 전환에도 유지
+   ══════════════════════════════════════════════════════ */
+var BHS_FS_STEPS = [
+  { fs:14,   lh:2.05 },
+  { fs:15.5, lh:2.00 },
+  { fs:17,   lh:1.90 },
+  { fs:19,   lh:1.85 },
+  { fs:21,   lh:1.80 },
+  { fs:23,   lh:1.75 }
+];
+var BHS_FS_KEY = 'bhs_reader_fs';
+var BHS_FS_I   = null;
+
+/* 저장값 없을 때: 모바일은 15.5px, 데스크탑은 17px (기존 rrkt 기본값과 동일) */
+function bhsFsDefault(){ return window.innerWidth <= 768 ? 1 : 2; }
+
+function bhsFsIdx(){
+  if(BHS_FS_I !== null) return BHS_FS_I;
+  var v = null;
+  try{ v = localStorage.getItem(BHS_FS_KEY); }catch(e){}
+  var i = (v === null) ? bhsFsDefault() : parseInt(v,10);
+  if(isNaN(i) || i < 0 || i >= BHS_FS_STEPS.length){
+    i = bhsFsDefault();
+    try{ localStorage.removeItem(BHS_FS_KEY); }catch(e){}   /* 손상된 저장값 정리 */
+  }
+  BHS_FS_I = i;
+  return i;
+}
+
+function bhsFsApply(){
+  var s  = BHS_FS_STEPS[bhsFsIdx()];
+  var vs = document.getElementById('view-story');
+  if(vs){
+    vs.style.setProperty('--rd-fs', s.fs + 'px');
+    vs.style.setProperty('--rd-lh', String(s.lh));
+  }
+  bhsFsSyncUI();
+}
+
+function bhsFsSyncUI(){
+  var i = bhsFsIdx(), s = BHS_FS_STEPS[i];
+  var n = document.getElementById('rd-fs-num');   if(n) n.textContent = s.fs;
+  var f = document.getElementById('rd-fs-fill');  if(f) f.style.width = (i/(BHS_FS_STEPS.length-1)*100) + '%';
+  var m = document.getElementById('rd-fs-minus'); if(m) m.disabled = (i === 0);
+  var p = document.getElementById('rd-fs-plus');  if(p) p.disabled = (i === BHS_FS_STEPS.length - 1);
+}
+
+window.bhsFsStep = function(d){
+  var i = bhsFsIdx() + d;
+  if(i < 0 || i >= BHS_FS_STEPS.length) return;
+  BHS_FS_I = i;
+  try{ localStorage.setItem(BHS_FS_KEY, String(i)); }catch(e){}
+  bhsFsApply();
+};
+
+window.bhsFsReset = function(){
+  BHS_FS_I = bhsFsDefault();
+  try{ localStorage.removeItem(BHS_FS_KEY); }catch(e){}
+  bhsFsApply();
+};
+
+window.bhsFsToggle = function(ev){
+  if(ev) ev.stopPropagation();
+  var p = document.getElementById('rd-fs-panel');
+  var t = document.getElementById('rd-fs-toggle');
+  if(!p) return;
+  var willOpen = p.classList.contains('hidden');
+  p.classList.toggle('hidden', !willOpen);
+  if(t) t.classList.toggle('on', willOpen);
+  if(willOpen) bhsFsSyncUI();
+};
+
+window.bhsFsClose = function(){
+  var p = document.getElementById('rd-fs-panel'); if(p) p.classList.add('hidden');
+  var t = document.getElementById('rd-fs-toggle'); if(t) t.classList.remove('on');
+};
+
+/* 패널 바깥 클릭 시 닫기 */
+document.addEventListener('click', function(e){
+  var w = document.getElementById('rd-fs-wrap');
+  if(w && !w.contains(e.target)) bhsFsClose();
+});
+/* ESC 로도 닫기 */
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') bhsFsClose(); });
+
 /* 읽기 뷰 진입 시 플로팅 네비 상태 세팅 */
 function bhsSetupFloatNav(volId, prev, next){
   var fep = document.getElementById('float-ep-nav');
@@ -2614,6 +2766,7 @@ function bhsSetupFloatNav(volId, prev, next){
 }
 
 function bhsHideFloatNav(){
+  if(window.bhsFsClose) bhsFsClose();
   var fep = document.getElementById('float-ep-nav');
   if(!fep) return;
   fep.classList.remove('visible');
@@ -2650,6 +2803,20 @@ function bhsRenderReader(){
     + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='ko'?'active':'') + '" data-lang="ko" onclick="setEpLang(\'ko\')">한본어</button>'
     + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='pure_ko'?'active':'') + '" data-lang="pure_ko" onclick="setEpLang(\'pure_ko\')">순KO</button>'
     + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='jp'?'active':'') + '" data-lang="jp" onclick="setEpLang(\'jp\')">JA</button>'
+    + '<span id="rd-fs-wrap">'
+    +   '<span class="rd-fs-sep"></span>'
+    +   '<button class="rd-fs-toggle" id="rd-fs-toggle" onclick="bhsFsToggle(event)" title="본문 글자 크기" aria-label="본문 글자 크기">가</button>'
+    +   '<div id="rd-fs-panel" class="hidden" onclick="event.stopPropagation()">'
+    +     '<div class="rd-fs-hd">본문 크기</div>'
+    +     '<div class="rd-fs-row">'
+    +       '<button class="rd-fs-btn" id="rd-fs-minus" onclick="bhsFsStep(-1)" aria-label="작게">&minus;</button>'
+    +       '<span class="rd-fs-val"><span id="rd-fs-num">17</span><small>px</small></span>'
+    +       '<button class="rd-fs-btn" id="rd-fs-plus" onclick="bhsFsStep(1)" aria-label="크게">+</button>'
+    +     '</div>'
+    +     '<div class="rd-fs-bar"><span id="rd-fs-fill"></span></div>'
+    +     '<button class="rd-fs-reset" onclick="bhsFsReset()">기본값으로</button>'
+    +   '</div>'
+    + '</span>'
     + '</div></div>'
     + '<div class="postype-wrap">'
     + '<div class="postype-header">'
@@ -2674,7 +2841,7 @@ function bhsRenderReader(){
     + '<div class="ep-nav-outer"><div class="ep-nav">'
     + '<button class="ep-nav-btn ' + (prev?'':'disabled') + '"' + (prev?' onclick="bhsGo(\'vol\',\''+v.id+'\','+prev.id+')"':'') + '>'
     + '<span>&#8592;</span><span class="ep-nav-title">' + (prev ? bhsEsc(prev.title) : '처음 화') + '</span></button>'
-    + '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; 에피소드 목록</button>'
+    + '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; <span class="epb-long">에피소드 </span>목록</button>'
     + '<button class="ep-nav-btn ' + (next?'':'disabled') + '"' + (next?' onclick="bhsGo(\'vol\',\''+v.id+'\','+next.id+')"':'') + '>'
     + '<span class="ep-nav-title">' + (next ? bhsEsc(next.title) : '마지막 화') + '</span><span>&#8594;</span></button>'
     + '</div></div>'
@@ -2684,10 +2851,11 @@ function bhsRenderReader(){
     + '<button class="ep-picker-close" onclick="closeEpPickerBtn()">&#10005;</button></div>'
     + '<div class="ep-picker-list" id="ep-picker-list"></div></div></div>';
 
-  /* ── 크롬 자동 숨김 + 플로팅 네비 ── */
+  /* ── 크롬 자동 숨김 + 플로팅 네비 + 글자 크기 ── */
   bhsResetChrome();
   bhsSetupFloatNav(v.id, prev, next);
   bhsAttachReaderScroll();
+  bhsFsApply();
 
   bhsLoadText(v.id, e.id);
 }
