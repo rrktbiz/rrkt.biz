@@ -2604,7 +2604,7 @@ function bhsBuildVolNav(vol){
 }
 window.bhsOpenVolPicker  = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.remove('hidden'); };
 window.bhsCloseVolPicker = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.add('hidden'); };
-window.bhsGoVol = function(volId){ bhsGo('vol', volId); };
+window.bhsGoVol = function(volId){ bhsGoAnimated('vol', volId); };
 
 var BHS_FOOTER_HTML = "<!-- ===== 푸터 · 저작권 / 공식 백업 ===== --><div class=\"site-footer\">  <div class=\"site-footer-inner\">    <span class=\"sf-copy\">&copy; BIZ. All rights reserved.</span>    <span class=\"sf-sep\"></span>    <span class=\"sf-note\">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>    <span class=\"sf-links\">      <a href=\"https://www.postype.com/@biz202099\" target=\"_blank\" rel=\"noopener\">postype.com/@biz202099</a>      <a href=\"https://www.postype.com/@rrkt2022\" target=\"_blank\" rel=\"noopener\">postype.com/@rrkt2022</a>    </span>  </div></div>";
 
@@ -3362,7 +3362,7 @@ window.onDeepLRetranslateClick = function(){
 /* ══════ 인트로 CTA → 내부 스토리 라우팅 (기존 함수 대체) ══════ */
 function bhsGoNovel(ev, volId){
   if(ev && ev.preventDefault) ev.preventDefault();
-  bhsGo('vol', volId);
+  bhsGoAnimated('vol', volId);
   return false;
 }
 
