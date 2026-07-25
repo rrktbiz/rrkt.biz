@@ -795,6 +795,65 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .bt-sep{width:1px;height:14px;background:#ddd;}
 .bt-brand{font-size:12px;font-weight:900;letter-spacing:2.5px;color:var(--tx);}
 .bt-lang{margin-left:auto;position:relative;display:flex;align-items:center;gap:8px;}
+
+#tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
+#tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+
+/* ── 작가 소개 카드 — 작품을 다 본 사람이 발견하는 자리 (상단 아님) ── */
+.author-strip{
+  max-width:760px;margin:34px auto 0;padding:18px 22px;
+  display:flex;align-items:center;gap:16px;
+  border:1px solid #e6e6e6;border-radius:12px;background:#fafafa;font-family:var(--fn);
+}
+.author-strip-thumb{width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #e2e2e2;background:#fff}
+.author-strip-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.author-strip-body{flex:1;min-width:0}
+.author-strip-lbl{font-size:9px;font-weight:700;letter-spacing:1.6px;color:#a8a8a8;text-transform:uppercase;margin-bottom:5px}
+.author-strip-name{font-size:15px;font-weight:700;color:#111;letter-spacing:-.02em;margin-bottom:3px}
+.author-strip-tag{font-size:12px;color:#666;line-height:1.6}
+.author-strip-btn{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;border:none;border-radius:7px;background:#111;color:#fff;
+  font-family:var(--fn);font-size:12px;font-weight:600;cursor:pointer;transition:background .12s;
+}
+.author-strip-btn:hover{background:#333}
+@media(max-width:560px){
+  .author-strip{flex-wrap:wrap;gap:12px;padding:16px 18px;margin-top:26px}
+  .author-strip-btn{width:100%;justify-content:center}
+}
+
+/* 번역 안내 각주 — 언어를 궁금해하는 바로 그 순간에만 보이게 */
+.tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
+.tb-lang-note b{color:#5f5f5f;font-weight:600}
+
+/* ── 제작자 소개 · 비즈니스 문의 오버레이 (허브와 동일 컴포넌트) ── */
+#contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+#contact-overlay.hidden{display:none}
+.contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
+.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
+.contact-close:hover{background:#fafafa;border-color:#c6c6c6}
+.contact-who{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #ececec}
+.contact-who-thumb{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #e2e2e2;background:#fafafa}
+.contact-who-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.contact-who-name{font-size:15px;font-weight:700;color:#111;letter-spacing:-.02em;margin-bottom:3px}
+.contact-who-tag{font-size:12px;color:#5f5f5f;line-height:1.6}
+.contact-eyebrow{font-size:10px;font-weight:600;letter-spacing:2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:8px}
+.contact-title{font-size:20px;font-weight:700;color:#111;letter-spacing:-.04em}
+.contact-desc{font-size:13px;color:#5f5f5f;margin-top:8px;line-height:1.8}
+.contact-mailrow{margin-top:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.contact-mailrow span.mail{font-size:13px;font-weight:600;color:#1a1a1a;font-family:'Inter',sans-serif}
+.biq-copy-btn{background:transparent;border:1px solid #e2e2e2;border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:#a0a0a0;cursor:pointer;transition:all .15s;flex-shrink:0}
+.biq-copy-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+
+/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
+.site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--fn)}
+.site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
+.sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
+.sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+.sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
+.sf-links a:hover{text-decoration:underline}
+
 #tl-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:10px;border:1px solid;transition:opacity .2s;opacity:0;pointer-events:none;white-space:nowrap;}
 #tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
 #tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
@@ -982,6 +1041,9 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
     </div>
     <div class="bt-lang">
       <span id="tl-badge"></span>
+      <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      </button>
       <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
         <span id="tb-lang-label">Language</span>
@@ -993,6 +1055,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
           <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()">
         </div>
         <div id="tb-lang-list"></div>
+        <div class="tb-lang-note">
+          <b>DeepL 우선</b> · 한도 초과 시 <b>Google 번역</b> 자동 전환<br>
+          정식 번역은 <b>한 &rarr; 영 &rarr; 일 &rarr; 중</b> 순서로 제공될 예정입니다.
+        </div>
       </div>
     </div>
   </div>
@@ -1003,6 +1069,34 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 
 
+
+
+<!-- ===== 제작자 소개 · 비즈니스 문의 ===== -->
+<div id="contact-overlay" class="hidden" onclick="if(event.target===this)closeContactOverlay()">
+  <div class="contact-card">
+    <button class="contact-close" onclick="closeContactOverlay()" aria-label="닫기">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="contact-who">
+      <div class="contact-who-thumb"><img src="../profile.png" alt="BIZ" onerror="this.style.display='none'"></div>
+      <div>
+        <div class="contact-who-name">BIZ</div>
+        <div class="contact-who-tag">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
+      </div>
+    </div>
+    <div class="contact-eyebrow">Contact</div>
+    <div class="contact-title">비즈니스 문의</div>
+    <div class="contact-desc">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
+    <div class="contact-mailrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a0a0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      <span class="mail">rrkt.biz@proton.me</span>
+      <button class="biq-copy-btn" onclick="biqCopyEmail(this)" title="복사">
+        <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <span class="biq-copy-txt">복사</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- ===== SPOILER WARNING MODAL ===== -->
 <div class="modal-overlay" id="spoilerModal">
@@ -1174,6 +1268,20 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
         </div>
       </div>
     </div>
+
+<!-- 작가 소개 — 연락 의사가 가장 높아지는 지점에 배치 -->
+<div class="author-strip">
+  <div class="author-strip-thumb"><img src="../profile.png" alt="BIZ" onerror="this.style.display='none'"></div>
+  <div class="author-strip-body">
+    <div class="author-strip-lbl">Author</div>
+    <div class="author-strip-name">BIZ</div>
+    <div class="author-strip-tag">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
+  </div>
+  <button class="author-strip-btn" onclick="openContactOverlay()">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
+    비즈니스 문의
+  </button>
+</div>
 
   </div>
 
@@ -1822,7 +1930,36 @@ PD의 질문: "이거 망할 수 있는 이유는? 그건 어떻게 막을 건�
     </div>
   </div>
 </div>
+
+<!-- 작가 소개 — 연락 의사가 가장 높아지는 지점에 배치 -->
+<div class="author-strip" style="margin-top:44px">
+  <div class="author-strip-thumb"><img src="../profile.png" alt="BIZ" onerror="this.style.display='none'"></div>
+  <div class="author-strip-body">
+    <div class="author-strip-lbl">Author</div>
+    <div class="author-strip-name">BIZ</div>
+    <div class="author-strip-tag">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
+  </div>
+  <button class="author-strip-btn" onclick="openContactOverlay()">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
+    비즈니스 문의
+  </button>
+</div>
+
     </div>
+  </div>
+</div>
+
+
+<!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
+<div class="site-footer">
+  <div class="site-footer-inner">
+    <span class="sf-copy">&copy; BIZ. All rights reserved.</span>
+    <span class="sf-sep"></span>
+    <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
+    <span class="sf-links">
+      <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
+      <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
+    </span>
   </div>
 </div>
 
@@ -1985,6 +2122,35 @@ async function bhsFetchText(url){
 }
 
 /* ══════ 라우팅 ══════ */
+
+/* ── 제작자 소개 · 비즈니스 문의 오버레이 ── */
+function openContactOverlay(){
+  var ov = document.getElementById('contact-overlay');
+  if(ov) ov.classList.remove('hidden');
+}
+function closeContactOverlay(){
+  var ov = document.getElementById('contact-overlay');
+  if(ov) ov.classList.add('hidden');
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeContactOverlay();
+});
+function biqCopyEmail(btn){
+  navigator.clipboard.writeText('rrkt.biz@proton.me').then(function(){
+    var svg = btn.querySelector('.biq-copy-svg'), txt = btn.querySelector('.biq-copy-txt');
+    if(svg) svg.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    if(txt) txt.textContent = '완료';
+    btn.style.borderColor = '#bbf7d0'; btn.style.background = '#f0fdf4'; btn.style.color = '#22c55e';
+    setTimeout(function(){
+      var s2 = btn.querySelector('.biq-copy-svg');
+      if(s2) s2.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      var t2 = btn.querySelector('.biq-copy-txt');
+      if(t2) t2.textContent = '복사';
+      btn.style.borderColor = ''; btn.style.background = ''; btn.style.color = '';
+    }, 1800);
+  });
+}
+
 function bhsGo(view, volId, epId, noPush){
   BS.view = view;
   if(view === 'intro'){ BS.vol = null; BS.ep = null; }
@@ -2029,7 +2195,7 @@ function bhsBuildTabs(){
 }
 
 function bhsBackToSite(){
-  location.href = BHS_ROOT + 'index.html';
+  location.href = BHS_ROOT + 'index.html#proj/blood-highschool/intro';
 }
 
 /* ══════ 렌더 ══════ */
@@ -2095,6 +2261,8 @@ window.bhsOpenVolPicker  = function(){ var m=document.getElementById('vol-picker
 window.bhsCloseVolPicker = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.add('hidden'); };
 window.bhsGoVol = function(volId){ bhsGo('vol', volId); };
 
+var BHS_FOOTER_HTML = "<!-- ===== 푸터 · 저작권 / 공식 백업 ===== --><div class=\"site-footer\">  <div class=\"site-footer-inner\">    <span class=\"sf-copy\">&copy; BIZ. All rights reserved.</span>    <span class=\"sf-sep\"></span>    <span class=\"sf-note\">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>    <span class=\"sf-links\">      <a href=\"https://www.postype.com/@biz202099\" target=\"_blank\" rel=\"noopener\">postype.com/@biz202099</a>      <a href=\"https://www.postype.com/@rrkt2022\" target=\"_blank\" rel=\"noopener\">postype.com/@rrkt2022</a>    </span>  </div></div>";
+
 /* ── 에피소드 목록 (rrkt renderEpList 이식) ── */
 function bhsRenderEpList(){
   var v = bhsVol(BS.vol);
@@ -2135,7 +2303,8 @@ function bhsRenderEpList(){
              + '</div>';
       }).join('')
     + '</div>'
-    + bhsBuildVolNav(v);
+    + bhsBuildVolNav(v)
+    + BHS_FOOTER_HTML;
 }
 
 /* ── 본문 뷰 (rrkt renderContentView 이식) ── */
