@@ -1023,6 +1023,77 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .ep-picker-st{margin-left:auto;font-size:9px;font-weight:700}
 .ep-picker-st.done{color:#c0392b}.ep-picker-st.plan{color:#a0a0a0}
 
+
+/* ══════════════════════════════════════════════════
+   룩북 밴드 — 커버 오른쪽 빈 공간에 '가둬서' 배치
+
+   핵심: 밴드 높이는 커버 높이에서 정보 영역을 뺀 나머지로
+   자동 결정되고, 썸네일은 그 칸에 맞춰 알아서 크기가 잡힌다.
+   썸네일에 고정 비율(aspect-ratio)을 주지 않는 게 요점 —
+   비율을 고정하면 칸을 무시하고 높이를 밀어붙여 커버 밖으로
+   삐져나온다.
+   ══════════════════════════════════════════════════ */
+#view-story .vol-banner{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  grid-template-areas:"thumb info" "thumb lk";
+  grid-template-rows:auto minmax(56px,1fr);
+  column-gap:20px; row-gap:10px;
+  align-items:start;
+  min-height:200px;               /* 커버 높이 = 배너 전체 높이 기준선 */
+}
+#view-story .vol-banner-thumb{grid-area:thumb;align-self:start}
+#view-story .vb-info{grid-area:info;min-width:0}
+
+#view-story .lk-band{
+  grid-area:lk;
+  align-self:stretch;             /* 남은 세로 공간을 정확히 채움 */
+  min-height:0;                   /* 내용이 밴드를 밀어 키우지 못하게 */
+  overflow:hidden;
+  background:#111;border-radius:8px;
+  padding:10px 12px;
+  display:flex;align-items:center;gap:14px;
+}
+#view-story .lk-band-hd{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex-shrink:0;width:118px}
+#view-story .lk-band-t{font-size:12.5px;font-weight:800;letter-spacing:2.5px;color:#FFD23F;line-height:1.2}
+#view-story .lk-band-m{font-size:10px;color:rgba(255,255,255,.5);line-height:1.35;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#view-story .lk-band-go{background:none;border:none;padding:0;margin-top:3px;font-size:10.5px;color:#fff;font-weight:500;border-bottom:1px solid rgba(255,255,255,.4);white-space:nowrap}
+
+/* 썸네일 — 칸이 크기를 정하고, 이미지는 잘려서 채워짐 */
+#view-story .lk-grid{display:flex;gap:6px;flex:1;min-width:0;align-self:stretch}
+#view-story .lk-cell{flex:1 1 0;min-width:0;border-radius:3px;overflow:hidden;position:relative;cursor:pointer;background:#2a2a2a;transition:opacity .12s}
+#view-story .lk-cell:hover{opacity:.82}
+#view-story .lk-cell img{width:100%;height:100%;object-fit:cover;display:block}
+#view-story .lk-cell.lk-empty{background:#242424}
+#view-story .lk-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,10,10,.62);color:#FFD23F;font-size:12px;font-weight:800;letter-spacing:.5px}
+
+/* 줄거리 — 배너 바깥 */
+#view-story .v-syn{max-width:700px;width:calc(100% - 40px);margin:16px auto 0}
+#view-story .v-syn-lbl{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:7px}
+#view-story .v-syn-tx{font-size:12.5px;color:var(--tx2);line-height:1.8}
+#view-story .v-links{display:flex;gap:18px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bd)}
+#view-story .v-links button{background:none;border:none;padding:0;font-size:12px;color:var(--ac);font-weight:500}
+#view-story .v-links button:hover{text-decoration:underline}
+
+@media(max-width:768px){
+  /* 커버 + 타이틀/태그는 나란히 그대로, 룩북만 전체 폭으로 아래에 */
+  #view-story .vol-banner{
+    grid-template-columns:110px 1fr;
+    grid-template-areas:"thumb info" "lk lk";
+    grid-template-rows:auto auto;
+    min-height:0;
+  }
+  #view-story .lk-band{flex-direction:column;align-items:stretch;gap:8px;padding:10px 12px 12px;overflow:visible}
+  #view-story .lk-band-hd{flex-direction:row;align-items:baseline;gap:8px;width:auto}
+  #view-story .lk-band-t{font-size:11.5px;letter-spacing:2px}
+  #view-story .lk-band-go{margin-top:0;margin-left:auto}
+  #view-story .lk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  #view-story .lk-cell{aspect-ratio:4/3}   /* 모바일은 높이 제약이 없으므로 비율 사용 */
+}
+@media(max-width:420px){
+  #view-story .lk-band-m{display:none}
+}
+
 @media(max-width:768px){
   #view-story .tb-crumb,#view-story .tb-arr,#view-story .tb-sep{display:none!important}
   #view-story .tb-cur{max-width:calc(100vw - 150px)}
@@ -1988,11 +2059,31 @@ var BHS_ROOT = '../';
 var BHS_ACC  = '#c0392b';
 var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
 
+/* ══════════════════════════════════════════════════════
+   룩북 설정 — 각 부의 lookbook 필드를 채우세요.
+
+     lookbook:{
+       count : 68,                          // 총 페이지 수 (0이면 카운터 대신 '보기')
+       meta  : '캐릭터 시트 34종',            // 부제 (생략 가능)
+       thumbs: [                            // 가로형 썸네일 4장, BHS_ROOT 기준 상대경로
+         'Blood_High_School/lookbook/p1_01.jpg',
+         'Blood_High_School/lookbook/p1_02.jpg',
+         'Blood_High_School/lookbook/p1_03.jpg',
+         'Blood_High_School/lookbook/p1_04.jpg'
+       ]
+     }
+
+   · 썸네일은 칸 크기에 맞춰 자동으로 잘려 채워집니다 (object-fit:cover)
+     → 원본 비율이 뭐든 상관없지만, 가로형 이미지가 가장 자연스럽습니다
+   · 마지막 장 위에 '+64' 카운터가 겹쳐 올라갑니다
+   · thumbs 가 비어 있어도 빈 칸으로 자리만 잡습니다
+   ══════════════════════════════════════════════════════ */
 var BHS_VOLUMES = [
   {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:'1부',
    label:'블러드하이스쿨 ~용의 부활~', type:'웹소설',
    available:true, tags:['#학원판타지','#용의혈통','#각성','#스쿨라이프','#인외배틀','#다크판타지'],
    links:{ chars:'', lookbook:'', notes:'' },
+   lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat1_cover.png',
    synopsis:'평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.',
    episodes:[
@@ -2016,6 +2107,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 ~류오가편~', type:'웹소설',
    available:true, tags:['#가문의비밀','#업보','#멸망의왕','#형제서사','#피의계승','#다크판타지'],
    links:{ chars:'', lookbook:'', notes:'' },
+   lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat2_cover.png',
    synopsis:'류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.',
    episodes:[
@@ -2039,6 +2131,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 3부', type:'웹소설',
    available:false, tags:['#신종족','#공개예정'],
    links:{ chars:'', lookbook:'', notes:'' },
+   lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat3_cover.png',
    synopsis:'새로운 종족이 나타난다.',
    episodes:[
@@ -2062,6 +2155,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 4부', type:'웹소설',
    available:false, tags:['#본격판타지','#떡밥회수','#공개예정'],
    links:{ chars:'', lookbook:'', notes:'' },
+   lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat4_cover.png',
    synopsis:'학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다.',
    episodes:[
@@ -2229,6 +2323,40 @@ window.bhsOpenLink = function(url){
   location.href = url;
 };
 
+/* ── 룩북 헬퍼 ── */
+function bhsLk(v){
+  var d = v.lookbook || {};
+  return {
+    count : d.count || 0,
+    meta  : d.meta  || '',
+    thumbs: d.thumbs || [],
+    url   : (v.links && v.links.lookbook) || ''
+  };
+}
+function bhsLkMeta(d){
+  var a = [];
+  if(d.count) a.push(d.count + ' 페이지');
+  if(d.meta)  a.push(d.meta);
+  return a.join(' · ');
+}
+function bhsLkCells(v, slots){
+  var d = bhsLk(v), out = '', i, t, img, badge;
+  var go   = 'onclick="bhsOpenLink(\'' + d.url + '\')"';
+  var rest = d.count - slots;
+  for(i = 0; i < slots; i++){
+    t   = d.thumbs[i];
+    img = t
+      ? '<img src="' + BHS_ROOT + t + '" loading="lazy"'
+        + ' onerror="this.parentNode.classList.add(\'lk-empty\');this.remove()">'
+      : '';
+    badge = (i === slots - 1)
+      ? '<span class="lk-badge">' + (rest > 0 ? '+' + rest : '보기') + '</span>'
+      : '';
+    out += '<div class="lk-cell' + (t ? '' : ' lk-empty') + '" ' + go + '>' + img + badge + '</div>';
+  }
+  return out;
+}
+
 /* ── 볼륨 네비 (rrkt buildVolNav 이식) ── */
 function bhsBuildVolNav(vol){
   var sameType = BHS_VOLUMES.filter(function(v){ return v.type === vol.type && v.available !== false; });
@@ -2273,24 +2401,35 @@ function bhsRenderEpList(){
   var tags = (v.tags || []).map(function(t){ return '<span class="vb-tag">' + bhsEsc(t) + '</span>'; }).join('');
   var lk = v.links || {};
 
+  var lkd = bhsLk(v);
+
   document.getElementById('st-wrap').innerHTML =
       '<div style="background:var(--sb);padding-top:8px">'
     + '<div class="vol-banner">'
     + '<div class="vol-banner-thumb" style="background:linear-gradient(' + v.grad + ');position:relative;overflow:hidden">'
     + '<img src="' + BHS_ROOT + v.cover + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" loading="lazy" onerror="this.style.display=\'none\'">'
     + '</div>'
-    + '<div style="flex:1">'
+    + '<div class="vb-info">'
     + '<div class="vb-lbl" style="color:' + BHS_ACC + '">블러드하이스쿨 &middot; ' + v.type + '</div>'
     + '<div class="vb-title">' + bhsEsc(v.label) + '</div>'
     + '<div class="vb-sub">' + eps.length + '화 수록</div>'
-    + '<div class="vb-synopsis"><div class="vb-synopsis-lbl">줄거리</div>'
-    + '<div class="vb-synopsis-text">' + bhsEsc(v.synopsis) + '</div></div>'
     + (tags ? '<div class="vb-tags">' + tags + '</div>' : '')
-    + '</div></div>'
-    + '<div class="vsec-row">'
-    + '<button class="vsec-btn" onclick="bhsOpenLink(\'' + (lk.chars    || '') + '\')">등장인물</button>'
-    + '<button class="vsec-btn" onclick="bhsOpenLink(\'' + (lk.lookbook || '') + '\')">룩북</button>'
-    + '<button class="vsec-btn" onclick="bhsOpenLink(\'' + (lk.notes    || '') + '\')">제작노트</button>'
+    + '</div>'
+    + '<div class="lk-band">'
+    + '<div class="lk-band-hd">'
+    + '<span class="lk-band-t">LOOKBOOK</span>'
+    + (bhsLkMeta(lkd) ? '<span class="lk-band-m">' + bhsLkMeta(lkd) + '</span>' : '')
+    + '<button class="lk-band-go" onclick="bhsOpenLink(\'' + lkd.url + '\')">전체 보기 &rarr;</button>'
+    + '</div>'
+    + '<div class="lk-grid">' + bhsLkCells(v, 4) + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="v-syn">'
+    + '<div class="v-syn-lbl">줄거리</div>'
+    + '<div class="v-syn-tx">' + bhsEsc(v.synopsis) + '</div>'
+    + '<div class="v-links">'
+    + '<button onclick="bhsOpenLink(\'' + (lk.chars || '') + '\')">등장인물 &rarr;</button>'
+    + '<button onclick="bhsOpenLink(\'' + (lk.notes || '') + '\')">제작노트 &rarr;</button>'
     + '</div></div>'
     + '<div class="ep-board">'
     + '<div class="ep-board-head"><span>#</span><span>제목</span><span style="text-align:right">날짜</span></div>'
