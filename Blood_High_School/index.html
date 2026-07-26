@@ -900,7 +900,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story.on{display:block;}
 #view-story button{font-family:var(--fn);cursor:pointer;}
 
-.bhs-ghost{position:fixed;left:0;right:0;overflow:hidden;z-index:150;background:#fff;pointer-events:none;}
+.bhs-ghost{position:fixed;left:0;right:0;overflow:hidden;z-index:150;background:transparent;pointer-events:none;}
 
 /* ── 볼륨 배너 ── */
 #view-story .vol-banner{display:flex;gap:20px;padding:20px 0 8px;align-items:flex-start;background:var(--sb);max-width:700px;margin:0 auto;width:calc(100% - 40px)}
@@ -2413,13 +2413,22 @@ function bhsMakeGhost(src){
   wrap.style.bottom = '0px';
 
   var clone = src.cloneNode(true);
+  var bg = '';
+  try{
+    bg = getComputedStyle(src).backgroundColor;
+    if(!bg || bg === 'transparent' || /rgba\(0,\s*0,\s*0,\s*0\)/.test(bg)){
+      bg = getComputedStyle(document.body).backgroundColor;
+    }
+  }catch(e){}
+  if(!bg || bg === 'transparent' || /rgba\(0,\s*0,\s*0,\s*0\)/.test(bg)) bg = '#fff';
+  clone.style.background = bg;
   clone.style.display   = 'block';
   clone.style.position  = 'absolute';
   clone.style.left      = '0';
   clone.style.width     = '100%';
   clone.style.top       = (rect.top - top) + 'px';
   clone.style.margin    = '0';
-  clone.style.minHeight = '0';
+  clone.style.minHeight = window.innerHeight + 'px';
   clone.style.transform = 'none';
   clone.style.animation = 'none';
 
