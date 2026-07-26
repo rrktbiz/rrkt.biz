@@ -900,14 +900,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story.on{display:block;}
 #view-story button{font-family:var(--fn);cursor:pointer;}
 
-@keyframes bhsSlideInRight{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
-@keyframes bhsSlideInLeft{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
-#view-intro.bhs-anim-right,#view-story.bhs-anim-right{animation:bhsSlideInRight .32s cubic-bezier(.22,1,.36,1) both;}
-#view-intro.bhs-anim-left,#view-story.bhs-anim-left{animation:bhsSlideInLeft .32s cubic-bezier(.22,1,.36,1) both;}
-@media (prefers-reduced-motion:reduce){
-  #view-intro.bhs-anim-right,#view-story.bhs-anim-right,
-  #view-intro.bhs-anim-left,#view-story.bhs-anim-left{animation:none;}
-}
+.bhs-ghost{position:fixed;left:0;right:0;overflow:hidden;z-index:150;background:#fff;pointer-events:none;}
 
 /* ── 볼륨 배너 ── */
 #view-story .vol-banner{display:flex;gap:20px;padding:20px 0 8px;align-items:flex-start;background:var(--sb);max-width:700px;margin:0 auto;width:calc(100% - 40px)}
@@ -2402,26 +2395,81 @@ function bhsTabIndex(order){
 }
 
 /* ── 모바일: 탭 전환 시 슬라이드 애니메이션과 함께 이동 ── */
+/* ── 이전 화면 스냅샷(고스트) 생성 — 캐러셀 전환용 ── */
+function bhsClearGhost(){
+  var g = document.querySelector('.bhs-ghost');
+  if(g && g.parentNode) g.parentNode.removeChild(g);
+}
+function bhsMakeGhost(src){
+  if(!src) return null;
+  bhsClearGhost();
+  var tb  = document.getElementById('bhs-topbar');
+  var top = tb ? Math.max(0, tb.getBoundingClientRect().bottom) : 0;
+  var rect = src.getBoundingClientRect();
+
+  var wrap = document.createElement('div');
+  wrap.className = 'bhs-ghost';
+  wrap.style.top = top + 'px';
+  wrap.style.bottom = '0px';
+
+  var clone = src.cloneNode(true);
+  clone.style.display   = 'block';
+  clone.style.position  = 'absolute';
+  clone.style.left      = '0';
+  clone.style.width     = '100%';
+  clone.style.top       = (rect.top - top) + 'px';
+  clone.style.margin    = '0';
+  clone.style.minHeight = '0';
+  clone.style.transform = 'none';
+  clone.style.animation = 'none';
+
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
+/* ── 모바일 한정: 캐러셀 방식 탭 전환 ── */
 function bhsGoAnimated(view, volId){
-  var order = bhsTabOrder();
+  var order   = bhsTabOrder();
   var fromIdx = bhsTabIndex(order);
-  var toId = view === 'intro' ? 'intro' : volId;
-  var toIdx = order.indexOf(toId);
+  var toId    = (view === 'intro') ? 'intro' : volId;
+  var toIdx   = order.indexOf(toId);
+
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  var reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canAnim  = isMobile && !reduce && typeof document.body.animate === 'function'
+                 && fromIdx !== -1 && toIdx !== -1 && toIdx !== fromIdx;
+
+  if(!canAnim){
+    if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
+    return;
+  }
+
   var dir = (toIdx > fromIdx) ? 1 : -1;
+  var src = (BS.view === 'intro') ? document.getElementById('view-intro')
+                                  : document.getElementById('view-story');
+  var ghost = bhsMakeGhost(src);
 
   if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
 
-  var target = (BS.view === 'intro') ? document.getElementById('view-intro') : document.getElementById('view-story');
-  if(!target) return;
+  var DUR = 320, EASE = 'cubic-bezier(.22,1,.36,1)';
+  var target = (BS.view === 'intro') ? document.getElementById('view-intro')
+                                     : document.getElementById('view-story');
 
-  var cls = dir > 0 ? 'bhs-anim-right' : 'bhs-anim-left';
-  target.classList.remove('bhs-anim-left','bhs-anim-right');
-  void target.offsetWidth;
-  target.classList.add(cls);
-  target.addEventListener('animationend', function h(){
-    target.classList.remove('bhs-anim-left','bhs-anim-right');
-    target.removeEventListener('animationend', h);
-  });
+  if(target){
+    target.animate(
+      [{transform:'translateX(' + (100 * dir) + '%)'},{transform:'translateX(0)'}],
+      {duration:DUR, easing:EASE}
+    );
+  }
+  if(ghost && ghost.firstChild){
+    var a = ghost.firstChild.animate(
+      [{transform:'translateX(0)'},{transform:'translateX(' + (-100 * dir) + '%)'}],
+      {duration:DUR, easing:EASE, fill:'forwards'}
+    );
+    a.onfinish = bhsClearGhost;
+    setTimeout(bhsClearGhost, DUR + 150);
+  }
 }
 function bhsPushHash(){
   var t = '#intro';
