@@ -77,9 +77,10 @@ body{top:0 !important}
 .tab.active{color:var(--blue-d);border-bottom-color:var(--blue-d);font-weight:700}
 
 /* ── 패널 ── */
-#stage{flex:1;position:relative;min-height:0;background:var(--bg);z-index:1}
+#stage{flex:1;position:relative;min-height:0;background:var(--bg);z-index:1;overflow:hidden}
 .panel{position:absolute;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
 .panel.active{display:block}
+.panel.tx-keep{display:block}
 .panel iframe{width:100%;height:100%;border:none;display:block;background:var(--bg)}
 
 .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:3;transition:opacity .25s}
@@ -548,6 +549,7 @@ function mount(tab){
     load.classList.add('gone');
     setTimeout(function(){ if(load.parentNode) load.parentNode.removeChild(load); }, 300);
     hookScroll(fr.contentWindow, fr.contentDocument);
+    hookSwipe(fr.contentDocument);
   });
   panel.appendChild(fr);
 }
@@ -1399,10 +1401,101 @@ function _doDollTranslate(url, cacheKey, blocks, origTitle, dlLang){
   }
 })();
 
+/* ── 탭 순서 (탭바 DOM 기준으로 자동 동기화) ── */
+function tabOrder(){
+  return [].slice.call(document.querySelectorAll('#tabbar .tab'))
+           .map(function(b){ return b.dataset.tab; });
+}
+
+/* ── 모바일 한정: 캐러셀 방식 탭 전환 ── */
+var _txBusy = false;
+function goAnimated(tab){
+  if(!TABS[tab]) tab = DEFAULT_TAB;
+
+  var order   = tabOrder();
+  var fromIdx = order.indexOf(current);
+  var toIdx   = order.indexOf(tab);
+
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  var reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canAnim  = isMobile && !reduce && !_txBusy
+                 && typeof document.body.animate === 'function'
+                 && fromIdx !== -1 && toIdx !== -1 && toIdx !== fromIdx;
+
+  if(!canAnim){ go(tab); return; }
+
+  var dir = (toIdx > fromIdx) ? 1 : -1;
+  var fromPanel = document.getElementById('panel-' + current);
+  if(!fromPanel){ go(tab); return; }
+
+  _txBusy = true;
+  fromPanel.classList.add('tx-keep');
+  go(tab);
+
+  var toPanel = document.getElementById('panel-' + tab);
+  var DUR = 320, EASE = 'cubic-bezier(.22,1,.36,1)';
+
+  function cleanup(){
+    fromPanel.getAnimations().forEach(function(a){ a.cancel(); });
+    fromPanel.classList.remove('tx-keep');
+    _txBusy = false;
+  }
+
+  if(toPanel){
+    toPanel.animate(
+      [{transform:'translateX(' + (100 * dir) + '%)'},{transform:'translateX(0)'}],
+      {duration:DUR, easing:EASE}
+    );
+  }
+  var a = fromPanel.animate(
+    [{transform:'translateX(0)'},{transform:'translateX(' + (-100 * dir) + '%)'}],
+    {duration:DUR, easing:EASE, fill:'forwards'}
+  );
+  a.onfinish = cleanup;
+  setTimeout(function(){ if(_txBusy) cleanup(); }, DUR + 150);
+}
+
+/* ── 좌우 스와이프로 탭 이동 (모바일) ── */
+function swipeStep(k){
+  var order = tabOrder();
+  var i = order.indexOf(current);
+  if(i === -1) return;
+  var n = i + k;
+  if(n < 0 || n >= order.length) return;
+  goAnimated(order[n]);
+}
+function hookSwipe(doc){
+  try{
+    if(!doc || doc._bizSwipeHooked) return;
+    doc._bizSwipeHooked = true;
+    var sx = 0, sy = 0, on = false;
+    var THRESHOLD = 60, MAX_VERTICAL = 60;
+
+    doc.addEventListener('touchstart', function(e){
+      if(!window.matchMedia('(max-width: 768px)').matches){ on = false; return; }
+      if(e.touches.length !== 1){ on = false; return; }
+      if(e.target.closest && e.target.closest('#tabbar')){ on = false; return; }
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      on = true;
+    }, {passive:true});
+
+    doc.addEventListener('touchend', function(e){
+      if(!on) return;
+      on = false;
+      var dx = e.changedTouches[0].clientX - sx;
+      var dy = e.changedTouches[0].clientY - sy;
+      if(Math.abs(dx) < THRESHOLD || Math.abs(dy) > MAX_VERTICAL) return;
+      swipeStep(dx < 0 ? 1 : -1);
+    }, {passive:true});
+  }catch(e){ /* file:// 로 열면 브라우저가 막습니다 */ }
+}
+
 /* ── 초기화 ── */
 document.querySelectorAll('.tab').forEach(function(b){
-  b.addEventListener('click', function(){ go(b.dataset.tab); });
+  b.addEventListener('click', function(){ goAnimated(b.dataset.tab); });
 });
+hookSwipe(document);
 
 window.addEventListener('popstate', function(){
   var h = parseHash();
