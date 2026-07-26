@@ -762,6 +762,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .cast-overlay-close:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111;}
 .cast-overlay-close:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
 .cast-overlay-img{max-width:100%;max-height:80vh;border:4px solid #111;border-radius:10px;box-shadow:8px 8px 0 rgba(0,0,0,.5);background:#fff;object-fit:contain;}
+.cast-overlay-error{display:none;margin-top:16px;padding:14px 18px;background:#2a0000;border:3px solid var(--red);border-radius:8px;color:#ffb3b3;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;line-height:1.7;max-width:90vw;word-break:break-all;text-align:center;}
 
 /* ===== PASSWORD OVERLAY (deep-dive 위에 씌우는 방식) ===== */
 .dd-locked .deep-content{display:none;}
@@ -1338,7 +1339,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
       <span class="cast-overlay-title" id="castOverlayTitle">등장인물</span>
       <button class="cast-overlay-close" onclick="bhsCloseCast()">&#10005;</button>
     </div>
-    <img class="cast-overlay-img" id="castOverlayImg" src="" alt="등장인물" onerror="this.style.display='none'">
+    <img class="cast-overlay-img" id="castOverlayImg" src="" alt="등장인물" onerror="bhsCastImgError(this)">
+    <div class="cast-overlay-error" id="castOverlayError"></div>
   </div>
 </div>
 
@@ -2628,6 +2630,10 @@ window.bhsOpenCast = function(path, label){
   var ov  = document.getElementById('castOverlay');
   var img = document.getElementById('castOverlayImg');
   var ttl = document.getElementById('castOverlayTitle');
+  var err = document.getElementById('castOverlayError');
+  err.style.display = 'none';
+  err.textContent = '';
+  img.style.display = '';
   img.src = BHS_ROOT + path;
   ttl.textContent = (label ? label + ' · ' : '') + '등장인물';
   ov.classList.add('show');
@@ -2637,6 +2643,12 @@ window.bhsCloseCast = function(){
   var ov = document.getElementById('castOverlay');
   ov.classList.remove('show');
   document.body.style.overflow = '';
+};
+window.bhsCastImgError = function(imgEl){
+  imgEl.style.display = 'none';
+  var err = document.getElementById('castOverlayError');
+  err.textContent = '이미지를 불러오지 못했습니다. 시도한 경로: ' + imgEl.src;
+  err.style.display = 'block';
 };
 
 /* ── 룩북 헬퍼 ── */
