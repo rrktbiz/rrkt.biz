@@ -89,6 +89,11 @@ body{top:0 !important}
 .spin{width:22px;height:22px;border:2px solid var(--bd);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 
+/* ── 당겨서 새로고침 ── */
+#ptr{position:absolute;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:50;transform:translateY(-56px)}
+#ptr .ptr-ico{width:20px;height:20px;border:2px solid var(--bd);border-top-color:var(--blue);border-radius:50%}
+#ptr.spin .ptr-ico{animation:sp .6s linear infinite}
+
 /* ── 소개 암호 게이트 ── */
 #gate{position:absolute;inset:0;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;
   background:linear-gradient(150deg,#eef4f8 0%,#f2eff8 50%,#edf5f7 100%);padding:24px;text-align:center}
@@ -133,6 +138,8 @@ body{top:0 !important}
   </div>
 
   <div id="stage">
+
+    <div id="ptr"><div class="ptr-ico"></div></div>
 
     <div class="panel active" id="panel-intro">
       <div id="gate">
@@ -241,6 +248,10 @@ function mount(tab){
     setTimeout(function(){ if(load.parentNode) load.parentNode.removeChild(load); }, 300);
     if(tab !== 'story') hookScroll(fr.contentWindow, fr.contentDocument);  /* story.html 은 자체 처리 후 postMessage */
     hookSwipe(fr.contentDocument);
+    hookPTR(fr.contentDocument, function(){
+      var d = fr.contentDocument;
+      return d ? (d.scrollingElement || d.documentElement) : null;
+    });
     if(TL.lang !== 'ko') _applyLangToIframes(TL.lang);                      /* 늦게 뜬 탭에도 현재 언어 적용 */
   });
   panel.appendChild(fr);
@@ -413,11 +424,80 @@ function hookSwipe(doc){
   }catch(e){ /* file:// 로 열면 브라우저가 막습니다 */ }
 }
 
+/* ── 당겨서 새로고침 (iframe 안쪽 스크롤까지 감지) ── */
+var PTR_H = 56, PTR_THRESH = 58;
+var ptrEl, ptrIco, _ptrDist = 0, _ptrRefreshing = false;
+function ptrInit(){
+  ptrEl = document.getElementById('ptr');
+  ptrIco = ptrEl ? ptrEl.querySelector('.ptr-ico') : null;
+}
+function setPTR(dist, animate){
+  if(_ptrRefreshing || !ptrEl) return;
+  _ptrDist = dist;
+  ptrEl.style.transition = animate ? 'transform .18s ease' : 'none';
+  ptrEl.style.transform = 'translateY(' + (dist - PTR_H) + 'px)';
+  if(ptrIco) ptrIco.style.transform = 'rotate(' + Math.min(dist * 3, 360) + 'deg)';
+}
+function triggerPTR(){
+  if(_ptrRefreshing) return;
+  _ptrRefreshing = true;
+  if(ptrEl){
+    ptrEl.style.transition = 'transform .15s ease';
+    ptrEl.style.transform = 'translateY(0)';
+    ptrEl.classList.add('spin');
+  }
+  setTimeout(function(){ location.reload(); }, 280);
+}
+function hookPTR(doc, getScrollEl){
+  try{
+    if(!doc || doc._bizPtrHooked) return;
+    doc._bizPtrHooked = true;
+    var sy = 0, active = false, pulling = false;
+
+    doc.addEventListener('touchstart', function(e){
+      if(_ptrRefreshing || e.touches.length !== 1){ active = false; return; }
+      if(window.innerWidth > 768){ active = false; return; }
+      var el = getScrollEl();
+      var top = el ? (el.scrollTop || 0) : 0;
+      if(top > 0){ active = false; return; }
+      sy = e.touches[0].clientY;
+      active = true;
+      pulling = false;
+    }, {passive:true});
+
+    doc.addEventListener('touchmove', function(e){
+      if(!active || _ptrRefreshing) return;
+      var dy = e.touches[0].clientY - sy;
+      if(dy <= 0){ if(pulling) setPTR(0, false); pulling = false; return; }
+      var el = getScrollEl();
+      var top = el ? (el.scrollTop || 0) : 0;
+      if(top > 0){ active = false; setPTR(0, false); return; }
+      pulling = true;
+      setPTR(Math.min(dy * 0.5, PTR_H + 24), false);
+    }, {passive:true});
+
+    doc.addEventListener('touchend', function(){
+      if(!active) return;
+      active = false;
+      if(pulling && _ptrDist >= PTR_THRESH){ triggerPTR(); }
+      else{ setPTR(0, true); }
+      pulling = false;
+    }, {passive:true});
+
+    doc.addEventListener('touchcancel', function(){
+      active = false; pulling = false;
+      if(!_ptrRefreshing) setPTR(0, true);
+    }, {passive:true});
+  }catch(e){ /* file:// 로 열면 브라우저가 막습니다 */ }
+}
+
 /* ── 초기화 ── */
+ptrInit();
 document.querySelectorAll('.tab').forEach(function(b){
   b.addEventListener('click', function(){ goAnimated(b.dataset.tab); });
 });
 hookSwipe(document);
+hookPTR(document, function(){ return document.querySelector('.panel.active'); });
 
 window.addEventListener('popstate', function(){
   var h = parseHash();
