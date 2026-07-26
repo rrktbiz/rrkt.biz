@@ -1,0 +1,42 @@
+/* ══════════════════════════════════════════════════
+   common.css — 전 페이지 공용 컴포넌트 스타일
+   · 상단바 우측(문의 버튼 · 언어 안내)
+   · 제작자 소개 / 비즈니스 문의 오버레이
+   · 푸터(저작권 · 공식 백업 안내)
+   ※ 색·폰트 변수(:root)는 각 페이지가 그대로 들고 있습니다
+   ══════════════════════════════════════════════════ */
+
+#tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
+#tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+
+/* 번역 안내 각주 — 언어를 궁금해하는 바로 그 순간에만 보이게 */
+.tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
+.tb-lang-note b{color:#5f5f5f;font-weight:600}
+
+/* ── 제작자 소개 · 비즈니스 문의 오버레이 (허브와 동일 컴포넌트) ── */
+#contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+#contact-overlay.hidden{display:none}
+.contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
+.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
+.contact-close:hover{background:#fafafa;border-color:#c6c6c6}
+.contact-who{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #ececec}
+.contact-who-thumb{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #e2e2e2;background:#fafafa}
+.contact-who-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.contact-who-name{font-size:15px;font-weight:700;color:#111;letter-spacing:-.02em;margin-bottom:3px}
+.contact-who-tag{font-size:12px;color:#5f5f5f;line-height:1.6}
+.contact-eyebrow{font-size:10px;font-weight:600;letter-spacing:2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:8px}
+.contact-title{font-size:20px;font-weight:700;color:#111;letter-spacing:-.04em}
+.contact-desc{font-size:13px;color:#5f5f5f;margin-top:8px;line-height:1.8}
+.contact-mailrow{margin-top:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.contact-mailrow span.mail{font-size:13px;font-weight:600;color:#1a1a1a;font-family:'Inter',sans-serif}
+.biq-copy-btn{background:transparent;border:1px solid #e2e2e2;border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:#a0a0a0;cursor:pointer;transition:all .15s;flex-shrink:0}
+.biq-copy-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+
+/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
+.site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--fn)}
+.site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
+.sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
+.sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+.sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
+.sf-links a:hover{text-decoration:underline}
