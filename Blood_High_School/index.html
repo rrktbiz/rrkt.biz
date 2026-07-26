@@ -2524,59 +2524,39 @@ function bhsBackToSite(){
 function bhsSetupSwipeTabs(){
   if(!window.matchMedia('(max-width: 768px)').matches) return;
 
-  var sx = 0, sy = 0, stime = 0, tracking = false, fired = false;
-  var DIST      = 55;    // 천천히 밀 때 인정할 가로 거리(px)
-  var FAST_DIST = 18;    // 빠르게 튕길 때 인정할 가로 거리(px)
-  var FAST_V    = 0.35;  // 빠름 판정 속도(px/ms)
-
-  function step(dir){
-    var order = bhsTabOrder();
-    var idx = bhsTabIndex(order);
-    if(idx === -1) return;
-    var t = idx + dir;
-    if(t < 0 || t >= order.length) return;
-    var id = order[t];
-    if(id === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', id);
-  }
-
-  function commit(dx, dy, dt){
-    if(fired) return;
-    var adx = Math.abs(dx), ady = Math.abs(dy);
-    if(adx <= ady * 1.2) return;                 // 세로 스크롤이면 무시
-    var v = adx / Math.max(dt, 1);
-    var ok = (adx >= DIST) ||
-             (adx >= FAST_DIST && v >= FAST_V && adx > ady * 2);
-    if(!ok) return;
-    fired = true;                                 // 한 제스처당 한 번만
-    step(dx < 0 ? 1 : -1);
-  }
+  var startX = 0, startY = 0, tracking = false;
+  var THRESHOLD = 60;     // 스와이프 인정 최소 가로 이동(px)
+  var MAX_VERTICAL = 60;  // 세로 스크롤과 구분하기 위한 허용치(px)
 
   document.body.addEventListener('touchstart', function(e){
-    if(e.touches.length !== 1){ tracking = false; return; }
+    if(e.touches.length !== 1) return;
     // 상단 탭바 자체 스크롤, 리더 내부(회차 보는 중)는 스와이프 탭전환 제외
-    if(e.target.closest('.bt-tabs') || BS.ep){ tracking = false; return; }
-    sx = e.touches[0].clientX;
-    sy = e.touches[0].clientY;
-    stime = e.timeStamp || Date.now();
-    tracking = true; fired = false;
-  }, {passive:true});
-
-  document.body.addEventListener('touchmove', function(e){
-    if(!tracking || fired) return;
-    var t = e.touches[0];
-    commit(t.clientX - sx, t.clientY - sy, (e.timeStamp || Date.now()) - stime);
+    if(e.target.closest('.bt-tabs') || BS.ep) { tracking = false; return; }
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    tracking = true;
   }, {passive:true});
 
   document.body.addEventListener('touchend', function(e){
     if(!tracking) return;
     tracking = false;
-    if(fired) return;
-    var t = e.changedTouches[0];
-    commit(t.clientX - sx, t.clientY - sy, (e.timeStamp || Date.now()) - stime);
-  }, {passive:true});
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) < THRESHOLD || Math.abs(dy) > MAX_VERTICAL) return;
 
-  document.body.addEventListener('touchcancel', function(){
-    tracking = false;
+    var order = bhsTabOrder();
+    var idx = bhsTabIndex(order);
+    if(idx === -1) return;
+
+    if(dx < 0 && idx < order.length - 1){
+      // 왼쪽으로 스와이프 → 다음 탭
+      var nextId = order[idx + 1];
+      if(nextId === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', nextId);
+    } else if(dx > 0 && idx > 0){
+      // 오른쪽으로 스와이프 → 이전 탭
+      var prevId = order[idx - 1];
+      if(prevId === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', prevId);
+    }
   }, {passive:true});
 }
 
