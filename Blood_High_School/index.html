@@ -900,9 +900,14 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story.on{display:block;}
 #view-story button{font-family:var(--fn);cursor:pointer;}
 
-#view-intro,#view-story{transition:transform .32s cubic-bezier(.22,1,.36,1),opacity .32s cubic-bezier(.22,1,.36,1);}
-#view-intro.bhs-anim-enter-right,#view-story.bhs-anim-enter-right{transform:translateX(24px);opacity:0;}
-#view-intro.bhs-anim-enter-left,#view-story.bhs-anim-enter-left{transform:translateX(-24px);opacity:0;}
+@keyframes bhsSlideInRight{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes bhsSlideInLeft{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
+#view-intro.bhs-anim-right,#view-story.bhs-anim-right{animation:bhsSlideInRight .32s cubic-bezier(.22,1,.36,1) both;}
+#view-intro.bhs-anim-left,#view-story.bhs-anim-left{animation:bhsSlideInLeft .32s cubic-bezier(.22,1,.36,1) both;}
+@media (prefers-reduced-motion:reduce){
+  #view-intro.bhs-anim-right,#view-story.bhs-anim-right,
+  #view-intro.bhs-anim-left,#view-story.bhs-anim-left{animation:none;}
+}
 
 /* ── 볼륨 배너 ── */
 #view-story .vol-banner{display:flex;gap:20px;padding:20px 0 8px;align-items:flex-start;background:var(--sb);max-width:700px;margin:0 auto;width:calc(100% - 40px)}
@@ -2398,10 +2403,6 @@ function bhsTabIndex(order){
 
 /* ── 모바일: 탭 전환 시 슬라이드 애니메이션과 함께 이동 ── */
 function bhsGoAnimated(view, volId){
-  if(!window.matchMedia('(max-width: 768px)').matches){
-    if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
-    return;
-  }
   var order = bhsTabOrder();
   var fromIdx = bhsTabIndex(order);
   var toId = view === 'intro' ? 'intro' : volId;
@@ -2412,15 +2413,14 @@ function bhsGoAnimated(view, volId){
 
   var target = (BS.view === 'intro') ? document.getElementById('view-intro') : document.getElementById('view-story');
   if(!target) return;
-  var enterClass = dir > 0 ? 'bhs-anim-enter-right' : 'bhs-anim-enter-left';
-  target.classList.remove('bhs-anim-enter-left','bhs-anim-enter-right');
+
+  var cls = dir > 0 ? 'bhs-anim-right' : 'bhs-anim-left';
+  target.classList.remove('bhs-anim-left','bhs-anim-right');
   void target.offsetWidth;
-  target.classList.add(enterClass);
-  void target.offsetWidth;
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      target.classList.remove(enterClass);
-    });
+  target.classList.add(cls);
+  target.addEventListener('animationend', function h(){
+    target.classList.remove('bhs-anim-left','bhs-anim-right');
+    target.removeEventListener('animationend', h);
   });
 }
 function bhsPushHash(){
