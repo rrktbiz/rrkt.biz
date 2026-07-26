@@ -7,8 +7,8 @@
    ── 쓰는 법 ──
      <div class="tb-right" style="position:relative"></div>   ← 비워두면 자동으로 채웁니다
      <link rel="stylesheet" href="common.css">
-     <script src="common.js"></script>   ← 본문 마크업 뒤
-     <script src="tl.js"></script>       ← 반드시 common.js 다음
+     script src="common.js"   ← 본문 마크업 뒤에 로드
+     script src="tl.js"       ← 반드시 common.js 다음
 
    ── 바꿀 일이 생기면 여기만 ──
      BIZ.MAIL / BIZ.PROFILE_IMG / BIZ.BACKUP_LINKS / BIZ.TL_NOTE
