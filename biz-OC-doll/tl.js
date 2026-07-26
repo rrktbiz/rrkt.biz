@@ -76,8 +76,20 @@ function _applyLangToIframes(lang){
     if(lang === 'ko') return;
     _injectGT(fr);
     _setIframeLang(fr, lang);
+    /* 자체 tl.js 를 가진 하위 페이지(story.html 등)에 언어를 알려줌 */
+    try{ fr.contentWindow.postMessage({type:'biz-tl-lang', lang:lang}, '*'); }catch(e){}
   });
 }
+window._applyLangToIframes = _applyLangToIframes;
+
+/* 부모 프레임이 언어를 바꿨을 때 — 구글 위젯은 부모가 이미 주입하므로 상태만 맞춘다 */
+window.addEventListener('message', function(ev){
+  var d = ev.data;
+  if(!d || d.type !== 'biz-tl-lang' || d.lang === TL.lang) return;
+  TL.lang = d.lang;
+  TL.hooks.forEach(function(fn){ try{ fn(d.lang); }catch(e){ console.warn('[TL hook]', e); } });
+  _tlBadge('google');
+});
 
 /* ── 언어 전환 진입점 ── */
 function setLang(lang){
