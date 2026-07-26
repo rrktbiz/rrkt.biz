@@ -751,6 +751,18 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .modal-btn-confirm:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111;}
 .modal-btn-confirm:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
 
+/* ===== 등장인물 이미지 오버레이 ===== */
+.cast-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.cast-overlay.show{opacity:1;pointer-events:all;}
+.cast-overlay-inner{position:relative;max-width:min(900px,94vw);max-height:90vh;display:flex;flex-direction:column;align-items:center;transform:translateY(10px);transition:transform .2s;}
+.cast-overlay.show .cast-overlay-inner{transform:translateY(0);}
+.cast-overlay-hd{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:10px;}
+.cast-overlay-title{font-family:'Bangers',cursive;font-size:18px;letter-spacing:1.5px;color:var(--yellow);}
+.cast-overlay-close{background:var(--red);color:#fff;border:3px solid #111;border-radius:6px;width:34px;height:34px;font-size:16px;font-weight:900;box-shadow:3px 3px 0 #111;cursor:pointer;transition:transform .1s,box-shadow .1s;}
+.cast-overlay-close:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #111;}
+.cast-overlay-close:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+.cast-overlay-img{max-width:100%;max-height:80vh;border:4px solid #111;border-radius:10px;box-shadow:8px 8px 0 rgba(0,0,0,.5);background:#fff;object-fit:contain;}
+
 /* ===== PASSWORD OVERLAY (deep-dive 위에 씌우는 방식) ===== */
 .dd-locked .deep-content{display:none;}
 .dd-pw-prompt{margin-top:0;border:2px dashed #111;border-top:none;border-radius:0 0 4px 4px;background:#fff;padding:18px 20px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
@@ -1320,6 +1332,16 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 </div>
 
 <!-- ===== SPOILER WARNING MODAL ===== -->
+<div class="cast-overlay" id="castOverlay" onclick="if(event.target===this)bhsCloseCast()">
+  <div class="cast-overlay-inner">
+    <div class="cast-overlay-hd">
+      <span class="cast-overlay-title" id="castOverlayTitle">등장인물</span>
+      <button class="cast-overlay-close" onclick="bhsCloseCast()">&#10005;</button>
+    </div>
+    <img class="cast-overlay-img" id="castOverlayImg" src="" alt="등장인물" onerror="this.style.display='none'">
+  </div>
+</div>
+
 <div class="modal-overlay" id="spoilerModal">
   <div class="modal-box">
     <div class="modal-hd">
@@ -2212,6 +2234,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 ~용의 부활~', type:'웹소설',
    available:true, tags:['#학원','#판타지','#소년만화','#옴니버스','#병맛개그','#다크판타지'],
    links:{ chars:'', lookbook:'', notes:'' },
+   cast:'Blood_High_School/bhs_1part_cast.png',
    lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat1_cover.png',
    synopsis:'평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.',
@@ -2236,6 +2259,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 ~류오가편~', type:'웹소설',
    available:true, tags:['#드라마','#다크판타지','#서스펜스','#극장판','#일본풍','#성장물'],
    links:{ chars:'', lookbook:'', notes:'' },
+   cast:'Blood_High_School/bhs_2part_cast.png',
    lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat2_cover.png',
    synopsis:'류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.',
@@ -2260,6 +2284,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 3부', type:'웹소설',
    available:false, tags:['#신종족','#공개예정'],
    links:{ chars:'', lookbook:'', notes:'' },
+   cast:'',
    lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat3_cover.png',
    synopsis:'새로운 종족이 나타난다.',
@@ -2284,6 +2309,7 @@ var BHS_VOLUMES = [
    label:'블러드하이스쿨 4부', type:'웹소설',
    available:false, tags:['#본격판타지','#떡밥회수','#공개예정'],
    links:{ chars:'', lookbook:'', notes:'' },
+   cast:'',
    lookbook:{ count:0, meta:'', thumbs:[] },
    cover:'Blood_High_School/bhs_novel_prat4_cover.png',
    synopsis:'학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다.',
@@ -2596,6 +2622,23 @@ window.bhsOpenLink = function(url){
   location.href = url;
 };
 
+/* ── 등장인물 이미지 오버레이 ── */
+window.bhsOpenCast = function(path, label){
+  if(!path){ console.warn('[BHS] 아직 등장인물 이미지가 없습니다.'); return; }
+  var ov  = document.getElementById('castOverlay');
+  var img = document.getElementById('castOverlayImg');
+  var ttl = document.getElementById('castOverlayTitle');
+  img.src = BHS_ROOT + path;
+  ttl.textContent = (label ? label + ' · ' : '') + '등장인물';
+  ov.classList.add('show');
+  document.body.style.overflow = 'hidden';
+};
+window.bhsCloseCast = function(){
+  var ov = document.getElementById('castOverlay');
+  ov.classList.remove('show');
+  document.body.style.overflow = '';
+};
+
 /* ── 룩북 헬퍼 ── */
 function bhsLk(v){
   var d = v.lookbook || {};
@@ -2701,7 +2744,7 @@ function bhsRenderEpList(){
     + '<div class="v-syn-lbl">줄거리</div>'
     + '<div class="v-syn-tx">' + bhsEsc(v.synopsis) + '</div>'
     + '<div class="v-links">'
-    + '<button onclick="bhsOpenLink(\'' + (lk.chars || '') + '\')">등장인물 &rarr;</button>'
+    + '<button onclick="bhsOpenCast(\'' + (v.cast || '') + '\',\'' + bhsEsc(v.label) + '\')">등장인물 &rarr;</button>'
     + '<button onclick="bhsOpenLink(\'' + (lk.notes || '') + '\')">제작노트 &rarr;</button>'
     + '</div></div>'
     + '<div class="ep-board">'
@@ -2881,6 +2924,7 @@ document.addEventListener('click', function(e){
 });
 /* ESC 로도 닫기 */
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape') bhsFsClose(); });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') bhsCloseCast(); });
 
 /* 읽기 뷰 진입 시 플로팅 네비 상태 세팅 */
 function bhsSetupFloatNav(volId, prev, next){
