@@ -193,13 +193,16 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 }
 .empty-state-icon{font-size:36px;margin-bottom:12px}
 .empty-state-title{font-size:14px;font-weight:600;color:var(--tx2);margin-bottom:6px}
+
+/* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
+.brandname{text-transform:none !important}
 </style>
 </head>
 <body>
 
 <div class="page-hero">
   <div class="page-hero-inner">
-    <div class="eyebrow">biz-OC-doll · Event</div>
+    <div class="eyebrow"><span class="brandname">biz-OC-doll</span> · Event</div>
     <div class="page-title">EVENT</div>
     <div class="page-desc">이벤트 & 로그 정리페이지</div>
   </div>
