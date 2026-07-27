@@ -250,6 +250,9 @@ body{top:0 !important}
   .doll-line-text{font-size:17px}
   .doll-reader-wrap{padding:40px 48px 100px}
 }
+
+/* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
+.brandname{text-transform:none !important}
 </style>
 </head>
 <body>
@@ -388,7 +391,7 @@ async function renderStoryList(){
     return '<div class="story-banner" style="background:' + bg + '">' +
       (img ? '<img src="' + img + '" onerror="this.style.display=\'none\'">' : '') +
       '<div class="story-banner-txt">' +
-        '<div class="story-banner-eyebrow">biz-OC-doll · STORY</div>' +
+        '<div class="story-banner-eyebrow"><span class="brandname">biz-OC-doll</span> · STORY</div>' +
         '<div class="story-banner-title">' + (BANNER_TXT[t]||'STORY') + '</div>' +
       '</div></div>';
   }
