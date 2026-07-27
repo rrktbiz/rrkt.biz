@@ -178,15 +178,24 @@ var current = null;
 
 
 
-/* ── 라우팅: #/tab  또는  #/story/3 ── */
+/* ── 라우팅 ──
+   #/chars        캐릭터 목록
+   #/chars/042    042번 캐릭터 (딥링크)
+   #/story        스토리 목록
+   #/story/3      3화
+   #/story/world  세계관
+
+   iframe 안쪽 주소는 주소창에 안 나옵니다.
+   그래서 '지금 뭘 보고 있는지'를 여기서 대신 적어 줍니다.
+   ── */
+var SUB_TABS = { story:true, chars:true };
+
 function parseHash(){
   var raw = (location.hash || '').replace(/^#\/?/, '');
   var parts = raw.split('/');
   var tab = TABS[parts[0]] ? parts[0] : DEFAULT_TAB;
-  var sub = (tab === 'story' && parts[1] !== undefined) ? parts[1] : '';
-  if(sub === 'world') return { tab: tab, ep: null, world: true };
-  var ep = (tab === 'story' && sub !== '') ? parseInt(sub, 10) : null;
-  return { tab: tab, ep: (isNaN(ep) ? null : ep), world: false };
+  var sub = (SUB_TABS[tab] && parts[1] !== undefined) ? decodeURIComponent(parts[1]) : '';
+  return { tab: tab, sub: sub };
 }
 
 function go(tab, push){
@@ -204,6 +213,7 @@ function go(tab, push){
   }
   setBarsHidden(false);
   if(changed) mount(tab);
+  else if(SUB_TABS[tab] && push !== false) frameNav(tab, '');   /* 같은 탭 재클릭 = 목록으로 */
 
   var btn = document.querySelector('.tab[data-tab="' + tab + '"]');
   if(btn && btn.scrollIntoView) btn.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
@@ -223,7 +233,7 @@ function mount(tab){
   panel.appendChild(load);
 
   var fr = document.createElement('iframe');
-  fr.src = cfg.src + (tab === 'story' ? storyHash() : '');
+  fr.src = cfg.src + (SUB_TABS[tab] ? subHash(tab) : '');
   fr.title = tab;
   fr.addEventListener('load', function(){
     load.classList.add('gone');
@@ -250,17 +260,18 @@ function setBarsHidden(hide){
   if(tabs) tabs.classList.toggle('hidden', hide);
 }
 
-/* ── 스토리 프레임과의 다리 ── */
-function storyHash(){
+/* ── 자식 프레임과의 다리 ── */
+function subHash(tab){
   var h = parseHash();
-  if(h.tab !== 'story') return '';
-  return h.world ? '#world' : (h.ep !== null ? '#' + h.ep : '');
+  if(h.tab !== tab || !h.sub) return '';
+  return '#' + encodeURIComponent(h.sub);
 }
-function storyFrame(){ return document.querySelector('#panel-story iframe'); }
-function storyNav(route){
-  var fr = storyFrame();
-  if(fr && fr.contentWindow) try{ fr.contentWindow.postMessage({type:'biz-doll-nav', route:route}, '*'); }catch(e){}
+function frameOf(tab){ return document.querySelector('#panel-' + tab + ' iframe'); }
+function frameNav(tab, route){
+  var fr = frameOf(tab);
+  if(fr && fr.contentWindow) try{ fr.contentWindow.postMessage({type:'biz-doll-nav', tab:tab, route:route}, '*'); }catch(e){}
 }
+function storyNav(route){ frameNav('story', route); }
 function _onScrollY(y, lastRef){
   if(window.innerWidth > 768){ setBarsHidden(false); lastRef.y = 0; return; }
   if(y > lastRef.y && y > 70)      setBarsHidden(true);
@@ -451,7 +462,7 @@ hookPTR(document, function(){ return document.querySelector('.panel.active'); })
 window.addEventListener('popstate', function(){
   var h = parseHash();
   go(h.tab, false);
-  if(h.tab === 'story') storyNav(h.world ? 'world' : (h.ep !== null ? h.ep : ''));
+  if(SUB_TABS[h.tab]) frameNav(h.tab, h.sub);
 });
 
 window.addEventListener('resize', function(){
@@ -473,9 +484,11 @@ window.addEventListener('message', function(ev){
     return;
   }
 
-  /* story.html 이 알려주는 현재 위치를 주소창에 반영 */
+  /* 자식 프레임이 알려주는 현재 위치를 주소창에 반영
+     (story.html 은 tab 을 안 보내던 옛 버전이라 기본값을 story 로 둡니다) */
   if(d.type === 'biz-doll-route'){
-    var h = (d.route === '' || d.route === null) ? '#/story' : '#/story/' + d.route;
+    var rtab = TABS[d.tab] ? d.tab : 'story';
+    var h = (!d.route) ? '#/' + rtab : '#/' + rtab + '/' + encodeURIComponent(d.route);
     if(location.hash !== h) history.pushState(null, '', h);
     return;
   }
@@ -489,7 +502,7 @@ document.querySelectorAll('.panel').forEach(hookPanelScroll);
 (function init(){
   var h = parseHash();
   current = null;
-  go(h.tab, false);   /* 스토리 딥링크는 mount() 가 story.html#... 로 넘깁니다 */
+  go(h.tab, false);   /* 딥링크는 mount() 가 자식 파일 해시로 넘깁니다 */
   if(!location.hash) history.replaceState(null, '', '#/' + h.tab);
 })();
 </script>
