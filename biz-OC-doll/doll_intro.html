@@ -119,7 +119,7 @@ html, body {
 .dash-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .dash-list li { font-size: 15px; color: var(--gray-600); line-height: 1.55; }
 
-/* WORLD PEEK — 세계관 압축 요약. 전문은 스토리 탭 EP.00 으로 넘긴다 */
+/* ABOUT PEEK — 창작에 필요한 최소 용어만. 원작 세계관은 스토리 탭 EP.00 으로 넘긴다 */
 .world-peek {
   margin-top: 40px;
   padding: 26px 28px 24px;
@@ -127,16 +127,15 @@ html, body {
   background: linear-gradient(150deg, #f2f7fa 0%, #f4f2f8 100%);
   border: 1px solid rgba(90,144,176,0.14);
 }
-.world-peek-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
-.world-peek-tagline { font-size: 17px; font-weight: 300; font-style: italic; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 18px; }
-.world-peek-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
-.world-peek-list li { font-size: 14px; color: var(--gray-600); line-height: 1.65; padding-left: 13px; position: relative; }
-.world-peek-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; border-radius: 50%; background: rgba(90,144,176,0.5); }
-.world-peek-list b { color: var(--gray-900); font-weight: 700; }
+.world-peek-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 16px; }
+.term-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.term-list li { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+.term-list b { color: var(--gray-900); font-weight: 700; }
+.term-dash { color: rgba(90,144,176,0.75); padding: 0 8px; }
 @media (max-width: 600px) {
   .world-peek { padding: 22px 20px 20px; }
-  .world-peek-tagline { font-size: 15px; }
-  .world-peek-list li { font-size: 13px; }
+  .term-list li { font-size: 14px; }
+  .term-dash { padding: 0 6px; }
 }
 
 /* WORLD LINK — 세계관으로 넘어가는 진입점. 버튼이 아니라 문장으로, 톤 전환을 예고 */
@@ -240,6 +239,7 @@ html, body {
 .modal-eyebrow { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--gray-900); text-transform: none; margin-bottom: 14px; }
 #biz-principles { border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
 .modal-footer { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--gray-600); line-height: 1.7; }
+.modal-ip-note { margin: 14px 18px 0; padding: 13px 15px; border-radius: 10px; background: rgba(90,144,176,0.07); border: 1px solid rgba(90,144,176,0.16); font-size: 12.5px; line-height: 1.8; color: #4a5560; }
 .modal-footer strong { color: var(--gray-900); font-weight: 600; }
 
 /* RESPONSIVE */
@@ -382,17 +382,15 @@ html, body {
 
     <p class="intent-quote">공식은 시작만 합니다. 비즈오씨돌은 팬들의 이름과 이야기로 살아갑니다.</p>
 
-    <!-- 세계관 압축 요약 — 전문은 스토리 탭(EP.00)으로 -->
+    <!-- 용어 안내 — 창작에 필요한 최소 정보만. 원작 세계관은 스토리 탭(EP.00)으로 -->
     <div class="world-peek">
-      <div class="world-peek-eyebrow">WORLDVIEW</div>
-      <p class="world-peek-tagline">결핍, 고통, 흔들림이 없는 세계.</p>
-      <ul class="world-peek-list">
-        <li><b>인간 20% · 비즈오씨돌 80%</b> — 인간은 비즈오씨돌에게 케어를 받으며 살아간다.</li>
-        <li><b>두 개의 별</b> — 인류는 여자별과 남자별로 분리되어 있고, 재결합은 불가능하다.</li>
-        <li><b>전속</b> — 모든 인간에게는 평생 함께하는 단 하나의 비즈오씨돌이 있다.</li>
+      <div class="world-peek-eyebrow">ABOUT · 비즈오씨돌이란</div>
+      <ul class="term-list">
+        <li><b>비즈오씨돌</b><span class="term-dash">—</span>당신을 돌보기 위해 만들어진 존재입니다.</li>
+        <li><b>전속</b><span class="term-dash">—</span>그중 평생 당신 곁에 있는 단 하나를 전속이라고 부릅니다.</li>
       </ul>
       <a class="world-link" href="#/story" onclick="goWorldview();return false;">
-        비즈오씨돌의 핵심 세계관 — 전문 보기
+        공식이 쌓고 있는 원작 이야기
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
     </div>
@@ -537,6 +535,7 @@ html, body {
     <div class="modal-body">
       <div class="modal-eyebrow">협업에서 변하지 않는 것들</div>
       <div id="biz-principles"></div>
+      <div class="modal-ip-note">게임·영상 등 IP 확장을 위한 원작 세계관 및 메인스토리 라인을 별도로 준비하고 있습니다. 상세 자료는 개별 요청 시 제공합니다.</div>
       <div class="modal-footer">협업의 구체적인 조건과 범위는 모두 <strong>개별 계약</strong>으로 정한다.</div>
     </div>
   </div>
