@@ -134,17 +134,6 @@ button{font-family:var(--fn);cursor:pointer}
 .detail-overlay-inner{background:var(--bg);margin:40px auto;max-width:800px;border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.18);transition:max-width .2s}
 .detail-overlay-inner.wide{max-width:1080px}
 
-/* ── ARCHIVE OVERLAY ── */
-#archive-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}
-#archive-overlay.open{display:flex}
-.archive-modal{width:min(92vw,960px);height:min(90vh,800px);background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,0.25);display:flex;flex-direction:column;position:relative}
-.archive-modal-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#faf9fb;border-bottom:1px solid #e8e2f0;flex-shrink:0}
-.archive-modal-title{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#a07ac8;text-transform:uppercase;flex:1}
-.archive-modal-code{font-size:11px;font-family:'Share Tech Mono',monospace;color:#6a4a90;background:rgba(160,122,200,0.1);padding:3px 10px;border-radius:100px;letter-spacing:.5px}
-.archive-modal-close{width:26px;height:26px;border-radius:50%;border:1px solid #e0d8ec;background:transparent;color:#a07ac8;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;font-family:var(--fn)}
-.archive-modal-close:hover{background:#f0e8f8;color:#7040a0}
-.archive-modal iframe{flex:1;border:none;width:100%;height:100%;display:block}
-
 /* ── MOBILE ── */
 @media(max-width:600px){
   .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh}
@@ -251,7 +240,7 @@ button{font-family:var(--fn);cursor:pointer}
         <button class="sheet-action-btn like-btn" id="detail-like-btn" onclick="toggleLikeDetail()" title="이 캐릭터를 좋아요">
           <span>좋아요</span><span class="like-heart" id="detail-like-heart">&#9825;</span>
         </button>
-        <button class="sheet-action-btn" onclick="alert('episode')">Episode<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8"/></svg></button>
+        <button class="sheet-action-btn" onclick="copyCharLink()" title="이 캐릭터 링크 복사"><span id="copy-link-label">링크 복사</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg></button>
       </div>
 
     </div>
@@ -275,18 +264,6 @@ button{font-family:var(--fn);cursor:pointer}
     <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title" id="nav-next-name"></span><span>→</span></button>
   </div>
   </div><!-- /detail-overlay-inner -->
-</div>
-
-<!-- ── ARCHIVE OVERLAY ── -->
-<div id="archive-overlay" onclick="if(event.target===this)closeArchive()">
-  <div class="archive-modal">
-    <div class="archive-modal-bar">
-      <span class="archive-modal-title">Archive</span>
-      <span class="archive-modal-code" id="archive-modal-code"></span>
-      <button class="archive-modal-close" onclick="closeArchive()" title="닫기">✕</button>
-    </div>
-    <iframe id="archive-iframe" src="" title="Archive"></iframe>
-  </div>
 </div>
 
 <script>
@@ -348,6 +325,7 @@ button{font-family:var(--fn);cursor:pointer}
         .filter(c=>c.status==='완료' || c.status==='작업중');
 
       renderList(); // 데이터 로드 후 리스트 재렌더
+      applyInitialRoute();
     }catch(e){
       console.warn('캐릭터 CSV 불러오기 실패:', e.message);
       // 폴백: 200개 빈 캐릭터 생성
@@ -356,6 +334,7 @@ button{font-family:var(--fn);cursor:pointer}
         holder:'—', status:'', grad:GRADIENTS[i%GRADIENTS.length],
       }));
       renderList();
+      applyInitialRoute();
     }
   }
   loadChars();
@@ -593,24 +572,6 @@ window.toggleLikeDetail = function(){
 }
 
 
-/* ── ARCHIVE INTEGRATION ── */
-window.openArchive = function(){
-  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
-  if(!c) return;
-  const code = c.idCode; // e.g. "BIZOCDOLL001"
-  document.getElementById('archive-modal-code').textContent = code;
-  const iframe = document.getElementById('archive-iframe');
-  iframe.src = 'archive.html?embed=1#' + code;
-  document.getElementById('archive-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-};
-window.closeArchive = function(){
-  document.getElementById('archive-overlay').classList.remove('open');
-  // iframe src 초기화 (뒤로가기 히스토리 방지)
-  setTimeout(()=>{ document.getElementById('archive-iframe').src = ''; }, 200);
-  document.body.style.overflow = '';
-};
-
 /* ── ACTIONS ── */
 window.toggleSheetWidth = function(){
   const overlay = document.querySelector('.detail-overlay-inner');
@@ -643,24 +604,107 @@ window.toggleWidth = function(){
 };
 window.setFilter = function(f){ state.filter=f; renderList(); };
 window.setSearch = function(v){ state.search=v; renderList(); };
-window.openChar = function(id){
+window.openChar = function(id, push){
   state.activeId=id;
   renderDetail(id);
   document.getElementById('detail-view').style.display='block';
   document.body.style.overflow='hidden';
   requestAnimationFrame(applyMobDetail);
+  if(push !== false) charRoute(String(id).padStart(3,'0'));
 };
-window.showList = function(){
+window.showList = function(push){
   state.activeId=null;
   document.getElementById('detail-view').style.display='none';
   document.body.style.overflow='';
   renderList();
+  if(push !== false) charRoute('');
 };
 window.navChar = function(dir){
   const list = getFilteredChars();
   const idx = list.findIndex(ch=>ch.id===state.activeId);
   const target = list[idx+dir];
   if(target) openChar(target.id);
+};
+
+/* ══════════════════════════════════════════════════
+   캐릭터 딥링크
+     index.html 안에서 :  #/chars/042
+     단독으로 열면      :  doll_charlist.html#042
+
+   이 파일은 iframe 안에 있어서 자기 주소가 주소창에 안 보입니다.
+   그래서 부모(index.html)에게 "나 지금 042 보고 있어"라고 알려주고,
+   주소창은 부모가 대신 고쳐 씁니다.
+   ══════════════════════════════════════════════════ */
+const EMBED = (function(){ try{ return window.parent !== window; }catch(e){ return true; } })();
+
+function charRoute(route){
+  if(EMBED){
+    try{ parent.postMessage({type:'biz-doll-route', tab:'chars', route:route}, '*'); }catch(e){}
+    return;
+  }
+  history.pushState(null, '', route ? ('#' + route) : location.pathname);
+}
+
+/* '042' · '42' · 'BIZOCDOLL042' 전부 받아줍니다 */
+function parseCharRoute(raw){
+  const v = String(raw||'').trim().toUpperCase().replace(/^BIZOCDOLL/,'');
+  if(!/^\d+$/.test(v)) return null;
+  return parseInt(v, 10);
+}
+function navToChar(raw, push){
+  const id = parseCharRoute(raw);
+  if(id === null || !window.CHARACTERS.some(c=>c.id===id)){ showList(push); return; }
+  openChar(id, push);
+}
+
+/* 목록이 아직 안 왔으면 들고 있다가, 다 불러온 뒤에 엽니다 */
+let _pendingRoute = decodeURIComponent((location.hash||'').replace(/^#/,''));
+function applyInitialRoute(){
+  if(!_pendingRoute) return;
+  const r = _pendingRoute; _pendingRoute = '';
+  navToChar(r, false);
+}
+
+/* 부모(index.html)가 보내는 이동 요청 — 뒤로가기·탭 재클릭 */
+window.addEventListener('message', function(ev){
+  const d = ev.data;
+  if(!d || d.type !== 'biz-doll-nav') return;
+  if(d.tab && d.tab !== 'chars') return;
+  if(window.CHARACTERS.length === 0){ _pendingRoute = d.route || ''; return; }
+  navToChar(d.route, false);
+});
+if(!EMBED){
+  window.addEventListener('popstate', function(){
+    navToChar(decodeURIComponent((location.hash||'').replace(/^#/,'')), false);
+  });
+}
+
+/* ── 링크 복사 ── */
+window.copyCharLink = function(){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  const num = String(c.id).padStart(3,'0');
+
+  let url;
+  try{
+    /* 부모 주소에서 해시만 갈아 끼웁니다 (도메인이 바뀌어도 알아서 따라감) */
+    const base = EMBED ? parent.location.href : location.href;
+    url = base.split('#')[0] + '#/chars/' + num;
+  }catch(e){
+    url = 'https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/#/chars/' + num;
+  }
+
+  const label = document.getElementById('copy-link-label');
+  const done = () => {
+    if(!label) return;
+    label.textContent = '복사됨!';
+    setTimeout(()=>{ label.textContent = '링크 복사'; }, 1400);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done).catch(()=>prompt('아래 주소를 복사하세요', url));
+  } else {
+    prompt('아래 주소를 복사하세요', url);
+  }
 };
 
 /* ── INIT ── */
