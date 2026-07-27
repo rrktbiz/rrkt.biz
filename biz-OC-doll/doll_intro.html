@@ -74,7 +74,7 @@ html, body {
   transform: translateX(-50%) rotate(45deg);
   width: 0.18em;
   height: 0.18em;
-  background: #4a5560;
+  background: currentColor;
 }
 .diamond-o { position: relative; display: inline-block; }
 .diamond-o::after {
@@ -85,7 +85,7 @@ html, body {
   transform: translate(-50%, -55%) rotate(45deg);
   width: 0.18em;
   height: 0.18em;
-  background: #4a5560;
+  background: currentColor;
 }
 .hero-sub { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 0 auto 28px; position: relative; z-index: 2; }
 .hero-hashtag { font-size: 13px; color: rgba(90,144,176,0.65); font-weight: 400; letter-spacing: 0.02em; }
@@ -319,7 +319,7 @@ html, body {
 
 
   <div class="hero-label">OPEN OC PROJECT</div>
-  <div class="hero-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL</div>
+  <div class="hero-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
   <div class="hero-sub">
     <span class="hero-hashtag">#비즈돌</span>
     <span class="hero-hashtag">#내비즈오씨돌</span>
@@ -409,7 +409,7 @@ html, body {
     <div class="source-block">
       <div class="source-row">
         <span class="badge badge-opt">자율</span>
-        <div class="source-text">개인 SNS · 소규모 창작은 별도 표기 의무 없음. 원할 경우 <strong>#BIZ-OC-DOLL</strong> 해시태그를 사용해 주세요.</div>
+        <div class="source-text">개인 SNS · 소규모 창작은 별도 표기 의무 없음. 원할 경우 <strong>#biz-OC-doll</strong> 해시태그를 사용해 주세요.</div>
       </div>
       <div class="source-row">
         <span class="badge badge-req">필수</span>
@@ -419,11 +419,11 @@ html, body {
         <div class="cite-label">출처 표기 예시 3종</div>
         <div class="cite-item">
           <span class="cite-num">1</span>
-          <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 BIZ-OC-DOLL 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
+          <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 biz-OC-doll 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
         </div>
         <div class="cite-item">
           <span class="cite-num">2</span>
-          <div class="cite-line">[캐릭터명] Original Character by BIZ-OC-DOLL</div>
+          <div class="cite-line">[캐릭터명] Original Character by biz-OC-doll</div>
         </div>
         <div class="cite-item">
           <span class="cite-num">3</span>
@@ -528,7 +528,7 @@ html, body {
     <div class="modal-header">
       <div>
         <div class="modal-title">기업 협업 원칙</div>
-        <div class="modal-sub">BIZ-OC-DOLL · Business</div>
+        <div class="modal-sub">biz-OC-doll · Business</div>
       </div>
       <button class="modal-close" onclick="closeBizModal()">×</button>
     </div>
@@ -543,10 +543,10 @@ html, body {
 
 <script>
 const BIZ_PRINCIPLES = [
-  "원저작권은 BIZ-OC-DOLL에 있다. 어떤 형태로도 이전되지 않는다.",
+  "원저작권은 biz-OC-doll에 있다. 어떤 형태로도 이전되지 않는다.",
   "기업은 허가된 범위 안에서만 캐릭터를 활용할 수 있다.",
   "팬 창작물의 권리는 창작자에게 있다. 기업이 이를 활용하려면 창작자와 개별 협의를 거쳐야 한다.",
-  "기업은 BIZ-OC-DOLL을 공식으로 자칭하거나 대표할 수 없다.",
+  "기업은 biz-OC-doll을 공식으로 자칭하거나 대표할 수 없다.",
   "프로젝트의 제작과 운영에 기업은 관여하지 않는다.",
   "개별 커스텀 요청은 받지 않는다.",
 ];
@@ -574,7 +574,7 @@ function closeBizModal() {
 }
 
 /* ── 세계관 전문으로 이동 ──
-   이 파일은 bizocdollindex.html 안에서 iframe 으로 열립니다.
+   이 파일은 index.html 안에서 iframe 으로 열립니다.
    부모가 있으면 postMessage 로 스토리 탭(EP.00) 전환을 요청하고,
    단독으로 열린 경우에는 인덱스 페이지의 스토리 탭으로 직접 이동합니다. */
 function goWorldview() {
@@ -584,7 +584,7 @@ function goWorldview() {
       return;
     }
   } catch (e) {}
-  window.location.href = 'bizocdollindex.html#/story/world';
+  window.location.href = 'index.html#/story/world';
 }
 /* ── 등록 폼 팝업 (window.open) ── */
 var _formPopup = null;
