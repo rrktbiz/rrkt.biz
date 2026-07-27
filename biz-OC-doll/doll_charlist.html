@@ -177,13 +177,16 @@ button{font-family:var(--fn);cursor:pointer}
 .hero-label{font-size:10px;font-weight:700;letter-spacing:3px;color:#5a90b0;text-transform:uppercase;margin-bottom:10px;position:relative;z-index:2;}
 .hero-title{font-size:clamp(20px,3.5vw,30px);font-weight:100;color:#3a6a88;letter-spacing:0.22em;line-height:1.1;margin-bottom:10px;font-family:'Josefin Sans',sans-serif;position:relative;z-index:2;}
 .hero-title-row{display:inline-flex;align-items:center;gap:10px;position:relative;z-index:2;margin-bottom:0;}
+
+/* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
+.brandname{text-transform:none !important}
 </style>
 
 <!-- ── LIST VIEW ── -->
 <div id="list-view">
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-label">biz-OC-doll · CHARACTERS</div>
+    <div class="hero-label"><span class="brandname">biz-OC-doll</span> · CHARACTERS</div>
     <div class="hero-title-row">
       <span class="hero-title">CHARACTERS</span>
     </div>
