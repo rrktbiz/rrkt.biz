@@ -476,7 +476,7 @@ html, body {
       <span style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--blue);text-transform:uppercase">Fan Work Registration</span>
     </div>
     <div style="font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-0.02em;margin-bottom:10px">연재·상업 창작 등록</div>
-    <p style="font-size:14px;color:var(--gray-600);line-height:1.85;margin-bottom:12px">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 등 중·대규모 창작을 진행 중이거나 완료하신 분들을 위한 자발적 등록 창구입니다. 등록된 창작물은 캐릭터의 공식 아카이브에 기록되며, 공식 생태계 연계 시 우선적으로 검토됩니다.</p>
+    <p style="font-size:14px;color:var(--gray-600);line-height:1.85;margin-bottom:12px">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 등 중·대규모 창작을 진행 중이거나 완료하신 분들을 위한 자발적 등록 창구입니다. 등록해 주신 창작물은 공식이 직접 확인하며, 공식 생태계 연계 시 우선적으로 검토됩니다.</p>
     <div style="background:rgba(90,144,176,0.07);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--gray-600);line-height:1.75">
       📌 <strong style="color:var(--gray-900)">등록은 의무가 아닙니다.</strong> 개인 SNS·소규모 창작·소규모 판매, 태그만 달린 창작물은 전혀 해당 없습니다. 만들고 싶은 대로 만드세요. 이 창구는 원하는 분들만을 위한 선택지입니다.
     </div>
@@ -584,18 +584,30 @@ function goWorldview() {
   } catch (e) {}
   window.location.href = 'index.html#/story/world';
 }
-/* ── 등록 폼 팝업 (window.open) ── */
-var _formPopup = null;
+/* ══════════════════════════════════════════════════
+   연재·상업 창작 등록
+   등록 폼(archive_form.html)은 구글폼으로 옮겼습니다.
+   아래 주소만 바꿔 끼우면 됩니다. 코드는 안 건드리셔도 됩니다.
+
+   ↓ 구글폼 만드신 뒤 따옴표 사이에 주소를 붙여넣으세요
+   ══════════════════════════════════════════════════ */
+var 등록폼_주소 = '';
+
 function openFormPopup() {
-  var pw = 900, ph = 720;
-  var left = Math.round((screen.width  - pw) / 2);
-  var top  = Math.round((screen.height - ph) / 2);
-  var features = 'width='+pw+',height='+ph+',left='+left+',top='+top+',resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
-  if (_formPopup && !_formPopup.closed) {
-    _formPopup.focus();
-  } else {
-    _formPopup = window.open('archive_form.html', 'form_popup', features);
+  if (등록폼_주소) {
+    window.open(등록폼_주소, '_blank', 'noopener');
+    return;
   }
+  /* 아직 폼이 없을 때 — 링크가 깨져 보이지 않도록 메일로 넘깁니다 */
+  window.location.href = 'mailto:rrkt.biz@proton.me'
+    + '?subject=' + encodeURIComponent('[biz-OC-doll] 연재·상업 창작 등록')
+    + '&body='    + encodeURIComponent(
+        '작품명 :\n'
+      + '창작자 :\n'
+      + '플랫폼 :\n'
+      + '사용한 캐릭터 코드 :\n'
+      + '작품 링크 :\n'
+      );
 }
 
 // GLITTER
