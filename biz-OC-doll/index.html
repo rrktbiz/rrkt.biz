@@ -1,4 +1,19 @@
 <!DOCTYPE html>
+<!--
+  ══════════════════════════════════════════════════════════════
+  ⚠ 파일명 안내 — 고치지 마세요
+
+  로컬 작업용 파일명 : bizocdoll_index.html
+  실제 배포 파일명   : index.html   (GitHub 업로드 시 이 이름으로)
+
+  이 프로젝트 폴더 안의 다른 파일들이 참조하는 'index.html' 은
+  배포 기준 이름이라 정상입니다. bizocdoll_index.html 로 바꾸면
+  배포 후에 링크가 전부 깨집니다.
+
+  (로컬에서 index.html 이 프로젝트마다 겹치는 걸 피하려고
+   작업 파일에만 프로젝트 이름을 붙여 두는 방식입니다.)
+  ══════════════════════════════════════════════════════════════
+-->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -34,6 +49,10 @@ button{font-family:var(--fn);cursor:pointer}
 .tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:5px 8px;border-radius:6px;transition:all .12s;white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
 .tb-back:hover{background:var(--sm);color:var(--tx)}
 .tb-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
+.diamond-i{position:relative;display:inline-block}
+.diamond-i::after{content:'';position:absolute;top:-.18em;left:50%;transform:translateX(-50%) rotate(45deg);width:.18em;height:.18em;background:currentColor}
+.diamond-o{position:relative;display:inline-block}
+.diamond-o::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%) rotate(45deg);width:.18em;height:.18em;background:currentColor}
 .tb-title{font-family:'Josefin Sans',sans-serif;font-weight:300;letter-spacing:.16em;font-size:14px;color:#4a5560;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
 .tb-mini{font-size:11px;color:var(--tx3);border:1px solid var(--bd);background:transparent;border-radius:6px;padding:5px 10px;transition:all .12s}
@@ -78,11 +97,11 @@ body{top:0 !important}
 .tab.active{color:var(--blue-d);border-bottom-color:var(--blue-d);font-weight:700}
 
 /* ── 패널 ── */
-#stage{flex:1;position:relative;min-height:0;background:var(--bg);z-index:1;overflow:hidden;touch-action:pan-y}
-.panel{position:absolute;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+#stage{flex:1;position:relative;min-height:0;background:var(--bg);z-index:1;overflow:hidden}
+.panel{position:absolute;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
 .panel.active{display:block}
 .panel.tx-keep{display:block}
-.panel iframe{width:100%;height:100%;border:none;display:block;background:var(--bg);touch-action:pan-y}
+.panel iframe{width:100%;height:100%;border:none;display:block;background:var(--bg)}
 
 .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:3;transition:opacity .25s}
 .loading.gone{opacity:0;pointer-events:none}
@@ -124,7 +143,7 @@ body{top:0 !important}
   <div id="topbar">
     <a class="tb-back" href="../index.html">← rrkt.biz</a>
     <div class="tb-sep"></div>
-    <span class="tb-title">B&#x131;Z-OC-D<span>O</span>LL</span>
+    <span class="tb-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</span>
     <div class="tb-right" style="position:relative"><!-- common.js 가 채웁니다 --></div>
   </div>
 
@@ -144,7 +163,7 @@ body{top:0 !important}
     <div class="panel active" id="panel-intro">
       <div id="gate">
         <div class="gate-label">Locked</div>
-        <div class="gate-title">B&#x131;Z-OC-D<span>O</span>LL</div>
+        <div class="gate-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
         <div class="gate-q">소개글을 보려면 암호를 입력해 주세요.</div>
         <div class="gate-row">
           <input id="gate-input" type="text" placeholder="암호" autocomplete="off"
