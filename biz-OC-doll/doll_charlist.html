@@ -63,6 +63,7 @@ button{font-family:var(--fn);cursor:pointer}
 .char-code-prefix{font-size:9px;font-weight:400;color:var(--tx3);font-family:'Inter',monospace;letter-spacing:.5px}
 .char-code{font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',monospace;letter-spacing:.5px}
 .char-sub{font-size:11px;color:var(--tx3);margin-top:1px}
+.like-notice{margin:28px 0 4px;text-align:center;font-size:11px;line-height:1.7;color:var(--tx3);opacity:.72;letter-spacing:.2px}
 .char-empty{grid-column:1/-1;padding:48px 0;text-align:center;font-size:12px;color:var(--tx3)}
 .char-sort-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;background:var(--sb);border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn)}
 .char-sort-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
@@ -194,13 +195,13 @@ button{font-family:var(--fn);cursor:pointer}
         <div class="sort-dropdown-menu" id="sort-dropdown-menu">
           <button class="sort-dropdown-item active" id="sort-opt-newest" onclick="setSort('newest')">최신순</button>
           <button class="sort-dropdown-item" id="sort-opt-oldest" onclick="setSort('oldest')">오래된순</button>
-          <button class="sort-dropdown-item" id="sort-opt-popular" onclick="setSort('popular')">인기순</button>
         </div>
       </div>
       <span class="char-count" id="char-count-lbl"></span>
       <button class="width-toggle-btn" id="width-toggle-btn" onclick="toggleWidth()" title="너비 전환">⇔ <span id="width-toggle-label">전체 너비</span></button>
     </div>
     <div class="char-grid" id="char-grid"></div>
+    <p class="like-notice">♥ 좋아요는 익명으로 집계됩니다. 누가 눌렀는지는 기록하지 않습니다.</p>
     </div><!-- /char-page-inner -->
   </div>
 </div>
@@ -344,26 +345,80 @@ button{font-family:var(--fn);cursor:pointer}
 window.charState = window.charState || { filter:"ALL", search:"", activeId:null, sort:"newest" };
 window.charState.activeId = null;
 const state = window.charState;
-window._VOTE_DATA = window._VOTE_DATA || {};
+/* 예전에 저장된 '인기순' 설정이 남아 있으면 최신순으로 되돌립니다 */
+if(state.sort === 'popular') state.sort = 'newest';
 
-// 투표 데이터 로드
-(function(){
-  const api = (typeof API !== 'undefined' && API && !API.includes('TEST')) ? API : null;
-  if(!api) return;
-  fetch(api + '?action=getVotes')
-    .then(r=>r.json())
-    .then(json=>{ if(json.ok){ window._VOTE_DATA=json.votes; if(state.sort==='popular') renderList(); } })
-    .catch(()=>{});
-})();
+/* ══════════════════════════════════════════════════
+   좋아요
 
-/* ── LIKED ── */
+   화면에는 '내가 누른 것'만 보입니다.
+   전체 몇 명이 눌렀는지는 어디에도 표시하지 않습니다.
+   집계는 시트에만 조용히 쌓이고, 공개 시점은 biz 가 정합니다.
+   ══════════════════════════════════════════════════ */
 function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem('doll_liked')||'[]'))}catch{return new Set()} }
 function saveLiked(s){ localStorage.setItem('doll_liked', JSON.stringify([...s])) }
+
+/* ── 브라우저마다 고정 딱지 ──
+   이름도 이메일도 IP도 아닙니다. 그냥 무작위 문자열이에요.
+   "같은 브라우저인가, 다른 브라우저인가"만 구별하려고 씁니다.
+   같은 사람이 100번 눌러도 1로 세기 위해 필요합니다. */
+function likerId(){
+  const k = 'bzd_liker';
+  try{
+    let v = localStorage.getItem(k);
+    if(!v){
+      v = (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
+      localStorage.setItem(k, v);
+    }
+    return v;
+  }catch(e){ return 'anon'; }
+}
+
+/* ── 서버 전송 ──
+   '+1 해줘 / -1 해줘' 가 아니라 '이 사람의 042번 = 켜짐/꺼짐' 을 보냅니다.
+   그래서 요청을 위조해도 자기 줄 하나만 바뀌고, 남의 숫자는 못 건드립니다.
+   취소도 자동으로 반영됩니다 — 꺼진 줄은 셀 때 빠지니까요.
+
+   여러 개를 연달아 누르는 일이 많아서 0.8초 모았다가 한 번에 보냅니다.
+   실패해도 화면은 그대로입니다. 좋아요의 원본은 이 브라우저이고,
+   서버에 가는 건 집계용 사본이니까요. */
+const _likeQueue = new Map();
+let _likeTimer = null;
+
+function queueLike(id, on){
+  _likeQueue.set(id, on ? 1 : 0);
+  clearTimeout(_likeTimer);
+  _likeTimer = setTimeout(flushLikes, 800);
+}
+
+function flushLikes(){
+  if(_likeQueue.size === 0) return;
+  const api = (typeof API !== 'undefined' && API) ? API
+            : (typeof CONFIG !== 'undefined' && CONFIG.API) ? CONFIG.API : '';
+  const items = [..._likeQueue.entries()].map(([c, s]) => ({ c, s }));
+  _likeQueue.clear();
+  if(!api) return;
+
+  fetch(api, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action:'like', liker: likerId(), items })
+  }).catch(()=>{});   /* 조용히 실패 — 사용자 화면에는 영향 없음 */
+}
+
+/* 탭을 닫거나 다른 앱으로 넘어갈 때 남은 것 마저 보내기 */
+window.addEventListener('pagehide', flushLikes);
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) flushLikes(); });
+
 window.toggleLike = function(id, e){
   e.stopPropagation();
   const liked = getLiked();
-  liked.has(id) ? liked.delete(id) : liked.add(id);
+  const willLike = !liked.has(id);
+  willLike ? liked.add(id) : liked.delete(id);
   saveLiked(liked);
+  queueLike(id, willLike);
   renderList();
 };
 
@@ -375,11 +430,7 @@ function getFilteredChars(){
     (state.filter==="ALL" || c.type===state.filter || (state.filter==="♥" && liked.has(c.id))) &&
     (!q || c.idCode.toLowerCase().includes(q))
   );
-  if(state.sort==='popular'){
-    filtered = [...filtered].sort((a,b)=>(window._VOTE_DATA[b.id]||0)-(window._VOTE_DATA[a.id]||0));
-  } else {
-    filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
-  }
+  filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
   return filtered;
 }
 
@@ -394,16 +445,12 @@ function renderList(){
   );
 
   // 정렬
-  if(state.sort==='popular'){
-    filtered = [...filtered].sort((a,b)=>(window._VOTE_DATA[b.id]||0)-(window._VOTE_DATA[a.id]||0));
-  } else {
-    filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
-  }
+  filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
 
   // 정렬 버튼 UI 동기화
   const sortLabel = document.getElementById('sort-label');
-  if(sortLabel) sortLabel.textContent = {newest:'최신순',oldest:'오래된순',popular:'인기순'}[state.sort]||'최신순';
-  ['newest','oldest','popular'].forEach(k=>{
+  if(sortLabel) sortLabel.textContent = {newest:'최신순',oldest:'오래된순'}[state.sort]||'최신순';
+  ['newest','oldest'].forEach(k=>{
     const el=document.getElementById('sort-opt-'+k);
     if(el) el.className='sort-dropdown-item'+(state.sort===k?' active':'');
   });
@@ -557,6 +604,7 @@ window.toggleLikeDetail = function(){
   const willLike = !liked.has(id);
   willLike ? liked.add(id) : liked.delete(id);
   saveLiked(liked);
+  queueLike(id, willLike);
   updateDetailLikeBtn();
 
   /* 켤 때만 하트 튀는 연출 */
