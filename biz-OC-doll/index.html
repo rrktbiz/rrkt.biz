@@ -113,22 +113,6 @@ body{top:0 !important}
 #ptr .ptr-ico{width:20px;height:20px;border:2px solid var(--bd);border-top-color:var(--blue);border-radius:50%}
 #ptr.spin .ptr-ico{animation:sp .6s linear infinite}
 
-/* ── 소개 암호 게이트 ── */
-#gate{position:absolute;inset:0;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(150deg,#eef4f8 0%,#f2eff8 50%,#edf5f7 100%);padding:24px;text-align:center}
-#gate.show{display:flex}
-.gate-label{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--blue);text-transform:uppercase;margin-bottom:14px}
-.gate-title{font-family:'Josefin Sans',sans-serif;font-weight:100;letter-spacing:.2em;font-size:clamp(22px,4vw,30px);color:#4a5560;margin-bottom:22px}
-.gate-q{font-size:13px;color:var(--tx2);line-height:1.8;margin-bottom:18px}
-.gate-row{display:flex;gap:8px;align-items:center}
-#gate-input{padding:9px 14px;border:1px solid rgba(90,144,176,.35);border-radius:100px;font-size:13px;font-family:var(--fn);background:rgba(255,255,255,.75);color:var(--tx);outline:none;width:180px;text-align:center;transition:border-color .15s}
-#gate-input:focus{border-color:var(--blue)}
-#gate-input.err{border-color:#d93025;animation:shake .3s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.gate-btn{padding:9px 20px;border:1px solid rgba(90,144,176,.35);border-radius:100px;background:rgba(255,255,255,.85);color:var(--blue);font-size:13px;font-weight:700;transition:background .15s}
-.gate-btn:hover{background:rgba(90,144,176,.12)}
-#gate-msg{font-size:12px;color:#d93025;height:18px;margin-top:12px}
-
 @media(max-width:600px){
   :root{--h-tab:42px}
   #tabbar{padding:0 8px}
@@ -151,8 +135,6 @@ body{top:0 !important}
     <button class="tab active" data-tab="intro">소개</button>
     <button class="tab" data-tab="chars">캐릭터</button>
     <button class="tab" data-tab="story">스토리</button>
-    <button class="tab" data-tab="vote">투표</button>
-    <button class="tab" data-tab="archive">아카이브</button>
     <button class="tab" data-tab="event">이벤트</button>
   </div>
 
@@ -160,27 +142,13 @@ body{top:0 !important}
 
     <div id="ptr"><div class="ptr-ico"></div></div>
 
-    <div class="panel active" id="panel-intro">
-      <div id="gate">
-        <div class="gate-label">Locked</div>
-        <div class="gate-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
-        <div class="gate-q">소개글을 보려면 암호를 입력해 주세요.</div>
-        <div class="gate-row">
-          <input id="gate-input" type="text" placeholder="암호" autocomplete="off"
-                 onkeydown="if(event.key==='Enter')unlockIntro()">
-          <button class="gate-btn" onclick="unlockIntro()">확인</button>
-        </div>
-        <div id="gate-msg"></div>
-      </div>
-    </div>
+    <div class="panel active" id="panel-intro"></div>
 
     <div class="panel" id="panel-chars"></div>
 
     <div class="panel" id="panel-story">
     </div>
 
-    <div class="panel" id="panel-vote"></div>
-    <div class="panel" id="panel-archive"></div>
     <div class="panel" id="panel-event"></div>
 
   </div>
@@ -200,15 +168,12 @@ body{top:0 !important}
    ══════════════════════════════════════════════════ */
 
 var TABS = {
-  intro:   { src:'doll_intro.html',   gated:true },
+  intro:   { src:'doll_intro.html'               },
   chars:   { src:'doll_charlist.html'            },
   story:   { src:'story.html'                    },
-  vote:    { src:'vote.html'                     },
-  archive: { src:'archive.html'                  },
   event:   { src:'event.html'                    }
 };
 var DEFAULT_TAB = 'intro';
-var GATE_PW = '2050년';
 var current = null;
 
 
@@ -239,7 +204,6 @@ function go(tab, push){
   }
   setBarsHidden(false);
   if(changed) mount(tab);
-  else if(tab === 'intro') refreshGate();
 
   var btn = document.querySelector('.tab[data-tab="' + tab + '"]');
   if(btn && btn.scrollIntoView) btn.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
@@ -250,7 +214,6 @@ function mount(tab){
   var panel = document.getElementById('panel-' + tab);
   if(!cfg || !panel) return;
 
-  if(cfg.gated && !unlocked()){ refreshGate(); return; }
   if(panel.dataset.mounted === '1') return;
   panel.dataset.mounted = '1';
 
@@ -319,39 +282,6 @@ function hookPanelScroll(panel){
     _onScrollY(panel.scrollTop, ref);
   }, {passive:true});
 }
-
-/* ── 소개 암호 게이트 ── */
-function unlocked(){
-  try{ return localStorage.getItem('doll_intro_unlocked') === '1'; }catch(e){ return false; }
-}
-function refreshGate(){
-  var gate = document.getElementById('gate');
-  if(!gate) return;
-  if(unlocked()){ gate.classList.remove('show'); }
-  else{
-    gate.classList.add('show');
-    var inp = document.getElementById('gate-input');
-    if(inp){ inp.value=''; setTimeout(function(){ try{inp.focus();}catch(e){} }, 80); }
-    var msg = document.getElementById('gate-msg'); if(msg) msg.textContent='';
-  }
-}
-function unlockIntro(){
-  var inp = document.getElementById('gate-input');
-  var msg = document.getElementById('gate-msg');
-  var raw = inp ? inp.value : '';
-  var val = (raw.normalize ? raw.normalize('NFC') : raw).trim();
-  var pw  = GATE_PW.normalize ? GATE_PW.normalize('NFC') : GATE_PW;
-  if(val === pw){
-    try{ localStorage.setItem('doll_intro_unlocked','1'); }catch(e){}
-    if(msg) msg.textContent = '';
-    document.getElementById('gate').classList.remove('show');
-    mount('intro');
-  }else{
-    if(msg) msg.textContent = '암호가 올바르지 않아요.';
-    if(inp){ inp.classList.add('err'); setTimeout(function(){ inp.classList.remove('err'); }, 340); try{inp.select();}catch(e){} }
-  }
-}
-
 
 /* ── 탭 순서 (탭바 DOM 기준으로 자동 동기화) ── */
 function tabOrder(){
