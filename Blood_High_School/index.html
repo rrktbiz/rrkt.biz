@@ -1,4 +1,19 @@
 <!DOCTYPE html>
+<!--
+  ══════════════════════════════════════════════════════════════
+  ⚠ 파일명 안내 — 고치지 마세요
+
+  로컬 작업용 파일명 : bhs_index.html
+  실제 배포 파일명   : index.html   (GitHub 업로드 시 이 이름으로)
+
+  이 프로젝트 폴더 안의 다른 파일들이 참조하는 'index.html' 은
+  배포 기준 이름이라 정상입니다. bhs_index.html 로 바꾸면
+  배포 후에 링크가 전부 깨집니다.
+
+  (로컬에서 index.html 이 프로젝트마다 겹치는 걸 피하려고
+   작업 파일에만 프로젝트 이름을 붙여 두는 방식입니다.)
+  ══════════════════════════════════════════════════════════════
+-->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -3224,24 +3239,61 @@ function setEpLang(lang){
   bhsLoadText(BS.vol, BS.ep);
 }
 
-/* ── 본문 로드 (rrkt _loadPostypeContent 이식) ── */
+/* ── 본문 로드 (rrkt _loadPostypeContent 이식) ──
+   [원칙] 언어가 무엇이든 이 함수가 본문칸을 '반드시' 채운다.
+          번역 계층(_renderEpForLang)은 이미 채워진 것을 갈아끼우는 역할만 한다.
+          그래서 번역 쪽이 아무 일도 안 해도 '불러오는 중…'에 갇히지 않는다. */
 async function bhsLoadText(volId, epId){
   var el = document.getElementById('postype-body');
   if(!el) return;
-  /* 전역 번역이 켜져 있으면 언어 전용 렌더로 위임 */
-  if(_currentLang && _currentLang !== 'ko'){ _renderEpForLang(_currentLang); return; }
+
+  /* ① 직전 화의 흔적 초기화 — 언어와 무관하게 항상 */
   _tlHideDeepLBtns();
   _tlBadgeReset();
-  var path = bhsTextPath(volId, epId, BHS_EP_LANG);
+
+  var lang      = _currentLang || 'ko';
+  var isForeign = (lang !== 'ko');
+
+  /* ② 어느 파일을 읽을지 결정 */
+  var srcLang;
+  if(!isForeign)         srcLang = BHS_EP_LANG;   /* 한국어: 한본어/순KO/JA 버튼 선택 존중 */
+  else if(lang === 'ja') srcLang = 'jp';          /* 일본어: 원본 그대로 (번역하지 않음) */
+  else                   srcLang = 'pure_ko';     /* 그 밖의 외국어: 순한국어 → 구글이 번역 */
+
+  var path = bhsTextPath(volId, epId, srcLang);
+  var text = null, lastErr = null;
+
   try{
-    var text = await bhsFetchText(path);
-    if(!document.getElementById('postype-body')) return;
-    _epOriginalLines = text.split('\n');
-    el.innerHTML = '<div class="postype-text">' + bhsBr(text) + '</div>';
+    text = await bhsFetchText(path);
   }catch(err){
-    el.innerHTML = '<div class="postype-error"><strong>본문 파일을 찾을 수 없습니다</strong><br>'
-                 + '<small style="color:#a03030">' + bhsEsc(path) + '</small><pre>' + bhsEsc(err.message) + '</pre></div>';
+    lastErr = err;
+    /* 외국어 전용 파일이 없으면 일반 한국어 본문으로 한 번 더 시도 */
+    if(isForeign){
+      try{ text = await bhsFetchText(bhsTextPath(volId, epId, 'ko')); lastErr = null; }
+      catch(e2){ lastErr = e2; }
+    }
   }
+
+  if(!document.getElementById('postype-body')) return;
+
+  /* ③ 어떤 경우에도 본문칸에 무언가는 남긴다 */
+  if(text === null){
+    el.innerHTML = '<div class="postype-error"><strong>본문 파일을 찾을 수 없습니다</strong><br>'
+                 + '<small style="color:#a03030">' + bhsEsc(path) + '</small><pre>'
+                 + bhsEsc(lastErr ? lastErr.message : '불러오기 실패') + '</pre></div>';
+    _updateEpLangBtns(lang);
+    return;
+  }
+
+  _epOriginalLines = text.split('\n');
+  var jpMode = (lang === 'ja');
+  el.innerHTML = '<div class="postype-text' + (jpMode ? ' notranslate' : '') + '">' + bhsBr(text) + '</div>';
+
+  if(jpMode)         _tlBadge('jp');
+  else if(isForeign) _tlBadge('google');
+
+  /* ④ 이제서야 번역 계층에 넘긴다 (갈아끼우기 전용) */
+  _renderEpForLang(lang);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -3265,9 +3317,10 @@ function setLang(lang){
 
   var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
 
-  /* 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리) */
+  /* 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리)
+     — 언어에 맞는 원본 파일부터 다시 읽는다. bhsLoadText 가 본문·배지·버튼을 한 번에 정리한다. */
   if(BS.view === 'vol' && BS.vol && BS.ep){
-    _renderEpForLang(lang);
+    bhsLoadText(BS.vol, BS.ep);
     if(_tlCache[lang]) _tlApply(_tlCache[lang]);
     _tlGoogle(lang);
     return;
@@ -3338,17 +3391,20 @@ function _tlBadgeReset(){
   el.className = ''; el.textContent = ''; _epOriginalLines = null;
 }
 
-/* ── 현재 언어에 맞춰 본문 렌더 (단일 진입점) ── */
+/* ── 번역 계층 갱신 (본문은 bhsLoadText 가 이미 채워 둠) ──
+   여기서는 본문칸을 '비우지 않는다'. 버튼 상태만 정리하고,
+   DeepL 캐시가 이미 있을 때만 본문을 갈아끼운다. */
 function _renderEpForLang(lang){
   var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
   _updateEpLangBtns(lang);
-  if(!lang || lang === 'ko') return;
-  if(lang === 'ja'){ _tlShowJpOriginal(); return; }
+  if(!lang || lang === 'ko'){ _tlHideDeepLBtns(); return; }
+  if(lang === 'ja'){ _tlHideDeepLBtns(); return; }   /* 일본어 원본은 번역 대상이 아님 */
   if(cfg.enabled && cfg.proxyUrl) _tlShowDeepLBtn(lang, cfg);
-  else _tlLoadPureKoAndGoogle(lang);
+  else _tlHideDeepLBtns();
 }
 
-/* ── 일본어: 번역하지 않고 일본어 원본 파일 직접 표시 ── */
+/* ── [현재 미사용] 일본어 원본 표시 — bhsLoadText 가 직접 처리하도록 바뀜.
+      되돌릴 일이 있을까 봐 남겨 둠. 지우려면 이 함수 통째로 삭제해도 무방. ── */
 function _tlShowJpOriginal(){
   var el = document.getElementById('postype-body'); if(!el) return;
   var jpPath     = bhsTextPath(BS.vol, BS.ep, 'jp');
@@ -3365,7 +3421,8 @@ function _tlShowJpOriginal(){
   });
 }
 
-/* ── DeepL 미설정 시: 순한국어 본문 + 구글 번역 ── */
+/* ── [현재 미사용] 순한국어+구글 폴백 — bhsLoadText 가 직접 처리하도록 바뀜.
+      되돌릴 일이 있을까 봐 남겨 둠. 지우려면 이 함수 통째로 삭제해도 무방. ── */
 function _tlLoadPureKoAndGoogle(lang){
   var el = document.getElementById('postype-body');
   if(!el){ _tlGoogle(lang); return; }
