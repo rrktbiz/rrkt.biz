@@ -161,6 +161,9 @@ button{font-family:var(--fn);cursor:pointer}
 .char-page-inner.wide{max-width:none}
 .width-toggle-btn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:var(--sb);border:1px solid var(--bd);border-radius:7px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn);flex-shrink:0}
 .width-toggle-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.detail-close-btn{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;background:var(--sb);border:1px solid var(--bd);border-radius:7px;color:var(--tx3);cursor:pointer;transition:all .12s}
+.detail-close-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.detail-close-btn svg{width:13px;height:13px}
 
 /* ── HERO ── */
 .hero{background:#fff;padding:32px 24px 0px;text-align:center;position:relative;overflow:visible;}
@@ -220,6 +223,9 @@ button{font-family:var(--fn);cursor:pointer}
     </span>
     <span class="tb-cur" id="detail-breadcrumb"></span>
     <button class="width-toggle-btn" id="sheet-wide-btn" onclick="toggleSheetWidth()" title="시트 너비 전환" style="margin-left:auto">⇔ <span id="sheet-wide-label">넓게 보기</span></button>
+    <button class="detail-close-btn" onclick="showList()" title="닫기" aria-label="닫기">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3L13 13M13 3L3 13"/></svg>
+    </button>
   </div>
 
   <div class="sheet-wrap">
