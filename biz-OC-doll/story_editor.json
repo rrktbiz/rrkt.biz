@@ -258,8 +258,19 @@
       "route": "f",
       "num": "1-1",
       "status": "done",
-      "completedDate": "",
-      "castList": [],
+      "completedDate": "2026-07-27",
+      "castList": [
+        {
+          "charNum": "003",
+          "exprUrl": "images/simple_profile/003.png",
+          "exprFilename": "003.png"
+        },
+        {
+          "charNum": "022",
+          "exprUrl": "images/simple_profile/022.png",
+          "exprFilename": "022.png"
+        }
+      ],
       "blocks": [
         {
           "type": "narration",
