@@ -67,6 +67,14 @@ body{top:0 !important}
 .story-tab-btn{flex-shrink:0;padding:10px 20px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;color:var(--tx3);transition:all .15s;white-space:nowrap;margin-bottom:-1px}
 .story-tab-btn:hover{color:var(--tx)}
 .story-tab-btn.active{color:var(--tx);border-bottom-color:var(--tx)}
+.story-ed-row{display:flex;gap:4px;max-width:720px;margin:0 auto 4px;padding:4px;background:var(--bg);border:1px solid var(--bd);border-radius:999px}
+.story-ed-btn{flex:1;padding:9px 0;background:transparent;border:1px solid transparent;border-radius:999px;font-size:13px;font-weight:600;color:var(--tx3);transition:all .14s;white-space:nowrap}
+.story-ed-btn:hover{color:var(--tx)}
+.story-ed-btn.active{background:var(--sb);border-color:var(--bd2);color:var(--tx)}
+.story-ed-wrap{padding:14px 24px 0}
+.ep-both-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid #7f9fb8;color:#4a6b85;background:#7f9fb818}
+.doll-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b2b2b;color:#fff;font-size:12.5px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
+.doll-toast.show{opacity:.94}
 .story-ep-card{background:var(--sb);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:border-color .12s,box-shadow .12s}
 .story-ep-card:hover{border-color:var(--bd2);box-shadow:0 2px 10px #0001}
 .story-ep-card.locked{opacity:.5;cursor:default;pointer-events:none}
@@ -353,6 +361,51 @@ function stClass(s){ return (s==='완료'||s==='done') ? 'done' : (s==='작업�
 function stLabel(s){ return (s==='완료'||s==='done') ? '완료' : (s==='작업중'||s==='wip') ? '작업중' : '예정'; }
 function canRead(e){ return e.status==='완료' || e.status==='done'; }
 
+/* ══════ 편(남자편 / 여자편 / 공통) ══════
+   JSON 의 route 필드: 'm' | 'f' | 'both'  (없으면 남자편으로 봄)
+   주소 열쇠는 '편-종류-화번호' (예: m-main-1-1).
+   both 인 화는 두 편 목록에 모두 나오고, 들어온 링크의 편을 그대로 따른다. */
+var ED_LABELS = {m:'남자편', f:'여자편'};
+var _ed = 'm';
+try{ var _ed0 = localStorage.getItem('doll_ed'); if(_ed0==='m'||_ed0==='f') _ed = _ed0; }catch(e){}
+function saveEd(){ try{ localStorage.setItem('doll_ed', _ed); }catch(e){} }
+
+function epEd(e){ var r = (e && e.route) || 'm'; return (r==='f'||r==='both') ? r : 'm'; }
+function epInEd(e, ed){ var r = epEd(e); return r==='both' || r===ed; }
+function epType(e){ return (e && e.type) || 'main'; }
+function epKey(e, ed){ return (ed || _ed) + '-' + epType(e) + '-' + (e.num || ''); }
+function findEpIdx(key, eps){
+  var p = String(key||'').split('-');
+  if(p.length < 3) return -1;
+  var ed = p[0], ty = p[1], num = p.slice(2).join('-');
+  if(ed!=='m' && ed!=='f') return -1;
+  for(var i=0;i<eps.length;i++){
+    if(epInEd(eps[i], ed) && epType(eps[i])===ty && String(eps[i].num||'')===num) return i;
+  }
+  return -1;
+}
+/* 같은 편 · 같은 종류의 형제 화들 (목록에 보이는 순서와 동일) */
+function siblings(eps, e){
+  var out = [];
+  eps.forEach(function(x, i){
+    if(epInEd(x, _ed) && epType(x)===epType(e)) out.push({e:x, i:i});
+  });
+  return out;
+}
+var _toastT = null;
+function toast(msg){
+  var el = document.getElementById('doll-toast');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'doll-toast'; el.className = 'doll-toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastT);
+  _toastT = setTimeout(function(){ el.classList.remove('show'); }, 2200);
+}
+
 var _storyChips = {};
 
 /* ── 스토리 목록 ── */
@@ -376,12 +429,32 @@ async function renderStoryList(){
 
   var eps = data.episodes || [];
   var banners = data._banners || {};
+
+  /* 두 편이 모두 있을 때만 스위치를 띄운다.
+     한쪽이 비어 있으면 스위치가 '여긴 아무것도 없음'을 광고하게 되므로 아예 감춘다. */
+  var edsPresent = ['m','f'].filter(function(k){
+    return eps.some(function(e){ return epInEd(e, k); });
+  });
+  if(edsPresent.length && edsPresent.indexOf(_ed) === -1){ _ed = edsPresent[0]; saveEd(); }
+  var showEdSwitch = edsPresent.length > 1;
+
   var groups = {main:[], sub:[], event:[]};
-  eps.forEach(function(e, i){ (groups[e.type] || groups.main).push(Object.assign({}, e, {_idx:i})); });
+  eps.forEach(function(e, i){
+    if(!epInEd(e, _ed)) return;
+    (groups[e.type] || groups.main).push(Object.assign({}, e, {_idx:i}));
+  });
   var types = ['main','sub','event'].filter(function(t){ return groups[t].length > 0; });
 
+  function edSwitchHtml(){
+    if(!showEdSwitch) return '';
+    return '<div class="story-ed-wrap"><div class="story-ed-row">' + edsPresent.map(function(k){
+      return '<button class="story-ed-btn' + (k===_ed?' active':'') + '" onclick="switchEdition(\'' + k + '\')">' +
+             (ED_LABELS[k]||k) + '</button>';
+    }).join('') + '</div></div>';
+  }
+
   if(!types.length){
-    listEl.innerHTML = worldCardHtml() + '<div class="story-empty">스토리 에피소드가 없습니다.</div>';
+    listEl.innerHTML = worldCardHtml() + edSwitchHtml() + '<div class="story-empty">스토리 에피소드가 없습니다.</div>';
     return;
   }
   var activeTab = types[0];
@@ -415,6 +488,7 @@ async function renderStoryList(){
         '<div style="flex:1;min-width:0">' +
           '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">' +
             '<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid ' + color + ';color:' + color + ';background:' + color + '18">' + (TAB_LABELS[e.type]||e.type||'') + '</span>' +
+            (epEd(e)==='both' ? '<span class="ep-both-badge">공통</span>' : '') +
             '<span class="ep-status-badge ' + stClass(e.status) + '" style="' + wipStyle + '">' + stLabel(e.status) + '</span>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:8px;min-width:0">' +
@@ -431,7 +505,7 @@ async function renderStoryList(){
     }).join('');
   }
 
-  listEl.innerHTML = worldCardHtml() + types.map(function(t){
+  listEl.innerHTML = worldCardHtml() + edSwitchHtml() + types.map(function(t){
     return '<div id="story-sec-' + t + '" style="display:' + (t===activeTab?'block':'none') + '">' +
       banner(t) +
       '<div style="padding:10px 24px 6px">' +
@@ -447,6 +521,13 @@ async function renderStoryList(){
     '</div>';
   }).join('');
 }
+
+window.switchEdition = function(k){
+  if(k === _ed) return;
+  _ed = k; saveEd();
+  _storyChips = {};
+  renderStoryList();
+};
 
 window.switchStoryTab = function(t){
   document.querySelectorAll('[id^="story-sec-"]').forEach(function(el){ el.style.display = 'none'; });
@@ -547,10 +628,28 @@ window.goCharsFromWorld = function(){
 
 /* ══════ 스토리 리더 ══════ */
 var _epIdx = -1;
+var _epKeyStr = '';
 
-window.openEp = function(idx, push){
+/* 잠금은 오직 여기 한 곳에서만 확인한다.
+   이전/다음 버튼 · 주소 직접 입력 · 부모창 메시지가 전부 이 문을 지난다. */
+window.openEp = async function(idx, push){
+  var data = await fetchStory(); if(!data) return;
+  var eps = data.episodes || [];
+  var e = eps[idx];
+  if(!e){ backToStoryList(push); return; }
+
+  if(!canRead(e)){
+    backToStoryList(push);
+    toast('아직 공개 전인 화입니다.');
+    return;
+  }
+
+  /* 다른 편의 링크로 들어왔으면 그 편으로 자동 전환 */
+  if(!epInEd(e, _ed)){ _ed = epEd(e); saveEd(); renderStoryList(); }
+
   _epIdx = idx;
-  if(push !== false) route(idx);
+  _epKeyStr = epKey(e, _ed);
+  if(push !== false) route(_epKeyStr);
   renderReader(idx);
 };
 window.backToStoryList = function(push){
@@ -570,8 +669,28 @@ async function renderReader(idx){
   var e = eps[idx];
   if(!e){ backToStoryList(); return; }
 
-  var prev = eps[idx-1] || null;
-  var next = eps[idx+1] || null;
+  /* 같은 편 · 같은 종류 안에서만 이동. 목록에 보이는 순서와 동일하다. */
+  var sibs = siblings(eps, e);
+  var pos = -1;
+  for(var si=0; si<sibs.length; si++){ if(sibs[si].i === idx) pos = si; }
+  var prevS = (pos > 0) ? sibs[pos-1] : null;
+  var nextS = (pos >= 0 && pos < sibs.length-1) ? sibs[pos+1] : null;
+
+  function navBtn(sb, dir){
+    var arrow = dir < 0 ? '<span>←</span>' : '<span>→</span>';
+    if(!sb){
+      var endTxt = dir < 0 ? '처음 화' : '마지막 화';
+      return '<button class="ep-nav-btn disabled">' +
+             (dir<0 ? arrow + '<span class="ep-nav-title">' + endTxt + '</span>'
+                    : '<span class="ep-nav-title">' + endTxt + '</span>' + arrow) + '</button>';
+    }
+    var ok = canRead(sb.e);
+    var t  = (sb.e.title || '') + (ok ? '' : ' · ' + stLabel(sb.e.status));
+    var op = ok ? ' onclick="openEp(' + sb.i + ')"' : '';
+    return '<button class="ep-nav-btn' + (ok ? '' : ' disabled') + '"' + op + '>' +
+           (dir<0 ? arrow + '<span class="ep-nav-title">' + t + '</span>'
+                  : '<span class="ep-nav-title">' + t + '</span>' + arrow) + '</button>';
+  }
 
   var cl = e.castList || [];
   var castHtml = cl.length
@@ -599,11 +718,9 @@ async function renderReader(idx){
       castHtml +
       '<div id="doll-blocks-wrap">' + bbDoll(e.blocks||[]) + '</div>' +
       '<div class="ep-nav-outer"><div class="ep-nav">' +
-        '<button class="ep-nav-btn ' + (prev?'':'disabled') + '" ' + (prev?'onclick="openEp(' + (idx-1) + ')"':'') + '>' +
-          '<span>←</span><span class="ep-nav-title">' + (prev ? prev.title : '처음 화') + '</span></button>' +
+        navBtn(prevS, -1) +
         '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; 목록</button>' +
-        '<button class="ep-nav-btn ' + (next?'':'disabled') + '" ' + (next?'onclick="openEp(' + (idx+1) + ')"':'') + '>' +
-          '<span class="ep-nav-title">' + (next ? next.title : '마지막 화') + '</span><span>→</span></button>' +
+        navBtn(nextS, 1) +
       '</div></div>' +
     '</div>';
 
@@ -675,7 +792,10 @@ window.openEpPicker = async function(){
   var data = await fetchStory();
   if(!data) return;
   var eps = data.episodes || [];
-  document.getElementById('ep-picker-list').innerHTML = eps.map(function(e, i){
+  var cur = eps[_epIdx];
+  var list = cur ? siblings(eps, cur) : eps.map(function(e,i){ return {e:e, i:i}; });
+  document.getElementById('ep-picker-list').innerHTML = list.map(function(sb){
+    var e = sb.e, i = sb.i;
     var read = canRead(e);
     return '<div class="ep-picker-item' + (i === _epIdx ? ' current' : '') + (read ? '' : ' locked') + '"' +
       (read ? ' onclick="closeEpPicker();openEp(' + i + ')"' : '') + '>' +
@@ -718,7 +838,7 @@ TL.onChange(function(lang){
 function _dlLangCode(lang){
   return (lang === 'zh-CN' || lang === 'zh-TW') ? 'ZH' : (lang || '').split('-')[0].toUpperCase();
 }
-function _dollCacheKey(){ return 'dl_doll_' + _epIdx + '_' + _dlLangCode(TL.lang); }
+function _dollCacheKey(){ return 'dl_doll_' + (_epKeyStr || _epIdx) + '_' + _dlLangCode(TL.lang); }
 
 function tlBarHtml(){
   var cfg = _dlCfg();
@@ -916,11 +1036,20 @@ function bars(hide){
 })();
 
 /* 위치 이동 한 곳으로 모음 */
-function navTo(r, push){
+async function navTo(r, push){
+  r = String(r == null ? '' : r);
   if(r === 'world'){ openWorld(push); return; }
-  var n = parseInt(r, 10);
-  if(!isNaN(n)){ openEp(n, push); return; }
-  backToStoryList(push);
+  if(!r){ backToStoryList(push); return; }
+
+  var data = await fetchStory();
+  var eps = (data && data.episodes) || [];
+  var idx = findEpIdx(r, eps);
+
+  /* 옛 주소(#3 처럼 칸 번호만) 호환 — 공개 전이라 쓰일 일은 거의 없다 */
+  if(idx < 0 && /^\d+$/.test(r)) idx = parseInt(r, 10);
+
+  if(idx < 0 || !eps[idx]){ backToStoryList(push); return; }
+  openEp(idx, push);
 }
 
 window.addEventListener('message', function(ev){
