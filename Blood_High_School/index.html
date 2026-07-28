@@ -1056,6 +1056,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .postype-status-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px}
 #view-story .postype-body{font-family:var(--fn);font-size:16px;line-height:2.0;color:#1a1a1a;letter-spacing:.01em;word-break:normal;overflow-wrap:break-word}
 #view-story .postype-text{white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.9;font-size:17px}
+#view-story .postype-text .ptl{margin:0;padding:0;font:inherit;line-height:inherit;color:inherit}
 #view-story .postype-hint{margin-top:32px;padding:20px;border:1px dashed var(--bd2);border-radius:10px;font-size:12px;color:var(--tx3);text-align:center}
 #view-story .postype-loading{display:flex;align-items:center;gap:10px;color:var(--tx3);font-size:13px;padding:32px 0}
 #view-story .postype-spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--tx3);border-radius:50%;animation:ptSpin .7s linear infinite;flex-shrink:0}
@@ -2428,6 +2429,16 @@ var BS = { view:'intro', vol:null, ep:null };
 function bhsVol(id){ for(var i=0;i<BHS_VOLUMES.length;i++){ if(BHS_VOLUMES[i].id===id) return BHS_VOLUMES[i]; } return null; }
 function bhsEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function bhsBr(s){ return bhsEsc(s).replace(/\n/g,'<br>'); }
+/* ── 본문 전용 줄 렌더 ──
+   <br> 로만 줄을 나누면 구글 번역이 여러 줄을 한 덩어리로 합쳐서 돌려줄 때가 있다
+   (<br> 은 인라인이라 구글이 앞뒤 문장을 한 문단으로 묶어버림).
+   줄마다 블록 요소(<p>)로 감싸면 구글이 줄 단위로 번역해서 모양이 유지된다. */
+function bhsLines(s){
+  return String(s==null?'':s).split('\n').map(function(l){
+    return l.trim() ? '<p class="ptl">' + bhsEsc(l) + '</p>'
+                    : '<p class="ptl">&nbsp;</p>';
+  }).join('');
+}
 function bhsStCls(s){ return s==='완료'?'done':(s==='작업중'?'wip':'plan'); }
 function bhsHasNote(v){ return bhsNoteParas(v).length > 0; }
 function bhsSecBtn(on, label, call, offMsg){
@@ -3287,7 +3298,7 @@ async function bhsLoadText(volId, epId){
 
   _epOriginalLines = text.split('\n');
   var jpMode = (lang === 'ja');
-  el.innerHTML = '<div class="postype-text' + (jpMode ? ' notranslate' : '') + '">' + bhsBr(text) + '</div>';
+  el.innerHTML = '<div class="postype-text' + (jpMode ? ' notranslate' : '') + '">' + bhsLines(text) + '</div>';
 
   if(jpMode)         _tlBadge('jp');
   else if(isForeign) _tlBadge('google');
@@ -3411,11 +3422,11 @@ function _tlShowJpOriginal(){
   var pureKoPath = bhsTextPath(BS.vol, BS.ep, 'pure_ko');
   el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>日本語版を読み込み中…</span></div>';
   bhsFetchText(jpPath).then(function(text){
-    el.innerHTML = '<div class="postype-text notranslate">' + bhsBr(text) + '</div>';
+    el.innerHTML = '<div class="postype-text notranslate">' + bhsLines(text) + '</div>';
     _tlBadge('jp');
   }).catch(function(){
     bhsFetchText(pureKoPath).then(function(text){
-      el.innerHTML = '<div class="postype-text">' + bhsBr(text) + '</div>';
+      el.innerHTML = '<div class="postype-text">' + bhsLines(text) + '</div>';
       _tlGoogle('ja');
     }).catch(function(){ _tlGoogle('ja'); });
   });
@@ -3427,7 +3438,7 @@ function _tlLoadPureKoAndGoogle(lang){
   var el = document.getElementById('postype-body');
   if(!el){ _tlGoogle(lang); return; }
   bhsFetchText(bhsTextPath(BS.vol, BS.ep, 'pure_ko')).then(function(text){
-    el.innerHTML = '<div class="postype-text">' + bhsBr(text) + '</div>';
+    el.innerHTML = '<div class="postype-text">' + bhsLines(text) + '</div>';
     _tlGoogle(lang);
   }).catch(function(){ _tlGoogle(lang); });
 }
@@ -3458,7 +3469,10 @@ function _tlDeepLEpisode(lang, cfg, onDone){
         .catch(function(){
           if(_epOriginalLines) return _epOriginalLines;
           var te = document.querySelector('#postype-body .postype-text');
-          var raw = te ? te.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'') : '';
+          var raw = te ? te.innerHTML
+                          .replace(/<\/p>|<br\s*\/?>/gi,'\n')
+                          .replace(/<[^>]+>/g,'')
+                          .replace(/&nbsp;/gi,' ') : '';
           return raw.split('\n');
         });
     });
@@ -3490,7 +3504,7 @@ function _tlDeepLEpisode(lang, cfg, onDone){
       var translated = [].concat.apply([], results);
       var output = lines.slice();
       indices.forEach(function(origIdx, ti){ output[origIdx] = translated[ti] || lines[origIdx]; });
-      var html = output.map(bhsEsc).join('<br>');
+      var html = bhsLines(output.join('\n'));
       el.innerHTML = '<div class="postype-text notranslate">' + html + '</div>';
       _tlBadge('deepl');
       try{ localStorage.setItem(cacheKey, html); }catch(e){}
@@ -3502,7 +3516,7 @@ function _tlDeepLEpisode(lang, cfg, onDone){
       bhsFetchText(pureKoPath).catch(function(){
         return _epOriginalLines ? _epOriginalLines.join('\n') : '';
       }).then(function(srcText){
-        el.innerHTML = '<div class="postype-text">' + bhsBr(srcText || '') + '</div>';
+        el.innerHTML = '<div class="postype-text">' + bhsLines(srcText || '') + '</div>';
         if(_currentLang && _currentLang !== 'ko') _tlGoogle(_currentLang);
       });
     });
