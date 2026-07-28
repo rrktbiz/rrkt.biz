@@ -411,8 +411,10 @@ function toast(msg){
   _toastT = setTimeout(function(){ el.classList.remove('show'); }, 2200);
 }
 
-var _storyChips = {};
-var _storyInput = {};   /* 아직 칩으로 안 굳은 입력 글자 */
+/* 검색은 종류 탭·편과 무관하게 하나로 공유한다.
+   '001번을 찾는다'는 의도는 탭을 옮겨도 그대로이기 때문. */
+var _storyChips = new Set();
+var _storyInput = '';   /* 아직 칩으로 안 굳은 입력 글자 */
 var _storyTab   = '';   /* 마지막으로 보던 종류 탭 */
 
 /* ── 스토리 목록 ── */
@@ -516,7 +518,7 @@ async function renderStoryList(){
       '<div style="padding:10px 24px 6px">' +
         '<input id="story-search-' + t + '" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" ' +
         'onkeydown="onStorySearchKey(event,\'' + t + '\')" ' +
-        'oninput="_storyInput[\'' + t + '\'] = this.value" ' +
+        'oninput="onStorySearchInput(this)" ' +
         'style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">' +
         '<div id="story-chips-' + t + '" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>' +
       '</div>' +
@@ -528,12 +530,7 @@ async function renderStoryList(){
   }).join('');
 
   /* 목록을 새로 그렸으니 검색 칩·입력 글자를 화면에 되살린다 */
-  types.forEach(function(t){
-    var inp = document.getElementById('story-search-' + t);
-    if(inp && _storyInput[t]) inp.value = _storyInput[t];
-    renderChips(t);
-    applyFilter(t);
-  });
+  syncSearchUI();
 }
 
 window.switchEdition = function(k){
@@ -550,31 +547,56 @@ window.switchStoryTab = function(t){
 };
 
 /* ── 캐릭터 번호 검색 칩 ── */
+/* 화면에 떠 있는 종류 탭 목록 (숨겨진 탭도 DOM 에는 있다) */
+function storyTypesOnScreen(){
+  var out = [];
+  document.querySelectorAll('[id^="story-chips-"]').forEach(function(el){
+    out.push(el.id.replace('story-chips-', ''));
+  });
+  return out;
+}
+/* 검색 상태를 세 탭 모두에 똑같이 반영한다 */
+function syncSearchUI(){
+  storyTypesOnScreen().forEach(function(t){
+    var inp = document.getElementById('story-search-' + t);
+    if(inp && inp.value !== _storyInput) inp.value = _storyInput;
+    renderChips(t);
+    applyFilter(t);
+  });
+}
+window.onStorySearchInput = function(el){
+  _storyInput = el.value;
+  storyTypesOnScreen().forEach(function(t){
+    var i = document.getElementById('story-search-' + t);
+    if(i && i !== el) i.value = _storyInput;
+  });
+};
+
 window.onStorySearchKey = function(ev, t){
   if(ev.key !== 'Enter' && ev.key !== ' ') return;
   ev.preventDefault();
   var input = ev.target;
   var val = input.value.trim();
   if(!val) return;
-  if(!_storyChips[t]) _storyChips[t] = new Set();
-  _storyChips[t].add(val);
+  _storyChips.add(val);
+  _storyInput = '';
   input.value = '';
-  renderChips(t); applyFilter(t);
+  syncSearchUI();
 };
 function renderChips(t){
   var wrap = document.getElementById('story-chips-' + t);
   if(!wrap) return;
-  wrap.innerHTML = Array.from(_storyChips[t]||[]).map(function(n){
+  wrap.innerHTML = Array.from(_storyChips).map(function(n){
     return '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 12px;background:var(--bg);border:1px solid var(--bd2);border-radius:20px;font-size:11px;font-weight:600;color:var(--tx2)">' +
       n + '<button onclick="removeChip(\'' + t + '\',\'' + n + '\')" style="background:none;border:none;cursor:pointer;color:var(--tx3);font-size:13px;line-height:1;padding:0 0 0 2px">×</button></span>';
   }).join('');
 }
 window.removeChip = function(t, n){
-  if(_storyChips[t]) _storyChips[t].delete(n);
-  renderChips(t); applyFilter(t);
+  _storyChips.delete(n);
+  syncSearchUI();
 };
 function applyFilter(t){
-  var chips = Array.from(_storyChips[t]||[]);
+  var chips = Array.from(_storyChips);
   document.querySelectorAll('#story-cards-' + t + ' .story-ep-card').forEach(function(card){
     var nums = (card.dataset.cast||'').split(',').filter(Boolean);
     var match = !chips.length || chips.every(function(q){ return nums.some(function(n){ return n.indexOf(q) !== -1; }); });
