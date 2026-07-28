@@ -407,6 +407,8 @@ function toast(msg){
 }
 
 var _storyChips = {};
+var _storyInput = {};   /* 아직 칩으로 안 굳은 입력 글자 */
+var _storyTab   = '';   /* 마지막으로 보던 종류 탭 */
 
 /* ── 스토리 목록 ── */
 async function renderStoryList(){
@@ -455,7 +457,7 @@ async function renderStoryList(){
     listEl.innerHTML = worldCardHtml() + edSwitchHtml() + '<div class="story-empty">' + emptyMsg + '</div>';
     return;
   }
-  var activeTab = types[0];
+  var activeTab = (types.indexOf(_storyTab) !== -1) ? _storyTab : types[0];
 
   function banner(t){
     var img = banners[t] || BANNER_IMGS[t] || '';
@@ -509,6 +511,7 @@ async function renderStoryList(){
       '<div style="padding:10px 24px 6px">' +
         '<input id="story-search-' + t + '" type="text" placeholder="캐릭터 번호로 검색 (예: 001)" ' +
         'onkeydown="onStorySearchKey(event,\'' + t + '\')" ' +
+        'oninput="_storyInput[\'' + t + '\'] = this.value" ' +
         'style="width:100%;padding:9px 16px;border:1px solid var(--bd);border-radius:20px;font-size:12px;font-family:var(--fn);outline:none;background:var(--bg);color:var(--tx)">' +
         '<div id="story-chips-' + t + '" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:4px"></div>' +
       '</div>' +
@@ -518,16 +521,24 @@ async function renderStoryList(){
       '<div id="story-cards-' + t + '" style="padding:8px 24px 24px">' + cards(t) + '</div>' +
     '</div>';
   }).join('');
+
+  /* 목록을 새로 그렸으니 검색 칩·입력 글자를 화면에 되살린다 */
+  types.forEach(function(t){
+    var inp = document.getElementById('story-search-' + t);
+    if(inp && _storyInput[t]) inp.value = _storyInput[t];
+    renderChips(t);
+    applyFilter(t);
+  });
 }
 
 window.switchEdition = function(k){
   if(k === _ed) return;
   _ed = k; saveEd();
-  _storyChips = {};
-  renderStoryList();
+  renderStoryList();   /* 검색 칩·입력 글자는 그대로 유지된다 */
 };
 
 window.switchStoryTab = function(t){
+  _storyTab = t;
   document.querySelectorAll('[id^="story-sec-"]').forEach(function(el){ el.style.display = 'none'; });
   var el = document.getElementById('story-sec-' + t);
   if(el) el.style.display = 'block';
