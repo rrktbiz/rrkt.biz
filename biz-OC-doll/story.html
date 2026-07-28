@@ -430,13 +430,9 @@ async function renderStoryList(){
   var eps = data.episodes || [];
   var banners = data._banners || {};
 
-  /* 두 편이 모두 있을 때만 스위치를 띄운다.
-     한쪽이 비어 있으면 스위치가 '여긴 아무것도 없음'을 광고하게 되므로 아예 감춘다. */
-  var edsPresent = ['m','f'].filter(function(k){
-    return eps.some(function(e){ return epInEd(e, k); });
-  });
-  if(edsPresent.length && edsPresent.indexOf(_ed) === -1){ _ed = edsPresent[0]; saveEd(); }
-  var showEdSwitch = edsPresent.length > 1;
+  /* 편 스위치는 항상 보인다. 한쪽이 아직 비어 있어도
+     '그쪽도 곧 온다'는 신호가 되도록 감추지 않는다. */
+  var EDS = ['m','f'];
 
   var groups = {main:[], sub:[], event:[]};
   eps.forEach(function(e, i){
@@ -446,15 +442,17 @@ async function renderStoryList(){
   var types = ['main','sub','event'].filter(function(t){ return groups[t].length > 0; });
 
   function edSwitchHtml(){
-    if(!showEdSwitch) return '';
-    return '<div class="story-ed-wrap"><div class="story-ed-row">' + edsPresent.map(function(k){
+    return '<div class="story-ed-wrap"><div class="story-ed-row">' + EDS.map(function(k){
       return '<button class="story-ed-btn' + (k===_ed?' active':'') + '" onclick="switchEdition(\'' + k + '\')">' +
              (ED_LABELS[k]||k) + '</button>';
     }).join('') + '</div></div>';
   }
 
   if(!types.length){
-    listEl.innerHTML = worldCardHtml() + edSwitchHtml() + '<div class="story-empty">스토리 에피소드가 없습니다.</div>';
+    var emptyMsg = eps.length
+      ? (ED_LABELS[_ed] || '이 편') + '은 아직 준비 중입니다.'
+      : '스토리 에피소드가 없습니다.';
+    listEl.innerHTML = worldCardHtml() + edSwitchHtml() + '<div class="story-empty">' + emptyMsg + '</div>';
     return;
   }
   var activeTab = types[0];
