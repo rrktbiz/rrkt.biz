@@ -67,11 +67,16 @@ body{top:0 !important}
 .story-tab-btn{flex-shrink:0;padding:10px 20px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:600;color:var(--tx3);transition:all .15s;white-space:nowrap;margin-bottom:-1px}
 .story-tab-btn:hover{color:var(--tx)}
 .story-tab-btn.active{color:var(--tx);border-bottom-color:var(--tx)}
-.story-ed-row{display:flex;gap:4px;max-width:720px;margin:0 auto 4px;padding:4px;background:var(--bg);border:1px solid var(--bd);border-radius:999px}
-.story-ed-btn{flex:1;padding:9px 0;background:transparent;border:1px solid transparent;border-radius:999px;font-size:13px;font-weight:600;color:var(--tx3);transition:all .14s;white-space:nowrap}
-.story-ed-btn:hover{color:var(--tx)}
-.story-ed-btn.active{background:var(--sb);border-color:var(--bd2);color:var(--tx)}
-.story-ed-wrap{padding:14px 24px 0}
+/* ── 편 스위치 (시안 G · 연한 채움 · 좌측 정렬) ──
+   남자편 연하늘 / 여자편 연보라. 사이트 블루(#5a90b0)와 채도를 맞춰
+   스위치만 튀어 보이지 않게 잡았다. */
+.story-ed-row{display:flex;gap:5px;max-width:720px;margin:0 auto}
+.story-ed-btn{padding:6px 15px;background:transparent;border:1px solid var(--bd);border-radius:999px;font-size:12px;font-weight:600;color:#b4b4b4;transition:all .14s;white-space:nowrap;cursor:pointer}
+.story-ed-btn:hover{color:var(--tx2);border-color:var(--bd2)}
+.story-ed-btn.active{font-weight:700}
+.story-ed-btn.m.active{background:#E4F0F8;border-color:#9CC4DC;color:#3D6C88}
+.story-ed-btn.f.active{background:#EDE7F6;border-color:#B4A3D4;color:#6B559B}
+.story-ed-wrap{padding:14px 24px 2px}
 .ep-both-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;border:1px solid #7f9fb8;color:#4a6b85;background:#7f9fb818}
 .doll-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b2b2b;color:#fff;font-size:12.5px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
 .doll-toast.show{opacity:.94}
@@ -445,7 +450,7 @@ async function renderStoryList(){
 
   function edSwitchHtml(){
     return '<div class="story-ed-wrap"><div class="story-ed-row">' + EDS.map(function(k){
-      return '<button class="story-ed-btn' + (k===_ed?' active':'') + '" onclick="switchEdition(\'' + k + '\')">' +
+      return '<button class="story-ed-btn ' + k + (k===_ed?' active':'') + '" onclick="switchEdition(\'' + k + '\')">' +
              (ED_LABELS[k]||k) + '</button>';
     }).join('') + '</div></div>';
   }
