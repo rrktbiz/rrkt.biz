@@ -139,7 +139,11 @@ button{font-family:var(--fn);cursor:pointer}
 @media(max-width:600px){
   .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh}
   .sheet-wrap{padding:20px 16px 32px}
+  .top-bar{padding:6px 14px}
+  .ep-nav-full{display:none}
+  .ep-nav-short{display:inline}
 }
+.ep-nav-short{display:none}
 
 /* ── CASSETTE NAV ARROWS ── */
 .cassette-nav-arrow{
@@ -266,9 +270,9 @@ button{font-family:var(--fn);cursor:pointer}
   </div>
 
   <div class="ep-nav">
-    <button class="ep-nav-btn" id="nav-prev" onclick="navChar(-1)"><span>←</span><span class="ep-nav-title" id="nav-prev-name"></span></button>
+    <button class="ep-nav-btn" id="nav-prev" onclick="navChar(-1)"><span>←</span><span class="ep-nav-title"><span class="ep-nav-full" id="nav-prev-name"></span><span class="ep-nav-short" id="nav-prev-short"></span></span></button>
     <button class="ep-nav-btn" style="justify-self:center" onclick="showList()" title="목록으로">목록으로</button>
-    <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title" id="nav-next-name"></span><span>→</span></button>
+    <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title"><span class="ep-nav-full" id="nav-next-name"></span><span class="ep-nav-short" id="nav-next-short"></span></span><span>→</span></button>
   </div>
   </div><!-- /detail-overlay-inner -->
 </div>
@@ -581,6 +585,8 @@ function renderDetail(id){
   const next = list[idx+1]||null;
   document.getElementById('nav-prev-name').textContent = prev ? prev.idCode : "없음";
   document.getElementById('nav-next-name').textContent = next ? next.idCode : "없음";
+  document.getElementById('nav-prev-short').textContent = prev ? prev.idCode.replace(/^\D+/,'') : "없음";
+  document.getElementById('nav-next-short').textContent = next ? next.idCode.replace(/^\D+/,'') : "없음";
   document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
   document.getElementById('nav-next').className = "ep-nav-btn"+(next?"":" disabled");
   const cp = document.getElementById('cassette-prev');
