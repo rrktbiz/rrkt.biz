@@ -30,13 +30,6 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 /* ── 바디 ── */
 .page-body{padding:28px 40px 60px;max-width:700px;margin:0 auto}
 
-/* ── 섹션 제목 ── */
-.sec-label{
-  font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);
-  text-transform:uppercase;margin-bottom:14px;margin-top:28px;
-}
-.sec-label:first-child{margin-top:0}
-
 /* ── 이벤트 카드 ── */
 .event-card{
   border:1px solid var(--bd);border-radius:12px;overflow:hidden;
@@ -56,7 +49,7 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 .event-status.upcoming{background:#fff8e1;color:#c77700}
 .event-status.ended{background:#f0f0f0;color:#888}
 .event-title{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px;line-height:1.4}
-.event-period{font-size:15px;color:var(--tx3);margin-bottom:10px}
+.event-period{font-size:11px;color:var(--tx3);margin-bottom:10px}
 .event-desc{font-size:13px;color:var(--tx2);line-height:1.75}
 .event-tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .event-tag{
@@ -99,24 +92,6 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
 }
 .event-btn:hover{opacity:.85}
 .event-btn.disabled{background:var(--bd);color:var(--tx3);cursor:default;pointer-events:none}
-
-/* ── 타임라인 ── */
-.timeline{display:flex;flex-direction:column;gap:0;position:relative;padding-left:22px}
-.timeline::before{
-  content:'';position:absolute;left:6px;top:6px;bottom:6px;
-  width:1px;background:var(--bd);
-}
-.tl-item{position:relative;padding:0 0 22px 18px}
-.tl-item:last-child{padding-bottom:0}
-.tl-dot{
-  position:absolute;left:-18px;top:3px;
-  width:12px;height:12px;border-radius:50%;
-  background:#fff;border:2px solid var(--acc);flex-shrink:0;
-}
-.tl-dot.done{background:var(--acc)}
-.tl-date{font-size:9px;font-weight:600;letter-spacing:.5px;color:var(--tx3);margin-bottom:3px;text-transform:uppercase}
-.tl-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
-.tl-desc{font-size:11px;color:var(--tx2);line-height:1.6}
 
 /* ── 탭 ── */
 .tab-bar{
@@ -173,14 +148,6 @@ html,body{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-
   color:var(--tx3);font-size:12px;line-height:1.8;
   border:1px dashed var(--bd2);border-radius:10px;
 }
-
-.empty-state{
-  text-align:center;padding:56px 20px;
-  border:1px dashed var(--bd2);border-radius:12px;
-  color:var(--tx3);font-size:12px;line-height:1.8;
-}
-.empty-state-icon{font-size:36px;margin-bottom:12px}
-.empty-state-title{font-size:14px;font-weight:600;color:var(--tx2);margin-bottom:6px}
 
 /* ── 상시 투표 카드 (티켓형) ── */
 .vote-card{
