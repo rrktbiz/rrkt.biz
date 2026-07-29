@@ -1223,6 +1223,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 }
 .fep-mid:hover{color:#1a1a1a}
 .fep-div{width:1px;height:18px;background:#e2e2e2;flex-shrink:0}
+/* 에피소드 목록 모달이 열려 있는 동안엔 플로팅 네비를 감춘다 */
+body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 
 /* ══════════════════════════════════════════
    본문 글자 크기 조절
@@ -3164,12 +3166,21 @@ function bhsHideFloatNav(){
   fep.classList.remove('visible');
   fep.classList.remove('active');
   fep._prevEp = fep._nextEp = null;
+  document.body.classList.remove('ep-picker-open');
 }
 
 window.bhsFloatEpNav = function(dir){
   var fep = document.getElementById('float-ep-nav');
   if(!fep) return;
-  if(dir === 'list'){ bhsGo('vol', fep._vol || BS.vol); return; }
+  if(dir === 'list'){
+    /* 하단 '에피소드 목록' 버튼과 동일 동작 — 에피소드 피커 모달 열기 */
+    if(typeof openEpPicker === 'function' && document.getElementById('ep-picker-modal')){
+      openEpPicker();
+    } else {
+      bhsGo('vol', fep._vol || BS.vol);   /* 모달이 없을 때만 예전처럼 목록 페이지로 */
+    }
+    return;
+  }
   var id = dir === 'prev' ? fep._prevEp : fep._nextEp;
   if(id != null) bhsGo('vol', fep._vol || BS.vol, id);
 };
@@ -3265,6 +3276,7 @@ function openEpPicker(){
          + '</div>';
   }).join('');
   document.getElementById('ep-picker-modal').classList.remove('hidden');
+  document.body.classList.add('ep-picker-open');
 }
 function pickEp(id){
   var e = bhsVol(BS.vol).episodes.find(function(x){ return x.id === id; });
@@ -3272,7 +3284,7 @@ function pickEp(id){
   if(e && bhsCanRead(e)) bhsGo('vol', BS.vol, id);
 }
 function closeEpPicker(ev){ if(ev.target === document.getElementById('ep-picker-modal')) closeEpPickerBtn(); }
-function closeEpPickerBtn(){ var m=document.getElementById('ep-picker-modal'); if(m) m.classList.add('hidden'); }
+function closeEpPickerBtn(){ var m=document.getElementById('ep-picker-modal'); if(m) m.classList.add('hidden'); document.body.classList.remove('ep-picker-open'); }
 
 /* ── 본문 소스 언어 (한본어 / 순KO / JA) ── */
 var BHS_EP_LANG = 'ko';
