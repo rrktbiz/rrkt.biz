@@ -604,8 +604,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
   #content{-webkit-overflow-scrolling:touch;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px)}
   .topbar-right{gap:4px}
   .tb-btn-txt{display:none!important}
+  /* 언어 버튼은 모바일에서도 데스크탑처럼 라벨+화살표 표시 */
+  #tb-lang-label,#tb-lang-caret{display:inline-block!important}
+  #tb-lang-drop-btn{padding:5px 11px;gap:6px}
   #topbar-cal-btn{padding:6px 8px;min-width:32px;justify-content:center;gap:0}
-  #tb-lang-drop-btn{padding:5px 8px;gap:4px}
   #tb-lang-dropdown{width:min(280px,calc(100vw - 16px));right:-4px}
   .home-page{padding-top:24px}
   .home-header{margin-bottom:20px}
