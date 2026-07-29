@@ -212,8 +212,8 @@ html, body {
 .creator-card-tagline { font-size: 12px; color: var(--gray-600); line-height: 1.6; margin-bottom: 8px; }
 .creator-card-mail { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; }
 .creator-card-mail:hover { text-decoration: underline; }
-.creator-card-copy { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; margin-left: 6px; padding: 0; border: 1.4px solid var(--blue); border-radius: 50%; background: none; color: var(--blue); cursor: pointer; vertical-align: middle; }
-.creator-card-copy:hover { background: rgba(90,144,176,0.1); }
+.creator-card-copy { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 3px 10px; border: 1px solid var(--gray-200); border-radius: 100px; background: var(--white); color: var(--gray-600); font-size: 11px; font-weight: 600; cursor: pointer; vertical-align: middle; }
+.creator-card-copy:hover { background: var(--gray-50); }
 .creator-card-copy.copied { color: #2ecc71; border-color: #2ecc71; }
 @media (max-width: 600px) {
   .creator-card { gap: 13px; padding: 15px 16px; }
@@ -517,8 +517,9 @@ html, body {
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
           rrkt.biz@proton.me
         </a>
-        <button type="button" class="creator-card-copy" title="이메일 주소 복사" aria-label="이메일 주소 복사" onclick="navigator.clipboard.writeText('rrkt.biz@proton.me'); this.classList.add('copied'); setTimeout(()=>this.classList.remove('copied'), 1200)">
+        <button type="button" class="creator-card-copy" title="이메일 주소 복사" aria-label="이메일 주소 복사" onclick="navigator.clipboard.writeText('rrkt.biz@proton.me'); this.querySelector('span').textContent='복사됨'; this.classList.add('copied'); setTimeout(()=>{this.classList.remove('copied'); this.querySelector('span').textContent='복사';}, 1200)">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 10.5v-7a1 1 0 0 1 1-1h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span>복사</span>
         </button>
       </div>
     </div>
