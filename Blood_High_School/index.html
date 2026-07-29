@@ -2277,13 +2277,18 @@ PD의 질문: "이거 망할 수 있는 이유는? 그건 어떻게 막을 건�
 
    [경로 설정]
    이 파일은 사이트 루트 기준 Blood_High_School/index.html 에 둡니다.
-   본문 txt 는 루트의 texts/ 폴더에서 읽습니다.
-     texts/blood-highschool-novel-1-01.txt        (한국어)
+   본문 txt 는 이 파일과 같은 폴더(Blood_High_School/) 안에서 읽습니다.
+     texts/blood-highschool-novel-1-01.txt              (한국어)
      texts_pure_ko/blood-highschool-novel-1-01_pure_ko.txt
      texts_jp/blood-highschool-novel-1-01_jp.txt
-   폴더 위치를 바꿨다면 BHS_ROOT 만 수정하세요.
+
+   ⚠ BHS_ROOT 와 BHS_TEXT_ROOT 는 다른 용도입니다. 헷갈리지 마세요.
+     BHS_ROOT      = 사이트 루트. 대문 링크와 표지·썸네일 이미지가 씁니다.
+     BHS_TEXT_ROOT = 원고 폴더.  본문 txt 만 씁니다.
+   원고 폴더만 옮겼다면 BHS_TEXT_ROOT 만 고치면 됩니다.
    ══════════════════════════════════════════════════════ */
 var BHS_ROOT = '../';
+var BHS_TEXT_ROOT = './';
 var BHS_ACC  = '#c0392b';
 var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
 
@@ -2481,9 +2486,9 @@ function bhsCanRead(e){ return e.status==='완료'; }
 /* ── 본문 파일 경로 ── */
 function bhsTextPath(volId, epId, lang){
   var base = 'blood-highschool-' + volId + '-' + String(epId).padStart(2,'0');
-  if(lang === 'pure_ko') return BHS_ROOT + 'texts_pure_ko/' + base + '_pure_ko.txt';
-  if(lang === 'jp')      return BHS_ROOT + 'texts_jp/' + base + '_jp.txt';
-  return BHS_ROOT + 'texts/' + base + '.txt';
+  if(lang === 'pure_ko') return BHS_TEXT_ROOT + 'texts_pure_ko/' + base + '_pure_ko.txt';
+  if(lang === 'jp')      return BHS_TEXT_ROOT + 'texts_jp/' + base + '_jp.txt';
+  return BHS_TEXT_ROOT + 'texts/' + base + '.txt';
 }
 
 /* ── 본문 fetch (번호 zero-padding 유무 모두 시도) ── */
