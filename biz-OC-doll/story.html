@@ -5,7 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 스토리</title>
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css">
+<style>
+/* ═══ 공용 컴포넌트 스타일 (구 common.css — 이 파일 안으로 합침) ═══
+   상단바 문의 버튼 · 언어 안내 각주 · 제작자 소개/문의 오버레이
+   ※ index.html 에도 같은 블록이 있습니다. 한쪽 고치면 반대쪽도. */
+#tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
+#tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+
+/* 번역 안내 각주 — 언어를 궁금해하는 바로 그 순간에만 보이게 */
+.tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
+.tb-lang-note b{color:#5f5f5f;font-weight:600}
+
+/* ── 제작자 소개 · 비즈니스 문의 오버레이 (허브와 동일 컴포넌트) ── */
+#contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+#contact-overlay.hidden{display:none}
+.contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
+.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
+.contact-close:hover{background:#fafafa;border-color:#c6c6c6}
+.contact-who{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #ececec}
+.contact-who-thumb{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #e2e2e2;background:#fafafa}
+.contact-who-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.contact-who-name{font-size:15px;font-weight:700;color:#111;letter-spacing:-.02em;margin-bottom:3px}
+.contact-who-tag{font-size:12px;color:#5f5f5f;line-height:1.6}
+.contact-eyebrow{font-size:10px;font-weight:600;letter-spacing:2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:8px}
+.contact-title{font-size:20px;font-weight:700;color:#111;letter-spacing:-.04em}
+.contact-desc{font-size:13px;color:#5f5f5f;margin-top:8px;line-height:1.8}
+.contact-mailrow{margin-top:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.contact-mailrow span.mail{font-size:13px;font-weight:600;color:#1a1a1a;font-family:'Inter',sans-serif}
+.biq-copy-btn{background:transparent;border:1px solid #e2e2e2;border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:#a0a0a0;cursor:pointer;transition:all .15s;flex-shrink:0}
+.biq-copy-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+</style>
 <script src="../config.js"></script>
 <script>
 /* iframe 안인지 먼저 판별 — 단독 상단바가 깜빡이지 않게 페인트 전에 */
@@ -275,7 +304,7 @@ body{top:0 !important}
   <a class="tb-back" href="index.html#/story">&larr; biz-OC-doll</a>
   <div class="tb-sep"></div>
   <span class="tb-title">STORY</span>
-  <div class="tb-right" style="position:relative"><!-- common.js 가 채웁니다 --></div>
+  <div class="tb-right" style="position:relative"><!-- 아래 공용 블록이 채웁니다 --></div>
 </div>
 
 <div id="story-list"></div>
@@ -292,8 +321,347 @@ body{top:0 !important}
   </div>
 </div>
 
-<script src="common.js"></script>
-<script src="tl.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   공용 UI + 번역 엔진  (구 common.js / tl.js — 이 파일 안으로 합침)
+
+   ⚠ 같은 블록이 index.html 에도 들어 있습니다.
+     특히 아래 두 가지는 index(부모) ↔ story(자식) 사이의 약속이라
+     한쪽만 고치면 화면은 멀쩡한데 번역만 조용히 안 먹습니다.
+       · postMessage 타입 문자열  'biz-tl-lang'
+       · _injectGT / _setIframeLang 동작
+     번역 관련을 건드리면 반드시 양쪽 다 같은 내용으로 맞추세요.
+
+   ── 값만 바꿀 거면 바로 아래 BIZ.MAIL / PROFILE_IMG / WHO_* / TL_NOTE ──
+   ═══════════════════════════════════════════════════════════ */
+
+var BIZ = window.BIZ = {
+
+  MAIL:        'rrkt.biz@proton.me',
+  PROFILE_IMG: '../profile.png',
+  WHO_NAME:    'BIZ',
+  WHO_TAG:     '스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.',
+
+
+  /* 언어 드롭다운 하단 안내문 — 한 곳만 고치면 전 페이지 반영 */
+  TL_NOTE:
+    '<b>DeepL 우선</b> · 한도 초과 시 <b>Google 번역</b> 자동 전환<br>' +
+    '정식 번역은 <b>한 &rarr; 영 &rarr; 일 &rarr; 중</b> 순서로 제공될 예정입니다.',
+
+  /* ── 상단바 우측 ── */
+  topbarRightHtml: function(){
+    return `      <span id="tl-badge"></span>
+      <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      </button>
+      <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
+        <span id="tb-lang-label" class="tb-btn-txt">Language</span>
+        <span id="tb-lang-caret" class="tb-btn-txt" style="font-size:8px;transition:transform .15s;display:inline-block">&#9660;</span>
+      </button>
+      <div id="tb-lang-dropdown">
+        <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
+          <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
+          <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
+        </div>
+        <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
+        <div class="tb-lang-note">${BIZ.TL_NOTE}</div>
+      </div>`;
+  },
+
+  /* ── 문의 오버레이 ── */
+  contactHtml: function(){
+    return `<!-- ===== 제작자 소개 · 비즈니스 문의 ===== -->
+<div id="contact-overlay" class="hidden" onclick="if(event.target===this)closeContactOverlay()">
+  <div class="contact-card">
+    <button class="contact-close" onclick="closeContactOverlay()" aria-label="닫기">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="contact-who">
+      <div class="contact-who-thumb"><img src="${BIZ.PROFILE_IMG}" alt="${BIZ.WHO_NAME}" onerror="this.style.display='none'"></div>
+      <div>
+        <div class="contact-who-name">${BIZ.WHO_NAME}</div>
+        <div class="contact-who-tag">${BIZ.WHO_TAG}</div>
+      </div>
+    </div>
+    <div class="contact-eyebrow">Contact</div>
+    <div class="contact-title">비즈니스 문의</div>
+    <div class="contact-desc">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
+    <div class="contact-mailrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a0a0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      <span class="mail">${BIZ.MAIL}</span>
+      <button class="biq-copy-btn" onclick="biqCopyEmail(this)" title="복사">
+        <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <span class="biq-copy-txt">복사</span>
+      </button>
+    </div>
+  </div>
+</div>`;
+  },
+
+  openContact:  function(){ var o = document.getElementById('contact-overlay'); if(o) o.classList.remove('hidden'); },
+  closeContact: function(){ var o = document.getElementById('contact-overlay'); if(o) o.classList.add('hidden'); },
+
+  copyEmail: function(btn){
+    navigator.clipboard.writeText(BIZ.MAIL).then(function(){
+      var svg = btn.querySelector('.biq-copy-svg'), txt = btn.querySelector('.biq-copy-txt');
+      if(svg) svg.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      if(txt) txt.textContent = '완료';
+      btn.style.borderColor = '#bbf7d0'; btn.style.background = '#f0fdf4'; btn.style.color = '#22c55e';
+      setTimeout(function(){
+        var s2 = btn.querySelector('.biq-copy-svg');
+        if(s2) s2.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+        var t2 = btn.querySelector('.biq-copy-txt');
+        if(t2) t2.textContent = '복사';
+        btn.style.borderColor = ''; btn.style.background = ''; btn.style.color = '';
+      }, 1800);
+    });
+  },
+
+  /* ── 초기 주입 ── */
+  mount: function(){
+    var tbr = document.querySelector('.tb-right');
+    if(tbr && !tbr.children.length) tbr.innerHTML = BIZ.topbarRightHtml();
+    if(!document.getElementById('contact-overlay'))
+      document.body.insertAdjacentHTML('beforeend', BIZ.contactHtml());
+  }
+};
+
+/* 기존 onclick / 기존 코드 호환 */
+window.openContactOverlay  = BIZ.openContact;
+window.closeContactOverlay = BIZ.closeContact;
+window.biqCopyEmail        = BIZ.copyEmail;
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') BIZ.closeContact();
+});
+
+BIZ.mount();
+
+
+/* ══ 번역 엔진 ══ */
+
+var TL = window.TL = {
+  lang:  'ko',
+  hooks: [],
+  onChange:   function(fn){ if(typeof fn === 'function') TL.hooks.push(fn); },
+  badge:      function(engine){ _tlBadge(engine); },
+  badgeReset: function(){ _tlBadgeReset(); },
+  set:        function(lang){ setLang(lang); }
+};
+
+/* ── 번역 뱃지 ── */
+function _tlBadge(engine){
+  var el = document.getElementById('tl-badge'); if(!el) return;
+  el.className = engine + ' show';
+  el.textContent = (engine === 'deepl') ? 'DeepL' : 'Google';
+}
+function _tlBadgeReset(){
+  var el = document.getElementById('tl-badge'); if(!el) return;
+  el.className = ''; el.textContent = '';
+}
+
+/* ── Google Translate ── */
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
+}
+function _tlGoogle(lang){
+  _tlBadge('google');
+  var sel = document.querySelector('.goog-te-combo');
+  if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
+  /* 위젯 미로드 시 쿠키 방식 */
+  document.cookie = 'googtrans=/ko/' + lang + ';path=/';
+  document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  location.reload();
+}
+
+/* ── iframe 탭에도 번역 적용 (같은 출처일 때만) ── */
+function _injectGT(fr){
+  try{
+    var d = fr.contentDocument, w = fr.contentWindow;
+    if(!d || !w || w.__gtInjected) return;
+    w.__gtInjected = true;
+    var slot = d.createElement('div');
+    slot.id = 'google_translate_element';
+    slot.style.display = 'none';
+    d.body.appendChild(slot);
+    w.googleTranslateElementInit = function(){
+      new w.google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
+    };
+    var sc = d.createElement('script');
+    sc.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    d.body.appendChild(sc);
+  }catch(e){}
+}
+function _setIframeLang(fr, lang, tries){
+  tries = tries || 0;
+  try{
+    var d = fr.contentDocument; if(!d) return;
+    var sel = d.querySelector('.goog-te-combo');
+    if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
+  }catch(e){ return; }
+  if(tries < 20) setTimeout(function(){ _setIframeLang(fr, lang, tries + 1); }, 350);
+}
+function _applyLangToIframes(lang){
+  document.querySelectorAll('.panel iframe').forEach(function(fr){
+    if(lang === 'ko') return;
+    _injectGT(fr);
+    _setIframeLang(fr, lang);
+    /* 자체 tl.js 를 가진 하위 페이지(story.html 등)에 언어를 알려줌 */
+    try{ fr.contentWindow.postMessage({type:'biz-tl-lang', lang:lang}, '*'); }catch(e){}
+  });
+}
+window._applyLangToIframes = _applyLangToIframes;
+
+/* 부모 프레임이 언어를 바꿨을 때 — 구글 위젯은 부모가 이미 주입하므로 상태만 맞춘다 */
+window.addEventListener('message', function(ev){
+  var d = ev.data;
+  if(!d || d.type !== 'biz-tl-lang' || d.lang === TL.lang) return;
+  TL.lang = d.lang;
+  TL.hooks.forEach(function(fn){ try{ fn(d.lang); }catch(e){ console.warn('[TL hook]', e); } });
+  _tlBadge('google');
+});
+
+/* ── 언어 전환 진입점 ── */
+function setLang(lang){
+  TL.lang = lang;
+
+  if(lang === 'ko'){
+    document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    location.reload();
+    return;
+  }
+
+  /* 페이지별 훅 — 스토리 본문 DeepL 등 (TL.onChange 로 등록) */
+  TL.hooks.forEach(function(fn){
+    try{ fn(lang); }catch(e){ console.warn('[TL hook]', e); }
+  });
+
+  _tlGoogle(lang);
+  _applyLangToIframes(lang);
+}
+window.setLang = setLang;
+window.googleTranslateElementInit = googleTranslateElementInit;
+
+/* ══ 상단바 언어 드롭다운 ══ */
+(function(){
+  var ALL_LANGS=[
+    ['Afrikaans','af'],['Albanian','sq'],['Amharic','am'],['Arabic','ar'],['Armenian','hy'],
+    ['Azerbaijani','az'],['Basque','eu'],['Belarusian','be'],['Bengali','bn'],['Bosnian','bs'],
+    ['Bulgarian','bg'],['Catalan','ca'],['Cebuano','ceb'],['Chinese (Simplified)','zh-CN'],
+    ['Chinese (Traditional)','zh-TW'],['Corsican','co'],['Croatian','hr'],['Czech','cs'],
+    ['Danish','da'],['Dutch','nl'],['English','en'],['Esperanto','eo'],['Estonian','et'],
+    ['Finnish','fi'],['French','fr'],['Frisian','fy'],['Galician','gl'],['Georgian','ka'],
+    ['German','de'],['Greek','el'],['Gujarati','gu'],['Haitian Creole','ht'],['Hausa','ha'],
+    ['Hawaiian','haw'],['Hebrew','iw'],['Hindi','hi'],['Hmong','hmn'],['Hungarian','hu'],
+    ['Icelandic','is'],['Igbo','ig'],['Indonesian','id'],['Irish','ga'],['Italian','it'],
+    ['Japanese','ja'],['Javanese','jv'],['Kannada','kn'],['Kazakh','kk'],['Khmer','km'],
+    ['Korean','ko'],['Kurdish','ku'],['Kyrgyz','ky'],['Lao','lo'],['Latin','la'],
+    ['Latvian','lv'],['Lithuanian','lt'],['Luxembourgish','lb'],['Macedonian','mk'],
+    ['Malagasy','mg'],['Malay','ms'],['Malayalam','ml'],['Maltese','mt'],['Maori','mi'],
+    ['Marathi','mr'],['Mongolian','mn'],['Myanmar (Burmese)','my'],['Nepali','ne'],
+    ['Norwegian','no'],['Nyanja (Chichewa)','ny'],['Pashto','ps'],['Persian','fa'],
+    ['Polish','pl'],['Portuguese','pt'],['Punjabi','pa'],['Romanian','ro'],['Russian','ru'],
+    ['Samoan','sm'],['Scots Gaelic','gd'],['Serbian','sr'],['Sesotho','st'],['Shona','sn'],
+    ['Sindhi','sd'],['Sinhala','si'],['Slovak','sk'],['Slovenian','sl'],['Somali','so'],
+    ['Spanish','es'],['Sundanese','su'],['Swahili','sw'],['Swedish','sv'],['Tagalog (Filipino)','tl'],
+    ['Tajik','tg'],['Tamil','ta'],['Telugu','te'],['Thai','th'],['Turkish','tr'],
+    ['Ukrainian','uk'],['Urdu','ur'],['Uzbek','uz'],['Vietnamese','vi'],['Welsh','cy'],
+    ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
+  ];
+  var _sel = null, _open = false;
+  var PRIORITY = ['ko','en','zh-CN','ja'];
+
+  function item(l){
+    var name = l[0], code = l[1], isS = (_sel === code);
+    var d = document.createElement('div');
+    d.style.cssText = 'display:flex;align-items:center;padding:8px 14px;cursor:pointer;gap:10px;background:' + (isS ? 'var(--sm)' : 'transparent');
+    d.onmouseover = function(){ this.style.background = 'var(--sm)'; };
+    d.onmouseout  = function(){ this.style.background = isS ? 'var(--sm)' : 'transparent'; };
+    d.onclick = function(){ tbLangSelect(code, name); };
+    var n = document.createElement('span');
+    n.style.cssText = 'font-size:13px;color:var(--tx);flex:1'; n.textContent = name;
+    var c = document.createElement('span');
+    c.style.cssText = 'font-size:11px;color:var(--tx3);font-family:monospace'; c.textContent = code;
+    d.appendChild(n); d.appendChild(c);
+    if(isS){ var ck = document.createElement('span'); ck.style.cssText = 'font-size:12px;color:#3558c0'; ck.textContent = '✓'; d.appendChild(ck); }
+    return d;
+  }
+  function render(q){
+    var list = document.getElementById('tb-lang-list'); if(!list) return;
+    var f = (q || '').toLowerCase().trim();
+    var filtered = f ? ALL_LANGS.filter(function(l){
+      return l[0].toLowerCase().indexOf(f) > -1 || l[1].toLowerCase().indexOf(f) > -1;
+    }) : ALL_LANGS;
+    list.innerHTML = '';
+    if(!filtered.length){
+      list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--tx3)">No results</div>';
+      return;
+    }
+    if(!f){
+      PRIORITY.map(function(c){
+        return ALL_LANGS.filter(function(l){ return l[1] === c; })[0];
+      }).filter(Boolean).forEach(function(l){ list.appendChild(item(l)); });
+      var div = document.createElement('div');
+      div.style.cssText = 'height:1px;background:var(--bd);margin:4px 0';
+      list.appendChild(div);
+      filtered.filter(function(l){ return PRIORITY.indexOf(l[1]) === -1; }).forEach(function(l){ list.appendChild(item(l)); });
+    }else{
+      filtered.forEach(function(l){ list.appendChild(item(l)); });
+    }
+  }
+  function close(){
+    _open = false;
+    var dd = document.getElementById('tb-lang-dropdown');
+    var btn = document.getElementById('tb-lang-drop-btn');
+    var caret = document.getElementById('tb-lang-caret');
+    if(dd) dd.style.display = 'none';
+    if(btn){ btn.style.background = 'transparent'; btn.style.color = 'var(--tx2)'; btn.style.borderColor = 'var(--bd)'; }
+    if(caret) caret.style.transform = '';
+  }
+  window.tbLangToggle = function(){
+    _open = !_open;
+    var dd = document.getElementById('tb-lang-dropdown');
+    var btn = document.getElementById('tb-lang-drop-btn');
+    var caret = document.getElementById('tb-lang-caret');
+    if(!dd) return;
+    dd.style.display = _open ? 'block' : 'none';
+    if(btn){
+      btn.style.background = _open ? 'var(--sm)' : 'transparent';
+      btn.style.color = _open ? 'var(--tx)' : 'var(--tx2)';
+      btn.style.borderColor = _open ? 'var(--bd2)' : 'var(--bd)';
+    }
+    if(caret) caret.style.transform = _open ? 'rotate(180deg)' : '';
+    if(_open){ render(''); setTimeout(function(){ var s = document.getElementById('tb-lang-search'); if(s) s.focus(); }, 80); }
+  };
+  window.tbLangFilter = function(){
+    var s = document.getElementById('tb-lang-search');
+    render(s ? s.value : '');
+  };
+  window.tbLangSelect = function(code, name){
+    _sel = code;
+    var lbl = document.getElementById('tb-lang-label');
+    if(lbl) lbl.textContent = name;
+    close();
+    setLang(code);
+  };
+  document.addEventListener('click', function(e){
+    if(_open && !e.target.closest('#tb-lang-drop-btn') && !e.target.closest('#tb-lang-dropdown')) close();
+  });
+
+  /* 새로고침 후에도 선택 언어 라벨 유지 (googtrans 쿠키 기준) */
+  var m = document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/);
+  if(m && m[1] && m[1] !== 'ko'){
+    TL.lang = m[1];
+    _sel = m[1];
+    var found = ALL_LANGS.filter(function(l){ return l[1] === m[1]; })[0];
+    var lbl0 = document.getElementById('tb-lang-label');
+    if(lbl0 && found) lbl0.textContent = found[0];
+    _tlBadge('google');
+  }
+})();
+</script>
 <script>
 /* ══════ 스토리 데이터 ══════ */
 var _storyData = null;
@@ -849,7 +1217,7 @@ document.addEventListener('keydown', function(ev){
 
 /* ══════════════════════════════════════════════════
    스토리 본문 DeepL 번역
-   · 공용 번역 엔진은 tl.js  (TL.lang / TL.onChange / TL.badge)
+   · 공용 번역 엔진은 이 파일 위쪽 공용 블록 (TL.lang / TL.onChange / TL.badge)
    · 3단계에서 story.html 로 함께 이사할 부분
    ══════════════════════════════════════════════════ */
 
@@ -1033,7 +1401,7 @@ function _doDollTranslate(url, cacheKey, blocks, origTitle, dlLang){
      biz-doll-go     캐릭터 탭으로 이동 요청
    부모 → story.html
      biz-doll-nav    뒤로가기·딥링크로 위치 이동
-     biz-tl-lang     언어 변경 (tl.js 가 처리)
+     biz-tl-lang     언어 변경 (위쪽 공용 블록이 처리)
 
    단독으로 열면(EMBED=false) 전부 자기 주소(#3, #world)로 처리합니다.
    ══════════════════════════════════════════════════ */
