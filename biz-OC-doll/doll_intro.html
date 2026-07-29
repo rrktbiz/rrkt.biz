@@ -74,7 +74,7 @@ html, body {
   transform: translateX(-50%) rotate(45deg);
   width: 0.18em;
   height: 0.18em;
-  background: currentColor;
+  background: #4a5560;
 }
 .diamond-o { position: relative; display: inline-block; }
 .diamond-o::after {
@@ -85,7 +85,7 @@ html, body {
   transform: translate(-50%, -55%) rotate(45deg);
   width: 0.18em;
   height: 0.18em;
-  background: currentColor;
+  background: #4a5560;
 }
 .hero-sub { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 0 auto 28px; position: relative; z-index: 2; }
 .hero-hashtag { font-size: 13px; color: rgba(90,144,176,0.65); font-weight: 400; letter-spacing: 0.02em; }
@@ -118,25 +118,6 @@ html, body {
 .intent-heading { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 20px; }
 .dash-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .dash-list li { font-size: 15px; color: var(--gray-600); line-height: 1.55; }
-
-/* ABOUT PEEK — 창작에 필요한 최소 용어만. 원작 세계관은 스토리 탭 EP.00 으로 넘긴다 */
-.world-peek {
-  margin-top: 40px;
-  padding: 26px 28px 24px;
-  border-radius: 16px;
-  background: linear-gradient(150deg, #f2f7fa 0%, #f4f2f8 100%);
-  border: 1px solid rgba(90,144,176,0.14);
-}
-.world-peek-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 16px; }
-.term-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
-.term-list li { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
-.term-list b { color: var(--gray-900); font-weight: 700; }
-.term-dash { color: rgba(90,144,176,0.75); padding: 0 8px; }
-@media (max-width: 600px) {
-  .world-peek { padding: 22px 20px 20px; }
-  .term-list li { font-size: 14px; }
-  .term-dash { padding: 0 6px; }
-}
 
 /* WORLD LINK — 세계관으로 넘어가는 진입점. 버튼이 아니라 문장으로, 톤 전환을 예고 */
 .world-link {
@@ -197,35 +178,86 @@ html, body {
 .creator-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
 .creator-label-ko { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 14px; }
 .creator-text { font-size: 15px; color: var(--gray-600); line-height: 1.8; font-weight: 400; }
-
-/* CREATOR CARD — 제작자 프로필. 팬/창작자 대상이라 '비즈니스 문의'가 아닌 '제작자' 톤 */
-.creator-card {
-  display: flex; align-items: center; gap: 16px;
-  margin-top: 28px; padding: 18px 20px;
-  border: 1px solid var(--gray-200); border-radius: 14px;
-  background: var(--gray-50);
-}
-.creator-card-thumb { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1px solid var(--gray-200); background: var(--white); }
-.creator-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.creator-card { display: flex; align-items: center; gap: 14px; margin-top: 24px; padding: 16px 18px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 14px; }
+.creator-avatar { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; background: #6f6bb3; display: flex; align-items: center; justify-content: center; }
 .creator-card-body { flex: 1; min-width: 0; }
-.creator-card-name { font-size: 14px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; margin-bottom: 3px; }
-.creator-card-tagline { font-size: 12px; color: var(--gray-600); line-height: 1.6; margin-bottom: 8px; }
-.creator-card-mail { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; }
-.creator-card-mail:hover { text-decoration: underline; }
-@media (max-width: 600px) {
-  .creator-card { gap: 13px; padding: 15px 16px; }
-  .creator-card-thumb { width: 44px; height: 44px; }
+.creator-card-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; letter-spacing: -0.01em; }
+.creator-card-desc { font-size: 13px; color: var(--gray-600); line-height: 1.5; margin-bottom: 6px; }
+.creator-card-email-row { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-600); }
+.copy-icon-btn { background: none; border: none; cursor: pointer; color: var(--gray-400); padding: 3px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; transition: background 0.15s, color 0.15s; flex-shrink: 0; }
+.copy-icon-btn:hover { background: var(--gray-200); color: var(--gray-600); }
+
+/* WORLD OVERLAY — 세계관을 별도 레이어(풀스크린)로 띄우는 컨테이너 */
+.world-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: #fff;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.34,1.2,0.64,1);
 }
+.world-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  border: none;
+  font-size: 18px;
+  color: var(--gray-600);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.world-close:hover { background: var(--gray-200); }
 
+/* WORLDVIEW — 인트로와 의도적으로 다른 톤. 여백 넓고, 문장 짧고, 장식 최소화 */
+.world-sec {
+  padding: 96px 24px 100px;
+  background:
+    radial-gradient(ellipse 500px 300px at 15% 10%, rgba(185,210,230,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 500px 300px at 85% 90%, rgba(210,195,230,0.16) 0%, transparent 100%),
+    linear-gradient(180deg, #fbfcfd 0%, #f6f3f8 50%, #fbfcfd 100%);
+  min-height: 100vh;
+}
+.world-inner { max-width: 560px; margin: 0 auto; }
+.world-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; text-align: center; margin-bottom: 20px; }
+.world-title { font-family: 'Josefin Sans', sans-serif; font-weight: 100; font-size: clamp(22px, 4vw, 30px); letter-spacing: 0.18em; text-align: center; color: #4a5560; margin-bottom: 10px; }
+.world-tagline { text-align: center; font-size: 15px; color: var(--gray-600); font-style: italic; line-height: 1.8; margin-bottom: 72px; }
+.world-block { margin-bottom: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(90,144,176,0.14); }
+.world-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.world-block-title { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; color: var(--blue); text-transform: uppercase; text-align: center; margin-bottom: 18px; }
+.world-block-body { font-size: 16px; color: var(--gray-600); line-height: 2; text-align: center; font-weight: 300; }
+.world-image-slot {
+  margin: 28px auto 0;
+  max-width: 460px;
+  min-height: 180px;
+  border: 1px dashed rgba(90,144,176,0.35);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+  background: rgba(255,255,255,0.4);
+}
+.world-cta { text-align: center; margin-top: 8px; }
+.world-cta-text { font-size: 17px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.02em; }
 
-/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
-.site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--font)}
-.site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
-.sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
-.sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
-.sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
-.sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
-.sf-links a:hover{text-decoration:underline}
+@media (max-width: 580px) {
+  .world-sec { padding: 64px 20px 72px; }
+  .world-block { margin-bottom: 44px; padding-bottom: 44px; }
+  .world-tagline { margin-bottom: 52px; }
+}
 
 /* MODAL */
 #biz-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
@@ -239,7 +271,6 @@ html, body {
 .modal-eyebrow { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--gray-900); text-transform: none; margin-bottom: 14px; }
 #biz-principles { border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
 .modal-footer { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--gray-600); line-height: 1.7; }
-.modal-ip-note { margin: 14px 18px 0; padding: 13px 15px; border-radius: 10px; background: rgba(90,144,176,0.07); border: 1px solid rgba(90,144,176,0.16); font-size: 12.5px; line-height: 1.8; color: #4a5560; }
 .modal-footer strong { color: var(--gray-900); font-weight: 600; }
 
 /* RESPONSIVE */
@@ -319,11 +350,13 @@ html, body {
 
 
   <div class="hero-label">OPEN OC PROJECT</div>
-  <div class="hero-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
+  <div class="hero-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL</div>
   <div class="hero-sub">
     <span class="hero-hashtag">#비즈돌</span>
-    <span class="hero-hashtag">#비즈오씨돌</span>
+    <span class="hero-hashtag">#내오씨돌</span>
     <span class="hero-hashtag">#BOD</span>
+    <span class="hero-hashtag">#자캐</span>
+    <span class="hero-hashtag">#OC</span>
   </div>
   <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
     <button class="btn-biz" onclick="openBizModal()">
@@ -358,40 +391,32 @@ html, body {
       <div class="concept-item">
         <div class="concept-num">01 · WHAT</div>
         <div class="concept-content">
-          <div class="concept-title">공식은 캐릭터를 완성하지 않습니다</div>
-          <div class="concept-body">공식이 만드는 것은 고유 코드와 캐릭터 시트뿐. 이름도, 성격도, 이야기도 비워둡니다. 남은 빈칸은 당신의 해석으로 완성됩니다.</div>
+          <div class="concept-title">코드를 가진 오씨돌, 당신과 만나다</div>
+          <div class="concept-body">이름도 성격도 말투도 아직 없습니다. 주어진 건 고유코드와 캐릭터시트 뿐. 이 오씨돌을 완성하는 건 당신입니다.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="concept-num">02 · HOW</div>
         <div class="concept-content">
-          <div class="concept-title">모든 만남이 새로운 공식</div>
-          <div class="concept-body">같은 코드를 가진 비즈오씨돌도 누구를 만나느냐에 따라 전혀 다른 존재가 됩니다. 백 명이 만나면 백 개의 비즈오씨돌이 태어나는 셈입니다. 정답은 없습니다. 이름을 지어주세요. 성격을 정해주세요. 어떤 이야기 속에 데려다 놓아도, 무엇으로 만들어도 좋습니다.</div>
+          <div class="concept-title">다르게 만나면, 다른 오씨돌이 된다</div>
+          <div class="concept-body">같은 코드를 가진 오씨돌이 다른 사람을 만난다면, 전혀 다른 오씨돌이 됩니다. 백 명이 만나면 백 개의 오씨돌이 태어나는 셈입니다. 정답은 없습니다. 이름을 지어주세요. 성격을 정해주세요. 어떤 이야기 속에 데려다 놓아도, 무엇으로 만들어도 좋습니다.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="concept-num">03 · YOUR MOVE</div>
         <div class="concept-content">
-          <div class="concept-title">당신의 해석이 하나의 세계</div>
-          <div class="concept-body">이름을 붙이고 이야기를 만드는 순간, 그 비즈오씨돌은 당신만의 세계에서 살아갑니다. 그림으로 그리든, 글로 쓰든, 무엇으로 만들든 그 권리는 전부 당신에게 있습니다.</div>
+          <div class="concept-title">이름을 붙이는 순간, 당신의 것</div>
+          <div class="concept-body">당신이 이름 붙인 순간부터, 이 오씨돌은 당신의 것입니다. 그림으로 그리든, 글로 쓰든, 무엇으로 만들든 그 권리는 전부 당신에게 있습니다.</div>
         </div>
       </div>
     </div>
 
-    <p class="intent-quote">공식은 시작만 합니다. 비즈오씨돌은 팬들의 이름과 이야기로 살아갑니다.</p>
+    <p class="intent-quote">코드로 태어난 오씨돌이, 당신이 부르는 이름으로 완성됩니다.</p>
 
-    <!-- 용어 안내 — 창작에 필요한 최소 정보만. 원작 세계관은 스토리 탭(EP.00)으로 -->
-    <div class="world-peek">
-      <div class="world-peek-eyebrow">ABOUT · 비즈오씨돌이란</div>
-      <ul class="term-list">
-        <li><b>비즈오씨돌</b><span class="term-dash">—</span>당신을 위해 만들어진 존재입니다.</li>
-        <li><b>전속</b><span class="term-dash">—</span>그중 평생 당신 곁에 있는 단 하나를 전속이라고 부릅니다.</li>
-      </ul>
-      <a class="world-link" href="#/story" onclick="goWorldview();return false;">
-        공식이 쌓고 있는 원작 이야기
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
+    <a class="world-link" href="#worldview" onclick="openWorldOverlay();return false;">
+      오씨돌은, 어디서 왔을까?
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
   </div>
 
   <!-- 가이드라인 -->
@@ -407,7 +432,7 @@ html, body {
     <div class="source-block">
       <div class="source-row">
         <span class="badge badge-opt">자율</span>
-        <div class="source-text">개인 SNS · 소규모 창작은 별도 표기 의무 없음. 원할 경우 <strong>#biz-OC-doll</strong> 해시태그를 사용해 주세요.</div>
+        <div class="source-text">개인 SNS · 소규모 창작은 별도 표기 의무 없음. 원할 경우 <strong>#BIZ-OC-DOLL</strong> 해시태그를 사용해 주세요.</div>
       </div>
       <div class="source-row">
         <span class="badge badge-req">필수</span>
@@ -417,11 +442,11 @@ html, body {
         <div class="cite-label">출처 표기 예시 3종</div>
         <div class="cite-item">
           <span class="cite-num">1</span>
-          <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 biz-OC-doll 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
+          <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 BIZ-OC-DOLL 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
         </div>
         <div class="cite-item">
           <span class="cite-num">2</span>
-          <div class="cite-line">[캐릭터명] Original Character by biz-OC-doll</div>
+          <div class="cite-line">[캐릭터명] Original Character by BIZ-OC-DOLL</div>
         </div>
         <div class="cite-item">
           <span class="cite-num">3</span>
@@ -476,7 +501,7 @@ html, body {
       <span style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--blue);text-transform:uppercase">Fan Work Registration</span>
     </div>
     <div style="font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-0.02em;margin-bottom:10px">연재·상업 창작 등록</div>
-    <p style="font-size:14px;color:var(--gray-600);line-height:1.85;margin-bottom:12px">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 등 중·대규모 창작을 진행 중이거나 완료하신 분들을 위한 자발적 등록 창구입니다. 등록해 주신 창작물은 공식이 직접 확인하며, 공식 생태계 연계 시 우선적으로 검토됩니다.</p>
+    <p style="font-size:14px;color:var(--gray-600);line-height:1.85;margin-bottom:12px">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 등 중·대규모 창작을 진행 중이거나 완료하신 분들을 위한 자발적 등록 창구입니다. 등록된 창작물은 캐릭터의 공식 아카이브에 기록되며, 공식 생태계 연계 시 우선적으로 검토됩니다.</p>
     <div style="background:rgba(90,144,176,0.07);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--gray-600);line-height:1.75">
       📌 <strong style="color:var(--gray-900)">등록은 의무가 아닙니다.</strong> 개인 SNS·소규모 창작·소규모 판매, 태그만 달린 창작물은 전혀 해당 없습니다. 만들고 싶은 대로 만드세요. 이 창구는 원하는 분들만을 위한 선택지입니다.
     </div>
@@ -500,24 +525,68 @@ html, body {
       </svg>
       제작자 노트
     </div>
-    <div class="creator-text">이 프로젝트를 운영하면서 제작자의 모든 역량은 캐릭터를 출시에만 씁니다. 불필요한 운영에 에너지를 쓰지 않기 위한 선택입니다. 이 프로젝트에는 종료 시점이 없습니다. 캐릭터는 계속 나옵니다. </div>
+    <div class="creator-text">이 프로젝트를 운영하면서 제작자의 모든 역량은 캐릭터를 완성하는 것에만 씁니다. 불필요한 운영에 에너지를 쓰지 않기 위한 선택입니다.<br><br>이 프로젝트에는 종료 시점이 없습니다. 캐릭터는 계속 나읍니다. </div>
 
-    <!-- 제작자 프로필 — 페이지 최하단. 다 읽은 사람이 발견하는 자리 -->
     <div class="creator-card">
-      <div class="creator-card-thumb">
-        <img src="../profile.png" alt="BIZ" onerror="this.style.display='none'">
+      <div class="creator-avatar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="10" r="6.5" fill="#fff" opacity="0.92"/>
+          <circle cx="9.3" cy="9.5" r="1.6" fill="#6f6bb3"/>
+          <circle cx="14.7" cy="9.5" r="1.6" fill="#6f6bb3"/>
+          <path d="M8 15.5C9 18 15 18 16 15.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity="0.92"/>
+        </svg>
       </div>
       <div class="creator-card-body">
         <div class="creator-card-name">BIZ</div>
-        <div class="creator-card-tagline">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
-        <a class="creator-card-mail" href="mailto:rrkt.biz@proton.me">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-          rrkt.biz@proton.me
-        </a>
+        <div class="creator-card-desc">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
+        <div class="creator-card-email-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          <span id="creator-email">rrkt.biz@proton.me</span>
+          <button class="copy-icon-btn" onclick="copyCreatorEmail(this)" aria-label="이메일 주소 복사" title="주소 복사">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
+</div>
+
+<!-- 세계관 (풀스크린 오버레이) -->
+<div class="world-overlay" id="world-overlay">
+  <button class="world-close" onclick="closeWorldOverlay()">×</button>
+  <div class="world-sec" id="worldview">
+    <div class="world-inner">
+      <div class="world-eyebrow">WORLDVIEW</div>
+      <div class="world-title">B<span class="diamond-i">&#x131;</span>Z-OC-D<span class="diamond-o">O</span>LL 세계관</div>
+      <p class="world-tagline">결핍, 고통, 흔들림이 없는 세계.</p>
+
+      <div class="world-block">
+        <div class="world-block-title">오씨돌이란</div>
+        <div class="world-block-body">먼 미래의 이 세계는, 인간은 20%. 오씨돌은 80%.<br>인간은 오씨돌에게 케어를 받으며, 영혼의 미세한 결핍을 채워주는 존재와 함께 살아가고 있다.</div>
+        <!-- 이미지 자리: 오씨돌/인간 비율, 케어 이미지 등 -->
+        <div class="world-image-slot">이미지 자리</div>
+      </div>
+
+      <div class="world-block">
+        <div class="world-block-title">두 개의 별</div>
+        <div class="world-block-body">인류는 두 개의 행성, 여자별과 남자별로 분리되어 있다.<br>서로 다른 바이러스 때문에 재결합이 불가능한 구조다.<br>각 행성에는 그 행성 인간에 대응하는 오씨돌이 배치되어 있다.</div>
+        <!-- 이미지 자리: 두 행성 일러스트 등 -->
+        <div class="world-image-slot">이미지 자리</div>
+      </div>
+
+      <div class="world-block">
+        <div class="world-block-title">전담</div>
+        <div class="world-block-body">모든 인간에게는 평생 함께하는 전담 오씨돌이 있다.<br><br>이 관계는 부모도, 연인도, 친구도 아니다.<br>세상 어떤 이름으로도 정의되지 않는, 오직 둘만의 관계.<br><br>영혼의 미세한 결핍을 채워주는 존재.</div>
+        <!-- 이미지 자리: 전담 오씨돌과 인간의 관계 이미지 등 -->
+        <div class="world-image-slot">이미지 자리</div>
+      </div>
+
+      <div class="world-cta">
+        <div class="world-cta-text">당신의 전담 오씨돌을 고르세요.</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -526,14 +595,13 @@ html, body {
     <div class="modal-header">
       <div>
         <div class="modal-title">기업 협업 원칙</div>
-        <div class="modal-sub">biz-OC-doll · Business</div>
+        <div class="modal-sub">BIZ-OC-DOLL · Business</div>
       </div>
       <button class="modal-close" onclick="closeBizModal()">×</button>
     </div>
     <div class="modal-body">
       <div class="modal-eyebrow">협업에서 변하지 않는 것들</div>
       <div id="biz-principles"></div>
-      <div class="modal-ip-note">게임·영상 등 IP 확장을 위한 원작 세계관 및 메인스토리 라인을 별도로 준비하고 있습니다. 상세 자료는 개별 요청 시 제공합니다.</div>
       <div class="modal-footer">협업의 구체적인 조건과 범위는 모두 <strong>개별 계약</strong>으로 정한다.</div>
     </div>
   </div>
@@ -541,10 +609,10 @@ html, body {
 
 <script>
 const BIZ_PRINCIPLES = [
-  "원저작권은 biz-OC-doll에 있다. 어떤 형태로도 이전되지 않는다.",
+  "원저작권은 BIZ-OC-DOLL에 있다. 어떤 형태로도 이전되지 않는다.",
   "기업은 허가된 범위 안에서만 캐릭터를 활용할 수 있다.",
   "팬 창작물의 권리는 창작자에게 있다. 기업이 이를 활용하려면 창작자와 개별 협의를 거쳐야 한다.",
-  "기업은 biz-OC-doll을 공식으로 자칭하거나 대표할 수 없다.",
+  "기업은 BIZ-OC-DOLL을 공식으로 자칭하거나 대표할 수 없다.",
   "프로젝트의 제작과 운영에 기업은 관여하지 않는다.",
   "개별 커스텀 요청은 받지 않는다.",
 ];
@@ -571,43 +639,65 @@ function closeBizModal() {
   setTimeout(() => { document.getElementById('biz-overlay').style.display = 'none'; }, 220);
 }
 
-/* ── 세계관 전문으로 이동 ──
-   이 파일은 index.html 안에서 iframe 으로 열립니다.
-   부모가 있으면 postMessage 로 스토리 탭(EP.00) 전환을 요청하고,
-   단독으로 열린 경우에는 인덱스 페이지의 스토리 탭으로 직접 이동합니다. */
-function goWorldview() {
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'biz-doll-go', target: 'worldview' }, '*');
-      return;
-    }
-  } catch (e) {}
-  window.location.href = 'index.html#/story/world';
+/* ── 세계관 풀스크린 레이어 ── */
+function openWorldOverlay() {
+  var ov = document.getElementById('world-overlay');
+  ov.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  ov.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    ov.style.opacity = '1';
+    ov.style.transform = 'translateY(0)';
+  }));
 }
-/* ══════════════════════════════════════════════════
-   연재·상업 창작 등록
-   등록 폼(archive_form.html)은 구글폼으로 옮겼습니다.
-   아래 주소만 바꿔 끼우면 됩니다. 코드는 안 건드리셔도 됩니다.
-
-   ↓ 구글폼 만드신 뒤 따옴표 사이에 주소를 붙여넣으세요
-   ══════════════════════════════════════════════════ */
-var 등록폼_주소 = 'https://forms.gle/u4sSNJrKtPnVAuAP7';
-
-function openFormPopup() {
-  if (등록폼_주소) {
-    window.open(등록폼_주소, '_blank', 'noopener');
-    return;
+function closeWorldOverlay() {
+  var ov = document.getElementById('world-overlay');
+  ov.style.opacity = '0';
+  ov.style.transform = 'translateY(24px)';
+  document.body.style.overflow = '';
+  setTimeout(() => { ov.style.display = 'none'; }, 260);
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('world-overlay').style.display === 'block') {
+    closeWorldOverlay();
   }
-  /* 아직 폼이 없을 때 — 링크가 깨져 보이지 않도록 메일로 넘깁니다 */
-  window.location.href = 'mailto:rrkt.biz@proton.me'
-    + '?subject=' + encodeURIComponent('[biz-OC-doll] 연재·상업 창작 등록')
-    + '&body='    + encodeURIComponent(
-        '작품명 :\n'
-      + '창작자 :\n'
-      + '플랫폼 :\n'
-      + '사용한 캐릭터 코드 :\n'
-      + '작품 링크 :\n'
-      );
+});
+function copyCreatorEmail(btn) {
+  var email = document.getElementById('creator-email').textContent;
+  var restore = function() {
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  };
+  var showCheck = function() {
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+    setTimeout(restore, 1200);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(showCheck).catch(showCheck);
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = email;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    showCheck();
+  }
+}
+
+/* ── 등록 폼 팝업 (window.open) ── */
+var _formPopup = null;
+function openFormPopup() {
+  var pw = 900, ph = 720;
+  var left = Math.round((screen.width  - pw) / 2);
+  var top  = Math.round((screen.height - ph) / 2);
+  var features = 'width='+pw+',height='+ph+',left='+left+',top='+top+',resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
+  if (_formPopup && !_formPopup.closed) {
+    _formPopup.focus();
+  } else {
+    _formPopup = window.open('archive_form.html', 'form_popup', features);
+  }
 }
 
 // GLITTER
@@ -721,19 +811,5 @@ function openFormPopup() {
   window.addEventListener('resize', draw);
 })();
 </script>
-
-<!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
-<div class="site-footer">
-  <div class="site-footer-inner">
-    <span class="sf-copy">&copy; rrkt.biz. All rights reserved.</span>
-    <span class="sf-sep"></span>
-    <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
-    <span class="sf-links">
-      <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
-      <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
-    </span>
-  </div>
-</div>
-
 </body>
 </html>
