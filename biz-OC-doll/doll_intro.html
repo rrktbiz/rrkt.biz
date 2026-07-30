@@ -184,6 +184,27 @@ html, body {
 .cite-num { font-size: 10px; font-weight: 700; color: var(--gray-400); flex-shrink: 0; min-width: 14px; padding-top: 3px; }
 .cite-line { font-size: 13px; color: var(--gray-600); line-height: 1.7; font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace; }
 
+/* FILL — 창작자가 직접 채워야 하는 자리.
+   파랑(정보)·빨강(금지)과 겹치지 않는 색을 씁니다. */
+.fill {
+  background: #fff3d4; color: #92400e; font-weight: 700;
+  padding: 1px 5px; border-radius: 4px;
+  box-shadow: inset 0 -1px 0 #eec97a;
+  font-family: var(--font);
+}
+.cite-guide {
+  font-size: 12.5px; color: var(--gray-600); line-height: 1.75;
+  padding-bottom: 12px; margin-bottom: 2px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.cite-guide b { color: var(--gray-900); font-weight: 700; }
+.cite-done {
+  margin-top: 14px; padding: 13px 15px;
+  background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px;
+}
+.cite-done-head { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--blue); margin-bottom: 6px; }
+.cite-done-sub { font-size: 12.5px; color: var(--gray-400); line-height: 1.6; margin-bottom: 9px; }
+
 /* RESTRICT */
 .restrict-note { font-size: 15px; color: var(--gray-600); line-height: 1.8; background: #fff8f8; border: 1px solid #fde2e2; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; }
 .restrict-list { border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; }
@@ -412,7 +433,7 @@ html, body {
 
   <div class="hero-label">OPEN OC PROJECT</div>
   <div class="hero-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
-  <div class="hero-tagline">작품은 끝나도, 이 캐릭터들은 끝나지 않길.</div>
+  <div class="hero-tagline">Even if the story ends, I hope these characters never do.</div>
   <div class="hero-sub">
     <span class="hero-hashtag">#비즈돌</span>
     <span class="hero-hashtag">#비즈오씨돌</span>
@@ -451,7 +472,7 @@ html, body {
         <div class="ledger-head">공식이 주는 것</div>
         <ul class="ledger-list">
           <li>고유 코드</li>
-          <li>캐릭터 시트<small>일러스트</small></li>
+          <li>캐릭터 시트</li>
           <li>표정 몇 가지</li>
         </ul>
       </div>
@@ -483,7 +504,7 @@ html, body {
         <li><b>비즈오씨돌</b><span class="term-dash">—</span>당신을 위해 만들어진 존재입니다.</li>
         <li><b>전속</b><span class="term-dash">—</span>그중 평생 당신 곁에 있는 단 하나.</li>
       </ul>
-      <a class="world-link" href="#/story" onclick="goWorldview();return false;">
+      <a class="world-link" href="#/story" onclick="goStory();return false;">
         원작 이야기 보기
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
@@ -551,17 +572,26 @@ html, body {
       <details class="fold">
         <summary>출처 표기 예시 3종</summary>
         <div class="cite-box">
+          <div class="cite-guide">
+            <b class="fill">[ ]</b> 로 칠해진 곳만 직접 바꿔 넣으시면 됩니다. <b>대괄호도 같이 지워주세요.</b> 나머지는 그대로 복사하셔도 됩니다.
+          </div>
           <div class="cite-item">
             <span class="cite-num">1</span>
-            <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 biz-OC-doll 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
+            <div class="cite-line">본 작품에 등장하는 캐릭터 <span class="fill">[캐릭터 이름]</span>은(는) biz-OC-doll 프로젝트의 <span class="fill">[BIZOCDOLL000]</span> 캐릭터를 기반으로 창작되었습니다.</div>
           </div>
           <div class="cite-item">
             <span class="cite-num">2</span>
-            <div class="cite-line">[캐릭터명] Original Character by biz-OC-doll</div>
+            <div class="cite-line"><span class="fill">[캐릭터 이름]</span> Original Character by biz-OC-doll</div>
           </div>
           <div class="cite-item">
             <span class="cite-num">3</span>
-            <div class="cite-line">#BIZOCDOLL001</div>
+            <div class="cite-line">#BIZOCDOLL<span class="fill">[000]</span></div>
+          </div>
+          <div class="cite-done">
+            <div class="cite-done-head">이렇게 채우면 됩니다</div>
+            <div class="cite-done-sub">이름을 &lsquo;레이&rsquo;로 정했고, 캐릭터 코드가 042라면 &mdash;</div>
+            <div class="cite-line">본 작품에 등장하는 캐릭터 레이는 biz-OC-doll 프로젝트의 BIZOCDOLL042 캐릭터를 기반으로 창작되었습니다.</div>
+            <div class="cite-line" style="margin-top:6px">#BIZOCDOLL042</div>
           </div>
         </div>
       </details>
@@ -684,28 +714,23 @@ function closeBizModal() {
    이 파일은 index.html 안에서 iframe 으로 열립니다.
    부모가 있으면 postMessage 로 스토리 탭(EP.00) 전환을 요청하고,
    단독으로 열린 경우에는 인덱스 페이지의 스토리 탭으로 직접 이동합니다. */
-function goWorldview() {
+/* ── 탭 이동 ──
+   부모 셸에 message 핸들러가 있으면 그쪽이 처리하고,
+   없으면 최상위 창의 해시를 직접 바꿔서 라우터가 받게 합니다.
+   두 경로가 같은 목적지라서 둘 다 동작해도 문제없습니다.
+   → 부모 index.html 을 손대지 않아도 됩니다. */
+function goTab(target, hash) {
   try {
     if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'biz-doll-go', target: 'worldview' }, '*');
+      window.parent.postMessage({ type: 'biz-doll-go', target: target }, '*');
+      try { window.top.location.hash = hash; } catch (e) {}
       return;
     }
   } catch (e) {}
-  window.location.href = 'index.html#/story/world';
+  window.location.href = 'index.html' + hash;
 }
-/* ── 캐릭터 일람으로 이동 ──
-   goWorldview() 와 같은 방식입니다.
-   ※ 부모 index.html 의 message 핸들러에 'chars' 분기를 한 줄 추가해 주세요.
-     (worldview 를 처리하는 곳 바로 옆) */
-function goChars() {
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'biz-doll-go', target: 'chars' }, '*');
-      return;
-    }
-  } catch (e) {}
-  window.location.href = 'index.html#/chars';
-}
+function goStory() { goTab('story', '#/story'); }   /* 세계관(EP.00) 아니라 스토리 목록 */
+function goChars() { goTab('chars', '#/chars'); }
 
 /* ══════════════════════════════════════════════════
    연재·상업 창작 등록
