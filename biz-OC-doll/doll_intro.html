@@ -128,6 +128,7 @@ html, body {
   border: 1px solid rgba(90,144,176,0.14);
 }
 .world-peek-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 16px; }
+.peek-lede { font-size: 15.5px; font-weight: 600; color: var(--gray-900); line-height: 1.75; letter-spacing: -0.015em; margin-bottom: 20px; }
 .term-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
 .term-list li { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
 .term-list b { color: var(--gray-900); font-weight: 700; }
@@ -245,6 +246,94 @@ html, body {
 .modal-ip-note { margin: 16px 0 10px; padding: 13px 16px; border-radius: 12px; background: rgba(90,144,176,0.07); border: 1px solid rgba(90,144,176,0.16); font-size: 12.5px; line-height: 1.8; color: #4a5560; }
 .modal-footer strong { color: var(--gray-900); font-weight: 600; }
 
+/* LEDGER — 이 프로젝트의 본질은 '누가 무엇을 정하는가'의 분업이다.
+   그래서 2단 표를 페이지의 기본 도형으로 쓴다. 장식이 아니라 구조. */
+.ledger {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--gray-200); border: 1px solid var(--gray-200);
+  border-radius: 16px; overflow: hidden; margin-bottom: 20px;
+}
+.ledger-cell { background: var(--white); padding: 22px 24px; }
+.ledger-cell.is-fixed { background: var(--gray-50); }
+.ledger-head { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--gray-400); margin-bottom: 15px; }
+.ledger-cell.is-yours .ledger-head { color: var(--blue); }
+.ledger-cell.is-no    .ledger-head { color: #b91c1c; }
+.ledger-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.ledger-list li { font-size: 14.5px; font-weight: 500; color: var(--gray-900); line-height: 1.5; letter-spacing: -0.015em; }
+.ledger-cell.is-fixed .ledger-list li { font-weight: 400; color: var(--gray-600); }
+.ledger-list li small { display: block; font-size: 12.5px; font-weight: 400; color: var(--gray-400); margin-top: 3px; letter-spacing: 0; }
+.ledger-foot { font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 8px; }
+.ledger-foot strong { color: var(--gray-900); font-weight: 600; }
+@media (max-width: 580px) {
+  .ledger { grid-template-columns: 1fr; }
+  .ledger-cell { padding: 19px 20px; }
+}
+
+/* REG ROW — 등록 창구. 대상이 극소수라 지면도 그만큼만 쓴다. */
+.reg-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+  margin-top: 18px; padding: 16px 20px;
+  border: 1px solid rgba(90,144,176,0.22);
+  background: rgba(90,144,176,0.05);
+  border-radius: 14px; scroll-margin-top: 32px;
+}
+.reg-text { flex: 1; min-width: 220px; font-size: 13.5px; color: var(--gray-600); line-height: 1.7; }
+.reg-text b { display: block; margin-bottom: 3px; font-size: 14px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; }
+.reg-btn {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--blue);
+  background: var(--white); border: 1px solid rgba(90,144,176,0.3);
+  border-radius: 100px; padding: 8px 18px; cursor: pointer; transition: background 0.15s;
+}
+.reg-btn:hover { background: rgba(90,144,176,0.1); }
+
+/* PULL — 문단이 아니라 '한 문장'으로 서야 하는 자리 */
+.pull {
+  font-size: 15px; color: var(--gray-900); line-height: 1.85;
+  letter-spacing: -0.015em; padding-left: 16px;
+  border-left: 2px solid var(--blue); margin-bottom: 34px;
+}
+.pull b { font-weight: 700; }
+.pull .go { display: inline-flex; align-items: center; gap: 5px; color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.pull .go:hover { text-decoration: underline; }
+
+/* 히어로 태그라인 — 기획의도 전문은 페이지 맨 아래. 여기엔 한 줄만. */
+.hero-tagline {
+  position: relative; z-index: 2;
+  font-size: 14px; font-weight: 400; color: #5f7385;
+  letter-spacing: -0.01em; line-height: 1.7; margin: -6px auto 20px;
+  max-width: 30em;
+}
+@media (max-width: 580px) { .hero-tagline { font-size: 13.5px; } }
+
+/* FOLD — 정보를 지우지 않고 접는다. 접힌 안쪽은 상업 창작자용 상세. */
+.fold > summary {
+  list-style: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px; font-weight: 600; color: var(--blue);
+  letter-spacing: -0.01em;
+}
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary::before { content: '\25B8'; font-size: 10px; transition: transform 0.18s ease; }
+.fold[open] > summary::before { transform: rotate(90deg); }
+.fold > summary:hover { text-decoration: underline; }
+.fold > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+
+/* 출처 표기 예시 — source-block 안쪽 */
+.source-block .fold { border-top: 1px solid var(--gray-100); }
+.source-block .fold > summary { padding: 15px 20px; }
+.source-block .fold[open] > summary { padding-bottom: 4px; }
+
+/* 종교 항목 상세 — restrict-item 안쪽 */
+.restrict-item .fold > summary { padding: 9px 0 0; font-size: 12px; }
+.restrict-fold-body {
+  margin-top: 10px; padding: 12px 14px;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px;
+  font-size: 13.5px; color: var(--gray-600); line-height: 1.75;
+}
+@media (prefers-reduced-motion: reduce) { .fold > summary::before { transition: none; } }
+
 /* RESPONSIVE */
 @media (max-width: 580px) {
   .page { padding: 0 20px 64px; }
@@ -323,174 +412,184 @@ html, body {
 
   <div class="hero-label">OPEN OC PROJECT</div>
   <div class="hero-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
+  <div class="hero-tagline">작품은 끝나도, 이 캐릭터들은 끝나지 않길.</div>
   <div class="hero-sub">
     <span class="hero-hashtag">#비즈돌</span>
     <span class="hero-hashtag">#비즈오씨돌</span>
     <span class="hero-hashtag">#BOD</span>
   </div>
+  <!-- ══════════════════════════════════════════════════
+       히어로 버튼
+       기존의 '비즈니스 안내'·'연재/상업 등록' 두 개는 소수 독자용이라
+       페이지 하단으로 내렸습니다. 여기에는 다수 방문자가 할 행동 하나만.
+
+       ※ 부모 셸(index.html) 탭에 캐릭터 탭이 이미 잘 보인다면
+         아래 <div> 한 덩어리를 통째로 지우셔도 됩니다.
+       ══════════════════════════════════════════════════ -->
   <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
-    <button class="btn-biz" onclick="openBizModal()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
-      비즈니스 안내
-    </button>
-    <a class="btn-report" href="#fan-work-registration" onclick="document.getElementById('fan-work-registration').scrollIntoView({behavior:'smooth'});return false;">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      연재·상업 창작 등록
+    <a class="btn-report" href="#/chars" onclick="goChars();return false;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      캐릭터 보러 가기
     </a>
   </div>
 </div>
 
 <div class="page">
 
-  <!-- 컨셉 -->
+  <!-- ══════════════════════════════════════════════════
+       1 · 이런 프로젝트입니다
+       설명하지 않고 보여준다. 컨셉 카드 3장이 하던 일을 표 하나가 한다.
+       ══════════════════════════════════════════════════ -->
   <div class="sec sec-first">
-    <div class="sec-eyebrow">PROJECT INTRODUCTION</div>
-    <div class="sec-title">프로젝트 소개서</div>
+    <div class="sec-eyebrow">What this is</div>
+    <div class="sec-title">이런 프로젝트입니다</div>
 
-    <!-- WHY: 기획의도 -->
-    <div style="margin-bottom:48px">
-      <div class="sec-eyebrow" style="margin-bottom:12px;font-size:14px">기획의도</div>
-      <div class="intent-heading">"작품은 끝나도, 이 캐릭터들은 끝나지 않길."</div>
-      <ul class="dash-list">
-        <li>좋아하는 캐릭터가 등장하는 작품이 완결된 날, 보내기 싫었습니다. 이후 출시되는 굿즈 몇 개로는 안 달래졌어요. 원했던 건 이 캐릭터가 어떤 세계관 안에서도 계속 살아있는 걸 추적하는 것, 그리고 내 작품 안에서 직접 움직이게 하고 싶은 욕심 — 저작권이 그걸 막았습니다. 그 아쉬움과 허무함을 아는 사람들을 위해 만들었습니다. 여기선 마음껏 좋아해도 됩니다.   </li>
-      </ul>
-    </div>
+    <p class="guide-body" style="margin-bottom:26px">이름 없는 캐릭터가 계속 나옵니다.<br>이름도, 성격도, 이야기도 당신이 정합니다.</p>
 
-    <!-- WHAT·HOW·YOUR MOVE -->
-    <div class="concepts">
-      <div class="concept-item">
-        <div class="concept-num">01 · WHAT</div>
-        <div class="concept-content">
-          <div class="concept-title">공식은 캐릭터를 완성하지 않습니다</div>
-          <div class="concept-body">공식이 만드는 것은 고유 코드와 캐릭터 시트뿐. 이름도, 성격도, 이야기도 비워둡니다. 남은 빈칸은 당신의 해석으로 완성됩니다.</div>
-        </div>
+    <div class="ledger">
+      <div class="ledger-cell is-fixed">
+        <div class="ledger-head">공식이 주는 것</div>
+        <ul class="ledger-list">
+          <li>고유 코드</li>
+          <li>캐릭터 시트<small>일러스트</small></li>
+          <li>표정 몇 가지</li>
+        </ul>
       </div>
-      <div class="concept-item">
-        <div class="concept-num">02 · HOW</div>
-        <div class="concept-content">
-          <div class="concept-title">모든 만남이 새로운 공식</div>
-          <div class="concept-body">같은 코드를 가진 비즈오씨돌도 누구를 만나느냐에 따라 전혀 다른 존재가 됩니다. 백 명이 만나면 백 개의 비즈오씨돌이 태어나는 셈입니다. 정답은 없습니다. 이름을 지어주세요. 성격을 정해주세요. 어떤 이야기 속에 데려다 놓아도, 무엇으로 만들어도 좋습니다.</div>
-        </div>
-      </div>
-      <div class="concept-item">
-        <div class="concept-num">03 · YOUR MOVE</div>
-        <div class="concept-content">
-          <div class="concept-title">당신의 해석이 하나의 세계</div>
-          <div class="concept-body">이름을 붙이고 이야기를 만드는 순간, 그 비즈오씨돌은 당신만의 세계에서 살아갑니다. 그림으로 그리든, 글로 쓰든, 무엇으로 만들든 그 권리는 전부 당신에게 있습니다.</div>
-        </div>
+      <div class="ledger-cell is-yours">
+        <div class="ledger-head">당신이 정하는 것</div>
+        <ul class="ledger-list">
+          <li>이름 · 성격</li>
+          <li>말투 · 서사</li>
+          <li>나이 · 키</li>
+          <li>그 외의 모든 것</li>
+        </ul>
       </div>
     </div>
 
-    <p class="intent-quote">공식은 시작만 합니다. 비즈오씨돌은 팬들의 이름과 이야기로 살아갑니다.</p>
+    <div class="pull">빈 공간은 자유롭게 가지고 놀라고 남겨둔 자리입니다.<br>채우는 방법에 정답은 없고, 굳이 채우지 않아도 됩니다.</div>
 
-    <!-- 용어 안내 — 창작에 필요한 최소 정보만. 원작 세계관은 스토리 탭(EP.00)으로 -->
+    <div class="pull" style="margin-bottom:40px">200명을 다 알 필요는 없습니다. 한 명만 마음에 들면 그걸로 충분합니다.
+      <a class="go" href="#/chars" onclick="goChars();return false;">캐릭터 보러 가기
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <!-- 이중 트랙 안내 — '공식 이야기가 따로 있으면 내 해석은 틀린 건가?'
+         라는 의심을 여기서 미리 없앤다. story.html 과 같은 표현을 쓴다. -->
     <div class="world-peek">
-      <div class="world-peek-eyebrow">ABOUT · 비즈오씨돌이란</div>
+      <div class="world-peek-eyebrow">Original · 원작 세계관</div>
+      <div class="peek-lede" style="font-size:15px;margin-bottom:16px">게임·영상 같은 확장을 대비해 공식도 따로 이야기를 씁니다.<br>당신의 비즈오씨돌은 거기 묶이지 않습니다.</div>
       <ul class="term-list">
         <li><b>비즈오씨돌</b><span class="term-dash">—</span>당신을 위해 만들어진 존재입니다.</li>
-        <li><b>전속</b><span class="term-dash">—</span>그중 평생 당신 곁에 있는 단 하나를 전속이라고 부릅니다.</li>
+        <li><b>전속</b><span class="term-dash">—</span>그중 평생 당신 곁에 있는 단 하나.</li>
       </ul>
       <a class="world-link" href="#/story" onclick="goWorldview();return false;">
-        공식이 쌓고 있는 원작 이야기
+        원작 이야기 보기
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
 
-  <!-- 가이드라인 -->
+
+  <!-- ══════════════════════════════════════════════════
+       2 · 규칙
+       '된다'와 '안 된다'는 같은 축이다. 따로 두면 두 번 읽어야 한다.
+       ══════════════════════════════════════════════════ -->
   <div class="sec">
-    <div class="sec-eyebrow">Fan Creation Guidelines</div>
-    <div class="sec-title">2차 창작 · 수익 · 저작권</div>
+    <div class="sec-eyebrow">Rules</div>
+    <div class="sec-title">해도 되는 것, 안 되는 것</div>
 
-    <div class="guide-label-section" style="margin-bottom:10px">01 · 창작과 수익, 모두 당신의 것</div>
-    <p class="guide-body" style="margin-bottom:32px">모든 캐릭터는 창작을 위해 열려 있습니다. 개인 굿즈, 포스타입 유료 발행, SNS 업로드 — 어떤 형태의 개인 창작이든 공식은 배당이나 권리를 요구하지 않습니다.</p>
+    <div class="ledger">
+      <div class="ledger-cell is-yours">
+        <div class="ledger-head">됩니다</div>
+        <ul class="ledger-list">
+          <li>이름 붙이기 · 설정 만들기</li>
+          <li>그림 · 글 · 영상 · 게임</li>
+          <li>개인 굿즈 제작과 판매</li>
+          <li>포스타입 유료 발행</li>
+          <li>플랫폼 연재 · 상업 게임 출시</li>
+          <li>다른 작품에 출연시키기</li>
+        </ul>
+      </div>
+      <div class="ledger-cell is-no">
+        <div class="ledger-head">안 됩니다</div>
+        <ul class="ledger-list">
+          <li>정치 견해 표명 · 혐오 조장 · 분쟁 유발 목적</li>
+          <li>현실 종교 포교물에 사용<small>작품 속 종교 설정은 허용</small></li>
+          <li>과도한 고어 · 혐오 묘사 · 성착취적 연출</li>
+        </ul>
+      </div>
+    </div>
 
-    <div class="guide-label-section" style="margin-bottom:8px">02 · 출처 표기 안내</div>
-    <div style="font-size:14px;color:var(--gray-400);margin-bottom:14px;line-height:1.6">창작자의 미적 자유를 존중하여 출처 표기를 상황에 따라 구분합니다.</div>
-    <div class="source-block">
+    <p class="ledger-foot"><strong>공식은 배당을 요구하지 않습니다.</strong> 당신이 만든 것의 권리는 당신 것입니다. 공식은 무단으로 쓰지 않고, 소유권을 주장하지 않습니다.</p>
+    <p class="ledger-foot" style="margin-bottom:0"><strong>공식은 창작물을 검열하지 않습니다.</strong> 다만 위 <strong>&lsquo;안 됩니다&rsquo;</strong> 항목이 들어간 창작물은 공식 굿즈·게임 등에 쓰지 않습니다.</p>
+
+    <details class="fold" style="margin-bottom:34px">
+      <summary>종교 관련 허용 / 금지 구분 자세히</summary>
+      <div class="restrict-fold-body">
+        <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start">
+          <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#e8f5e9;color:#2e7d32;flex-shrink:0;margin-top:2px">O 허용</span>
+          <span>캐릭터가 각종 콘텐츠(웹소설, 웹툰, 일러스트, 영상, 게임 등) 및 미디어 서사 내에서 종교적 설정(사제, 수녀, 불교 신자 등)으로 등장하거나 관련 복식을 착용하는 창작 행위. 그로 인한 3차 창작도 허용합니다.</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#fff0f0;color:#c62828;flex-shrink:0;margin-top:2px">X 금지</span>
+          <span>캐릭터를 현실 종교의 포교용 홍보물(포스터, 전단지 등)에 무단 사용하는 행위. 캐릭터를 특정 종교의 상징물로 전락시켜 선전 도구로 쓰는 것을 금지합니다.</span>
+        </div>
+      </div>
+    </details>
+
+    <div class="guide-label-section" style="margin-bottom:12px">출처 표기</div>
+    <div class="source-block" style="margin-bottom:0">
       <div class="source-row">
         <span class="badge badge-opt">자율</span>
-        <div class="source-text">개인 SNS · 소규모 창작은 별도 표기 의무 없음. 원할 경우 <strong>#biz-OC-doll</strong> 해시태그를 사용해 주세요.</div>
+        <div class="source-text">개인 SNS · 소규모 창작은 표기 의무 없음. 원하면 <strong>#biz-OC-doll</strong></div>
       </div>
       <div class="source-row">
         <span class="badge badge-req">필수</span>
-        <div class="source-text">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 시 작품 하단이나 크레딧에 기재해 주세요.</div>
+        <div class="source-text">플랫폼 연재 · 상업 게임 · 대규모 판매는 작품 하단이나 크레딧에 기재해 주세요.</div>
       </div>
-      <div class="cite-box">
-        <div class="cite-label">출처 표기 예시 3종</div>
-        <div class="cite-item">
-          <span class="cite-num">1</span>
-          <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 biz-OC-doll 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
-        </div>
-        <div class="cite-item">
-          <span class="cite-num">2</span>
-          <div class="cite-line">[캐릭터명] Original Character by biz-OC-doll</div>
-        </div>
-        <div class="cite-item">
-          <span class="cite-num">3</span>
-          <div class="cite-line">#BIZOCDOLL001</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="guide-label-section" style="margin-bottom:10px;margin-top:32px">03 · 저작권 귀속</div>
-    <p class="guide-body" style="margin-bottom:32px">당신이 만든 2차 저작물의 권리는 전적으로 당신에게 있습니다. 공식은 당신의 창작물을 무단으로 사용하지 않고, 소유권을 주장하지 않습니다.</p>
-
-    <div class="guide-label-section-red" style="margin-bottom:12px">이용 제한 · Restrictions</div>
-    <div class="restrict-note">공식은 모든 창작물을 실시간으로 검열하거나 통제하지 않습니다. 창작은 창작자에게 맡겨지지만, 아래 항목이 포함된 창작물은 공식 생태계(공식 프로젝트, 앱 게임, 굿즈화 등)에서 불리해질 수 있습니다.</div>
-    <div class="restrict-list">
-      <div class="restrict-item">
-        <div class="restrict-num">1</div>
-        <div>
-          <div class="restrict-title">사회적·정치적 악용</div>
-          <div class="restrict-body">특정 정치적 견해 표명, 사회적 혐오 조장, 분쟁 유발을 목적으로 한 사용은 허용하지 않습니다.</div>
-        </div>
-      </div>
-      <div class="restrict-item">
-        <div class="restrict-num">2</div>
-        <div>
-          <div class="restrict-title">종교적 오용 방지 <span style="font-weight:400;font-size:13px;color:var(--gray-400)">(창작물과 홍보물 구분)</span></div>
-          <div class="restrict-body" style="margin-top:8px">
-            <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">
-              <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#e8f5e9;color:#2e7d32;flex-shrink:0;margin-top:2px">O 허용</span>
-              <span>캐릭터가 각종 콘텐츠(웹소설, 웹툰, 일러스트, 영상, 게임 등) 및 미디어 서사 내에서 종교적 설정(사제, 수녀, 불교 신자 등)으로 등장하거나 관련 복식을 착용하는 창작 행위. 그로 인한 3차 창작도 허용합니다.</span>
-            </div>
-            <div style="display:flex;gap:8px;align-items:flex-start">
-              <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#fff0f0;color:#c62828;flex-shrink:0;margin-top:2px">X 금지</span>
-              <span>캐릭터를 현실 종교의 포교용 홍보물(포스터, 전단지 등)에 무단 사용하는 행위. 캐릭터를 특정 종교의 상징물로 전락시켜 선전 도구로 쓰는 것을 금지합니다.</span>
-            </div>
+      <details class="fold">
+        <summary>출처 표기 예시 3종</summary>
+        <div class="cite-box">
+          <div class="cite-item">
+            <span class="cite-num">1</span>
+            <div class="cite-line">본 작품에 등장하는 캐릭터 [캐릭터명]은 biz-OC-doll 프로젝트의 [BIZOCDOLL000] 캐릭터를 기반으로 창작되었습니다.</div>
+          </div>
+          <div class="cite-item">
+            <span class="cite-num">2</span>
+            <div class="cite-line">[캐릭터명] Original Character by biz-OC-doll</div>
+          </div>
+          <div class="cite-item">
+            <span class="cite-num">3</span>
+            <div class="cite-line">#BIZOCDOLL001</div>
           </div>
         </div>
+      </details>
+    </div>
+
+    <!-- 연재·상업 창작 등록
+         대상 독자는 바로 위 '필수' 줄을 읽은 사람입니다.
+         자리로 이미 타게팅이 되므로 크게 외칠 필요가 없습니다. -->
+    <div id="fan-work-registration" class="reg-row">
+      <div class="reg-text">
+        <b>연재·상업 창작을 하고 계신가요?</b>
+        등록해 두시면 공식이 확인하고, 나중에 굿즈·게임 연계를 검토할 때 먼저 봅니다. 의무는 아닙니다.
       </div>
-      <div class="restrict-item">
-        <div class="restrict-num">3</div>
-        <div>
-          <div class="restrict-title">수위 및 표현 기준</div>
-          <div class="restrict-body">과도한 고어, 혐오감을 조장하는 묘사, 성착취적 연출이 포함된 창작물은 공식 생태계 연계가 어렵습니다.</div>
-        </div>
-      </div>
+      <button class="reg-btn" onclick="openFormPopup()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        등록 폼
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- 연재·상업 창작 등록 안내 -->
-  <div id="fan-work-registration" style="margin-top:40px;background:linear-gradient(135deg,rgba(90,144,176,0.07) 0%,rgba(90,144,176,0.03) 100%);border:1px solid rgba(90,144,176,0.2);border-radius:16px;padding:28px 28px 24px;scroll-margin-top:32px">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a90b0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      <span style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--blue);text-transform:uppercase">Fan Work Registration</span>
-    </div>
-    <div style="font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-0.02em;margin-bottom:10px">연재·상업 창작 등록</div>
-    <p style="font-size:14px;color:var(--gray-600);line-height:1.85;margin-bottom:12px">웹툰·웹소설 플랫폼 연재, 상업 게임 출시, 대규모 상업 판매 등 중·대규모 창작을 진행 중이거나 완료하신 분들을 위한 자발적 등록 창구입니다. 등록해 주신 창작물은 공식이 직접 확인하며, 공식 생태계 연계 시 우선적으로 검토됩니다.</p>
-    <div style="background:rgba(90,144,176,0.07);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--gray-600);line-height:1.75">
-      📌 <strong style="color:var(--gray-900)">등록은 의무가 아닙니다.</strong> 개인 SNS·소규모 창작·소규모 판매, 태그만 달린 창작물은 전혀 해당 없습니다. 만들고 싶은 대로 만드세요. 이 창구는 원하는 분들만을 위한 선택지입니다.
-    </div>
-    <button onclick="openFormPopup()" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--blue);background:rgba(255,255,255,0.8);border:1px solid rgba(90,144,176,0.3);border-radius:100px;padding:8px 20px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='rgba(90,144,176,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.8)'">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      등록 폼 바로가기
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-    </button>
-  </div>
 
-  <!-- 제작자 스탠드 -->
+
+  <!-- ══════════════════════════════════════════════════
+       4 · 제작자 노트
+       기획의도(왜)와 운영 방침(어떻게)을 여기 합쳤습니다.
+       끝까지 읽은 사람에게만 하는 이야기라 맨 아래.
+       ══════════════════════════════════════════════════ -->
   <div class="creator-block">
     <div class="creator-label">Creator's Stand</div>
     <div class="creator-label-ko" style="display:flex;align-items:center;gap:8px">
@@ -503,10 +602,16 @@ html, body {
       </svg>
       제작자 노트
     </div>
-    <div class="creator-text">이 프로젝트를 운영하면서 제작자의 모든 역량은 캐릭터를 출시에만 씁니다. 불필요한 운영에 에너지를 쓰지 않기 위한 선택입니다. 이 프로젝트에는 종료 시점이 없습니다. 캐릭터는 계속 나옵니다. </div>
+    <div class="creator-text" style="margin-bottom:18px">좋아하던 캐릭터가 나오는 작품이 완결되면, 그 캐릭터가 죽은 것처럼 느낍니다. 그래서 내 이야기 안에서라도 움직이게 하고 싶었는데, 저작권이 막았습니다. 그래서 막히지 않는 걸 만들었습니다.</div>
+    <div class="creator-text" style="margin-bottom:26px">여기엔 완결도 완성도 없습니다. 200명은 목표일 뿐 고정된 숫자도 아닙니다. 꾸준히 해서 신뢰를 얻겠다는 계획은 일찌감치 버렸고, 대신 멈추지 않는 걸 기준으로 삼았습니다. 몰아서 낼 때도, 한참 조용할 때도 있을 겁니다. 제 역량은 캐릭터를 내놓는 데만 씁니다.</div>
 
-    <!-- 제작자 프로필 — 페이지 최하단. 다 읽은 사람이 발견하는 자리 -->
-    <!-- [숨김 처리] 사용 여부 미정. 다시 보이게 하려면 아래 style="display:none" 부분만 삭제 -->
+    <!-- 히어로에서 내려온 버튼. 기업 담당자는 여기까지 읽고 누릅니다 -->
+    <button class="btn-biz" onclick="openBizModal()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      비즈니스 안내
+    </button>
+
+    <!-- [숨김 처리] 사용 여부 미정. 다시 보이게 하려면 style="display:none" 만 삭제 -->
     <div class="creator-card" style="display:none">
       <div class="creator-card-thumb">
         <img src="../profile.png" alt="rrkt.biz" onerror="this.style.display='none'">
@@ -518,10 +623,6 @@ html, body {
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
           rrkt.biz@proton.me
         </a>
-        <button type="button" class="creator-card-copy" title="이메일 주소 복사" aria-label="이메일 주소 복사" onclick="navigator.clipboard.writeText('rrkt.biz@proton.me'); this.querySelector('span').textContent='복사됨'; this.classList.add('copied'); setTimeout(()=>{this.classList.remove('copied'); this.querySelector('span').textContent='복사';}, 1200)">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 10.5v-7a1 1 0 0 1 1-1h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <span>복사</span>
-        </button>
       </div>
     </div>
   </div>
@@ -592,6 +693,20 @@ function goWorldview() {
   } catch (e) {}
   window.location.href = 'index.html#/story/world';
 }
+/* ── 캐릭터 일람으로 이동 ──
+   goWorldview() 와 같은 방식입니다.
+   ※ 부모 index.html 의 message 핸들러에 'chars' 분기를 한 줄 추가해 주세요.
+     (worldview 를 처리하는 곳 바로 옆) */
+function goChars() {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'biz-doll-go', target: 'chars' }, '*');
+      return;
+    }
+  } catch (e) {}
+  window.location.href = 'index.html#/chars';
+}
+
 /* ══════════════════════════════════════════════════
    연재·상업 창작 등록
    등록 폼(archive_form.html)은 구글폼으로 옮겼습니다.
