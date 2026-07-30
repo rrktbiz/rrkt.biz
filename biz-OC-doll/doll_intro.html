@@ -15,7 +15,9 @@
   --gray-400: #a3a3a3;
   --gray-600: #525252;
   --gray-900: #111111;
-  --blue: #5a90b0;
+  --blue: #5a90b0;              /* 버튼·테두리·장식용 */
+  --blue-ink: #477693;          /* 작은 글씨용 (흰 배경 4.91:1, AA 통과) */
+  --gray-450: #6e6e6e;          /* 보조설명용 (회 배경 4.89:1, AA 통과) */
   --red: #d93025;
   --font: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;
 }
@@ -91,9 +93,9 @@ html, body {
 .hero-hashtag { font-size: 13px; color: rgba(90,144,176,0.65); font-weight: 400; letter-spacing: 0.02em; }
 .hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center; }
 .tag { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 100px; background: rgba(255,255,255,0.4); border: 1px solid rgba(90,144,176,0.3); color: var(--blue); }
-.btn-biz { font-size: 13px; font-weight: 600; padding: 7px 18px; border-radius: 100px; background: rgba(255,255,255,0.6); border: 1px solid rgba(74,85,96,0.2); color: #4a5560; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2; }
+.btn-biz { font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 100px; background: rgba(255,255,255,0.6); border: 1px solid rgba(74,85,96,0.2); color: #4a5560; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2; }
 .btn-biz:hover { background: #e8e8e8; transform: scale(1.02); }
-.btn-report { font-size: 13px; font-weight: 600; padding: 7px 18px; border-radius: 100px; background: rgba(90,144,176,0.1); border: 1px solid rgba(90,144,176,0.35); color: var(--blue); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; text-decoration: none; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2; }
+.btn-report { font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 100px; background: rgba(90,144,176,0.1); border: 1px solid rgba(90,144,176,0.35); color: var(--blue); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; text-decoration: none; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2; }
 .btn-report:hover { background: rgba(90,144,176,0.18); transform: scale(1.02); }
 
 /* PAGE */
@@ -102,7 +104,7 @@ html, body {
 /* SECTION */
 .sec { padding-top: 56px; margin-top: 56px; border-top: 1px solid var(--gray-200); }
 .sec-first { border-top: none; padding-top: 12px; }
-.sec-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+.sec-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--blue-ink); text-transform: uppercase; margin-bottom: 8px; }
 .sec-title { font-size: 22px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; line-height: 1.3; margin-bottom: 32px; }
 
 /* CONCEPTS */
@@ -127,12 +129,12 @@ html, body {
   background: linear-gradient(150deg, #f2f7fa 0%, #f4f2f8 100%);
   border: 1px solid rgba(90,144,176,0.14);
 }
-.world-peek-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; margin-bottom: 16px; }
+.world-peek-eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: 2px; color: var(--blue-ink); text-transform: uppercase; margin-bottom: 16px; }
 .peek-lede { font-size: 15.5px; font-weight: 600; color: var(--gray-900); line-height: 1.75; letter-spacing: -0.015em; margin-bottom: 20px; }
 .term-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
 .term-list li { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
 .term-list b { color: var(--gray-900); font-weight: 700; }
-.term-dash { color: rgba(90,144,176,0.75); padding: 0 8px; }
+.term-dash { color: var(--blue-ink); opacity: 0.85; padding: 0 8px; }
 @media (max-width: 600px) {
   .world-peek { padding: 22px 20px 20px; }
   .term-list li { font-size: 14px; }
@@ -149,7 +151,7 @@ html, body {
   color: var(--blue);
   text-decoration: none;
   letter-spacing: -0.01em;
-  padding-left: 16px;
+  padding: 13px 0 13px 16px;   /* ③ 탭 타깃 18px → 44px */
   border-left: 2px solid rgba(90,144,176,0.35);
   transition: gap 0.2s ease, border-color 0.2s ease;
 }
@@ -202,7 +204,7 @@ html, body {
   margin-top: 14px; padding: 13px 15px;
   background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px;
 }
-.cite-done-head { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--blue); margin-bottom: 6px; }
+.cite-done-head { font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--blue-ink); margin-bottom: 6px; }
 .cite-done-sub { font-size: 12.5px; color: var(--gray-400); line-height: 1.6; margin-bottom: 9px; }
 
 /* RESTRICT */
@@ -276,13 +278,13 @@ html, body {
 }
 .ledger-cell { background: var(--white); padding: 22px 24px; }
 .ledger-cell.is-fixed { background: var(--gray-50); }
-.ledger-head { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--gray-400); margin-bottom: 15px; }
-.ledger-cell.is-yours .ledger-head { color: var(--blue); }
+.ledger-head { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--gray-600); margin-bottom: 15px; }
+.ledger-cell.is-yours .ledger-head { color: var(--blue-ink); }
 .ledger-cell.is-no    .ledger-head { color: #b91c1c; }
 .ledger-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .ledger-list li { font-size: 14.5px; font-weight: 500; color: var(--gray-900); line-height: 1.5; letter-spacing: -0.015em; }
 .ledger-cell.is-fixed .ledger-list li { font-weight: 400; color: var(--gray-600); }
-.ledger-list li small { display: block; font-size: 12.5px; font-weight: 400; color: var(--gray-400); margin-top: 3px; letter-spacing: 0; }
+.ledger-list li small { display: block; font-size: 12.5px; font-weight: 400; color: var(--gray-450); margin-top: 3px; letter-spacing: 0; }
 .ledger-foot { font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 8px; }
 .ledger-foot strong { color: var(--gray-900); font-weight: 600; }
 @media (max-width: 580px) {
@@ -303,9 +305,9 @@ html, body {
 .reg-text b { display: block; margin-bottom: 3px; font-size: 14px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; }
 .reg-btn {
   display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
-  font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--blue);
+  font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--blue-ink);
   background: var(--white); border: 1px solid rgba(90,144,176,0.3);
-  border-radius: 100px; padding: 8px 18px; cursor: pointer; transition: background 0.15s;
+  border-radius: 100px; padding: 13px 20px; cursor: pointer; transition: background 0.15s;
 }
 .reg-btn:hover { background: rgba(90,144,176,0.1); }
 
@@ -316,7 +318,9 @@ html, body {
   border-left: 2px solid var(--blue); margin-bottom: 34px;
 }
 .pull b { font-weight: 700; }
-.pull .go { display: inline-flex; align-items: center; gap: 5px; color: var(--blue); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.pull .go { position: relative; display: inline-flex; align-items: center; gap: 5px; color: var(--blue-ink); font-weight: 700; text-decoration: none; white-space: nowrap; }
+/* ③ 줄 높이를 건드리지 않고 히트 영역만 46px 로 확장 */
+.pull .go::before { content: ''; position: absolute; inset: -9px -10px; }
 .pull .go:hover { text-decoration: underline; }
 
 /* 히어로 태그라인 — 기획의도 전문은 페이지 맨 아래. 여기엔 한 줄만. */
@@ -332,8 +336,9 @@ html, body {
 .fold > summary {
   list-style: none; cursor: pointer;
   display: inline-flex; align-items: center; gap: 7px;
-  font-size: 12.5px; font-weight: 600; color: var(--blue);
+  font-size: 12.5px; font-weight: 600; color: var(--blue-ink);
   letter-spacing: -0.01em;
+  padding: 14px 0;             /* ③ 탭 타깃 17px → 45px */
 }
 .fold > summary::-webkit-details-marker { display: none; }
 .fold > summary::before { content: '\25B8'; font-size: 10px; transition: transform 0.18s ease; }
@@ -344,7 +349,7 @@ html, body {
 /* 출처 표기 예시 — source-block 안쪽 */
 .source-block .fold { border-top: 1px solid var(--gray-100); }
 .source-block .fold > summary { padding: 15px 20px; }
-.source-block .fold[open] > summary { padding-bottom: 4px; }
+.source-block .fold[open] > summary { padding-bottom: 12px; }  /* ③ 펼친 뒤에도 탭 타깃 44px 유지 */
 
 /* 종교 항목 상세 — restrict-item 안쪽 */
 .restrict-item .fold > summary { padding: 9px 0 0; font-size: 12px; }
@@ -433,7 +438,9 @@ html, body {
 
   <div class="hero-label">OPEN OC PROJECT</div>
   <div class="hero-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
+  <!-- ④ 태그라인. 한글판으로 바꾸려면 아래 두 줄을 서로 바꿔 주세요 -->
   <div class="hero-tagline">Even if the story ends, I hope these characters never do.</div>
+  <!-- <div class="hero-tagline">작품은 끝나도, 이 캐릭터들은 끝나지 않길.</div> -->
   <div class="hero-sub">
     <span class="hero-hashtag">#비즈돌</span>
     <span class="hero-hashtag">#비즈오씨돌</span>
@@ -487,9 +494,9 @@ html, body {
       </div>
     </div>
 
-    <div class="pull">빈 공간은 자유롭게 가지고 놀라고 남겨둔 자리입니다.<br>채우는 방법에 정답은 없고, 굳이 채우지 않아도 됩니다.</div>
+    <div class="pull">빈 공간은 <b>자유롭게 가지고 놀라고</b> 남겨둔 자리입니다.<br>채우는 방법에 정답은 없고, <b>굳이 채우지 않아도 됩니다.</b></div>
 
-    <div class="pull" style="margin-bottom:40px">전부 다 알 필요는 없습니다. 한 명만 마음에 들면 그걸로 충분합니다.
+    <div class="pull" style="margin-bottom:40px">전부 다 알 필요는 없습니다. <b>한 명만 마음에 들면 그걸로 충분합니다.</b>
       <a class="go" href="#/chars" onclick="goChars();return false;">캐릭터 보러 가기
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
@@ -545,7 +552,7 @@ html, body {
     <p class="ledger-foot"><strong>공식은 창작물을 하나하나 검열하지 않습니다.</strong> 다만 위 두 가지만은 하지 말아주세요.</p>
     <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 공식은 전체 이용가 분위기로 유지할 예정이라 굿즈·게임에는 쓰지 않습니다.</p>
 
-    <details class="fold" style="margin-bottom:34px">
+    <details class="fold" style="margin-bottom:20px">
       <summary>종교 관련 허용 / 금지 구분 자세히</summary>
       <div class="restrict-fold-body">
         <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start">
