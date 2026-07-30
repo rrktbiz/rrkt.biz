@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 프로젝트 소개</title>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -332,11 +332,12 @@ html, body {
 /* 히어로 태그라인 — 기획의도 전문은 페이지 맨 아래. 여기엔 한 줄만. */
 .hero-tagline {
   position: relative; z-index: 2;
-  font-size: 14px; font-weight: 400; color: #5f7385;
-  letter-spacing: -0.01em; line-height: 1.7; margin: -6px auto 20px;
+  font-family: 'Zen Kurenaido', 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 400; color: #9faebc;
+  letter-spacing: 0.01em; line-height: 1.65; margin: -4px auto 20px;
   max-width: 30em;
 }
-@media (max-width: 580px) { .hero-tagline { font-size: 13.5px; } }
+@media (max-width: 580px) { .hero-tagline { font-size: 12px; max-width: 30em; } }
 
 /* FOLD — 정보를 지우지 않고 접는다. 접힌 안쪽은 상업 창작자용 상세. */
 .fold > summary {
