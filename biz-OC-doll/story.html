@@ -258,6 +258,35 @@ body{top:0 !important}
 .ep-nav-btn:first-child{justify-self:start}
 .ep-nav-btn:last-child{justify-self:end}
 .ep-nav-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── 플로팅 에피소드 네비 (읽기 뷰 전용) — bhs_index 에서 이식 ── */
+#float-ep-nav{
+  position:fixed;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  right:16px;
+  z-index:110;
+  display:none;
+  align-items:center;gap:6px;
+  background:var(--sb);
+  border:1px solid var(--bd);
+  border-radius:30px;
+  box-shadow:0 4px 16px #00000018;
+  padding:6px 8px;
+  opacity:0;
+  transform:translateY(12px);
+  pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+}
+#float-ep-nav.active{display:flex}
+#float-ep-nav.visible{opacity:1;transform:translateY(0);pointer-events:all}
+.fep-btn{background:transparent;border:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--tx2);cursor:pointer;transition:background .12s,color .12s;flex-shrink:0}
+.fep-btn:hover{background:var(--sm);color:var(--tx)}
+.fep-btn.disabled{opacity:.3;pointer-events:none}
+.fep-mid{font-size:11px;font-weight:600;color:var(--tx2);padding:0 6px;cursor:pointer;white-space:nowrap;transition:color .12s}
+.fep-mid:hover{color:var(--tx)}
+.fep-div{width:1px;height:18px;background:var(--bd);flex-shrink:0}
+/* 목록 피커가 열려 있는 동안엔 감춘다 */
+#ep-picker:not(.hidden) ~ #float-ep-nav{opacity:0;pointer-events:none}
 .ep-picker-btn{justify-self:center;display:flex;align-items:center;gap:5px;padding:8px 16px;background:var(--sb);border:1px solid var(--bd2);border-radius:7px;font-size:11px;font-weight:600;color:var(--tx2);transition:all .12s;white-space:nowrap}
 .ep-picker-btn:hover{background:var(--bg);color:var(--tx)}
 
@@ -319,6 +348,15 @@ body{top:0 !important}
     </div>
     <div class="ep-picker-list" id="ep-picker-list"></div>
   </div>
+</div>
+
+<!-- ===== 플로팅 에피소드 네비 (읽기 뷰 전용) — bhs_index 에서 이식 ===== -->
+<div id="float-ep-nav">
+  <button class="fep-btn" id="fep-prev" onclick="dollFloatNav('prev')" aria-label="이전 화">&#8249;</button>
+  <div class="fep-div"></div>
+  <span class="fep-mid" onclick="dollFloatNav('list')">목록</span>
+  <div class="fep-div"></div>
+  <button class="fep-btn" id="fep-next" onclick="dollFloatNav('next')" aria-label="다음 화">&#8250;</button>
 </div>
 
 <script>
@@ -982,6 +1020,7 @@ function applyFilter(t){
    에피소드 리더와 같은 뷰 전환을 재사용해서
    "이것도 읽는 콘텐츠"라는 인식을 만든다. */
 window.openWorld = function(push){
+  dollHideFloatNav();
   var listEl = document.getElementById('story-list');
   var readEl = document.getElementById('story-reader');
   if(push !== false) route('world');
@@ -1057,6 +1096,7 @@ window.openEp = async function(idx, push){
   renderReader(idx);
 };
 window.backToStoryList = function(push){
+  dollHideFloatNav();
   bars(false);
   if(push !== false) route('');
   document.getElementById('story-reader').classList.remove('show');
@@ -1132,6 +1172,8 @@ async function renderReader(idx){
   readEl.classList.add('show');
   window.scrollTo(0, 0);
   bars(false);
+
+  dollSetupFloatNav(prevS, nextS);
 
   _dollOrigBlocks = e.blocks || [];
   _dollOrigTitle  = e.title || '';
@@ -1414,6 +1456,42 @@ function route(r){
   history.pushState(null, '', (r === '' || r === null) ? location.pathname : '#' + r);
 }
 
+/* ══════════════════════════════════════════════════════
+   플로팅 에피소드 네비 — bhs_index 에서 이식
+   읽기 뷰에서 위로 스크롤하면 우하단에 ‹ 목록 › 이 뜬다.
+   ══════════════════════════════════════════════════════ */
+function dollSetupFloatNav(prevS, nextS){
+  var fep = document.getElementById('float-ep-nav');
+  if(!fep) return;
+  var pOk = !!(prevS && canRead(prevS.e));
+  var nOk = !!(nextS && canRead(nextS.e));
+  fep._prevIdx = pOk ? prevS.i : null;
+  fep._nextIdx = nOk ? nextS.i : null;
+  var pb = document.getElementById('fep-prev');
+  var nb = document.getElementById('fep-next');
+  if(pb) pb.classList.toggle('disabled', !pOk);
+  if(nb) nb.classList.toggle('disabled', !nOk);
+  fep.classList.add('active');
+  /* 진입 직후엔 숨김. 아래로 내렸다가 다시 위로 올릴 때 나타난다. */
+  fep.classList.remove('visible');
+}
+
+function dollHideFloatNav(){
+  var fep = document.getElementById('float-ep-nav');
+  if(!fep) return;
+  fep.classList.remove('visible');
+  fep.classList.remove('active');
+  fep._prevIdx = fep._nextIdx = null;
+}
+
+window.dollFloatNav = function(dir){
+  var fep = document.getElementById('float-ep-nav');
+  if(!fep) return;
+  if(dir === 'list'){ openEpPicker(); return; }
+  var idx = (dir === 'prev') ? fep._prevIdx : fep._nextIdx;
+  if(idx != null) openEp(idx);
+};
+
 var _barsHidden = false;
 function bars(hide){
   if(_barsHidden === hide) return;
@@ -1423,6 +1501,12 @@ function bars(hide){
   var solo = document.getElementById('solo-topbar');
   if(solo) solo.classList.toggle('hidden', hide);
   if(!hide) document.querySelectorAll('.reader-topbar.hidden').forEach(function(el){ el.classList.remove('hidden'); });
+  /* 상단바가 내려올 때(위로 스크롤) 플로팅 네비도 같이 나타난다 */
+  var fep = document.getElementById('float-ep-nav');
+  if(fep){
+    if(hide) fep.classList.remove('visible');
+    else if(fep.classList.contains('active')) fep.classList.add('visible');
+  }
   toParent({type:'biz-doll-bars', hide:hide});
 }
 
