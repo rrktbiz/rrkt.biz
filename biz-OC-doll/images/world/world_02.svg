@@ -1,23 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="460" height="345" viewBox="0 0 460 345" role="img" aria-label="">
-<circle cx="145" cy="172" r="68" fill="#eaf1f6" stroke="#5a90b0" stroke-width="1" opacity="0.9"/>
-<circle cx="315" cy="172" r="68" fill="#f2eef8" stroke="#a794c4" stroke-width="1" opacity="0.9"/>
-<g fill="#eef1f4" stroke="#c6c6c6" stroke-width="1">
-<circle cx="115" cy="160" r="5"/><rect x="109" y="168" width="12" height="19" rx="6"/>
-<circle cx="175" cy="160" r="5"/><rect x="169" y="168" width="12" height="19" rx="6"/>
-<circle cx="285" cy="160" r="5"/><rect x="279" y="168" width="12" height="19" rx="6"/>
-<circle cx="345" cy="160" r="5"/><rect x="339" y="168" width="12" height="19" rx="6"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="148" viewBox="0 0 460 148" role="img" aria-label="">
+<circle cx="140" cy="74" r="74" fill="#eaf1f6" stroke="#5a90b0" stroke-width="1.1" vector-effect="non-scaling-stroke"/>
+<circle cx="320" cy="74" r="74" fill="#f3effa" stroke="#a794c4" stroke-width="1.1" vector-effect="non-scaling-stroke"/>
+<g fill="#ffffff" stroke="#b9bfc4" stroke-width="1.1" vector-effect="non-scaling-stroke">
+<circle cx="106" cy="61" r="6"/><rect x="99" y="71" width="14" height="22" rx="7"/>
+<circle cx="174" cy="61" r="6"/><rect x="167" y="71" width="14" height="22" rx="7"/>
+<circle cx="286" cy="61" r="6"/><rect x="279" y="71" width="14" height="22" rx="7"/>
+<circle cx="354" cy="61" r="6"/><rect x="347" y="71" width="14" height="22" rx="7"/>
 </g>
-<g fill="#5a90b0">
-<circle cx="145" cy="160" r="5"/><rect x="139" y="168" width="12" height="19" rx="6"/>
+<g fill="#5a90b0"><circle cx="140" cy="61" r="6"/><rect x="133" y="71" width="14" height="22" rx="7"/></g>
+<ellipse cx="140" cy="74" rx="13" ry="23" fill="none" stroke="#5a90b0" stroke-width="1.2" opacity="0.5" vector-effect="non-scaling-stroke"/>
+<g fill="#8e78b3"><circle cx="320" cy="61" r="6"/><rect x="313" y="71" width="14" height="22" rx="7"/></g>
+<ellipse cx="320" cy="74" rx="13" ry="23" fill="none" stroke="#8e78b3" stroke-width="1.2" opacity="0.5" vector-effect="non-scaling-stroke"/>
+<g stroke="#b5b5b5" stroke-width="1.1" stroke-dasharray="3 4" stroke-linecap="round" vector-effect="non-scaling-stroke">
+<line x1="214" y1="74" x2="226" y2="74"/>
+<line x1="234" y1="74" x2="246" y2="74"/>
 </g>
-<ellipse cx="145" cy="174" rx="11" ry="18" fill="none" stroke="#5a90b0" stroke-width="1.1" opacity="0.5"/>
-<g fill="#8e78b3">
-<circle cx="315" cy="160" r="5"/><rect x="309" y="168" width="12" height="19" rx="6"/>
-</g>
-<ellipse cx="315" cy="174" rx="11" ry="18" fill="none" stroke="#8e78b3" stroke-width="1.1" opacity="0.5"/>
-<g stroke="#a0a0a0" stroke-width="1.2" stroke-dasharray="3 4" stroke-linecap="round">
-<line x1="215" y1="172" x2="226" y2="172"/>
-<line x1="234" y1="172" x2="245" y2="172"/>
-</g>
-<line x1="230" y1="156" x2="230" y2="188" stroke="#8a8a8a" stroke-width="2" stroke-linecap="round"/>
+<line x1="230" y1="58" x2="230" y2="90" stroke="#a0a0a0" stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
 </svg>
