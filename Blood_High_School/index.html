@@ -199,7 +199,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .cast-overlay-title{font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:900;letter-spacing:-.2px;color:#fff;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .cast-overlay-zoom{flex:0 0 auto;background:var(--yellow);color:#111;border:2px solid #111;border-radius:5px;padding:6px 12px;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:900;cursor:pointer;transition:filter .12s;}
 .cast-overlay-zoom:hover{filter:brightness(1.08);}
-.cast-overlay-close{flex:0 0 auto;background:var(--red);color:#fff;border:2px solid #111;border-radius:5px;width:30px;height:30px;font-size:14px;font-weight:900;line-height:1;cursor:pointer;transition:filter .12s;}
+.cast-overlay-close{touch-action:manipulation;position:relative;flex:0 0 auto;background:var(--red);color:#fff;border:2px solid #111;border-radius:5px;width:30px;height:30px;font-size:14px;font-weight:900;line-height:1;cursor:pointer;transition:filter .12s;}
 .cast-overlay-close:hover{filter:brightness(1.12);}
 .cast-overlay-stage{border:3px solid #111;border-top:none;border-radius:0 0 10px 10px;background:#fff;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.5);}
 .cast-overlay-img{display:block;width:100%;height:auto;}
@@ -215,7 +215,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .note-card{background:#fff;border:1px solid #e6e4e0;border-radius:12px;overflow:hidden;}
 .note-hd{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;background:#fff;border-bottom:1px solid #eceae6;padding:15px 24px;}
 .note-hd-title{flex:1;min-width:0;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:500;color:#8c8a85;letter-spacing:.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.note-hd-close{flex:0 0 auto;width:28px;height:28px;background:none;border:none;border-radius:6px;font-size:15px;line-height:1;color:#a3a19c;cursor:pointer;transition:background .12s,color .12s;}
+.note-hd-close{touch-action:manipulation;position:relative;flex:0 0 auto;width:28px;height:28px;background:none;border:none;border-radius:6px;font-size:15px;line-height:1;color:#a3a19c;cursor:pointer;transition:background .12s,color .12s;}
 .note-hd-close:hover{background:#f4f2ef;color:#111;}
 .note-body{padding:38px 42px 44px;}
 .note-doc{font-family:'Noto Sans KR',sans-serif;font-size:20px;font-weight:500;line-height:1.45;color:#141412;letter-spacing:-.3px;margin-bottom:30px;}
@@ -288,7 +288,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #contact-overlay.hidden{display:none}
 .contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
-.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
+.contact-close{touch-action:manipulation;position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
 .contact-close:hover{background:#fafafa;border-color:#c6c6c6}
 .contact-who{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #ececec}
 .contact-who-thumb{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #e2e2e2;background:#fafafa}
@@ -418,7 +418,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .vol-picker-inner{background:#fff;border-radius:14px;box-shadow:0 8px 40px #0000002a;width:min(400px,90vw);max-height:60vh;display:flex;flex-direction:column;overflow:hidden}
 .vol-picker-hd{padding:14px 18px;border-bottom:1px solid #e2e2e2;display:flex;align-items:center;justify-content:space-between}
 .vol-picker-title{font-size:13px;font-weight:700;color:#1a1a1a}
-.vol-picker-close{background:transparent;border:none;color:#a0a0a0;font-size:18px;padding:0 4px;line-height:1;transition:color .12s}
+.vol-picker-close{touch-action:manipulation;position:relative;background:transparent;border:none;color:#a0a0a0;font-size:18px;padding:0 4px;line-height:1;transition:color .12s}
 .vol-picker-close:hover{color:#1a1a1a}
 .vol-picker-list{overflow-y:auto;flex:1}
 .vol-picker-item{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #e2e2e2;cursor:pointer;transition:background .1s}
@@ -478,7 +478,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .ep-picker-inner{background:#fff;border-radius:14px;box-shadow:0 8px 40px #0000002a;width:min(480px,90vw);max-height:70vh;display:flex;flex-direction:column;overflow:hidden}
 .ep-picker-hd{padding:14px 18px;border-bottom:1px solid #e2e2e2;display:flex;align-items:center;justify-content:space-between}
 .ep-picker-title{font-size:14px;font-weight:700;color:#1a1a1a}
-.ep-picker-close{background:transparent;border:none;color:#a0a0a0;font-size:18px;padding:0 4px;line-height:1;transition:color .12s}
+.ep-picker-close{touch-action:manipulation;position:relative;background:transparent;border:none;color:#a0a0a0;font-size:18px;padding:0 4px;line-height:1;transition:color .12s}
 .ep-picker-close:hover{color:#1a1a1a}
 .ep-picker-list{overflow-y:auto;flex:1}
 .ep-picker-item{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid #e2e2e2;cursor:pointer;transition:background .1s}
@@ -718,6 +718,26 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   #view-story .tb-back{font-size:11.5px}
 }
 
+
+/* ══════════════════════════════════════════════════
+   닫기 버튼 터치 영역
+   보이는 크기는 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 배경이 없어 화면에 나타나지 않고,
+   position:absolute 라 배치에도 영향을 주지 않습니다.
+   마우스 환경에는 적용되지 않습니다.
+   ══════════════════════════════════════════════════ */
+@media(hover:none) and (pointer:coarse){
+  /* .contact-close — 26px → 44x44px · 모달 카드 · 이웃 없음 */
+  .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
+  /* .note-hd-close — 28px → 44x44px · 왼쪽=제목 텍스트 */
+  .note-hd-close::after{content:'';position:absolute;top:-8px;right:-8px;bottom:-8px;left:-8px}
+  /* .cast-overlay-close — 30px → 44x44px · 왼쪽=화면맞춤 버튼(gap 12) */
+  .cast-overlay-close::after{content:'';position:absolute;top:-7px;right:-8px;bottom:-7px;left:-6px}
+  /* .vol-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
+  .vol-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
+  /* .ep-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
+  .ep-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
+}
 </style>
 </head>
 <body>
