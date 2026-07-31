@@ -510,7 +510,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .vol-picker-inner{background:var(--sb);border-radius:14px;box-shadow:0 8px 40px #0000002a;width:min(400px,90vw);max-height:60vh;display:flex;flex-direction:column;overflow:hidden}
 .vol-picker-hd{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
 .vol-picker-title{font-size:13px;font-weight:700}
-.vol-picker-close{background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1;cursor:pointer;transition:color .12s}
+.vol-picker-close{touch-action:manipulation;position:relative;background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1;cursor:pointer;transition:color .12s}
 .vol-picker-close:hover{color:var(--tx)}
 .vol-picker-list{overflow-y:auto;flex:1}
 .vol-picker-item{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s}
@@ -742,7 +742,7 @@ body{top:0!important}
 #contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #contact-overlay.hidden{display:none}
 .contact-card{position:relative;background:var(--sb);border:1px solid var(--bd);border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026}
-.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--bd);border-radius:6px;color:var(--tx2);cursor:pointer;transition:all .12s}
+.contact-close{touch-action:manipulation;position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--bd);border-radius:6px;color:var(--tx2);cursor:pointer;transition:all .12s}
 .contact-close:hover{background:var(--bg);border-color:var(--bd2)}
 
 
@@ -811,6 +811,20 @@ body{top:0!important}
 .doll-divider::before,.doll-divider::after{content:'';flex:1;height:1px;background:var(--bd)}
 @media(max-width:480px){.doll-reader-wrap{padding:16px 18px 100px;margin:0}.doll-line-text{font-size:15px;line-height:2}}
 @media(min-width:769px){.doll-line-text{font-size:17px}.doll-reader-wrap{padding:40px 48px 100px}}
+
+/* ══════════════════════════════════════════════════
+   닫기 버튼 터치 영역
+   보이는 크기는 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 배경이 없어 화면에 나타나지 않고,
+   position:absolute 라 배치에도 영향을 주지 않습니다.
+   마우스 환경에는 적용되지 않습니다.
+   ══════════════════════════════════════════════════ */
+@media(hover:none) and (pointer:coarse){
+  /* .contact-close — 26px → 44x44px · 모달 카드 · 이웃 없음 */
+  .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
+  /* .vol-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
+  .vol-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
+}
 </style>
 </head>
 <body>
