@@ -17,7 +17,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>biz-OC-doll</title>
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -66,7 +66,15 @@ button{font-family:var(--fn);cursor:pointer}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 
-#app{display:flex;flex-direction:column;height:100%}
+/* 아이폰 노치·홈 인디케이터 영역 확보.
+   세로에서는 하단 인디케이터, 가로에서는 노치 쪽 좌우가 대상입니다.
+   해당 기기가 아니면 env() 값이 0이라 아무 일도 일어나지 않습니다. */
+#app{
+  display:flex;flex-direction:column;height:100%;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  padding-left:env(safe-area-inset-left,0px);
+  padding-right:env(safe-area-inset-right,0px);
+}
 
 /* ── 상단바 ── */
 #topbar{
@@ -531,7 +539,7 @@ window.googleTranslateElementInit = googleTranslateElementInit;
 /* ══════════════════════════════════════════════════
    biz-OC-doll SPA
    - 탭 전환·에피소드 읽기 모두 새로고침 없음
-   - 소개/캐릭터/투표/아카이브/이벤트 = 기존 파일 iframe 지연 로드
+   - 각 탭 = 개별 파일 iframe 지연 로드
    - 스토리 = story_editor.json 직접 렌더 (네이티브)
    ══════════════════════════════════════════════════ */
 
