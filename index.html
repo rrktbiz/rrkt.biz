@@ -63,29 +63,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #content{display:block;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);padding-bottom:env(safe-area-inset-bottom,0px)}
 body.nav-pinned #nav-backdrop{display:none!important}
 
-/* ── HERO ── */
-.home-hero{background:var(--sb);border:1px solid #fff;border-radius:12px;overflow:hidden;margin-bottom:18px;position:relative}
-.home-hero-inner{padding:22px 24px 20px}
-.home-hero-top{display:flex;align-items:flex-start;gap:18px;margin-bottom:16px}
-.home-hero-info{flex:1;min-width:0}
-.home-hero-name{font-size:20px;font-weight:700;color:#111;letter-spacing:-.04em;margin-bottom:4px}
-.home-hero-tagline{font-size:12px;color:var(--tx2);line-height:1.65}
-.home-hero-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
-.home-hero-tag{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--bg);border:1px solid var(--bd);color:var(--tx3)}
-.home-hero-tag.acc{background:#fff5f5;border-color:#ffd0d0;color:#c0392b}
-.home-hero-divider{border:none;border-top:1px solid var(--bd);margin:0 0 14px}
-.home-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border-radius:8px;overflow:hidden;margin-bottom:14px}
-.home-hero-stat{background:var(--bg);padding:12px 0;text-align:center}
-.home-hero-stat-n{font-size:18px;font-weight:700;color:var(--tx);letter-spacing:-.04em;line-height:1}
-.home-hero-stat-l{font-size:9px;color:var(--tx3);margin-top:3px;font-weight:500}
-.home-hero-markets{display:flex;align-items:center;gap:6px;margin-bottom:14px}
-.home-hero-market-lbl{font-size:10px;color:var(--tx3);margin-right:2px}
-.home-hero-market{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid}
-.home-hero-cta{display:flex;gap:8px}
-.home-hero-btn-p{flex:1;background:#111;color:#fff;border:none;border-radius:7px;padding:9px 0;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fn);transition:background .12s}
-.home-hero-btn-p:hover{background:#333}
-.home-hero-btn-s{flex:1;background:transparent;color:var(--tx);border:1px solid var(--bd);border-radius:7px;padding:9px 0;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--fn);transition:all .12s}
-.home-hero-btn-s:hover{border-color:var(--bd2);background:var(--bg)}
 
 /* ── HOME ── */
 .home-page{padding:40px 18px 20px;max-width:950px;margin:0 auto}
@@ -220,57 +197,6 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-author-note-text{font-size:12px;color:var(--tx2);line-height:1.75}
 .home-author-note-date{font-size:9px;color:var(--tx3);margin-top:8px}
 
-/* ── HOME TRANSLATION NOTICE ── */
-.home-trans-notice{
-  box-shadow:0 2px 12px #0000000a;
-  background:var(--sb);border:1px solid var(--bd);border-radius:10px;
-  overflow:hidden;margin-bottom:0;
-}
-.home-trans-notice.notice-collapsed{
-  background:transparent;border-color:transparent;
-}
-.home-trans-notice-wrap{position:relative;margin-bottom:18px}
-.home-notice-toggle{
-  position:absolute;top:-11px;right:14px;z-index:2;
-  width:22px;height:22px;border-radius:50%;
-  background:var(--sb);border:1px solid var(--bd);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:background .12s,border-color .12s;
-  box-shadow:0 1px 4px #0000000f;
-  overflow:hidden;white-space:nowrap;
-}
-.home-notice-toggle:hover{background:var(--bg);border-color:var(--bd2)}
-.home-notice-toggle svg{display:block;flex-shrink:0}
-.home-notice-toggle.expanded{
-  width:auto;height:auto;border-radius:6px;
-  padding:6px 12px;gap:6px;font-size:12px;font-weight:500;
-  color:var(--tx);top:0;
-}
-.home-notice-toggle .notice-btn-label{
-  display:none;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--tx);
-}
-.home-notice-toggle.expanded .notice-btn-label{display:flex}
-.notice-btn-div{color:var(--bd2);font-weight:300;font-size:11px}
-.notice-btn-icons{display:none;align-items:center;gap:5px;font-size:14px;line-height:1}
-@media(max-width:480px){
-  .home-notice-toggle.expanded .notice-btn-label{display:none}
-  .home-notice-toggle.expanded .notice-btn-icons{display:flex}
-}
-.home-notice-row{display:flex;align-items:flex-start;gap:14px;padding:16px 20px}
-.home-notice-sep{height:1px;background:var(--bd);margin:0}
-.home-trans-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
-.home-trans-text{display:flex;flex-direction:column;gap:4px;min-width:0}
-.home-trans-title{font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
-.home-trans-body{font-size:13px;color:#2a2a3a;line-height:1.8;margin:0}
-.home-trans-body strong{font-weight:700;color:#1a1a1a}
-/* ── COPYRIGHT NOTICE ── */
-.home-copy-notice{display:none}
-.home-copy-text{display:flex;flex-direction:column;gap:4px;min-width:0}
-.home-copy-title{font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
-.home-copy-body{font-size:13px;color:#2a2a3a;line-height:1.8;margin:0}
-.home-copy-links{display:flex;gap:10px;margin-top:5px;flex-wrap:wrap}
-.home-copy-link{font-size:11px;color:var(--tx2);text-decoration:none;border-bottom:1px solid var(--bd2);padding-bottom:1px;transition:color .12s}
-.home-copy-link:hover{color:var(--tx)}
 #lang-detect-banner{
   display:none;align-items:center;gap:12px;
   background:#e8f0fe;border:1px solid #b5d4f4;border-radius:10px;
@@ -730,20 +656,6 @@ body{top:0!important}
 .tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
 .tb-lang-note b{color:#5f5f5f;font-weight:600}
 
-/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
-.site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--fn)}
-.site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
-.sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
-.sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
-.sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
-.sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
-.sf-links a:hover{text-decoration:underline}
-
-#contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
-#contact-overlay.hidden{display:none}
-.contact-card{position:relative;background:var(--sb);border:1px solid var(--bd);border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026}
-.contact-close{touch-action:manipulation;position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--bd);border-radius:6px;color:var(--tx2);cursor:pointer;transition:all .12s}
-.contact-close:hover{background:var(--bg);border-color:var(--bd2)}
 
 
 
@@ -820,8 +732,6 @@ body{top:0!important}
    마우스 환경에는 적용되지 않습니다.
    ══════════════════════════════════════════════════ */
 @media(hover:none) and (pointer:coarse){
-  /* .contact-close — 26px → 44x44px · 모달 카드 · 이웃 없음 */
-  .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
   /* .vol-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
   .vol-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
 }
@@ -830,28 +740,6 @@ body{top:0!important}
 <body>
 <!-- MAIN CONTENT -->
 <main id="content"></main>
-
-<div id="contact-overlay" class="hidden" onclick="if(event.target===this)closeContactOverlay()">
-  <div class="contact-card">
-    <button class="contact-close" onclick="closeContactOverlay()" aria-label="닫기">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </button>
-    <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:var(--tx3);text-transform:uppercase;margin-bottom:8px">Contact</div>
-    <div style="font-size:22px;font-weight:700;color:#111;letter-spacing:-.04em">비즈니스 문의</div>
-    <div style="font-size:13px;color:var(--tx2);margin-top:8px;line-height:1.8">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
-    <div style="margin-top:20px;display:flex;align-items:center;gap:8px">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
-      <span style="font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',sans-serif">rrkt.biz@proton.me</span>
-      <button onclick="biqCopyEmail(this)" title="복사"
-        style="background:transparent;border:1px solid var(--bd);border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .15s;flex-shrink:0"
-        onmouseover="this.style.background='var(--bg)';this.style.color='var(--tx)';this.style.borderColor='var(--bd2)'"
-        onmouseout="if(!this.dataset.copied){this.style.background='transparent';this.style.color='var(--tx3)';this.style.borderColor='var(--bd)'}">
-        <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        <span class="biq-copy-txt">복사</span>
-      </button>
-    </div>
-  </div>
-</div>
 
 <div id="google_translate_element"></div>
 
@@ -1420,38 +1308,6 @@ function render(){
   else                      { _tlBadgeReset(); renderHome(); }
 }
 
-/* ── BUSINESS INQUIRY OVERLAY ── */
-function openContactOverlay(){
-  const ov=document.getElementById("contact-overlay");
-  if(ov) ov.classList.remove("hidden");
-}
-function closeContactOverlay(){
-  const ov=document.getElementById("contact-overlay");
-  if(ov) ov.classList.add("hidden");
-}
-document.addEventListener("keydown",function(e){
-  if(e.key==="Escape") closeContactOverlay();
-});
-
-/* ── BUSINESS INQUIRY FORM ── */
-function biqCopyEmail(btn){
-  navigator.clipboard.writeText("rrkt.biz@proton.me").then(function(){
-    var svg=btn.querySelector(".biq-copy-svg"),txt=btn.querySelector(".biq-copy-txt");
-    if(svg)svg.outerHTML='<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-    if(txt)txt.textContent="완료";
-    btn.style.borderColor="#bbf7d0";btn.style.background="#f0fdf4";btn.style.color="#22c55e";
-    btn.dataset.copied="1";
-    setTimeout(function(){
-      var svg2=btn.querySelector(".biq-copy-svg");
-      if(svg2)svg2.outerHTML='<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
-      var txt2=btn.querySelector(".biq-copy-txt");
-      if(txt2)txt2.textContent="복사";
-      btn.style.borderColor="var(--bd)";btn.style.background="transparent";btn.style.color="var(--tx3)";
-      delete btn.dataset.copied;
-    },1800);
-  });
-}
-
 /* ── PROGRESS PAGE ── */
 /* ── HOME ── */
 function renderHome(){
@@ -1599,94 +1455,6 @@ function renderHome(){
               <span style="font-size:9px;color:var(--tx3)">all time</span>
             </div>
           </div>
-
-          <!-- HERO -->
-          <div class="home-hero" style="margin-bottom:0">
-            <div class="home-hero-inner">
-              <div style="display:flex;align-items:center;gap:18px">
-                <!-- 원형 썸네일 -->
-                <div style="width:72px;height:72px;border-radius:50%;border:1px solid var(--bd);flex-shrink:0;overflow:hidden">
-                  <img src="profile.png" alt="profile" style="width:100%;height:100%;object-fit:cover;display:block">
-                </div>
-                <!-- 텍스트 + 버튼 -->
-                <div style="flex:1;min-width:0">
-                  <div style="font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--tx3);margin-bottom:7px;display:flex;align-items:center;gap:5px">
-                    <span>✦</span> 소개
-                  </div>
-                  <div class="home-hero-tagline" style="margin-bottom:12px">
-
-스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.
-
-
-</div>
-                  <button class="home-hero-btn-p" style="display:inline-flex;align-items:center;gap:6px;padding:7px 16px;font-size:11px;flex:unset" onclick="openContactOverlay()">
-                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="#fff" stroke-width="1.3"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    비즈니스 문의
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 번역/저작권 안내 -->
-          ${(()=>{
-            /* 기본 접힘. 허브는 시스템 전체를 설명하는 곳이지만
-               첫 화면을 안내문이 차지하지 않도록 사용자가 편 적이 있을 때만 펼친다 */
-            const closed=localStorage.getItem('rrkt_notice_open')!=='true';
-            const wrapMb=closed?'margin-bottom:-20px':'margin-bottom:18px';
-            const cardCls=closed?' notice-collapsed':'';
-            const bodyStyle=closed?'max-height:0':'';
-            const btnTop=closed?'top:-65px':'top:-11px';
-            const btnCls=closed?' expanded':'';
-            const chevRot=closed?'rotate(180deg)':'';
-            return `<div class="home-trans-notice-wrap" style="${wrapMb}">
-            <button class="home-notice-toggle${btnCls}" id="noticeToggle" onclick="toggleNotice()" title="접기/펼치기" style="${btnTop}">
-              <span class="notice-btn-label">
-                번역 안내 <span class="notice-btn-div">/</span> 저작권 안내
-              </span>
-              <span class="notice-btn-icons">🌐<span class="notice-btn-div">/</span>©</span>
-              <svg id="noticeChevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--tx2)" stroke-width="1.8" style="transform:${chevRot}">
-                <path d="M2 6.5l3-3 3 3"/>
-              </svg>
-            </button>
-            <div class="home-trans-notice${cardCls}" id="noticeCard">
-              <div class="home-notice-body" id="noticeBody" style="${bodyStyle}">
-                <div class="home-notice-row">
-                  <span class="home-trans-icon">🌐</span>
-                  <div class="home-trans-text">
-                    <span class="home-trans-title">번역 안내</span>
-                    <p class="home-trans-body">이 사이트는 <strong>Google 번역</strong>으로 표시됩니다. 상단에서 언어를 선택하면 페이지 전체가 선택한 언어로 자동 번역됩니다.<br>자동 번역이 어색한 경우, 일부 페이지에서는 <strong>DeepL</strong>로 다시 번역할 수 있습니다. DeepL 쪽이 문장을 더 자연스럽게 옮기는 편이며, 현재 어떤 엔진이 적용되어 있는지는 상단 배지에 표시됩니다.</p>
-                  </div>
-                </div>
-                <div class="home-notice-sep"></div>
-                <div class="home-notice-row">
-                  <span class="home-trans-icon">©</span>
-                  <div class="home-copy-text">
-                    <span class="home-copy-title">저작권 안내</span>
-                    <p class="home-copy-body">이 사이트의 콘텐츠는 작가 본인이 포스타입에 백업 업로드하고 있습니다. 타 사이트에서 동일한 콘텐츠를 발견하더라도 공식 업로드이므로, 불펌으로 오해하지 않으시길 바랍니다. 저작권은 작가에게 있습니다.</p>
-                    <div class="home-copy-links">
-                      <span style="font-size:11px;color:var(--tx3)">백업 주소 →</span>
-                      <a class="home-copy-link" href="https://www.postype.com/@biz202099" target="_blank">postype.com/@biz202099</a>
-                      <a class="home-copy-link" href="https://www.postype.com/@rrkt2022" target="_blank">postype.com/@rrkt2022</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>`;
-          })()}
-          <!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
-          <div class="site-footer">
-            <div class="site-footer-inner">
-              <span class="sf-copy">&copy; rrkt.biz. All rights reserved.</span>
-              <span class="sf-sep"></span>
-              <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
-              <span class="sf-links">
-                <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
-                <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
-              </span>
-            </div>
-          </div>
-          
       </div>
     </div>`;
   // 렌더 후 글로벌 방문자 수 비동기 로드
@@ -2269,7 +2037,6 @@ function applyHash(hash){
   if(!hash || hash === "#" || hash === "#home"){ S.view="home"; S.activeProj=null; return; }
   const parts = hash.replace(/^#/,"").split("/");
   const p0 = parts[0];
-  if(p0 === "about"){ setTimeout(openContactOverlay,0); return; }
   if(p0 === "calendar"){
     S.view="calendar";
     if(parts[1]) S.calY = parseInt(parts[1]);
@@ -2332,64 +2099,6 @@ function rebuildWorkLog(){
   injectCharDatesIntoWorkLog();
 }
 
-/* ── 번역/저작권 안내 접기 ── */
-(function(){
-  var STORE_KEY='rrkt_notice_open';
-
-  function isOpen(){
-    return localStorage.getItem(STORE_KEY)!=='false';
-  }
-
-  function applyState(){
-    var body=document.getElementById('noticeBody');
-    var chev=document.getElementById('noticeChevron');
-    var card=document.getElementById('noticeCard');
-    var wrap=document.querySelector('.home-trans-notice-wrap');
-    var btn=document.getElementById('noticeToggle');
-    if(!body) return;
-    if(isOpen()){
-      card && card.classList.remove('notice-collapsed');
-      if(wrap) wrap.style.marginBottom='18px';
-      if(btn)  { btn.style.top='-11px'; btn.classList.remove('expanded'); }
-      body.style.maxHeight='';
-      if(chev) chev.style.transform='';
-    } else {
-      body.style.maxHeight='0';
-      if(chev) chev.style.transform='rotate(180deg)';
-      setTimeout(function(){
-        card && card.classList.add('notice-collapsed');
-        if(wrap) wrap.style.marginBottom='-20px';
-        if(btn)  { btn.style.top='-65px'; btn.classList.add('expanded'); }
-      },0);
-    }
-  }
-
-  window._applyNoticeState=applyState;
-
-  window.toggleNotice=function(){
-    var body=document.getElementById('noticeBody');
-    var chev=document.getElementById('noticeChevron');
-    var card=document.getElementById('noticeCard');
-    var wrap=document.querySelector('.home-trans-notice-wrap');
-    var btn=document.getElementById('noticeToggle');
-    if(!body) return;
-    var opening=!isOpen();
-    localStorage.setItem(STORE_KEY, opening);
-    if(opening){
-      card && card.classList.remove('notice-collapsed');
-      if(wrap) wrap.style.marginBottom='18px';
-      if(btn)  { btn.style.top='-11px'; btn.classList.remove('expanded'); }
-      body.style.maxHeight='';
-      if(chev) chev.style.transform='';
-    } else {
-      body.style.maxHeight='0';
-      if(chev) chev.style.transform='rotate(180deg)';
-      card && card.classList.add('notice-collapsed');
-      if(wrap) wrap.style.marginBottom='-20px';
-      if(btn)  { btn.style.top='-65px'; btn.classList.add('expanded'); }
-    }
-  };
-})();
 
 </script>
 
