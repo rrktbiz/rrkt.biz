@@ -185,7 +185,7 @@ button{font-family:var(--fn);cursor:pointer}
 .char-page-inner.wide{max-width:none}
 .width-toggle-btn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:var(--sb);border:1px solid var(--bd);border-radius:7px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn);flex-shrink:0}
 .width-toggle-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
-.detail-close-btn{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;background:var(--sb);border:1px solid var(--bd);border-radius:7px;color:var(--tx3);cursor:pointer;transition:all .12s}
+.detail-close-btn{touch-action:manipulation;position:relative;width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;background:var(--sb);border:1px solid var(--bd);border-radius:7px;color:var(--tx3);cursor:pointer;transition:all .12s}
 .detail-close-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
 .detail-close-btn svg{width:13px;height:13px}
 
@@ -197,6 +197,18 @@ button{font-family:var(--fn);cursor:pointer}
 
 /* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
 .brandname{text-transform:none !important}
+
+/* ══════════════════════════════════════════════════
+   닫기 버튼 터치 영역
+   보이는 크기는 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 배경이 없어 화면에 나타나지 않고,
+   position:absolute 라 배치에도 영향을 주지 않습니다.
+   마우스 환경에는 적용되지 않습니다.
+   ══════════════════════════════════════════════════ */
+@media(hover:none) and (pointer:coarse){
+  /* .detail-close-btn — 28px → 44x44px · 왼쪽=너비전환 버튼(gap 8) */
+  .detail-close-btn::after{content:'';position:absolute;top:-8px;right:-12px;bottom:-8px;left:-4px}
+}
 </style>
 
 <!-- ── LIST VIEW ── -->
