@@ -188,7 +188,11 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 @media(max-width:600px){
   .hero{padding:36px 20px 40px}.cw-bar{padding:10px 20px}.tab-wrap{padding:0 16px}
-  .char-img{width:100px;min-width:100px}.char-img img{width:100px;height:100px}
+  .char-card{flex-direction:column}
+  .char-img{width:100%;min-width:0;height:190px;background:#f7f7f7;border-right:0;border-bottom:3px solid var(--black);}
+  .char-img img{width:190px;height:190px;}
+  .char-img.noimg{height:190px}
+  .char-body{padding:14px 16px 16px}
   .sfx-1,.sfx-2,.sfx-3{display:none}
 }
 
