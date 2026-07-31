@@ -20,7 +20,7 @@
 #contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #contact-overlay.hidden{display:none}
 .contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
-.contact-close{position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
+.contact-close{touch-action:manipulation;position:absolute;top:14px;right:14px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #e2e2e2;border-radius:6px;color:#5f5f5f;cursor:pointer;transition:all .12s}
 .contact-close:hover{background:#fafafa;border-color:#c6c6c6}
 .contact-who{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #ececec}
 .contact-who-thumb{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #e2e2e2;background:#fafafa}
@@ -296,7 +296,7 @@ body{top:0 !important}
 .ep-picker-inner{width:100%;max-width:420px;max-height:70vh;background:var(--sb);border:1px solid var(--bd);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.18)}
 .ep-picker-hd{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
 .ep-picker-title{font-size:14px;font-weight:700}
-.ep-picker-close{background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1}
+.ep-picker-close{touch-action:manipulation;position:relative;background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1}
 .ep-picker-close:hover{color:var(--tx)}
 .ep-picker-list{overflow-y:auto;flex:1}
 .ep-picker-item{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s}
@@ -325,6 +325,20 @@ body{top:0 !important}
 
 /* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
 .brandname{text-transform:none !important}
+
+/* ══════════════════════════════════════════════════
+   닫기 버튼 터치 영역
+   보이는 크기는 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 배경이 없어 화면에 나타나지 않고,
+   position:absolute 라 배치에도 영향을 주지 않습니다.
+   마우스 환경에는 적용되지 않습니다.
+   ══════════════════════════════════════════════════ */
+@media(hover:none) and (pointer:coarse){
+  /* .contact-close — 26px → 44x44px · 모달 카드 · 이웃 없음 */
+  .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
+  /* .ep-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
+  .ep-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
+}
 </style>
 </head>
 <body>
