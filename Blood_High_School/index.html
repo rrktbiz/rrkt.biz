@@ -217,6 +217,62 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .cast-overlay-hint{margin-top:12px;text-align:center;font-family:'Noto Sans KR',sans-serif;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:-.1px;}
 .cast-overlay-error{display:none;margin-top:16px;padding:14px 18px;background:#2a0000;border:3px solid var(--red);border-radius:8px;color:#ffb3b3;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;line-height:1.7;word-break:break-all;text-align:center;}
 
+/* ===== 등장인물 HTML 카드 (번역 가능) ===== */
+.cast-doc{padding:20px 22px 26px;font-family:'Noto Sans KR',sans-serif;color:#111;}
+.cast-doc-hd{display:flex;align-items:stretch;border:3px solid #111;border-radius:7px;overflow:hidden;margin-bottom:6px;}
+.cast-doc-hd-l{flex:1;padding:12px 16px;min-width:0}
+.cast-doc-eng{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#111;}
+.cast-doc-eng b{color:var(--red);font-weight:800}
+.cast-doc-t{font-size:20px;font-weight:900;letter-spacing:-.5px;margin-top:1px}
+.cast-doc-badge{display:inline-block;margin-top:5px;background:#111;color:#fff;font-size:10px;font-weight:700;letter-spacing:-.2px;padding:3px 9px;border-radius:3px}
+.cast-doc-hd-r{display:flex;align-items:center;gap:16px;background:#111;color:#fff;padding:12px 18px;flex:0 0 auto}
+.cast-doc-num{font-size:25px;font-weight:900;letter-spacing:-1px;line-height:1;flex:0 0 auto}
+.cast-doc-hd-r>span:last-child{display:flex;flex-direction:column;min-width:0}
+.cast-doc-part{display:block;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#ff5566;margin-bottom:3px}
+.cast-doc-sub{display:block;font-size:13px;font-weight:700;line-height:1.4}
+.cast-doc-cast{display:block;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:1.6px;color:#888;margin-top:2px}
+.cast-sec{display:flex;align-items:center;gap:9px;margin:22px 0 11px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:2.5px;color:#111}
+.cast-sec i{width:17px;height:3px;background:var(--red);flex:0 0 auto;display:block}
+.cast-sec b{font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:900;letter-spacing:-.2px}
+.cast-sec u{flex:1;height:1px;background:#e2e2e2;text-decoration:none}
+.cast-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 11px;align-items:stretch}
+.cast-grid.paired{row-gap:0}
+.cast-arrow{text-align:center;font-size:12px;color:#c4c4c4;line-height:1;padding:6px 0}
+.cast-card{display:flex;flex-direction:column;height:100%;border:2.5px solid #111;border-radius:6px;overflow:hidden;background:#fff;}
+.cast-ci{flex:0 0 auto;aspect-ratio:1;background:#f2f2f2;border-bottom:2.5px solid #111;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cast-ci img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.cast-ci.noimg::after{content:'IMAGE';font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#b5b5b5;letter-spacing:1.5px}
+.cast-bd{flex:1 1 auto;padding:8px 9px 10px}
+.cast-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px}
+.cast-tag{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:-.2px;line-height:1.55;white-space:nowrap}
+.cast-tag.tg-human{border:1.5px solid #111;color:#111;background:#fff}
+.cast-tag.tg-dragon{background:#111;color:#fff}
+.cast-tag.tg-baek{background:#ddeeff;color:#1050a0;border:1px solid #6699cc}
+.cast-tag.tg-spirit{background:#ede0ff;color:#5b189e;border:1px solid #b070e0}
+.cast-tag.tg-vampire{background:#111;color:#ff4444}
+.cast-tag.tg-doll{background:#1565c0;color:#fff}
+.cast-tag.tg-mage{background:#1a0840;color:#fff}
+.cast-tag.tg-beast{background:#ffe0ee;color:#9e1855;border:1px solid #e070a0}
+.cast-tag.tg-shadow{background:#0d1a40;color:#a0b8e8}
+.cast-tag.tg-gold{background:#7a5a00;color:#f5d96e;border:1px solid #c8a832}
+.cast-tag.tg-herb{background:#d4f0c0;color:#2d6e0f;border:1px solid #7bc44a}
+.cast-tag.tg-onmyo{background:#fde8e8;color:#a80000;border:1px solid #e08080}
+.cast-tag.tg-miko{background:#fde8e8;color:#a80000;border:1px solid #e08080}
+.cast-nm{font-size:14px;font-weight:900;letter-spacing:-.3px;color:#111;padding-bottom:5px;border-bottom:1px solid #eee;margin-bottom:6px}
+.cast-de{font-size:11px;line-height:1.7;color:#555;font-weight:500}
+.cast-doc-ft{margin-top:24px;padding-top:12px;border-top:1px solid #e8e8e8;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1.6px;color:#bdbdbd;display:flex;justify-content:space-between;gap:10px}
+@media(max-width:700px){
+  .cast-doc{padding:14px 13px 20px}
+  .cast-grid{grid-template-columns:repeat(2,1fr);gap:9px}
+  .cast-doc-t{font-size:16px}
+  .cast-doc-eng{font-size:10px;letter-spacing:2px}
+  .cast-doc-num{font-size:20px}
+  .cast-doc-hd-r{padding:10px 12px;gap:10px}
+  .cast-doc-sub{font-size:12px}
+  .cast-nm{font-size:13px}
+  .cast-de{font-size:10.5px;line-height:1.65}
+}
+
 /* ===== 제작노트 텍스트 오버레이 ===== */
 .note-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:9999;display:block;overflow-y:auto;overscroll-behavior:contain;opacity:0;pointer-events:none;transition:opacity .18s;-webkit-overflow-scrolling:touch;}
 .note-overlay.show{opacity:1;pointer-events:all;}
@@ -836,12 +892,9 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
     <div class="cast-overlay-hd">
       <span class="cast-overlay-tag">CAST</span>
       <span class="cast-overlay-title" id="castOverlayTitle">등장인물</span>
-      <button class="cast-overlay-zoom" id="castOverlayZoom" onclick="bhsToggleCastFit()">화면 맞춤</button>
       <button class="cast-overlay-close" onclick="bhsCloseCast()">&#10005;</button>
     </div>
-    <div class="cast-overlay-stage">
-      <img class="cast-overlay-img" id="castOverlayImg" src="" alt="등장인물" onerror="bhsCastImgError(this)">
-    </div>
+    <div class="cast-overlay-stage" id="castOverlayBody"></div>
     <div class="cast-overlay-hint">바깥 영역 클릭 또는 ESC 키로 닫기</div>
     <div class="cast-overlay-error" id="castOverlayError"></div>
   </div>
@@ -1080,6 +1133,103 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
    · 마지막 장 위에 '+64' 카운터가 겹쳐 올라갑니다
    · thumbs 가 비어 있어도 빈 칸으로 자리만 잡습니다
    ══════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════
+   등장인물(캐스트) 데이터 — 이미지가 아니라 HTML 로 그립니다.
+
+   · 여기 적힌 글자는 전부 진짜 텍스트라서 구글/DeepL 번역이 그대로 잡습니다.
+   · 이미지는 BHS_ROOT + BHS_CAST_IMG + img 로 조합됩니다.
+       예) ../Blood_High_School/images/1_kuro.png
+   · img 파일이 없으면 자동으로 회색 IMAGE 칸이 뜹니다.
+     나중에 해당 파일명으로 그림만 올리면 새로고침 시 바로 붙습니다.
+   · tag 색상 키: human dragon baek spirit vampire doll mage
+                  beast shadow gold herb onmyo miko
+   · cols 는 세로 한 칸입니다. 카드를 2개 넣으면 사이에 ▼ 변신 화살표가 생깁니다.
+   · 3·4부는 아직 비어 있습니다. 아래 형식대로 novel-3 을 추가하면
+     '등장인물' 버튼이 자동으로 켜집니다.
+   ══════════════════════════════════════════════════════ */
+var BHS_CAST_IMG = 'Blood_High_School/images/';
+
+var BHS_CAST = {
+
+'novel-1':{
+  part:'PART ONE', num:'1부', sub:'용의 부활편',
+  groups:[
+    {en:'MAIN CHARACTERS', ko:'주연', cols:[
+      [ {img:'1_kuro.png',   tags:[['human','인간']],  name:'류오 쿠로',
+         desc:'평범하고 순진한 모범생. 기가 약하고 겁이 많지만, 싸움이 싫은 만큼 관계를 소중히 여긴다.'},
+        {img:'2_Lackness.png',       tags:[['dragon','흑룡']], name:'라크니스',
+         desc:'쿠로의 몸속에 잠든 전설의 어둠의 다크 드래곤. 위기의 순간 쿠로를 대신해 나선다.'} ],
+      [ {img:'3_Eun-ho.png',         tags:[['human','인간']],  name:'은호',
+         desc:'쿠로의 소꿉친구. 능글거리고 장난이 많다. 쿨한 척하지만 쿠로와 관련된 일은 먼저 나선다.'},
+        {img:'4_Kitsune_no_Shinrei.png', tags:[['spirit','여우 신령']], name:'여우 신령',
+         desc:'은호의 본모습. 쿠로의 아버지인 요시유키의 부탁으로 쿠로를 지키는 천년 여우 신령.'} ],
+      [ {img:'5_Herbaeken.png',      tags:[['human','인간']],  name:'헤르바켄',
+         desc:'전설을 쫓아 건너온 전설 오타쿠. 매일 새로운 전설을 들고 와 쿠로와 은호를 끌어들인다.'},
+        {img:'6_Herbaeken_ver2.png', tags:[['herb','헤르바가문의 후예']], name:'헤르바켄',
+         desc:'천 년 전 멸망한 용족 왕국 백성의 후예. 라크니스를 처단해야 하는 숙명을 짊어졌다.'} ],
+      [ {img:'7_Siro.png',           tags:[['human','인간']],  name:'류오 시로',
+         desc:'쿠로의 쌍둥이 동생. 세상 경험이 별로 없어 어린아이 같은 상태. 와가마마 기질.'},
+        {img:'8_Lumensia.png',       tags:[['baek','백룡']],   name:'루멘시아',
+         desc:'봉인을 거부한 또 다른 용의 힘. 오레사마 기질로 세계 최강자를 노리며 서열 도장깨기 중.'} ]
+    ]},
+    {en:'SUPPORTING', ko:'조연', cols:[
+      [ {img:'9_Riusu_Fereru.png',   tags:[['vampire','뱀파이어']], name:'리우스 페렐',
+         desc:'성 세인츠 학원 학생회장. 장미 정원을 피로 물들이는 게 취미인 변태.'} ],
+      [ {img:'10_Shota.png',         tags:[['doll','마리오네트']],  name:'쇼타',
+         desc:'성 세인츠 학원 교장. 주인님이 원하는 것을 모으는 미쳐버린 인형.'} ],
+      [ {img:'11_Lubell.png',        tags:[['beast','신성 마물']],  name:'루벨',
+         desc:'학원 뒷편 버려진 성지에서 발견한 신성 마물. 무리에서 소외됐다.'} ],
+      [ {img:'12_Murasaki.png',      tags:[['human','인간'],['mage','흑마법사']], name:'무라사키',
+         desc:'1-B반 쿠로네 담임. 복화술을 하는 괴짜 교사. 모두에게 무시당한다.'} ],
+      [ {img:'13_Miko.png',          tags:[['human','인간'],['miko','무녀']],     name:'류오 미코',
+         desc:'쿠로를 무시하는 동갑 사촌. 요시유키의 제자로, 당주 자리를 두고 라이벌 관계에 있다.'} ],
+      [ {img:'14_Yoshiyuki.png',     tags:[['human','인간'],['onmyo','음양사']],  name:'류오 요시유키',
+         desc:'쿠로의 아버지. 희대의 음양사이자 류오가의 전 당주.'} ],
+      [ {img:'15_Jiji.png',          tags:[['human','인간']], name:'지지',
+         desc:'쿠로의 할아버지이자 류오가의 현 당주. 고집불통 노인.'} ],
+      [ {img:'16_Shitsujide_Hakase.png', tags:[['human','인간']], name:'시츠지데 하카세',
+         desc:'루멘시아의 집사. 예의 바른 태도 뒤에 자신만의 목적을 숨기고 있다.'} ]
+    ]}
+  ]
+},
+
+'novel-2':{
+  part:'PART TWO', num:'2부', sub:'류오가편',
+  groups:[
+    {en:'MAIN CHARACTERS', ko:'주연', cols:[
+      [ {img:'1_kuro.png', tags:[['human','인간'],['dragon','흑룡']], name:'류오 쿠로',
+         desc:'류오가의 차기 당주. 여전히 기가 약하지만 힘과 가문의 무게 사이에서 자신다운 방식을 고민하고 있다.'} ],
+      [ {img:'3_Eun-ho.png',      tags:[['human','인간'],['spirit','여우 신령']], name:'은호',
+         desc:'쿠로 아버지의 부탁으로 소꿉친구로서 곁에 머물러 온 천년 여우 신령. 류오가의 아이들을 필사적으로 지킨다.'} ],
+      [ {img:'17_Aoi.png',        tags:[['human','인간'],['shadow','금단주술사']], name:'카게히라 아오이',
+         desc:'야미 가문 카게히라가의 당주. 다정하고 능청스러운 것이 본모습이지만, 당주로서는 냉혹할 수밖에 없다.'} ],
+      [ {img:'13_Miko.png',       tags:[['human','인간'],['miko','무녀']], name:'류오 미코',
+         desc:'악인 테츠야의 딸이라는 굴레에도 굴하지 않는 요시유키의 제자. 류오가를 바로잡겠다는 독한 야망을 품고 있다.'} ]
+    ]},
+    {en:'SUPPORTING', ko:'조연', cols:[
+      [ {img:'5_Herbaeken.png',   tags:[['human','인간'],['herb','탐구자']], name:'헤르바켄',
+         desc:'복수귀에서 벗어나 쿠로와 은호의 동료가 됐다. 용족 전설의 진실을 홀로 쫓는다.'} ],
+      [ {img:'20_Sonzai.png',     tags:[['gold','진노카기'],['gold','인외']], name:'그 존재',
+         desc:'보는 이에 따라 다르게 인식되는 정체불명의 인외. 그 목적은 알 수 없다.'} ],
+      [ {img:'19_Yuka.png',       tags:[['human','인간'],['shadow','금단주술사']], name:'카게히라 유카',
+         desc:'카게히라가를 지키는 아오이의 여동생. 전투 시엔 말 한마디 없이 침입자를 처리한다.'} ],
+      [ {img:'7_Siro.png',        tags:[['human','인간'],['baek','백룡']], name:'류오 시로',
+         desc:'류오가에 합류한 쿠로의 쌍둥이 동생. 서열 정리 후 헤르바켄에게 훈육당하고 있다.'} ],
+      [ {img:'18_Tetsuya.png',    tags:[['human','인간']], name:'류오 테츠야',
+         desc:'미코의 아버지. 류오가 역대 최악의 당주. 비극의 씨앗을 뿌린 인물.'} ],
+      [ {img:'14_Yoshiyuki.png',  tags:[['human','인간'],['onmyo','음양사']], name:'류오 요시유키',
+         desc:'쿠로의 아버지. 류오가의 부패를 청산했던 올바른 당주. 모든 이야기의 시작점.'} ],
+      [ {img:'15_Jiji.png',       tags:[['human','인간']], name:'지지',
+         desc:'류오가의 현 당주이자 쿠로의 할아버지. 가문의 전통을 고집하는 완고한 노인.'} ],
+      [ {img:'11_Lubell.png',     tags:[['beast','신성 마물']], name:'루벨',
+         desc:'학원 뒷편 버려진 성지에서 발견해 거둔 신성 마물. 현 전설연구부의 마스코트.'} ]
+    ]}
+  ]
+}
+
+};
+
 var BHS_VOLUMES = [
   {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:'1부',
    label:'블러드하이스쿨 ~용의 부활~', type:'웹소설',
@@ -1535,24 +1685,67 @@ window.bhsOpenLink = function(url){
   else { location.href = url; }
 };
 
-/* ── 등장인물 이미지 오버레이 ── */
-window.bhsOpenCast = function(path, label){
-  if(!path){ console.warn('[BHS] 아직 등장인물 이미지가 없습니다.'); return; }
-  var ov    = document.getElementById('castOverlay');
-  var inner = document.getElementById('castOverlayInner');
-  var img   = document.getElementById('castOverlayImg');
-  var ttl   = document.getElementById('castOverlayTitle');
-  var err   = document.getElementById('castOverlayError');
-  var stage = document.querySelector('.cast-overlay-stage');
-  err.style.display = 'none';
-  err.textContent   = '';
-  img.style.display = '';
-  if(stage) stage.style.display = '';
-  /* 항상 '읽기(원본 폭)' 모드로 초기화 */
-  inner.classList.remove('fit');
-  document.getElementById('castOverlayZoom').textContent = '화면 맞춤';
-  img.src = BHS_ROOT + path;
-  ttl.textContent = label || '등장인물';
+/* ── 등장인물 오버레이 — BHS_CAST 를 HTML 카드로 그립니다 ── */
+function bhsCastCard(c){
+  var src = BHS_ROOT + BHS_CAST_IMG + (c.img || '');
+  var im  = c.img
+    ? '<img src="' + src + '" alt="' + bhsEsc(c.name) + '" loading="lazy"'
+      + ' onerror="this.style.display=\'none\';this.parentNode.classList.add(\'noimg\')">'
+    : '';
+  var tg = (c.tags || []).map(function(t){
+    return '<span class="cast-tag tg-' + t[0] + '">' + bhsEsc(t[1]) + '</span>';
+  }).join('');
+  return '<div class="cast-card' + (c.star ? ' star' : '') + '">'
+       + '<div class="cast-ci' + (c.img ? '' : ' noimg') + '">' + im + '</div>'
+       + '<div class="cast-bd">'
+       + (tg ? '<div class="cast-tags">' + tg + '</div>' : '')
+       + '<div class="cast-nm">' + bhsEsc(c.name) + '</div>'
+       + '<div class="cast-de">' + bhsEsc(c.desc || '') + '</div>'
+       + '</div></div>';
+}
+function bhsCastHtml(d){
+  var h = '<div class="cast-doc">'
+    + '<div class="cast-doc-hd">'
+    + '<div class="cast-doc-hd-l">'
+    + '<div class="cast-doc-eng"><b>BLOOD</b> HIGH SCHOOL</div>'
+    + '<div class="cast-doc-t">블러드하이스쿨</div>'
+    + '<span class="cast-doc-badge">등장인물 소개</span>'
+    + '</div>'
+    + '<div class="cast-doc-hd-r">'
+    + '<span class="cast-doc-num">' + bhsEsc(d.num) + '</span>'
+    + '<span><span class="cast-doc-part">' + bhsEsc(d.part) + '</span>'
+    + '<span class="cast-doc-sub">' + bhsEsc(d.sub) + '</span>'
+    + '<span class="cast-doc-cast">CAST INTRODUCTION</span></span>'
+    + '</div></div>';
+  (d.groups || []).forEach(function(g){
+    var rows = 1;
+    g.cols.forEach(function(c){ if(c.length > rows) rows = c.length; });
+    var cells = '';
+    for(var r = 0; r < rows; r++){
+      if(r > 0){
+        g.cols.forEach(function(c){
+          cells += c[r] ? '<div class="cast-arrow">&#9660;</div>' : '<div></div>';
+        });
+      }
+      g.cols.forEach(function(c){
+        cells += c[r] ? bhsCastCard(c[r]) : '<div></div>';
+      });
+    }
+    h += '<div class="cast-sec"><i></i>' + bhsEsc(g.en) + '<b>&middot; ' + bhsEsc(g.ko) + '</b><u></u></div>'
+       + '<div class="cast-grid' + (rows > 1 ? ' paired' : '') + '">' + cells + '</div>';
+  });
+  h += '<div class="cast-doc-ft"><span>BLOOD HIGH SCHOOL &middot; '
+     + bhsEsc(d.num) + ' &middot; ' + bhsEsc(d.sub) + '</span><span>rrkt.biz</span></div>';
+  return h + '</div>';
+}
+window.bhsOpenCast = function(volId, label){
+  var d = BHS_CAST[volId];
+  if(!d){ console.warn('[BHS] 아직 등장인물 데이터가 없습니다: ' + volId); return; }
+  var ov = document.getElementById('castOverlay');
+  document.getElementById('castOverlayBody').innerHTML = bhsCastHtml(d);
+  document.getElementById('castOverlayTitle').textContent = label || '등장인물';
+  var err = document.getElementById('castOverlayError');
+  if(err){ err.style.display = 'none'; err.textContent = ''; }
   ov.scrollTop = 0;
   ov.classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -1562,22 +1755,6 @@ window.bhsCloseCast = function(){
   if(!ov || !ov.classList.contains('show')) return;
   ov.classList.remove('show');
   document.body.style.overflow = '';
-};
-/* 읽기(원본 폭) ↔ 화면 맞춤 토글 */
-window.bhsToggleCastFit = function(){
-  var inner = document.getElementById('castOverlayInner');
-  var btn   = document.getElementById('castOverlayZoom');
-  var ov    = document.getElementById('castOverlay');
-  var isFit = inner.classList.toggle('fit');
-  btn.textContent = isFit ? '크게 보기' : '화면 맞춤';
-  ov.scrollTop = 0;
-};
-window.bhsCastImgError = function(imgEl){
-  var stage = document.querySelector('.cast-overlay-stage');
-  if(stage) stage.style.display = 'none';
-  var err = document.getElementById('castOverlayError');
-  err.textContent = '이미지를 불러오지 못했습니다. 시도한 경로: ' + imgEl.src;
-  err.style.display = 'block';
 };
 
 /* ══════════════════════════════════════════════════════
@@ -1727,7 +1904,7 @@ function bhsRenderEpList(){
     + '<div class="v-syn-lbl">줄거리</div>'
     + '<div class="v-syn-tx">' + bhsEsc(v.synopsis) + '</div>'
     + '<div class="v-links">'
-    + bhsSecBtn(!!v.cast, '등장인물', 'bhsOpenCast(\'' + (v.cast || '') + '\',\'' + bhsEsc(v.label) + '\')', '등장인물 이미지가 아직 없습니다')
+    + bhsSecBtn(!!BHS_CAST[v.id], '등장인물', 'bhsOpenCast(\'' + v.id + '\',\'' + bhsEsc(v.label) + '\')', '등장인물이 아직 등록되지 않았습니다')
     + bhsSecBtn(bhsHasNote(v), '제작노트', 'bhsOpenNote(\'' + v.id + '\')', '제작노트가 아직 작성되지 않았습니다')
     + '</div></div>'
     + '<div class="ep-board">'
