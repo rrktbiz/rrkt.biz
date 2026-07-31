@@ -314,6 +314,24 @@ body{top:0 !important}
 .story-empty{padding:60px 24px;text-align:center;font-size:13px;color:var(--tx3);line-height:2}
 .story-empty code{background:var(--sm);border:1px solid var(--bd);border-radius:4px;padding:1px 6px;font-size:11px;color:var(--tx2)}
 
+/* 데스크탑에서도 긴 화 제목이 가운데 버튼을 침범하지 않도록 그리드 칸에 가둔다 */
+.ep-nav-btn{max-width:min(260px,100%);overflow:hidden}
+
+@media(max-width:768px){
+  /* 플로팅 네비가 하단 에피소드 네비를 가리지 않도록 */
+  .ep-nav-outer{padding-bottom:calc(2px + env(safe-area-inset-bottom,0px))}
+  /* justify-self:start/end 버튼이 max-content 로 부풀어 가운데 버튼을 덮던 문제 */
+  .ep-nav{padding:10px 12px;gap:8px}
+  .ep-nav-btn{max-width:100%;padding:12px;font-size:11px;overflow:hidden}
+  .ep-picker-btn{padding:12px;font-size:10.5px}
+}
+@media(max-width:420px){
+  /* 아주 좁은 화면: 가운데 버튼을 "≡ 목록" 으로 축약 */
+  .epb-long{display:none}
+  .ep-nav{gap:6px}
+  .ep-nav-btn{padding:12px}
+}
+
 @media(max-width:480px){
   .doll-reader-wrap{padding:16px 18px 100px;margin:0}
   .doll-line-text{font-size:15px;line-height:2}
@@ -1143,7 +1161,7 @@ async function renderReader(idx){
                     : '<span class="ep-nav-title">' + endTxt + '</span>' + arrow) + '</button>';
     }
     var ok = canRead(sb.e);
-    var t  = (sb.e.title || '') + (ok ? '' : ' · ' + stLabel(sb.e.status));
+    var t  = sb.e.title || '';
     var op = ok ? ' onclick="openEp(' + sb.i + ')"' : '';
     return '<button class="ep-nav-btn' + (ok ? '' : ' disabled') + '"' + op + '>' +
            (dir<0 ? arrow + '<span class="ep-nav-title">' + t + '</span>'
@@ -1177,7 +1195,7 @@ async function renderReader(idx){
       '<div id="doll-blocks-wrap">' + bbDoll(e.blocks||[]) + '</div>' +
       '<div class="ep-nav-outer"><div class="ep-nav">' +
         navBtn(prevS, -1) +
-        '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; 목록</button>' +
+        '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; <span class="epb-long">에피소드 </span>목록</button>' +
         navBtn(nextS, 1) +
       '</div></div>' +
     '</div>';
