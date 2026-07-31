@@ -8,7 +8,7 @@
   "episodes": [
     {
       "eyebrow": "MAIN STORY",
-      "title": "테스트를 위한 첫화",
+      "title": "1",
       "type": "main",
       "route": "m",
       "num": "1-1",
@@ -42,7 +42,7 @@
         {
           "type": "narration",
           "data": {
-            "text": "테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다&nbsp;",
+            "text": "테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다&nbsp;",
             "msgs": []
           }
         },
@@ -58,7 +58,7 @@
           "data": {
             "charNum": "001",
             "exprFilename": "001.png",
-            "text": "안녕.",
+            "text": "테스트 대사",
             "msgs": []
           }
         },
@@ -74,7 +74,7 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "테스트입니다",
+            "text": "테스트 대사",
             "msgs": []
           }
         },
@@ -83,7 +83,7 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "<span style=\"color: rgb(26, 26, 26); font-style: normal;\">테스트입니다</span>",
+            "text": "<span style=\"color: rgb(26, 26, 26); font-style: normal;\">테스트 대사</span>",
             "msgs": []
           }
         },
@@ -92,7 +92,7 @@
           "data": {
             "charNum": "001",
             "exprFilename": "001.png",
-            "text": "<span style=\"color: rgb(26, 26, 26); font-style: normal;\">테스트입니다</span>",
+            "text": "<span style=\"color: rgb(26, 26, 26); font-style: normal;\">테스트 대사</span>",
             "msgs": []
           }
         },
@@ -101,7 +101,7 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "&nbsp;흩날리는 꽃잎 사이로 지나가는 바람 소리가 유난히 선명하게 들리는 오후입니다.&nbsp;",
+            "text": "테스트 대사",
             "msgs": []
           }
         },
@@ -117,7 +117,7 @@
           "data": {
             "charNum": "",
             "exprFilename": "",
-            "text": "번역이 제대로 되고있는지 테스트 페이지",
+            "text": "테스트 대사",
             "msgs": []
           }
         }
@@ -125,11 +125,11 @@
     },
     {
       "eyebrow": "MAIN STORY",
-      "title": "테스트 두번째",
+      "title": "2",
       "type": "main",
       "route": "m",
       "num": "1-2",
-      "status": "wip",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -142,11 +142,11 @@
     },
     {
       "eyebrow": "CHARACTER STORY",
-      "title": "서브스토리1화",
+      "title": "1",
       "type": "sub",
       "route": "m",
       "num": "1-1",
-      "status": "wip",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -174,7 +174,7 @@
     },
     {
       "eyebrow": "EVENT STORY",
-      "title": "이벤트스토리1화",
+      "title": "1",
       "type": "event",
       "route": "m",
       "num": "1-1",
@@ -191,11 +191,11 @@
     },
     {
       "eyebrow": "MAIN STORY",
-      "title": "새 에피소드",
+      "title": "1",
       "type": "main",
       "route": "f",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -208,7 +208,7 @@
     },
     {
       "eyebrow": "CHARACTER STORY",
-      "title": "새 에피소드",
+      "title": "1",
       "type": "sub",
       "route": "f",
       "num": "1-1",
@@ -225,7 +225,7 @@
     },
     {
       "eyebrow": "EVENT STORY",
-      "title": "새 에피소드",
+      "title": "1",
       "type": "event",
       "route": "f",
       "num": "1-1",
