@@ -47,7 +47,7 @@ button{font-family:var(--fn);cursor:pointer}
 .char-tab:last-child{border-right:none}
 .char-tab:hover{background:var(--bg);color:var(--tx)}
 .char-tab.active{background:#5a90b0;color:#fff;font-weight:700}
-.char-search{flex:1;min-width:100px;max-width:180px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;font-family:var(--fn);background:var(--sb);color:var(--tx);outline:none;transition:border-color .12s}
+.char-search{flex:1;min-width:100px;max-width:180px;padding:7px 12px;border:1px solid var(--bd);border-radius:8px;font-size:16px;transform-origin:left center;font-family:var(--fn);background:var(--sb);color:var(--tx);outline:none;transition:border-color .12s}
 .char-search:focus{border-color:var(--bd2)}
 .char-count{font-size:11px;color:var(--tx3);white-space:nowrap}
 .char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
@@ -56,9 +56,29 @@ button{font-family:var(--fn);cursor:pointer}
 .char-thumb{width:100%;aspect-ratio:1;border-radius:8px;border:1px solid var(--bd);overflow:hidden;transition:transform .14s,box-shadow .14s;display:flex;align-items:center;justify-content:center;position:relative;background:#d8d8d8}
 .char-thumb-inner{width:100%;height:100%;filter:grayscale(1);opacity:.6}
 .char-thumb-face{width:100%;height:100%}
-.char-like-overlay{position:absolute;top:6px;right:6px;z-index:2;background:transparent;border:1.5px solid rgba(255,255,255,0.8);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;line-height:1;transition:all .15s;padding:0;padding-top:1.5px;color:rgba(255,255,255,0.15);-webkit-text-stroke:1.2px rgba(255,255,255,0.85)}
+.char-like-overlay{position:absolute;top:6px;right:6px;z-index:2;touch-action:manipulation;background:transparent;border:1.5px solid rgba(255,255,255,0.8);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;line-height:1;transition:all .15s;padding:0;padding-top:1.5px;color:rgba(255,255,255,0.15);-webkit-text-stroke:1.2px rgba(255,255,255,0.85)}
 .char-like-overlay:hover{border-color:#fff;transform:scale(1.1);color:rgba(255,255,255,0.2);-webkit-text-stroke:1.2px #fff}
 .char-like-overlay.liked{border-color:rgba(255,255,255,0.4);color:#f43f5e;-webkit-text-stroke:0px}
+/* ── 하트 터치 영역 ──
+   보이는 하트는 26px 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 position:absolute 라 flex 배치에서 빠지므로 ♥ 위치에 영향이 없고,
+   배경이 없어 화면에도 나타나지 않습니다.
+
+   26 + 6 + 12 = 44px (애플 권장 최소 터치 크기)
+   위·오른쪽은 썸네일 모서리까지만 넓히고, 남는 만큼을 아래·왼쪽으로 보냅니다.
+   (.char-thumb 이 overflow:hidden 이라 밖으로 나가면 잘립니다)
+
+   마우스 환경에는 적용되지 않습니다 — 데스크탑은 지금 크기가 적당합니다. */
+@media(hover:none) and (pointer:coarse){
+  .char-like-overlay::after{
+    content:'';
+    position:absolute;
+    top:-6px;
+    right:-6px;
+    bottom:-12px;
+    left:-12px;
+  }
+}
 .char-name-row{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:5px;gap:1px}
 .char-code-prefix{font-size:9px;font-weight:400;color:var(--tx3);font-family:'Inter',monospace;letter-spacing:.5px}
 .char-code{font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',monospace;letter-spacing:.5px}
@@ -138,7 +158,7 @@ button{font-family:var(--fn);cursor:pointer}
 /* ── MOBILE ── */
 .ep-nav-short{display:none}
 @media(max-width:600px){
-  .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh}
+  .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh;min-height:100dvh}
   .sheet-wrap{padding:20px 16px 32px}
   .top-bar{padding:6px 14px}
   .ep-nav-full{display:none}
@@ -361,7 +381,7 @@ if(state.sort === 'popular') state.sort = 'newest';
 
    화면에는 '내가 누른 것'만 보입니다.
    전체 몇 명이 눌렀는지는 어디에도 표시하지 않습니다.
-   집계는 시트에만 조용히 쌓이고, 공개 시점은 biz 가 정합니다.
+   집계는 시트에 쌓이며, 공개 여부는 아직 정해지지 않았습니다.
    ══════════════════════════════════════════════════ */
 function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem('doll_liked')||'[]'))}catch{return new Set()} }
 function saveLiked(s){ localStorage.setItem('doll_liked', JSON.stringify([...s])) }
