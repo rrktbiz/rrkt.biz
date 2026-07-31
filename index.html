@@ -922,43 +922,10 @@ const PROJECTS = [
     status:"active",
     keepSub:true, landOnIntro:true,
     subType:"default",
-    twitterUrl:"https://twitter.com/your_handle",
     intro:"혈액형이 운명을 결정하는 세계. 전학 온 주인공이 숨겨진 비밀과 마주하며 성장하는 다크 판타지 학원물입니다. 권력, 혈통, 그리고 그 너머의 진실을 쫓아가는 이야기.",
     tags:["다크판타지","학원물","액션","병맛개그","소년만화","뉴트로"]
   },
 
-  /* ── 완료 프로젝트 샘플 (필요 시 수정) ── */
-  {
-    id:"sample-done-1",
-    label:"완료 프로젝트 A",
-    acc:"#64748b", acc2:"#475569",
-    status:"done",
-    keepSub:false, landOnIntro:true,
-    subType:"default",
-    intro:"완료된 프로젝트 예시입니다. 이 항목을 실제 완료된 프로젝트로 교체하세요.",
-    tags:["완료"]
-  },
-  {
-    id:"sample-done-2",
-    label:"완료 프로젝트 B",
-    acc:"#78716c", acc2:"#57534e",
-    status:"done",
-    keepSub:false, landOnIntro:true,
-    subType:"default",
-    intro:"완료된 프로젝트 예시입니다.",
-    tags:["완료"]
-  },
-  /* ── 보류 프로젝트 샘플 (필요 시 수정) ── */
-  {
-    id:"sample-archive-1",
-    label:"보류 프로젝트",
-    acc:"#94a3b8", acc2:"#64748b",
-    status:"archive",
-    keepSub:false, landOnIntro:true,
-    subType:"default",
-    intro:"보류된 프로젝트 예시입니다.",
-    tags:["보류"]
-  },
 ];
 
 const VOLUMES = {
@@ -1030,15 +997,11 @@ const VOLUMES = {
       {id:"sub",   label:"CHARACTER STORY", color:"#5a90b0", count:24},
       {id:"event", label:"EVENT STORY",     color:"#c0a040", count:24},
     ],
+    /* 아래 세 배열은 비워 둡니다.
+       실제 값은 loadDollStoryFromJson() 이 story_editor.json 에서 받아
+       통째로 갈아끼웁니다. 여기 손으로 적으면 덮어써집니다. */
     episodes:{
-      "main":[
-        {id:1, num:"1-1", title:"테스트를 위한 첫화",  date:"2026-04-12", status:"완료"},
-        {id:2, num:"1-2", title:"테스트 두번째",        date:null,         status:"작업중"},
-      ],
-      "sub":[
-        {id:1, num:"1-1", title:"캐릭터스토리 1화",    date:null,         status:"작업중"},
-      ],
-      "event":[],
+      "main":[], "sub":[], "event":[],
     }
   },
 };
@@ -2220,7 +2183,58 @@ function injectCharDatesIntoWorkLog(){
   });
 }
 
-/* ── 스토리 에디터 JSON 불러오기 (진행현황 카테고리 카드용) ── */
+/* ── 스토리 에디터 JSON 불러오기 ──
+   biz-OC-doll 회차의 날짜·상태 원본은 story_editor.json 입니다.
+   story.html 이 읽는 바로 그 파일이고, 여기서는 캘린더와 '최근 작업'에
+   쓸 값만 받아옵니다.
+
+   ※ VOLUMES["biz-oc-doll"].episodes 를 손으로 적지 마세요.
+     불러오기에 성공하면 이 함수가 통째로 덮어씁니다.
+     회차를 추가하려면 story_editor.json 을 고치면 됩니다. */
+const DOLL_STORY_JSON = 'biz-OC-doll/story_editor.json';
+
+/* story_editor.json 은 done/wip/plan, 이 파일은 완료/작업중/예정 을 씁니다.
+   '최근 작업'의 완료 목록이 "완료" 로만 걸러내기 때문에 반드시 변환해야 합니다. */
+const DOLL_STATUS_MAP = { done:'완료', wip:'작업중', plan:'예정' };
+
+/* "2026-04-12" 또는 "2026. 4. 12" → "2026-04-12", 그 외에는 null */
+function normalizeDollDate(v){
+  if(!v) return null;
+  v = String(v).trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  const m = v.match(/(\d{4})[.\-\/]\s*(\d{1,2})[.\-\/]\s*(\d{1,2})/);
+  return m ? `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}` : null;
+}
+
+async function loadDollStoryFromJson(){
+  try{
+    const res = await fetch(DOLL_STORY_JSON, {cache:'no-cache'});
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const eps = (data && Array.isArray(data.episodes)) ? data.episodes : null;
+    if(!eps) throw new Error('episodes 배열이 없습니다');
+
+    const next = { main:[], sub:[], event:[] };
+    eps.forEach(e=>{
+      const cat = next[e.type] ? e.type : 'main';
+      next[cat].push({
+        id:     next[cat].length + 1,
+        num:    e.num || '',
+        title:  e.title || '',
+        date:   normalizeDollDate(e.completedDate),
+        status: DOLL_STATUS_MAP[e.status] || e.status || '예정',
+      });
+    });
+
+    VOLUMES['biz-oc-doll'].episodes = next;
+    return true;
+  }catch(e){
+    /* 실패해도 화면은 그대로 뜹니다 — 비즈오씨돌 회차만 안 보일 뿐입니다 */
+    console.warn('story_editor.json 불러오기 실패:', e.message);
+    return false;
+  }
+}
+
 // ══════════════════════════════════════════════
 //  # HASH NAVIGATION — history.pushState 방식
 //  pushState는 이벤트를 발생시키지 않으므로
@@ -2293,6 +2307,9 @@ loadEpDataFromSheets().then(ok=>{
 });
 loadCharDataFromSheets().then(ok=>{
   if(ok){ injectCharDatesIntoWorkLog(); render(); }
+});
+loadDollStoryFromJson().then(ok=>{
+  if(ok){ rebuildWorkLog(); render(); }
 });
 
 function rebuildWorkLog(){
