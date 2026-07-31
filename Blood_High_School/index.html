@@ -264,6 +264,9 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 @media(max-width:700px){
   .cast-doc{padding:14px 13px 20px}
   .cast-grid{grid-template-columns:repeat(2,1fr);gap:9px}
+  .cast-grid.paired{row-gap:0}
+  .cast-grid.paired>*{grid-column:var(--mc);grid-row:var(--mr)}
+  .cast-grid.paired>.cast-mt{margin-top:9px}
   .cast-doc-t{font-size:16px}
   .cast-doc-eng{font-size:10px;letter-spacing:2px}
   .cast-doc-num{font-size:20px}
@@ -1686,7 +1689,7 @@ window.bhsOpenLink = function(url){
 };
 
 /* ── 등장인물 오버레이 — BHS_CAST 를 HTML 카드로 그립니다 ── */
-function bhsCastCard(c){
+function bhsCastCard(c, pos){
   var src = BHS_ROOT + BHS_CAST_IMG + (c.img || '');
   var im  = c.img
     ? '<img src="' + src + '" alt="' + bhsEsc(c.name) + '" loading="lazy"'
@@ -1695,7 +1698,7 @@ function bhsCastCard(c){
   var tg = (c.tags || []).map(function(t){
     return '<span class="cast-tag tg-' + t[0] + '">' + bhsEsc(t[1]) + '</span>';
   }).join('');
-  return '<div class="cast-card' + (c.star ? ' star' : '') + '">'
+  return '<div class="cast-card' + (pos ? pos.cls : '') + '"' + (pos ? pos.st : '') + '>'
        + '<div class="cast-ci' + (c.img ? '' : ' noimg') + '">' + im + '</div>'
        + '<div class="cast-bd">'
        + (tg ? '<div class="cast-tags">' + tg + '</div>' : '')
@@ -1720,19 +1723,31 @@ function bhsCastHtml(d){
   (d.groups || []).forEach(function(g){
     var rows = 1;
     g.cols.forEach(function(c){ if(c.length > rows) rows = c.length; });
+    var paired = rows > 1;
+    /* 모바일(2열)에서 변신 쌍이 쪼개지지 않도록 칸 위치를 미리 계산해 둔다.
+       한 쌍 = 세로 3칸(위 카드 / 화살표 / 아래 카드). MCOL 만 바꾸면 열 수 변경 가능. */
+    var MCOL = 2;
+    function mpos(i, slot){
+      var blk = Math.floor(i / MCOL);
+      return { cls:(blk > 0 && slot === 1 ? ' cast-mt' : ''),
+               st:' style="--mc:' + (i % MCOL + 1) + ';--mr:' + (blk * 3 + slot) + '"' };
+    }
     var cells = '';
     for(var r = 0; r < rows; r++){
       if(r > 0){
-        g.cols.forEach(function(c){
-          cells += c[r] ? '<div class="cast-arrow">&#9660;</div>' : '<div></div>';
+        g.cols.forEach(function(c, i){
+          var m = paired ? mpos(i, 2) : null;
+          cells += c[r] ? '<div class="cast-arrow"' + (m ? m.st : '') + '>&#9660;</div>'
+                        : '<div' + (m ? m.st : '') + '></div>';
         });
       }
-      g.cols.forEach(function(c){
-        cells += c[r] ? bhsCastCard(c[r]) : '<div></div>';
+      g.cols.forEach(function(c, i){
+        var m = paired ? mpos(i, r === 0 ? 1 : 3) : null;
+        cells += c[r] ? bhsCastCard(c[r], m) : '<div' + (m ? m.st : '') + '></div>';
       });
     }
     h += '<div class="cast-sec"><i></i>' + bhsEsc(g.en) + '<b>&middot; ' + bhsEsc(g.ko) + '</b><u></u></div>'
-       + '<div class="cast-grid' + (rows > 1 ? ' paired' : '') + '">' + cells + '</div>';
+       + '<div class="cast-grid' + (paired ? ' paired' : '') + '">' + cells + '</div>';
   });
   h += '<div class="cast-doc-ft"><span>BLOOD HIGH SCHOOL &middot; '
      + bhsEsc(d.num) + ' &middot; ' + bhsEsc(d.sub) + '</span><span>rrkt.biz</span></div>';
