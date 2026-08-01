@@ -507,6 +507,48 @@ body{
       gap: 14px;
     }
 
+    /* ── 표 · 모바일 대응 ──────────────────────────────
+       colgroup 의 px 고정폭이 좁은 화면에서 마지막 칸을 뭉개므로
+       모바일에서는 고정폭을 해제하고, 5열짜리 PART 07 표(.t-phase)는
+       가로 스크롤 대신 행 단위 카드로 접는다. */
+    .pd-doc table { font-size: 13px; }
+    .pd-doc col { width: auto !important; }
+    .pd-doc table[style*="fixed"] { table-layout: auto !important; }
+    .pd-doc th, .pd-doc td { padding: 8px 10px; white-space: normal !important; }
+
+    .pd-doc .t-phase,
+    .pd-doc .t-phase tbody,
+    .pd-doc .t-phase tr,
+    .pd-doc .t-phase td { display: block; width: auto; }
+
+    .pd-doc .t-phase tr:first-child { display: none; }   /* 헤더행 숨김 */
+
+    .pd-doc .t-phase tr {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      margin: 0 0 10px;
+      padding: 12px 14px;
+    }
+    .pd-doc .t-phase td { border: 0; padding: 4px 0; }
+    .pd-doc .t-phase td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #E51937;
+      margin-bottom: 2px;
+    }
+    .pd-doc .t-phase td:first-child {
+      font-size: 16px;
+      font-weight: 900;
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 2px solid #111;
+    }
+    .pd-doc .t-phase td:first-child::before { content: none; }
+
   }
 
   .pd-doc .deep-dive {
@@ -1107,13 +1149,13 @@ PD의 질문: "연재 주기는? 독자 이탈 없이 유지할 수 있는 구�
   </div>
 
   <div class="content">
-    <table style="table-layout:fixed;width:100%">
+    <table class="t-phase" style="table-layout:fixed;width:100%">
       <colgroup><col style="width:52px"><col style="width:104px"><col style="width:56px"><col style="width:110px"><col></colgroup>
       <tr><th style="white-space:nowrap">구분</th><th style="white-space:nowrap">부제</th><th style="white-space:nowrap">화수</th><th>톤</th><th>구조</th></tr>
-      <tr><td style="white-space:nowrap">1부</td><td style="white-space:nowrap">용의 부활편</td><td style="white-space:nowrap">12화</td><td>가벼움, 코미디, 옴니버스</td><td>매 화 사건 해결형. 독립된 에피소드가 캐릭터를 빌드업.</td></tr>
-      <tr><td style="white-space:nowrap">2부</td><td style="white-space:nowrap">류오가편</td><td style="white-space:nowrap">12화</td><td>무거움, 드라마, 시리얼</td><td>주인공 성장 아크의 첫 분기점. 심리전·관계극 중심의 극장판 호흡.</td></tr>
-      <tr><td style="white-space:nowrap">3부</td><td style="white-space:nowrap">미정</td><td style="white-space:nowrap">12화</td><td>가벼움, 코미디</td><td>새로운 인외 캐릭터(아군·적)의 빌드업.</td></tr>
-      <tr><td style="white-space:nowrap">4부</td><td style="white-space:nowrap">미정</td><td style="white-space:nowrap">12화</td><td>웅장함, 본격 판타지</td><td>인외 배틀. 누적된 전설 떡밥의 본격 회수.</td></tr>
+      <tr><td data-label="구분" style="white-space:nowrap">1부</td><td data-label="부제" style="white-space:nowrap">용의 부활편</td><td data-label="화수" style="white-space:nowrap">12화</td><td data-label="톤">가벼움, 코미디, 옴니버스</td><td data-label="구조">매 화 사건 해결형. 독립된 에피소드가 캐릭터를 빌드업.</td></tr>
+      <tr><td data-label="구분" style="white-space:nowrap">2부</td><td data-label="부제" style="white-space:nowrap">류오가편</td><td data-label="화수" style="white-space:nowrap">12화</td><td data-label="톤">무거움, 드라마, 시리얼</td><td data-label="구조">주인공 성장 아크의 첫 분기점. 심리전·관계극 중심의 극장판 호흡.</td></tr>
+      <tr><td data-label="구분" style="white-space:nowrap">3부</td><td data-label="부제" style="white-space:nowrap">미정</td><td data-label="화수" style="white-space:nowrap">12화</td><td data-label="톤">가벼움, 코미디</td><td data-label="구조">새로운 인외 캐릭터(아군·적)의 빌드업.</td></tr>
+      <tr><td data-label="구분" style="white-space:nowrap">4부</td><td data-label="부제" style="white-space:nowrap">미정</td><td data-label="화수" style="white-space:nowrap">12화</td><td data-label="톤">웅장함, 본격 판타지</td><td data-label="구조">인외 배틀. 누적된 전설 떡밥의 본격 회수.</td></tr>
     </table>
 
     <h3>공개 방식 — 부 단위 일괄 공개 (시즌제 OTT 방식)</h3>
