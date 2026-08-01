@@ -19,6 +19,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>biz-OC-doll</title>
+
+<!-- ══════════════════════════════════════════════════
+     파비콘 (브라우저 탭 아이콘) — 보석
+
+     이미지 파일이 아니라 코드 안에 그림이 통째로 들어있습니다.
+     따로 업로드할 파일이 없고, 폴더 구조가 바뀌어도 안 깨집니다.
+     (블러드하이스쿨 파비콘과 같은 방식입니다)
+
+     ── 색 바꾸는 법 ──
+       %23cfe6f4  보석 몸통 색  ← 여기만 바꾸면 됩니다
+       %231a1a1a  외곽선 + 커팅선 색 (두 군데)
+
+       다른 색 후보:
+         %23a8d4ec  조금 진한 하늘
+         %235a90b0  사이트 파랑
+         %233a6a88  진한 파랑
+
+     ※ %23 이 # 입니다. 주소 안이라 # 를 그대로 못 씁니다.
+
+     ── 커팅선 농도 ──
+       opacity='0.6' 이 보석 안쪽 면 선입니다.
+       0.3 으로 낮추면 연해지고, 1 로 올리면 진해집니다.
+       0 으로 두면 커팅선 없이 실루엣만 남습니다.
+
+     ── 여백에 대해 ──
+     보석이 캔버스를 꽉 채우도록 좌표를 잡아두었습니다.
+     여백을 늘리면 탭에서 보석이 그만큼 작게 보이니
+     좌표는 되도록 건드리지 마세요.
+
+     ※ 소개·캐릭터·스토리·이벤트 파일에는 넣지 않아도 됩니다.
+        그 파일들은 이 페이지 안(iframe)에서 열리기 때문에
+        탭 아이콘을 바꾸지 않습니다.
+        나중에 /c/042.html 같은 미리보기 파일을 만들 때는
+        아래 한 줄을 그 파일에도 복사해 두세요.
+        (카톡 링크를 눌러 들어온 사람이 실제로 보는 탭입니다)
+     ══════════════════════════════════════════════════ -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
+
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ═══ 공용 컴포넌트 스타일 (구 common.css — 이 파일 안으로 합침) ═══
