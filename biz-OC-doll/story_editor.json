@@ -12,7 +12,7 @@
       "type": "main",
       "route": "m",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "2026-04-12",
       "castList": [
         {
@@ -31,142 +31,7 @@
           "exprFilename": ""
         }
       ],
-      "blocks": [
-        {
-          "type": "system",
-          "data": {
-            "text": "시간 · 장소",
-            "msgs": []
-          }
-        },
-        {
-          "type": "narration",
-          "data": {
-            "text": "테스트용 나레이션 대사입니다 테스트용 나레이션 대사입니다&nbsp;",
-            "msgs": []
-          }
-        },
-        {
-          "type": "sfx",
-          "data": {
-            "text": "쾅—",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "001",
-            "exprFilename": "001.png",
-            "text": "테스트 대사",
-            "msgs": []
-          }
-        },
-        {
-          "type": "scene",
-          "data": {
-            "filename": "1-1.png",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "테스트 대사",
-            "msgs": []
-          }
-        },
-        {
-          "type": "thought",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "<span style=\"color: rgb(26, 26, 26); font-style: normal;\">테스트 대사</span>",
-            "msgs": []
-          }
-        },
-        {
-          "type": "thought",
-          "data": {
-            "charNum": "001",
-            "exprFilename": "001.png",
-            "text": "<span style=\"color: rgb(26, 26, 26); font-style: normal;\">테스트 대사</span>",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "테스트 대사",
-            "msgs": []
-          }
-        },
-        {
-          "type": "scene",
-          "data": {
-            "filename": "",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "테스트 대사",
-            "msgs": []
-          }
-        }
-      ]
-    },
-    {
-      "eyebrow": "MAIN STORY",
-      "title": "2 메인스토리2 테스트 제목 길게 써보기",
-      "type": "main",
-      "route": "m",
-      "num": "1-2",
-      "status": "done",
-      "completedDate": "",
-      "castList": [
-        {
-          "charNum": "001",
-          "exprUrl": "",
-          "exprFilename": ""
-        }
-      ],
-      "blocks": [
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "대사를 입력하세요",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "대사를 입력하세요",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "대사를 입력하세요",
-            "msgs": []
-          }
-        }
-      ]
+      "blocks": []
     },
     {
       "eyebrow": "CHARACTER STORY",
@@ -174,7 +39,7 @@
       "type": "sub",
       "route": "m",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -198,26 +63,7 @@
           "exprFilename": "004.png"
         }
       ],
-      "blocks": [
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "대사를 입력하세요",
-            "msgs": []
-          }
-        },
-        {
-          "type": "speech",
-          "data": {
-            "charNum": "",
-            "exprFilename": "",
-            "text": "대사를 입력하세요",
-            "msgs": []
-          }
-        }
-      ]
+      "blocks": []
     },
     {
       "eyebrow": "EVENT STORY",
@@ -225,7 +71,7 @@
       "type": "event",
       "route": "m",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -234,22 +80,7 @@
           "exprFilename": ""
         }
       ],
-      "blocks": [
-        {
-          "type": "scene",
-          "data": {
-            "filename": "",
-            "msgs": []
-          }
-        },
-        {
-          "type": "narration",
-          "data": {
-            "text": "테스트입니다&nbsp;",
-            "msgs": []
-          }
-        }
-      ]
+      "blocks": []
     },
     {
       "eyebrow": "MAIN STORY",
@@ -257,7 +88,7 @@
       "type": "main",
       "route": "f",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -274,7 +105,7 @@
       "type": "sub",
       "route": "f",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
@@ -291,7 +122,7 @@
       "type": "event",
       "route": "f",
       "num": "1-1",
-      "status": "done",
+      "status": "plan",
       "completedDate": "",
       "castList": [
         {
