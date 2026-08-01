@@ -417,7 +417,7 @@ BIZ.mount();
       osc.frequency.setValueAtTime(1500, t);          /* FREQ */
 
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.06, t + 0.003);   /* VOL */
+      g.gain.exponentialRampToValueAtTime(0.20, t + 0.003);   /* VOL */
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.025); /* DUR */
 
       osc.connect(g); g.connect(ctx.destination);
