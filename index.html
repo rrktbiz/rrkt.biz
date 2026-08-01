@@ -27,10 +27,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.show{opacity:1}
 #topbar-cal-btn{font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s}
-/* 클릭 소리 켜기·끄기 버튼 */
-#tb-sound-btn{width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);cursor:pointer;transition:all .12s;flex-shrink:0}
-#tb-sound-btn:hover{background:var(--bg);color:var(--tx);border-color:var(--bd2)}
-#tb-sound-btn.is-off{opacity:.5}
 #topbar-cal-btn:hover{background:var(--bg);color:var(--tx)}
 
 /* ── FLOATING NAV ── */
@@ -125,10 +121,6 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-proj-card.prep:hover .home-proj-thumb::after{content:none}
 .home-proj-card.prep .home-proj-title{color:var(--tx3)}
 .home-proj-badge{position:absolute;top:8px;left:8px;z-index:2;font-size:9px;font-weight:700;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.55);padding:3px 9px;border-radius:20px;backdrop-filter:blur(2px)}
-/* 업데이트 배지 — 같은 자리(표지 왼쪽 위)를 씁니다.
-   오픈 준비중 표시가 있으면 그쪽이 우선이라 함께 뜨지 않습니다. */
-.home-proj-badge.is-new{background:#c0392b}
-.home-proj-badge.is-update{background:#3558c0}
 .home-proj-prep-slot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--sm)}
 .home-proj-prep-slot .pp-mark{font-size:20px;color:var(--tx3);opacity:.35}
 .home-proj-prep-slot .pp-txt{font-size:9px;letter-spacing:.08em;color:var(--tx3);opacity:.6;text-transform:uppercase}
@@ -781,7 +773,52 @@ body{top:0!important}
    3. Raw 버튼 클릭 → 주소창 URL 복사 → textId 에 붙여넣기
 ══════════════════════════════════════════════════════ */
 
-/* ── Google Sheets 동기화 설정 (API 키 불필요 — 공개 CSV 방식) ── */
+/* ══════════════════════════════════════════════════════════════════
+   ★★★  중요 — 이 파일을 읽는 사람(AI 포함)에게  ★★★
+   ★★★  캘린더 날짜는 이 HTML 안에 없습니다  ★★★
+
+   이 파일만 훑어보면 모든 회차가 date:null 로 보여서
+   "작업 일정이 하나도 없다"고 오해하기 쉽습니다. 아닙니다.
+   HTML 안의 date / status 값은 전부 빈 껍데기(placeholder)이고,
+   진짜 날짜는 페이지가 열린 뒤 아래 3곳에서 fetch 로 받아옵니다.
+
+   ┌──────────────────────────────────────────────────────────────┐
+   │ 1) 블러드하이스쿨(블하스) 작업목록 · 회차 날짜/상태          │
+   │    ← 구글시트 "episodes" 탭 (공개 CSV)                        │
+   │    담당 함수: loadEpDataFromSheets()                          │
+   │    결과: VOLUMES["blood-highschool"] 의 각 회차              │
+   │          .date / .status 를 시트 값으로 덮어씀                │
+   ├──────────────────────────────────────────────────────────────┤
+   │ 2) biz-OC-doll 캐릭터시트 · 캐릭터 갱신 날짜                  │
+   │    ← 구글시트 "OC-characters" 탭 (공개 CSV)                   │
+   │    담당 함수: loadCharDataFromSheets()                        │
+   │    결과: window._CHAR_DATA 에 저장 →                          │
+   │          injectCharDatesIntoWorkLog() 가 WORK_LOG 에 주입     │
+   ├──────────────────────────────────────────────────────────────┤
+   │ 3) biz-OC-doll 스토리 회차 날짜 (※ 시트 아님, JSON 파일)      │
+   │    ← biz-OC-doll/story_editor.json                            │
+   │    담당 함수: loadDollStoryFromJson()                         │
+   └──────────────────────────────────────────────────────────────┘
+
+   최종 합류 지점: WORK_LOG (날짜 문자열 → 작업 배열)
+   캘린더(renderCalendar)와 홈의 미니 달력은 WORK_LOG 만 봅니다.
+   즉 "캘린더에 뭐가 뜨는지"는 이 HTML이 아니라 구글시트를 봐야 압니다.
+
+   ── 시트 주소 ──
+   문서:   https://docs.google.com/spreadsheets/d/19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk/edit
+   episodes 탭 CSV:
+     https://docs.google.com/spreadsheets/d/19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk/gviz/tq?tqx=out:csv&sheet=episodes
+   OC-characters 탭 CSV:
+     https://docs.google.com/spreadsheets/d/19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk/gviz/tq?tqx=out:csv&sheet=OC-characters
+
+   ※ 시트는 "링크가 있는 모든 사용자 - 뷰어" 로 공개돼 있어야 CSV가 열립니다.
+     비공개로 바꾸면 캘린더가 통째로 빈 채로 뜹니다.
+   ※ 날짜를 고치고 싶으면 이 HTML이 아니라 구글시트를 고치세요.
+══════════════════════════════════════════════════════════════════ */
+
+/* ── Google Sheets 동기화 설정 (API 키 불필요 — 공개 CSV 방식) ──
+   config.js 에 CONFIG.SHEETS_ID 가 있으면 그 값이 우선이고,
+   없으면 아래 기본 ID를 씁니다. 시트를 갈아끼울 땐 config.js 쪽을 고치세요. */
 const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
   ? CONFIG.SHEETS_ID
   : '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
@@ -794,97 +831,29 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
  * Drive 이미지 URL 생성 — <img src=""> 에 바로 사용
  * @param {string|null} fileId
  */
-/* ══════════════════════════════════════════════════
-   클릭 소리 (Windows XP style)
-
-   biz-OC-doll · 블러드하이스쿨과 똑같은 소리입니다.
-   음 두 개가 위에서 아래로 떨어집니다. (1200Hz → 900Hz)
-
-   메인 화면 우측 상단의 스피커 버튼으로 끄고 켤 수 있습니다.
-   끈 상태는 rrkt_sound 라는 이름으로 브라우저에 저장되며,
-   세 사이트가 같은 이름을 쓰기 때문에
-   한 곳에서 끄면 나머지에서도 함께 꺼집니다.
-   처음 방문한 사람에게는 켜진 상태로 시작합니다.
-
-   ※ 스피커 버튼은 메인 화면에만 있습니다.
-     캘린더·소개 화면에는 상단 우측 영역 자체가 없기 때문입니다.
-     소리는 그 화면들에서도 나며, 끄려면 메인으로 돌아오면 됩니다.
-
-   ── 소리 바꾸는 법 ──
-   아래 tone(...) 두 줄이 전부입니다.
-     tone(음높이, 시작시각, 길이, 크기)
-   ※ 세 사이트가 같은 값을 씁니다. 여기만 고치면 소리가 갈라집니다.
-     바꾸려면 bizocdoll_index.html 과 bhs_index.html 도 함께 고치세요.
-   ══════════════════════════════════════════════════ */
+/* ── Click sound (Windows XP style) ── */
 (function(){
-
-  var KEY = 'rrkt_sound';
-  var on  = true;
-  try{ if(localStorage.getItem(KEY) === '0') on = false; }catch(e){}
-
-  var _ctx = null;
-  function getCtx(){ if(!_ctx) _ctx = new (window.AudioContext||window.webkitAudioContext)(); return _ctx; }
-
+  let _ctx=null;
+  function getCtx(){if(!_ctx)_ctx=new(window.AudioContext||window.webkitAudioContext)();return _ctx;}
   function playClick(){
-    if(!on) return;
     try{
-      var ctx = getCtx();
-      if(ctx.state === 'suspended') ctx.resume();
-
-      function tone(freq, start, dur, vol){
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = 'sine';
-        o.frequency.setValueAtTime(freq, ctx.currentTime + start);
-        g.gain.setValueAtTime(vol, ctx.currentTime + start);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
-        o.start(ctx.currentTime + start);
-        o.stop(ctx.currentTime + start + dur + 0.01);
+      const ctx=getCtx();
+      // Windows XP click: two quick tones like old UI feedback
+      function tone(freq,start,dur,vol){
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.type='sine';
+        o.frequency.setValueAtTime(freq,ctx.currentTime+start);
+        g.gain.setValueAtTime(vol,ctx.currentTime+start);
+        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+start+dur);
+        o.start(ctx.currentTime+start);
+        o.stop(ctx.currentTime+start+dur+0.01);
       }
-
-      tone(1200, 0,     0.05, 0.12);
-      tone(900,  0.045, 0.06, 0.09);
+      tone(1200,0,0.05,0.12);
+      tone(900,0.045,0.06,0.09);
     }catch(e){}
   }
-
-  var ICON_ON  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
-  var ICON_OFF = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
-
-  /* 메인 화면은 다시 그려질 때마다 버튼이 새로 만들어지므로
-     그때마다 아이콘 상태를 다시 입혀줍니다. */
-  function paint(){
-    var b = document.getElementById('tb-sound-btn');
-    if(!b) return;
-    var want = on ? 'on' : 'off';
-    if(b.getAttribute('data-snd') === want) return;   /* 무한 반복 방지 */
-    b.setAttribute('data-snd', want);
-    b.innerHTML = on ? ICON_ON : ICON_OFF;
-    b.classList.toggle('is-off', !on);
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    b.title = on ? '클릭 소리 끄기' : '클릭 소리 켜기';
-  }
-
-  window.bizSoundToggle = function(){
-    on = !on;
-    try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
-    paint();
-    if(on) playClick();
-  };
-
-  document.addEventListener('click', function(e){
-    var t = e.target;
-    if(t && t.closest && t.closest('#tb-sound-btn')) return;
-    playClick();
-  }, true);
-
-  function init(){
-    paint();
-    var c = document.getElementById('content');
-    if(c && window.MutationObserver) new MutationObserver(paint).observe(c, { childList:true, subtree:true });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-
+  document.addEventListener('click',playClick);
 })();
 
 /* ── DATA ── */
@@ -940,6 +909,22 @@ const PROJECTS = [
 
 ];
 
+/* ══════════════════════════════════════════════════════════════
+   VOLUMES — 권/회차 목록
+
+   ※ 아래 회차들의 date:null / status:"예정" 은 초기값일 뿐입니다.
+     블하스(blood-highschool) 는 페이지 로드 후
+     loadEpDataFromSheets() 가 구글시트 "episodes" 탭을 읽어
+     date 와 status 를 전부 덮어씁니다.
+     → 그래서 이 파일만 보고 "일정이 비어있다"고 판단하면 안 됩니다.
+
+     매칭 기준: 시트의 (종류 type + 권수 num + N화 id) 가
+     여기 VOLUMES 의 v.type / v.num / e.id 와 일치해야 붙습니다.
+     제목을 바꿔도 상관없지만 num·id 를 바꾸면 시트와 어긋납니다.
+
+     biz-oc-doll 의 episodes 는 시트가 아니라
+     biz-OC-doll/story_editor.json 이 통째로 덮어씁니다. (손으로 적지 말 것)
+══════════════════════════════════════════════════════════════ */
 const VOLUMES = {
   "blood-highschool": [
     {id:"novel-1", num:1, label:"[웹소설]블러드하이스쿨 ~용의 부활~", sub:"1부", grad:"150deg,#3a0000,#8b0000,#c0392b", type:"웹소설", tags:["판타지","학원"],
@@ -1019,7 +1004,23 @@ const VOLUMES = {
 };
 
 
-/* Build work log */
+/* ══════════════════════════════════════════════════════════════
+   WORK_LOG — 캘린더가 실제로 그리는 유일한 데이터
+
+   형태: { "2026-04-12": [ {proj, title, status, acc, ...}, ... ] }
+
+   ※ 첫 실행 시점(=이 아래 buildWorkLog() 호출)에는 거의 비어 있습니다.
+     VOLUMES 의 date 가 아직 전부 null 이기 때문입니다.
+     구글시트 CSV / story_editor.json fetch 가 끝난 뒤
+     rebuildWorkLog() 가 다시 돌면서 그제서야 채워집니다.
+     (파일 맨 아래 "시작:" 부트 구간 참고)
+
+   채워지는 경로 3개:
+     ① 블하스 회차   → 구글시트 episodes 탭      → VOLUMES → buildWorkLog()
+     ② 돌 스토리 회차 → story_editor.json         → VOLUMES → buildWorkLog()
+     ③ 돌 캐릭터     → 구글시트 OC-characters 탭 → injectCharDatesIntoWorkLog()
+                       (이 항목만 isChar:true 로 표시됨)
+══════════════════════════════════════════════════════════════ */
 const WORK_LOG = {};
 function buildWorkLog(){
   ["blood-highschool"].forEach(pid=>{
@@ -1055,76 +1056,6 @@ const S={
   lastMobProj:null,
   epLang:"ko",
 };
-
-/* ══════════════════════════════════════════════════
-   업데이트 배지 계산
-
-   프로젝트 표지 왼쪽 위에 NEW 또는 UPDATE 를 띄웁니다.
-   값은 캘린더 기록(WORK_LOG)에서 자동으로 가져옵니다.
-   따로 손으로 켜고 끌 필요가 없습니다.
-
-   ── 어느 쪽이 붙나요 ──
-     NEW      그 프로젝트의 첫 공개이거나
-              새 권 · 새 시리즈의 첫 화일 때
-     UPDATE   기존 권에 화가 추가되었을 때
-     둘 다 해당하면 NEW 가 이깁니다.
-
-   ── 기간 ──
-     BADGE_DAYS 안에 완료된 작업이 있으면 그 프로젝트에 배지가 붙습니다.
-     지금은 14일입니다. 이 숫자만 바꾸면 기간이 바뀝니다.
-
-     그 기간 안에 아무것도 없으면, 전체를 통틀어 가장 최근에
-     완료한 작업 하나에만 배지를 남깁니다.
-     한동안 조용해도 사이트 전체가 "아무것도 없는" 상태로
-     보이지 않게 하기 위한 장치입니다.
-
-   ※ '완료' 상태만 셉니다. '작업중' 과 '예정' 은 세지 않습니다.
-     아직 안 나온 것에 배지가 붙으면 방문자가 헛걸음합니다.
-   ══════════════════════════════════════════════════ */
-const BADGE_DAYS = 14;
-
-function computeProjBadges(){
-  var today = new Date(); today.setHours(0,0,0,0);
-
-  function daysAgo(ds){
-    var p = String(ds).split('-');
-    var d = new Date(+p[0], (+p[1])-1, +p[2]); d.setHours(0,0,0,0);
-    return Math.round((today - d) / 86400000);
-  }
-
-  /* 완료된 작업만 모읍니다 (미래 날짜는 제외) */
-  var all = [];
-  Object.keys(WORK_LOG).forEach(function(date){
-    if(daysAgo(date) < 0) return;
-    WORK_LOG[date].forEach(function(w){
-      if(stClass(w.status) !== 'done') return;
-      all.push({ date:date, projId:w.projId, group:(w.volId || w.dollCatId || '_') });
-    });
-  });
-  if(!all.length) return {};
-
-  all.sort(function(a,b){ return a.date.localeCompare(b.date); });   /* 오래된 → 최신 */
-
-  /* 프로젝트별 · 권별 첫 완료일을 기록해 둡니다 */
-  var firstOfProj = {}, firstOfGroup = {};
-  all.forEach(function(w){
-    var gk = w.projId + '|' + w.group;
-    if(!firstOfProj[w.projId]) firstOfProj[w.projId] = w.date;
-    if(!firstOfGroup[gk])      firstOfGroup[gk]      = w.date;
-  });
-
-  var recent = all.filter(function(w){ return daysAgo(w.date) <= BADGE_DAYS; });
-  if(!recent.length) recent = [ all[all.length - 1] ];   /* 조용할 때의 최소 한 개 */
-
-  var out = {};
-  recent.forEach(function(w){
-    if(out[w.projId] === 'NEW') return;                  /* NEW 가 UPDATE 보다 우선 */
-    var gk = w.projId + '|' + w.group;
-    var isNew = (firstOfProj[w.projId] === w.date) || (firstOfGroup[gk] === w.date);
-    out[w.projId] = isNew ? 'NEW' : 'UPDATE';
-  });
-  return out;
-}
 
 const getProj=id=>PROJECTS.find(p=>p.id===id);
 const ds=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
@@ -1578,7 +1509,6 @@ function renderHome(){
         </div>
         <div class="topbar-right" style="position:relative">
           <span id="tl-badge"></span>
-          <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
           <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
             <span id="tb-lang-label" class="tb-btn-txt">Language</span>
@@ -1611,18 +1541,12 @@ function renderHome(){
             ${(()=>{
               /* status: 'active' = 정상 공개 / 'prep' = 오픈 준비중 / 'hidden' = 홈에서 숨김 */
               const shownProjs=PROJECTS.filter(p=>(p.status||'active')!=='hidden');
-              const upBadges=computeProjBadges();
               return shownProjs.map(p=>{
                 const isPrep=(p.status||'active')==='prep';
                 const illustSlot = p.illust
                   ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
                   : `<div class="home-proj-prep-slot"><span class="pp-mark">✦</span><span class="pp-txt">${isPrep?'coming soon':'illustration'}</span></div>`;
-                /* 오픈 준비중이 최우선입니다.
-                   아직 열지 않은 작품에 업데이트 배지가 붙으면 어색합니다. */
-                const up = upBadges[p.id];
-                const badge = isPrep
-                  ? `<div class="home-proj-badge">OPEN 준비중</div>`
-                  : (up ? `<div class="home-proj-badge is-${up==='NEW'?'new':'update'}">${up}</div>` : '');
+                const badge = isPrep ? `<div class="home-proj-badge">OPEN 준비중</div>` : '';
                 const attrs = isPrep
                   ? `title="${p.label} — 오픈 준비중"`
                   : `onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기"`;
@@ -1657,6 +1581,11 @@ function renderHome(){
 }
 
 /* ── CALENDAR ── */
+/* ── 캘린더 렌더링 ──
+   그리는 데이터는 WORK_LOG 하나뿐입니다.
+   WORK_LOG 는 구글시트(episodes / OC-characters 탭)와
+   story_editor.json 에서 채워집니다 — 파일 상단 주석 참고.
+   "캘린더에 뭐가 안 뜬다" → 이 함수가 아니라 시트/JSON 부터 확인하세요. */
 function renderCalendar(){
   const{calY:y,calM:m,calOverview:ov,calTimeline:tl,calSpan:span}=S;
   const firstDay=new Date(y,m,1).getDay(),daysInMonth=new Date(y,m+1,0).getDate();
@@ -2022,7 +1951,24 @@ function miniNext(){if(S.homeMiniM===11){S.homeMiniM=0;S.homeMiniY++;}else S.hom
 
 
 
-/* ── Sheets 불러오기 (공개 CSV — API 키 불필요) ── */
+/* ══════════════════════════════════════════════════════════════
+   ★ 블러드하이스쿨(블하스) 작업목록의 날짜는 여기서 들어옵니다 ★
+
+   출처: 구글시트 "episodes" 탭 (공개 CSV, API 키 불필요)
+   https://docs.google.com/spreadsheets/d/19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk/gviz/tq?tqx=out:csv&sheet=episodes
+
+   하는 일: 시트를 읽어 VOLUMES 안 각 회차의 .date / .status 를 덮어씀
+   그 다음: rebuildWorkLog() → WORK_LOG → 캘린더에 표시
+
+   시트 열 구조 (1행은 헤더라 건너뜀, 좌우 2벌이 한 줄에 들어감)
+     왼쪽  A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜
+     오른쪽 G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜
+   프로젝트 칸에 쓰는 값: "블러드하이스쿨" 또는 "biz-OC-doll"
+   날짜 형식: 2026-04-12 또는 2026. 4. 12  (둘 다 인식)
+
+   ※ 실패해도 페이지는 그대로 뜹니다 — 날짜만 안 붙습니다.
+     콘솔에 "Sheets CSV 불러오기 실패" 가 찍히면 시트 공개설정부터 확인.
+══════════════════════════════════════════════════════════════ */
 async function loadEpDataFromSheets(){
   try{
     // 시트 이름으로 직접 fetch — gid 불필요
@@ -2086,7 +2032,22 @@ async function loadEpDataFromSheets(){
   }
 }
 
-/* ── 캐릭터 시트 불러오기 (OC-characters 탭 CSV) ── */
+/* ══════════════════════════════════════════════════════════════
+   ★ biz-OC-doll 캐릭터시트의 날짜도 구글시트에서 받아옵니다 ★
+
+   출처: 구글시트 "OC-characters" 탭 (공개 CSV, API 키 불필요)
+   https://docs.google.com/spreadsheets/d/19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk/gviz/tq?tqx=out:csv&sheet=OC-characters
+
+   시트 열 구조 (1행 헤더):
+     A=code(캐릭터 번호) B=type C=holder D=status E=updated(갱신 날짜)
+
+   하는 일: window._CHAR_DATA 배열에 담아둠 (여기까지가 이 함수)
+   그 다음: injectCharDatesIntoWorkLog() 가 updated 날짜를
+            WORK_LOG 에 isChar:true 항목으로 꽂아 넣음 → 캘린더 표시
+
+   ※ 캐릭터 목록/날짜를 이 HTML에서 찾으려 하지 마세요. 없습니다.
+     전부 위 시트에 있습니다.
+══════════════════════════════════════════════════════════════ */
 async function loadCharDataFromSheets(){
   try{
     const _csvFn = (typeof SHEET_CSV === 'function')
@@ -2126,7 +2087,11 @@ async function loadCharDataFromSheets(){
   }
 }
 
-/* ── 캐릭터 updated 날짜 → WORK_LOG 주입 ── */
+/* ── 캐릭터 updated 날짜 → WORK_LOG 주입 ──
+   위 loadCharDataFromSheets() 가 받아온 구글시트 OC-characters 탭 데이터를
+   캘린더가 읽는 WORK_LOG 형태로 옮기는 함수입니다.
+   여기서 넣는 항목만 isChar:true 가 붙어 있고,
+   rebuildWorkLog() 이 다시 돌 때 중복 방지를 위해 먼저 싹 지웠다가 다시 넣습니다. */
 function injectCharDatesIntoWorkLog(){
   const chars = window._CHAR_DATA || [];
   const dollProj = PROJECTS.find(p=>p.id==='biz-oc-doll');
@@ -2276,6 +2241,21 @@ if(location.hash && location.hash.length > 1){
   try { applyHash(location.hash); } catch(e){}
 }
 render();
+
+/* ══════════════════════════════════════════════════════════════
+   ★ 외부 데이터 3종 로드 — 캘린더 날짜가 여기서 채워집니다 ★
+
+   첫 render() 시점의 캘린더는 사실상 비어 있습니다.
+   아래 fetch 가 끝나야 날짜가 붙고 다시 render() 됩니다.
+   (그래서 새로고침 직후 잠깐 캘린더가 휑한 게 정상입니다)
+
+   ① loadEpDataFromSheets()   구글시트 episodes 탭      → 블하스 작업목록
+   ② loadCharDataFromSheets() 구글시트 OC-characters 탭 → 돌 캐릭터시트
+   ③ loadDollStoryFromJson()  story_editor.json 파일    → 돌 스토리 회차
+
+   셋은 서로 기다리지 않고 각자 끝나는 대로 화면을 갱신합니다.
+   하나가 실패해도 나머지는 정상 표시되고, 콘솔에 경고만 남습니다.
+══════════════════════════════════════════════════════════════ */
 loadEpDataFromSheets().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
 });
