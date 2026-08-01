@@ -180,9 +180,9 @@ body{top:0 !important}
 .world-read-block:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
 .world-read-block-title{font-size:12px;font-weight:700;letter-spacing:2.5px;color:var(--blue);text-transform:uppercase;text-align:center;margin-bottom:18px}
 .world-read-block-body{font-size:16px;color:var(--tx2);line-height:2;text-align:center;font-weight:300}
-.world-img-slot{margin:28px auto 0;max-width:460px;border-radius:14px;overflow:hidden}
-.world-img-slot img{width:100%;display:block}
-.world-img-slot.empty{min-height:180px;border:1px dashed rgba(90,144,176,.35);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.4)}
+.world-img-slot{margin:28px auto 0;max-width:460px;aspect-ratio:460/180;border-radius:14px;overflow:hidden}
+.world-img-slot img{width:100%;height:100%;object-fit:contain;display:block}
+.world-img-slot.empty{border:1px dashed rgba(90,144,176,.35);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.4)}
 .world-img-slot.empty::after{content:'이미지 자리';font-size:12px;letter-spacing:.5px;color:var(--tx3)}
 .world-read-cta{text-align:center;margin-top:52px;padding-top:20px;padding-bottom:44px}
 .world-read-cta-text{font-size:17px;font-weight:600;color:var(--tx);letter-spacing:-.02em;margin-bottom:20px}
