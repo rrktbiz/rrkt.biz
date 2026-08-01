@@ -8,7 +8,7 @@
   "episodes": [
     {
       "eyebrow": "MAIN STORY",
-      "title": "1",
+      "title": "1화 메인스토리 테스트 제목 길게 써보기",
       "type": "main",
       "route": "m",
       "num": "1-1",
@@ -125,11 +125,11 @@
     },
     {
       "eyebrow": "MAIN STORY",
-      "title": "2",
+      "title": "2 메인스토리2 테스트 제목 길게 써보기",
       "type": "main",
       "route": "m",
       "num": "1-2",
-      "status": "plan",
+      "status": "done",
       "completedDate": "",
       "castList": [
         {
@@ -138,7 +138,35 @@
           "exprFilename": ""
         }
       ],
-      "blocks": []
+      "blocks": [
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        }
+      ]
     },
     {
       "eyebrow": "CHARACTER STORY",
