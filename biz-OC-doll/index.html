@@ -379,12 +379,25 @@ BIZ.mount();
    음원을 내려받는 게 아니라 브라우저가 그 자리에서
    음을 만들어 냅니다. 그래서 용량도 로딩 시간도 늘지 않습니다.
 
+   ── 어떤 소리인가요 ──
+   rrkt.biz 허브 페이지에서 쓰던 클릭음과 똑같은 소리입니다.
+   음 두 개가 위에서 아래로 떨어집니다. (1200Hz → 900Hz)
+   윈도우 XP 시절 버튼 소리와 비슷한 계열입니다.
+
    ── 소리 바꾸는 법 ──
-   아래 _tick 함수의 숫자 네 개가 전부입니다.
-     FREQ 1500  음 높이. 올리면 날카롭고, 내리면 둔탁합니다.
-     'square'   음색. 'sine' 으로 바꾸면 훨씬 부드러워집니다.
-     DUR 0.025  길이(초). 0.05 를 넘기면 연속 클릭 때 겹칩니다.
-     VOL 0.06   크기. 0.12 정도면 꽤 커집니다.
+   아래 _tick 함수 안의 tone(...) 두 줄이 전부입니다.
+     tone(음높이, 시작시각, 길이, 크기)
+
+     음높이  1200 과 900 입니다.
+             둘 다 같은 비율로 내리면 묵직해집니다. (예: 900 / 675)
+             뒤 숫자가 앞 숫자보다 낮아야 "떨어지는" 느낌이 납니다.
+     크기    0.12 와 0.09 입니다.
+             시끄러우면 0.08 / 0.06 정도로 함께 내리세요.
+             한쪽만 내리면 두 음의 균형이 깨집니다.
+
+   ※ 허브 페이지와 같은 값이므로 되도록 그대로 두세요.
+     두 사이트를 오갈 때 소리가 같아야 한 곳처럼 느껴집니다.
+     소리를 바꾸려면 허브 index.html 도 같이 고쳐야 합니다.
 
    ── 소개·캐릭터·스토리·이벤트 탭도 소리가 납니다 ──
    그 페이지들은 이 페이지 안(iframe)에 들어와 있습니다.
@@ -409,19 +422,19 @@ BIZ.mount();
       if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
       if(ctx.state === 'suspended') ctx.resume();
 
-      var t   = ctx.currentTime;
-      var osc = ctx.createOscillator();
-      var g   = ctx.createGain();
+      function tone(freq, start, dur, vol){
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(freq, ctx.currentTime + start);
+        g.gain.setValueAtTime(vol, ctx.currentTime + start);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+        o.start(ctx.currentTime + start);
+        o.stop(ctx.currentTime + start + dur + 0.01);
+      }
 
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(1500, t);          /* FREQ */
-
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.20, t + 0.003);   /* VOL */
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.025); /* DUR */
-
-      osc.connect(g); g.connect(ctx.destination);
-      osc.start(t); osc.stop(t + 0.05);
+      tone(1200, 0,     0.05, 0.12);
+      tone(900,  0.045, 0.06, 0.09);
     }catch(e){}
   }
 
