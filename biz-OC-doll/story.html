@@ -206,8 +206,12 @@ body{top:0 !important}
 .reader-topbar button{background:transparent;border:none;color:var(--tx3);font-size:13px;padding:5px 8px;border-radius:5px}
 .reader-topbar button:hover{color:var(--tx);background:var(--sm)}
 /* 상단바 오른쪽 닫기(X) — 모바일에서만 노출. '← 목록' 과 같은 동작 */
-.topbar-x{display:none;margin-left:auto;flex-shrink:0;position:relative;width:30px;height:30px;align-items:center;justify-content:center;font-size:16px;line-height:1;padding:0}
-@media(max-width:768px){ .topbar-x{display:inline-flex} }
+.topbar-x{display:none;position:absolute;top:50%;right:14px;transform:translateY(-50%);width:30px;height:30px;align-items:center;justify-content:center;font-size:16px;line-height:1;padding:0}
+@media(max-width:768px){
+  .topbar-x{display:inline-flex}
+  /* 제목이 X 아래로 파고들지 않도록 오른쪽 여백만 확보 (높이 영향 없음) */
+  .reader-topbar{padding-right:52px}
+}
 .doll-reader-wrap{max-width:700px;margin:20px auto 40px;padding:32px 40px 80px;background:var(--sb);border-radius:12px}
 .doll-reader-header{padding:16px 0;margin-bottom:4px;text-align:center}
 .doll-ep-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
