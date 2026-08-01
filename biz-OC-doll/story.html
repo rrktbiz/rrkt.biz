@@ -205,6 +205,9 @@ body{top:0 !important}
 .reader-topbar.hidden{transform:translateY(-110%)}
 .reader-topbar button{background:transparent;border:none;color:var(--tx3);font-size:13px;padding:5px 8px;border-radius:5px}
 .reader-topbar button:hover{color:var(--tx);background:var(--sm)}
+/* 상단바 오른쪽 닫기(X) — 모바일에서만 노출. '← 목록' 과 같은 동작 */
+.topbar-x{display:none;margin-left:auto;flex-shrink:0;position:relative;width:30px;height:30px;align-items:center;justify-content:center;font-size:16px;line-height:1;padding:0}
+@media(max-width:768px){ .topbar-x{display:inline-flex} }
 .doll-reader-wrap{max-width:700px;margin:20px auto 40px;padding:32px 40px 80px;background:var(--sb);border-radius:12px}
 .doll-reader-header{padding:16px 0;margin-bottom:4px;text-align:center}
 .doll-ep-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase}
@@ -251,7 +254,7 @@ body{top:0 !important}
 
 /* 화 이동 */
 .ep-nav-outer{background:var(--sb);padding-bottom:32px}
-.ep-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px clamp(12px,3vw,24px);max-width:700px;margin:0 auto;width:100%;min-width:0}
+.ep-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:14px clamp(12px,3vw,24px);max-width:700px;margin:0 auto;width:100%;min-width:0}
 .ep-nav-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-size:12px;font-weight:500;transition:all .12s;min-width:0;max-width:260px}
 .ep-nav-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
 .ep-nav-btn.disabled{opacity:.3;cursor:default;pointer-events:none}
@@ -356,6 +359,8 @@ body{top:0 !important}
   .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
   /* .ep-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
   .ep-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
+  /* .topbar-x — 30px → 44x44px · 상단바 오른쪽 끝 · 이웃 없음 */
+  .topbar-x::after{content:'';position:absolute;top:-7px;right:-7px;bottom:-7px;left:-7px}
 }
 </style>
 </head>
@@ -1062,6 +1067,7 @@ window.openWorld = function(push){
       '<button onclick="backToStoryList()">← 목록</button>' +
       '<div style="width:1px;height:14px;background:var(--bd);margin:0 2px"></div>' +
       '<div style="font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">EP.00 · 공식 원작 설정</div>' +
+      '<button class="topbar-x" onclick="backToStoryList()" aria-label="목록으로 닫기">&#10005;</button>' +
     '</div>' +
     '<div class="world-read">' +
       '<div class="world-read-inner">' +
