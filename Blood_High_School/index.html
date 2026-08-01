@@ -324,6 +324,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .bt-lang{margin-left:auto;padding-left:10px;position:relative;display:flex;align-items:center;gap:6px;flex-shrink:0;}
 
 #tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
+/* 소리 켜기·끄기 버튼 — 문의 버튼과 같은 모양입니다 */
+#tb-sound-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
+#tb-sound-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+#tb-sound-btn.is-off{color:#b8b8b8}
 #tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
 
 /* ── 작가 소개 카드 — 작품을 다 본 사람이 발견하는 자리 (상단 아님) ── */
@@ -821,6 +825,7 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
     </div>
     <div class="bt-lang">
       <span id="tl-badge"></span>
+      <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
       <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       </button>
@@ -2835,6 +2840,87 @@ function googleTranslateElementInit(){
 }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!-- ══════════════════════════════════════════════════
+     클릭 소리
+
+     rrkt.biz 허브 · biz-OC-doll 과 똑같은 소리입니다.
+     음 두 개가 위에서 아래로 떨어집니다. (1200Hz → 900Hz)
+
+     상단바의 스피커 버튼으로 끄고 켤 수 있습니다.
+     끈 상태는 rrkt_sound 라는 이름으로 브라우저에 저장되며,
+     세 사이트가 같은 이름을 쓰기 때문에
+     한 곳에서 끄면 나머지에서도 함께 꺼집니다.
+     처음 방문한 사람에게는 켜진 상태로 시작합니다.
+
+     소리 파일은 없습니다. 브라우저가 그 자리에서 음을 만듭니다.
+
+     ── 소리 바꾸는 법 ──
+     아래 tone(...) 두 줄이 전부입니다.
+       tone(음높이, 시작시각, 길이, 크기)
+     ※ 세 사이트가 같은 값을 씁니다. 여기만 고치면 소리가 갈라집니다.
+       바꾸려면 허브 index.html 과 bizocdoll_index.html 도 함께 고치세요.
+     ══════════════════════════════════════════════════ -->
+<script>
+(function(){
+
+  var KEY = 'rrkt_sound';
+  var on  = true;
+  try{ if(localStorage.getItem(KEY) === '0') on = false; }catch(e){}
+
+  var ctx = null;
+
+  function _tick(){
+    if(!on) return;
+    try{
+      if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === 'suspended') ctx.resume();
+
+      function tone(freq, start, dur, vol){
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(freq, ctx.currentTime + start);
+        g.gain.setValueAtTime(vol, ctx.currentTime + start);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+        o.start(ctx.currentTime + start);
+        o.stop(ctx.currentTime + start + dur + 0.01);
+      }
+
+      tone(1200, 0,     0.05, 0.12);
+      tone(900,  0.045, 0.06, 0.09);
+    }catch(e){}
+  }
+
+  var ICON_ON  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+  var ICON_OFF = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
+
+  function paint(){
+    var b = document.getElementById('tb-sound-btn');
+    if(!b) return;
+    b.innerHTML = on ? ICON_ON : ICON_OFF;
+    b.classList.toggle('is-off', !on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.title = on ? '클릭 소리 끄기' : '클릭 소리 켜기';
+  }
+
+  window.bizSoundToggle = function(){
+    on = !on;
+    try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
+    paint();
+    if(on) _tick();
+  };
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(t && t.closest && t.closest('#tb-sound-btn')) return;
+    _tick();
+  }, true);
+
+  paint();
+
+})();
+</script>
 
 </body>
 </html>
