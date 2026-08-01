@@ -64,6 +64,10 @@
    ※ story.html 에도 같은 블록이 있습니다. 한쪽 고치면 반대쪽도. */
 #tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
 #tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+/* 소리 켜기·끄기 버튼 — 문의 버튼과 같은 모양입니다 */
+#tb-sound-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
+#tb-sound-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+#tb-sound-btn.is-off{color:#b8b8b8}
 
 /* 번역 안내 각주 — 언어를 궁금해하는 바로 그 순간에만 보이게 */
 .tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
@@ -274,6 +278,7 @@ var BIZ = window.BIZ = {
   /* ── 상단바 우측 ── */
   topbarRightHtml: function(){
     return `      <span id="tl-badge"></span>
+      <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
       <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       </button>
@@ -360,6 +365,123 @@ document.addEventListener('keydown', function(e){
 });
 
 BIZ.mount();
+
+
+/* ══════════════════════════════════════════════════
+   클릭 소리
+
+   페이지 어디를 눌러도 아주 짧은 "틱" 소리가 납니다.
+   상단바의 스피커 버튼으로 끄고 켤 수 있고,
+   끈 상태는 브라우저에 기억되어 다음에 와도 유지됩니다.
+   처음 방문한 사람에게는 켜진 상태로 시작합니다.
+
+   ── 소리 파일이 없습니다 ──
+   음원을 내려받는 게 아니라 브라우저가 그 자리에서
+   음을 만들어 냅니다. 그래서 용량도 로딩 시간도 늘지 않습니다.
+
+   ── 소리 바꾸는 법 ──
+   아래 _tick 함수의 숫자 네 개가 전부입니다.
+     FREQ 1500  음 높이. 올리면 날카롭고, 내리면 둔탁합니다.
+     'square'   음색. 'sine' 으로 바꾸면 훨씬 부드러워집니다.
+     DUR 0.025  길이(초). 0.05 를 넘기면 연속 클릭 때 겹칩니다.
+     VOL 0.06   크기. 0.12 정도면 꽤 커집니다.
+
+   ── 소개·캐릭터·스토리·이벤트 탭도 소리가 납니다 ──
+   그 페이지들은 이 페이지 안(iframe)에 들어와 있습니다.
+   아래 코드가 그 안쪽까지 알아서 연결하므로
+   각 파일을 따로 고칠 필요가 없습니다.
+
+   ※ 내 컴퓨터에서 파일을 더블클릭해 열면 브라우저 보안 정책 탓에
+     안쪽 탭에서는 소리가 안 날 수 있습니다.
+     깃허브에 올린 뒤에는 정상 작동합니다.
+   ══════════════════════════════════════════════════ */
+(function(){
+
+  var KEY = 'bizocdoll_sound';
+  var on  = true;
+  try{ if(localStorage.getItem(KEY) === '0') on = false; }catch(e){}
+
+  var ctx = null;
+
+  function _tick(){
+    if(!on) return;
+    try{
+      if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === 'suspended') ctx.resume();
+
+      var t   = ctx.currentTime;
+      var osc = ctx.createOscillator();
+      var g   = ctx.createGain();
+
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1500, t);          /* FREQ */
+
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.06, t + 0.003);   /* VOL */
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.025); /* DUR */
+
+      osc.connect(g); g.connect(ctx.destination);
+      osc.start(t); osc.stop(t + 0.05);
+    }catch(e){}
+  }
+
+  /* 스피커 아이콘 두 종류 */
+  var ICON_ON  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+  var ICON_OFF = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
+
+  function paint(){
+    var b = document.getElementById('tb-sound-btn');
+    if(!b) return;
+    b.innerHTML = on ? ICON_ON : ICON_OFF;
+    b.classList.toggle('is-off', !on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.title = on ? '클릭 소리 끄기' : '클릭 소리 켜기';
+  }
+
+  window.bizSoundToggle = function(){
+    on = !on;
+    try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
+    paint();
+    if(on) _tick();   /* 켠 순간 한 번 들려줍니다 */
+  };
+
+  /* 스피커 버튼 자체를 누를 때는 중복으로 울리지 않게 걸러냅니다 */
+  function onClick(e){
+    var t = e.target;
+    if(t && t.closest && t.closest('#tb-sound-btn')) return;
+    _tick();
+  }
+
+  document.addEventListener('click', onClick, true);
+
+  /* ── 안쪽 탭(iframe)까지 연결 ── */
+  function attach(){
+    var frames = document.querySelectorAll('#stage iframe');
+    for(var i = 0; i < frames.length; i++){
+      (function(fr){
+        if(fr.__bizSnd) return;
+        fr.__bizSnd = 1;
+        var bind = function(){
+          try{
+            var d = fr.contentDocument;
+            if(d) d.addEventListener('click', onClick, true);
+          }catch(err){}   /* 내 컴퓨터에서 직접 열었을 때는 여기서 조용히 넘어갑니다 */
+        };
+        fr.addEventListener('load', bind);
+        bind();
+      })(frames[i]);
+    }
+  }
+
+  var stage = document.getElementById('stage');
+  if(stage && window.MutationObserver){
+    new MutationObserver(attach).observe(stage, { childList: true, subtree: true });
+  }
+  attach();
+
+  paint();
+
+})();
 
 
 /* ══ 번역 엔진 ══ */
