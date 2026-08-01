@@ -13,20 +13,10 @@
       "route": "m",
       "num": "1-1",
       "status": "plan",
-      "completedDate": "2026-04-12",
+      "completedDate": "",
       "castList": [
         {
           "charNum": "001",
-          "exprUrl": "",
-          "exprFilename": ""
-        },
-        {
-          "charNum": "002",
-          "exprUrl": "images/simple_profile/002.png",
-          "exprFilename": "002.png"
-        },
-        {
-          "charNum": "004",
           "exprUrl": "",
           "exprFilename": ""
         }
@@ -46,21 +36,6 @@
           "charNum": "001",
           "exprUrl": "",
           "exprFilename": ""
-        },
-        {
-          "charNum": "002",
-          "exprUrl": "images/simple_profile/002.png",
-          "exprFilename": "002.png"
-        },
-        {
-          "charNum": "003",
-          "exprUrl": "images/simple_profile/003.png",
-          "exprFilename": "003.png"
-        },
-        {
-          "charNum": "004",
-          "exprUrl": "images/simple_profile/004.png",
-          "exprFilename": "004.png"
         }
       ],
       "blocks": []
@@ -92,9 +67,9 @@
       "completedDate": "",
       "castList": [
         {
-          "charNum": "010",
-          "exprUrl": "images/simple_profile/010.png",
-          "exprFilename": "010.png"
+          "charNum": "001",
+          "exprUrl": "images/simple_profile/001.png",
+          "exprFilename": "001.png"
         }
       ],
       "blocks": []
@@ -125,16 +100,6 @@
       "status": "plan",
       "completedDate": "",
       "castList": [
-        {
-          "charNum": "003",
-          "exprUrl": "images/simple_profile/003.png",
-          "exprFilename": "003.png"
-        },
-        {
-          "charNum": "004",
-          "exprUrl": "images/simple_profile/004.png",
-          "exprFilename": "004.png"
-        },
         {
           "charNum": "001",
           "exprUrl": "",
