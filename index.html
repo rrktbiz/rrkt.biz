@@ -125,6 +125,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-proj-card.prep:hover .home-proj-thumb::after{content:none}
 .home-proj-card.prep .home-proj-title{color:var(--tx3)}
 .home-proj-badge{position:absolute;top:8px;left:8px;z-index:2;font-size:9px;font-weight:700;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.55);padding:3px 9px;border-radius:20px;backdrop-filter:blur(2px)}
+/* 업데이트 배지 — 같은 자리(표지 왼쪽 위)를 씁니다.
+   오픈 준비중 표시가 있으면 그쪽이 우선이라 함께 뜨지 않습니다. */
+.home-proj-badge.is-new{background:#c0392b}
+.home-proj-badge.is-update{background:#3558c0}
 .home-proj-prep-slot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--sm)}
 .home-proj-prep-slot .pp-mark{font-size:20px;color:var(--tx3);opacity:.35}
 .home-proj-prep-slot .pp-txt{font-size:9px;letter-spacing:.08em;color:var(--tx3);opacity:.6;text-transform:uppercase}
@@ -1052,6 +1056,76 @@ const S={
   epLang:"ko",
 };
 
+/* ══════════════════════════════════════════════════
+   업데이트 배지 계산
+
+   프로젝트 표지 왼쪽 위에 NEW 또는 UPDATE 를 띄웁니다.
+   값은 캘린더 기록(WORK_LOG)에서 자동으로 가져옵니다.
+   따로 손으로 켜고 끌 필요가 없습니다.
+
+   ── 어느 쪽이 붙나요 ──
+     NEW      그 프로젝트의 첫 공개이거나
+              새 권 · 새 시리즈의 첫 화일 때
+     UPDATE   기존 권에 화가 추가되었을 때
+     둘 다 해당하면 NEW 가 이깁니다.
+
+   ── 기간 ──
+     BADGE_DAYS 안에 완료된 작업이 있으면 그 프로젝트에 배지가 붙습니다.
+     지금은 14일입니다. 이 숫자만 바꾸면 기간이 바뀝니다.
+
+     그 기간 안에 아무것도 없으면, 전체를 통틀어 가장 최근에
+     완료한 작업 하나에만 배지를 남깁니다.
+     한동안 조용해도 사이트 전체가 "아무것도 없는" 상태로
+     보이지 않게 하기 위한 장치입니다.
+
+   ※ '완료' 상태만 셉니다. '작업중' 과 '예정' 은 세지 않습니다.
+     아직 안 나온 것에 배지가 붙으면 방문자가 헛걸음합니다.
+   ══════════════════════════════════════════════════ */
+const BADGE_DAYS = 14;
+
+function computeProjBadges(){
+  var today = new Date(); today.setHours(0,0,0,0);
+
+  function daysAgo(ds){
+    var p = String(ds).split('-');
+    var d = new Date(+p[0], (+p[1])-1, +p[2]); d.setHours(0,0,0,0);
+    return Math.round((today - d) / 86400000);
+  }
+
+  /* 완료된 작업만 모읍니다 (미래 날짜는 제외) */
+  var all = [];
+  Object.keys(WORK_LOG).forEach(function(date){
+    if(daysAgo(date) < 0) return;
+    WORK_LOG[date].forEach(function(w){
+      if(stClass(w.status) !== 'done') return;
+      all.push({ date:date, projId:w.projId, group:(w.volId || w.dollCatId || '_') });
+    });
+  });
+  if(!all.length) return {};
+
+  all.sort(function(a,b){ return a.date.localeCompare(b.date); });   /* 오래된 → 최신 */
+
+  /* 프로젝트별 · 권별 첫 완료일을 기록해 둡니다 */
+  var firstOfProj = {}, firstOfGroup = {};
+  all.forEach(function(w){
+    var gk = w.projId + '|' + w.group;
+    if(!firstOfProj[w.projId]) firstOfProj[w.projId] = w.date;
+    if(!firstOfGroup[gk])      firstOfGroup[gk]      = w.date;
+  });
+
+  var recent = all.filter(function(w){ return daysAgo(w.date) <= BADGE_DAYS; });
+  if(!recent.length) recent = [ all[all.length - 1] ];   /* 조용할 때의 최소 한 개 */
+
+  var out = {};
+  recent.forEach(function(w){
+    if(out[w.projId] === 'NEW') return;                  /* NEW 가 UPDATE 보다 우선 */
+    var gk = w.projId + '|' + w.group;
+    var isNew = (firstOfProj[w.projId] === w.date) || (firstOfGroup[gk] === w.date);
+    out[w.projId] = isNew ? 'NEW' : 'UPDATE';
+  });
+  return out;
+}
+
 const getProj=id=>PROJECTS.find(p=>p.id===id);
 const ds=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 const stClass=s=>(s==="완료"||s==="done")?"done":(s==="작업중"||s==="wip")?"wip":"plan";
@@ -1537,12 +1611,18 @@ function renderHome(){
             ${(()=>{
               /* status: 'active' = 정상 공개 / 'prep' = 오픈 준비중 / 'hidden' = 홈에서 숨김 */
               const shownProjs=PROJECTS.filter(p=>(p.status||'active')!=='hidden');
+              const upBadges=computeProjBadges();
               return shownProjs.map(p=>{
                 const isPrep=(p.status||'active')==='prep';
                 const illustSlot = p.illust
                   ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
                   : `<div class="home-proj-prep-slot"><span class="pp-mark">✦</span><span class="pp-txt">${isPrep?'coming soon':'illustration'}</span></div>`;
-                const badge = isPrep ? `<div class="home-proj-badge">OPEN 준비중</div>` : '';
+                /* 오픈 준비중이 최우선입니다.
+                   아직 열지 않은 작품에 업데이트 배지가 붙으면 어색합니다. */
+                const up = upBadges[p.id];
+                const badge = isPrep
+                  ? `<div class="home-proj-badge">OPEN 준비중</div>`
+                  : (up ? `<div class="home-proj-badge is-${up==='NEW'?'new':'update'}">${up}</div>` : '');
                 const attrs = isPrep
                   ? `title="${p.label} — 오픈 준비중"`
                   : `onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기"`;
