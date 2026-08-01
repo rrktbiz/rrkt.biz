@@ -8,7 +8,7 @@
   "episodes": [
     {
       "eyebrow": "MAIN STORY",
-      "title": "1화 메인스토리 테스트 제목 길게 써보기",
+      "title": "-",
       "type": "main",
       "route": "m",
       "num": "1-1",
@@ -35,7 +35,7 @@
     },
     {
       "eyebrow": "CHARACTER STORY",
-      "title": "테스트 제목 길게 써보기",
+      "title": "-",
       "type": "sub",
       "route": "m",
       "num": "1-1",
@@ -67,7 +67,7 @@
     },
     {
       "eyebrow": "EVENT STORY",
-      "title": "테스트 제목 길게 써보기",
+      "title": "-",
       "type": "event",
       "route": "m",
       "num": "1-1",
@@ -84,7 +84,7 @@
     },
     {
       "eyebrow": "MAIN STORY",
-      "title": "3 테스트 제목 길게 써보기",
+      "title": "-",
       "type": "main",
       "route": "f",
       "num": "1-1",
@@ -101,7 +101,7 @@
     },
     {
       "eyebrow": "CHARACTER STORY",
-      "title": "테스트 제목 길게 써보기",
+      "title": "-",
       "type": "sub",
       "route": "f",
       "num": "1-1",
@@ -118,7 +118,7 @@
     },
     {
       "eyebrow": "EVENT STORY",
-      "title": "테스트 제목 길게 써보기",
+      "title": "-",
       "type": "event",
       "route": "f",
       "num": "1-1",
