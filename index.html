@@ -27,6 +27,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.show{opacity:1}
 #topbar-cal-btn{font-size:12px;padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);display:flex;align-items:center;gap:5px;transition:all .12s}
+/* 클릭 소리 켜기·끄기 버튼 */
+#tb-sound-btn{width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);cursor:pointer;transition:all .12s;flex-shrink:0}
+#tb-sound-btn:hover{background:var(--bg);color:var(--tx);border-color:var(--bd2)}
+#tb-sound-btn.is-off{opacity:.5}
 #topbar-cal-btn:hover{background:var(--bg);color:var(--tx)}
 
 /* ── FLOATING NAV ── */
@@ -786,29 +790,97 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
  * Drive 이미지 URL 생성 — <img src=""> 에 바로 사용
  * @param {string|null} fileId
  */
-/* ── Click sound (Windows XP style) ── */
+/* ══════════════════════════════════════════════════
+   클릭 소리 (Windows XP style)
+
+   biz-OC-doll · 블러드하이스쿨과 똑같은 소리입니다.
+   음 두 개가 위에서 아래로 떨어집니다. (1200Hz → 900Hz)
+
+   메인 화면 우측 상단의 스피커 버튼으로 끄고 켤 수 있습니다.
+   끈 상태는 rrkt_sound 라는 이름으로 브라우저에 저장되며,
+   세 사이트가 같은 이름을 쓰기 때문에
+   한 곳에서 끄면 나머지에서도 함께 꺼집니다.
+   처음 방문한 사람에게는 켜진 상태로 시작합니다.
+
+   ※ 스피커 버튼은 메인 화면에만 있습니다.
+     캘린더·소개 화면에는 상단 우측 영역 자체가 없기 때문입니다.
+     소리는 그 화면들에서도 나며, 끄려면 메인으로 돌아오면 됩니다.
+
+   ── 소리 바꾸는 법 ──
+   아래 tone(...) 두 줄이 전부입니다.
+     tone(음높이, 시작시각, 길이, 크기)
+   ※ 세 사이트가 같은 값을 씁니다. 여기만 고치면 소리가 갈라집니다.
+     바꾸려면 bizocdoll_index.html 과 bhs_index.html 도 함께 고치세요.
+   ══════════════════════════════════════════════════ */
 (function(){
-  let _ctx=null;
-  function getCtx(){if(!_ctx)_ctx=new(window.AudioContext||window.webkitAudioContext)();return _ctx;}
+
+  var KEY = 'rrkt_sound';
+  var on  = true;
+  try{ if(localStorage.getItem(KEY) === '0') on = false; }catch(e){}
+
+  var _ctx = null;
+  function getCtx(){ if(!_ctx) _ctx = new (window.AudioContext||window.webkitAudioContext)(); return _ctx; }
+
   function playClick(){
+    if(!on) return;
     try{
-      const ctx=getCtx();
-      // Windows XP click: two quick tones like old UI feedback
-      function tone(freq,start,dur,vol){
-        const o=ctx.createOscillator(),g=ctx.createGain();
-        o.connect(g);g.connect(ctx.destination);
-        o.type='sine';
-        o.frequency.setValueAtTime(freq,ctx.currentTime+start);
-        g.gain.setValueAtTime(vol,ctx.currentTime+start);
-        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+start+dur);
-        o.start(ctx.currentTime+start);
-        o.stop(ctx.currentTime+start+dur+0.01);
+      var ctx = getCtx();
+      if(ctx.state === 'suspended') ctx.resume();
+
+      function tone(freq, start, dur, vol){
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.type = 'sine';
+        o.frequency.setValueAtTime(freq, ctx.currentTime + start);
+        g.gain.setValueAtTime(vol, ctx.currentTime + start);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+        o.start(ctx.currentTime + start);
+        o.stop(ctx.currentTime + start + dur + 0.01);
       }
-      tone(1200,0,0.05,0.12);
-      tone(900,0.045,0.06,0.09);
+
+      tone(1200, 0,     0.05, 0.12);
+      tone(900,  0.045, 0.06, 0.09);
     }catch(e){}
   }
-  document.addEventListener('click',playClick);
+
+  var ICON_ON  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+  var ICON_OFF = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
+
+  /* 메인 화면은 다시 그려질 때마다 버튼이 새로 만들어지므로
+     그때마다 아이콘 상태를 다시 입혀줍니다. */
+  function paint(){
+    var b = document.getElementById('tb-sound-btn');
+    if(!b) return;
+    var want = on ? 'on' : 'off';
+    if(b.getAttribute('data-snd') === want) return;   /* 무한 반복 방지 */
+    b.setAttribute('data-snd', want);
+    b.innerHTML = on ? ICON_ON : ICON_OFF;
+    b.classList.toggle('is-off', !on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.title = on ? '클릭 소리 끄기' : '클릭 소리 켜기';
+  }
+
+  window.bizSoundToggle = function(){
+    on = !on;
+    try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
+    paint();
+    if(on) playClick();
+  };
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(t && t.closest && t.closest('#tb-sound-btn')) return;
+    playClick();
+  }, true);
+
+  function init(){
+    paint();
+    var c = document.getElementById('content');
+    if(c && window.MutationObserver) new MutationObserver(paint).observe(c, { childList:true, subtree:true });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+
 })();
 
 /* ── DATA ── */
@@ -1432,6 +1504,7 @@ function renderHome(){
         </div>
         <div class="topbar-right" style="position:relative">
           <span id="tl-badge"></span>
+          <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
           <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
             <span id="tb-lang-label" class="tb-btn-txt">Language</span>
