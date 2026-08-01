@@ -193,6 +193,10 @@ body{top:0 !important}
   transition:background .15s,gap .18s ease;
 }
 .world-read-cta-btn:hover{background:var(--blue-d);gap:12px}
+.world-read-cta-btns{display:flex;flex-direction:column;align-items:center;gap:12px}
+/* 두 번째 버튼 — 같은 파랑, 채움만 반전 */
+.world-read-cta-btn.outline{background:transparent;color:var(--blue)}
+.world-read-cta-btn.outline:hover{background:rgba(90,144,176,.10);color:var(--blue-d);border-color:var(--blue-d)}
 @media(max-width:580px){
   .world-read{padding:56px 20px 80px}
   .world-read-block{margin-bottom:52px;padding-bottom:0}
@@ -783,7 +787,8 @@ var WORLDVIEW = {
       img:'images/world/world_03.svg' }
   ],
   ctaText: '당신의 전속 비즈오씨돌을 고르세요.',
-  ctaBtn:  '캐릭터 보러 가기'
+  ctaBtn:  '캐릭터 보러 가기',
+  ctaBtn2: '스토리 보러 가기'
 };
 
 /* 스토리 목록 최상단 EP.00 카드 */
@@ -1089,10 +1094,16 @@ window.openWorld = function(push){
         }).join('') +
         '<div class="world-read-cta">' +
           '<div class="world-read-cta-text">' + WORLDVIEW.ctaText + '</div>' +
-          '<button class="world-read-cta-btn" onclick="goCharsFromWorld()">' +
-            WORLDVIEW.ctaBtn +
-            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>' +
-          '</button>' +
+          '<div class="world-read-cta-btns">' +
+            '<button class="world-read-cta-btn" onclick="goCharsFromWorld()">' +
+              WORLDVIEW.ctaBtn +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>' +
+            '</button>' +
+            '<button class="world-read-cta-btn outline" onclick="backToStoryList()">' +
+              WORLDVIEW.ctaBtn2 +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>' +
+            '</button>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
