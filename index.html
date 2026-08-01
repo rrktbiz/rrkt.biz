@@ -114,6 +114,16 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-proj-card:hover .home-proj-thumb::after{content:"소개글 보기 →";position:absolute;top:8px;right:8px;font-size:9px;font-weight:600;letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;border-radius:20px;backdrop-filter:blur(2px)}
 .home-proj-title{margin-top:10px;padding-left:4px;font-size:16px;font-weight:600;color:var(--tx);line-height:1.35}
 .home-proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,210px));gap:18px 16px;margin-bottom:0px;justify-content:center}
+/* 오픈 준비중 프로젝트 카드 */
+.home-proj-card.prep{cursor:default}
+.home-proj-card.prep:hover .home-proj-thumb{box-shadow:none}
+.home-proj-card.prep:hover .proj-thumb-img{transform:none}
+.home-proj-card.prep:hover .home-proj-thumb::after{content:none}
+.home-proj-card.prep .home-proj-title{color:var(--tx3)}
+.home-proj-badge{position:absolute;top:8px;left:8px;z-index:2;font-size:9px;font-weight:700;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.55);padding:3px 9px;border-radius:20px;backdrop-filter:blur(2px)}
+.home-proj-prep-slot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--sm)}
+.home-proj-prep-slot .pp-mark{font-size:20px;color:var(--tx3);opacity:.35}
+.home-proj-prep-slot .pp-txt{font-size:9px;letter-spacing:.08em;color:var(--tx3);opacity:.6;text-transform:uppercase}
 @media(max-width:480px){
   .home-proj-grid{grid-template-columns:repeat(2,1fr);gap:12px}
 }
@@ -827,6 +837,30 @@ const PROJECTS = [
     intro:"혈액형이 운명을 결정하는 세계. 전학 온 주인공이 숨겨진 비밀과 마주하며 성장하는 다크 판타지 학원물입니다. 권력, 혈통, 그리고 그 너머의 진실을 쫓아가는 이야기.",
     tags:["다크판타지","학원물","액션","병맛개그","소년만화","뉴트로"]
   },
+  {
+    id:"pending-store",
+    label:"Pending Store",
+    acc:"#7b8a9e", acc2:"#5f6d80",
+    illust:"",                    /* 표지 이미지 나오면 파일명 넣기 */
+    illustDesc:"",
+    status:"prep",                /* prep = 오픈 준비중 (홈에 표시되지만 클릭 불가) */
+    keepSub:false, landOnIntro:false,
+    subType:"default",
+    intro:"",
+    tags:[]
+  },
+  {
+    id:"sentimental-emotion",
+    label:"센티멘탈이모션",
+    acc:"#b07f9a", acc2:"#96637f",
+    illust:"",                    /* 표지 이미지 나오면 파일명 넣기 */
+    illustDesc:"",
+    status:"prep",
+    keepSub:false, landOnIntro:false,
+    subType:"default",
+    intro:"",
+    tags:[]
+  },
 
 ];
 
@@ -1428,13 +1462,19 @@ function renderHome(){
           <!-- 프로젝트 이미지 카드 (별도 묶음) -->
           <div class="home-proj-grid">
             ${(()=>{
-              const activeProjs=PROJECTS.filter(p=>(p.status||'active')==='active');
-              return activeProjs.map(p=>{
+              /* status: 'active' = 정상 공개 / 'prep' = 오픈 준비중 / 'hidden' = 홈에서 숨김 */
+              const shownProjs=PROJECTS.filter(p=>(p.status||'active')!=='hidden');
+              return shownProjs.map(p=>{
+                const isPrep=(p.status||'active')==='prep';
                 const illustSlot = p.illust
                   ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
-                  : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--sm)"><span style="font-size:9px;color:var(--tx3);opacity:.45">illustration</span></div>`;
-                return `<div class="home-proj-card" onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기">
-                  <div class="home-proj-thumb">${illustSlot}</div>
+                  : `<div class="home-proj-prep-slot"><span class="pp-mark">✦</span><span class="pp-txt">${isPrep?'coming soon':'illustration'}</span></div>`;
+                const badge = isPrep ? `<div class="home-proj-badge">OPEN 준비중</div>` : '';
+                const attrs = isPrep
+                  ? `title="${p.label} — 오픈 준비중"`
+                  : `onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기"`;
+                return `<div class="home-proj-card${isPrep?' prep':''}" ${attrs}>
+                  <div class="home-proj-thumb">${badge}${illustSlot}</div>
                   <div class="home-proj-title">${p.label}</div>
                 </div>`;
               }).join('');
