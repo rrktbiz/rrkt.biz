@@ -170,11 +170,11 @@
     },
     {
       "eyebrow": "CHARACTER STORY",
-      "title": "1",
+      "title": "테스트 제목 길게 써보기",
       "type": "sub",
       "route": "m",
       "num": "1-1",
-      "status": "plan",
+      "status": "done",
       "completedDate": "",
       "castList": [
         {
@@ -198,15 +198,34 @@
           "exprFilename": "004.png"
         }
       ],
-      "blocks": []
+      "blocks": [
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        },
+        {
+          "type": "speech",
+          "data": {
+            "charNum": "",
+            "exprFilename": "",
+            "text": "대사를 입력하세요",
+            "msgs": []
+          }
+        }
+      ]
     },
     {
       "eyebrow": "EVENT STORY",
-      "title": "1",
+      "title": "테스트 제목 길게 써보기",
       "type": "event",
       "route": "m",
       "num": "1-1",
-      "status": "plan",
+      "status": "done",
       "completedDate": "",
       "castList": [
         {
@@ -215,15 +234,30 @@
           "exprFilename": ""
         }
       ],
-      "blocks": []
+      "blocks": [
+        {
+          "type": "scene",
+          "data": {
+            "filename": "",
+            "msgs": []
+          }
+        },
+        {
+          "type": "narration",
+          "data": {
+            "text": "테스트입니다&nbsp;",
+            "msgs": []
+          }
+        }
+      ]
     },
     {
       "eyebrow": "MAIN STORY",
-      "title": "1",
+      "title": "3 테스트 제목 길게 써보기",
       "type": "main",
       "route": "f",
       "num": "1-1",
-      "status": "plan",
+      "status": "done",
       "completedDate": "",
       "castList": [
         {
@@ -236,11 +270,11 @@
     },
     {
       "eyebrow": "CHARACTER STORY",
-      "title": "1",
+      "title": "테스트 제목 길게 써보기",
       "type": "sub",
       "route": "f",
       "num": "1-1",
-      "status": "plan",
+      "status": "done",
       "completedDate": "",
       "castList": [
         {
@@ -253,11 +287,11 @@
     },
     {
       "eyebrow": "EVENT STORY",
-      "title": "1",
+      "title": "테스트 제목 길게 써보기",
       "type": "event",
       "route": "f",
       "num": "1-1",
-      "status": "plan",
+      "status": "done",
       "completedDate": "",
       "castList": [
         {
