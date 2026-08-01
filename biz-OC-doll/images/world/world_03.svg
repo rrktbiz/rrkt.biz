@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="460" height="136" viewBox="0 0 460 136" role="img" aria-label="">
-<line x1="170" y1="90" x2="306" y2="90" stroke="#5a90b0" stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="180" viewBox="0 0 460 180" role="img" aria-label="">
+<line x1="172" y1="90" x2="308" y2="90" stroke="#5a90b0" stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
 <g fill="#5a90b0">
-<circle cx="120" cy="24" r="20"/><rect x="94" y="52" width="52" height="80" rx="26"/>
+<circle cx="130" cy="60" r="15"/><rect x="110" y="80" width="40" height="55" rx="20"/>
 </g>
-<ellipse cx="120" cy="68" rx="44" ry="68" fill="none" stroke="#5a90b0" stroke-width="1.4" opacity="0.45" vector-effect="non-scaling-stroke"/>
+<ellipse cx="130" cy="90" rx="30" ry="52" fill="none" stroke="#5a90b0" stroke-width="1.4" opacity="0.45" vector-effect="non-scaling-stroke"/>
 <g fill="#ffffff" stroke="#b9bfc4" stroke-width="1.2" vector-effect="non-scaling-stroke">
-<circle cx="340" cy="24" r="20"/><rect x="314" y="52" width="52" height="80" rx="26"/>
+<circle cx="340" cy="60" r="15"/><rect x="320" y="80" width="40" height="55" rx="20"/>
 </g>
 </svg>
