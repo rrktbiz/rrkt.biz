@@ -883,12 +883,12 @@ const PROJECTS = [
     tags:["다크판타지","학원물","액션","병맛개그","소년만화","뉴트로"]
   },
   {
-    id:"paper-store",
+    id:"goods-shop",
     label:"Goods Shop",
     acc:"#7b8a9e", acc2:"#5f6d80",
     illust:"",                    /* 표지 이미지 나오면 파일명 넣기 */
     illustDesc:"",
-    status:"active",
+    status:"prep",                /* prep = 오픈 준비중 (홈에 표시되지만 클릭 불가) */
     keepSub:false, landOnIntro:false,
     subType:"default",
     intro:"",
@@ -1874,7 +1874,7 @@ function goCal(){S.view="calendar";S.activeProj=null;pushHash();render();}
 const PROJECT_SITES = {
   "blood-highschool": "Blood_High_School/index.html",
   "biz-oc-doll":      "biz-OC-doll/index.html",
-  "paper-store":      "goods_shop/index.html",
+  "goods-shop":      "goods_shop/index.html",
 };
 function goSite(pid, hash){
   const base = PROJECT_SITES[pid];
