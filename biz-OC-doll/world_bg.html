@@ -124,7 +124,9 @@ var CONFIG = {
   GEMS:     5,      // 떠다니는 보석 개수
   FRONT:    7,      // 화면 앞을 지나가는 흐릿한 것들
   SPEED:    1.0,    // 전체 속도 배율. 더 느리게 하려면 0.75
-  FADE:     0.4,   // ◀ 배경 연하게 하기. 그림 위에 덮는 흰 막의 진하기
+  BLUR:     1.4,    // ◀ 흐리게. 단위는 px. 0 = 선명하게 / 1~2 = 은은하게 / 4 이상 = 뭉개짐
+                    //    큰 화면에서 프레임이 버벅이면 이 값을 0 으로
+  FADE:     0.5,   // ◀ 배경 연하게 하기. 그림 위에 덮는 흰 막의 진하기
                     //    0 = 원래 그대로 / 0.55 = 지금 / 0.8 = 아주 희미하게
                     //    글자가 배경에 묻히면 이 숫자만 올리면 됩니다
   BITRATE:  10      // 녹화 화질(Mbps). 60초짜리라 낮춰 잡았습니다 (약 75MB)
@@ -319,6 +321,34 @@ function gemVis(p,ph){
   if (t<0.50) return 1;
   if (t<0.70) return 1-smooth((t-0.50)/0.20);
   return 0;
+}
+
+/* ── 블러 ──
+   이미 그려진 화면을 보조 캔버스에 잠깐 옮겼다가, 흰 바탕 위에 흐리게 다시 얹습니다.
+   캔버스 안에서 처리하므로 뽑아낸 영상에도 그대로 남습니다.
+   (CSS 로 흐리게 하면 화면에만 적용되고 영상에는 안 남습니다) */
+var bcv=null, bctx=null;
+function blurPass(){
+  if (!(CONFIG.BLUR>0)) return;
+  if (!bcv){
+    try{ bcv=document.createElement('canvas'); bctx=bcv.getContext('2d'); }
+    catch(e){ CONFIG.BLUR=0; return; }
+    if(!bctx){ CONFIG.BLUR=0; return; }
+  }
+  var pw=cv.width, ph=cv.height;
+  if (bcv.width!==pw || bcv.height!==ph){ bcv.width=pw; bcv.height=ph; }
+
+  bctx.setTransform(1,0,0,1,0,0);
+  bctx.clearRect(0,0,pw,ph);
+  bctx.drawImage(cv,0,0);
+
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.filter='none';
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,pw,ph);   /* 가장자리가 어두워지지 않게 */
+  ctx.filter='blur('+(CONFIG.BLUR*DPR).toFixed(2)+'px)';
+  ctx.drawImage(bcv,0,0);
+  ctx.filter='none';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -678,6 +708,9 @@ function draw(p){
     ctx.fillStyle=fg3;
     ctx.beginPath(); ctx.arc(fx2,fy2,frr,0,TAU); ctx.fill();
   }
+
+  /* ══ 흐리게 ══ */
+  blurPass();
 
   /* ══ 마지막에 흰 막을 한 겹 덮어 전체를 연하게 ══
      CONFIG.FADE 하나로 진하기가 정해집니다. 여기서 처리하면
