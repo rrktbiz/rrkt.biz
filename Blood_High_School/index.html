@@ -324,10 +324,22 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .bt-lang{margin-left:auto;padding-left:10px;position:relative;display:flex;align-items:center;gap:6px;flex-shrink:0;}
 
 #tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
-/* 소리 켜기·끄기 버튼 — 문의 버튼과 같은 모양입니다 */
+/* ── 소리 켜기·끄기 버튼 + 소리 크기 조절바 ──────────────────────
+   ※ 세 사이트(허브 index.html · bizocdoll_index.html · bhs_index.html)가
+     똑같은 모양을 씁니다. 한 곳만 고치면 생김새가 갈라집니다. */
+#tb-sound-wrap{position:relative;display:flex;align-items:center;flex-shrink:0}
 #tb-sound-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
 #tb-sound-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
 #tb-sound-btn.is-off{color:#b8b8b8}
+/* 버튼 아래로 떠오르는 작은 조절바 상자 */
+#tb-sound-pop{position:absolute;top:calc(100% + 6px);right:0;display:none;align-items:center;gap:9px;padding:9px 12px;background:#fff;border:1px solid #e2e2e2;border-radius:9px;box-shadow:0 8px 26px rgba(0,0,0,.13);z-index:10001;white-space:nowrap}
+#tb-sound-pop.open{display:flex}
+#tb-sound-range{-webkit-appearance:none;appearance:none;width:104px;height:4px;margin:0;border:none;border-radius:3px;background:#e2e2e2;outline:none;cursor:pointer}
+#tb-sound-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:13px;height:13px;border:none;border-radius:50%;background:#1a1a1a;cursor:pointer}
+#tb-sound-range::-moz-range-thumb{width:13px;height:13px;border:none;border-radius:50%;background:#1a1a1a;cursor:pointer}
+#tb-sound-range::-moz-range-track{height:4px;border-radius:3px;background:transparent}
+#tb-sound-val{font-size:10.5px;font-weight:600;color:#8a8a8a;min-width:30px;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+@media(max-width:768px){#tb-sound-range{width:88px}}
 #tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
 
 /* ── 작가 소개 카드 — 작품을 다 본 사람이 발견하는 자리 (상단 아님) ── */
@@ -825,7 +837,13 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
     </div>
     <div class="bt-lang">
       <span id="tl-badge"></span>
-      <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
+      <span id="tb-sound-wrap">
+        <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
+        <div id="tb-sound-pop">
+          <input id="tb-sound-range" type="range" min="0" max="100" step="5" value="100" aria-label="소리 크기">
+          <span id="tb-sound-val">100%</span>
+        </div>
+      </span>
       <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       </button>
@@ -2855,6 +2873,13 @@ function googleTranslateElementInit(){
 
      소리 파일은 없습니다. 브라우저가 그 자리에서 음을 만듭니다.
 
+     ── 소리 크기 조절바 ──
+     스피커 버튼에 마우스를 올리면 (휴대폰에서는 버튼을 누르면)
+     버튼 아래에 작은 조절바가 나타납니다. 0~100% 사이로 움직입니다.
+     0까지 내리면 꺼진 것과 같고, 다시 올리면 켜집니다.
+     이 값은 rrkt_sound_vol 이라는 이름으로 저장되며,
+     켜짐·꺼짐과 마찬가지로 세 사이트가 함께 씁니다.
+
      ── 소리 바꾸는 법 ──
      아래 tone(...) 두 줄이 전부입니다.
        tone(음높이, 시작시각, 길이, 크기)
@@ -2864,60 +2889,150 @@ function googleTranslateElementInit(){
 <script>
 (function(){
 
-  var KEY = 'rrkt_sound';
+  /* 저장 이름 — 세 사이트가 같은 이름을 씁니다. 바꾸면 설정이 갈라집니다. */
+  var KEY     = 'rrkt_sound';       /* '1' 켜짐 / '0' 꺼짐 */
+  var KEY_VOL = 'rrkt_sound_vol';   /* 소리 크기 0~100 */
+
   var on  = true;
+  var vol = 100;
   try{ if(localStorage.getItem(KEY) === '0') on = false; }catch(e){}
+  try{
+    var sv = parseInt(localStorage.getItem(KEY_VOL), 10);
+    if(!isNaN(sv)) vol = Math.max(0, Math.min(100, sv));
+  }catch(e){}
+
+  function save(){
+    try{
+      localStorage.setItem(KEY, on ? '1' : '0');
+      localStorage.setItem(KEY_VOL, String(vol));
+    }catch(e){}
+  }
 
   var ctx = null;
 
   function _tick(){
-    if(!on) return;
+    if(!on || vol <= 0) return;
     try{
       if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
       if(ctx.state === 'suspended') ctx.resume();
 
-      function tone(freq, start, dur, vol){
+      var k = vol / 100;   /* 조절바가 두 음의 크기를 같은 비율로 함께 줄입니다 */
+
+      function tone(freq, start, dur, v){
         var o = ctx.createOscillator(), g = ctx.createGain();
         o.connect(g); g.connect(ctx.destination);
         o.type = 'sine';
         o.frequency.setValueAtTime(freq, ctx.currentTime + start);
-        g.gain.setValueAtTime(vol, ctx.currentTime + start);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+        g.gain.setValueAtTime(Math.max(v, 0.0005), ctx.currentTime + start);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + dur);
         o.start(ctx.currentTime + start);
         o.stop(ctx.currentTime + start + dur + 0.01);
       }
 
-      tone(1200, 0,     0.05, 0.12);
-      tone(900,  0.045, 0.06, 0.09);
+      tone(1200, 0,     0.05, 0.12 * k);
+      tone(900,  0.045, 0.06, 0.09 * k);
     }catch(e){}
   }
 
-  var ICON_ON  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
-  var ICON_OFF = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
+  /* 스피커 아이콘 세 종류 — 큰 소리 / 작은 소리 / 꺼짐 */
+  var _S = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
+  var ICON_ON  = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+  var ICON_LOW = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/></svg>';
+  var ICON_OFF = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
 
+  /* 그림이 실제로 달라졌을 때만 다시 그립니다.
+     (허브는 화면을 다시 그릴 때마다 이 함수를 부르기 때문에,
+      매번 손대면 서로를 계속 불러대는 무한 반복이 됩니다) */
   function paint(){
+    var mute = (!on || vol === 0);
+
     var b = document.getElementById('tb-sound-btn');
-    if(!b) return;
-    b.innerHTML = on ? ICON_ON : ICON_OFF;
-    b.classList.toggle('is-off', !on);
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    b.title = on ? '클릭 소리 끄기' : '클릭 소리 켜기';
+    if(b){
+      var face = mute ? 'off' : (vol <= 40 ? 'low' : 'on');
+      if(b.getAttribute('data-snd') !== face){
+        b.innerHTML = (face === 'off') ? ICON_OFF : (face === 'low' ? ICON_LOW : ICON_ON);
+        b.setAttribute('data-snd', face);
+      }
+      b.classList.toggle('is-off', mute);
+      b.setAttribute('aria-pressed', mute ? 'false' : 'true');
+      b.title = mute ? '클릭 소리 켜기' : '클릭 소리 끄기 (크기 ' + vol + '%)';
+    }
+
+    var r = document.getElementById('tb-sound-range');
+    if(r){
+      if(String(vol) !== r.value) r.value = vol;
+      var p = (mute ? 0 : vol) + '%';
+      r.style.background = 'linear-gradient(to right,#1a1a1a 0,#1a1a1a ' + p + ',#e2e2e2 ' + p + ',#e2e2e2 100%)';
+    }
+
+    var t = document.getElementById('tb-sound-val');
+    var txt = (mute ? 0 : vol) + '%';
+    if(t && t.textContent !== txt) t.textContent = txt;
+  }
+
+  /* ── 조절바 상자 여닫기 ──
+     마우스를 올리면 열리고, 버튼을 누르면 잠깐 열렸다 닫힙니다.
+     (휴대폰에서는 마우스를 올릴 수 없어서 이 잠깐이 조절할 틈이 됩니다) */
+  var popT = null, prevT = null;
+
+  function popOpen(auto){
+    var p = document.getElementById('tb-sound-pop');
+    if(!p) return;
+    p.classList.add('open');
+    clearTimeout(popT);
+    if(auto) popT = setTimeout(popClose, 2800);
+  }
+  function popClose(){
+    clearTimeout(popT);
+    var p = document.getElementById('tb-sound-pop');
+    if(p) p.classList.remove('open');
   }
 
   window.bizSoundToggle = function(){
     on = !on;
-    try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
-    paint();
-    if(on) _tick();
+    if(on && vol === 0) vol = 70;   /* 0%인 채로 켜면 아무 소리도 안 나므로 */
+    save(); paint(); popOpen(true);
+    if(on) _tick();                 /* 켠 순간 한 번 들려줍니다 */
   };
 
-  document.addEventListener('click', function(e){
+  /* 아래 손잡이들은 전부 document 에 한 번만 답니다.
+     상단바가 다시 그려져도 알아서 계속 동작합니다. */
+
+  document.addEventListener('mouseover', function(e){
     var t = e.target;
-    if(t && t.closest && t.closest('#tb-sound-btn')) return;
+    if(t && t.closest && t.closest('#tb-sound-wrap')) popOpen(false);
+  });
+
+  document.addEventListener('mouseout', function(e){
+    var t = e.target, r = e.relatedTarget;
+    if(!t || !t.closest || !t.closest('#tb-sound-wrap')) return;
+    if(r && r.closest && r.closest('#tb-sound-wrap')) return;
+    clearTimeout(popT);
+    popT = setTimeout(popClose, 280);
+  });
+
+  document.addEventListener('input', function(e){
+    var t = e.target;
+    if(!t || t.id !== 'tb-sound-range') return;
+    vol = parseInt(t.value, 10) || 0;
+    on  = vol > 0;                  /* 0까지 내리면 꺼짐, 다시 올리면 켜짐 */
+    save(); paint(); popOpen(false);
+    clearTimeout(prevT);
+    prevT = setTimeout(_tick, 150); /* 끄는 동안 소리가 우르르 나지 않게 한 번만 미리듣기 */
+  });
+
+  function onClick(e){
+    var t = e.target;
+    /* 스피커 버튼·조절바를 만질 때는 클릭음이 겹쳐 울리지 않게 걸러냅니다 */
+    if(t && t.closest && t.closest('#tb-sound-wrap')) return;
+    popClose();
     _tick();
-  }, true);
+  }
+
+  document.addEventListener('click', onClick, true);
 
   paint();
+  document.addEventListener('DOMContentLoaded', paint);
 
 })();
 </script>
