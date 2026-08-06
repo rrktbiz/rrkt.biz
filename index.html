@@ -1600,7 +1600,22 @@ function renderHome(){
             })()}
           </div>
 
-          <!-- 방문자 위젯 (비표시) -->
+          <!-- ══════════════════════════════════════════════
+               방문자 위젯 — 지금은 화면에 안 보입니다 (display:none)
+
+               ⚠ 집계는 계속 돌아가고 있습니다.
+                 화면만 감춘 것이지 기능을 끈 게 아닙니다.
+                 나라별 방문 수는 Cloudflare 쪽에 계속 쌓입니다.
+
+               좋아요와 같은 방식입니다 — 숫자는 모으되 남에게 안 보여줍니다.
+
+               ── 다시 보이게 하려면 ──
+                 아래 style="display:none" 만 지우면 됩니다.
+
+               ── 집계 자체를 멈추려면 ──
+                 이 줄이 아니라 아래쪽 setTimeout(fetchGlobalVisits, 0) 을
+                 지워야 합니다. 여기만 건드리면 계속 쌓입니다.
+               ══════════════════════════════════════════════ -->
           <div class="vis-widget" style="display:none">
             <div class="vis-hd">
               <span class="vis-hd-lbl">Visitors by country</span>
@@ -1616,7 +1631,10 @@ function renderHome(){
           </div>
       </div>
     </div>`;
-  // 렌더 후 글로벌 방문자 수 비동기 로드
+  /* 글로벌 방문자 수 집계.
+     위젯이 화면에 안 보여도(display:none) 이 줄은 계속 실행됩니다.
+     '숫자는 모으되 표시하지 않는다'가 의도입니다 — 지우지 마세요.
+     집계 자체를 그만두고 싶을 때만 이 줄을 지우면 됩니다. */
   setTimeout(fetchGlobalVisits, 0);
   // 언어 감지 배너 표시
   setTimeout(window.ldBannerShow, 100);
