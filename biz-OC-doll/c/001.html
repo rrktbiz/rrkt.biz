@@ -2,9 +2,49 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+
+<!-- ══════════════════════════════════════════════════════════════
+     biz-OC-doll — 캐릭터 명찰 파일 (OG 미리보기용)
+
+     ── 이 파일이 왜 필요한가 ──
+     사이트 안에서 캐릭터를 열면 주소 끝이 #/chars/000 형태가 됩니다.
+     그런데 # 뒤쪽은 서버로 전달되지 않습니다.
+     그래서 그 주소를 트위터·카톡에 붙이면 캐릭터 얼굴이 아니라
+     사이트 대문 카드가 뜹니다.
+
+     이 파일은 그걸 해결하는 '명찰'입니다.
+       .../c/000.html 로 들어오면
+       → 미리보기에는 그 캐릭터의 얼굴이 뜨고
+       → 사람은 곧바로 사이트 안 그 캐릭터 화면으로 넘어갑니다
+
+     ── 새 명찰 만드는 법 (개당 20초) ──
+     ① 이 파일을 복사해서 번호로 저장  (예: 042.html)
+     ② 편집기의 '모두 바꾸기'로  001 → 042   (아래 7군데가 한 번에 바뀝니다)
+          title / og:title / og:image / og:url
+          script 안 location.replace / body 링크 주소 / body 링크 글자
+        ※ 이 설명문에는 001 을 일부러 쓰지 않았습니다.
+           그래서 '모두 바꾸기'를 해도 설명이 망가지지 않습니다.
+     ③ images/og/042.png (1200x630) 올리기
+
+     캐릭터가 50명을 넘어가면 손으로 하지 말고 스크립트로 뽑으세요.
+
+     ── 그림 주의 ──
+     카톡은 가운데를 정사각으로 잘라서 보여줄 때가 있습니다.
+     얼굴은 가운데 630x630 안에 두고 양옆은 배경만 두세요.
+
+     ── 그림이 아직 없어도 됩니다 ──
+     그림칸만 비고 제목·설명은 정상으로 뜹니다.
+     ══════════════════════════════════════════════════════════════ -->
+
 <title>BIZOCDOLL001</title>
+
+<!-- 탭 아이콘 — 보석 (본체 index.html 과 같은 그림)
+     카톡 링크를 눌러 들어온 사람이 실제로 보는 탭이라 넣어둡니다. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="biz-OC-doll">
+<meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="BIZOCDOLL001">
 <meta property="og:description" content="이름도 이야기도 아직 없습니다. 당신이 채워주세요.">
 <meta property="og:image" content="https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/images/og/001.png">
@@ -12,7 +52,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/c/001.html">
 <meta name="twitter:card" content="summary_large_image">
+
 <script>location.replace('../#/chars/001')</script>
 </head>
+
+<!-- 자바스크립트가 꺼져 있으면 위 script 가 안 돕니다.
+     그때 사람이 직접 누를 수 있게 링크를 남겨둡니다. -->
 <body><a href="../#/chars/001">BIZOCDOLL001 보러 가기</a></body>
 </html>
