@@ -321,7 +321,26 @@ button{font-family:var(--fn);cursor:pointer}
     "135deg,#fff7ed,#fdba74","135deg,#f0fdf4,#86efac",
   ];
 
+  /* 로딩 상태 — renderList 의 빈 화면 문구가 이 값을 봅니다.
+     'loading' 불러오는 중 / 'ok' 정상 / 'empty' 시트는 읽었는데 캐릭터 0명 / 'error' 실패 */
+  window._charLoadState = 'loading';
+
+  /* 불러오는 동안 회색 안내를 띄워둡니다.
+     (renderList 를 여기서 부를 수 없습니다 — 아래쪽 state 변수가 아직 안 만들어졌습니다) */
+  (function(){
+    const g = document.getElementById('char-grid');
+    if(g) g.innerHTML = '<div class="char-empty">불러오는 중...</div>';
+  })();
+
   async function loadChars(){
+    /* ⚠ 이 한 줄을 지우지 마세요.
+       아래 try 안에서 곧바로(await 전에) 오류가 나면 catch 도 곧바로 실행되는데,
+       그 시점에는 이 아래쪽 'const state' 가 아직 안 만들어져 있습니다.
+       그대로 renderList() 를 부르면 스크립트 전체가 죽어서
+       화면이 하얗게 멈춥니다. (config.js 가 안 열렸을 때가 그 경우입니다)
+       이 줄이 실행 순서를 한 박자 미뤄서 그걸 막습니다. */
+    await null;
+
     try{
       // config.js 의 SHEET_CSV() 헬퍼 사용
       const url = (typeof SHEET_CSV === 'function')
@@ -329,7 +348,13 @@ button{font-family:var(--fn);cursor:pointer}
         : null;
       if(!url) throw new Error('config.js 미로드');
 
-      const res = await fetch(url);
+      /* 10초 안에 응답이 없으면 포기합니다.
+         이게 없으면 구글이 응답을 안 줄 때 '불러오는 중...'이 영원히 돕니다. */
+      const ctrl = new AbortController();
+      const timer = setTimeout(()=>ctrl.abort(), 10000);
+      const res = await fetch(url, {signal: ctrl.signal});
+      clearTimeout(timer);
+
       if(!res.ok) throw new Error('CSV fetch 실패 ' + res.status);
       const csv = await res.text();
 
@@ -344,7 +369,14 @@ button{font-family:var(--fn);cursor:pointer}
         cols.push(cur.trim());
         return cols;
       });
-      if(rows.length < 2) return;
+      /* 시트는 읽었는데 내용이 헤더뿐인 경우.
+         예전에는 여기서 그냥 멈춰서 '불러오는 중...'이 영원히 남았습니다. */
+      if(rows.length < 2){
+        window.CHARACTERS = [];
+        window._charLoadState = 'empty';
+        renderList();
+        return;
+      }
 
       // 헤더: code / type / holder / status / updated
       // 완료 · 작업중 캐릭터만 표시
@@ -365,17 +397,27 @@ button{font-family:var(--fn);cursor:pointer}
         })
         .filter(c=>c.status==='완료' || c.status==='작업중');
 
+      window._charLoadState = window.CHARACTERS.length ? 'ok' : 'empty';
       renderList(); // 데이터 로드 후 리스트 재렌더
       applyInitialRoute();
     }catch(e){
+      /* ── 불러오기 실패 ──────────────────────────────────
+         예전에는 여기서 '빈 캐릭터 200개'를 만들어 뿌렸습니다.
+         그러면 방문자 눈에는 고장이 아니라
+         '이 프로젝트 텅 비어 있네'로 보입니다. 첫인상이 망가집니다.
+
+         그래서 지금은 아무것도 만들지 않고 안내문만 띄웁니다.
+         (문구는 renderList 안 char-empty 부분에 있습니다)
+
+         실패하는 흔한 이유:
+           · 구글시트 공유가 '링크가 있는 모든 사용자 → 뷰어'가 아님
+           · 시트 탭 이름이 OC-characters 가 아님
+           · 방문자 쪽 인터넷 문제 / 구글 일시 장애
+         ────────────────────────────────────────────────── */
       console.warn('캐릭터 CSV 불러오기 실패:', e.message);
-      // 폴백: 200개 빈 캐릭터 생성
-      window.CHARACTERS = Array.from({length:200},(_,i)=>({
-        id:i+1, idCode:`BIZOCDOLL${String(i+1).padStart(3,'0')}`,
-        holder:'—', status:'', grad:GRADIENTS[i%GRADIENTS.length],
-      }));
+      window.CHARACTERS = [];
+      window._charLoadState = 'error';
       renderList();
-      applyInitialRoute();
     }
   }
   loadChars();
@@ -517,8 +559,21 @@ function renderList(){
   window._filteredChars = filtered;
   document.getElementById('char-count-lbl').textContent = filtered.length + "개 표시";
 
+  /* 화면이 비었을 때 무슨 말을 띄울지.
+     '검색 결과 없음'과 '불러오기 실패'는 완전히 다른 상황이라 구분합니다. */
+  const emptyMsg = (function(){
+    const st = window._charLoadState;
+    if(st === 'loading') return '불러오는 중...';
+    if(st === 'error')   return '캐릭터 목록을 불러오지 못했습니다.'
+                              + '<br><span style="opacity:.7">잠시 후 다시 시도해 주세요.</span>'
+                              + '<br><button onclick="location.reload()" style="margin-top:14px;padding:7px 18px;font-size:11px;font-family:inherit;background:none;border:1px solid var(--bd2, #c6c6c6);border-radius:6px;color:inherit;cursor:pointer">다시 불러오기</button>';
+    if(st === 'empty')   return '아직 공개된 캐릭터가 없습니다.';
+    if(state.filter === "♥") return '좋아요한 캐릭터가 없습니다 ♥';
+    return '검색 결과 없음';
+  })();
+
   document.getElementById('char-grid').innerHTML = filtered.length===0
-    ? `<div class="char-empty">${state.filter==="♥" ? "좋아요한 캐릭터가 없습니다 ♥" : "검색 결과 없음"}</div>`
+    ? `<div class="char-empty">${emptyMsg}</div>`
     : filtered.map(c=>{
         const isLiked = liked.has(c.id);
         const iconNum = String(c.id).padStart(3,'0');
