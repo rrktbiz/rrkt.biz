@@ -761,13 +761,30 @@ var _storyErr = null;
 async function fetchStory(){
   if(_storyData) return _storyData;
   try{
-    var r = await fetch('story_editor.json', {cache:'no-cache'});
+    /* 15초 안에 응답이 없으면 포기합니다.
+       이게 없으면 서버가 응답을 물고 있을 때 로딩 동그라미가 영원히 돕니다. */
+    var _ctrl = new AbortController();
+    var _timer = setTimeout(function(){ _ctrl.abort(); }, 15000);
+
+    var r = await fetch('story_editor.json', {cache:'no-cache', signal:_ctrl.signal});
+    clearTimeout(_timer);
+
     if(!r.ok) throw new Error('HTTP ' + r.status);
     _storyData = await r.json();
     _storyErr = null;
   }catch(e){
     _storyErr = e;
     _storyData = null;
+    /* 자세한 원인은 화면이 아니라 콘솔에만 남깁니다.
+       (F12 → Console 에서 볼 수 있습니다)
+
+       흔한 원인:
+         · story_editor.json 이 이 파일과 같은 폴더에 없음
+         · 파일을 더블클릭(file://)해서 열었음
+           → 브라우저가 file:// 에서 JSON 읽기를 막습니다.
+              깃허브에 올리거나 로컬 서버로 열어야 합니다.
+         · JSON 문법 오류 (쉼표 하나 빠져도 통째로 안 읽힙니다) */
+    console.warn('story_editor.json 불러오기 실패:', e && e.message);
   }
   return _storyData;
 }
@@ -877,6 +894,15 @@ var _storyChips = new Set();
 var _storyInput = '';   /* 아직 칩으로 안 굳은 입력 글자 */
 var _storyTab   = '';   /* 마지막으로 보던 종류 탭 */
 
+/* 실패했을 때 [다시 불러오기] 버튼이 부릅니다.
+   새로고침이 아니라 JSON 만 다시 받습니다. 보던 위치가 유지됩니다. */
+function retryStory(){
+  _storyData = null;
+  _storyErr  = null;
+  renderStoryList();
+}
+window.retryStory = retryStory;
+
 /* ── 스토리 목록 ── */
 async function renderStoryList(){
   var listEl = document.getElementById('story-list');
@@ -887,12 +913,23 @@ async function renderStoryList(){
 
   var data = await fetchStory();
   if(!data){
+    /* ── 불러오기 실패 ──────────────────────────────────
+       예전에는 여기에 개발자용 진단 문구가 그대로 떴습니다.
+       ('story_editor.json 이 같은 폴더에 있는지', 'file://', 오류코드 …)
+       방문자는 그게 무슨 말인지 모르고 '사이트가 망가졌다'로만 읽습니다.
+
+       그래서 화면에는 사람 말만 남기고,
+       원인 진단은 콘솔(F12)로 보냈습니다. fetchStory 주석을 보세요.
+
+       ※ EP.00 WORLDVIEW 카드(worldCardHtml)는 이 파일 안에 들어 있어서
+          불러오기가 실패해도 그대로 보입니다. 일부러 남겨둡니다 —
+          화면이 통째로 비는 것보다 낫습니다.
+       ────────────────────────────────────────────────── */
     listEl.innerHTML = worldCardHtml() +
-      '<div class="story-empty">스토리 데이터를 불러오지 못했습니다.' +
-      '<br><span style="font-size:12px">1. <code>story_editor.json</code> 이 이 파일과 같은 폴더에 있는지' +
-      '<br>2. 파일을 더블클릭(<code>file://</code>)해서 열지 않았는지' +
-      '<br><span style="font-size:11px;opacity:.75">브라우저는 file:// 에서 JSON 읽기를 막습니다. 서버에 올리거나 로컬 서버로 열어야 보여요.</span>' +
-      '<br><span style="font-size:11px;opacity:.6">(' + (_storyErr ? _storyErr.message : 'unknown') + ')</span></span></div>';
+      '<div class="story-empty">스토리를 불러오지 못했습니다.' +
+      '<br><span style="font-size:12px;opacity:.75">잠시 후 다시 시도해 주세요.</span>' +
+      '<br><button onclick="retryStory()" style="margin-top:18px;padding:8px 20px;font-size:12px;font-family:inherit;background:none;border:1px solid var(--bd2,#c6c6c6);border-radius:6px;color:inherit;cursor:pointer">다시 불러오기</button>' +
+      '</div>';
     return;
   }
 
