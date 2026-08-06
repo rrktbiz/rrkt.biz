@@ -139,6 +139,35 @@
   .tags .tag:hover{color:#555;text-decoration:underline;}
   .tags .tag[aria-current="true"]{color:var(--ink);text-decoration:underline;}
 
+  /* ── 상품 상세 오버레이 ─────────────────── */
+  .modal{
+    position:fixed;inset:0;z-index:1000;
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:48px 20px;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    background:rgba(255,255,255,.92);
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  }
+  .modal[hidden]{display:none;}
+  .modal-box{
+    position:relative;
+    width:100%;max-width:700px;margin:auto;
+    background:#fff;border:1px solid var(--line);
+    padding:60px 40px 52px;
+    animation:modalIn .18s ease-out;
+  }
+  @keyframes modalIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:none;}
+  }
+  .modal-close{
+    position:absolute;top:14px;right:16px;
+    font-size:22px;line-height:1;color:#bbb;
+    padding:6px 8px;
+  }
+  .modal-close:hover{color:#111;}
+
   /* ── 상품 상세 ──────────────────────────── */
   .detail{max-width:620px;margin:0 auto;}
   .detail .ph{width:100%;margin-bottom:7px;}
@@ -198,6 +227,8 @@
     .shot{min-height:0;}
     .ph.sq,.ph.wide,.ph.tall,.ph.strip{width:100%;}
     footer{margin-top:60px;}
+    .modal{padding:0;}
+    .modal-box{max-width:none;min-height:100%;border:0;padding:56px 22px 44px;}
   }
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important;}
@@ -288,26 +319,6 @@
     <div class="grid" id="shop-grid"></div>
   </section>
 
-  <!-- ── PRODUCT ──────────────────────── -->
-  <section class="view" id="product">
-    <div class="detail">
-      <div class="ph" style="aspect-ratio:1/1"></div>
-      <div class="ph" style="aspect-ratio:1/1"></div>
-      <div class="ph" style="aspect-ratio:1/1"></div>
-      <div class="info">
-        <div class="name" id="p-name">상품명</div>
-        <div class="price" id="p-price">0원</div>
-        <p class="desc">
-          80g 모조지에 인쇄한 낱장 메모지입니다.<br>
-          50매 한 묶음, 낱장으로 뜯어 쓸 수 있습니다.<br>
-          크기 A6 (105 × 148mm)
-        </p>
-        <div class="buy">COMING SOON</div>
-      </div>
-      <a class="back" href="#" data-go="shop">← 목록으로</a>
-    </div>
-  </section>
-
   <footer>
     <div class="head">COMPANY INFO</div>
     <div>Company : BRAND ㅣ Company Registration No : 000-00-00000</div>
@@ -333,6 +344,29 @@
     </div>
   </footer>
 
+</div>
+
+<!-- ── PRODUCT 오버레이 ─────────────────── -->
+<div class="modal" id="product" hidden role="dialog" aria-modal="true" aria-labelledby="p-name">
+  <div class="modal-box">
+    <button class="modal-close" data-close aria-label="닫기">×</button>
+    <div class="detail">
+      <div class="ph" style="aspect-ratio:1/1"></div>
+      <div class="ph" style="aspect-ratio:1/1"></div>
+      <div class="ph" style="aspect-ratio:1/1"></div>
+      <div class="info">
+        <div class="name" id="p-name">상품명</div>
+        <div class="price" id="p-price">0원</div>
+        <p class="desc">
+          80g 모조지에 인쇄한 낱장 메모지입니다.<br>
+          50매 한 묶음, 낱장으로 뜯어 쓸 수 있습니다.<br>
+          크기 A6 (105 × 148mm)
+        </p>
+        <div class="buy">COMING SOON</div>
+      </div>
+      <button class="back" data-close>← 목록으로</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -401,8 +435,47 @@ function render(){
   }
 }
 
+/* ── 상세 오버레이 열기 / 닫기 ── */
+const modal = document.getElementById("product");
+let _lockY = 0;        // 오버레이 열기 직전 스크롤 위치
+let _lastFocus = null; // 오버레이 열기 직전 눌렀던 버튼
+
+function openProduct(it, trigger){
+  document.getElementById("p-name").textContent = it.name;
+  document.getElementById("p-price").textContent = won(it.price);
+
+  _lastFocus = trigger || null;
+  _lockY = window.scrollY || window.pageYOffset || 0;
+
+  modal.hidden = false;
+  modal.scrollTop = 0;
+
+  // 뒤 목록이 같이 스크롤되지 않도록 잠금
+  document.body.style.position = "fixed";
+  document.body.style.top = -_lockY + "px";
+  document.body.style.width = "100%";
+
+  const btn = modal.querySelector(".modal-close");
+  if (btn) btn.focus();
+}
+
+function closeProduct(){
+  if (modal.hidden) return;
+  modal.hidden = true;
+
+  // 스크롤 잠금 해제 + 보던 자리로 복귀
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.width = "";
+  window.scrollTo(0, _lockY);
+
+  if (_lastFocus && document.contains(_lastFocus)) _lastFocus.focus();
+  _lastFocus = null;
+}
+
 function go(id, cat){
   if (typeof _tlBadgeReset === "function") _tlBadgeReset();
+  closeProduct();
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === id));
   if (id === "shop"){
     state.cat = cat || "전체 상품";
@@ -417,6 +490,9 @@ function go(id, cat){
 }
 
 document.addEventListener("click", e => {
+  if (e.target === modal){ closeProduct(); return; }        // 바깥 여백 클릭
+  if (e.target.closest("[data-close]")){ closeProduct(); return; }
+
   const nav = e.target.closest("[data-go]");
   if (nav){ e.preventDefault(); go(nav.dataset.go, nav.dataset.cat); return; }
 
@@ -438,10 +514,12 @@ document.addEventListener("click", e => {
   const shot = e.target.closest("[data-item]");
   if (shot){
     const it = ITEMS.find(x => x.id === +shot.dataset.item);
-    document.getElementById("p-name").textContent = it.name;
-    document.getElementById("p-price").textContent = won(it.price);
-    go("product");
+    openProduct(it, shot);
   }
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeProduct();
 });
 
 document.getElementById("search-input").addEventListener("input", render);
