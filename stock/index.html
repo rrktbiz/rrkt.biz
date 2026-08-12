@@ -231,7 +231,11 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .rd-bar{display:flex;align-items:center;gap:10px;padding:26px 0 0}
 .rd-back{background:transparent;border:none;font-size:12px;color:var(--tx3);padding:5px 0;transition:color .12s}
 .rd-back:hover{color:var(--tx)}
-.rd-head{padding:22px 0 30px;border-bottom:1px solid var(--bd)}
+.rd-head{
+  padding:22px 0 30px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:14px;
+}
+.rd-head-l{flex:1;min-width:0}
 .rd-meta{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}
 .rd-title{font-size:22px;font-weight:700;letter-spacing:-.035em;line-height:1.45;color:var(--tx)}
 /* 글자 크기 기본값. JS 가 저장된 값으로 덮어씁니다.
@@ -266,10 +270,22 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .rd-copy:hover{border-color:var(--bd2);color:var(--tx2)}
 
 /* ── 원문 보기 ──
-   texts_raw/{id}.txt 가 올라가 있는 글에만 버튼이 나타납니다. */
-#rd-raw-btn{display:none}
+   texts_raw/{id}.txt 가 올라가 있는 글에만 버튼이 나타납니다.
+
+   자리를 제목 옆으로 올려 둔 이유:
+     본문을 다 읽고 맨 아래까지 내려가야 보이는 자리에 있으면
+     "읽기 전에 원문부터 볼까" 를 고를 수가 없습니다.
+     AI 고지와 짝이 되는 버튼이라 글 시작 지점에 있는 게 맞습니다. */
+#rd-raw-btn{
+  display:none;align-items:center;gap:6px;flex-shrink:0;
+  padding:7px 14px;border-radius:100px;border:1px solid var(--bd);
+  background:transparent;font-size:11.5px;font-weight:500;color:var(--tx3);
+  transition:all .12s;white-space:nowrap;margin-bottom:3px;
+}
 #rd-raw-btn.on{display:inline-flex}
-.rd-raw-wrap{display:none;margin-top:20px}
+#rd-raw-btn:hover{border-color:var(--bd2);color:var(--tx2)}
+#rd-raw-btn.open{background:var(--sm);border-color:var(--bd2);color:var(--tx2)}
+.rd-raw-wrap{display:none;margin-top:24px}
 .rd-raw-wrap.open{display:block}
 .rd-raw-label{
   font-size:11px;font-weight:600;color:var(--blue-ink);letter-spacing:-.01em;
@@ -379,6 +395,11 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .card-title{font-size:14.5px}
   .rd-title{font-size:19px}
 
+  /* 좁은 화면에서는 제목 옆에 버튼을 두면 제목이 눌립니다.
+     아래로 내려 왼쪽에 붙입니다. */
+  .rd-head{flex-direction:column;align-items:flex-start;gap:14px}
+  #rd-raw-btn{margin-bottom:0}
+
   /* 표지는 좁은 화면에서 한 단계 줄입니다. 비율(3:4)은 그대로입니다. */
   .seed-banner{gap:12px;padding:12px 13px}
   .seed-thumb{width:84px;height:112px}
@@ -460,8 +481,16 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   <div id="reader">
     <div class="rd-bar"><button class="rd-back" onclick="goList()">&larr; 목록</button></div>
     <div class="rd-head">
-      <div class="rd-meta" id="rd-meta"></div>
-      <div class="rd-title" id="rd-title"></div>
+      <div class="rd-head-l">
+        <div class="rd-meta" id="rd-meta"></div>
+        <div class="rd-title" id="rd-title"></div>
+      </div>
+      <!-- 원문 보기 — texts_raw/ 에 파일이 있는 글에만 나타납니다 -->
+      <button class="rd-raw-btn" id="rd-raw-btn" onclick="toggleRaw()">원문 보기</button>
+    </div>
+    <div class="rd-raw-wrap" id="rd-raw-wrap">
+      <div class="rd-raw-label" id="rd-raw-label"></div>
+      <div class="rd-raw-body" id="rd-raw-body"></div>
     </div>
     <div class="rd-body" id="rd-body"></div>
     <div class="rd-foot">
@@ -470,11 +499,6 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       <button class="rd-nav" id="rd-next" onclick="goSib(1)"></button>
     </div>
     <button class="rd-copy" onclick="copyLink()">링크 복사</button>
-    <button class="rd-copy" id="rd-raw-btn" onclick="toggleRaw()">원문 보기</button>
-    <div class="rd-raw-wrap" id="rd-raw-wrap">
-      <div class="rd-raw-label" id="rd-raw-label"></div>
-      <div class="rd-raw-body" id="rd-raw-body"></div>
-    </div>
     <div class="rd-ainote" id="ai-note-read"></div>
   </div>
 
@@ -996,6 +1020,7 @@ async function loadRaw(x){
   var btn = document.getElementById('rd-raw-btn');
   var wrap = document.getElementById('rd-raw-wrap');
   btn.classList.remove('on');
+  btn.classList.remove('open');
   wrap.classList.remove('open');
   btn.textContent = '원문 보기';
 
@@ -1016,6 +1041,7 @@ function toggleRaw(){
   var wrap = document.getElementById('rd-raw-wrap');
   var btn  = document.getElementById('rd-raw-btn');
   var open = wrap.classList.toggle('open');
+  btn.classList.toggle('open', open);
   btn.textContent = open ? '원문 닫기' : '원문 보기';
 }
 
