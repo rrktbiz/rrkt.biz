@@ -459,6 +459,48 @@ function normDate(v){
   return v;
 }
 
+/* ══════════════════════════════════════════════════
+   id 앞자리 0 되살리기
+
+   구글시트는 001 을 '숫자 1' 로 봅니다.
+   그래서 CSV 로 받으면 001 이 아니라 1 로 옵니다.
+   그대로 두면 texts/1.txt 를 찾게 되어 본문이 안 열립니다.
+
+   숫자로만 된 id 는 세 자리로 맞춥니다.  1 → 001,  42 → 042
+   숫자가 아닌 id(예: a1)는 건드리지 않습니다.
+
+   ※ 파일 이름은 세 자리로 지으세요.  texts/001.txt
+     혹시 texts/1.txt 로 올렸더라도, 세 자리로 못 찾으면
+     원래 값으로 한 번 더 찾아보므로 그것도 열립니다.
+   ══════════════════════════════════════════════════ */
+function padId(v){
+  v = String(v == null ? '' : v).trim();
+  return /^\d+$/.test(v) ? v.padStart(3, '0') : v;
+}
+
+/* 본문 파일 읽기.
+   texts/001.txt 를 먼저 찾고, 없으면 texts/1.txt 도 한 번 봅니다.
+   둘 다 없으면 null 을 돌려줍니다. */
+async function fetchText(dir, x, timeout){
+  var names = [x.id];
+  if(x.rawId && x.rawId !== x.id) names.push(x.rawId);
+  for(var i = 0; i < names.length; i++){
+    try{
+      var opt = {cache:'no-cache'};
+      var timer = null;
+      if(timeout){
+        var ctrl = new AbortController();
+        opt.signal = ctrl.signal;
+        timer = setTimeout(function(){ ctrl.abort(); }, timeout);
+      }
+      var r = await fetch(dir + '/' + names[i] + '.txt', opt);
+      if(timer) clearTimeout(timer);
+      if(r.ok) return await r.text();
+    }catch(e){ /* 다음 이름으로 넘어갑니다 */ }
+  }
+  return null;
+}
+
 function esc(s){
   return String(s==null?'':s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -503,8 +545,10 @@ async function loadList(){
     ITEMS = rows.slice(1)
       .filter(function(r){ return (r[0]||'').trim(); })
       .map(function(r){
+        var raw = (r[0]||'').trim();
         return {
-          id:    (r[0]||'').trim(),
+          id:    padId(raw),   /* 001 로 맞춘 값. 링크와 파일 이름에 씁니다 */
+          rawId: raw,          /* 시트가 준 원래 값. 못 찾았을 때 한 번 더 시도합니다 */
           title: (r[1]||'').trim() || '무제',
           date:  normDate(r[2]),
           open:  (r[3]||'').trim().toUpperCase(),
@@ -632,20 +676,17 @@ function render(){
   /* 발췌는 본문 파일에서 앞부분만 떼어 옵니다.
      목록에 소개 칸을 따로 두지 않는 이유가 이것입니다 — 시트에 적을 게 하나 줄어듭니다.
      한 번 읽은 건 기억해 두므로 목록을 오갈 때 다시 받지 않습니다. */
-  arr.forEach(function(x){ fillExcerpt(x.id); });
+  arr.forEach(function(x){ fillExcerpt(x); });
 }
 
-async function fillExcerpt(id){
-  var el = document.getElementById('ex-' + id);
+async function fillExcerpt(x){
+  var el = document.getElementById('ex-' + x.id);
   if(!el) return;
-  var t = BODY_CACHE[id];
+  var t = BODY_CACHE[x.id];
   if(t === undefined){
-    try{
-      var r = await fetch('texts/' + id + '.txt', {cache:'no-cache'});
-      t = r.ok ? await r.text() : null;
-    }catch(e){ t = null; }
-    BODY_CACHE[id] = t;
-    el = document.getElementById('ex-' + id);   /* 기다리는 동안 화면이 바뀌었을 수 있음 */
+    t = await fetchText('texts', x);
+    BODY_CACHE[x.id] = t;
+    el = document.getElementById('ex-' + x.id);   /* 기다리는 동안 화면이 바뀌었을 수 있음 */
     if(!el) return;
   }
   el.textContent = t ? t.replace(/\s+/g,' ').trim().slice(0,120) : '';
@@ -671,13 +712,7 @@ async function openItem(id){
 
   var t = BODY_CACHE[id];
   if(t === undefined){
-    try{
-      var ctrl = new AbortController();
-      var timer = setTimeout(function(){ ctrl.abort(); }, 10000);
-      var r = await fetch('texts/' + id + '.txt', {cache:'no-cache', signal:ctrl.signal});
-      clearTimeout(timer);
-      t = r.ok ? await r.text() : null;
-    }catch(e){ t = null; }
+    t = await fetchText('texts', x, 10000);
     BODY_CACHE[id] = t;
   }
   if(CUR !== x) return;   /* 읽는 동안 다른 글로 넘어갔으면 덮어쓰지 않습니다 */
@@ -720,10 +755,7 @@ async function loadRaw(x){
 
   var t = RAW_CACHE[x.id];
   if(t === undefined){
-    try{
-      var r = await fetch('texts_raw/' + x.id + '.txt', {cache:'no-cache'});
-      t = r.ok ? await r.text() : null;
-    }catch(e){ t = null; }
+    t = await fetchText('texts_raw', x);
     RAW_CACHE[x.id] = t;
   }
   if(CUR !== x) return;          /* 그새 다른 글로 넘어갔으면 무시 */
@@ -792,7 +824,9 @@ function route(){
 
   var f = h.match(/^#\/f\/(.+)$/);
   if(f){
-    var id = decodeURIComponent(f[1]);
+    /* #/f/1 로 들어와도 001 로 찾아갑니다.
+       예전에 복사해 둔 링크나 손으로 친 주소를 살리기 위해서입니다. */
+    var id = padId(decodeURIComponent(f[1]));
     if(!CUR || CUR.id !== id) openItem(id);
     return;
   }
