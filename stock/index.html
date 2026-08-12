@@ -85,6 +85,55 @@ a{color:inherit}
 #tb-sound-btn:hover{background:var(--sm);color:var(--tx);border-color:var(--bd2)}
 #tb-sound-btn.is-off{color:var(--tx3)}
 
+/* ══════════════════════════════════════════
+   읽기 화면 크롬 자동 숨김  (블러드하이스쿨에서 옮겨옴)
+
+   모바일에서 글을 내리는 동안 상단바를 접습니다.
+   위로 올리면 다시 나옵니다. 데스크탑에서는 항상 보입니다.
+   높이는 JS 가 실측해서 --st-tbh 로 넣습니다.
+   ══════════════════════════════════════════ */
+#topbar{transition:transform .28s ease;will-change:transform}
+
+/* ── 본문 글자 크기 (읽기 화면에서만 상단바에 나타남) ──
+   실제 크기는 JS 가 #reader 에 --rd-fs / --rd-lh 로 넣습니다. */
+#tb-fs-wrap{position:relative;display:none;align-items:center;flex-shrink:0}
+body.reading #tb-fs-wrap{display:inline-flex}
+.tb-fs-toggle{
+  font-size:12px;font-weight:700;line-height:1.4;
+  height:28px;padding:0 9px;border:1px solid var(--bd);border-radius:6px;
+  background:transparent;color:var(--tx2);transition:all .12s;white-space:nowrap;
+}
+.tb-fs-toggle:hover{background:var(--sm);color:var(--tx);border-color:var(--bd2)}
+.tb-fs-toggle.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+
+#rd-fs-panel{
+  position:absolute;top:calc(100% + 9px);right:0;
+  width:186px;padding:12px;
+  background:#fff;border:1px solid var(--bd);border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.13);
+  z-index:400;text-align:left;
+}
+#rd-fs-panel.hidden{display:none}
+.rd-fs-hd{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--tx3);text-transform:uppercase;margin-bottom:9px}
+.rd-fs-row{display:flex;align-items:center;gap:8px}
+.rd-fs-btn{
+  width:32px;height:32px;flex-shrink:0;
+  border:1px solid var(--bd);border-radius:7px;background:#fff;color:var(--tx);
+  font-size:15px;font-weight:600;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:all .12s;
+}
+.rd-fs-btn:hover:not(:disabled){background:var(--sm);border-color:var(--bd2)}
+.rd-fs-btn:disabled{opacity:.28;cursor:default}
+.rd-fs-val{flex:1;text-align:center;font-size:13px;font-weight:700;color:var(--tx);font-variant-numeric:tabular-nums}
+.rd-fs-val small{font-size:10px;font-weight:500;color:var(--tx3);margin-left:1px}
+.rd-fs-bar{margin-top:10px;height:4px;border-radius:4px;background:#eee;overflow:hidden}
+.rd-fs-bar span{display:block;height:100%;width:0;background:var(--tx);border-radius:4px;transition:width .18s ease}
+.rd-fs-reset{
+  width:100%;margin-top:10px;padding:6px 0;border:none;border-radius:6px;
+  background:var(--sm);color:var(--tx2);font-size:10.5px;font-weight:600;transition:all .12s;
+}
+.rd-fs-reset:hover{background:#ececec;color:var(--tx)}
+
 /* ── 대문 ── */
 .wrap{max-width:720px;margin:0 auto;padding:0 24px 80px}
 .head{padding:44px 0 26px;border-bottom:1px solid var(--bd)}
@@ -164,19 +213,30 @@ a{color:inherit}
 .rd-head{padding:22px 0 30px;border-bottom:1px solid var(--bd)}
 .rd-meta{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}
 .rd-title{font-size:22px;font-weight:700;letter-spacing:-.035em;line-height:1.45;color:var(--tx)}
+/* 글자 크기 기본값. JS 가 저장된 값으로 덮어씁니다.
+   ⚠ 여기 숫자를 고쳐도 저장값이 있으면 그 값이 이깁니다.
+     기본값을 바꾸려면 아래 STOCK_FS_STEPS 쪽을 고치세요. */
+#reader{--rd-fs:16px;--rd-lh:2.05}
 .rd-body{
   padding:36px 0 20px;
-  font-size:16px;line-height:2.05;color:#2a2a2a;letter-spacing:-.012em;
+  font-size:var(--rd-fs);line-height:var(--rd-lh);color:#2a2a2a;letter-spacing:-.012em;
   white-space:pre-wrap;word-break:keep-all;
 }
-.rd-foot{display:flex;gap:8px;padding:26px 0 0;border-top:1px solid var(--bd)}
+.rd-foot{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;padding:26px 0 0;border-top:1px solid var(--bd)}
 .rd-nav{
-  flex:1;padding:12px 0;border-radius:10px;border:1px solid var(--bd);
+  min-width:0;padding:12px;border-radius:10px;border:1px solid var(--bd);
   background:transparent;font-size:12.5px;font-weight:600;color:var(--tx2);transition:all .12s;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:12px;padding-right:12px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .rd-nav:hover:not(:disabled){border-color:var(--blue);color:var(--blue-ink)}
 .rd-nav:disabled{color:var(--bd2);cursor:default}
+.rd-pick{
+  justify-self:center;display:flex;align-items:center;gap:5px;
+  padding:12px 16px;border-radius:10px;border:1px solid var(--bd2);
+  background:var(--sm);font-size:11.5px;font-weight:600;color:var(--tx2);
+  transition:all .12s;white-space:nowrap;
+}
+.rd-pick:hover{background:#fff;color:var(--tx)}
 .rd-copy{
   margin-top:22px;display:inline-flex;align-items:center;gap:6px;
   padding:7px 14px;border-radius:100px;border:1px solid var(--bd);
@@ -197,7 +257,7 @@ a{color:inherit}
 .rd-raw-body{
   padding:18px 20px;border-radius:11px;
   background:var(--sm);border:1px solid var(--bd);
-  font-size:14px;line-height:1.95;color:var(--tx2);letter-spacing:-.012em;
+  font-size:calc(var(--rd-fs) - 2px);line-height:var(--rd-lh);color:var(--tx2);letter-spacing:-.012em;
   white-space:pre-wrap;word-break:keep-all;
 }
 
@@ -228,6 +288,64 @@ a{color:inherit}
   .pd-row dt{flex:none;font-size:11.5px}
 }
 
+/* ══════════════════════════════════════════
+   플로팅 네비 (읽기 화면 전용)  — 블러드하이스쿨에서 옮겨옴
+
+   글을 읽는 중에 화면 오른쪽 아래에 떠 있는 작은 막대입니다.
+   ‹ 이전  /  목록  /  다음 ›
+   글에 들어온 직후에는 숨어 있다가,
+   아래로 내렸다 다시 위로 올릴 때 나타납니다.
+   ══════════════════════════════════════════ */
+#float-nav{
+  position:fixed;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  right:16px;
+  z-index:200;
+  display:none;align-items:center;gap:6px;
+  background:#fff;border:1px solid var(--bd);border-radius:30px;
+  box-shadow:0 4px 16px #00000018;
+  padding:6px 8px;
+  opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+}
+#float-nav.active{display:flex}
+#float-nav.visible{opacity:1;transform:translateY(0);pointer-events:all}
+.fn-btn{
+  background:transparent;border:none;
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--tx2);transition:background .12s,color .12s;flex-shrink:0;
+}
+.fn-btn:hover{background:var(--sm);color:var(--tx)}
+.fn-btn.disabled{opacity:.3;pointer-events:none}
+.fn-mid{font-size:11px;font-weight:600;color:var(--tx2);padding:0 6px;cursor:pointer;white-space:nowrap;transition:color .12s}
+.fn-mid:hover{color:var(--tx)}
+.fn-div{width:1px;height:18px;background:var(--bd);flex-shrink:0}
+/* 목록 모달이 열려 있는 동안엔 플로팅 네비를 감춥니다 */
+body.picker-open #float-nav{opacity:0;pointer-events:none}
+
+/* ── 글 목록 모달 ── */
+.pick-modal{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:#00000050}
+.pick-modal.hidden{display:none}
+.pick-inner{background:#fff;border-radius:14px;box-shadow:0 8px 40px #0000002a;width:min(480px,90vw);max-height:70vh;display:flex;flex-direction:column;overflow:hidden}
+.pick-hd{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pick-title{font-size:14px;font-weight:700;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pick-close{touch-action:manipulation;position:relative;background:transparent;border:none;color:var(--tx3);font-size:18px;padding:0 4px;line-height:1;transition:color .12s;flex-shrink:0}
+.pick-close:hover{color:var(--tx)}
+.pick-list{overflow-y:auto;flex:1}
+.pick-item{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;text-align:left;width:100%;background:transparent;border-left:none;border-right:none;border-top:none}
+.pick-item:last-child{border-bottom:none}
+.pick-item:hover{background:var(--sm)}
+.pick-item.current{background:rgba(90,144,176,.08);font-weight:600}
+.pick-num{font-size:10px;color:var(--tx3);font-weight:500;min-width:30px;flex-shrink:0}
+.pick-t{font-size:13px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pick-date{margin-left:auto;font-size:10px;color:var(--tx3);flex-shrink:0;padding-left:8px}
+
+/* 손가락 터치 영역만 넓힙니다. 보이는 크기는 그대로입니다. */
+@media(hover:none) and (pointer:coarse){
+  .pick-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
+}
+
 /* ── 토스트 ── */
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b2b2b;color:#fff;font-size:12.5px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
 .toast.show{opacity:.94}
@@ -239,7 +357,23 @@ a{color:inherit}
   .card{padding:14px 16px}
   .card-title{font-size:14.5px}
   .rd-title{font-size:19px}
-  .rd-body{font-size:15.5px;line-height:2}
+
+  /* ⚠ 예전에는 여기서 본문 크기를 15.5px 로 고정했습니다.
+     지금은 글자 크기 조절이 붙어 있어서, 고정하면 조절이 먹지 않습니다.
+     모바일 기본값은 JS 쪽 stFsDefault() 가 정합니다. */
+
+  /* 읽는 중에는 좁은 상단바에서 FOR PD 를 접습니다.
+     글자 크기 버튼 자리를 내주기 위해서입니다. */
+  body.reading #tb-pd-btn{display:none}
+  /* 플로팅 네비가 맨 아래 버튼을 가리지 않도록 */
+  body.reading .wrap{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+  .rd-nav{padding:12px 10px;font-size:11.5px}
+  .rd-pick{padding:12px;font-size:10.5px}
+}
+@media(max-width:400px){
+  /* 아주 좁은 화면에서는 가운데 버튼을 "☰ 목록" 으로 줄입니다 */
+  .rdp-long{display:none}
+  .rd-foot{gap:6px}
 }
 </style>
 </head>
@@ -255,6 +389,20 @@ a{color:inherit}
       FOR PD
     </button>
     <button id="tb-sound-btn" onclick="soundToggle()" title="클릭 소리"></button>
+    <!-- 글자 크기 — 글을 읽는 중에만 나타납니다 (body.reading) -->
+    <span id="tb-fs-wrap">
+      <button class="tb-fs-toggle" id="rd-fs-toggle" onclick="stFsToggle(event)" title="본문 글자 크기" aria-label="본문 글자 크기">가</button>
+      <div id="rd-fs-panel" class="hidden" onclick="event.stopPropagation()">
+        <div class="rd-fs-hd">본문 크기</div>
+        <div class="rd-fs-row">
+          <button class="rd-fs-btn" id="rd-fs-minus" onclick="stFsStep(-1)" aria-label="작게">&minus;</button>
+          <span class="rd-fs-val"><span id="rd-fs-num">16</span><small>px</small></span>
+          <button class="rd-fs-btn" id="rd-fs-plus" onclick="stFsStep(1)" aria-label="크게">+</button>
+        </div>
+        <div class="rd-fs-bar"><span id="rd-fs-fill"></span></div>
+        <button class="rd-fs-reset" onclick="stFsReset()">기본값으로</button>
+      </div>
+    </span>
   </div>
 </div>
 
@@ -292,6 +440,7 @@ a{color:inherit}
     <div class="rd-body" id="rd-body"></div>
     <div class="rd-foot">
       <button class="rd-nav" id="rd-prev" onclick="goSib(-1)"></button>
+      <button class="rd-pick" onclick="openPicker()">&#9776; <span class="rdp-long">글 </span>목록</button>
       <button class="rd-nav" id="rd-next" onclick="goSib(1)"></button>
     </div>
     <button class="rd-copy" onclick="copyLink()">링크 복사</button>
@@ -303,6 +452,26 @@ a{color:inherit}
     <div class="rd-ainote" id="ai-note-read"></div>
   </div>
 
+</div>
+
+<!-- ═══ 플로팅 네비 (읽기 화면 전용) ═══ -->
+<div id="float-nav">
+  <button class="fn-btn" id="fn-prev" onclick="floatNav('prev')" aria-label="이전 글">&#8249;</button>
+  <div class="fn-div"></div>
+  <span class="fn-mid" onclick="floatNav('list')">목록</span>
+  <div class="fn-div"></div>
+  <button class="fn-btn" id="fn-next" onclick="floatNav('next')" aria-label="다음 글">&#8250;</button>
+</div>
+
+<!-- ═══ 글 목록 모달 ═══ -->
+<div class="pick-modal hidden" id="pick-modal" onclick="closePickerBg(event)">
+  <div class="pick-inner">
+    <div class="pick-hd">
+      <span class="pick-title" id="pick-title">글 목록</span>
+      <button class="pick-close" onclick="closePicker()">&#10005;</button>
+    </div>
+    <div class="pick-list" id="pick-list"></div>
+  </div>
 </div>
 
 <script>
@@ -697,6 +866,7 @@ async function openItem(id){
   CUR = x;
 
   showView('reader');
+  resetChrome();   /* 접혀 있던 상단바 원복. 본문을 기다리기 전에 해둡니다 */
 
   document.getElementById('rd-title').textContent = x.title;
   document.getElementById('rd-meta').innerHTML =
@@ -728,6 +898,12 @@ async function openItem(id){
   nx.textContent = nx.disabled ? '다음 글 없음' : arr[i+1].title + ' ›';
 
   location.hash = '#/f/' + id;
+
+  /* ── 읽기 보조 기능 켜기 ── */
+  setupFloatNav(arr[i-1] || null, arr[i+1] || null);
+  attachReaderScroll();
+  stFsApply();
+
   loadRaw(x);
 }
 
@@ -778,12 +954,260 @@ function goSib(step){
 }
 
 /* ══════════════════════════════════════════════════
+   ▼▼▼ 읽기 보조 기능 — 블러드하이스쿨에서 옮겨온 묶음 ▼▼▼
+
+   네 가지입니다.
+     ① 상단바 자동 숨김 (모바일)
+     ② 플로팅 네비 (‹ 이전 / 목록 / 다음 ›)
+     ③ 글 목록 모달
+     ④ 본문 글자 크기
+
+   번역 기능은 옮기지 않았습니다. 이 창고에는 번역판 원고가 없습니다.
+
+   ⚠ 넷 다 '읽기 화면에서만' 도는 것들입니다.
+     목록·PD 화면으로 나갈 때 showView() 가 전부 꺼줍니다.
+     새 화면을 추가하게 되면 그쪽도 showView() 를 거치게 하세요.
+   ══════════════════════════════════════════════════ */
+
+/* ── ① 상단바 자동 숨김 ──────────────────────────────
+   내리는 중이면 접고, 올리는 중이면 폅니다.
+   데스크탑(769px 이상)에서는 아무 일도 하지 않습니다.
+   마우스로 읽을 때는 상단바가 사라지는 게 오히려 불편해서입니다. */
+var ST_SC = { hidden:false, lastY:0, ticking:false, attached:false };
+
+function syncTopbarH(){
+  var tb = document.getElementById('topbar');
+  var h = tb ? (tb.offsetHeight || 46) : 46;
+  document.documentElement.style.setProperty('--st-tbh', h + 'px');
+  return h;
+}
+
+function isReading(){ return !!CUR && document.getElementById('reader').classList.contains('show'); }
+
+function applyHide(doHide){
+  if(ST_SC.hidden === doHide) return;
+  ST_SC.hidden = doHide;
+  var tb = document.getElementById('topbar');
+  var fn = document.getElementById('float-nav');
+  if(doHide){
+    if(tb) tb.style.transform = 'translateY(-' + (tb.offsetHeight || 46) + 'px)';
+    if(fn) fn.classList.remove('visible');
+    stFsClose();                    /* 상단바가 접히면 크기 패널도 닫습니다 */
+  }else{
+    if(tb) tb.style.transform = '';
+    if(fn && fn.classList.contains('active')) fn.classList.add('visible');
+  }
+}
+
+/* 화면을 옮기거나 다른 글로 넘어갈 때 강제로 원복 */
+function resetChrome(){
+  ST_SC.hidden = false;
+  ST_SC.lastY  = 0;
+  var tb = document.getElementById('topbar');
+  if(tb) tb.style.transform = '';
+}
+
+function onReaderScroll(){
+  ST_SC.ticking = false;
+  if(!isReading() || window.innerWidth > 768){ applyHide(false); return; }
+  var st = window.pageYOffset || document.documentElement.scrollTop || 0;
+  if(st > ST_SC.lastY && st > 60)   applyHide(true);    /* 내리는 중 → 접기 */
+  else if(st < ST_SC.lastY - 10)    applyHide(false);   /* 올리는 중 → 펴기 */
+  ST_SC.lastY = st <= 0 ? 0 : st;
+}
+
+/* 스크롤 감시는 한 번만 답니다. 글을 몇 번 열어도 중복으로 안 붙습니다. */
+function attachReaderScroll(){
+  syncTopbarH();
+  if(ST_SC.attached) return;
+  window.addEventListener('scroll', function(){
+    if(!ST_SC.ticking){ requestAnimationFrame(onReaderScroll); ST_SC.ticking = true; }
+  }, {passive:true});
+  window.addEventListener('resize', function(){
+    syncTopbarH();
+    if(window.innerWidth > 768) applyHide(false);
+  });
+  /* 모바일 주소창이 접혔다 펴질 때 높이가 달라집니다 */
+  window.addEventListener('orientationchange', function(){ setTimeout(syncTopbarH, 200); });
+  ST_SC.attached = true;
+}
+
+/* ── ② 플로팅 네비 ──────────────────────────────────
+   글에 막 들어왔을 때는 숨어 있습니다.
+   맨 위에서는 화면 아래 버튼이 이미 보이거나 곧 보이므로 겹칠 뿐입니다.
+   내렸다가 다시 올릴 때 나타납니다. */
+function setupFloatNav(prev, next){
+  var fn = document.getElementById('float-nav');
+  if(!fn) return;
+  var pb = document.getElementById('fn-prev');
+  var nb = document.getElementById('fn-next');
+  if(pb) pb.classList.toggle('disabled', !prev);
+  if(nb) nb.classList.toggle('disabled', !next);
+  fn.classList.add('active');
+  fn.classList.remove('visible');
+}
+
+function hideFloatNav(){
+  var fn = document.getElementById('float-nav');
+  if(!fn) return;
+  fn.classList.remove('visible');
+  fn.classList.remove('active');
+  document.body.classList.remove('picker-open');
+}
+
+function floatNav(dir){
+  if(dir === 'list'){ openPicker(); return; }
+  goSib(dir === 'prev' ? -1 : 1);
+}
+
+/* ── ③ 글 목록 모달 ─────────────────────────────────
+   지금 보고 있는 목록(visible())을 그대로 씁니다.
+   씨앗을 골라 둔 상태면 그 씨앗의 글만, 정렬도 목록 화면과 같습니다.
+   "읽는 중에 보는 목록"과 "나가서 보는 목록"이 어긋나지 않게 하려는 것입니다. */
+function openPicker(){
+  var arr = visible();
+  document.getElementById('pick-title').textContent =
+    SEED ? (SEED + ' — 글 목록') : '글 목록';
+  document.getElementById('pick-list').innerHTML = arr.map(function(x){
+    return '<button class="pick-item' + (CUR && x.id===CUR.id ? ' current' : '') + '" '
+         + 'onclick="pickItem(\'' + esc(x.id) + '\')">'
+         + '<span class="pick-num">' + esc(x.id) + '</span>'
+         + '<span class="pick-t">' + esc(x.title) + '</span>'
+         + (x.date ? '<span class="pick-date">' + esc(x.date) + '</span>' : '')
+         + '</button>';
+  }).join('') || '<div class="state">목록이 비어 있습니다</div>';
+  document.getElementById('pick-modal').classList.remove('hidden');
+  document.body.classList.add('picker-open');
+
+  /* 글이 쌓이면 목록이 길어집니다. 지금 읽는 글이 보이는 자리로 옮겨 둡니다. */
+  var cur = document.querySelector('#pick-list .pick-item.current');
+  if(cur && cur.scrollIntoView) cur.scrollIntoView({block:'center'});
+}
+function pickItem(id){ closePicker(); openItem(id); }
+function closePicker(){
+  var m = document.getElementById('pick-modal');
+  if(m) m.classList.add('hidden');
+  document.body.classList.remove('picker-open');
+}
+/* 바깥 어두운 곳을 눌렀을 때만 닫습니다 */
+function closePickerBg(ev){ if(ev.target === document.getElementById('pick-modal')) closePicker(); }
+
+/* ── ④ 본문 글자 크기 ───────────────────────────────
+   크게 키울수록 줄간격을 조금씩 좁힙니다.
+   그대로 두면 글자가 클 때 줄 사이가 벌어져 문단이 흩어져 보입니다.
+
+   ⚠ 저장 이름이 블러드하이스쿨(bhs_reader_fs)과 다릅니다.
+     일부러 나눠 두었습니다. 여기는 조각글이라 한 편이 짧고,
+     저쪽은 웹소설이라 한 화가 깁니다. 편한 크기가 서로 다릅니다.
+     (클릭 소리는 반대로 공용입니다 — 한 곳에서 끄면 다 꺼집니다) */
+var STOCK_FS_STEPS = [
+  { fs:14,   lh:2.10 },
+  { fs:15.5, lh:2.05 },   /* 모바일 기본 */
+  { fs:16.5, lh:2.00 },   /* 데스크탑 기본 */
+  { fs:18,   lh:1.95 },
+  { fs:20,   lh:1.90 },
+  { fs:22.5, lh:1.85 }
+];
+var STOCK_FS_KEY = 'stock_reader_fs';
+var STOCK_FS_I   = null;
+
+function stFsDefault(){ return window.innerWidth <= 768 ? 1 : 2; }
+
+function stFsIdx(){
+  if(STOCK_FS_I !== null) return STOCK_FS_I;
+  var v = null;
+  try{ v = localStorage.getItem(STOCK_FS_KEY); }catch(e){}
+  var i = (v === null) ? stFsDefault() : parseInt(v,10);
+  if(isNaN(i) || i < 0 || i >= STOCK_FS_STEPS.length){
+    i = stFsDefault();
+    try{ localStorage.removeItem(STOCK_FS_KEY); }catch(e){}   /* 망가진 저장값 정리 */
+  }
+  STOCK_FS_I = i;
+  return i;
+}
+
+function stFsApply(){
+  var s = STOCK_FS_STEPS[stFsIdx()];
+  var r = document.getElementById('reader');
+  if(r){
+    r.style.setProperty('--rd-fs', s.fs + 'px');
+    r.style.setProperty('--rd-lh', String(s.lh));
+  }
+  stFsSyncUI();
+}
+
+function stFsSyncUI(){
+  var i = stFsIdx(), s = STOCK_FS_STEPS[i];
+  var n = document.getElementById('rd-fs-num');   if(n) n.textContent = s.fs;
+  var f = document.getElementById('rd-fs-fill');  if(f) f.style.width = (i/(STOCK_FS_STEPS.length-1)*100) + '%';
+  var m = document.getElementById('rd-fs-minus'); if(m) m.disabled = (i === 0);
+  var p = document.getElementById('rd-fs-plus');  if(p) p.disabled = (i === STOCK_FS_STEPS.length - 1);
+}
+
+function stFsStep(d){
+  var i = stFsIdx() + d;
+  if(i < 0 || i >= STOCK_FS_STEPS.length) return;
+  STOCK_FS_I = i;
+  try{ localStorage.setItem(STOCK_FS_KEY, String(i)); }catch(e){}
+  stFsApply();
+}
+
+function stFsReset(){
+  STOCK_FS_I = stFsDefault();
+  try{ localStorage.removeItem(STOCK_FS_KEY); }catch(e){}
+  stFsApply();
+}
+
+function stFsToggle(ev){
+  if(ev) ev.stopPropagation();
+  var p = document.getElementById('rd-fs-panel');
+  var t = document.getElementById('rd-fs-toggle');
+  if(!p) return;
+  var willOpen = p.classList.contains('hidden');
+  p.classList.toggle('hidden', !willOpen);
+  if(t) t.classList.toggle('on', willOpen);
+  if(willOpen) stFsSyncUI();
+}
+
+function stFsClose(){
+  var p = document.getElementById('rd-fs-panel'); if(p) p.classList.add('hidden');
+  var t = document.getElementById('rd-fs-toggle'); if(t) t.classList.remove('on');
+}
+
+/* 패널 바깥을 누르면 닫힙니다 */
+document.addEventListener('click', function(e){
+  var w = document.getElementById('tb-fs-wrap');
+  if(w && !w.contains(e.target)) stFsClose();
+});
+/* ESC 로 크기 패널과 목록 모달을 닫습니다 */
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  stFsClose();
+  closePicker();
+});
+
+/* ▲▲▲ 읽기 보조 기능 묶음 끝 ▲▲▲ */
+
+
+/* ══════════════════════════════════════════════════
    화면 전환 — 목록 / 읽기 / PD 안내 세 개뿐입니다
    ══════════════════════════════════════════════════ */
 function showView(v){
   document.getElementById('listview').style.display = (v === 'list') ? '' : 'none';
   document.getElementById('reader').classList.toggle('show', v === 'reader');
   document.getElementById('pdview').classList.toggle('show', v === 'pd');
+
+  /* 읽기 화면일 때만 켜지는 것들:
+       body.reading → 상단바 글자 크기 버튼
+       플로팅 네비 · 상단바 자동 숨김 */
+  var reading = (v === 'reader');
+  document.body.classList.toggle('reading', reading);
+  if(!reading){
+    hideFloatNav();
+    resetChrome();
+    closePicker();
+    stFsClose();
+  }
   window.scrollTo(0,0);
 }
 
