@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<!--
+  ══════════════════════════════════════════════════════════════
+  ⚠ 파일명 안내 — 고치지 마세요
+
+  로컬 작업용 파일명 : stock_index.html
+  실제 배포 파일명   : index.html   (GitHub 업로드 시 이 이름으로)
+
+  이 프로젝트 폴더 안의 다른 파일들이 참조하는 'index.html' 은
+  배포 기준 이름이라 정상입니다. stock_index.html 로 바꾸면
+  배포 후에 링크가 전부 깨집니다.
+
+  (로컬에서 index.html 이 프로젝트마다 겹치는 걸 피하려고
+   작업 파일에만 프로젝트 이름을 붙여 두는 방식입니다.)
+  ══════════════════════════════════════════════════════════════
+-->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI글창고 · rrkt.biz</title>
+
+<!-- ════════════════════════════════════════════════════════════
+     AI글창고 (stock)
+
+     이 파일 하나가 목록 + 읽기 화면 전부입니다.
+
+     ── 어디서 무엇을 읽어오나 ──
+       목록 : 공용 구글시트의  stock  탭  (../config.js 의 SHEETS_ID)
+              열 순서 →  id / 제목 / 날짜 / 공개 / 씨앗
+       본문 : texts/{id}.txt      (예: id 가 001 이면 texts/001.txt)
+
+     ⚠ 본문 파일 이름은 시트의 id 를 그대로 씁니다.
+       시트에 001 이라 적었으면 파일도 001.txt 여야 합니다.
+       시트에는 적었는데 파일이 없으면 열었을 때 안내문이 나옵니다.
+
+     ── 글 한 편 올리는 순서 ──
+       1. texts/ 에 000.txt 를 올린다  (UTF-8, 그냥 줄바꿈으로 문단 구분)
+       2. 시트 stock 탭에 한 줄 적는다
+       3. 끝. 이 파일은 안 건드립니다.
+
+     ── config.js ──
+       읽기만 합니다. 고칠 필요 없습니다.
+       (SHEET_CSV('stock') 이 알아서 주소를 만듭니다)
+     ════════════════════════════════════════════════════════════ -->
+
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../config.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e8e8e8;--bd2:#c6c6c6;
+  --tx:#111111;--tx2:#525252;--tx3:#a3a3a3;
+  --blue:#5a90b0;--blue-ink:#477693;--ink:#4a5560;
+  --fn:'Inter','Noto Sans KR',-apple-system,sans-serif;
+  --h-top:46px;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
+button{font-family:var(--fn);cursor:pointer}
+a{color:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+
+/* ── 상단바 ── */
+#topbar{
+  height:var(--h-top);background:var(--sb);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:10px;padding:0 16px;
+  position:sticky;top:0;z-index:120;
+}
+.tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:5px 8px;border-radius:6px;transition:all .12s;white-space:nowrap;flex-shrink:0;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.tb-back:hover{background:var(--sm);color:var(--tx)}
+.tb-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
+.tb-title{font-family:'Josefin Sans',sans-serif;font-weight:300;letter-spacing:.16em;font-size:14px;color:var(--ink)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
+#tb-pd-btn{
+  display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;
+  border:1px solid var(--bd);border-radius:6px;background:transparent;
+  font-family:'Josefin Sans',sans-serif;font-weight:300;letter-spacing:.1em;
+  font-size:11px;color:var(--tx2);transition:all .12s;white-space:nowrap;
+}
+#tb-pd-btn:hover{background:var(--sm);color:var(--blue-ink);border-color:var(--blue)}
+#tb-sound-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);transition:all .12s}
+#tb-sound-btn:hover{background:var(--sm);color:var(--tx);border-color:var(--bd2)}
+#tb-sound-btn.is-off{color:var(--tx3)}
+
+/* ── 대문 ── */
+.wrap{max-width:720px;margin:0 auto;padding:0 24px 80px}
+.head{padding:44px 0 26px;border-bottom:1px solid var(--bd)}
+.head-eyebrow{font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:300;letter-spacing:2.6px;color:var(--blue-ink);margin-bottom:11px}
+.head-title{font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--tx);margin-bottom:12px}
+.head-desc{font-size:13.5px;line-height:1.85;color:var(--tx);letter-spacing:-.015em;font-weight:500}
+
+/* AI 고지 — 대문에서 유일하게 상자로 둘러싸는 부분입니다.
+   의무 고지라서 시선이 한 번은 걸리게 둡니다. */
+.ai-note{
+  margin:15px 0 0;padding:13px 15px;border-radius:9px;
+  background:var(--sm);border:1px solid var(--bd);
+  font-size:12px;line-height:1.85;color:var(--tx2);letter-spacing:-.012em;
+}
+.ai-note b{color:var(--tx);font-weight:600}
+
+/* 왜 이렇게 하는가 — 한 줄. 조용히 둡니다. */
+.head-why{margin-top:13px;font-size:11.5px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em}
+.rd-ainote{
+  margin-top:24px;padding-top:16px;border-top:1px solid var(--bd);
+  font-size:11px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em;
+}
+
+/* ── 씨앗 칩 ── */
+.seed-row{display:flex;gap:7px;padding:20px 0 4px;flex-wrap:wrap}
+.seed-chip{
+  padding:6px 14px;border-radius:100px;border:1px solid var(--bd);
+  background:transparent;font-size:12px;font-weight:500;color:var(--tx3);
+  transition:all .13s;white-space:nowrap;
+}
+.seed-chip:hover{border-color:var(--bd2);color:var(--tx2)}
+.seed-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.seed-chip .cnt{font-size:10px;opacity:.7;margin-left:4px}
+
+/* ── 목록 ── */
+.seed-note{
+  margin:16px 0 2px;padding:11px 15px;border-radius:9px;
+  background:var(--sm);border:1px solid var(--bd);
+  font-size:12px;line-height:1.7;color:var(--tx2);letter-spacing:-.01em;
+}
+.seed-note b{color:var(--tx);font-weight:600}
+.seed-note a{color:var(--blue-ink);font-weight:600;text-decoration:none}
+.seed-note a:hover{text-decoration:underline}
+.order-note{padding:14px 2px 8px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
+
+.list{padding-top:6px}
+.card{
+  width:100%;text-align:left;display:block;
+  background:var(--sb);border:1px solid var(--bd);border-radius:11px;
+  padding:16px 19px;margin-bottom:9px;
+  transition:border-color .12s,box-shadow .12s,transform .12s;
+}
+.card:hover{border-color:var(--bd2);box-shadow:0 2px 12px #0000000d;transform:translateY(-1px)}
+.card-top{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap}
+.card-date{font-family:'Inter',sans-serif;font-size:11px;color:var(--tx3);letter-spacing:.02em;flex-shrink:0}
+.card-seed{
+  font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;
+  background:rgba(90,144,176,.10);border:1px solid rgba(90,144,176,.26);color:var(--blue-ink);
+  white-space:nowrap;
+}
+.card-title{font-size:15.5px;font-weight:700;color:var(--tx);letter-spacing:-.025em;line-height:1.5;margin-bottom:6px}
+.card-ex{font-size:12.5px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ── 상태 안내 ── */
+.state{padding:60px 10px;text-align:center;font-size:13px;line-height:1.9;color:var(--tx3)}
+.state b{display:block;font-size:14px;color:var(--tx2);font-weight:600;margin-bottom:8px}
+.state button{margin-top:16px;padding:8px 20px;border-radius:100px;border:1px solid var(--bd);background:transparent;font-size:12px;font-weight:600;color:var(--tx2);transition:all .12s}
+.state button:hover{border-color:var(--bd2);color:var(--tx)}
+
+/* ── 읽기 화면 ── */
+#reader{display:none}
+#reader.show{display:block}
+.rd-bar{display:flex;align-items:center;gap:10px;padding:26px 0 0}
+.rd-back{background:transparent;border:none;font-size:12px;color:var(--tx3);padding:5px 0;transition:color .12s}
+.rd-back:hover{color:var(--tx)}
+.rd-head{padding:22px 0 30px;border-bottom:1px solid var(--bd)}
+.rd-meta{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}
+.rd-title{font-size:22px;font-weight:700;letter-spacing:-.035em;line-height:1.45;color:var(--tx)}
+.rd-body{
+  padding:36px 0 20px;
+  font-size:16px;line-height:2.05;color:#2a2a2a;letter-spacing:-.012em;
+  white-space:pre-wrap;word-break:keep-all;
+}
+.rd-foot{display:flex;gap:8px;padding:26px 0 0;border-top:1px solid var(--bd)}
+.rd-nav{
+  flex:1;padding:12px 0;border-radius:10px;border:1px solid var(--bd);
+  background:transparent;font-size:12.5px;font-weight:600;color:var(--tx2);transition:all .12s;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:12px;padding-right:12px;
+}
+.rd-nav:hover:not(:disabled){border-color:var(--blue);color:var(--blue-ink)}
+.rd-nav:disabled{color:var(--bd2);cursor:default}
+.rd-copy{
+  margin-top:22px;display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:100px;border:1px solid var(--bd);
+  background:transparent;font-size:11.5px;font-weight:500;color:var(--tx3);transition:all .12s;
+}
+.rd-copy:hover{border-color:var(--bd2);color:var(--tx2)}
+
+/* ── 원문 보기 ──
+   texts_raw/{id}.txt 가 올라가 있는 글에만 버튼이 나타납니다.
+   파일이 없으면 버튼 자체가 안 보이므로, 편마다 골라서 낼 수 있습니다. */
+#rd-raw-btn{display:none}
+#rd-raw-btn.on{display:inline-flex}
+.rd-raw-wrap{display:none;margin-top:20px}
+.rd-raw-wrap.open{display:block}
+.rd-raw-label{
+  font-size:11px;font-weight:600;color:var(--blue-ink);letter-spacing:-.01em;
+  margin-bottom:10px;line-height:1.7;
+}
+.rd-raw-body{
+  padding:18px 20px;border-radius:11px;
+  background:var(--sm);border:1px solid var(--bd);
+  font-size:14px;line-height:1.95;color:var(--tx2);letter-spacing:-.012em;
+  white-space:pre-wrap;word-break:keep-all;
+}
+
+/* ── PD · 기획 문의용 화면 (#/pd) ──
+   일반 독자 화면에는 끼어들지 않습니다.
+   대문 맨 아래 작은 링크 하나로만 들어갑니다.
+   PD 에게는 주소를 직접 보내는 쪽을 씁니다 →  .../stock/#/pd */
+#pdview{display:none}
+#pdview.show{display:block}
+.pd-head{padding:44px 0 24px;border-bottom:1px solid var(--bd)}
+.pd-eyebrow{font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:300;letter-spacing:2.6px;color:var(--blue-ink);margin-bottom:11px}
+.pd-title{font-size:23px;font-weight:700;letter-spacing:-.03em;margin-bottom:10px}
+.pd-lead{font-size:13px;line-height:1.85;color:var(--tx2);letter-spacing:-.01em}
+.pd-sec{padding:26px 0;border-bottom:1px solid var(--bd)}
+.pd-sec:last-of-type{border-bottom:none}
+.pd-h{font-size:11px;font-weight:700;letter-spacing:1.6px;color:var(--blue-ink);text-transform:uppercase;margin-bottom:14px}
+.pd-row{display:flex;gap:14px;padding:7px 0;font-size:13px;line-height:1.8;letter-spacing:-.012em}
+.pd-row dt{flex:0 0 128px;color:var(--tx3);font-weight:500}
+.pd-row dd{flex:1;color:var(--tx);min-width:0}
+.pd-p{font-size:13px;line-height:1.9;color:var(--tx2);letter-spacing:-.012em;margin-bottom:11px}
+.pd-p:last-child{margin-bottom:0}
+.pd-p b{color:var(--tx);font-weight:600}
+.pd-mail{display:inline-block;margin-top:4px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--tx)}
+@media(max-width:520px){
+  .pd-head{padding:32px 0 20px}
+  .pd-title{font-size:20px}
+  .pd-row{flex-direction:column;gap:2px;padding:9px 0}
+  .pd-row dt{flex:none;font-size:11.5px}
+}
+
+/* ── 토스트 ── */
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b2b2b;color:#fff;font-size:12.5px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
+.toast.show{opacity:.94}
+
+@media(max-width:520px){
+  .wrap{padding:0 16px 60px}
+  .head{padding:32px 0 20px}
+  .head-title{font-size:22px}
+  .card{padding:14px 16px}
+  .card-title{font-size:14.5px}
+  .rd-title{font-size:19px}
+  .rd-body{font-size:15.5px;line-height:2}
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <a class="tb-back" href="../index.html">&larr; rrkt.biz</a>
+  <div class="tb-sep"></div>
+  <span class="tb-title">AI STOCK</span>
+  <div class="tb-right">
+    <button id="tb-pd-btn" onclick="openPD()" title="기획 · 제휴 문의">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+      FOR PD
+    </button>
+    <button id="tb-sound-btn" onclick="soundToggle()" title="클릭 소리"></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ── 목록 화면 ── -->
+  <div id="listview">
+    <div class="head">
+      <div class="head-eyebrow">AI WRITING STOCK</div>
+      <div class="head-title">AI글창고</div>
+      <div class="head-desc" id="head-what"></div>
+      <div class="ai-note" id="ai-note-head"></div>
+      <div class="head-why" id="head-why"></div>
+    </div>
+
+    <div class="seed-row" id="seed-row"></div>
+    <div id="seed-note-slot"></div>
+    <div class="order-note" id="order-note"></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <!-- ── PD · 기획 문의용 화면 ── -->
+  <div id="pdview">
+    <div class="rd-bar"><button class="rd-back" onclick="goList()">&larr; 글 목록</button></div>
+    <div id="pd-slot"></div>
+  </div>
+
+  <!-- ── 읽기 화면 ── -->
+  <div id="reader">
+    <div class="rd-bar"><button class="rd-back" onclick="goList()">&larr; 목록</button></div>
+    <div class="rd-head">
+      <div class="rd-meta" id="rd-meta"></div>
+      <div class="rd-title" id="rd-title"></div>
+    </div>
+    <div class="rd-body" id="rd-body"></div>
+    <div class="rd-foot">
+      <button class="rd-nav" id="rd-prev" onclick="goSib(-1)"></button>
+      <button class="rd-nav" id="rd-next" onclick="goSib(1)"></button>
+    </div>
+    <button class="rd-copy" onclick="copyLink()">링크 복사</button>
+    <button class="rd-copy" id="rd-raw-btn" onclick="toggleRaw()">원문 보기</button>
+    <div class="rd-raw-wrap" id="rd-raw-wrap">
+      <div class="rd-raw-label" id="rd-raw-label"></div>
+      <div class="rd-raw-body" id="rd-raw-body"></div>
+    </div>
+    <div class="rd-ainote" id="ai-note-read"></div>
+  </div>
+
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   AI 사용 표기 — 문구는 여기 한 곳에만 있습니다
+
+   대문과 읽기 화면 아래에 같은 문장이 자동으로 들어갑니다.
+   두 군데에 넣는 이유:
+     글 하나를 링크로 공유하면 상대는 대문을 안 거치고 바로 들어옵니다.
+     대문에만 적어두면 그 사람 눈에는 표기가 아예 안 보입니다.
+
+   ⚠ 문구를 고칠 일이 생기면 여기만 고치세요.
+
+   ⚠ 다듬는 정도가 달라지면 문장도 같이 바꿔야 합니다.
+     지금 문장은 '소재와 구성은 사람, 문장으로 완성한 것은 AI' 를 뜻합니다.
+     실제보다 AI 비중을 작게 적으면, 나중에 알려졌을 때
+     "사용한 것"이 아니라 "숨긴 것"이 문제가 됩니다.
+     줄여 적느니 넉넉하게 적는 쪽이 안전합니다.
+   ══════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   대문 세 줄
+
+   순서에 이유가 있습니다.
+     ① 여기가 뭔지   — 독자가 제일 먼저 알아야 하는 것
+     ② AI 고지       — 의무. 유일하게 상자로 둘러싼 부분
+     ③ 왜 이렇게 하는지 — 궁금한 사람만 읽으면 되는 것
+
+   ⚠ 같은 말을 두 줄에 겹쳐 쓰지 마세요.
+     '재료입니다' 는 ①에만, 'AI 가 문장을 씁니다' 는 ②에만 있습니다.
+     한쪽을 고칠 때 다른 쪽에 같은 말을 더하면 대문이 다시 지저분해집니다.
+
+   ⚠ ②는 읽기 화면 맨 아래에도 그대로 들어갑니다.
+     글 하나만 링크로 받아 들어온 사람은 대문을 안 거치기 때문입니다.
+   ══════════════════════════════════════════════════ */
+
+/* ① 여기가 뭔지 */
+var WHAT_NOTE =
+  '떠오른 소재를 짧은 소설로 적어 쌓아두는 창고입니다. 완성작이 아니라 재료입니다.';
+
+/* ② AI 고지 — 실제 작업 비중이 달라지면 이 문장부터 고치세요 */
+var AI_NOTE =
+  '<b>무엇을 쓸지는 제가 정하고, 문장은 생성형 AI(Google Gemini)가 씁니다.</b><br>'
++ '각 글에는 AI 에 넣기 전 원문을 함께 둡니다.';
+
+/* ③ 왜 이렇게 하는지 — 한 줄을 넘기지 마세요. 길어지면 해명처럼 읽힙니다 */
+var WHY_NOTE =
+  '소재 쌓이는 속도를 쓰는 속도가 못 따라가서 이렇게 합니다.';
+
+/* 원문 영역 위에 붙는 한 줄.
+   "보고 싶으면 보든가" 가 아니라 "재료도 같이 두었다" 로 씁니다.
+   내용은 같지만 시비 걸 각이 없어집니다. */
+var RAW_NOTE = 'AI 에 넣기 전, 제가 쓴 원문입니다.';
+
+
+/* ══════════════════════════════════════════════════
+   PD · 기획 문의용 안내  (#/pd)
+
+   주소를 직접 보내면 이 화면만 열립니다 →  .../stock/#/pd
+
+   ⚠ 여기에는 '변하지 않는 것'만 적습니다.
+     편수 · 일정 · 진행 상황 같은 것을 적으면
+     고치지 않는 순간 문서가 낡아서 오히려 신뢰를 깎습니다.
+     구조와 작업 방식만 적어두면 몇 년을 둬도 사실입니다.
+
+   ⚠ 다른 프로젝트가 AI 를 '안 쓴다'고 적지 마세요.
+     이 문서는 이 창고에 대해서만 말합니다.
+     말하지 않는 것은 거짓이 아니지만, 단언은 거짓이 될 수 있습니다.
+
+   ⚠ 나중에 따로 기획서를 만들게 되면 이 내용을 옮겨 적지 말고
+     이 주소로 링크만 거세요. 같은 말이 두 군데 있으면
+     한쪽만 고쳐서 말이 어긋나는 사고가 반드시 납니다.
+   ══════════════════════════════════════════════════ */
+var PD_MAIL = 'rrkt.biz@proton.me';
+
+var PD_DOC =
+  '<div class="pd-head">'
++   '<div class="pd-eyebrow">FOR PARTNERS</div>'
++   '<div class="pd-title">AI글창고 — 작업 안내</div>'
++   '<div class="pd-lead">생성형 AI 를 활용해 만드는 조각글 창고입니다. '
++     '작업 구조와 권리 관계를 정리해 두었습니다.</div>'
++ '</div>'
+
++ '<div class="pd-sec">'
++   '<div class="pd-h">작업 구분</div>'
++   '<dl>'
++     '<div class="pd-row"><dt>직접</dt><dd>소재 · 구성 · 세계관 · 캐릭터 · 장면의 분위기</dd></div>'
++     '<div class="pd-row"><dt>생성형 AI</dt><dd>위 내용을 문장으로 세우는 작업 (Google Gemini)</dd></div>'
++     '<div class="pd-row"><dt>공개 자료</dt><dd>AI 투입 전 원문을 각 글에 함께 게시</dd></div>'
++   '</dl>'
++ '</div>'
+
++ '<div class="pd-sec">'
++   '<div class="pd-h">이 창고의 위치</div>'
++   '<p class="pd-p">여기 글은 완성작이 아니라 <b>정식 작품 이전 단계의 재료</b>입니다. '
++     '같은 세계의 조각이 충분히 모이면 별도 프로젝트로 분리합니다.</p>'
+/* ⚠ 아래 문장을 지우지 마세요.
+   '분리한다' 만 적어두면 '창고를 벗어나면서 AI 표기를 뗀다' 로 읽힙니다.
+   두 번째 문장은 다짐이 아니라 확인 가능한 사실이라 이 대목의 핵심입니다.
+   (승격돼도 원본을 창고에 그대로 두는 것은 이미 정해진 방식입니다) */
++   '<p class="pd-p">분리된 뒤에도 AI 활용 표기는 그대로 따라갑니다. '
++     '출발점이 된 조각글과 원문은 이 창고에 그대로 남겨 둡니다.</p>'
++ '</div>'
+
++ '<div class="pd-sec">'
++   '<div class="pd-h">권리</div>'
++   '<p class="pd-p">소재 · 구성 · 세계관 · 캐릭터는 제 저작물입니다. '
++     'AI 가 생성한 문장 부분은 현행 국내 제도상 보호 범위가 제한된다는 점을 인지하고 있습니다.</p>'
++   '<p class="pd-p">이를 전제로 <b>AI 투입 전 원고를 전편 보관</b>하고 있으며, 협의 시 제공 가능합니다.</p>'
++ '</div>'
+
++ '<div class="pd-sec">'
++   '<div class="pd-h">문의</div>'
++   '<a class="pd-mail" href="mailto:' + PD_MAIL + '">' + PD_MAIL + '</a>'
++ '</div>';
+
+
+/* ══════════════════════════════════════════════════
+   승격된 씨앗 — 여기만 손으로 적습니다
+
+   창고에 있던 씨앗 하나가 독립 프로젝트로 나갔을 때,
+   원본은 창고에 그대로 두고 여기에 한 줄만 더합니다.
+   그러면 그 씨앗을 눌렀을 때 "여기서 시작됐습니다" 안내가 붙습니다.
+
+   시트에 열을 추가하지 않는 이유:
+     승격은 몇 달에 한 번 있을까 말까 한 일인데
+     그것 때문에 매번 채워야 할 칸이 하나 늘어나는 건 손해입니다.
+
+   적는 법:  '씨앗이름': { label:'프로젝트 이름', url:'../폴더/index.html' }
+   ══════════════════════════════════════════════════ */
+var SEED_PROMOTED = {
+  /* 예시 — 실제로 승격되면 앞의 // 를 지우고 값을 고치세요
+  '폐교': { label:'폐교 프로젝트', url:'../hyepgyo/index.html' },
+  */
+};
+
+/* ══════════════════════════════════════════════════
+   데이터
+   ══════════════════════════════════════════════════ */
+var ITEMS = null;      /* 시트에서 읽은 목록 */
+var LOAD  = 'loading'; /* loading | ok | empty | error */
+var SEED  = '';        /* 지금 고른 씨앗. '' 이면 전체 */
+var CUR   = null;      /* 지금 읽고 있는 글 */
+var BODY_CACHE = {};   /* 한 번 읽은 본문은 다시 안 받습니다 */
+var RAW_CACHE  = {};   /* 원문도 마찬가지. null 이면 '원문 파일 없음' 입니다 */
+
+/* gviz 는 날짜를 "2026. 4. 9." 처럼 줍니다. 2026-04-09 로 맞춥니다. */
+function normDate(v){
+  v = (v||'').trim();
+  if(!v) return '';
+  if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  var m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+  if(m) return m[1] + '-' + ('0'+m[2]).slice(-2) + '-' + ('0'+m[3]).slice(-2);
+  return v;
+}
+
+function esc(s){
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+/* CSV 한 줄을 칸으로 쪼갭니다. 따옴표 안의 쉼표는 그대로 둡니다. */
+function splitRow(r){
+  var cols=[], cur='', inQ=false;
+  for(var i=0;i<r.length;i++){
+    var ch = r[i];
+    if(ch === '"'){
+      if(inQ && r[i+1] === '"'){ cur += '"'; i++; }   /* "" 는 따옴표 한 개 */
+      else inQ = !inQ;
+    }
+    else if(ch === ',' && !inQ){ cols.push(cur.trim()); cur=''; }
+    else cur += ch;
+  }
+  cols.push(cur.trim());
+  return cols;
+}
+
+async function loadList(){
+  /* config.js 가 아직 안 붙었을 때 화면이 하얗게 멈추는 걸 막습니다 */
+  await null;
+  try{
+    var url = (typeof SHEET_CSV === 'function') ? SHEET_CSV('stock') : null;
+    if(!url) throw new Error('config.js 미로드');
+
+    /* 10초 안에 응답이 없으면 포기합니다.
+       없으면 구글이 응답을 물고 있을 때 '불러오는 중'이 영원히 남습니다. */
+    var ctrl  = new AbortController();
+    var timer = setTimeout(function(){ ctrl.abort(); }, 10000);
+    var res   = await fetch(url, {signal: ctrl.signal});
+    clearTimeout(timer);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+
+    var rows = (await res.text()).trim().split('\n').map(splitRow);
+    if(rows.length < 2){ ITEMS = []; LOAD = 'empty'; render(); return; }
+
+    /* 헤더: id / 제목 / 날짜 / 공개 / 씨앗 */
+    ITEMS = rows.slice(1)
+      .filter(function(r){ return (r[0]||'').trim(); })
+      .map(function(r){
+        return {
+          id:    (r[0]||'').trim(),
+          title: (r[1]||'').trim() || '무제',
+          date:  normDate(r[2]),
+          open:  (r[3]||'').trim().toUpperCase(),
+          seed:  (r[4]||'').trim()
+        };
+      })
+      /* 공개 칸이 O / o / Y / TRUE 인 것만 보여줍니다. 빈 칸은 안 보입니다. */
+      .filter(function(x){ return x.open==='O' || x.open==='Y' || x.open==='TRUE' || x.open==='공개'; });
+
+    LOAD = ITEMS.length ? 'ok' : 'empty';
+    render();
+    route();   /* 주소로 바로 들어온 경우를 여기서 처리합니다 */
+  }catch(e){
+    /* 화면에는 짧게, 자세한 원인은 콘솔(F12)에만 남깁니다.
+
+       흔한 원인:
+         · 구글시트 공유가 '링크가 있는 모든 사용자 → 뷰어' 가 아님
+         · 시트 탭 이름이 stock 이 아님
+         · 파일을 더블클릭(file://)해서 열었음 → 깃허브에 올려야 합니다 */
+    console.warn('AI글창고 목록 불러오기 실패:', e && e.message);
+    ITEMS = []; LOAD = 'error';
+    render();
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   씨앗 묶기
+
+   같은 단어가 2편 이상 적혔을 때만 칩이 생깁니다.
+   1편뿐인 씨앗은 굳이 칩을 만들지 않고 목록에 섞여 있습니다.
+   (칩이 한 편짜리로 가득 차면 그냥 목록을 두 번 보는 셈이라서)
+   ══════════════════════════════════════════════════ */
+function seedCounts(){
+  var m = {};
+  (ITEMS||[]).forEach(function(x){
+    if(!x.seed) return;
+    m[x.seed] = (m[x.seed]||0) + 1;
+  });
+  return m;
+}
+function activeSeeds(){
+  var m = seedCounts(), out = [];
+  for(var k in m){ if(m[k] >= 2) out.push([k, m[k]]); }
+  out.sort(function(a,b){ return b[1] - a[1] || a[0].localeCompare(b[0],'ko'); });
+  return out;
+}
+
+/* 지금 화면에 보일 글들.
+   전체는 최신순, 씨앗을 고른 상태는 오래된순입니다.
+   같은 세계의 조각은 먼저 쓴 게 바탕이고 나중 게 덧붙는 경우가 많아서입니다. */
+function visible(){
+  var arr = (ITEMS||[]).slice();
+  if(SEED) arr = arr.filter(function(x){ return x.seed === SEED; });
+  arr.sort(function(a,b){
+    var d = String(a.date).localeCompare(String(b.date));
+    if(d !== 0) return SEED ? d : -d;
+    return SEED ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id);
+  });
+  return arr;
+}
+
+/* ══════════════════════════════════════════════════
+   그리기
+   ══════════════════════════════════════════════════ */
+function render(){
+  var row = document.getElementById('seed-row');
+  var seeds = activeSeeds();
+  if(LOAD !== 'ok' || !seeds.length){
+    row.innerHTML = '';
+  }else{
+    row.innerHTML =
+      '<button class="seed-chip' + (SEED===''?' active':'') + '" onclick="pickSeed(\'\')">전체'
+      + '<span class="cnt">' + ITEMS.length + '</span></button>'
+      + seeds.map(function(s){
+          return '<button class="seed-chip' + (SEED===s[0]?' active':'') + '" '
+               + 'onclick="pickSeed(\'' + esc(s[0]).replace(/'/g,"\\'") + '\')">'
+               + esc(s[0]) + '<span class="cnt">' + s[1] + '</span></button>';
+        }).join('');
+  }
+
+  /* 씨앗을 골랐을 때만 나오는 안내 */
+  var note = document.getElementById('seed-note-slot');
+  var ord  = document.getElementById('order-note');
+  if(SEED){
+    var p = SEED_PROMOTED[SEED];
+    note.innerHTML =
+      '<div class="seed-note"><b>' + esc(SEED) + '</b> — 같은 세계의 조각들입니다.'
+      + (p ? ' 이 세계는 <a href="' + esc(p.url) + '">' + esc(p.label) + '</a> 로 이어졌습니다.' : '')
+      + '</div>';
+    ord.textContent = '먼저 쓴 순서로 놓여 있습니다.';
+  }else{
+    note.innerHTML = '';
+    ord.textContent = (LOAD==='ok') ? '최근에 쓴 순서로 놓여 있습니다.' : '';
+  }
+
+  var list = document.getElementById('list');
+
+  if(LOAD === 'loading'){
+    list.innerHTML = '<div class="state">불러오는 중…</div>';
+    return;
+  }
+  if(LOAD === 'error'){
+    list.innerHTML = '<div class="state"><b>목록을 불러오지 못했습니다</b>'
+      + '잠시 뒤에 다시 시도해 주세요.'
+      + '<br><button onclick="retry()">다시 불러오기</button></div>';
+    return;
+  }
+  if(LOAD === 'empty'){
+    list.innerHTML = '<div class="state"><b>아직 쌓인 글이 없습니다</b>곧 채워집니다.</div>';
+    return;
+  }
+
+  var arr = visible();
+  list.innerHTML = arr.map(function(x){
+    return '<button class="card" onclick="openItem(\'' + esc(x.id) + '\')">'
+      + '<div class="card-top">'
+        + (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
+        + (x.seed && !SEED ? '<span class="card-seed">' + esc(x.seed) + '</span>' : '')
+      + '</div>'
+      + '<div class="card-title">' + esc(x.title) + '</div>'
+      + '<div class="card-ex" id="ex-' + esc(x.id) + '"></div>'
+    + '</button>';
+  }).join('');
+
+  /* 발췌는 본문 파일에서 앞부분만 떼어 옵니다.
+     목록에 소개 칸을 따로 두지 않는 이유가 이것입니다 — 시트에 적을 게 하나 줄어듭니다.
+     한 번 읽은 건 기억해 두므로 목록을 오갈 때 다시 받지 않습니다. */
+  arr.forEach(function(x){ fillExcerpt(x.id); });
+}
+
+async function fillExcerpt(id){
+  var el = document.getElementById('ex-' + id);
+  if(!el) return;
+  var t = BODY_CACHE[id];
+  if(t === undefined){
+    try{
+      var r = await fetch('texts/' + id + '.txt', {cache:'no-cache'});
+      t = r.ok ? await r.text() : null;
+    }catch(e){ t = null; }
+    BODY_CACHE[id] = t;
+    el = document.getElementById('ex-' + id);   /* 기다리는 동안 화면이 바뀌었을 수 있음 */
+    if(!el) return;
+  }
+  el.textContent = t ? t.replace(/\s+/g,' ').trim().slice(0,120) : '';
+}
+
+/* ══════════════════════════════════════════════════
+   읽기
+   ══════════════════════════════════════════════════ */
+async function openItem(id){
+  var x = (ITEMS||[]).filter(function(v){ return v.id === id; })[0];
+  if(!x) return;
+  CUR = x;
+
+  showView('reader');
+
+  document.getElementById('rd-title').textContent = x.title;
+  document.getElementById('rd-meta').innerHTML =
+    (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
+    + (x.seed ? '<span class="card-seed">' + esc(x.seed) + '</span>' : '');
+
+  var body = document.getElementById('rd-body');
+  body.textContent = '불러오는 중…';
+
+  var t = BODY_CACHE[id];
+  if(t === undefined){
+    try{
+      var ctrl = new AbortController();
+      var timer = setTimeout(function(){ ctrl.abort(); }, 10000);
+      var r = await fetch('texts/' + id + '.txt', {cache:'no-cache', signal:ctrl.signal});
+      clearTimeout(timer);
+      t = r.ok ? await r.text() : null;
+    }catch(e){ t = null; }
+    BODY_CACHE[id] = t;
+  }
+  if(CUR !== x) return;   /* 읽는 동안 다른 글로 넘어갔으면 덮어쓰지 않습니다 */
+
+  /* 본문 파일이 없을 때.
+     시트에는 적었는데 texts/ 에 올리는 걸 잊은 경우가 대부분입니다. */
+  body.textContent = t != null ? t
+    : '본문을 찾지 못했습니다.\n(texts/' + id + '.txt 가 올라가 있는지 확인해 주세요)';
+
+  var arr = visible();
+  var i = arr.findIndex(function(v){ return v.id === id; });
+  var pv = document.getElementById('rd-prev');
+  var nx = document.getElementById('rd-next');
+  pv.disabled = (i <= 0);
+  nx.disabled = (i < 0 || i >= arr.length - 1);
+  pv.textContent = pv.disabled ? '이전 글 없음' : '‹ ' + arr[i-1].title;
+  nx.textContent = nx.disabled ? '다음 글 없음' : arr[i+1].title + ' ›';
+
+  location.hash = '#/f/' + id;
+  loadRaw(x);
+}
+
+/* ══════════════════════════════════════════════════
+   원문 보기
+
+   texts_raw/{id}.txt 를 찾아봅니다.
+   있으면 버튼이 나타나고, 없으면 버튼 자체가 안 생깁니다.
+   → 어떤 글의 원문을 낼지는 파일을 올리느냐 마느냐로만 정합니다.
+     이 파일도 시트도 손댈 필요가 없습니다.
+
+   ※ 원문을 아직 안 낼 글은 그냥 texts_raw/ 에 올리지 마세요.
+     (로컬 _draft/ 에만 두면 됩니다)
+   ══════════════════════════════════════════════════ */
+async function loadRaw(x){
+  var btn = document.getElementById('rd-raw-btn');
+  var wrap = document.getElementById('rd-raw-wrap');
+  btn.classList.remove('on');
+  wrap.classList.remove('open');
+  btn.textContent = '원문 보기';
+
+  var t = RAW_CACHE[x.id];
+  if(t === undefined){
+    try{
+      var r = await fetch('texts_raw/' + x.id + '.txt', {cache:'no-cache'});
+      t = r.ok ? await r.text() : null;
+    }catch(e){ t = null; }
+    RAW_CACHE[x.id] = t;
+  }
+  if(CUR !== x) return;          /* 그새 다른 글로 넘어갔으면 무시 */
+  if(t == null || !t.trim()) return;   /* 원문 파일 없음 → 버튼 안 보임 */
+
+  document.getElementById('rd-raw-label').textContent = RAW_NOTE;
+  document.getElementById('rd-raw-body').textContent  = t;
+  btn.classList.add('on');
+}
+
+function toggleRaw(){
+  var wrap = document.getElementById('rd-raw-wrap');
+  var btn  = document.getElementById('rd-raw-btn');
+  var open = wrap.classList.toggle('open');
+  btn.textContent = open ? '원문 닫기' : '원문 보기';
+}
+
+function goSib(step){
+  if(!CUR) return;
+  var arr = visible();
+  var i = arr.findIndex(function(v){ return v.id === CUR.id; });
+  var t = arr[i + step];
+  if(t) openItem(t.id);
+}
+
+/* ══════════════════════════════════════════════════
+   화면 전환 — 목록 / 읽기 / PD 안내 세 개뿐입니다
+   ══════════════════════════════════════════════════ */
+function showView(v){
+  document.getElementById('listview').style.display = (v === 'list') ? '' : 'none';
+  document.getElementById('reader').classList.toggle('show', v === 'reader');
+  document.getElementById('pdview').classList.toggle('show', v === 'pd');
+  window.scrollTo(0,0);
+}
+
+function openPD(){
+  CUR = null;
+  document.getElementById('pd-slot').innerHTML = PD_DOC;
+  showView('pd');
+  if(location.hash !== '#/pd') location.hash = '#/pd';
+}
+
+function goList(){
+  CUR = null;
+  showView('list');
+  var want = SEED ? '#/s/' + encodeURIComponent(SEED) : '#/';
+  if(location.hash !== want) location.hash = want;
+}
+
+function pickSeed(s){
+  SEED = s;
+  render();
+  var want = s ? '#/s/' + encodeURIComponent(s) : '#/';
+  if(location.hash !== want) location.hash = want;
+}
+
+function retry(){ LOAD = 'loading'; render(); loadList(); }
+
+/* ── 주소 한 곳에서 화면을 정합니다 ──
+   #/          목록
+   #/s/씨앗    씨앗으로 거른 목록
+   #/f/001     글 읽기
+   #/pd        기획 문의 안내 (PD 에게 이 주소를 보냅니다) */
+function route(){
+  var h = location.hash || '';
+
+  var f = h.match(/^#\/f\/(.+)$/);
+  if(f){
+    var id = decodeURIComponent(f[1]);
+    if(!CUR || CUR.id !== id) openItem(id);
+    return;
+  }
+  if(/^#\/pd$/.test(h)){ openPD(); return; }
+
+  var s = h.match(/^#\/s\/(.+)$/);
+  SEED = s ? decodeURIComponent(s[1]) : '';
+  CUR = null;
+  showView('list');
+  render();
+}
+window.addEventListener('hashchange', route);
+
+/* ── 링크 복사 ── */
+var _tT = null;
+function toast(msg){
+  var el = document.getElementById('toast');
+  if(!el){ el = document.createElement('div'); el.id='toast'; el.className='toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_tT);
+  _tT = setTimeout(function(){ el.classList.remove('show'); }, 2000);
+}
+function copyLink(){
+  var u = location.href;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(u).then(function(){ toast('링크를 복사했습니다'); },
+                                          function(){ toast(u); });
+  }else toast(u);
+}
+
+/* ══════════════════════════════════════════════════
+   클릭 소리
+
+   허브 · biz-OC-doll · 블러드하이스쿨과 같은 저장 이름을 씁니다.
+   한 곳에서 끄면 여기서도 함께 꺼집니다.
+   소리를 바꾸려면 네 곳을 모두 같은 값으로 고쳐야 합니다.
+   ══════════════════════════════════════════════════ */
+(function(){
+  var KEY = 'rrkt_sound', KEY_VOL = 'rrkt_sound_vol';
+  var on = true, vol = 100, ctx = null;
+  try{ if(localStorage.getItem(KEY) === '0') on = false; }catch(e){}
+  try{ var sv = parseInt(localStorage.getItem(KEY_VOL),10); if(!isNaN(sv)) vol = Math.max(0,Math.min(100,sv)); }catch(e){}
+
+  var _S = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
+  var ICON_ON  = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+  var ICON_LOW = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/></svg>';
+  var ICON_OFF = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
+
+  function paint(){
+    var mute = (!on || vol === 0);
+    var b = document.getElementById('tb-sound-btn');
+    if(!b) return;
+    b.innerHTML = mute ? ICON_OFF : (vol <= 40 ? ICON_LOW : ICON_ON);
+    b.classList.toggle('is-off', mute);
+    b.title = mute ? '클릭 소리 켜기' : '클릭 소리 끄기';
+  }
+  window.soundToggle = function(){
+    on = !on;
+    if(on && vol === 0) vol = 100;
+    try{ localStorage.setItem(KEY, on?'1':'0'); localStorage.setItem(KEY_VOL, String(vol)); }catch(e){}
+    paint();
+  };
+  document.addEventListener('click', function(){
+    if(!on || vol <= 0) return;
+    try{
+      if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === 'suspended') ctx.resume();
+      var k = vol/100;
+      function tone(f,st,du,v){
+        var o=ctx.createOscillator(), g=ctx.createGain();
+        o.connect(g); g.connect(ctx.destination); o.type='sine';
+        o.frequency.setValueAtTime(f, ctx.currentTime+st);
+        g.gain.setValueAtTime(Math.max(v,0.0005), ctx.currentTime+st);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+st+du);
+        o.start(ctx.currentTime+st); o.stop(ctx.currentTime+st+du+0.01);
+      }
+      tone(1200, 0, 0.05, 0.12*k);
+      tone(900, 0.045, 0.06, 0.09*k);
+    }catch(e){}
+  });
+  paint();
+})();
+
+/* 시작 */
+document.getElementById('head-what').innerHTML     = WHAT_NOTE;
+document.getElementById('ai-note-head').innerHTML  = AI_NOTE;
+document.getElementById('head-why').innerHTML      = WHY_NOTE;
+document.getElementById('ai-note-read').innerHTML  = AI_NOTE;
+
+/* ⚠ route() 를 loadList() 보다 먼저 부릅니다.
+   PD 안내(#/pd)는 구글시트와 아무 상관이 없는 화면입니다.
+   시트를 다 읽은 뒤에 화면을 정하면
+   시트가 느릴 때 늦게 열리고, 시트가 안 열리면 아예 안 열립니다.
+   PD 에게 보내는 주소가 시트 상태에 발목 잡히면 안 됩니다.
+
+   글 읽기(#/f/001)는 목록이 있어야 하므로
+   loadList() 가 끝난 뒤 route() 를 한 번 더 부릅니다. */
+route();
+loadList();
+</script>
+</body>
+</html>
