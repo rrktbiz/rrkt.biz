@@ -223,6 +223,36 @@ body.reading #tb-fs-wrap{display:inline-flex}
 }
 .order-note{padding:14px 2px 8px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
 
+/* ══════════════════════════════════════════════════
+   표지 선반 — 씨앗을 안 고른 첫 화면
+
+   글을 한 편씩 늘어놓는 대신 '세계'를 표지로 늘어놓습니다.
+   한 줄에 5개. 최근에 업데이트된 세계가 앞에 옵니다.
+   표지 비율은 3:4 로, 씨앗 배너 표지와 같습니다.
+   ══════════════════════════════════════════════════ */
+.shelf{display:grid;grid-template-columns:repeat(5,1fr);gap:18px 14px;padding-top:4px}
+.shelf-item{
+  display:block;width:100%;text-align:left;padding:0;
+  background:none;border:none;
+}
+.shelf-cover{
+  aspect-ratio:3/4;border-radius:8px;overflow:hidden;
+  background:var(--sm);border:1px solid var(--bd);
+  transition:border-color .12s,box-shadow .12s,transform .12s;
+}
+.shelf-item:hover .shelf-cover{border-color:var(--bd2);box-shadow:0 3px 14px #0000000f;transform:translateY(-2px)}
+.shelf-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.shelf-name{font-size:13px;font-weight:700;color:var(--tx);letter-spacing:-.025em;line-height:1.45;margin-top:9px}
+.shelf-meta{font-size:10.5px;color:var(--tx3);letter-spacing:-.01em;margin-top:3px;line-height:1.5}
+/* 가장 최근에 손댄 세계 하나만 색을 줍니다. 다 칠하면 티가 안 납니다 */
+.shelf-meta.fresh{color:var(--blue-ink);font-weight:500}
+.shelf-tags{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:5px}
+.shelf-tags span{font-size:10.5px;font-weight:500;color:var(--blue-ink);letter-spacing:-.01em;white-space:nowrap;line-height:1.6}
+
+/* 씨앗을 안 적은 글은 선반에 설 자리가 없습니다.
+   사라지면 안 되니 선반 아래에 따로 깔아 둡니다. */
+.unsorted-head{padding:30px 2px 10px;font-size:11px;color:var(--tx3);letter-spacing:-.01em;border-top:1px solid var(--bd);margin-top:26px}
+
 .list{padding-top:6px}
 .card{
   width:100%;text-align:left;display:block;
@@ -428,6 +458,11 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .seed-thumb{width:84px;height:112px}
   .seed-bn-name{font-size:14px}
 
+  /* 선반은 화면 폭에 따라 칸 수를 줄입니다.
+     좁은 화면에서 5칸을 유지하면 표지가 손톱만 해집니다. */
+  .shelf{grid-template-columns:repeat(3,1fr);gap:16px 12px}
+  .shelf-name{font-size:12.5px}
+
   /* ⚠ 예전에는 여기서 본문 크기를 15.5px 로 고정했습니다.
      지금은 글자 크기 조절이 붙어 있어서, 고정하면 조절이 먹지 않습니다.
      모바일 기본값은 JS 쪽 stFsDefault() 가 정합니다. */
@@ -444,6 +479,11 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   /* 아주 좁은 화면에서는 가운데 버튼을 "☰ 목록" 으로 줄입니다 */
   .rdp-long{display:none}
   .rd-foot{gap:6px}
+  .shelf{grid-template-columns:repeat(2,1fr)}
+}
+/* 노트북·태블릿 중간 폭 — 5칸은 빡빡하고 3칸은 헐렁한 구간 */
+@media(min-width:769px) and (max-width:1000px){
+  .shelf{grid-template-columns:repeat(4,1fr)}
 }
 </style>
 </head>
@@ -900,6 +940,74 @@ function seedTags(name){
   return out;
 }
 
+/* ══════════════════════════════════════════════════
+   업데이트 시점
+
+   선반에 "3일 전 업데이트" 처럼 붙는 글자와, 선반 순서를 정하는 값입니다.
+   기준은 그 씨앗에 속한 글 중 가장 최근 날짜입니다.
+
+   ⚠ 날짜 칸이 비어 있는 글은 계산에서 빠집니다.
+     한 씨앗의 글이 전부 날짜가 없으면 업데이트 글자가 안 나오고,
+     선반에서도 날짜 있는 세계들 뒤로 갑니다.
+     (없는 날짜를 오늘로 쳐서 맨 앞에 세우면 순서가 거짓말이 됩니다)
+   ══════════════════════════════════════════════════ */
+
+/* 그 씨앗에서 가장 최근 날짜. 없으면 '' */
+function seedLatest(name){
+  var best = '';
+  (ITEMS||[]).forEach(function(x){
+    if(x.seed !== name || !x.date) return;
+    if(x.date > best) best = x.date;      /* YYYY-MM-DD 라 글자 비교로 충분합니다 */
+  });
+  return best;
+}
+
+/* 오늘로부터 며칠 전인지. 날짜가 아니면 null */
+function daysSince(ymd){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(ymd || '')) return null;
+  var p = ymd.split('-');
+  var then = new Date(+p[0], +p[1] - 1, +p[2]);
+  var n = new Date();
+  var today = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  return Math.round((today - then) / 86400000);
+}
+
+/* 선반에 붙는 글자 */
+function updText(ymd){
+  var d = daysSince(ymd);
+  if(d === null) return '';
+  if(d <= 0)   return '오늘 업데이트';            /* 시트 날짜가 내일이어도 오늘로 봅니다 */
+  if(d === 1)  return '어제 업데이트';
+  if(d < 30)   return d + '일 전 업데이트';
+  if(d < 365)  return Math.floor(d / 30) + '개월 전 업데이트';
+  return Math.floor(d / 365) + '년 전 업데이트';
+}
+
+/* 선반에 세울 세계들. 최근에 업데이트된 순.
+   날짜가 같거나 둘 다 없으면 편수 많은 순, 그다음 가나다순입니다. */
+function shelfSeeds(){
+  var m = seedCounts(), out = [];
+  for(var k in m) out.push({ name:k, count:m[k], last:seedLatest(k) });
+  out.sort(function(a, b){
+    if(a.last !== b.last){
+      if(!a.last) return 1;               /* 날짜 없는 세계는 뒤로 */
+      if(!b.last) return -1;
+      return b.last.localeCompare(a.last);
+    }
+    return b.count - a.count || a.name.localeCompare(b.name, 'ko');
+  });
+  return out;
+}
+
+/* 씨앗 칸이 빈 글. 선반에는 설 자리가 없어서 아래에 따로 깝니다. */
+function unsortedItems(){
+  return (ITEMS||[]).filter(function(x){ return !x.seed; })
+    .sort(function(a, b){
+      var d = String(a.date).localeCompare(String(b.date));
+      return d !== 0 ? -d : b.id.localeCompare(a.id);
+    });
+}
+
 /* 지금 화면에 보일 글들.
    전체는 최신순, 씨앗을 고른 상태는 오래된순입니다.
    같은 세계의 조각은 먼저 쓴 게 바탕이고 나중 게 덧붙는 경우가 많아서입니다. */
@@ -924,8 +1032,8 @@ function render(){
     row.innerHTML = '';
   }else{
     row.innerHTML =
-      '<button class="seed-chip' + (SEED===''?' active':'') + '" onclick="pickSeed(\'\')">전체'
-      + '<span class="cnt">' + ITEMS.length + '</span></button>'
+      '<button class="seed-chip' + (SEED===''?' active':'') + '" onclick="pickSeed(\'\')">세계'
+      + '<span class="cnt">' + seeds.length + '</span></button>'
       + seeds.map(function(s){
           return '<button class="seed-chip' + (SEED===s[0]?' active':'') + '" '
                + 'onclick="pickSeed(\'' + esc(s[0]).replace(/'/g,"\\'") + '\')">'
@@ -962,7 +1070,7 @@ function render(){
     ord.textContent = '먼저 쓴 순서로 놓여 있습니다.';
   }else{
     note.innerHTML = '';
-    ord.textContent = (LOAD==='ok') ? '최근에 쓴 순서로 놓여 있습니다.' : '';
+    ord.textContent = (LOAD==='ok') ? '최근에 손댄 세계부터 놓여 있습니다.' : '';
   }
 
   var list = document.getElementById('list');
@@ -982,6 +1090,9 @@ function render(){
     return;
   }
 
+  /* 씨앗을 안 고른 첫 화면은 글 목록이 아니라 표지 선반입니다 */
+  if(!SEED){ renderShelf(list); return; }
+
   var arr = visible();
   list.innerHTML = arr.map(function(x){
     return '<button class="card" onclick="openItem(\'' + esc(x.id) + '\')">'
@@ -998,6 +1109,59 @@ function render(){
      목록에 소개 칸을 따로 두지 않는 이유가 이것입니다 — 시트에 적을 게 하나 줄어듭니다.
      한 번 읽은 건 기억해 두므로 목록을 오갈 때 다시 받지 않습니다. */
   arr.forEach(function(x){ fillExcerpt(x); });
+}
+
+/* ══════════════════════════════════════════════════
+   표지 선반 그리기
+   ══════════════════════════════════════════════════ */
+function renderShelf(list){
+  var seeds = shelfSeeds();
+  var loose = unsortedItems();
+
+  if(!seeds.length && !loose.length){
+    list.innerHTML = '<div class="state"><b>아직 쌓인 글이 없습니다</b>곧 채워집니다.</div>';
+    return;
+  }
+
+  /* 맨 앞 하나에만 색을 줍니다. 단, 날짜가 있을 때만 */
+  var freshest = seeds.length && seeds[0].last ? seeds[0].last : null;
+
+  var html = '<div class="shelf">' + seeds.map(function(s){
+    var th = SEED_THUMB[s.name];
+    var tg = seedTags(s.name);
+    var up = updText(s.last);
+    return '<button class="shelf-item" onclick="pickSeed(\'' + esc(s.name).replace(/'/g,"\\'") + '\')">'
+      + '<div class="shelf-cover">'
+      +   (th ? '<img src="' + esc(th) + '" alt="" onerror="this.style.display=\'none\'">' : '')
+      + '</div>'
+      + '<div class="shelf-name">' + esc(s.name) + '</div>'
+      + '<div class="shelf-meta' + (up && s.last === freshest ? ' fresh' : '') + '">'
+      +   s.count + '편' + (up ? ' · ' + up : '')
+      + '</div>'
+      + (tg.length
+          ? '<div class="shelf-tags">'
+            + tg.slice(0, 3).map(function(t){ return '<span>#' + esc(t) + '</span>'; }).join('')
+            + '</div>'
+          : '')
+    + '</button>';
+  }).join('') + '</div>';
+
+  /* 씨앗을 안 적은 글 — 선반에 안 보이니 아래에 그대로 깝니다 */
+  if(loose.length){
+    html += '<div class="unsorted-head">아직 씨앗을 안 적은 글 ' + loose.length + '편</div>'
+      + loose.map(function(x){
+          return '<button class="card" onclick="openItem(\'' + esc(x.id) + '\')">'
+            + '<div class="card-top">'
+            +   (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
+            + '</div>'
+            + '<div class="card-title">' + esc(x.title) + '</div>'
+            + '<div class="card-ex" id="ex-' + esc(x.id) + '"></div>'
+          + '</button>';
+        }).join('');
+  }
+
+  list.innerHTML = html;
+  loose.forEach(function(x){ fillExcerpt(x); });
 }
 
 async function fillExcerpt(x){
