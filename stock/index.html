@@ -230,13 +230,16 @@ body.reading #tb-fs-wrap{display:inline-flex}
    한 줄에 5개. 최근에 업데이트된 세계가 앞에 옵니다.
    표지 비율은 3:4 로, 씨앗 배너 표지와 같습니다.
    ══════════════════════════════════════════════════ */
-.shelf{display:grid;grid-template-columns:repeat(5,1fr);gap:18px 14px;padding-top:4px}
+/* ⚠ minmax(0,1fr) 이어야 합니다. 그냥 1fr 로 두면
+   "내용이 안 잘릴 만큼"은 자리를 내주느라 글이 긴 칸만 넓어집니다.
+   0 을 최소값으로 박아야 다섯 칸이 정확히 같은 폭이 됩니다. */
+.shelf{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px 14px;padding-top:4px}
 .shelf-item{
   /* ⚠ button 은 내용을 세로 가운데에 놓습니다.
      그냥 두면 글이 짧은 칸의 표지가 아래로 밀려 줄이 어긋납니다.
      flex 로 바꿔서 위부터 쌓이게 고정합니다. */
   display:flex;flex-direction:column;align-items:stretch;
-  align-self:start;
+  align-self:start;min-width:0;
   width:100%;text-align:left;padding:0;
   background:none;border:none;
 }
@@ -277,7 +280,7 @@ body.reading #tb-fs-wrap{display:inline-flex}
 /* 태그는 한 줄까지만. 넘치는 건 오른쪽으로 흐려지며 사라집니다 */
 .shelf-tags{
   display:flex;align-items:baseline;gap:7px;flex-wrap:nowrap;
-  margin-top:5px;height:1.6em;overflow:hidden;
+  margin-top:5px;height:1.6em;overflow:hidden;min-width:0;
   -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent);
           mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent);
 }
@@ -520,7 +523,7 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .rd-foot{gap:6px}
   /* 4칸이면 한 칸이 아주 좁아지므로 간격과 글자도 같이 줄입니다.
      안 줄이면 표지보다 글자가 더 자리를 먹습니다. */
-  .shelf{grid-template-columns:repeat(4,1fr);gap:14px 7px}
+  .shelf{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 7px}
   /* 글자가 작아지면 고정 높이도 같이 줄여야 빈 자리가 안 생깁니다.
      (높이는 그 줄 글자 크기 기준이라 line-height 를 바꾸면 같이 손봐야 합니다) */
   .shelf-name{font-size:11px;line-height:1.35;margin-top:6px;height:2.7em}
