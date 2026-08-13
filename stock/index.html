@@ -67,10 +67,10 @@
   --tx:#111111;--tx2:#525252;--tx3:#a3a3a3;
   /* 창고의 컨셉은 단순함입니다. 강조는 검정 계열로만 합니다.
      색이 남아 있는 곳은 딱 둘 —
-       --tag   장르 해시태그
+       --tag   장르 해시태그 (브라우저 기본 링크색과 같은 파랑)
        .rc-keep 대조 화면에서 원문이 살아남은 자리 (#0040ff) */
   --blue:#111111;--blue-ink:#111111;--ink:#111111;
-  --tag:#477693;
+  --tag:#0000ee;
   --fn:'Inter','Noto Sans KR',-apple-system,sans-serif;
   --h-top:46px;
 }
@@ -92,7 +92,7 @@ a{color:inherit}
 .tb-back:hover{background:var(--sm);color:var(--tx)}
 .tb-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
 .tb-title{
-  font-family:var(--fn);font-weight:600;letter-spacing:.1em;font-size:13px;color:var(--ink);
+  font-family:var(--fn);font-weight:400;letter-spacing:.1em;font-size:13px;color:var(--ink);
   text-decoration:none;padding:5px 6px;border-radius:6px;transition:background .12s;
 }
 .tb-title:hover{background:var(--sm)}
@@ -619,11 +619,11 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
        ./ 는 지금 이 파일이 있는 stock 폴더를 가리킵니다. -->
   <a class="tb-title" href="./">AI STOCK</a>
   <div class="tb-right">
+    <button id="tb-sound-btn" onclick="soundToggle()" title="클릭 소리"></button>
     <button id="tb-pd-btn" onclick="openPD()" title="기획 · 제휴 문의">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
       FOR PD
     </button>
-    <button id="tb-sound-btn" onclick="soundToggle()" title="클릭 소리"></button>
     <!-- 글자 크기 — 글을 읽는 중에만 나타납니다 (body.reading) -->
     <span id="tb-fs-wrap">
       <button class="tb-fs-toggle" id="rd-fs-toggle" onclick="stFsToggle(event)" title="본문 글자 크기" aria-label="본문 글자 크기">가</button>
