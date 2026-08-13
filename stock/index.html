@@ -227,7 +227,7 @@ body.reading #tb-fs-wrap{display:inline-flex}
      600 으로 두면 한글만 700 으로 대체돼 영문보다 두꺼워집니다. */
 .seed-bn-tags{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-top:8px}
 .seed-tag{
-  font-size:11.5px;font-weight:500;color:var(--tag);
+  font-size:11.5px;font-weight:400;color:var(--tag);
   letter-spacing:-.01em;white-space:nowrap;line-height:1.6;
 }
 .order-note{padding:14px 2px 8px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
@@ -292,7 +292,7 @@ body.reading #tb-fs-wrap{display:inline-flex}
   -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent);
           mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent);
 }
-.shelf-tags span{font-size:10.5px;font-weight:500;color:var(--tag);letter-spacing:-.01em;white-space:nowrap;line-height:1.6}
+.shelf-tags span{font-size:10.5px;font-weight:400;color:var(--tag);letter-spacing:-.01em;white-space:nowrap;line-height:1.6}
 /* 태그가 없는 세계도 자리는 남겨 둡니다. 안 그러면 그 칸만 짧아집니다 */
 .shelf-tags-empty{height:1.6em;margin-top:5px}
 
@@ -362,8 +362,12 @@ body.reading #tb-fs-wrap{display:inline-flex}
   transition:all .12s;white-space:nowrap;
 }
 .rd-pick:hover{background:#fff;color:var(--tx)}
+/* 본문 맨 아래 버튼 줄.
+   '글 목록'(가운데 큰 버튼)은 같은 세계 안에서 글을 고르는 것이고,
+   여기 '목록으로'는 선반(첫 화면)으로 나가는 것입니다. */
+.rd-bottom{display:flex;align-items:center;gap:8px;margin-top:22px;flex-wrap:wrap}
 .rd-copy{
-  margin-top:22px;display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;align-items:center;gap:6px;
   padding:7px 14px;border-radius:100px;border:1px solid var(--bd);
   background:transparent;font-size:11.5px;font-weight:500;color:var(--tx3);transition:all .12s;
 }
@@ -708,7 +712,10 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       <button class="rd-pick" onclick="openPicker()">&#9776; <span class="rdp-long">글 </span>목록</button>
       <button class="rd-nav" id="rd-next" onclick="goSib(1)"></button>
     </div>
-    <button class="rd-copy" onclick="copyLink()">링크 복사</button>
+    <div class="rd-bottom">
+      <button class="rd-copy" onclick="goList()">&larr; 목록으로</button>
+      <button class="rd-copy" onclick="copyLink()">링크 복사</button>
+    </div>
     <div class="rd-ainote" id="ai-note-read"></div>
   </div>
 
