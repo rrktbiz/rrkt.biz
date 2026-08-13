@@ -368,15 +368,19 @@ body.reading #tb-fs-wrap{display:inline-flex}
      본문을 다 읽고 맨 아래까지 내려가야 보이는 자리에 있으면
      "읽기 전에 원문부터 볼까" 를 고를 수가 없습니다.
      AI 고지와 짝이 되는 버튼이라 글 시작 지점에 있는 게 맞습니다. */
-#rd-raw-btn{
-  display:none;align-items:center;gap:6px;flex-shrink:0;
+/* 버튼 두 개가 나란히 섭니다.
+     원문 보기 — 예전처럼 본문 아래에 원문 상자를 펼칩니다. 원문만 볼 사람용.
+     원문 대조 — 좌우 2단 대조를 엽니다. 넓은 화면에서만 보입니다. */
+.rd-head-btns{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-bottom:3px}
+.rd-hbtn{
+  display:none;align-items:center;gap:6px;
   padding:7px 14px;border-radius:100px;border:1px solid var(--bd);
   background:transparent;font-size:11.5px;font-weight:500;color:var(--tx3);
-  transition:all .12s;white-space:nowrap;margin-bottom:3px;
+  transition:all .12s;white-space:nowrap;
 }
-#rd-raw-btn.on{display:inline-flex}
-#rd-raw-btn:hover{border-color:var(--bd2);color:var(--tx2)}
-#rd-raw-btn.open{background:var(--sm);border-color:var(--bd2);color:var(--tx2)}
+.rd-hbtn.on{display:inline-flex}
+.rd-hbtn:hover{border-color:var(--bd2);color:var(--tx2)}
+.rd-hbtn.open{background:var(--sm);border-color:var(--bd2);color:var(--tx2)}
 .rd-raw-wrap{display:none;margin-top:24px}
 .rd-raw-wrap.open{display:block}
 .rd-raw-label{
@@ -425,6 +429,12 @@ body.comparing .rd-body{display:none}
 .rc-b{display:block}
 .rc-b.lit{background:rgba(90,144,176,.13);border-radius:4px;box-shadow:0 0 0 3px rgba(90,144,176,.13)}
 .rc-b.matched{cursor:default}
+
+/* 원문에서 살아남은 표현.
+   바탕은 안 칠하고 글자색만 바꿉니다.
+   ⚠ 굵기는 500 입니다. 600 으로 두면 한글만 700 으로 대체돼
+     영문·숫자보다 두꺼워집니다 (Noto Sans KR 은 400·500·700 만 있음). */
+.rc-keep{color:var(--blue-ink);font-weight:500}
 
 .rc-tools{display:flex;align-items:center;gap:11px;margin-top:11px;flex-wrap:wrap}
 .rc-toggle{
@@ -535,7 +545,9 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   /* 좁은 화면에서는 제목 옆에 버튼을 두면 제목이 눌립니다.
      아래로 내려 왼쪽에 붙입니다. */
   .rd-head{flex-direction:column;align-items:flex-start;gap:14px}
-  #rd-raw-btn{margin-bottom:0}
+  .rd-head-btns{margin-bottom:0}
+  /* 폰에서는 대조를 안 쓰므로 버튼 자체를 없앱니다 */
+  #rd-cmp-btn{display:none !important}
 
   /* 표지는 좁은 화면에서 한 단계 줄입니다. 비율(3:4)은 그대로입니다. */
   .seed-banner{gap:12px;padding:12px 13px}
@@ -647,8 +659,11 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
         <div class="rd-meta" id="rd-meta"></div>
         <div class="rd-title" id="rd-title"></div>
       </div>
-      <!-- 원문 보기 — texts_raw/ 에 파일이 있는 글에만 나타납니다 -->
-      <button class="rd-raw-btn" id="rd-raw-btn" onclick="toggleRaw()">원문 보기</button>
+      <!-- 원문 관련 버튼 — texts_raw/ 에 파일이 있는 글에만 나타납니다 -->
+      <div class="rd-head-btns">
+        <button class="rd-hbtn" id="rd-raw-btn" onclick="toggleRawBox()">원문 보기</button>
+        <button class="rd-hbtn" id="rd-cmp-btn" onclick="toggleCompare()">원문 대조</button>
+      </div>
     </div>
     <div class="rd-raw-wrap" id="rd-raw-wrap">
       <div class="rd-raw-label" id="rd-raw-label"></div>
@@ -669,6 +684,7 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       </div>
       <div class="rc-tools">
         <button class="rc-toggle on" id="rc-align-btn" onclick="toggleAlign()">자동 맞춤 켬</button>
+        <button class="rc-toggle on" id="rc-keep-btn" onclick="toggleKeep()">살아남은 말 켬</button>
         <span class="rc-note" id="rc-note"></span>
       </div>
     </div>
@@ -1359,13 +1375,15 @@ async function openItem(id){
    ══════════════════════════════════════════════════ */
 async function loadRaw(x){
   var btn = document.getElementById('rd-raw-btn');
+  var cmp = document.getElementById('rd-cmp-btn');
   closeCompare();                /* 글을 넘길 때마다 대조는 접고 시작합니다 */
 
   var wrap = document.getElementById('rd-raw-wrap');
-  btn.classList.remove('on');
-  btn.classList.remove('open');
+  btn.classList.remove('on', 'open');
+  cmp.classList.remove('on', 'open');
   wrap.classList.remove('open');
-  btn.textContent = rawBtnLabel(false);
+  btn.textContent = '원문 보기';
+  cmp.textContent = '원문 대조';
 
   var t = RAW_CACHE[x.id];
   if(t === undefined){
@@ -1379,6 +1397,7 @@ async function loadRaw(x){
   document.getElementById('rd-raw-body').textContent  = t;
   /* 대조 칸은 열 때 buildCompare 가 블록으로 다시 그립니다. 여기선 안 건드립니다 */
   btn.classList.add('on');
+  cmp.classList.add('on');       /* 폰에서는 CSS 가 이 버튼을 숨깁니다 */
 }
 
 /* ══════════════════════════════════════════════════
@@ -1390,6 +1409,7 @@ async function loadRaw(x){
    ══════════════════════════════════════════════════ */
 var COMPARING = false;
 var ALIGN     = true;     /* 자동 맞춤 켜짐/꺼짐 */
+var KEEP      = true;     /* 살아남은 말 칠하기 켜짐/꺼짐 */
 var PAIRS     = [];       /* PAIRS[원문블록] = 짝지어진 AI블록 번호. -1 이면 짝 없음 */
 
 /* ══════════════════════════════════════════════════
@@ -1486,43 +1506,99 @@ function alignBlocks(R, A){
 
 function isNarrow(){ return window.matchMedia('(max-width:768px)').matches; }
 
-function rawBtnLabel(open){
-  if(isNarrow()) return open ? '원문 닫기' : '원문 보기';
-  return open ? '대조 닫기' : '원문 대조';
+/* 둘은 서로를 밀어냅니다. 상자와 대조가 동시에 열려 있으면
+   같은 원문이 화면에 두 번 나와서 어수선해집니다. */
+function closeRawBox(){
+  document.getElementById('rd-raw-wrap').classList.remove('open');
+  var b = document.getElementById('rd-raw-btn');
+  if(b){ b.classList.remove('open'); b.textContent = '원문 보기'; }
 }
 
 function closeCompare(){
   COMPARING = false;
   document.body.classList.remove('comparing');
   document.getElementById('rd-compare').classList.remove('open');
-  var btn = document.getElementById('rd-raw-btn');
-  if(btn){ btn.classList.remove('open'); btn.textContent = rawBtnLabel(false); }
+  var b = document.getElementById('rd-cmp-btn');
+  if(b){ b.classList.remove('open'); b.textContent = '원문 대조'; }
 }
 
-function toggleRaw(){
-  var btn = document.getElementById('rd-raw-btn');
+/* 원문만 보기 — 본문 위에 원문 상자를 펼칩니다 */
+function toggleRawBox(){
+  closeCompare();
+  var wrap = document.getElementById('rd-raw-wrap');
+  var btn  = document.getElementById('rd-raw-btn');
+  var open = wrap.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.textContent = open ? '원문 닫기' : '원문 보기';
+}
 
-  /* ── 좁은 화면: 예전 방식 그대로 ── */
-  if(isNarrow()){
-    closeCompare();
-    var wrap = document.getElementById('rd-raw-wrap');
-    var open = wrap.classList.toggle('open');
-    btn.classList.toggle('open', open);
-    btn.textContent = rawBtnLabel(open);
-    return;
-  }
-
-  /* ── 넓은 화면: 2단 대조 ── */
-  document.getElementById('rd-raw-wrap').classList.remove('open');
+/* 원문 대조 — 좌우 2단. 폰에서는 버튼이 안 보이지만,
+   혹시 불려도 원문 상자로 돌립니다. */
+function toggleCompare(){
+  if(isNarrow()){ toggleRawBox(); return; }
+  closeRawBox();
+  var btn = document.getElementById('rd-cmp-btn');
   COMPARING = !COMPARING;
   document.body.classList.toggle('comparing', COMPARING);
   document.getElementById('rd-compare').classList.toggle('open', COMPARING);
   btn.classList.toggle('open', COMPARING);
-  btn.textContent = rawBtnLabel(COMPARING);
+  btn.textContent = COMPARING ? '대조 닫기' : '원문 대조';
+  if(COMPARING) buildCompare();
+}
 
-  if(COMPARING){
-    buildCompare();
+/* ══════════════════════════════════════════════════
+   살아남은 말 칠하기
+
+   짝지어진 원문 줄과 AI 문단 안에서,
+   원문에 쓴 말이 AI 글에 그대로 남아 있으면 두 쪽 다 글자색을 바꿉니다.
+
+   찾는 방법:
+     원문을 어절로 끊고, 각 어절의 앞부분을 길게부터 짧게 줄여 가며
+     AI 문장 안에 그 글자가 있는지 봅니다.
+     한국어는 조사가 뒤에 붙으니 ('게이트' → '게이트가')
+     앞에서부터 맞춰야 걸립니다.
+
+   ⚠ 뜻이 아니라 글자를 봅니다.
+     AI 가 '괴수' 를 '몬스터' 로 바꿔 썼으면 살아남은 걸로 안 칩니다.
+     반대로 '거대한' 같은 흔한 말은 우연히 겹쳐서 칠해질 수 있습니다.
+     참고 표시이지 검수 결과가 아닙니다.
+   ══════════════════════════════════════════════════ */
+var KEEP_MIN = 2;    /* 이보다 짧은 조각은 우연히 겹치기 쉬워 무시합니다 */
+
+function survivorMasks(rawT, aiT){
+  var rm = new Array(rawT.length).fill(false);
+  var am = new Array(aiT.length).fill(false);
+  var re = /[\uAC00-\uD7A3\u3131-\u318Ea-zA-Z0-9]+/g, m;
+  while((m = re.exec(rawT)) !== null){
+    var w = m[0], at = m.index, i;
+    for(var L = w.length; L >= KEEP_MIN; L--){
+      var p = w.substr(0, L);
+      var idx = aiT.indexOf(p);
+      if(idx < 0) continue;
+      for(i = 0; i < L; i++) rm[at + i] = true;
+      while(idx >= 0){                       /* AI 쪽은 나온 곳마다 다 칠합니다 */
+        for(i = 0; i < L; i++) am[idx + i] = true;
+        idx = aiT.indexOf(p, idx + 1);
+      }
+      break;                                 /* 가장 긴 것 하나만 씁니다 */
+    }
   }
+  return { r:rm, a:am };
+}
+
+/* 표시된 자리를 span 으로 감싸 HTML 로 만듭니다 */
+function paint(t, mask){
+  if(!mask) return esc(t);
+  var out = '', run = false;
+  for(var i = 0; i < t.length; i++){
+    var on = !!mask[i];
+    if(on !== run){
+      out += on ? '<span class="rc-keep">' : '</span>';
+      run = on;
+    }
+    out += esc(t[i]);
+  }
+  return out + (run ? '</span>' : '');
 }
 
 /* 두 칸을 블록으로 다시 그립니다.
@@ -1536,14 +1612,28 @@ function buildCompare(){
   var A = splitBlocks(aiT), R = splitBlocks(rawT);
   PAIRS = ALIGN ? alignBlocks(R, A) : new Array(R.length).fill(-1);
 
+  /* 짝지어진 쌍마다 살아남은 자리를 계산해 둡니다.
+     짝이 없는 블록은 비교할 상대가 없으니 안 칠합니다. */
+  var maskR = new Array(R.length).fill(null);
+  var maskA = new Array(A.length).fill(null);
+  var kept = 0;
+  if(KEEP){
+    PAIRS.forEach(function(j, i){
+      if(j < 0) return;
+      var mk = survivorMasks(R[i], A[j]);
+      maskR[i] = mk.r; maskA[j] = mk.a;
+      if(mk.r.some(function(v){ return v; })) kept++;
+    });
+  }
+
   document.getElementById('rc-ai').innerHTML = A.map(function(t, k){
-    return '<span class="rc-b" data-k="' + k + '">' + esc(t) + '</span>';
+    return '<span class="rc-b" data-k="' + k + '">' + paint(t, maskA[k]) + '</span>';
   }).join('\n');
 
   document.getElementById('rc-raw').innerHTML = R.map(function(t, k){
     var m = PAIRS[k];
     return '<span class="rc-b' + (m >= 0 ? ' matched' : '') + '" data-m="' + m + '">'
-         + esc(t) + '</span>';
+         + paint(t, maskR[k]) + '</span>';
   }).join('\n');
 
   var hit = PAIRS.filter(function(v){ return v >= 0; }).length;
@@ -1553,8 +1643,9 @@ function buildCompare(){
   }else if(!hit){
     note.textContent = '겹치는 표현을 못 찾아 맞추지 못했습니다. 원문 그대로 놓았습니다.';
   }else{
-    note.textContent = '원문 ' + R.length + '줄 중 ' + hit + '줄을 짝지었습니다. '
-                     + '한쪽에 마우스를 올리면 짝이 같이 밝아집니다.';
+    note.textContent = '원문 ' + R.length + '줄 중 ' + hit + '줄을 짝지었습니다.'
+      + (KEEP ? ' 파란 글자는 원문에서 그대로 살아남은 말입니다.'
+              : ' 한쪽에 마우스를 올리면 짝이 같이 밝아집니다.');
   }
 
   document.getElementById('rc-ai').scrollTop  = 0;
@@ -1582,6 +1673,14 @@ function toggleAlign(){
   var b = document.getElementById('rc-align-btn');
   b.classList.toggle('on', ALIGN);
   b.textContent = ALIGN ? '자동 맞춤 켬' : '자동 맞춤 끔';
+  buildCompare();
+}
+
+function toggleKeep(){
+  KEEP = !KEEP;
+  var b = document.getElementById('rc-keep-btn');
+  b.classList.toggle('on', KEEP);
+  b.textContent = KEEP ? '살아남은 말 켬' : '살아남은 말 끔';
   buildCompare();
 }
 
@@ -1635,13 +1734,10 @@ function syncPanes(){
   });
 }
 
-/* 창을 줄여 폰 폭이 되면 대조는 접습니다. CSS 도 같이 숨기지만
-   버튼 글자와 상태까지 맞춰 두어야 다시 넓혔을 때 안 꼬입니다. */
+/* 창을 줄여 폰 폭이 되면 대조는 접습니다. CSS 도 버튼을 숨기지만
+   상태까지 맞춰 두어야 다시 넓혔을 때 안 꼬입니다. */
 window.addEventListener('resize', function(){
-  var btn = document.getElementById('rd-raw-btn');
   if(COMPARING && isNarrow()) closeCompare();
-  else if(btn && !COMPARING) btn.textContent = rawBtnLabel(
-    document.getElementById('rd-raw-wrap').classList.contains('open'));
 });
 
 function goSib(step){
