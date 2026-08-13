@@ -381,18 +381,22 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .rd-hbtn.on{display:inline-flex}
 .rd-hbtn:hover{border-color:var(--bd2);color:var(--tx2)}
 .rd-hbtn.open{background:var(--sm);border-color:var(--bd2);color:var(--tx2)}
-.rd-raw-wrap{display:none;margin-top:24px}
+/* ── 원문 보기 ──
+   상자를 펼치는 게 아니라, 본문 자리를 원문으로 갈아 끼웁니다.
+   AI 글을 읽던 그 자리에서 원문이 그대로 보입니다.
+
+   ⚠ 원문을 읽는 동안에는 아래 AI 고지를 숨깁니다.
+     지금 화면에 뜬 글은 AI 가 쓴 게 아니니까요. */
+.rd-raw-wrap{display:none;margin-top:22px}
 .rd-raw-wrap.open{display:block}
 .rd-raw-label{
-  font-size:11px;font-weight:600;color:var(--blue-ink);letter-spacing:-.01em;
-  margin-bottom:10px;line-height:1.7;
-}
-.rd-raw-body{
-  padding:18px 20px;border-radius:11px;
+  padding:11px 15px;border-radius:9px;
   background:var(--sm);border:1px solid var(--bd);
-  font-size:calc(var(--rd-fs) - 2px);line-height:var(--rd-lh);color:var(--tx2);letter-spacing:-.012em;
-  white-space:pre-wrap;word-break:keep-all;
+  font-size:11.5px;font-weight:500;color:var(--blue-ink);letter-spacing:-.01em;
+  line-height:1.7;
 }
+body.rawmode .rd-body{color:var(--tx2)}     /* 원문은 한 톤 옅게 — 눈으로 구분됩니다 */
+body.rawmode .rd-ainote{display:none}
 
 /* ── 원문 대조 (넓은 화면 전용) ──
    왼쪽 원문, 오른쪽 AI 글. 한쪽을 굴리면 다른 쪽도 같은 비율로 따라옵니다.
@@ -432,9 +436,11 @@ body.comparing .rd-body{display:none}
 
 /* 원문에서 살아남은 표현.
    바탕은 안 칠하고 글자색만 바꿉니다.
+   사이트의 흐린 청록빛 파랑(--blue-ink)이 아니라 쨍한 파랑입니다.
+   대조는 훑어보는 화면이라 눈에 확 들어와야 합니다.
    ⚠ 굵기는 500 입니다. 600 으로 두면 한글만 700 으로 대체돼
      영문·숫자보다 두꺼워집니다 (Noto Sans KR 은 400·500·700 만 있음). */
-.rc-keep{color:var(--blue-ink);font-weight:500}
+.rc-keep{color:#0a52ff;font-weight:500}
 
 .rc-tools{display:flex;align-items:center;gap:11px;margin-top:11px;flex-wrap:wrap}
 .rc-toggle{
@@ -665,9 +671,9 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
         <button class="rd-hbtn" id="rd-cmp-btn" onclick="toggleCompare()">원문 대조</button>
       </div>
     </div>
+    <!-- 원문 모드 안내 — 본문이 원문으로 갈아 끼워졌을 때만 뜹니다 -->
     <div class="rd-raw-wrap" id="rd-raw-wrap">
       <div class="rd-raw-label" id="rd-raw-label"></div>
-      <div class="rd-raw-body" id="rd-raw-body"></div>
     </div>
     <!-- 원문 대조 — 넓은 화면에서만 열립니다.
          왼쪽이 AI 글, 오른쪽이 원문입니다. -->
@@ -1378,6 +1384,11 @@ async function loadRaw(x){
   var cmp = document.getElementById('rd-cmp-btn');
   closeCompare();                /* 글을 넘길 때마다 대조는 접고 시작합니다 */
 
+  /* 원문 모드도 풉니다. 본문은 openItem 이 이미 AI 글로 채워 두었으니
+     여기서는 표시만 되돌립니다. */
+  RAWMODE = false;
+  document.body.classList.remove('rawmode');
+
   var wrap = document.getElementById('rd-raw-wrap');
   btn.classList.remove('on', 'open');
   cmp.classList.remove('on', 'open');
@@ -1394,8 +1405,7 @@ async function loadRaw(x){
   if(t == null || !t.trim()) return;   /* 원문 파일 없음 → 버튼 안 보임 */
 
   document.getElementById('rd-raw-label').textContent = RAW_NOTE;
-  document.getElementById('rd-raw-body').textContent  = t;
-  /* 대조 칸은 열 때 buildCompare 가 블록으로 다시 그립니다. 여기선 안 건드립니다 */
+  /* 본문과 대조 칸은 버튼을 누를 때 채웁니다 */
   btn.classList.add('on');
   cmp.classList.add('on');       /* 폰에서는 CSS 가 이 버튼을 숨깁니다 */
 }
@@ -1408,6 +1418,7 @@ async function loadRaw(x){
    버튼 하나가 화면 폭에 따라 다른 걸 엽니다.
    ══════════════════════════════════════════════════ */
 var COMPARING = false;
+var RAWMODE   = false;    /* 본문 자리에 원문이 떠 있는 상태 */
 var ALIGN     = true;     /* 자동 맞춤 켜짐/꺼짐 */
 var KEEP      = true;     /* 살아남은 말 칠하기 켜짐/꺼짐 */
 var PAIRS     = [];       /* PAIRS[원문블록] = 짝지어진 AI블록 번호. -1 이면 짝 없음 */
@@ -1509,9 +1520,15 @@ function isNarrow(){ return window.matchMedia('(max-width:768px)').matches; }
 /* 둘은 서로를 밀어냅니다. 상자와 대조가 동시에 열려 있으면
    같은 원문이 화면에 두 번 나와서 어수선해집니다. */
 function closeRawBox(){
+  RAWMODE = false;
+  document.body.classList.remove('rawmode');
   document.getElementById('rd-raw-wrap').classList.remove('open');
   var b = document.getElementById('rd-raw-btn');
   if(b){ b.classList.remove('open'); b.textContent = '원문 보기'; }
+  /* 본문을 AI 글로 되돌립니다 */
+  if(CUR && BODY_CACHE[CUR.id] != null){
+    document.getElementById('rd-body').textContent = BODY_CACHE[CUR.id];
+  }
 }
 
 function closeCompare(){
@@ -1522,14 +1539,25 @@ function closeCompare(){
   if(b){ b.classList.remove('open'); b.textContent = '원문 대조'; }
 }
 
-/* 원문만 보기 — 본문 위에 원문 상자를 펼칩니다 */
+/* 원문 보기 — 본문 자리를 원문으로 갈아 끼웁니다.
+   상자를 따로 펼치지 않습니다. 읽던 그 자리에서 글만 바뀝니다. */
 function toggleRawBox(){
+  if(!CUR) return;
   closeCompare();
-  var wrap = document.getElementById('rd-raw-wrap');
   var btn  = document.getElementById('rd-raw-btn');
-  var open = wrap.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  btn.textContent = open ? '원문 닫기' : '원문 보기';
+  var body = document.getElementById('rd-body');
+
+  RAWMODE = !RAWMODE;
+  document.body.classList.toggle('rawmode', RAWMODE);
+  document.getElementById('rd-raw-wrap').classList.toggle('open', RAWMODE);
+  btn.classList.toggle('open', RAWMODE);
+  btn.textContent = RAWMODE ? 'AI 글로 돌아가기' : '원문 보기';
+
+  if(RAWMODE){
+    body.textContent = RAW_CACHE[CUR.id] || '';
+  }else if(BODY_CACHE[CUR.id] != null){
+    body.textContent = BODY_CACHE[CUR.id];
+  }
 }
 
 /* 원문 대조 — 좌우 2단. 폰에서는 버튼이 안 보이지만,
@@ -2016,6 +2044,7 @@ function openPD(){
 function goList(){
   CUR = null;
   closeCompare();
+  closeRawBox();
   showView('list');
   var want = SEED ? '#/s/' + encodeURIComponent(SEED) : '#/';
   if(location.hash !== want) location.hash = want;
