@@ -390,6 +390,38 @@ body.reading #tb-fs-wrap{display:inline-flex}
   white-space:pre-wrap;word-break:keep-all;
 }
 
+/* ── 원문 대조 (넓은 화면 전용) ──
+   왼쪽 원문, 오른쪽 AI 글. 한쪽을 굴리면 다른 쪽도 같은 비율로 따라옵니다.
+
+   ⚠ 좁은 화면에서는 아예 안 씁니다.
+     폰에서 2단으로 쪼개면 한 줄에 대여섯 글자밖에 안 들어가서 읽을 수가 없습니다.
+     폰은 예전처럼 '원문 보기' 상자로 둡니다. (JS 쪽 isNarrow 가 갈라 줍니다) */
+.rd-compare{display:none;margin-top:22px}
+.rd-compare.open{display:block}
+/* 대조 중에는 읽는 폭을 넓힙니다. 720px 를 반으로 쪼개면 너무 좁습니다 */
+body.comparing .wrap{max-width:1140px}
+body.comparing .rd-body{display:none}
+.rc-panes{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rc-pane{
+  display:flex;flex-direction:column;min-width:0;
+  border:1px solid var(--bd);border-radius:11px;overflow:hidden;
+}
+.rc-pane.raw{background:var(--sm)}
+.rc-label{
+  flex-shrink:0;padding:10px 15px;border-bottom:1px solid var(--bd);
+  font-family:'Inter',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.14em;
+  color:var(--tx3);background:var(--sb);
+}
+.rc-pane.raw .rc-label{color:var(--blue-ink);background:var(--sm)}
+.rc-text{
+  flex:1;overflow-y:auto;height:68vh;padding:18px 20px;
+  font-size:calc(var(--rd-fs) - 2px);line-height:var(--rd-lh);letter-spacing:-.012em;
+  white-space:pre-wrap;word-break:keep-all;
+}
+.rc-pane.raw .rc-text{color:var(--tx2)}
+.rc-pane.ai  .rc-text{color:#2a2a2a}
+.rc-note{margin-top:10px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
+
 /* ── PD · 기획 문의용 화면 (#/pd) ──
    일반 독자 화면에는 끼어들지 않습니다.
    대문 맨 아래 작은 링크 하나로만 들어갑니다.
@@ -502,6 +534,12 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
      (아래 max-width:560px / 400px 블록) */
   .shelf-name{font-size:12.5px}
 
+  /* 원문 대조는 좁은 화면에서 아예 안 나옵니다.
+     혹시 넓은 창에서 켜 둔 채로 창을 줄여도 안전하게 접힙니다. */
+  .rd-compare{display:none !important}
+  body.comparing .rd-body{display:block}
+  body.comparing .wrap{max-width:720px}
+
   /* ⚠ 예전에는 여기서 본문 크기를 15.5px 로 고정했습니다.
      지금은 글자 크기 조절이 붙어 있어서, 고정하면 조절이 먹지 않습니다.
      모바일 기본값은 JS 쪽 stFsDefault() 가 정합니다. */
@@ -602,6 +640,20 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
     <div class="rd-raw-wrap" id="rd-raw-wrap">
       <div class="rd-raw-label" id="rd-raw-label"></div>
       <div class="rd-raw-body" id="rd-raw-body"></div>
+    </div>
+    <!-- 원문 대조 — 넓은 화면에서만 열립니다 -->
+    <div class="rd-compare" id="rd-compare">
+      <div class="rc-panes">
+        <div class="rc-pane raw">
+          <div class="rc-label">RAW &middot; 제가 쓴 원문</div>
+          <div class="rc-text" id="rc-raw"></div>
+        </div>
+        <div class="rc-pane ai">
+          <div class="rc-label">AI &middot; 생성된 문장</div>
+          <div class="rc-text" id="rc-ai"></div>
+        </div>
+      </div>
+      <div class="rc-note">양쪽 스크롤이 같이 움직입니다. 길이가 달라서 위치는 비율로 맞춥니다.</div>
     </div>
     <div class="rd-body" id="rd-body"></div>
     <div class="rd-foot">
@@ -1290,11 +1342,13 @@ async function openItem(id){
    ══════════════════════════════════════════════════ */
 async function loadRaw(x){
   var btn = document.getElementById('rd-raw-btn');
+  closeCompare();                /* 글을 넘길 때마다 대조는 접고 시작합니다 */
+
   var wrap = document.getElementById('rd-raw-wrap');
   btn.classList.remove('on');
   btn.classList.remove('open');
   wrap.classList.remove('open');
-  btn.textContent = '원문 보기';
+  btn.textContent = rawBtnLabel(false);
 
   var t = RAW_CACHE[x.id];
   if(t === undefined){
@@ -1306,16 +1360,94 @@ async function loadRaw(x){
 
   document.getElementById('rd-raw-label').textContent = RAW_NOTE;
   document.getElementById('rd-raw-body').textContent  = t;
+  document.getElementById('rc-raw').textContent       = t;
   btn.classList.add('on');
 }
 
-function toggleRaw(){
-  var wrap = document.getElementById('rd-raw-wrap');
-  var btn  = document.getElementById('rd-raw-btn');
-  var open = wrap.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  btn.textContent = open ? '원문 닫기' : '원문 보기';
+/* ══════════════════════════════════════════════════
+   원문 대조
+
+   넓은 화면에서만 씁니다.
+   좁은 화면은 예전 그대로 '원문 보기' 상자입니다.
+   버튼 하나가 화면 폭에 따라 다른 걸 엽니다.
+   ══════════════════════════════════════════════════ */
+var COMPARING = false;
+
+function isNarrow(){ return window.matchMedia('(max-width:768px)').matches; }
+
+function rawBtnLabel(open){
+  if(isNarrow()) return open ? '원문 닫기' : '원문 보기';
+  return open ? '대조 닫기' : '원문 대조';
 }
+
+function closeCompare(){
+  COMPARING = false;
+  document.body.classList.remove('comparing');
+  document.getElementById('rd-compare').classList.remove('open');
+  var btn = document.getElementById('rd-raw-btn');
+  if(btn){ btn.classList.remove('open'); btn.textContent = rawBtnLabel(false); }
+}
+
+function toggleRaw(){
+  var btn = document.getElementById('rd-raw-btn');
+
+  /* ── 좁은 화면: 예전 방식 그대로 ── */
+  if(isNarrow()){
+    closeCompare();
+    var wrap = document.getElementById('rd-raw-wrap');
+    var open = wrap.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.textContent = rawBtnLabel(open);
+    return;
+  }
+
+  /* ── 넓은 화면: 2단 대조 ── */
+  document.getElementById('rd-raw-wrap').classList.remove('open');
+  COMPARING = !COMPARING;
+  document.body.classList.toggle('comparing', COMPARING);
+  document.getElementById('rd-compare').classList.toggle('open', COMPARING);
+  btn.classList.toggle('open', COMPARING);
+  btn.textContent = rawBtnLabel(COMPARING);
+
+  if(COMPARING){
+    /* 오른쪽 칸은 지금 화면에 떠 있는 본문을 그대로 옮겨 담습니다.
+       따로 다시 받지 않습니다 — 이미 읽어 둔 것을 씁니다. */
+    document.getElementById('rc-ai').textContent =
+      document.getElementById('rd-body').textContent;
+    document.getElementById('rc-raw').scrollTop = 0;
+    document.getElementById('rc-ai').scrollTop  = 0;
+  }
+}
+
+/* 스크롤 연동.
+   원문은 짧고 AI 글은 길어서 같은 픽셀만큼 굴리면 금방 어긋납니다.
+   "전체의 몇 %" 로 맞춥니다. */
+function syncPanes(){
+  var a = document.getElementById('rc-raw');
+  var b = document.getElementById('rc-ai');
+  if(!a || !b) return;
+  var lock = false;
+  function link(from, to){
+    from.addEventListener('scroll', function(){
+      if(lock) return;                     /* 상대를 움직이면 그쪽도 scroll 이 터집니다 */
+      lock = true;
+      var room = from.scrollHeight - from.clientHeight;
+      var r = room > 0 ? from.scrollTop / room : 0;
+      to.scrollTop = r * (to.scrollHeight - to.clientHeight);
+      requestAnimationFrame(function(){ lock = false; });
+    });
+  }
+  link(a, b); link(b, a);
+}
+
+/* 창을 줄여 폰 폭이 되면 대조는 접습니다. CSS 도 같이 숨기지만
+   버튼 글자와 상태까지 맞춰 두어야 다시 넓혔을 때 안 꼬입니다. */
+window.addEventListener('resize', function(){
+  var btn = document.getElementById('rd-raw-btn');
+  if(COMPARING && isNarrow()) closeCompare();
+  else if(btn && !COMPARING) btn.textContent = rawBtnLabel(
+    document.getElementById('rd-raw-wrap').classList.contains('open'));
+});
 
 function goSib(step){
   if(!CUR) return;
@@ -1592,6 +1724,7 @@ function openPD(){
 
 function goList(){
   CUR = null;
+  closeCompare();
   showView('list');
   var want = SEED ? '#/s/' + encodeURIComponent(SEED) : '#/';
   if(location.hash !== want) location.hash = want;
@@ -1717,6 +1850,7 @@ document.getElementById('ai-note-read').innerHTML  = AI_NOTE;
 
    글 읽기(#/f/001)는 목록이 있어야 하므로
    loadList() 가 끝난 뒤 route() 를 한 번 더 부릅니다. */
+syncPanes();   /* 대조 두 칸의 스크롤을 묶어 둡니다 (한 번만 걸면 됩니다) */
 route();
 loadList();
 </script>
