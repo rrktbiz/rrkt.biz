@@ -414,13 +414,26 @@ body.comparing .rd-body{display:none}
 }
 .rc-pane.raw .rc-label{color:var(--blue-ink);background:var(--sm)}
 .rc-text{
-  flex:1;overflow-y:auto;height:68vh;padding:18px 20px;
+  flex:1;overflow-y:auto;height:68vh;padding:18px 20px;position:relative;
   font-size:calc(var(--rd-fs) - 2px);line-height:var(--rd-lh);letter-spacing:-.012em;
   white-space:pre-wrap;word-break:keep-all;
 }
 .rc-pane.raw .rc-text{color:var(--tx2)}
 .rc-pane.ai  .rc-text{color:#2a2a2a}
-.rc-note{margin-top:10px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
+
+/* 줄 하나가 블록 하나입니다. 자동 맞춤은 이 블록에 위쪽 빈칸을 넣어 밀어냅니다 */
+.rc-b{display:block}
+.rc-b.lit{background:rgba(90,144,176,.13);border-radius:4px;box-shadow:0 0 0 3px rgba(90,144,176,.13)}
+.rc-b.matched{cursor:default}
+
+.rc-tools{display:flex;align-items:center;gap:11px;margin-top:11px;flex-wrap:wrap}
+.rc-toggle{
+  flex-shrink:0;padding:5px 12px;border-radius:100px;border:1px solid var(--bd);
+  background:transparent;font-size:11px;font-weight:500;color:var(--tx3);transition:all .12s;
+}
+.rc-toggle:hover{border-color:var(--bd2);color:var(--tx2)}
+.rc-toggle.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.rc-note{font-size:11px;color:var(--tx3);letter-spacing:-.01em;line-height:1.6}
 
 /* ── PD · 기획 문의용 화면 (#/pd) ──
    일반 독자 화면에는 끼어들지 않습니다.
@@ -641,19 +654,23 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       <div class="rd-raw-label" id="rd-raw-label"></div>
       <div class="rd-raw-body" id="rd-raw-body"></div>
     </div>
-    <!-- 원문 대조 — 넓은 화면에서만 열립니다 -->
+    <!-- 원문 대조 — 넓은 화면에서만 열립니다.
+         왼쪽이 AI 글, 오른쪽이 원문입니다. -->
     <div class="rd-compare" id="rd-compare">
       <div class="rc-panes">
-        <div class="rc-pane raw">
-          <div class="rc-label">RAW &middot; 제가 쓴 원문</div>
-          <div class="rc-text" id="rc-raw"></div>
-        </div>
         <div class="rc-pane ai">
           <div class="rc-label">AI &middot; 생성된 문장</div>
           <div class="rc-text" id="rc-ai"></div>
         </div>
+        <div class="rc-pane raw">
+          <div class="rc-label">RAW &middot; 제가 쓴 원문</div>
+          <div class="rc-text" id="rc-raw"></div>
+        </div>
       </div>
-      <div class="rc-note">양쪽 스크롤이 같이 움직입니다. 길이가 달라서 위치는 비율로 맞춥니다.</div>
+      <div class="rc-tools">
+        <button class="rc-toggle on" id="rc-align-btn" onclick="toggleAlign()">자동 맞춤 켬</button>
+        <span class="rc-note" id="rc-note"></span>
+      </div>
     </div>
     <div class="rd-body" id="rd-body"></div>
     <div class="rd-foot">
@@ -1360,7 +1377,7 @@ async function loadRaw(x){
 
   document.getElementById('rd-raw-label').textContent = RAW_NOTE;
   document.getElementById('rd-raw-body').textContent  = t;
-  document.getElementById('rc-raw').textContent       = t;
+  /* 대조 칸은 열 때 buildCompare 가 블록으로 다시 그립니다. 여기선 안 건드립니다 */
   btn.classList.add('on');
 }
 
@@ -1372,6 +1389,100 @@ async function loadRaw(x){
    버튼 하나가 화면 폭에 따라 다른 걸 엽니다.
    ══════════════════════════════════════════════════ */
 var COMPARING = false;
+var ALIGN     = true;     /* 자동 맞춤 켜짐/꺼짐 */
+var PAIRS     = [];       /* PAIRS[원문블록] = 짝지어진 AI블록 번호. -1 이면 짝 없음 */
+
+/* ══════════════════════════════════════════════════
+   자동 맞춤
+
+   원문 줄과 AI 문단을 짝지어, 짝끼리 같은 높이에 오도록
+   원문 쪽에 빈칸을 넣어 밀어냅니다.
+
+   ⚠ 원문의 순서는 절대 바꾸지 않습니다.
+     줄을 실제로 옮기면 쓴 사람의 순서가 뒤틀립니다.
+     밀어내기만 하므로 원문은 원문 그대로 남습니다.
+
+   짝을 찾는 방법:
+     두 글에서 공백·문장부호를 뺀 뒤 '두 글자 조각'(게이트, 히어, 어로…)을 모읍니다.
+     겹치는 조각이 많을수록 같은 장면일 가능성이 높습니다.
+     원문은 짧고 AI 글은 기니까, 겹친 개수를 '짧은 쪽' 기준으로 나눕니다.
+     (전체 길이로 나누면 짧은 원문이 무조건 손해를 봅니다)
+
+   ⚠ 이건 뜻을 아는 게 아니라 글자가 겹치는 걸 세는 것입니다.
+     AI 가 원문을 통째로 바꿔 썼으면 짝을 못 찾습니다.
+     못 찾은 줄은 억지로 붙이지 않고 제자리에 둡니다.
+   ══════════════════════════════════════════════════ */
+
+/* 줄 단위로 쪼갭니다. 빈 줄로 문단이 나뉘어 있으면 문단 단위로 */
+function splitBlocks(t){
+  var s = String(t || '').replace(/\r/g, '');
+  var by = s.split(/\n\s*\n/).map(function(v){ return v.trim(); }).filter(Boolean);
+  if(by.length >= 2) return by;
+  return s.split(/\n/).map(function(v){ return v.trim(); }).filter(Boolean);
+}
+
+/* 두 글자 조각 모음 */
+function grams(s){
+  var t = String(s).replace(/[^\uAC00-\uD7A3\u3131-\u318Ea-zA-Z0-9]/g, '');
+  var m = {}, n = 0;
+  for(var i = 0; i < t.length - 1; i++){
+    var g = t.substr(i, 2);
+    if(!m[g]){ m[g] = 1; n++; }
+  }
+  return { set:m, n:n };
+}
+
+/* 겹침 정도. 0(전혀) ~ 1(짧은 쪽이 통째로 들어 있음) */
+function overlap(a, b){
+  if(!a.n || !b.n) return 0;
+  var small = a.n <= b.n ? a : b, big = a.n <= b.n ? b : a;
+  var hit = 0;
+  for(var g in small.set) if(big.set[g]) hit++;
+  return hit / small.n;
+}
+
+/* 순서를 지키면서 점수 합이 가장 큰 짝짓기를 찾습니다.
+   R = 원문 블록들, A = AI 블록들. 결과는 R 길이만큼의 배열입니다. */
+function alignBlocks(R, A){
+  var MIN = 0.14;                    /* 이보다 안 겹치면 남남으로 봅니다 */
+  var n = R.length, m = A.length;
+  var out = new Array(n).fill(-1);
+  if(!n || !m) return out;
+
+  var gr = R.map(grams), ga = A.map(grams);
+  var S = [];
+  for(var i = 0; i < n; i++){
+    S[i] = [];
+    for(var j = 0; j < m; j++){
+      var v = overlap(gr[i], ga[j]);
+      S[i][j] = v >= MIN ? v : 0;
+    }
+  }
+
+  /* dp[i][j] = 원문 i줄, AI j문단까지 봤을 때의 최고 점수 */
+  var dp = [], bk = [];
+  for(i = 0; i <= n; i++){ dp[i] = new Array(m + 1).fill(0); bk[i] = new Array(m + 1).fill(0); }
+  for(i = 1; i <= n; i++){
+    for(j = 1; j <= m; j++){
+      var skipA = dp[i][j-1];              /* 이 AI 문단은 짝 없음 */
+      var skipR = dp[i-1][j];              /* 이 원문 줄은 짝 없음 */
+      var take  = S[i-1][j-1] > 0 ? dp[i-1][j-1] + S[i-1][j-1] : -1;
+      var best = skipA, code = 1;
+      if(skipR > best){ best = skipR; code = 2; }
+      if(take  > best){ best = take;  code = 3; }
+      dp[i][j] = best; bk[i][j] = code;
+    }
+  }
+
+  i = n; j = m;
+  while(i > 0 && j > 0){
+    var c = bk[i][j];
+    if(c === 3){ out[i-1] = j-1; i--; j--; }
+    else if(c === 2){ i--; }
+    else { j--; }
+  }
+  return out;
+}
 
 function isNarrow(){ return window.matchMedia('(max-width:768px)').matches; }
 
@@ -1410,18 +1521,73 @@ function toggleRaw(){
   btn.textContent = rawBtnLabel(COMPARING);
 
   if(COMPARING){
-    /* 오른쪽 칸은 지금 화면에 떠 있는 본문을 그대로 옮겨 담습니다.
-       따로 다시 받지 않습니다 — 이미 읽어 둔 것을 씁니다. */
-    document.getElementById('rc-ai').textContent =
-      document.getElementById('rd-body').textContent;
-    document.getElementById('rc-raw').scrollTop = 0;
-    document.getElementById('rc-ai').scrollTop  = 0;
+    buildCompare();
   }
 }
 
+/* 두 칸을 블록으로 다시 그립니다.
+   본문은 이미 받아 둔 것을 씁니다 — 파일을 다시 받지 않습니다. */
+function buildCompare(){
+  if(!CUR) return;
+  var aiT  = BODY_CACHE[CUR.id];
+  if(aiT == null) aiT = document.getElementById('rd-body').textContent || '';
+  var rawT = RAW_CACHE[CUR.id] || '';
+
+  var A = splitBlocks(aiT), R = splitBlocks(rawT);
+  PAIRS = ALIGN ? alignBlocks(R, A) : new Array(R.length).fill(-1);
+
+  document.getElementById('rc-ai').innerHTML = A.map(function(t, k){
+    return '<span class="rc-b" data-k="' + k + '">' + esc(t) + '</span>';
+  }).join('\n');
+
+  document.getElementById('rc-raw').innerHTML = R.map(function(t, k){
+    var m = PAIRS[k];
+    return '<span class="rc-b' + (m >= 0 ? ' matched' : '') + '" data-m="' + m + '">'
+         + esc(t) + '</span>';
+  }).join('\n');
+
+  var hit = PAIRS.filter(function(v){ return v >= 0; }).length;
+  var note = document.getElementById('rc-note');
+  if(!ALIGN){
+    note.textContent = '자동 맞춤을 껐습니다. 스크롤은 비율로 따라갑니다.';
+  }else if(!hit){
+    note.textContent = '겹치는 표현을 못 찾아 맞추지 못했습니다. 원문 그대로 놓았습니다.';
+  }else{
+    note.textContent = '원문 ' + R.length + '줄 중 ' + hit + '줄을 짝지었습니다. '
+                     + '한쪽에 마우스를 올리면 짝이 같이 밝아집니다.';
+  }
+
+  document.getElementById('rc-ai').scrollTop  = 0;
+  document.getElementById('rc-raw').scrollTop = 0;
+  if(ALIGN) requestAnimationFrame(applyAlign);
+}
+
+/* 짝지어진 원문 줄을 상대 문단 높이까지 밀어 내립니다.
+   위에서부터 하나씩 처리합니다 — 앞을 밀면 뒤도 같이 밀려서
+   매번 다시 재야 정확합니다. */
+function applyAlign(){
+  var aiB  = document.querySelectorAll('#rc-ai .rc-b');
+  var rawB = document.querySelectorAll('#rc-raw .rc-b');
+  rawB.forEach(function(el){ el.style.marginTop = ''; });
+  rawB.forEach(function(el){
+    var m = +el.dataset.m;
+    if(m < 0 || !aiB[m]) return;
+    var gap = aiB[m].offsetTop - el.offsetTop;
+    if(gap > 0) el.style.marginTop = gap + 'px';
+  });
+}
+
+function toggleAlign(){
+  ALIGN = !ALIGN;
+  var b = document.getElementById('rc-align-btn');
+  b.classList.toggle('on', ALIGN);
+  b.textContent = ALIGN ? '자동 맞춤 켬' : '자동 맞춤 끔';
+  buildCompare();
+}
+
 /* 스크롤 연동.
-   원문은 짧고 AI 글은 길어서 같은 픽셀만큼 굴리면 금방 어긋납니다.
-   "전체의 몇 %" 로 맞춥니다. */
+   자동 맞춤이 켜져 있으면 두 칸의 높이가 이미 맞아 있으니 1:1 로 붙입니다.
+   꺼져 있으면 원문이 훨씬 짧으므로 '전체의 몇 %' 로 맞춥니다. */
 function syncPanes(){
   var a = document.getElementById('rc-raw');
   var b = document.getElementById('rc-ai');
@@ -1431,13 +1597,42 @@ function syncPanes(){
     from.addEventListener('scroll', function(){
       if(lock) return;                     /* 상대를 움직이면 그쪽도 scroll 이 터집니다 */
       lock = true;
-      var room = from.scrollHeight - from.clientHeight;
-      var r = room > 0 ? from.scrollTop / room : 0;
-      to.scrollTop = r * (to.scrollHeight - to.clientHeight);
+      if(ALIGN){
+        to.scrollTop = from.scrollTop;
+      }else{
+        var room = from.scrollHeight - from.clientHeight;
+        var r = room > 0 ? from.scrollTop / room : 0;
+        to.scrollTop = r * (to.scrollHeight - to.clientHeight);
+      }
       requestAnimationFrame(function(){ lock = false; });
     });
   }
   link(a, b); link(b, a);
+
+  /* 한쪽에 마우스를 올리면 짝이 된 반대쪽도 같이 밝아집니다.
+     블록은 다시 그려지니 칸 자체에 한 번만 걸어 둡니다. */
+  function lit(on){
+    return function(e){
+      var el = e.target.closest ? e.target.closest('.rc-b') : null;
+      if(!el) return;
+      var ai, raw;
+      if(el.dataset.m !== undefined){
+        raw = el; ai = document.querySelectorAll('#rc-ai .rc-b')[+el.dataset.m];
+      }else{
+        ai = el;
+        var k = +el.dataset.k;
+        raw = Array.prototype.filter.call(
+          document.querySelectorAll('#rc-raw .rc-b'),
+          function(v){ return +v.dataset.m === k; })[0];
+      }
+      if(ai)  ai.classList.toggle('lit', on);
+      if(raw) raw.classList.toggle('lit', on);
+    };
+  }
+  [a, b].forEach(function(p){
+    p.addEventListener('mouseover', lit(true));
+    p.addEventListener('mouseout',  lit(false));
+  });
 }
 
 /* 창을 줄여 폰 폭이 되면 대조는 접습니다. CSS 도 같이 숨기지만
