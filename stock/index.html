@@ -27,7 +27,7 @@
 
      ── 어디서 무엇을 읽어오나 ──
        목록 : 공용 구글시트의  stock  탭  (../config.js 의 SHEETS_ID)
-              열 순서 →  id / 제목 / 날짜 / 공개 / 씨앗
+              열 순서 →  id / 제목 / 날짜 / 공개 / 씨앗 / 장르태그
        본문 : texts/{id}.txt      (예: id 가 001 이면 texts/001.txt)
 
      ⚠ 본문 파일 이름은 시트의 id 를 그대로 씁니다.
@@ -38,6 +38,14 @@
        1. texts/ 에 000.txt 를 올린다  (UTF-8, 그냥 줄바꿈으로 문단 구분)
        2. 시트 stock 탭에 한 줄 적는다
        3. 끝. 이 파일은 안 건드립니다.
+
+     ── 장르태그 (F열) ──
+       씨앗 배너에 뜨는 태그입니다. 시트 F열에 적습니다.
+         적는 법:  #현대판타지 #SF #BL     (또는  현대판타지, SF, BL)
+       # 은 있어도 되고 없어도 됩니다. 화면에는 항상 # 이 붙어 나옵니다.
+       같은 씨앗 줄 중 한 줄에만 적어도 됩니다.
+       여러 줄에 나눠 적으면 다 합쳐서 보여주고, 겹치는 건 한 번만 나옵니다.
+       빈 칸이면 태그 줄 자체가 안 나옵니다.
 
      ── 씨앗(세계) 하나에 표지를 붙이고 싶을 때 ──
        1. images/seed/ 에 그림을 올린다  (3:4 비율, 600×800 정도)
@@ -198,6 +206,15 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .seed-bn-desc{font-size:12px;line-height:1.8;color:var(--tx2);letter-spacing:-.01em}
 .seed-bn-desc a{color:var(--blue-ink);font-weight:600;text-decoration:none}
 .seed-bn-desc a:hover{text-decoration:underline}
+/* ── 씨앗 장르태그 ──
+   배너 안내문 아래에 붙습니다. 시트 F열(장르태그)에서 읽어옵니다.
+   태그가 없으면 이 줄은 아예 안 그려집니다. */
+.seed-bn-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.seed-tag{
+  font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:11px;
+  background:var(--sb);border:1px solid var(--bd);color:var(--tx2);
+  letter-spacing:-.01em;white-space:nowrap;
+}
 .order-note{padding:14px 2px 8px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
 
 .list{padding-top:6px}
@@ -795,7 +812,7 @@ async function loadList(){
     var rows = (await res.text()).trim().split('\n').map(splitRow);
     if(rows.length < 2){ ITEMS = []; LOAD = 'empty'; render(); return; }
 
-    /* 헤더: id / 제목 / 날짜 / 공개 / 씨앗 */
+    /* 헤더: id / 제목 / 날짜 / 공개 / 씨앗 / 장르태그 */
     ITEMS = rows.slice(1)
       .filter(function(r){ return (r[0]||'').trim(); })
       .map(function(r){
@@ -806,7 +823,8 @@ async function loadList(){
           title: (r[1]||'').trim() || '무제',
           date:  normDate(r[2]),
           open:  (r[3]||'').trim().toUpperCase(),
-          seed:  (r[4]||'').trim()
+          seed:  (r[4]||'').trim(),
+          tags:  parseTags(r[5])
         };
       })
       /* 공개 칸이 O / o / Y / TRUE 인 것만 보여줍니다. 빈 칸은 안 보입니다. */
@@ -850,6 +868,32 @@ function activeSeeds(){
   return out;
 }
 
+/* ══════════════════════════════════════════════════
+   장르태그
+
+   시트 F열에 '#현대판타지 #SF #BL' 처럼 적습니다.
+   쉼표로 나눠 적어도 되고, # 은 있어도 없어도 됩니다.
+   ══════════════════════════════════════════════════ */
+function parseTags(v){
+  return String(v || '')
+    .split(/[\s,·/|]+/)                     /* 띄어쓰기·쉼표·가운뎃점·슬래시 다 됩니다 */
+    .map(function(t){ return t.replace(/^#+/, '').trim(); })
+    .filter(function(t){ return t; });
+}
+
+/* 그 씨앗에 달린 태그 전부. 여러 줄에 나눠 적혀 있어도 합치고, 겹치면 한 번만 남깁니다. */
+function seedTags(name){
+  var seen = {}, out = [];
+  (ITEMS||[]).forEach(function(x){
+    if(x.seed !== name) return;
+    (x.tags||[]).forEach(function(t){
+      if(seen[t]) return;
+      seen[t] = 1; out.push(t);
+    });
+  });
+  return out;
+}
+
 /* 지금 화면에 보일 글들.
    전체는 최신순, 씨앗을 고른 상태는 오래된순입니다.
    같은 세계의 조각은 먼저 쓴 게 바탕이고 나중 게 덧붙는 경우가 많아서입니다. */
@@ -890,6 +934,7 @@ function render(){
     var p   = SEED_PROMOTED[SEED];
     var th  = SEED_THUMB[SEED];
     var cnt = seedCounts()[SEED] || 0;
+    var tg  = seedTags(SEED);
     note.innerHTML =
       '<div class="seed-banner">'
       + '<div class="seed-thumb">'
@@ -902,6 +947,11 @@ function render(){
                     : '같은 세계의 조각들입니다. 지금까지 ' + cnt + '편.')
       +   (p ? '<br>이 세계는 <a href="' + esc(p.url) + '">' + esc(p.label) + '</a> 로 이어졌습니다.' : '')
       +   '</div>'
+      +   (tg.length
+            ? '<div class="seed-bn-tags">'
+              + tg.map(function(t){ return '<span class="seed-tag">#' + esc(t) + '</span>'; }).join('')
+              + '</div>'
+            : '')
       + '</div></div>';
     ord.textContent = '먼저 쓴 순서로 놓여 있습니다.';
   }else{
