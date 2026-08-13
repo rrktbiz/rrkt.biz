@@ -208,32 +208,19 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .seed-bn-desc a:hover{text-decoration:underline}
 /* ── 씨앗 장르태그 ──
    배너 안내문 아래에 붙습니다. 시트 F열(장르태그)에서 읽어옵니다.
-   태그가 없으면 이 줄은 아예 안 그려집니다. */
-.seed-bn-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:8px}
+   태그가 없으면 이 줄은 아예 안 그려집니다.
+
+   align-items:baseline —
+     영문은 Inter, 한글은 Noto Sans KR 로 그려지는데 두 폰트의 기준선이 달라서
+     그냥 두면 #SF 와 #현대판타지 의 줄이 어긋납니다. 글자 밑선을 맞춰 줍니다.
+   font-weight:500 —
+     Noto Sans KR 은 이 페이지에서 400·500·700 만 불러옵니다.
+     600 으로 두면 한글만 700 으로 대체돼 영문보다 두꺼워집니다. */
+.seed-bn-tags{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-top:8px}
 .seed-tag{
   font-size:11.5px;font-weight:500;color:var(--blue-ink);
-  letter-spacing:-.01em;white-space:nowrap;
+  letter-spacing:-.01em;white-space:nowrap;line-height:1.6;
 }
-/* ── 씨앗 링크 줄 (등장인물) ──
-   태그 아래에 붙습니다. SEED_CAST 에 적힌 씨앗에만 나옵니다.
-   블러드하이스쿨 줄거리 아래 '등장인물 →' 와 같은 모양입니다. */
-.seed-links{
-  display:flex;gap:16px;flex-wrap:wrap;
-  margin-top:11px;padding-top:10px;border-top:1px solid var(--bd);
-}
-.seed-link{
-  background:none;border:none;padding:0;
-  font-size:11.5px;font-weight:500;color:var(--blue-ink);letter-spacing:-.01em;
-}
-.seed-link:hover{text-decoration:underline}
-
-/* ── 등장인물 모달 속 한 줄 ──
-   ⚠ 안쪽 디자인은 아직 정하지 않았습니다. 지금은 이름 + 한 줄뿐입니다.
-     글 목록 모달(.pick-*)의 껍데기를 그대로 빌려 씁니다. */
-.cast-row{padding:12px 18px;border-bottom:1px solid var(--bd)}
-.cast-row:last-child{border-bottom:none}
-.cast-name{font-size:13px;font-weight:600;color:var(--tx);letter-spacing:-.02em}
-.cast-line{font-size:12px;line-height:1.75;color:var(--tx3);letter-spacing:-.01em;margin-top:4px}
 .order-note{padding:14px 2px 8px;font-size:11px;color:var(--tx3);letter-spacing:-.01em}
 
 .list{padding-top:6px}
@@ -560,19 +547,6 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   </div>
 </div>
 
-<!-- ═══ 등장인물 모달 ═══
-     글 목록 모달의 껍데기(.pick-*)를 그대로 씁니다.
-     안쪽 디자인이 정해지면 이 안만 갈아끼우면 됩니다. -->
-<div class="pick-modal hidden" id="cast-modal" onclick="closeCastBg(event)">
-  <div class="pick-inner">
-    <div class="pick-hd">
-      <span class="pick-title" id="cast-title">등장인물</span>
-      <button class="pick-close" onclick="closeCast()">&#10005;</button>
-    </div>
-    <div class="pick-list" id="cast-list"></div>
-  </div>
-</div>
-
 <script>
 /* ══════════════════════════════════════════════════
    AI 사용 표기 — 문구는 여기 한 곳에만 있습니다
@@ -739,35 +713,6 @@ var SEED_PROMOTED = {
 var SEED_THUMB = {
   /* 예시 — 앞의 // 를 지우고 값을 고치세요
   '초고속히어로': 'images/seed/hero.png',
-  */
-};
-
-/* ══════════════════════════════════════════════════
-   씨앗 등장인물 — 여기도 손으로 적습니다
-
-   씨앗 배너 아래 '등장인물 →' 링크로 열립니다.
-   적어 둔 씨앗에만 링크가 나옵니다. 안 적으면 줄 자체가 없습니다.
-   (태그와 같은 방식입니다 — 빈 칸이면 자리도 안 만듭니다)
-
-   ⚠ 안쪽 화면은 아직 미정입니다.
-     지금은 이름 + 한 줄, 그게 전부인 뼈대만 있습니다.
-     나중에 그림·관계도·긴 소개를 붙일 자리는 renderCast() 한 곳입니다.
-     칸을 늘리려면 여기 { } 안에 항목만 더하면 됩니다.
-
-   ── 적는 법 ──
-     '씨앗이름': [
-       { name:'이름', line:'한 줄' },
-       { name:'이름', line:'한 줄' },
-     ],
-
-   line 은 없어도 됩니다. 이름만 적어도 나옵니다.
-   ══════════════════════════════════════════════════ */
-var SEED_CAST = {
-  /* 예시 — 앞의 / * * / 를 지우고 값을 고치세요
-  '초고속히어로': [
-    { name:'이름 미정', line:'달리는 것 말고는 할 줄 아는 게 없다.' },
-    { name:'이름 미정', line:'' },
-  ],
   */
 };
 
@@ -1011,11 +956,6 @@ function render(){
       +   (tg.length
             ? '<div class="seed-bn-tags">'
               + tg.map(function(t){ return '<span class="seed-tag">#' + esc(t) + '</span>'; }).join('')
-              + '</div>'
-            : '')
-      +   ((SEED_CAST[SEED] || []).length
-            ? '<div class="seed-links">'
-              + '<button class="seed-link" onclick="openCast()">등장인물 &rarr;</button>'
               + '</div>'
             : '')
       + '</div></div>';
@@ -1310,33 +1250,6 @@ function closePicker(){
 /* 바깥 어두운 곳을 눌렀을 때만 닫습니다 */
 function closePickerBg(ev){ if(ev.target === document.getElementById('pick-modal')) closePicker(); }
 
-/* ── 등장인물 모달 ──────────────────────────────────
-   SEED_CAST 에 적어 둔 것을 그대로 줄줄이 그립니다.
-   ⚠ 지금은 이름 + 한 줄뿐입니다. 안쪽 디자인은 아직 미정입니다.
-     그림·관계·긴 소개를 붙일 자리는 renderCast() 이 함수 하나입니다. */
-function openCast(){
-  var arr = SEED_CAST[SEED] || [];
-  if(!arr.length) return;
-  document.getElementById('cast-title').textContent = SEED + ' — 등장인물';
-  document.getElementById('cast-list').innerHTML = renderCast(arr);
-  document.getElementById('cast-modal').classList.remove('hidden');
-  document.body.classList.add('picker-open');
-}
-function renderCast(arr){
-  return arr.map(function(c){
-    return '<div class="cast-row">'
-         + '<div class="cast-name">' + esc(c.name || '') + '</div>'
-         + (c.line ? '<div class="cast-line">' + esc(c.line) + '</div>' : '')
-         + '</div>';
-  }).join('');
-}
-function closeCast(){
-  var m = document.getElementById('cast-modal');
-  if(m) m.classList.add('hidden');
-  document.body.classList.remove('picker-open');
-}
-function closeCastBg(ev){ if(ev.target === document.getElementById('cast-modal')) closeCast(); }
-
 /* ── ④ 본문 글자 크기 ───────────────────────────────
    크게 키울수록 줄간격을 조금씩 좁힙니다.
    그대로 두면 글자가 클 때 줄 사이가 벌어져 문단이 흩어져 보입니다.
@@ -1429,7 +1342,6 @@ document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
   stFsClose();
   closePicker();
-  closeCast();
 });
 
 /* ▲▲▲ 읽기 보조 기능 묶음 끝 ▲▲▲ */
@@ -1452,7 +1364,6 @@ function showView(v){
     hideFloatNav();
     resetChrome();
     closePicker();
-    closeCast();
     stFsClose();
   }
   window.scrollTo(0,0);
@@ -1474,7 +1385,6 @@ function goList(){
 
 function pickSeed(s){
   SEED = s;
-  closeCast();          /* 다른 씨앗으로 옮기면 열려 있던 등장인물 창은 닫습니다 */
   render();
   var want = s ? '#/s/' + encodeURIComponent(s) : '#/';
   if(location.hash !== want) location.hash = want;
