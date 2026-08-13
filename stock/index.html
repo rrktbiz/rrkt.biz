@@ -162,19 +162,13 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .head{padding:44px 0 26px;border-bottom:1px solid var(--bd)}
 .head-eyebrow{font-family:var(--fn);font-size:10px;font-weight:500;letter-spacing:1.8px;color:var(--tx3);margin-bottom:11px}
 .head-title{font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--tx);margin-bottom:12px}
-.head-desc{font-size:13.5px;line-height:1.85;color:var(--tx);letter-spacing:-.015em;font-weight:500}
-
-/* AI 고지 — 대문에서 유일하게 상자로 둘러싸는 부분입니다.
-   의무 고지라서 시선이 한 번은 걸리게 둡니다. */
-.ai-note{
-  margin:15px 0 0;padding:13px 15px;border-radius:9px;
-  background:var(--sm);border:1px solid var(--bd);
-  font-size:12px;line-height:1.85;color:var(--tx2);letter-spacing:-.012em;
+/* 대문 소개 — 설명 · AI 고지 · 혼잣말을 한 덩이로 둡니다.
+   상자도 볼드도 쓰지 않고, 줄바꿈으로만 나눕니다.
+   줄간격은 예전 홈페이지처럼 바짝 붙입니다(1.45). */
+.head-desc{
+  font-size:12px;line-height:1.45;color:var(--tx);
+  letter-spacing:-.012em;font-weight:400;
 }
-.ai-note b{color:var(--tx);font-weight:600}
-
-/* 왜 이렇게 하는가 — 한 줄. 조용히 둡니다. */
-.head-why{margin-top:13px;font-size:11.5px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em}
 .rd-ainote{
   margin-top:24px;padding-top:16px;border-top:1px solid var(--bd);
   font-size:11px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em;
@@ -653,8 +647,6 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       <div class="head-eyebrow">AI WRITING STOCK</div>
       <div class="head-title">AI글창고</div>
       <div class="head-desc" id="head-what"></div>
-      <div class="ai-note" id="ai-note-head"></div>
-      <div class="head-why" id="head-why"></div>
     </div>
 
     <div class="seed-row" id="seed-row"></div>
@@ -779,7 +771,7 @@ var WHAT_NOTE =
 
 /* ② AI 고지 — 실제 작업 비중이 달라지면 이 문장부터 고치세요 */
 var AI_NOTE =
-  '<b>소재와 전개는 제가 적고, 문장은 생성형 AI(Google Gemini)가 씁니다.</b><br>'
+  '소재와 전개는 제가 적고, 문장은 생성형 AI(Google Gemini)가 씁니다.<br>'
 + '각 글에는 AI 에 넣기 전 원문을 함께 둡니다.';
 
 /* ③ 왜 이렇게 하는지 — 한 줄로 둡니다 */
@@ -2172,9 +2164,10 @@ function copyLink(){
 })();
 
 /* 시작 */
-document.getElementById('head-what').innerHTML     = WHAT_NOTE;
-document.getElementById('ai-note-head').innerHTML  = AI_NOTE;
-document.getElementById('head-why').innerHTML      = WHY_NOTE;
+/* 대문은 세 문구를 한 덩이로 이어 붙입니다.
+   (문구 자체는 위 ①②③ 자리에서 계속 따로 고치시면 됩니다) */
+document.getElementById('head-what').innerHTML     =
+  WHAT_NOTE + '<br>' + AI_NOTE + '<br>' + WHY_NOTE;
 document.getElementById('ai-note-read').innerHTML  = AI_NOTE;
 
 /* ⚠ route() 를 loadList() 보다 먼저 부릅니다.
