@@ -236,9 +236,19 @@ body.reading #tb-fs-wrap{display:inline-flex}
   background:none;border:none;
 }
 .shelf-cover{
+  position:relative;
   aspect-ratio:3/4;border-radius:8px;overflow:hidden;
   background:var(--sm);border:1px solid var(--bd);
   transition:border-color .12s,box-shadow .12s,transform .12s;
+}
+/* 표지 왼쪽 위에 붙는 딱지. 가장 최근에 손댄 세계에만 붙습니다.
+   Josefin Sans 는 이 페이지에서 100·300 만 불러와서
+   작은 딱지에 쓰면 흐려집니다. 그래서 Inter 를 씁니다. */
+.shelf-new{
+  position:absolute;top:8px;left:8px;z-index:1;
+  font-family:'Inter',sans-serif;font-size:8.5px;font-weight:600;
+  letter-spacing:.12em;color:#fff;background:var(--blue);
+  padding:3px 7px;border-radius:4px;line-height:1;
 }
 .shelf-item:hover .shelf-cover{border-color:var(--bd2);box-shadow:0 3px 14px #0000000f;transform:translateY(-2px)}
 .shelf-cover img{width:100%;height:100%;object-fit:cover;display:block}
@@ -1130,12 +1140,14 @@ function renderShelf(list){
     var th = SEED_THUMB[s.name];
     var tg = seedTags(s.name);
     var up = updText(s.last);
+    var isNew = !!(up && s.last === freshest);
     return '<button class="shelf-item" onclick="pickSeed(\'' + esc(s.name).replace(/'/g,"\\'") + '\')">'
       + '<div class="shelf-cover">'
+      +   (isNew ? '<span class="shelf-new">UPDATE</span>' : '')
       +   (th ? '<img src="' + esc(th) + '" alt="" onerror="this.style.display=\'none\'">' : '')
       + '</div>'
       + '<div class="shelf-name">' + esc(s.name) + '</div>'
-      + '<div class="shelf-meta' + (up && s.last === freshest ? ' fresh' : '') + '">'
+      + '<div class="shelf-meta' + (isNew ? ' fresh' : '') + '">'
       +   s.count + '편' + (up ? ' · ' + up : '')
       + '</div>'
       + (tg.length
