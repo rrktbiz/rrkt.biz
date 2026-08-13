@@ -468,9 +468,9 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .seed-thumb{width:84px;height:112px}
   .seed-bn-name{font-size:14px}
 
-  /* 선반은 화면 폭에 따라 칸 수를 줄입니다.
-     좁은 화면에서 5칸을 유지하면 표지가 손톱만 해집니다. */
-  .shelf{grid-template-columns:repeat(3,1fr);gap:16px 12px}
+  /* 선반 칸 수는 여기서 안 건드립니다.
+     태블릿 폭까지는 5칸을 그대로 두고, 진짜 좁아지는 지점에서만 줄입니다.
+     (아래 max-width:560px / 400px 블록) */
   .shelf-name{font-size:12.5px}
 
   /* ⚠ 예전에는 여기서 본문 크기를 15.5px 로 고정했습니다.
@@ -485,15 +485,21 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .rd-nav{padding:12px 10px;font-size:11.5px}
   .rd-pick{padding:12px;font-size:10.5px}
 }
+/* ── 선반 칸 수 ──
+   401px 위로는 어떤 폭에서도 5칸입니다. 창을 줄여도 안 바뀝니다.
+   400px 이하에서만 4칸으로 내려갑니다. */
 @media(max-width:400px){
   /* 아주 좁은 화면에서는 가운데 버튼을 "☰ 목록" 으로 줄입니다 */
   .rdp-long{display:none}
   .rd-foot{gap:6px}
-  .shelf{grid-template-columns:repeat(2,1fr)}
-}
-/* 노트북·태블릿 중간 폭 — 5칸은 빡빡하고 3칸은 헐렁한 구간 */
-@media(min-width:769px) and (max-width:1000px){
-  .shelf{grid-template-columns:repeat(4,1fr)}
+  /* 4칸이면 한 칸이 아주 좁아지므로 간격과 글자도 같이 줄입니다.
+     안 줄이면 표지보다 글자가 더 자리를 먹습니다. */
+  .shelf{grid-template-columns:repeat(4,1fr);gap:14px 7px}
+  .shelf-name{font-size:11px;line-height:1.35;margin-top:6px}
+  .shelf-meta{font-size:9.5px;margin-top:2px}
+  .shelf-tags{gap:5px;margin-top:3px}
+  .shelf-tags span{font-size:9.5px}
+  .shelf-new{top:5px;left:5px;font-size:7px;padding:2px 4px;letter-spacing:.08em}
 }
 </style>
 </head>
