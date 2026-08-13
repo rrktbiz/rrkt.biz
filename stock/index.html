@@ -232,7 +232,12 @@ body.reading #tb-fs-wrap{display:inline-flex}
    ══════════════════════════════════════════════════ */
 .shelf{display:grid;grid-template-columns:repeat(5,1fr);gap:18px 14px;padding-top:4px}
 .shelf-item{
-  display:block;width:100%;text-align:left;padding:0;
+  /* ⚠ button 은 내용을 세로 가운데에 놓습니다.
+     그냥 두면 글이 짧은 칸의 표지가 아래로 밀려 줄이 어긋납니다.
+     flex 로 바꿔서 위부터 쌓이게 고정합니다. */
+  display:flex;flex-direction:column;align-items:stretch;
+  align-self:start;
+  width:100%;text-align:left;padding:0;
   background:none;border:none;
 }
 .shelf-cover{
@@ -252,12 +257,33 @@ body.reading #tb-fs-wrap{display:inline-flex}
 }
 .shelf-item:hover .shelf-cover{border-color:var(--bd2);box-shadow:0 3px 14px #0000000f;transform:translateY(-2px)}
 .shelf-cover img{width:100%;height:100%;object-fit:cover;display:block}
-.shelf-name{font-size:13px;font-weight:700;color:var(--tx);letter-spacing:-.025em;line-height:1.45;margin-top:9px}
-.shelf-meta{font-size:10.5px;color:var(--tx3);letter-spacing:-.01em;margin-top:3px;line-height:1.5}
+/* ── 표지 아래 글자 ──
+   세 줄 다 높이를 고정합니다. 이름이 한 줄이든 두 줄이든 카드 높이가 같습니다.
+   고정을 안 하면 글이 긴 칸 하나 때문에 그 줄 전체가 밀립니다.
+   넘치는 글자는 잘립니다. 잘린 내용은 세계로 들어가면 다 보입니다. */
+.shelf-name{
+  font-size:13px;font-weight:700;color:var(--tx);letter-spacing:-.025em;
+  line-height:1.45;margin-top:9px;
+  height:2.9em;                                  /* 두 줄 자리를 항상 비워 둡니다 */
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.shelf-meta{
+  font-size:10.5px;color:var(--tx3);letter-spacing:-.01em;
+  margin-top:3px;line-height:1.5;height:1.5em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 /* 가장 최근에 손댄 세계 하나만 색을 줍니다. 다 칠하면 티가 안 납니다 */
 .shelf-meta.fresh{color:var(--blue-ink);font-weight:500}
-.shelf-tags{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:5px}
+/* 태그는 한 줄까지만. 넘치는 건 오른쪽으로 흐려지며 사라집니다 */
+.shelf-tags{
+  display:flex;align-items:baseline;gap:7px;flex-wrap:nowrap;
+  margin-top:5px;height:1.6em;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent);
+          mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent);
+}
 .shelf-tags span{font-size:10.5px;font-weight:500;color:var(--blue-ink);letter-spacing:-.01em;white-space:nowrap;line-height:1.6}
+/* 태그가 없는 세계도 자리는 남겨 둡니다. 안 그러면 그 칸만 짧아집니다 */
+.shelf-tags-empty{height:1.6em;margin-top:5px}
 
 /* 씨앗을 안 적은 글은 선반에 설 자리가 없습니다.
    사라지면 안 되니 선반 아래에 따로 깔아 둡니다. */
@@ -495,9 +521,12 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   /* 4칸이면 한 칸이 아주 좁아지므로 간격과 글자도 같이 줄입니다.
      안 줄이면 표지보다 글자가 더 자리를 먹습니다. */
   .shelf{grid-template-columns:repeat(4,1fr);gap:14px 7px}
-  .shelf-name{font-size:11px;line-height:1.35;margin-top:6px}
+  /* 글자가 작아지면 고정 높이도 같이 줄여야 빈 자리가 안 생깁니다.
+     (높이는 그 줄 글자 크기 기준이라 line-height 를 바꾸면 같이 손봐야 합니다) */
+  .shelf-name{font-size:11px;line-height:1.35;margin-top:6px;height:2.7em}
   .shelf-meta{font-size:9.5px;margin-top:2px}
   .shelf-tags{gap:5px;margin-top:3px}
+  .shelf-tags-empty{margin-top:3px}
   .shelf-tags span{font-size:9.5px}
   .shelf-new{top:5px;left:5px;font-size:7px;padding:2px 4px;letter-spacing:.08em}
 }
@@ -1160,7 +1189,7 @@ function renderShelf(list){
           ? '<div class="shelf-tags">'
             + tg.slice(0, 3).map(function(t){ return '<span>#' + esc(t) + '</span>'; }).join('')
             + '</div>'
-          : '')
+          : '<div class="shelf-tags-empty"></div>')
     + '</button>';
   }).join('') + '</div>';
 
