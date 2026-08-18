@@ -109,6 +109,65 @@ a{color:inherit}
 #tb-sound-btn.is-off{color:var(--tx3)}
 
 /* ══════════════════════════════════════════
+   번역  (story.html · 허브 index.html 과 같은 방식)
+
+   두 겹입니다. 하는 일이 다릅니다.
+
+     ① 상단바 언어 드롭다운 — 구글 번역이 '페이지 전체'를 갈아 끼웁니다.
+                              메뉴 · 버튼 · 목록 · 안내문까지 다 바뀝니다.
+     ② DeepL 로 번역 — 지금 읽는 '글 본문'만 다시 번역합니다.
+                       구글이 소설 문장에 약해서 붙여 둔 두 번째 통로입니다.
+                       ①을 켜야 ②버튼이 나타납니다.
+
+   ⚠ 색은 이 창고 규칙대로 흑백입니다.
+     다른 사이트(story.html)는 파랑 뱃지를 쓰지만
+     창고는 강조를 검정 계열로만 하기로 했으므로 일부러 안 맞췄습니다.
+     여기에 파랑을 되살리지 마세요. 위 :root 주석과 어긋납니다.
+
+   ⚠ googtrans 쿠키는 도메인 전체에 걸립니다.
+     허브에서 영어를 골라 두면 이 창고도 영어로 열립니다. 의도된 동작입니다.
+   ══════════════════════════════════════════ */
+#tl-badge{
+  font-size:10px;font-weight:600;letter-spacing:.02em;
+  padding:3px 7px;border-radius:4px;
+  border:1px solid var(--bd);background:var(--sm);color:var(--tx2);
+  opacity:0;pointer-events:none;transition:opacity .2s;white-space:nowrap;
+}
+#tl-badge.show{opacity:1}
+#tb-lang-btn{
+  display:flex;align-items:center;gap:5px;height:28px;padding:0 9px;
+  border:1px solid var(--bd);border-radius:6px;background:transparent;
+  font-size:11px;color:var(--tx2);transition:all .12s;white-space:nowrap;
+}
+#tb-lang-btn:hover{background:var(--sm);color:var(--tx);border-color:var(--bd2)}
+#tb-lang-caret{font-size:8px;display:inline-block;transition:transform .15s}
+#tb-lang-dropdown{
+  display:none;position:absolute;top:calc(100% + 6px);right:12px;width:270px;
+  background:var(--sb);border:1px solid var(--bd);border-radius:10px;
+  box-shadow:0 8px 28px #00000018;z-index:9999;overflow:hidden;
+}
+.tb-lang-note{
+  padding:10px 14px;border-top:1px solid var(--bd);background:var(--sm);
+  font-size:10.5px;line-height:1.7;color:var(--tx3);
+}
+.tb-lang-note b{color:var(--tx2);font-weight:600}
+
+/* 구글 번역이 위에 끼워 넣는 막대와 여백을 지웁니다.
+   이 두 줄이 없으면 상단바가 40px 아래로 밀려납니다. */
+.goog-te-banner-frame,.goog-te-menu-frame,.skiptranslate{display:none !important}
+body{top:0 !important}
+
+/* 번역 중에도 자리를 잡아 두려고 숨겨 둔 구글 위젯 자리 */
+#google_translate_element{position:fixed;bottom:8px;right:8px;opacity:0;pointer-events:none;z-index:-1}
+
+/* 좁은 화면에서는 지구본만 남기고 'Language' 글자를 접습니다.
+   읽는 중에는 상단바에 글자 크기 버튼까지 들어와서 자리가 없습니다. */
+@media(max-width:768px){
+  #tb-lang-label{display:none}
+  #tb-lang-dropdown{right:8px;width:min(270px,calc(100vw - 24px))}
+}
+
+/* ══════════════════════════════════════════
    읽기 화면 크롬 자동 숨김  (블러드하이스쿨에서 옮겨옴)
 
    모바일에서 글을 내리는 동안 상단바를 접습니다.
@@ -377,7 +436,9 @@ body.reading #tb-fs-wrap{display:inline-flex}
 /* 버튼 두 개가 나란히 섭니다.
      원문 보기 — 예전처럼 본문 아래에 원문 상자를 펼칩니다. 원문만 볼 사람용.
      원문 대조 — 좌우 2단 대조를 엽니다. 넓은 화면에서만 보입니다. */
-.rd-head-btns{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-bottom:3px}
+/* 버튼이 최대 넷까지 섭니다 (DeepL · 재번역 · 원문 보기 · 원문 대조).
+   좁은 화면에서 제목 아래로 내려왔을 때 넘치지 않게 줄바꿈을 허용합니다. */
+.rd-head-btns{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-bottom:3px;flex-wrap:wrap}
 .rd-hbtn{
   display:none;align-items:center;gap:6px;
   padding:7px 14px;border-radius:100px;border:1px solid var(--bd);
@@ -387,6 +448,12 @@ body.reading #tb-fs-wrap{display:inline-flex}
 .rd-hbtn.on{display:inline-flex}
 .rd-hbtn:hover{border-color:var(--bd2);color:var(--tx2)}
 .rd-hbtn.open{background:var(--sm);border-color:var(--bd2);color:var(--tx2)}
+.rd-hbtn:disabled{opacity:.55;cursor:default}
+/* DeepL 버튼도 같은 .rd-hbtn 을 씁니다.
+   원문 버튼들과 나란히 서는 자리라 모양을 따로 만들 이유가 없습니다.
+   나타나고 사라지는 규칙만 다릅니다 —
+     원문 버튼 : texts_raw/ 에 파일이 있으면 나타남
+     DeepL 버튼: 언어를 한국어 아닌 것으로 바꾸면 나타남  */
 /* ── 원문 보기 ──
    상자를 펼치는 게 아니라, 본문 자리를 원문으로 갈아 끼웁니다.
    AI 글을 읽던 그 자리에서 원문이 그대로 보입니다.
@@ -617,7 +684,26 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
        ./ 는 지금 이 파일이 있는 stock 폴더를 가리킵니다. -->
   <a class="tb-title" href="./">AI STOCK</a>
   <div class="tb-right">
+    <span id="tl-badge"></span>
     <button id="tb-sound-btn" onclick="soundToggle()" title="클릭 소리"></button>
+    <!-- 언어 — 페이지 전체를 구글 번역으로 바꿉니다.
+         목록은 아래 ALL_LANGS 한 곳에만 있습니다. -->
+    <button id="tb-lang-btn" onclick="tbLangToggle()" title="언어" aria-label="언어">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
+      <span id="tb-lang-label">Language</span>
+      <span id="tb-lang-caret">&#9660;</span>
+    </button>
+    <div id="tb-lang-dropdown">
+      <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
+        <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
+        <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
+      </div>
+      <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
+      <div class="tb-lang-note">
+        이 페이지는 <b>Google 번역</b>으로 표시됩니다.<br>
+        글 본문은 <b>DeepL</b>로 다시 번역할 수 있습니다.
+      </div>
+    </div>
     <button id="tb-pd-btn" onclick="openPD()" title="기획 · 제휴 문의">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
       FOR PD
@@ -671,6 +757,9 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       </div>
       <!-- 원문 관련 버튼 — texts_raw/ 에 파일이 있는 글에만 나타납니다 -->
       <div class="rd-head-btns">
+        <!-- DeepL — 언어를 한국어 아닌 것으로 바꿨을 때만 나타납니다 -->
+        <button class="rd-hbtn" id="rd-tl-btn" onclick="stTlGo()">DeepL로 번역</button>
+        <button class="rd-hbtn" id="rd-tl-rebtn" onclick="stTlRedo()" title="캐시를 지우고 다시 번역합니다">재번역</button>
         <button class="rd-hbtn" id="rd-raw-btn" onclick="toggleRawBox()">원문 보기</button>
         <button class="rd-hbtn" id="rd-cmp-btn" onclick="toggleCompare()">원문 대조</button>
       </div>
@@ -683,13 +772,18 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
          왼쪽이 AI 글, 오른쪽이 원문입니다. -->
     <div class="rd-compare" id="rd-compare">
       <div class="rc-panes">
+        <!-- ⚠ 대조 두 칸은 번역에서 뺐습니다 (notranslate / translate="no").
+             여기가 하는 일은 '원문에 쓴 한국어 낱말이 AI 글에 그대로 남았나' 를
+             글자 단위로 대보는 것입니다. 번역기가 양쪽을 각자 다른 말로 바꾸면
+             칠해진 자리가 전부 어긋나서 화면이 뜻 없는 색칠이 됩니다.
+             칸 제목과 아래 버튼은 그대로 번역됩니다. -->
         <div class="rc-pane ai">
           <div class="rc-label">AI &middot; 생성된 문장</div>
-          <div class="rc-text" id="rc-ai"></div>
+          <div class="rc-text notranslate" id="rc-ai" translate="no"></div>
         </div>
         <div class="rc-pane raw">
           <div class="rc-label">RAW &middot; 제가 쓴 원문</div>
-          <div class="rc-text" id="rc-raw"></div>
+          <div class="rc-text notranslate" id="rc-raw" translate="no"></div>
         </div>
       </div>
       <div class="rc-tools">
@@ -732,6 +826,393 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
     <div class="pick-list" id="pick-list"></div>
   </div>
 </div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   번역 ①  페이지 전체 — 구글 번역
+
+   상단바 지구본 버튼이 여는 목록입니다.
+   고른 언어는 googtrans 쿠키에 남습니다. 쿠키는 도메인 전체에 걸려서
+   허브 · 블러드하이스쿨 · biz-OC-doll 과 언어가 자동으로 같이 갑니다.
+   (그래서 여기서 언어를 바꾸면 다른 사이트도 그 언어로 열립니다)
+
+   ⚠ 한국어로 되돌릴 때는 새로고침을 합니다.
+     구글 번역은 한 번 갈아 끼운 글을 원래대로 되돌리지 못합니다.
+     되돌리는 척하다가 문장이 반씩 섞이는 일이 생겨서, 아예 다시 받습니다.
+
+   ⚠ 이 블록은 story.html · index.html 에도 같은 내용이 들어 있습니다.
+     번역 쪽을 고칠 일이 생기면 세 곳을 같은 내용으로 맞추세요.
+     한쪽만 고치면 화면은 멀쩡한데 번역만 조용히 어긋납니다.
+   ═══════════════════════════════════════════════════════════════ */
+
+var TL = window.TL = { lang:'ko', hooks:[], onChange:function(fn){ TL.hooks.push(fn); } };
+
+function tlBadge(engine){
+  var el = document.getElementById('tl-badge'); if(!el) return;
+  el.className = 'show';
+  el.textContent = (engine === 'deepl') ? 'DeepL' : 'Google';
+}
+function tlBadgeOff(){
+  var el = document.getElementById('tl-badge'); if(!el) return;
+  el.className = ''; el.textContent = '';
+}
+
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
+}
+window.googleTranslateElementInit = googleTranslateElementInit;
+
+function setLang(lang){
+  TL.lang = lang;
+
+  /* 한국어 = 번역 끄기. 쿠키를 지우고 페이지를 다시 받습니다. */
+  if(lang === 'ko'){
+    document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    location.reload();
+    return;
+  }
+
+  /* 화면별 훅 — 본문 DeepL 바 상태를 다시 계산합니다 */
+  TL.hooks.forEach(function(fn){ try{ fn(lang); }catch(e){ console.warn('[TL hook]', e); } });
+
+  tlBadge('google');
+  var sel = document.querySelector('.goog-te-combo');
+  if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
+
+  /* 위젯이 아직 안 붙었으면 쿠키로 알려주고 다시 받습니다 */
+  document.cookie = 'googtrans=/ko/' + lang + ';path=/';
+  document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  location.reload();
+}
+window.setLang = setLang;
+
+
+/* ── 언어 드롭다운 ── */
+(function(){
+  var ALL_LANGS=[
+    ['Afrikaans','af'],['Albanian','sq'],['Amharic','am'],['Arabic','ar'],['Armenian','hy'],
+    ['Azerbaijani','az'],['Basque','eu'],['Belarusian','be'],['Bengali','bn'],['Bosnian','bs'],
+    ['Bulgarian','bg'],['Catalan','ca'],['Cebuano','ceb'],['Chinese (Simplified)','zh-CN'],
+    ['Chinese (Traditional)','zh-TW'],['Corsican','co'],['Croatian','hr'],['Czech','cs'],
+    ['Danish','da'],['Dutch','nl'],['English','en'],['Esperanto','eo'],['Estonian','et'],
+    ['Finnish','fi'],['French','fr'],['Frisian','fy'],['Galician','gl'],['Georgian','ka'],
+    ['German','de'],['Greek','el'],['Gujarati','gu'],['Haitian Creole','ht'],['Hausa','ha'],
+    ['Hawaiian','haw'],['Hebrew','iw'],['Hindi','hi'],['Hmong','hmn'],['Hungarian','hu'],
+    ['Icelandic','is'],['Igbo','ig'],['Indonesian','id'],['Irish','ga'],['Italian','it'],
+    ['Japanese','ja'],['Javanese','jv'],['Kannada','kn'],['Kazakh','kk'],['Khmer','km'],
+    ['Korean','ko'],['Kurdish','ku'],['Kyrgyz','ky'],['Lao','lo'],['Latin','la'],
+    ['Latvian','lv'],['Lithuanian','lt'],['Luxembourgish','lb'],['Macedonian','mk'],
+    ['Malagasy','mg'],['Malay','ms'],['Malayalam','ml'],['Maltese','mt'],['Maori','mi'],
+    ['Marathi','mr'],['Mongolian','mn'],['Myanmar (Burmese)','my'],['Nepali','ne'],
+    ['Norwegian','no'],['Nyanja (Chichewa)','ny'],['Pashto','ps'],['Persian','fa'],
+    ['Polish','pl'],['Portuguese','pt'],['Punjabi','pa'],['Romanian','ro'],['Russian','ru'],
+    ['Samoan','sm'],['Scots Gaelic','gd'],['Serbian','sr'],['Sesotho','st'],['Shona','sn'],
+    ['Sindhi','sd'],['Sinhala','si'],['Slovak','sk'],['Slovenian','sl'],['Somali','so'],
+    ['Spanish','es'],['Sundanese','su'],['Swahili','sw'],['Swedish','sv'],['Tagalog (Filipino)','tl'],
+    ['Tajik','tg'],['Tamil','ta'],['Telugu','te'],['Thai','th'],['Turkish','tr'],
+    ['Ukrainian','uk'],['Urdu','ur'],['Uzbek','uz'],['Vietnamese','vi'],['Welsh','cy'],
+    ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
+  ];
+  /* 맨 위에 고정으로 올려 두는 언어. 나머지는 알파벳 순서 그대로입니다. */
+  var PRIORITY = ['ko','en','ja','zh-CN'];
+  var _sel = null, _open = false;
+
+  function item(l){
+    var name = l[0], code = l[1], isS = (_sel === code);
+    var d = document.createElement('div');
+    d.style.cssText = 'display:flex;align-items:center;padding:8px 14px;cursor:pointer;gap:10px;background:' + (isS ? 'var(--sm)' : 'transparent');
+    d.onmouseover = function(){ this.style.background = 'var(--sm)'; };
+    d.onmouseout  = function(){ this.style.background = isS ? 'var(--sm)' : 'transparent'; };
+    d.onclick     = function(){ tbLangSelect(code, name); };
+    var n = document.createElement('span');
+    n.style.cssText = 'font-size:13px;color:var(--tx);flex:1'; n.textContent = name;
+    var c = document.createElement('span');
+    c.style.cssText = 'font-size:11px;color:var(--tx3);font-family:monospace'; c.textContent = code;
+    d.appendChild(n); d.appendChild(c);
+    if(isS){
+      var ck = document.createElement('span');
+      ck.style.cssText = 'font-size:12px;color:var(--tx)'; ck.textContent = '✓';
+      d.appendChild(ck);
+    }
+    return d;
+  }
+  function render(q){
+    var list = document.getElementById('tb-lang-list'); if(!list) return;
+    var f = (q || '').toLowerCase().trim();
+    var filtered = f ? ALL_LANGS.filter(function(l){
+      return l[0].toLowerCase().indexOf(f) > -1 || l[1].toLowerCase().indexOf(f) > -1;
+    }) : ALL_LANGS;
+    list.innerHTML = '';
+    if(!filtered.length){
+      list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--tx3)">No results</div>';
+      return;
+    }
+    if(!f){
+      PRIORITY.map(function(c){
+        return ALL_LANGS.filter(function(l){ return l[1] === c; })[0];
+      }).filter(Boolean).forEach(function(l){ list.appendChild(item(l)); });
+      var div = document.createElement('div');
+      div.style.cssText = 'height:1px;background:var(--bd);margin:4px 0';
+      list.appendChild(div);
+      filtered.filter(function(l){ return PRIORITY.indexOf(l[1]) === -1; }).forEach(function(l){ list.appendChild(item(l)); });
+    }else{
+      filtered.forEach(function(l){ list.appendChild(item(l)); });
+    }
+  }
+  function close(){
+    _open = false;
+    var dd = document.getElementById('tb-lang-dropdown');
+    var btn = document.getElementById('tb-lang-btn');
+    var caret = document.getElementById('tb-lang-caret');
+    if(dd) dd.style.display = 'none';
+    if(btn){ btn.style.background = 'transparent'; btn.style.borderColor = 'var(--bd)'; }
+    if(caret) caret.style.transform = '';
+  }
+  window.tbLangToggle = function(){
+    _open = !_open;
+    var dd = document.getElementById('tb-lang-dropdown');
+    var btn = document.getElementById('tb-lang-btn');
+    var caret = document.getElementById('tb-lang-caret');
+    if(!dd) return;
+    dd.style.display = _open ? 'block' : 'none';
+    if(btn){
+      btn.style.background = _open ? 'var(--sm)' : 'transparent';
+      btn.style.borderColor = _open ? 'var(--bd2)' : 'var(--bd)';
+    }
+    if(caret) caret.style.transform = _open ? 'rotate(180deg)' : '';
+    if(_open){ render(''); setTimeout(function(){ var s = document.getElementById('tb-lang-search'); if(s) s.focus(); }, 80); }
+  };
+  window.tbLangFilter = function(){
+    var s = document.getElementById('tb-lang-search');
+    render(s ? s.value : '');
+  };
+  window.tbLangSelect = function(code, name){
+    _sel = code;
+    var lbl = document.getElementById('tb-lang-label');
+    if(lbl) lbl.textContent = name;
+    close();
+    setLang(code);
+  };
+  document.addEventListener('click', function(e){
+    if(_open && !e.target.closest('#tb-lang-btn') && !e.target.closest('#tb-lang-dropdown')) close();
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && _open) close(); });
+
+  /* 새로고침 뒤에도 고른 언어를 기억합니다 (googtrans 쿠키를 읽습니다) */
+  var m = document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/);
+  if(m && m[1] && m[1] !== 'ko'){
+    TL.lang = m[1];
+    _sel = m[1];
+    var found = ALL_LANGS.filter(function(l){ return l[1] === m[1]; })[0];
+    var lbl0 = document.getElementById('tb-lang-label');
+    if(lbl0 && found) lbl0.textContent = found[0];
+    tlBadge('google');
+  }
+})();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   번역 ②  글 본문 — DeepL
+
+   구글 번역은 메뉴·버튼에는 잘 맞지만 소설 문장에서 자주 어색해집니다.
+   그래서 '지금 읽는 글 본문' 만 DeepL 로 다시 받는 버튼을 둡니다.
+   제목 옆, 원문 버튼들 옆자리입니다.
+
+   ── 동작 ──
+     · 언어가 한국어면 버튼이 아예 안 나옵니다 (번역할 이유가 없음)
+     · 한 번 받은 번역은 localStorage 에 저장합니다. 다시 열면 즉시 뜹니다.
+     · '재번역' 은 저장해 둔 것을 지우고 새로 받습니다.
+     · 원문 보기 상태에서 누르면 '원문' 을 번역합니다.
+       AI 글과 원문은 서로 다른 글이라 따로 저장합니다.
+
+   ── 왜 줄 단위로 쪼개 보내나 ──
+     본문은 통짜 텍스트이고 화면은 white-space:pre-wrap 로 줄을 그대로 살립니다.
+     통째로 보내면 번역기가 줄바꿈을 자기 마음대로 합쳐 버려서 문단이 무너집니다.
+     줄마다 따로 보내고 원래 자리에 도로 끼우면 생김새가 그대로 남습니다.
+
+   ⚠ DeepL 키는 여기 없습니다. config.js 의 DEEPL.proxyUrl(Cloudflare Worker)만
+     부릅니다. 키는 Worker 안에만 있습니다. 여기에 적지 마세요.
+
+   ⚠ config.js 에서 DEEPL.enabled 를 false 로 하면 이 버튼은 안 나오고
+     위 ① 구글 번역만 돕니다. 이 파일은 고칠 필요 없습니다.
+   ═══════════════════════════════════════════════════════════════ */
+
+function stDlCfg(){ return (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {}; }
+
+/* 구글 언어코드 → DeepL 언어코드.  zh-CN / zh-TW 는 둘 다 ZH 입니다. */
+function stDlLang(lang){
+  if(lang === 'zh-CN' || lang === 'zh-TW') return 'ZH';
+  return String(lang || '').split('-')[0].toUpperCase();
+}
+
+/* 지금 화면에 떠 있는 글의 '원본' 텍스트.
+   원문 보기 중이면 원문, 아니면 AI 글입니다. 본문이 없으면 null. */
+function stSrcText(){
+  if(!CUR) return null;
+  var t = (typeof RAWMODE !== 'undefined' && RAWMODE) ? RAW_CACHE[CUR.id] : BODY_CACHE[CUR.id];
+  return (t == null) ? null : t;
+}
+
+/* 저장 열쇠 —  글번호 · AI/원문 · 언어  가 하나라도 다르면 다른 칸입니다 */
+function stTlKey(){
+  if(!CUR) return '';
+  var mode = (typeof RAWMODE !== 'undefined' && RAWMODE) ? 'raw' : 'ai';
+  return 'dl_stock_' + CUR.id + '_' + mode + '_' + stDlLang(TL.lang);
+}
+function stTlCached(){
+  try{
+    var v = localStorage.getItem(stTlKey());
+    return v ? JSON.parse(v) : null;
+  }catch(e){ return null; }
+}
+
+/* ── 본문 칠하기 ──
+   저장해 둔 번역이 있으면 그것을, 없으면 원본을 넣습니다.
+   번역문에는 notranslate 를 붙입니다. 안 붙이면 구글 번역이
+   DeepL 이 만든 문장을 한 번 더 번역해서 문장이 뭉개집니다. */
+function stPaintBody(){
+  var body = document.getElementById('rd-body');
+  if(!body || !CUR) return;
+  var src = stSrcText();
+  if(src == null) return;              /* 본문 없음 안내는 openItem 이 이미 써 뒀습니다 */
+  var title = document.getElementById('rd-title');
+  var hit = (TL.lang && TL.lang !== 'ko') ? stTlCached() : null;
+
+  if(hit){
+    body.classList.add('notranslate');  body.setAttribute('translate','no');
+    body.textContent = hit.b;
+    if(title && hit.t){
+      title.classList.add('notranslate'); title.setAttribute('translate','no');
+      title.textContent = hit.t;
+    }
+  }else{
+    body.classList.remove('notranslate'); body.removeAttribute('translate');
+    body.textContent = src;
+    if(title){
+      title.classList.remove('notranslate'); title.removeAttribute('translate');
+      title.textContent = CUR.title;
+    }
+  }
+}
+
+/* ── 버튼 모양 ── */
+function stTlBtn(){  return document.getElementById('rd-tl-btn'); }
+function stTlReBtn(){ return document.getElementById('rd-tl-rebtn'); }
+function stTlBtnReset(){
+  var b = stTlBtn(); if(!b) return;
+  b.disabled = false; b.classList.remove('open'); b.textContent = 'DeepL로 번역';
+}
+function stTlBtnBusy(){
+  var b = stTlBtn(); if(!b) return;
+  b.disabled = true; b.textContent = '번역 중…';
+}
+function stTlBtnDone(){
+  var b = stTlBtn(); if(!b) return;
+  b.disabled = false; b.classList.add('open'); b.textContent = 'DeepL 번역됨';
+  tlBadge('deepl');
+}
+
+/* ── 상태 맞추기 ──
+   글을 열 때 · 언어를 바꿀 때 · 원문 보기를 켜고 끌 때 부릅니다.
+   버튼을 보일지 말지, 저장된 번역이 있는지를 여기서 한 번에 정합니다. */
+function stTlSync(){
+  var btn = stTlBtn(), re = stTlReBtn();
+  if(!btn || !re) return;
+  var cfg = stDlCfg();
+  var on = !!CUR
+        && TL.lang && TL.lang !== 'ko'
+        && cfg.enabled && cfg.proxyUrl
+        && stSrcText() != null;
+
+  btn.classList.toggle('on', !!on);
+  if(!on){
+    re.classList.remove('on');
+    stTlBtnReset();
+    stPaintBody();
+    return;
+  }
+  if(stTlCached()){ stTlBtnDone(); re.classList.add('on'); }
+  else            { stTlBtnReset(); re.classList.remove('on'); }
+  stPaintBody();
+}
+window.stTlSync = stTlSync;
+
+/* 언어가 바뀌면 본문 상태도 다시 계산합니다 */
+TL.onChange(function(){ stTlSync(); });
+
+/* ── 실제 번역 ── */
+function stTlRun(force){
+  var cfg = stDlCfg();
+  var url = cfg.proxyUrl;
+  if(!url || !CUR) return;
+  if(!TL.lang || TL.lang === 'ko') return;
+
+  var src = stSrcText(); if(src == null) return;
+  var key  = stTlKey();
+  var lang = stDlLang(TL.lang);
+  var who  = CUR;                       /* 받는 동안 다른 글로 넘어갔는지 볼 표식 */
+
+  if(force){ try{ localStorage.removeItem(key); }catch(e){} }
+
+  /* 줄 단위로 쪼갭니다. 빈 줄은 보내지 않고 자리만 지킵니다. */
+  var lines = src.split('\n');
+  var slots = [], texts = [];
+  lines.forEach(function(l, i){ if(l.trim()){ slots.push(i); texts.push(l); } });
+
+  var title = (CUR.title || '').trim();
+  var all = (title ? [title] : []).concat(texts);
+  if(!all.length) return;
+
+  stTlBtnBusy();
+
+  /* 한 번에 너무 많이 보내면 프록시가 거절합니다. 50줄씩 나눠 보냅니다. */
+  var BATCH = 50, batches = [];
+  for(var i = 0; i < all.length; i += BATCH) batches.push(all.slice(i, i + BATCH));
+
+  Promise.all(batches.map(function(b){
+    return fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({text:b, target_lang:lang})
+    }).then(function(r){
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(d){
+      return (d.translations || []).map(function(t){ return t.text; });
+    });
+  })).then(function(res){
+    var out = [].concat.apply([], res);
+    var off = title ? 1 : 0;
+    var outLines = lines.slice();
+    slots.forEach(function(li, k){ if(out[off + k]) outLines[li] = out[off + k]; });
+
+    var pack = { t: title ? (out[0] || title) : '', b: outLines.join('\n') };
+    try{ localStorage.setItem(key, JSON.stringify(pack)); }catch(e){}
+    /* 저장칸이 꽉 차서 실패해도 화면에는 그냥 보여 줍니다 */
+
+    if(CUR !== who) return;             /* 그새 다른 글로 넘어갔으면 화면은 안 건드립니다 */
+    stTlSync();
+  }).catch(function(err){
+    console.warn('[DeepL 창고]', err);
+    if(CUR !== who) return;
+    stTlBtnReset();
+    if(typeof toast === 'function') toast('번역을 받지 못했습니다. 잠시 뒤 다시 눌러 주세요');
+  });
+}
+
+window.stTlGo = function(){
+  var b = stTlBtn();
+  if(!b || b.disabled) return;
+  if(b.classList.contains('open')) return;   /* 이미 번역돼 있으면 아무 일도 안 합니다 */
+  stTlRun(false);
+};
+window.stTlRedo = function(){
+  var b = stTlBtn();
+  if(b && b.disabled) return;
+  stTlRun(true);
+};
+</script>
 
 <script>
 /* ══════════════════════════════════════════════════
@@ -1373,6 +1854,15 @@ async function openItem(id){
   stFsApply();
 
   loadRaw(x);
+
+  /* 번역 상태 맞추기 — 저장해 둔 DeepL 번역이 있으면 여기서 바로 갈아 끼웁니다.
+     이 줄이 없으면 번역해 둔 글도 다음에 열 때 한국어로 나옵니다.
+
+     ⚠ 반드시 loadRaw() 뒤에 둡니다.
+       앞에 두면 앞 글에서 켜 둔 '원문 보기' 가 아직 꺼지기 전이라
+       새 글의 원문을 찾다가 버튼이 안 나옵니다.
+       (loadRaw 는 기다릴 필요 없습니다. RAWMODE 끄는 일은 맨 앞에서 끝납니다) */
+  stTlSync();
 }
 
 /* ══════════════════════════════════════════════════
@@ -1536,6 +2026,9 @@ function closeRawBox(){
   if(CUR && BODY_CACHE[CUR.id] != null){
     document.getElementById('rd-body').textContent = BODY_CACHE[CUR.id];
   }
+  /* AI 글과 원문은 번역을 따로 저장합니다. 어느 쪽을 보고 있느냐가 바뀌었으니
+     버튼과 본문을 다시 맞춥니다. */
+  if(window.stTlSync) stTlSync();
 }
 
 function closeCompare(){
@@ -1565,6 +2058,8 @@ function toggleRawBox(){
   }else if(BODY_CACHE[CUR.id] != null){
     body.textContent = BODY_CACHE[CUR.id];
   }
+  /* 원문에도 DeepL 버튼이 그대로 붙습니다. 저장은 AI 글과 따로 합니다. */
+  if(window.stTlSync) stTlSync();
 }
 
 /* 원문 대조 — 좌우 2단. 폰에서는 버튼이 안 보이지만,
@@ -2182,5 +2677,13 @@ syncPanes();   /* 대조 두 칸의 스크롤을 묶어 둡니다 (한 번만 �
 route();
 loadList();
 </script>
+
+<!-- ═══ 구글 번역 위젯 ═══
+     화면에는 안 보입니다. 위 setLang() 이 이 위젯의 숨은 선택칸을 대신 눌러 줍니다.
+     ⚠ 이 두 줄을 지우면 상단바 언어 버튼이 눌려도 아무 일도 안 일어납니다.
+     ⚠ 맨 아래에 두는 이유: 이 스크립트는 구글 서버에서 받아옵니다.
+       위에 두면 구글이 느린 날 창고 화면 전체가 같이 늦게 뜹니다. -->
+<div id="google_translate_element"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
