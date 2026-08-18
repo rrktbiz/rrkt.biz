@@ -400,6 +400,12 @@ body.reading #tb-fs-wrap{display:inline-flex}
   font-size:var(--rd-fs);line-height:var(--rd-lh);color:#2a2a2a;letter-spacing:-.012em;
   white-space:pre-wrap;word-break:keep-all;
 }
+/* 줄 하나 = 블록 하나.
+   ⚠ 통짜 텍스트로 넣으면 구글 번역이 줄바꿈을 자기 마음대로 다시 나눠서
+     문단이 무너집니다. 줄마다 <p> 로 나눠 두면 줄 단위로 번역돼서 모양이 남습니다.
+     본문을 넣을 때는 반드시 rdSetBody() 를 쓰세요 (textContent 직접 대입 금지). */
+.rd-body > p{margin:0;white-space:pre-wrap;word-break:keep-all}
+.rd-body > p.rd-blank{height:calc(var(--rd-fs) * var(--rd-lh))}
 .rd-foot{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;padding:26px 0 0;border-top:1px solid var(--bd)}
 .rd-nav{
   min-width:0;padding:12px;border-radius:10px;border:1px solid var(--bd);
@@ -1071,6 +1077,46 @@ function stTlCached(){
    저장해 둔 번역이 있으면 그것을, 없으면 원본을 넣습니다.
    번역문에는 notranslate 를 붙입니다. 안 붙이면 구글 번역이
    DeepL 이 만든 문장을 한 번 더 번역해서 문장이 뭉개집니다. */
+/* ── 본문 넣기 / 꺼내기 (공용) ──
+   본문 자리에 글을 넣는 곳은 전부 이 함수를 씁니다.
+   줄(\n)마다 <p> 하나씩 만들어 넣습니다.
+
+   왜 이렇게 하나 —
+     구글 번역은 태그 단위로 글을 잘라 번역기에 보냅니다.
+     통짜 텍스트 한 덩어리로 두면 줄바꿈이 통째로 날아가고
+     번역기가 제멋대로 나눈 줄만 남아 문단이 무너집니다.
+     줄마다 블록으로 나눠 두면 줄 단위로 번역돼서 생김새가 그대로 남습니다.
+     (DeepL 쪽은 예전부터 줄 단위로 쪼개 보내고 있었습니다. 이제 같은 방식입니다.)
+
+   빈 줄은 글자가 없어서 높이가 0이 됩니다. .rd-blank 로 한 줄 높이를 줍니다. */
+function rdSetBody(text){
+  var body = document.getElementById('rd-body');
+  if(!body) return;
+  body.textContent = '';
+  var lines = String(text == null ? '' : text).split('\n');
+  var frag = document.createDocumentFragment();
+  for(var i = 0; i < lines.length; i++){
+    var p = document.createElement('p');
+    if(/^\s*$/.test(lines[i])){ p.className = 'rd-blank'; }
+    else { p.textContent = lines[i]; }
+    frag.appendChild(p);
+  }
+  body.appendChild(frag);
+}
+
+/* 화면에 떠 있는 본문을 다시 통짜 글로 꺼냅니다 (대조 화면용).
+   블록으로 쪼개 뒀으니 그냥 textContent 를 읽으면 줄바꿈이 사라집니다. */
+function rdGetBody(){
+  var body = document.getElementById('rd-body');
+  if(!body) return '';
+  var kids = body.children;
+  if(!kids.length) return body.textContent || '';
+  var out = [];
+  for(var i = 0; i < kids.length; i++) out.push(kids[i].textContent);
+  return out.join('\n');
+}
+window.rdSetBody = rdSetBody; window.rdGetBody = rdGetBody;
+
 function stPaintBody(){
   var body = document.getElementById('rd-body');
   if(!body || !CUR) return;
@@ -1081,14 +1127,14 @@ function stPaintBody(){
 
   if(hit){
     body.classList.add('notranslate');  body.setAttribute('translate','no');
-    body.textContent = hit.b;
+    rdSetBody(hit.b);
     if(title && hit.t){
       title.classList.add('notranslate'); title.setAttribute('translate','no');
       title.textContent = hit.t;
     }
   }else{
     body.classList.remove('notranslate'); body.removeAttribute('translate');
-    body.textContent = src;
+    rdSetBody(src);
     if(title){
       title.classList.remove('notranslate'); title.removeAttribute('translate');
       title.textContent = CUR.title;
@@ -1823,7 +1869,7 @@ async function openItem(id){
     + (x.seed ? '<span class="card-seed">' + esc(x.seed) + '</span>' : '');
 
   var body = document.getElementById('rd-body');
-  body.textContent = '불러오는 중…';
+  rdSetBody('불러오는 중…');
 
   var t = BODY_CACHE[id];
   if(t === undefined){
@@ -1834,8 +1880,8 @@ async function openItem(id){
 
   /* 본문 파일이 없을 때.
      시트에는 적었는데 texts/ 에 올리는 걸 잊은 경우가 대부분입니다. */
-  body.textContent = t != null ? t
-    : '본문을 찾지 못했습니다.\n(texts/' + id + '.txt 가 올라가 있는지 확인해 주세요)';
+  rdSetBody(t != null ? t
+    : '본문을 찾지 못했습니다.\n(texts/' + id + '.txt 가 올라가 있는지 확인해 주세요)');
 
   var arr = visible();
   var i = arr.findIndex(function(v){ return v.id === id; });
@@ -2024,7 +2070,7 @@ function closeRawBox(){
   if(b){ b.classList.remove('open'); b.textContent = '원문 보기'; }
   /* 본문을 AI 글로 되돌립니다 */
   if(CUR && BODY_CACHE[CUR.id] != null){
-    document.getElementById('rd-body').textContent = BODY_CACHE[CUR.id];
+    rdSetBody(BODY_CACHE[CUR.id]);
   }
   /* AI 글과 원문은 번역을 따로 저장합니다. 어느 쪽을 보고 있느냐가 바뀌었으니
      버튼과 본문을 다시 맞춥니다. */
@@ -2054,9 +2100,9 @@ function toggleRawBox(){
   btn.textContent = RAWMODE ? 'AI 글로 돌아가기' : '원문 보기';
 
   if(RAWMODE){
-    body.textContent = RAW_CACHE[CUR.id] || '';
+    rdSetBody(RAW_CACHE[CUR.id] || '');
   }else if(BODY_CACHE[CUR.id] != null){
-    body.textContent = BODY_CACHE[CUR.id];
+    rdSetBody(BODY_CACHE[CUR.id]);
   }
   /* 원문에도 DeepL 버튼이 그대로 붙습니다. 저장은 AI 글과 따로 합니다. */
   if(window.stTlSync) stTlSync();
@@ -2136,7 +2182,7 @@ function paint(t, mask){
 function buildCompare(){
   if(!CUR) return;
   var aiT  = BODY_CACHE[CUR.id];
-  if(aiT == null) aiT = document.getElementById('rd-body').textContent || '';
+  if(aiT == null) aiT = rdGetBody();
   var rawT = RAW_CACHE[CUR.id] || '';
 
   var A = splitBlocks(aiT), R = splitBlocks(rawT);
