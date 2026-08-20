@@ -329,6 +329,10 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .cal-mm-cell.hw-bh{background:color-mix(in srgb,#c0392b 15%,transparent);color:#c0392b;font-weight:700}
 .cal-mm-cell.hw-biz{background:color-mix(in srgb,#3a9ed4 15%,transparent);color:#1a7aaa;font-weight:700}
 .cal-mm-cell.hw-both{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 50%,color-mix(in srgb,#3a9ed4 15%,transparent) 50%);color:#7a3a7a;font-weight:700}
+.cal-mm-cell.hw-st{background:color-mix(in srgb,#8a9aa8 20%,transparent);color:#5f6d80;font-weight:700}
+.cal-mm-cell.hw-bh-st{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 50%,color-mix(in srgb,#8a9aa8 20%,transparent) 50%);color:#8a5548;font-weight:700}
+.cal-mm-cell.hw-biz-st{background:linear-gradient(135deg,color-mix(in srgb,#3a9ed4 15%,transparent) 50%,color-mix(in srgb,#8a9aa8 20%,transparent) 50%);color:#43728a;font-weight:700}
+.cal-mm-cell.hw-all{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 33%,color-mix(in srgb,#3a9ed4 15%,transparent) 33% 66%,color-mix(in srgb,#8a9aa8 20%,transparent) 66%);color:#6a5570;font-weight:700}
 .cal-mm-cell.td{background:#3558c0;color:#fff;font-weight:800;border-radius:50%}
 /* ── TIMELINE VIEW ── */
 .cal-timeline{padding-bottom:32px}
@@ -1108,7 +1112,7 @@ const PROJECTS = [
     id:"stock",
     label:"AI글창고",
     acc:"#8a9aa8", acc2:"#6e7d8a",
-    illust:"",
+    illust:"stock_home.png",
     illustDesc:"",
     status:"active",
     keepSub:false, landOnIntro:false,
@@ -1865,23 +1869,24 @@ function renderCalendar(){
     for(let d=1;d<=days;d++){
       const ds_=ds(yr,mo,d);
       const _entries=WORK_LOG[ds_]||[];
-      /* 프로젝트별 미니 달력 표시색 — 새 프로젝트를 전체 보기에 띄우려면 아래 두 줄에만 추가하면 됩니다.
-         예전엔 blood-highschool / biz-oc-doll 두 개가 하드코딩돼 있어서
-         AI글창고(projId:'stock') 조각글이 전체 보기에서 통째로 빠졌습니다. */
-      const MM_COLOR={"blood-highschool":"#c0392b","biz-oc-doll":"#3a9ed4","stock":"#8a9aa8"};
-      const MM_TXT  ={"blood-highschool":"#c0392b","biz-oc-doll":"#1a7aaa","stock":"#5f6d7a"};
-      const _pids=Object.keys(MM_COLOR).filter(pid=>_entries.some(e=>e.projId===pid));
-      const hw=_pids.length>0;
+      /* ★ 여기서 세는 프로젝트만 연간 전체보기에 색이 칠해집니다.
+         프로젝트가 늘면 아래 has~ 한 줄과 hwCls 분기를 같이 늘려야 합니다.
+         (예전에 AI글창고가 안 뜬 이유가 이 줄이 빠져 있어서였습니다) */
+      const hasBH=_entries.some(e=>e.projId==="blood-highschool");
+      const hasBiz=_entries.some(e=>e.projId==="biz-oc-doll");
+      const hasSt=_entries.some(e=>e.projId==="stock");
+      const hw=hasBH||hasBiz||hasSt;
+      const hwCls= (hasBH&&hasBiz&&hasSt) ? " hw-all"
+                 : (hasBH&&hasBiz)        ? " hw-both"
+                 : (hasBH&&hasSt)         ? " hw-bh-st"
+                 : (hasBiz&&hasSt)        ? " hw-biz-st"
+                 : hasBH                  ? " hw-bh"
+                 : hasBiz                 ? " hw-biz"
+                 : hasSt                  ? " hw-st"
+                 : "";
       const isToday=yr===_tn.getFullYear()&&mo===_tn.getMonth()&&d===_tn.getDate();
-      let hwAttr="";
-      if(hw&&!isToday){
-        const bg=_pids.length===1
-          ? `color-mix(in srgb,${MM_COLOR[_pids[0]]} 15%,transparent)`
-          : `linear-gradient(135deg,${_pids.map((p,i)=>`color-mix(in srgb,${MM_COLOR[p]} 15%,transparent) ${Math.round(i*100/_pids.length)}% ${Math.round((i+1)*100/_pids.length)}%`).join(",")})`;
-        hwAttr=` style="background:${bg};color:${_pids.length===1?MM_TXT[_pids[0]]:"#6b4f7a"};font-weight:700"`;
-      }
       if(hw) cnt++;
-      cells+=`<div class="cal-mm-cell${isToday?" td":""}"${hwAttr}>${d}</div>`;
+      cells+=`<div class="cal-mm-cell${hwCls}${isToday?" td":""}">${d}</div>`;
     }
     return`<div class="cal-mini-month${isCurMo?" cur-month":""}" onclick="goMonth(${yr},${mo})">
       <div class="cal-mm-head"><span class="cal-mm-lbl">${mo+1}월</span><span class="cal-mm-count${cnt?" has":""}">${cnt?cnt+"건":"없음"}</span></div>
