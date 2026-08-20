@@ -368,6 +368,12 @@ body.reading #tb-fs-wrap{display:inline-flex}
   background:rgba(0,0,0,.045);border:1px solid rgba(0,0,0,.10);color:var(--tx2);
   white-space:nowrap;
 }
+/* 글자 수 — 날짜 줄 오른쪽 끝에 붙습니다.
+   본문 파일을 받아 온 뒤에 채워지므로 처음엔 비어 있습니다. */
+.card-len{
+  margin-left:auto;flex-shrink:0;
+  font-family:'Inter',sans-serif;font-size:11px;color:var(--tx3);letter-spacing:.02em;
+}
 .card-title{font-size:15.5px;font-weight:700;color:var(--tx);letter-spacing:-.025em;line-height:1.5;margin-bottom:6px}
 .card-ex{font-size:12.5px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -509,7 +515,11 @@ body.comparing .rd-body{display:none}
   flex-shrink:0;padding:10px 15px;border-bottom:1px solid var(--bd);
   font-family:'Inter',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.14em;
   color:var(--tx3);background:var(--sb);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
 }
+/* 칸 제목 줄 오른쪽 끝의 글자 수. 제목보다 한 톤 옅게 둡니다 */
+.rc-len{font-weight:500;letter-spacing:.06em;color:var(--tx3);opacity:.85;white-space:nowrap}
+.rc-pane.raw .rc-label .rc-len{color:var(--blue-ink)}
 .rc-pane.raw .rc-label{color:var(--blue-ink);background:var(--sm)}
 .rc-text{
   flex:1;overflow-y:auto;height:68vh;padding:18px 20px;position:relative;
@@ -786,7 +796,7 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
       <div class="rd-raw-label" id="rd-raw-label"></div>
     </div>
     <!-- 원문 대조 — 넓은 화면에서만 열립니다.
-         왼쪽이 AI 글, 오른쪽이 원문입니다. -->
+         왼쪽이 원문, 오른쪽이 AI 글입니다. -->
     <div class="rd-compare" id="rd-compare">
       <div class="rc-panes">
         <!-- ⚠ 대조 두 칸은 번역에서 뺐습니다 (notranslate / translate="no").
@@ -794,13 +804,13 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
              글자 단위로 대보는 것입니다. 번역기가 양쪽을 각자 다른 말로 바꾸면
              칠해진 자리가 전부 어긋나서 화면이 뜻 없는 색칠이 됩니다.
              칸 제목과 아래 버튼은 그대로 번역됩니다. -->
-        <div class="rc-pane ai">
-          <div class="rc-label">AI &middot; 생성된 문장</div>
-          <div class="rc-text notranslate" id="rc-ai" translate="no"></div>
-        </div>
         <div class="rc-pane raw">
-          <div class="rc-label">RAW &middot; 제가 쓴 원문</div>
+          <div class="rc-label">RAW &middot; 제가 쓴 원문<span class="rc-len" id="rc-len-raw"></span></div>
           <div class="rc-text notranslate" id="rc-raw" translate="no"></div>
+        </div>
+        <div class="rc-pane ai">
+          <div class="rc-label">AI &middot; 생성된 문장<span class="rc-len" id="rc-len-ai"></span></div>
+          <div class="rc-text notranslate" id="rc-ai" translate="no"></div>
         </div>
       </div>
       <div class="rc-tools">
@@ -1781,6 +1791,7 @@ function render(){
       + '<div class="card-top">'
         + (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
         + (x.seed && !SEED ? '<span class="card-seed">' + esc(x.seed) + '</span>' : '')
+        + '<span class="card-len" id="len-' + esc(x.id) + '"></span>'
       + '</div>'
       + '<div class="card-title">' + esc(x.title) + '</div>'
       + '<div class="card-ex" id="ex-' + esc(x.id) + '"></div>'
@@ -1837,6 +1848,7 @@ function renderShelf(list){
           return '<button class="card" onclick="openItem(\'' + esc(x.id) + '\')">'
             + '<div class="card-top">'
             +   (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
+            +   '<span class="card-len" id="len-' + esc(x.id) + '"></span>'
             + '</div>'
             + '<div class="card-title">' + esc(x.title) + '</div>'
             + '<div class="card-ex" id="ex-' + esc(x.id) + '"></div>'
@@ -1846,6 +1858,19 @@ function renderShelf(list){
 
   list.innerHTML = html;
   loose.forEach(function(x){ fillExcerpt(x); });
+}
+
+/* ── 글자 수 세기 ──
+   줄바꿈은 빼고, 문장 안의 띄어쓰기는 넣어서 셉니다 (공백 포함 기준).
+   공백까지 빼고 싶으면 아래 replace 를 /\s/g 로 바꾸면 됩니다.
+   1234 → "1,234자" 로 돌려줍니다. */
+function charCount(t){
+  if(!t) return 0;
+  return t.replace(/[\r\n\t]/g,'').trim().length;
+}
+function lenText(t){
+  var n = charCount(t);
+  return n ? n.toLocaleString('en-US') + '자' : '';
 }
 
 async function fillExcerpt(x){
@@ -1859,6 +1884,9 @@ async function fillExcerpt(x){
     if(!el) return;
   }
   el.textContent = t ? t.replace(/\s+/g,' ').trim().slice(0,120) : '';
+  /* 발췌를 뜨면서 글자 수도 같이 채웁니다 — 파일을 한 번만 받으면 됩니다 */
+  var ln = document.getElementById('len-' + x.id);
+  if(ln) ln.textContent = lenText(t);
 }
 
 /* ══════════════════════════════════════════════════
@@ -2220,6 +2248,12 @@ function buildCompare(){
     return '<span class="rc-b' + (m >= 0 ? ' matched' : '') + '" data-m="' + m + '">'
          + paint(t, maskR[k]) + '</span>';
   }).join('\n');
+
+  /* 칸 제목 오른쪽 글자 수 — 화면에 뿌린 그 글을 그대로 셉니다 */
+  var lr = document.getElementById('rc-len-raw');
+  var la = document.getElementById('rc-len-ai');
+  if(lr) lr.textContent = lenText(rawT);
+  if(la) la.textContent = lenText(aiT);
 
   var hit = PAIRS.filter(function(v){ return v >= 0; }).length;
   var note = document.getElementById('rc-note');
