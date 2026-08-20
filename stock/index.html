@@ -1861,12 +1861,17 @@ function renderShelf(list){
 }
 
 /* ── 글자 수 세기 ──
-   줄바꿈은 빼고, 문장 안의 띄어쓰기는 넣어서 셉니다 (공백 포함 기준).
-   공백까지 빼고 싶으면 아래 replace 를 /\s/g 로 바꾸면 됩니다.
+   워드·한글·글자수 세기 사이트의 '공백 포함' 과 같은 기준입니다.
+     · 띄어쓰기 : 1자로 셉니다
+     · 줄바꿈   : 1자로 셉니다 (엔터 한 번 = 1자)
+     · \r       : 셈에서 뺍니다. 윈도우에서 저장한 파일은 줄바꿈이 \r\n 두 글자라,
+                  안 빼면 같은 글인데도 줄 수만큼 숫자가 부풀어 오릅니다.
+     · 글 앞뒤의 빈 줄·공백 : 트림해서 뺍니다
+   공백까지 빼고 세고 싶으면 아래 줄을 t.replace(/\s/g,'').length 로 바꾸면 됩니다.
    1234 → "1,234자" 로 돌려줍니다. */
 function charCount(t){
   if(!t) return 0;
-  return t.replace(/[\r\n\t]/g,'').trim().length;
+  return t.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().length;
 }
 function lenText(t){
   var n = charCount(t);
