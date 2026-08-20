@@ -28,7 +28,8 @@
 
 히어로 모드 가동.
 
-[ NOTIFICATION : S-CLASS ACCESS ] ━━━━━━━━━━━━━━━ 
+[ NOTIFICATION : S-CLASS ACCESS ] 
+━━━━━━━━━━━━━━━ 
 ㆍ연결 기기 : H-Driver (Type: Origin) 
 ㆍ사용자 :천보영 (Rank: S) 
 ㆍ상태 : 전 출력 개방 (Full Output) 
