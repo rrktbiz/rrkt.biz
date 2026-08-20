@@ -1108,7 +1108,7 @@ const PROJECTS = [
     id:"stock",
     label:"AI글창고",
     acc:"#8a9aa8", acc2:"#6e7d8a",
-    illust:"stock_home.png",
+    illust:"",
     illustDesc:"",
     status:"active",
     keepSub:false, landOnIntro:false,
@@ -1865,13 +1865,23 @@ function renderCalendar(){
     for(let d=1;d<=days;d++){
       const ds_=ds(yr,mo,d);
       const _entries=WORK_LOG[ds_]||[];
-      const hasBH=_entries.some(e=>e.projId==="blood-highschool");
-      const hasBiz=_entries.some(e=>e.projId==="biz-oc-doll");
-      const hw=hasBH||hasBiz;
-      const hwCls=hw?(hasBH&&hasBiz?" hw-both":hasBH?" hw-bh":" hw-biz"):"";
+      /* 프로젝트별 미니 달력 표시색 — 새 프로젝트를 전체 보기에 띄우려면 아래 두 줄에만 추가하면 됩니다.
+         예전엔 blood-highschool / biz-oc-doll 두 개가 하드코딩돼 있어서
+         AI글창고(projId:'stock') 조각글이 전체 보기에서 통째로 빠졌습니다. */
+      const MM_COLOR={"blood-highschool":"#c0392b","biz-oc-doll":"#3a9ed4","stock":"#8a9aa8"};
+      const MM_TXT  ={"blood-highschool":"#c0392b","biz-oc-doll":"#1a7aaa","stock":"#5f6d7a"};
+      const _pids=Object.keys(MM_COLOR).filter(pid=>_entries.some(e=>e.projId===pid));
+      const hw=_pids.length>0;
       const isToday=yr===_tn.getFullYear()&&mo===_tn.getMonth()&&d===_tn.getDate();
+      let hwAttr="";
+      if(hw&&!isToday){
+        const bg=_pids.length===1
+          ? `color-mix(in srgb,${MM_COLOR[_pids[0]]} 15%,transparent)`
+          : `linear-gradient(135deg,${_pids.map((p,i)=>`color-mix(in srgb,${MM_COLOR[p]} 15%,transparent) ${Math.round(i*100/_pids.length)}% ${Math.round((i+1)*100/_pids.length)}%`).join(",")})`;
+        hwAttr=` style="background:${bg};color:${_pids.length===1?MM_TXT[_pids[0]]:"#6b4f7a"};font-weight:700"`;
+      }
       if(hw) cnt++;
-      cells+=`<div class="cal-mm-cell${hwCls}${isToday?" td":""}">${d}</div>`;
+      cells+=`<div class="cal-mm-cell${isToday?" td":""}"${hwAttr}>${d}</div>`;
     }
     return`<div class="cal-mini-month${isCurMo?" cur-month":""}" onclick="goMonth(${yr},${mo})">
       <div class="cal-mm-head"><span class="cal-mm-lbl">${mo+1}월</span><span class="cal-mm-count${cnt?" has":""}">${cnt?cnt+"건":"없음"}</span></div>
