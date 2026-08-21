@@ -353,30 +353,46 @@ body.reading #tb-fs-wrap{display:inline-flex}
    사라지면 안 되니 선반 아래에 따로 깔아 둡니다. */
 .unsorted-head{padding:30px 2px 10px;font-size:11px;color:var(--tx3);letter-spacing:-.01em;border-top:1px solid var(--bd);margin-top:26px}
 
+/* ── 글 목록 ──
+   한 줄에 [제목] [글자 수] [날짜] 순서로 놓습니다.
+   200편이 쌓여도 스크롤이 짧게 유지되도록 카드가 아니라 목록 줄로 그립니다.
+   줄들은 .rows 상자 하나 안에 들어가고, 줄 사이는 가는 선으로만 나눕니다. */
 .list{padding-top:6px}
-.card{
-  width:100%;text-align:left;display:block;
+.rows{
   background:var(--sb);border:1px solid var(--bd);border-radius:11px;
-  padding:16px 19px;margin-bottom:9px;
-  transition:border-color .12s,box-shadow .12s,transform .12s;
+  overflow:hidden;margin-bottom:9px;
 }
-.card:hover{border-color:var(--bd2);box-shadow:0 2px 12px #0000000d;transform:translateY(-1px)}
-.card-top{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap}
-.card-date{font-family:'Inter',sans-serif;font-size:11px;color:var(--tx3);letter-spacing:.02em;flex-shrink:0}
+.card{
+  width:100%;text-align:left;
+  display:flex;align-items:center;gap:12px;
+  background:transparent;border:none;border-bottom:1px solid var(--bd);
+  border-radius:0;padding:12px 17px;margin:0;
+  transition:background .12s;
+}
+.card:last-child{border-bottom:none}
+.card:hover{background:rgba(0,0,0,.022)}
+.card-date{
+  font-family:'Inter',sans-serif;font-size:11px;color:var(--tx3);letter-spacing:.02em;
+  flex-shrink:0;width:74px;text-align:right;order:3;
+}
 .card-seed{
   font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;
   background:rgba(0,0,0,.045);border:1px solid rgba(0,0,0,.10);color:var(--tx2);
-  white-space:nowrap;
+  white-space:nowrap;flex-shrink:0;order:2;
 }
-/* 글자 수 — 날짜 줄 오른쪽 끝에 붙습니다.
+/* 글자 수 — 제목과 날짜 사이입니다.
    본문 파일을 받아 온 뒤에 채워지므로 처음엔 비어 있습니다. */
 .card-len{
-  margin-left:auto;flex-shrink:0;
+  flex-shrink:0;order:2;
   font-family:'Inter',sans-serif;font-size:11px;color:var(--tx3);letter-spacing:.02em;
 }
-.card-title{font-size:15.5px;font-weight:700;color:var(--tx);letter-spacing:-.025em;line-height:1.5;margin-bottom:6px}
-.card-ex{font-size:12.5px;line-height:1.8;color:var(--tx3);letter-spacing:-.01em;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* 제목이 한 줄을 넘으면 잘리고 … 이 붙습니다. 줄이 두 줄로 늘어나지 않습니다. */
+.card-title{
+  order:1;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:14.5px;font-weight:500;color:var(--tx);letter-spacing:-.02em;
+  line-height:1.6;margin:0;
+}
 
 /* ── 상태 안내 ── */
 .state{padding:60px 10px;text-align:center;font-size:13px;line-height:1.9;color:var(--tx3)}
@@ -642,8 +658,10 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .wrap{padding:0 16px 60px}
   .head{padding:32px 0 20px}
   .head-title{font-size:22px}
-  .card{padding:14px 16px}
-  .card-title{font-size:14.5px}
+  .card{padding:11px 14px;gap:9px}
+  .card-title{font-size:14px}
+  .card-date{width:62px;font-size:10.5px}
+  .card-len{font-size:10.5px}
   .rd-title{font-size:19px}
 
   /* 좁은 화면에서는 제목 옆에 버튼을 두면 제목이 눌립니다.
@@ -1786,22 +1804,18 @@ function render(){
   if(!SEED){ renderShelf(list); return; }
 
   var arr = visible();
-  list.innerHTML = arr.map(function(x){
+  list.innerHTML = '<div class="rows">' + arr.map(function(x){
     return '<button class="card" onclick="openItem(\'' + esc(x.id) + '\')">'
-      + '<div class="card-top">'
-        + (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
-        + (x.seed && !SEED ? '<span class="card-seed">' + esc(x.seed) + '</span>' : '')
-        + '<span class="card-len" id="len-' + esc(x.id) + '"></span>'
-      + '</div>'
       + '<div class="card-title">' + esc(x.title) + '</div>'
-      + '<div class="card-ex" id="ex-' + esc(x.id) + '"></div>'
+      + (x.seed && !SEED ? '<span class="card-seed">' + esc(x.seed) + '</span>' : '')
+      + '<span class="card-len" id="len-' + esc(x.id) + '"></span>'
+      + (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
     + '</button>';
-  }).join('');
+  }).join('') + '</div>';
 
-  /* 발췌는 본문 파일에서 앞부분만 떼어 옵니다.
-     목록에 소개 칸을 따로 두지 않는 이유가 이것입니다 — 시트에 적을 게 하나 줄어듭니다.
+  /* 글자 수는 본문 파일을 받아서 셉니다.
      한 번 읽은 건 기억해 두므로 목록을 오갈 때 다시 받지 않습니다. */
-  arr.forEach(function(x){ fillExcerpt(x); });
+  arr.forEach(function(x){ fillLen(x); });
 }
 
 /* ══════════════════════════════════════════════════
@@ -1844,20 +1858,19 @@ function renderShelf(list){
   /* 씨앗을 안 적은 글 — 선반에 안 보이니 아래에 그대로 깝니다 */
   if(loose.length){
     html += '<div class="unsorted-head">아직 씨앗을 안 적은 글 ' + loose.length + '편</div>'
+      + '<div class="rows">'
       + loose.map(function(x){
           return '<button class="card" onclick="openItem(\'' + esc(x.id) + '\')">'
-            + '<div class="card-top">'
-            +   (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
-            +   '<span class="card-len" id="len-' + esc(x.id) + '"></span>'
-            + '</div>'
             + '<div class="card-title">' + esc(x.title) + '</div>'
-            + '<div class="card-ex" id="ex-' + esc(x.id) + '"></div>'
+            + '<span class="card-len" id="len-' + esc(x.id) + '"></span>'
+            + (x.date ? '<span class="card-date">' + esc(x.date) + '</span>' : '')
           + '</button>';
-        }).join('');
+        }).join('')
+      + '</div>';
   }
 
   list.innerHTML = html;
-  loose.forEach(function(x){ fillExcerpt(x); });
+  loose.forEach(function(x){ fillLen(x); });
 }
 
 /* ── 글자 수 세기 ──
@@ -1878,20 +1891,17 @@ function lenText(t){
   return n ? n.toLocaleString('en-US') + '자' : '';
 }
 
-async function fillExcerpt(x){
-  var el = document.getElementById('ex-' + x.id);
-  if(!el) return;
+async function fillLen(x){
+  var ln = document.getElementById('len-' + x.id);
+  if(!ln) return;
   var t = BODY_CACHE[x.id];
   if(t === undefined){
     t = await fetchText('texts', x);
     BODY_CACHE[x.id] = t;
-    el = document.getElementById('ex-' + x.id);   /* 기다리는 동안 화면이 바뀌었을 수 있음 */
-    if(!el) return;
+    ln = document.getElementById('len-' + x.id);   /* 기다리는 동안 화면이 바뀌었을 수 있음 */
+    if(!ln) return;
   }
-  el.textContent = t ? t.replace(/\s+/g,' ').trim().slice(0,120) : '';
-  /* 발췌를 뜨면서 글자 수도 같이 채웁니다 — 파일을 한 번만 받으면 됩니다 */
-  var ln = document.getElementById('len-' + x.id);
-  if(ln) ln.textContent = lenText(t);
+  ln.textContent = lenText(t);
 }
 
 /* ══════════════════════════════════════════════════
