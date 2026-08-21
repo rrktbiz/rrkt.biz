@@ -253,19 +253,19 @@ body.reading #tb-fs-wrap{display:inline-flex}
    나중에 씨앗 하나가 독립 프로젝트로 나가도
    그때 만든 표지를 그대로 쓸 수 있습니다. */
 .seed-banner{
-  display:flex;gap:15px;align-items:flex-start;
-  margin:16px 0 2px;padding:14px 15px;border-radius:11px;
+  display:flex;gap:18px;align-items:center;
+  margin:16px 0 2px;padding:16px 17px;border-radius:11px;
   background:var(--sm);border:1px solid var(--bd);
 }
 .seed-thumb{
-  width:108px;height:144px;flex-shrink:0;          /* 3:4 */
+  width:150px;height:200px;flex-shrink:0;          /* 3:4 */
   border-radius:7px;border:1px solid var(--bd);background:#fff;
   overflow:hidden;
 }
 .seed-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.seed-bn-body{flex:1;min-width:0;padding-top:2px}
-.seed-bn-name{font-size:15px;font-weight:700;color:var(--tx);letter-spacing:-.025em;margin-bottom:7px;line-height:1.4}
-.seed-bn-desc{font-size:12px;line-height:1.8;color:var(--tx2);letter-spacing:-.01em}
+.seed-bn-body{flex:1;min-width:0}
+.seed-bn-name{font-size:17px;font-weight:700;color:var(--tx);letter-spacing:-.025em;margin-bottom:8px;line-height:1.4}
+.seed-bn-desc{font-size:12.5px;line-height:1.8;color:var(--tx2);letter-spacing:-.01em}
 .seed-bn-desc a{color:var(--blue-ink);font-weight:600;text-decoration:none}
 .seed-bn-desc a:hover{text-decoration:underline}
 /* ── 씨앗 장르태그 ──
@@ -654,9 +654,9 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   #rd-cmp-btn{display:none !important}
 
   /* 표지는 좁은 화면에서 한 단계 줄입니다. 비율(3:4)은 그대로입니다. */
-  .seed-banner{gap:12px;padding:12px 13px}
-  .seed-thumb{width:84px;height:112px}
-  .seed-bn-name{font-size:14px}
+  .seed-banner{gap:14px;padding:14px 14px}
+  .seed-thumb{width:114px;height:152px}
+  .seed-bn-name{font-size:15.5px}
 
   /* 선반 칸 수는 여기서 안 건드립니다.
      태블릿 폭까지는 5칸을 그대로 두고, 진짜 좁아지는 지점에서만 줄입니다.
