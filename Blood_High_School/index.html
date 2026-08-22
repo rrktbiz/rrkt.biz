@@ -880,11 +880,11 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
    로그(LOG) 뷰 — 매체 변천 기록용
    흰 배경 + 날짜를 앞세운 연표. 본편 탭보다 톤을 낮춘다.
    ══════════════════════════════════════════════════════ */
-#view-history{display:none;background:#fafafa;border-top:1px solid #f0f0f0;padding:44px 0 52px}
+#view-history{display:none;background:#fafafa;border-top:1px solid #f0f0f0;padding:44px 0 0}
 #view-history.on{display:block}
 /* 본문 카드 — 옅은 그림자로 페이지에서 살짝 띄운다 */
 #view-history .hs-wrap{
-  max-width:760px;width:calc(100% - 40px);margin:0 auto;
+  max-width:760px;width:calc(100% - 40px);margin:0 auto 40px;
   background:#fff;border:1px solid #f0f0f0;border-radius:14px;
   box-shadow:0 1px 2px rgba(0,0,0,.03), 0 6px 24px rgba(0,0,0,.05);
   padding:44px 44px 40px;
@@ -948,7 +948,7 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 
 @media(max-width:768px){
   #view-history{padding:26px 0 34px}
-  #view-history .hs-wrap{width:calc(100% - 24px);padding:30px 20px 26px;border-radius:12px}
+  #view-history .hs-wrap{width:calc(100% - 24px);padding:30px 20px 26px;border-radius:12px;margin-bottom:20px}
   #view-history .hs-title{font-size:21px}
   #view-history .hs-item{grid-template-columns:70px 1fr;padding-bottom:32px}
   #view-history .hs-date{padding-right:24px}
@@ -1611,7 +1611,7 @@ var BHS_VOLUMES = [
    ══════════════════════════════════════════════════════ */
 var BHS_HISTORY = {
   eyebrow : 'LOG',
-  title   : 'LOG',
+/*  title   : 'LOG', */
   lead    : '작품의 첫 시작과 끝을 기록해놓은 페이지.',
 
   items : [
