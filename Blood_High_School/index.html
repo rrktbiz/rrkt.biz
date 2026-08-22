@@ -864,6 +864,40 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   /* .ep-picker-close — 18px → 44x44px · 왼쪽=제목 텍스트 */
   .ep-picker-close::after{content:'';position:absolute;top:-13px;right:-13px;bottom:-13px;left:-13px}
 }
+/* ══════════════════════════════════════════════════════
+   역사(ARCHIVE) 뷰 — 유튜브 애니 시절 기록용
+   조용한 기록실 톤. 히어로(빨강)와 대비되게 종이색 배경.
+   ══════════════════════════════════════════════════════ */
+#view-history{display:none;background:#faf9f7;border-top:1px solid #ececec}
+#view-history.on{display:block}
+#view-history .hs-wrap{max-width:700px;width:calc(100% - 40px);margin:0 auto;padding:52px 0 8px}
+#view-history .hs-eyebrow{font-size:9px;font-weight:700;letter-spacing:2.6px;color:#b3aca2;text-transform:uppercase;margin-bottom:10px}
+#view-history .hs-title{font-family:var(--serif);font-size:26px;font-weight:700;color:#2b2b2b;letter-spacing:-.5px;line-height:1.35}
+#view-history .hs-lead{font-family:var(--serif);font-size:14px;line-height:2;color:#6b6b6b;margin-top:16px;white-space:pre-line}
+#view-history .hs-rule{height:1px;background:#e4e0d9;margin:34px 0 0}
+#view-history .hs-rule-dot{width:5px;height:5px;border-radius:50%;background:var(--red);opacity:.55;margin:-3px auto 0}
+
+#view-history .hs-tl{position:relative;padding:34px 0 8px 0}
+#view-history .hs-tl::before{content:'';position:absolute;left:5px;top:34px;bottom:26px;width:1px;background:#e4e0d9}
+#view-history .hs-item{position:relative;padding:0 0 30px 26px}
+#view-history .hs-item::before{content:'';position:absolute;left:0;top:5px;width:11px;height:11px;border-radius:50%;background:#faf9f7;border:1.5px solid #d8d2c8}
+#view-history .hs-item.hs-first::before{border-color:var(--red);background:var(--red);opacity:.75}
+#view-history .hs-year{font-size:10px;font-weight:800;letter-spacing:1.4px;color:#a9a29a}
+#view-history .hs-kind{display:inline-block;margin-left:7px;font-size:9px;font-weight:700;letter-spacing:.6px;color:#8d8579;background:#f0ece5;border:1px solid #e4e0d9;border-radius:10px;padding:2px 8px;vertical-align:1px}
+#view-history .hs-name{font-family:var(--serif);font-size:16px;font-weight:700;color:#2b2b2b;margin-top:7px}
+#view-history .hs-desc{font-size:12.5px;line-height:1.95;color:#6f6f6f;margin-top:6px;white-space:pre-line}
+#view-history .hs-link{display:inline-flex;align-items:center;gap:5px;margin-top:11px;padding:6px 12px;background:#fff;border:1px solid #e0dbd3;border-radius:7px;font-size:11px;font-weight:600;color:#7a736a;transition:all .12s}
+#view-history .hs-link:hover{border-color:#c9c2b7;color:#3a3a3a}
+
+#view-history .hs-note{margin:8px 0 0;padding:20px 22px;background:#fff;border:1px solid #ebe7e0;border-radius:10px}
+#view-history .hs-note-lbl{font-size:9px;font-weight:700;letter-spacing:1.6px;color:#b3aca2;text-transform:uppercase;margin-bottom:9px}
+#view-history .hs-note-tx{font-family:var(--serif);font-size:13px;line-height:2;color:#5f5f5f;white-space:pre-line}
+#view-history .hs-tail{text-align:center;font-size:11px;color:#b3aca2;padding:30px 0 46px;letter-spacing:.3px}
+@media(max-width:768px){
+  #view-history .hs-wrap{padding:38px 0 8px}
+  #view-history .hs-title{font-size:22px}
+  #view-history .hs-lead{font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -908,6 +942,8 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   </div>
   <div class="bt-tabs" id="bt-tabs">
     <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGoAnimated('intro')">소개</button>
+    <!-- 각 부 탭은 bhsBuildTabs() 가 이 사이에 끼워 넣습니다 (역사 탭은 항상 맨 뒤) -->
+    <button class="bt-tab" id="bt-tab-history" onclick="bhsGoAnimated('history')">역사</button>
   </div>
 </div>
 
@@ -1172,6 +1208,12 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 <!-- ===== STORY 뷰 ===== -->
 <div id="view-story">
   <div class="st-wrap" id="st-wrap"></div>
+</div>
+
+<!-- ===== HISTORY 뷰 (역사 기록) ===== -->
+<div id="view-history">
+  <div class="hs-wrap" id="hs-wrap"></div>
+  <div id="hs-foot"></div>
 </div>
 
 <!-- ===== 플로팅 에피소드 네비 (읽기 뷰 전용) ===== -->
@@ -1490,6 +1532,78 @@ var BHS_VOLUMES = [
    ]}
 ];
 
+/* ══════════════════════════════════════════════════════
+   역사(ARCHIVE) 데이터 — 여기만 고치면 역사 탭이 바뀝니다
+   · items 는 위에서 아래로 = 옛날 → 최근 순서
+   · url 을 비워두면(''), 링크 버튼이 아예 안 나옵니다
+   · desc 안에서 줄바꿈은 \n
+   ══════════════════════════════════════════════════════ */
+var BHS_HISTORY = {
+  eyebrow : 'ARCHIVE',
+  title   : '블러드하이스쿨은 유튜브에서 시작했습니다',
+  lead    : '지금의 웹소설이 되기 전, 이 이야기는 한 편의 유튜브 애니메이션이었습니다.\n오래된 화면이지만 여기서부터 시작했기에, 지우지 않고 남겨 둡니다.',
+
+  items : [
+    {
+      year : '20XX',                    /* ← 첫 공개 연도 */
+      kind : '유튜브 애니메이션',
+      name : '(작품 제목을 적어주세요)',
+      desc : '블러드하이스쿨이 처음 세상에 나온 형태.\n무엇을 만들었고 어떤 이야기였는지 두세 줄로 적어주세요.',
+      url  : ''                          /* ← 유튜브 주소 (없으면 '' 그대로) */
+    },
+    {
+      year : '20XX',
+      kind : '웹툰',
+      name : '(연재했던 제목 / 플랫폼)',
+      desc : '중단된 이유나 당시의 방향을 짧게 적어주세요.',
+      url  : ''
+    },
+    {
+      year : '20XX',
+      kind : '웹소설',
+      name : '블러드하이스쿨 1부 · 2부',
+      desc : '지금의 형태. 1부와 2부 완결.',
+      url  : ''
+    }
+  ],
+
+  note : '(짧은 소회 한 문단. 예: 다시 보면 부끄러운 화면이지만, 그때의 내가 없었으면 지금의 블하스도 없었습니다.)',
+  tail : '이 페이지는 기록용입니다.'
+};
+
+/* ── 역사 뷰 렌더 ── */
+function bhsRenderHistory(){
+  var H = BHS_HISTORY || {};
+  var items = (H.items || []).map(function(it, i){
+    var link = it.url
+      ? '<a class="hs-link" href="' + bhsEsc(it.url) + '" target="_blank" rel="noopener">'
+        + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+        + '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>'
+        + '보러가기</a>'
+      : '';
+    return '<div class="hs-item' + (i === 0 ? ' hs-first' : '') + '">'
+         + '<span class="hs-year">' + bhsEsc(it.year || '') + '</span>'
+         + (it.kind ? '<span class="hs-kind">' + bhsEsc(it.kind) + '</span>' : '')
+         + '<div class="hs-name">' + bhsEsc(it.name || '') + '</div>'
+         + (it.desc ? '<div class="hs-desc">' + bhsEsc(it.desc) + '</div>' : '')
+         + link
+         + '</div>';
+  }).join('');
+
+  document.getElementById('hs-wrap').innerHTML =
+      '<div class="hs-eyebrow">' + bhsEsc(H.eyebrow || 'ARCHIVE') + '</div>'
+    + '<div class="hs-title">' + bhsEsc(H.title || '') + '</div>'
+    + (H.lead ? '<div class="hs-lead">' + bhsEsc(H.lead) + '</div>' : '')
+    + '<div class="hs-rule"></div><div class="hs-rule-dot"></div>'
+    + '<div class="hs-tl">' + items + '</div>'
+    + (H.note ? '<div class="hs-note"><div class="hs-note-lbl">작가의 말</div>'
+              + '<div class="hs-note-tx">' + bhsEsc(H.note) + '</div></div>' : '')
+    + '<div class="hs-tail">' + bhsEsc(H.tail || '') + '</div>';
+
+  var f = document.getElementById('hs-foot');
+  if(f) f.innerHTML = BHS_FOOTER_HTML;
+}
+
 var BS = { view:'intro', vol:null, ep:null };
 
 function bhsVol(id){ for(var i=0;i<BHS_VOLUMES.length;i++){ if(BHS_VOLUMES[i].id===id) return BHS_VOLUMES[i]; } return null; }
@@ -1578,7 +1692,7 @@ function biqCopyEmail(btn){
 
 function bhsGo(view, volId, epId, noPush){
   BS.view = view;
-  if(view === 'intro'){ BS.vol = null; BS.ep = null; }
+  if(view === 'intro' || view === 'history'){ BS.vol = null; BS.ep = null; }
   else { BS.vol = volId || BS.vol; BS.ep = (epId === undefined ? null : epId); }
   if(!noPush) bhsPushHash();
   bhsRender();
@@ -1588,10 +1702,12 @@ function bhsGo(view, volId, epId, noPush){
 function bhsTabOrder(){
   var order = ['intro'];
   BHS_VOLUMES.forEach(function(v){ if(v.available !== false) order.push(v.id); });
+  order.push('history');   /* 역사 탭은 항상 맨 뒤 */
   return order;
 }
 function bhsTabIndex(order){
-  if(BS.view === 'intro') return 0;
+  if(BS.view === 'intro')   return 0;
+  if(BS.view === 'history') return order.indexOf('history');
   return order.indexOf(BS.vol);
 }
 
@@ -1638,11 +1754,18 @@ function bhsMakeGhost(src){
   return wrap;
 }
 
+/* ── 현재 화면에 해당하는 뷰 요소 ── */
+function bhsViewEl(view){
+  if(view === 'intro')   return document.getElementById('view-intro');
+  if(view === 'history') return document.getElementById('view-history');
+  return document.getElementById('view-story');
+}
+
 /* ── 모바일 한정: 캐러셀 방식 탭 전환 ── */
 function bhsGoAnimated(view, volId){
   var order   = bhsTabOrder();
   var fromIdx = bhsTabIndex(order);
-  var toId    = (view === 'intro') ? 'intro' : volId;
+  var toId    = (view === 'intro' || view === 'history') ? view : volId;
   var toIdx   = order.indexOf(toId);
 
   var isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -1651,20 +1774,18 @@ function bhsGoAnimated(view, volId){
                  && fromIdx !== -1 && toIdx !== -1 && toIdx !== fromIdx;
 
   if(!canAnim){
-    if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
+    if(view === 'intro' || view === 'history') bhsGo(view); else bhsGo('vol', volId);
     return;
   }
 
   var dir = (toIdx > fromIdx) ? 1 : -1;
-  var src = (BS.view === 'intro') ? document.getElementById('view-intro')
-                                  : document.getElementById('view-story');
+  var src = bhsViewEl(BS.view);
   var ghost = bhsMakeGhost(src);
 
-  if(view === 'intro') bhsGo('intro'); else bhsGo('vol', volId);
+  if(view === 'intro' || view === 'history') bhsGo(view); else bhsGo('vol', volId);
 
   var DUR = 320, EASE = 'cubic-bezier(.22,1,.36,1)';
-  var target = (BS.view === 'intro') ? document.getElementById('view-intro')
-                                     : document.getElementById('view-story');
+  var target = bhsViewEl(BS.view);
 
   if(target){
     target.animate(
@@ -1683,6 +1804,7 @@ function bhsGoAnimated(view, volId){
 }
 function bhsPushHash(){
   var t = '#intro';
+  if(BS.view === 'history') t = '#history';
   if(BS.view === 'vol' && BS.vol){
     t = '#' + BS.vol;
     if(BS.ep) t += '/' + BS.ep;
@@ -1691,6 +1813,7 @@ function bhsPushHash(){
 }
 function bhsApplyHash(){
   var p = (location.hash || '').replace(/^#/,'').split('/').filter(Boolean);
+  if(p[0] === 'history'){ BS.view = 'history'; BS.vol = null; BS.ep = null; return; }
   var v = p[0] ? bhsVol(p[0]) : null;
   if(v && v.available !== false){
     BS.view = 'vol'; BS.vol = v.id; BS.ep = p[1] ? parseInt(p[1],10) : null;
@@ -1713,7 +1836,9 @@ function bhsBuildTabs(){
     b.textContent = v.sub;
     if(v.available === false){ b.disabled = true; b.title = '공개 예정'; }
     else b.onclick = function(){ bhsGoAnimated('vol', v.id); };
-    wrap.appendChild(b);
+    /* 역사 탭이 항상 맨 뒤에 오도록 그 앞에 삽입 */
+    var hist = document.getElementById('bt-tab-history');
+    if(hist) wrap.insertBefore(b, hist); else wrap.appendChild(b);
   });
 }
 
@@ -1752,11 +1877,11 @@ function bhsSetupSwipeTabs(){
     if(dx < 0 && idx < order.length - 1){
       // 왼쪽으로 스와이프 → 다음 탭
       var nextId = order[idx + 1];
-      if(nextId === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', nextId);
+      if(nextId === 'intro' || nextId === 'history') bhsGoAnimated(nextId); else bhsGoAnimated('vol', nextId);
     } else if(dx > 0 && idx > 0){
       // 오른쪽으로 스와이프 → 이전 탭
       var prevId = order[idx - 1];
-      if(prevId === 'intro') bhsGoAnimated('intro'); else bhsGoAnimated('vol', prevId);
+      if(prevId === 'intro' || prevId === 'history') bhsGoAnimated(prevId); else bhsGoAnimated('vol', prevId);
     }
   }, {passive:true});
 }
@@ -1765,7 +1890,27 @@ function bhsSetupSwipeTabs(){
 function bhsRender(){
   var intro = document.getElementById('view-intro');
   var story = document.getElementById('view-story');
+  var hist  = document.getElementById('view-history');
   var ti = document.getElementById('bt-tab-intro');
+  var th = document.getElementById('bt-tab-history');
+
+  /* 역사 탭 */
+  if(BS.view === 'history'){
+    intro.style.display = 'none';
+    story.classList.remove('on');
+    hist.classList.add('on');
+    ti.classList.remove('active');
+    if(th) th.classList.add('active');
+    document.querySelectorAll('.bt-tab[data-vol]').forEach(function(b){ b.classList.remove('active'); });
+    bhsRenderHistory();
+    bhsResetChrome(); bhsHideFloatNav();
+    window.scrollTo(0,0);
+    BHS_SC.lastY = 0;
+    return;
+  }
+  hist.classList.remove('on');
+  if(th) th.classList.remove('active');
+
   if(BS.view === 'vol' && BS.vol){
     intro.style.display = 'none';
     story.classList.add('on');
