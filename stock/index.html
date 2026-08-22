@@ -371,9 +371,15 @@ body.reading #tb-fs-wrap{display:inline-flex}
 }
 .card:last-child{border-bottom:none}
 .card:hover{background:rgba(0,0,0,.022)}
+/* ⚠ 폭을 width 로 고정하면 안 됩니다.
+   Inter 는 웹폰트라 로딩 전에는 기기 기본 폰트로 먼저 그려지는데,
+   그 숫자가 더 넓어서 '2026-08-20' 이 고정폭을 넘고 '-' 뒤에서 잘립니다.
+   min-width 로 두면 모자랄 때만 칸이 늘어나고, 남을 때는 지금처럼 나란히 맞습니다. */
 .card-date{
   font-family:'Inter',sans-serif;font-size:11px;color:var(--tx3);letter-spacing:.02em;
-  flex-shrink:0;width:74px;text-align:right;order:3;
+  flex-shrink:0;min-width:74px;text-align:right;order:3;
+  white-space:nowrap;                 /* 날짜가 두 줄로 쪼개지지 않게 */
+  font-variant-numeric:tabular-nums;  /* 숫자 폭을 같게 해서 세로줄이 흔들리지 않게 */
 }
 .card-seed{
   font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;
@@ -643,7 +649,7 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
 .pick-item.current{background:rgba(0,0,0,.05);font-weight:600}
 .pick-num{font-size:10px;color:var(--tx3);font-weight:500;min-width:30px;flex-shrink:0}
 .pick-t{font-size:13px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pick-date{margin-left:auto;font-size:10px;color:var(--tx3);flex-shrink:0;padding-left:8px}
+.pick-date{margin-left:auto;font-size:10px;color:var(--tx3);flex-shrink:0;padding-left:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
 
 /* 손가락 터치 영역만 넓힙니다. 보이는 크기는 그대로입니다. */
 @media(hover:none) and (pointer:coarse){
@@ -660,7 +666,7 @@ body.picker-open #float-nav{opacity:0;pointer-events:none}
   .head-title{font-size:22px}
   .card{padding:11px 14px;gap:9px}
   .card-title{font-size:14px}
-  .card-date{width:62px;font-size:10.5px}
+  .card-date{min-width:62px;font-size:10.5px}
   .card-len{font-size:10.5px}
   .rd-title{font-size:19px}
 
