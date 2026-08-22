@@ -466,6 +466,10 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .bt-tab.active{color:#111;font-weight:800;border-bottom-color:var(--red);}
 .bt-tab.disabled{color:#d2d2d2;cursor:default;pointer-events:none;}
 .bt-tab.disabled:hover{color:#d2d2d2;}
+/* 역사 탭만 오른쪽 끝으로 밀고, 글씨를 얇게 (기록용이라 톤을 낮춤) */
+#bt-tab-history{margin-left:auto;font-weight:400;color:#a8a8a8;letter-spacing:.5px;}
+#bt-tab-history:hover{color:#666;}
+#bt-tab-history.active{font-weight:500;color:#444;border-bottom-color:#c9c2b7;}
 
 @media(max-width:620px){
   .bt-r1{padding:0 13px;}
@@ -872,8 +876,8 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 #view-history.on{display:block}
 #view-history .hs-wrap{max-width:700px;width:calc(100% - 40px);margin:0 auto;padding:52px 0 8px}
 #view-history .hs-eyebrow{font-size:9px;font-weight:700;letter-spacing:2.6px;color:#b3aca2;text-transform:uppercase;margin-bottom:10px}
-#view-history .hs-title{font-family:var(--serif);font-size:26px;font-weight:700;color:#2b2b2b;letter-spacing:-.5px;line-height:1.35}
-#view-history .hs-lead{font-family:var(--serif);font-size:14px;line-height:2;color:#6b6b6b;margin-top:16px;white-space:pre-line}
+#view-history .hs-title{font-family:var(--fn);font-size:24px;font-weight:800;color:#2b2b2b;letter-spacing:-.7px;line-height:1.4}
+#view-history .hs-lead{font-family:var(--fn);font-size:13px;line-height:1.95;color:#6b6b6b;margin-top:15px;white-space:pre-line}
 #view-history .hs-rule{height:1px;background:#e4e0d9;margin:34px 0 0}
 #view-history .hs-rule-dot{width:5px;height:5px;border-radius:50%;background:var(--red);opacity:.55;margin:-3px auto 0}
 
@@ -884,14 +888,19 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 #view-history .hs-item.hs-first::before{border-color:var(--red);background:var(--red);opacity:.75}
 #view-history .hs-year{font-size:10px;font-weight:800;letter-spacing:1.4px;color:#a9a29a}
 #view-history .hs-kind{display:inline-block;margin-left:7px;font-size:9px;font-weight:700;letter-spacing:.6px;color:#8d8579;background:#f0ece5;border:1px solid #e4e0d9;border-radius:10px;padding:2px 8px;vertical-align:1px}
-#view-history .hs-name{font-family:var(--serif);font-size:16px;font-weight:700;color:#2b2b2b;margin-top:7px}
+#view-history .hs-name{font-family:var(--fn);font-size:15px;font-weight:700;color:#2b2b2b;margin-top:7px;letter-spacing:-.3px}
 #view-history .hs-desc{font-size:12.5px;line-height:1.95;color:#6f6f6f;margin-top:6px;white-space:pre-line}
+#view-history .hs-thumb{display:block;position:relative;width:196px;max-width:100%;aspect-ratio:16/9;margin-top:12px;border-radius:8px;overflow:hidden;border:1px solid #e0dbd3;background:#efece7}
+#view-history .hs-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s,filter .25s;filter:saturate(.85)}
+#view-history .hs-thumb:hover img{transform:scale(1.03);filter:saturate(1)}
+#view-history .hs-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34px;height:24px;border-radius:6px;background:rgba(20,20,20,.62);display:flex;align-items:center;justify-content:center}
+#view-history .hs-play::after{content:'';border-left:8px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
 #view-history .hs-link{display:inline-flex;align-items:center;gap:5px;margin-top:11px;padding:6px 12px;background:#fff;border:1px solid #e0dbd3;border-radius:7px;font-size:11px;font-weight:600;color:#7a736a;transition:all .12s}
 #view-history .hs-link:hover{border-color:#c9c2b7;color:#3a3a3a}
 
 #view-history .hs-note{margin:8px 0 0;padding:20px 22px;background:#fff;border:1px solid #ebe7e0;border-radius:10px}
 #view-history .hs-note-lbl{font-size:9px;font-weight:700;letter-spacing:1.6px;color:#b3aca2;text-transform:uppercase;margin-bottom:9px}
-#view-history .hs-note-tx{font-family:var(--serif);font-size:13px;line-height:2;color:#5f5f5f;white-space:pre-line}
+#view-history .hs-note-tx{font-family:var(--fn);font-size:12.5px;line-height:1.95;color:#5f5f5f;white-space:pre-line}
 #view-history .hs-tail{text-align:center;font-size:11px;color:#b3aca2;padding:30px 0 46px;letter-spacing:.3px}
 @media(max-width:768px){
   #view-history .hs-wrap{padding:38px 0 8px}
@@ -1536,30 +1545,31 @@ var BHS_VOLUMES = [
    역사(ARCHIVE) 데이터 — 여기만 고치면 역사 탭이 바뀝니다
    · items 는 위에서 아래로 = 옛날 → 최근 순서
    · url 을 비워두면(''), 링크 버튼이 아예 안 나옵니다
+   · 유튜브 주소를 넣으면 썸네일이 자동으로 붙습니다 (따로 이미지 안 넣어도 됨)
    · desc 안에서 줄바꿈은 \n
    ══════════════════════════════════════════════════════ */
 var BHS_HISTORY = {
   eyebrow : 'ARCHIVE',
   title   : '블러드하이스쿨은 유튜브에서 시작했습니다',
-  lead    : '지금의 웹소설이 되기 전, 이 이야기는 한 편의 유튜브 애니메이션이었습니다.\n오래된 화면이지만 여기서부터 시작했기에, 지우지 않고 남겨 둡니다.',
+  lead    : '지금의 웹소설이 되기 전, 이 이야기는 한 편의 클레이 애니메이션이었습니다.\n2017년의 화면이지만 여기서부터 시작했기에, 지우지 않고 남겨 둡니다.',
 
   items : [
     {
-      year : '20XX',                    /* ← 첫 공개 연도 */
-      kind : '유튜브 애니메이션',
-      name : '(작품 제목을 적어주세요)',
-      desc : '블러드하이스쿨이 처음 세상에 나온 형태.\n무엇을 만들었고 어떤 이야기였는지 두세 줄로 적어주세요.',
-      url  : ''                          /* ← 유튜브 주소 (없으면 '' 그대로) */
+      year : '2017. 02. 28',
+      kind : '클레이 애니메이션',
+      name : '블러드하이스쿨 1부',
+      desc : '블러드하이스쿨이 처음 세상에 나온 형태.\n점토로 만들어 유튜브에 올린 1부 애니메이션입니다.',
+      url  : 'https://youtu.be/dv2ZYwO32z0'
     },
     {
-      year : '20XX',
+      year : '2023. 11. 07',
       kind : '웹툰',
-      name : '(연재했던 제목 / 플랫폼)',
-      desc : '중단된 이유나 당시의 방향을 짧게 적어주세요.',
+      name : '블러드하이스쿨 웹툰',
+      desc : '같은 이야기를 웹툰으로 다시 그리기 시작한 시점.\n이후 이야기는 웹소설로 이어집니다.',
       url  : ''
     },
     {
-      year : '20XX',
+      year : '2026. 02. 14',
       kind : '웹소설',
       name : '블러드하이스쿨 1부 · 2부',
       desc : '지금의 형태. 1부와 2부 완결.',
@@ -1567,9 +1577,16 @@ var BHS_HISTORY = {
     }
   ],
 
-  note : '(짧은 소회 한 문단. 예: 다시 보면 부끄러운 화면이지만, 그때의 내가 없었으면 지금의 블하스도 없었습니다.)',
+  note : '(짧은 소회 한 문단을 적어주세요. 예: 다시 보면 부끄러운 화면이지만, 그때의 내가 없었으면 지금의 블하스도 없었습니다.)',
   tail : '이 페이지는 기록용입니다.'
 };
+
+/* ── 유튜브 주소에서 영상 id 뽑기 (썸네일용) ── */
+function bhsYtId(url){
+  if(!url) return '';
+  var m = String(url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/);
+  return m ? m[1] : '';
+}
 
 /* ── 역사 뷰 렌더 ── */
 function bhsRenderHistory(){
@@ -1579,13 +1596,22 @@ function bhsRenderHistory(){
       ? '<a class="hs-link" href="' + bhsEsc(it.url) + '" target="_blank" rel="noopener">'
         + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
         + '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>'
-        + '보러가기</a>'
+        + (bhsYtId(it.url) ? '유튜브에서 보기' : '보러가기') + '</a>'
       : '';
+    var yt = bhsYtId(it.url);
+    var thumb = yt
+      ? '<a class="hs-thumb" href="' + bhsEsc(it.url) + '" target="_blank" rel="noopener" aria-label="유튜브에서 보기">'
+        + '<img src="https://img.youtube.com/vi/' + bhsEsc(yt) + '/mqdefault.jpg" alt="" loading="lazy"'
+        + ' onerror="this.parentNode.style.display=\'none\'">'
+        + '<span class="hs-play"></span></a>'
+      : '';
+
     return '<div class="hs-item' + (i === 0 ? ' hs-first' : '') + '">'
          + '<span class="hs-year">' + bhsEsc(it.year || '') + '</span>'
          + (it.kind ? '<span class="hs-kind">' + bhsEsc(it.kind) + '</span>' : '')
          + '<div class="hs-name">' + bhsEsc(it.name || '') + '</div>'
          + (it.desc ? '<div class="hs-desc">' + bhsEsc(it.desc) + '</div>' : '')
+         + thumb
          + link
          + '</div>';
   }).join('');
