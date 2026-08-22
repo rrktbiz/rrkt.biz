@@ -895,14 +895,15 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 #view-history .hs-item:last-child{padding-bottom:10px}
 
 #view-history .hs-date{text-align:right;padding-right:22px}
-#view-history .hs-y{font-size:23px;font-weight:600;color:#2a2a2a;letter-spacing:-.8px;line-height:1;font-variant-numeric:tabular-nums}
-#view-history .hs-md{font-size:11px;font-weight:500;color:#b0b0b0;letter-spacing:.8px;margin-top:6px;font-variant-numeric:tabular-nums}
-#view-history .hs-item.hs-first .hs-y{color:var(--red)}
-#view-history .hs-item.hs-first .hs-md{color:#d99}
+#view-history .hs-y{font-size:19px;font-weight:600;color:#2a2a2a;letter-spacing:-.5px;line-height:1;font-variant-numeric:tabular-nums}
+#view-history .hs-md{font-size:13px;font-weight:500;color:#a8a8a8;letter-spacing:.4px;margin-top:5px;font-variant-numeric:tabular-nums}
+/* 빨강은 '지금'인 마지막 항목에만 */
+#view-history .hs-item.hs-now .hs-y{color:var(--red)}
+#view-history .hs-item.hs-now .hs-md{color:#e0929e}
 
 #view-history .hs-body{position:relative;border-left:1px solid #ececec;padding-left:24px;padding-bottom:4px}
 #view-history .hs-body::before{content:'';position:absolute;left:-4.5px;top:6px;width:8px;height:8px;border-radius:50%;background:#fff;border:1.5px solid #d8d8d8}
-#view-history .hs-item.hs-first .hs-body::before{background:var(--red);border-color:var(--red)}
+#view-history .hs-item.hs-now .hs-body::before{background:var(--red);border-color:var(--red)}
 #view-history .hs-item:last-child .hs-body{border-left-color:transparent}
 
 #view-history .hs-kind{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.6px;color:#8a8a8a;background:#f5f5f5;border:1px solid #ececec;border-radius:10px;padding:2px 9px}
@@ -918,10 +919,10 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 /* 웹소설 표지 — 세로 커버 여러 장 */
 #view-history .hs-covers{display:flex;gap:10px;flex-shrink:0}
 #view-history .hs-cover{display:block;width:78px;text-align:center}
-#view-history .hs-cover-img{position:relative;width:78px;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid #ececec;background:#f4f4f4}
-#view-history .hs-cover-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s}
+#view-history .hs-cover-img{display:block;position:relative;width:100%;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid #ececec;background:#fff}
+#view-history .hs-cover-img img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .25s}
 #view-history .hs-cover:hover .hs-cover-img img{transform:scale(1.04)}
-#view-history .hs-cover-lb{font-size:10px;font-weight:600;color:#9a9a9a;margin-top:6px;letter-spacing:.3px}
+#view-history .hs-cover-lb{display:block;font-size:10px;font-weight:600;color:#9a9a9a;margin-top:6px;letter-spacing:.3px}
 #view-history .hs-cover:hover .hs-cover-lb{color:#2b2b2b}
 #view-history .hs-txt{flex:1;min-width:0}
 #view-history .hs-desc{font-size:12.5px;line-height:1.9;color:#6f6f6f;white-space:pre-line}
@@ -934,14 +935,15 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   #view-history .hs-title{font-size:21px}
   #view-history .hs-item{grid-template-columns:62px 1fr;padding-bottom:32px}
   #view-history .hs-date{padding-right:14px}
-  #view-history .hs-y{font-size:19px;letter-spacing:-1px}
-  #view-history .hs-md{font-size:10px;margin-top:4px}
+  #view-history .hs-y{font-size:17px;letter-spacing:-.4px}
+  #view-history .hs-md{font-size:12px;margin-top:4px}
   #view-history .hs-body{padding-left:16px}
   #view-history .hs-name{font-size:15px}
   #view-history .hs-row{flex-direction:column;gap:12px}
-  #view-history .hs-thumb{width:100%}
+  #view-history .hs-row{gap:14px}
+  #view-history .hs-thumb{width:168px}
   #view-history .hs-covers{gap:8px}
-  #view-history .hs-cover,#view-history .hs-cover-img{width:70px}
+  #view-history .hs-cover{width:62px}
 }
 </style>
 </head>
@@ -1670,7 +1672,8 @@ function bhsRenderHistory(){
         + (yt ? '유튜브에서 보기' : '보러가기') + '</a>'
       : '';
 
-    return '<div class="hs-item' + (i === 0 ? ' hs-first' : '') + '">'
+    var isNow = (i === (H.items || []).length - 1);   /* 마지막 = 지금 */
+    return '<div class="hs-item' + (isNow ? ' hs-now' : '') + '">'
          + '<div class="hs-date">'
          +   '<div class="hs-y">' + bhsEsc(it.year || '') + '</div>'
          +   (it.date ? '<div class="hs-md">' + bhsEsc(it.date) + '</div>' : '')
