@@ -880,9 +880,15 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
    로그(LOG) 뷰 — 매체 변천 기록용
    흰 배경 + 날짜를 앞세운 연표. 본편 탭보다 톤을 낮춘다.
    ══════════════════════════════════════════════════════ */
-#view-history{display:none;background:#fff;border-top:1px solid #f0f0f0}
+#view-history{display:none;background:#fafafa;border-top:1px solid #f0f0f0;padding:44px 0 52px}
 #view-history.on{display:block}
-#view-history .hs-wrap{max-width:700px;width:calc(100% - 40px);margin:0 auto;padding:52px 0 8px}
+/* 본문 카드 — 옅은 그림자로 페이지에서 살짝 띄운다 */
+#view-history .hs-wrap{
+  max-width:760px;width:calc(100% - 40px);margin:0 auto;
+  background:#fff;border:1px solid #f0f0f0;border-radius:14px;
+  box-shadow:0 1px 2px rgba(0,0,0,.03), 0 6px 24px rgba(0,0,0,.05);
+  padding:44px 44px 40px;
+}
 #view-history .hs-eyebrow{font-size:9px;font-weight:700;letter-spacing:2.6px;color:#bdbdbd;text-transform:uppercase;margin-bottom:10px}
 #view-history .hs-title{font-family:var(--fn);font-size:24px;font-weight:600;color:#1c1c1c;letter-spacing:-.6px;line-height:1.4}
 #view-history .hs-lead{font-family:var(--fn);font-size:13px;line-height:1.95;color:#767676;margin-top:15px;white-space:pre-line}
@@ -902,7 +908,8 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 #view-history .hs-item.hs-now .hs-md{color:#e0929e}
 
 #view-history .hs-body{position:relative;border-left:3px solid #ececec;padding-left:26px;padding-bottom:4px}
-#view-history .hs-item.hs-now .hs-body{border-left-color:var(--red)}
+/* 마지막 항목은 다음 목록이 없으니 레일을 끊는다 */
+#view-history .hs-item:last-child .hs-body{border-left-color:transparent}
 
 /* 매체 아이콘 배지 — 레일 위에 얹힘 */
 #view-history .hs-badge{
@@ -937,10 +944,11 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 #view-history .hs-desc{font-size:12.5px;line-height:1.9;color:#6f6f6f;white-space:pre-line}
 #view-history .hs-link{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:6px 12px;background:#fff;border:1px solid #e4e4e4;border-radius:7px;font-size:11px;font-weight:600;color:#7c7c7c;transition:all .12s}
 #view-history .hs-link:hover{border-color:#c9c9c9;color:#2b2b2b}
-#view-history .hs-foot-pad{height:34px}
+#view-history .hs-foot-pad{height:4px}
 
 @media(max-width:768px){
-  #view-history .hs-wrap{padding:38px 0 8px}
+  #view-history{padding:26px 0 34px}
+  #view-history .hs-wrap{width:calc(100% - 24px);padding:30px 20px 26px;border-radius:12px}
   #view-history .hs-title{font-size:21px}
   #view-history .hs-item{grid-template-columns:70px 1fr;padding-bottom:32px}
   #view-history .hs-date{padding-right:24px}
@@ -1613,7 +1621,7 @@ var BHS_HISTORY = {
       kind : '클레이 애니메이션',
       icon : 'film',
       name : '[애니] 블러드하이스쿨',
-      desc : '블러드하이스쿨의 첫 시작.\n클레이애니로 만들어 유튜브에 올린 애니메이션.\n2부 펀딩 실패 이후 저퀄리티로 3부/번외편까지 제작해 공개 했으나 현재는 비공개 처리됨.(개인사유로 1부 이외에 공개를 원치않음.)',
+      desc : '클레이애니로 만들어 유튜브에 올린 애니메이션.\n2부 펀딩 실패 이후 저퀄리티로 3부/번외편까지 제작해 공개 했으나 현재는 비공개 처리됨.(개인사유로 1부 이외에 공개를 원치않음.)',
       url  : 'https://youtu.be/dv2ZYwO32z0',
       thumb: ''    /* 유튜브라 비워둬도 자동 */
     },
