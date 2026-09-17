@@ -663,6 +663,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .lk-band-t{font-size:12.5px;font-weight:800;letter-spacing:2.5px;color:#FFD23F;line-height:1.2}
 #view-story .lk-band-m{font-size:10px;color:rgba(255,255,255,.5);line-height:1.35;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #view-story .lk-band-go{background:none;border:none;padding:0;margin-top:3px;font-size:10.5px;color:#fff;font-weight:500;border-bottom:1px solid rgba(255,255,255,.4);white-space:nowrap}
+#view-story .lk-band-go-disabled{color:rgba(255,255,255,.4);border-bottom-color:rgba(255,255,255,.15);cursor:default}
 
 /* 썸네일 — 칸이 크기를 정하고, 이미지는 잘려서 채워짐 */
 #view-story .lk-grid{display:flex;gap:6px;flex:1;min-width:0;align-self:stretch}
@@ -670,6 +671,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .lk-cell:hover{opacity:.82}
 #view-story .lk-cell img{width:100%;height:100%;object-fit:cover;display:block}
 #view-story .lk-cell.lk-empty{background:#242424}
+#view-story .lk-cell.lk-wip{cursor:default}
+#view-story .lk-cell.lk-wip:hover{opacity:1}
 #view-story .lk-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,10,10,.62);color:#FFD23F;font-size:12px;font-weight:800;letter-spacing:.5px}
 
 /* 줄거리 — 배너 바깥 */
@@ -1318,6 +1321,7 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
      lookbook:{
        count : 68,                          // 총 페이지 수 (0이면 카운터 대신 '보기')
        meta  : '캐릭터 시트 34종',            // 부제 (생략 가능)
+       state : '보기',                      // '보기' = 링크 활성 / '준비중' = 링크 비활성(공개 보류)
        thumbs: [                            // 가로형 썸네일 4장, BHS_ROOT 기준 상대경로
          'Blood_High_School/lookbook/p1_01.jpg',
          'Blood_High_School/lookbook/p1_02.jpg',
@@ -1330,6 +1334,9 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
      → 원본 비율이 뭐든 상관없지만, 가로형 이미지가 가장 자연스럽습니다
    · 마지막 장 위에 '+64' 카운터가 겹쳐 올라갑니다
    · thumbs 가 비어 있어도 빈 칸으로 자리만 잡습니다
+   · state 를 생략하면 자동으로 '보기'(활성)로 취급합니다
+   · state:'준비중' 으로 바꾸면 버튼/뱃지 글자가 '준비중'으로 바뀌고
+     클릭해도 링크가 열리지 않습니다 (링크 주소는 그대로 남아 있음)
    ══════════════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════════════
@@ -1458,7 +1465,8 @@ var BHS_VOLUMES = [
    /* ▼▼▼ 여기 lookbook: 뒤 따옴표 안이 "1부 룩북" 링크 주소입니다 (지금은 값이 채워져 있음 — 바꾸려면 이 안을 교체) ▼▼▼ */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_1part_cast.png',
-   lookbook:{ count:0, meta:'Google Drive', thumbs:[] },
+   /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
+   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:[] },
    notes:[
      '안녕하세요!',
      '2017년 애니메이션, 2023년 웹툰을 거쳐 드디어 2026년 『블러드 하이스쿨』이 웹소설로 찾아왔습니다.',
@@ -1499,7 +1507,8 @@ var BHS_VOLUMES = [
    /* ▼▼▼ 여기 lookbook: 뒤 따옴표 두 개 사이('') 에 "2부 룩북" 링크 주소를 넣으세요 (지금은 비어 있음) ▼▼▼ */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_2part_cast.png',
-   lookbook:{ count:0, meta:'Google Drive', thumbs:[] },
+   /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
+   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:[] },
    notes:[
      '드디어 류오가 편, 그리고 『블러드하이스쿨』 2부가 마무리되었습니다.',
      '2부는 웹툰 시절부터 가장 오래 고민하며 시간을 들인 만큼, 완성했다는 사실 자체가 저에게는 큰 성공입니다.',
@@ -2218,6 +2227,7 @@ function bhsLk(v){
     count : d.count || 0,
     meta  : d.meta  || '',
     thumbs: d.thumbs || [],
+    state : d.state || '보기',   // '보기' = 링크 활성 / '준비중' = 링크 비활성
     url   : (v.links && v.links.lookbook) || ''
   };
 }
@@ -2229,7 +2239,8 @@ function bhsLkMeta(d){
 }
 function bhsLkCells(v, slots){
   var d = bhsLk(v), out = '', i, t, img, badge;
-  var go   = 'onclick="bhsOpenLink(\'' + d.url + '\')"';
+  var wip  = (d.state === '준비중');
+  var go   = wip ? '' : 'onclick="bhsOpenLink(\'' + d.url + '\')"';
   var rest = d.count - slots;
   for(i = 0; i < slots; i++){
     t   = d.thumbs[i];
@@ -2238,9 +2249,9 @@ function bhsLkCells(v, slots){
         + ' onerror="this.parentNode.classList.add(\'lk-empty\');this.remove()">'
       : '';
     badge = (i === slots - 1)
-      ? '<span class="lk-badge">' + (rest > 0 ? '+' + rest : '보기') + '</span>'
+      ? '<span class="lk-badge">' + (wip ? '준비중' : (rest > 0 ? '+' + rest : '보기')) + '</span>'
       : '';
-    out += '<div class="lk-cell' + (t ? '' : ' lk-empty') + '" ' + go + '>' + img + badge + '</div>';
+    out += '<div class="lk-cell' + (t ? '' : ' lk-empty') + (wip ? ' lk-wip' : '') + '" ' + go + '>' + img + badge + '</div>';
   }
   return out;
 }
@@ -2307,7 +2318,9 @@ function bhsRenderEpList(){
     + '<div class="lk-band-hd">'
     + '<span class="lk-band-t">LOOKBOOK</span>'
     + (bhsLkMeta(lkd) ? '<span class="lk-band-m">' + bhsLkMeta(lkd) + '</span>' : '')
-    + '<button class="lk-band-go" onclick="bhsOpenLink(\'' + lkd.url + '\')">전체 보기 &rarr;</button>'
+    + '<button class="lk-band-go' + (lkd.state==='준비중' ? ' lk-band-go-disabled' : '') + '"'
+    + (lkd.state==='준비중' ? '' : ' onclick="bhsOpenLink(\'' + lkd.url + '\')"')
+    + '>' + (lkd.state==='준비중' ? '준비중' : '전체 보기 &rarr;') + '</button>'
     + '</div>'
     + '<div class="lk-grid">' + bhsLkCells(v, 4) + '</div>'
     + '</div>'
