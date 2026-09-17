@@ -465,6 +465,26 @@ body{
     font-size: 10px;
   }
 
+  /* 실제 이미지가 채워진 캐릭터 얼굴 (placeholder 대체) */
+  .pd-doc .char-photo {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e0ddd6;
+    background: #f0eee6;
+  }
+  .pd-doc .char-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .pd-doc .char-faces .char-photo {
+    margin: 0;
+  }
+
   /* 2단 얼굴 스택 (평상시 / 각성·이면) */
   .pd-doc .char-faces {
     flex-shrink: 0;
@@ -497,6 +517,11 @@ body{
     }
 
     .pd-doc .img-placeholder.character {
+      width: 70px;
+      height: 70px;
+    }
+
+    .pd-doc .char-photo {
       width: 70px;
       height: 70px;
     }
@@ -994,6 +1019,19 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
   <div class="content">
     <div style="margin-bottom:28px; border: 1.5px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
       <div style="background:#E51937; padding:7px 18px;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;color:#fff;">비주얼 레퍼런스</span>
+      </div>
+      <div style="padding:18px 20px; background:#fff;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.3px;margin-bottom:8px;">룩북 (캐릭터·배경 시각 레퍼런스)</div>
+        <p style="font-size:13px;color:#555;line-height:1.65;margin:0 0 14px;">캐릭터 의상, 배경, 색감·분위기를 정리한 애니메이션화 대비 시각 참고 자료입니다. 제작에는 AI를 부분적으로 활용했으며, 트레이싱·리터칭·전체 생성 등 사용 방식은 문서 내 각 장에 개별 표기되어 있습니다.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block; padding:9px 18px; background:#111; color:#fff; font-size:13px; font-weight:700; border-radius:4px; text-decoration:none;">1부 룩북 보기 &rarr;</a>
+          <a href="https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block; padding:9px 18px; background:#111; color:#fff; font-size:13px; font-weight:700; border-radius:4px; text-decoration:none;">2부 룩북 보기 &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:28px; border: 1.5px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
+      <div style="background:#E51937; padding:7px 18px;">
         <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;color:#fff;">캐릭터 설계</span>
       </div>
       <div style="padding:18px 20px; background:#fff;">
@@ -1036,11 +1074,11 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
     <div class="char-block">
       <div class="char-faces">
         <div class="char-face-item">
-          <div class="img-placeholder character">쿠로<br>얼굴</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/1_kuro.png" alt="류오 쿠로" loading="lazy"></div>
           <span class="char-face-cap">평상시</span>
         </div>
         <div class="char-face-item">
-          <div class="img-placeholder character">라크니스<br>얼굴</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/2_Lackness.png" alt="라크니스" loading="lazy"></div>
           <span class="char-face-cap">각성</span>
         </div>
       </div>
@@ -1056,11 +1094,11 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
     <div class="char-block">
       <div class="char-faces">
         <div class="char-face-item">
-          <div class="img-placeholder character">은호<br>얼굴</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/3_Eun-ho.png" alt="은호" loading="lazy"></div>
           <span class="char-face-cap">평상시</span>
         </div>
         <div class="char-face-item">
-          <div class="img-placeholder character">여우<br>신령</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/4_Kitsune_no_Shinrei.png" alt="여우 신령" loading="lazy"></div>
           <span class="char-face-cap">본모습</span>
         </div>
       </div>
@@ -1076,11 +1114,11 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
     <div class="char-block">
       <div class="char-faces">
         <div class="char-face-item">
-          <div class="img-placeholder character">헤르바켄<br>얼굴</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/5_Herbaeken.png" alt="헤르바켄" loading="lazy"></div>
           <span class="char-face-cap">평상시</span>
         </div>
         <div class="char-face-item">
-          <div class="img-placeholder character">복수귀<br>모드</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/6_Herbaeken_ver2.png" alt="헤르바켄 (복수귀 모드)" loading="lazy"></div>
           <span class="char-face-cap">이면</span>
         </div>
       </div>
@@ -1096,11 +1134,11 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
     <div class="char-block">
       <div class="char-faces">
         <div class="char-face-item">
-          <div class="img-placeholder character">시로<br>얼굴</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/7_Siro.png" alt="류오 시로" loading="lazy"></div>
           <span class="char-face-cap">평상시</span>
         </div>
         <div class="char-face-item">
-          <div class="img-placeholder character">루멘시아<br>얼굴</div>
+          <div class="char-photo"><img src="../Blood_High_School/images/char/8_Lumensia.png" alt="루멘시아" loading="lazy"></div>
           <span class="char-face-cap">각성</span>
         </div>
       </div>
@@ -1114,7 +1152,7 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
     </div>
 
     <div class="char-block">
-      <div class="img-placeholder character">미코<br>얼굴</div>
+      <div class="char-photo"><img src="../Blood_High_School/images/char/13_Miko.png" alt="류오 미코" loading="lazy"></div>
       <div class="char-body">
         <div class="char-name">류오 미코 (사촌 / 당주 경쟁자)</div>
         <div class="char-role">테츠야의 딸 · 요시유키의 제자 · 류오가 경영 엘리트</div>
@@ -1125,7 +1163,7 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
     </div>
 
     <div class="char-block">
-      <div class="img-placeholder character">아오이<br>얼굴</div>
+      <div class="char-photo"><img src="../Blood_High_School/images/char/17_Aoi.png" alt="카게히라 아오이" loading="lazy"></div>
       <div class="char-body">
         <div class="char-name">카게히라 아오이 (카게히라가 당주)</div>
         <div class="char-role">뒷가문의 당주 · 쿠로에게는 '같은 젊은 당주'</div>
