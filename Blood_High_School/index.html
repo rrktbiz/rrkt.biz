@@ -525,8 +525,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 /* ── 에피소드 보드 ── */
 #view-story .ep-board{margin:16px auto 12px;max-width:700px;width:calc(100% - 40px);background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
-#view-story .ep-board-head{display:grid;grid-template-columns:44px 1fr 100px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
-#view-story .ep-row{display:grid;grid-template-columns:44px 1fr 100px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
+#view-story .ep-board-head{display:grid;grid-template-columns:44px 1fr 120px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
+#view-story .ep-row{display:grid;grid-template-columns:44px 1fr 120px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
 #view-story .ep-row:last-child{border-bottom:none}
 #view-story .ep-row:hover{background:#ebebeb}
 #view-story .ep-row-locked{cursor:default}
@@ -538,8 +538,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .ep-status-badge.done{background:#ffe4e4;color:#c0392b}
 #view-story .ep-status-badge.wip{background:#F9F4CA;color:#F9CB4C}
 #view-story .ep-status-badge.plan{background:#f0f0f0;color:#aaa}
-#view-story .ep-date-col{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:10px;color:var(--tx3);text-align:right;white-space:nowrap}
-#view-story .ep-cc-txt{font-size:9px;color:var(--tx3);opacity:.65}
+#view-story .ep-date-col{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:6px;font-size:10px;color:var(--tx3);text-align:right;white-space:nowrap}
+#view-story .ep-cc-txt{font-size:10px;color:var(--tx3);opacity:.6}
 
 /* ── 볼륨 네비 + 목록 모달 ── */
 #view-story .vol-nav-outer{background:var(--sb);padding:8px 0 28px}
@@ -2363,8 +2363,8 @@ function bhsRenderEpList(){
              + '<span class="ep-title-col"><span class="ep-title-text">' + bhsEsc(e.title) + '</span>'
              + '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + e.status + '</span></span>'
              + '<span class="ep-date-col" id="ep-cc-' + v.id + '-' + e.id + '">'
-             + '<span>' + (e.date || '&mdash;') + '</span>'
              + (ok ? '<span class="ep-cc-txt"></span>' : '')
+             + '<span>' + (e.date || '&mdash;') + '</span>'
              + '</span>'
              + '</div>';
       }).join('')
