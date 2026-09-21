@@ -3632,8 +3632,8 @@ function applyMobDetail(){
   if(mob){
     row.style.flexWrap      = 'wrap';
     row.style.gap           = '6px 12px';   /* 위아래 6 · 섬네일과 오른쪽 사이 12 */
-    row.style.paddingBottom = '14px';
-    row.style.marginBottom  = '16px';
+    row.style.paddingBottom = '8px';    /* 이미지 위 간격 30→20 (8+12) */
+    row.style.marginBottom  = '12px';
     if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }   /* 폰 섬네일 80 유지 (옆에 코드+버튼) */
     if(hdrText){ hdrText.style.flex='1'; hdrText.style.minWidth='0'; }
     if(holder){ holder.style.width='100%'; holder.style.padding='0'; holder.style.order='3'; }
@@ -3642,7 +3642,7 @@ function applyMobDetail(){
       b.style.flex='1'; b.style.justifyContent='center'; b.style.minWidth='0';
     });
     if(overlay){ overlay.style.margin='0'; overlay.style.borderRadius='0'; }
-    if(wrap){ wrap.style.padding='14px 16px 30px'; }   /* 위 20→14 · 아래 30: 이미지 위 간격(14+16)과 맞춤 */
+    if(wrap){ wrap.style.padding='14px 16px 20px'; }   /* 이미지 아래 간격 30→20 (위와 같게) */
   } else {
     row.style.flexWrap=''; row.style.gap='20px'; row.style.paddingBottom='8px'; row.style.marginBottom='12px';   /* 여백 줄임: 20→8, 24→12 */
     if(thumb){ thumb.style.width='56px'; thumb.style.height='56px'; thumb.style.flexShrink='0'; }
