@@ -727,6 +727,20 @@ body{top:0 !important}
 /* 오른쪽 조작법 안내 · 왼쪽 정보 블록은 기본으로 숨김 (데스크탑 넓은 화면에서만 켜짐) */
 .chars-scope .detail-help,.chars-scope .detail-side{display:none}
 @media(max-width:600px){
+/* ── 폰: 위쪽 두 줄을 줄이기 (데스크탑처럼 코드 줄 하나로 합침) ──
+   · 맨 위 줄(코드 글씨 + 넓게 보기 + ✕)은 코드가 아래 줄과 겹치므로 코드 글씨를 숨기고,
+     넓게 보기(아이콘만)·✕ 두 버튼만 코드 줄 오른쪽 끝으로 올려 붙입니다.
+   · 섬네일 80→48px, 코드 글씨 28→22px
+   · 좋아요·공유하기 줄은 그대로 아래에 둡니다. */
+.chars-scope .detail-overlay-inner{position:relative}
+.chars-scope .detail-overlay-inner .top-bar{position:absolute;top:14px;right:16px;height:48px;padding:0;background:transparent;border-bottom:none;gap:6px;z-index:5}
+.chars-scope .detail-overlay-inner .top-bar .tb-crumbs-mid,
+.chars-scope .detail-overlay-inner .top-bar .tb-cur{display:none}
+.chars-scope .detail-overlay-inner #sheet-wide-label{display:none}
+.chars-scope .detail-overlay-inner #sheet-wide-btn{padding:6px 9px;font-size:13px}
+.chars-scope .detail-overlay-inner .sheet-header-text{padding-right:74px}
+.chars-scope .detail-overlay-inner .sheet-info-code{font-size:22px}
+.chars-scope .detail-overlay-inner .sheet-info-label{font-size:9px}
 /* 폰: 조작법·정보 블록은 어떤 경우에도 안 보이게 */
 .chars-scope .detail-help,.chars-scope .detail-side{display:none !important}
 /* 폰: 아래 이전·목록·다음 줄 위 구분선 없앰 (데스크탑과 통일) — 간격은 이미지 위쪽과 같은 30px */
@@ -3606,7 +3620,7 @@ function applyMobDetail(){
     row.style.gap           = '10px 14px';
     row.style.paddingBottom = '14px';
     row.style.marginBottom  = '16px';
-    if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }
+    if(thumb){ thumb.style.width='48px'; thumb.style.height='48px'; thumb.style.flexShrink='0'; }   /* 폰 섬네일 80→48 */
     if(hdrText){ hdrText.style.flex='1'; hdrText.style.minWidth='0'; }
     if(holder){ holder.style.width='100%'; holder.style.padding='0'; holder.style.order='3'; }
     if(btns){ btns.style.width='100%'; btns.style.flexDirection='row'; btns.style.marginLeft='0'; btns.style.gap='8px'; btns.style.order='4'; }
@@ -3614,7 +3628,7 @@ function applyMobDetail(){
       b.style.flex='1'; b.style.justifyContent='center'; b.style.minWidth='0';
     });
     if(overlay){ overlay.style.margin='0'; overlay.style.borderRadius='0'; }
-    if(wrap){ wrap.style.padding='20px 16px 30px'; }   /* 아래 30: 이미지 위 간격(14+16)과 맞춤 */
+    if(wrap){ wrap.style.padding='14px 16px 30px'; }   /* 위 20→14 · 아래 30: 이미지 위 간격(14+16)과 맞춤 */
   } else {
     row.style.flexWrap=''; row.style.gap='20px'; row.style.paddingBottom='8px'; row.style.marginBottom='12px';   /* 여백 줄임: 20→8, 24→12 */
     if(thumb){ thumb.style.width='56px'; thumb.style.height='56px'; thumb.style.flexShrink='0'; }
