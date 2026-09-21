@@ -724,6 +724,8 @@ body{top:0 !important}
 .chars-scope .detail-overlay-inner.wide{max-width:1080px}
 /* ── MOBILE ── */
 .chars-scope .ep-nav-short{display:none}
+/* 공유 버튼 짧은 글자('공유')는 기본 숨김 — 아주 좁은 폰에서만 보임 */
+.chars-scope .share-lbl-short{display:none}
 /* 오른쪽 조작법 안내 · 왼쪽 정보 블록은 기본으로 숨김 (데스크탑 넓은 화면에서만 켜짐) */
 .chars-scope .detail-help,.chars-scope .detail-side{display:none}
 @media(max-width:600px){
@@ -739,8 +741,20 @@ body{top:0 !important}
 .chars-scope .detail-overlay-inner #sheet-wide-label{display:none}
 .chars-scope .detail-overlay-inner #sheet-wide-btn{padding:6px 9px;font-size:13px}
 .chars-scope .detail-overlay-inner .sheet-header-text{padding-right:74px}
+/* 섬네일(80px) 오른쪽에 위: CODE·코드명 / 아래: 좋아요·공유 버튼 — 섬네일 높이 안에 두 줄이 다 들어감 */
+.chars-scope .detail-overlay-inner .sheet-header-row{display:grid !important;grid-template-columns:80px minmax(0,1fr);grid-template-rows:1fr auto;align-items:start}
+.chars-scope .detail-overlay-inner .sheet-thumb{grid-column:1;grid-row:1 / span 2}
+.chars-scope .detail-overlay-inner .sheet-header-text{grid-column:2;grid-row:1;align-self:start}
+.chars-scope .detail-overlay-inner .sheet-action-btns{grid-column:2;grid-row:2;align-self:end}
+.chars-scope .detail-overlay-inner .top-bar{height:40px}
 .chars-scope .detail-overlay-inner .sheet-info-code{font-size:22px}
 .chars-scope .detail-overlay-inner .sheet-info-label{font-size:9px}
+.chars-scope .share-lbl-short{display:none}
+/* 아주 좁은 폰(폭 380px 미만)에서는 '공유하기' → '공유' */
+@media(max-width:379px){
+  .chars-scope .share-lbl-full{display:none}
+  .chars-scope .share-lbl-short{display:inline}
+}
 /* 폰: 조작법·정보 블록은 어떤 경우에도 안 보이게 */
 .chars-scope .detail-help,.chars-scope .detail-side{display:none !important}
 /* 폰: 아래 이전·목록·다음 줄 위 구분선 없앰 (데스크탑과 통일) — 간격은 이미지 위쪽과 같은 30px */
@@ -1524,7 +1538,7 @@ body{top:0 !important}
               <button class="sheet-action-btn like-btn" id="detail-like-btn" onclick="toggleLikeDetail()" title="이 캐릭터를 좋아요">
                 <span>좋아요</span><span class="like-heart" id="detail-like-heart">&#9825;</span>
               </button>
-              <button class="sheet-action-btn" id="share-btn" onclick="toggleShareMenu(event)" title="이 캐릭터 공유하기" aria-haspopup="true" aria-expanded="false"><span>공유하기</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.5" r="1.8"/><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="12.5" r="1.8"/><path d="M5.6 7.1l4.8-2.7M5.6 8.9l4.8 2.7"/></svg></button>
+              <button class="sheet-action-btn" id="share-btn" onclick="toggleShareMenu(event)" title="이 캐릭터 공유하기" aria-haspopup="true" aria-expanded="false"><span><span class="share-lbl-full">공유하기</span><span class="share-lbl-short">공유</span></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.5" r="1.8"/><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="12.5" r="1.8"/><path d="M5.6 7.1l4.8-2.7M5.6 8.9l4.8 2.7"/></svg></button>
               <!-- 공유 메뉴 (공유하기 버튼 아래에 펼쳐짐) -->
               <div class="share-menu" id="share-menu" role="menu">
                 <button class="share-item" role="menuitem" onclick="copyCharLink()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg><span id="copy-link-label">링크 복사</span></button>
@@ -3617,10 +3631,10 @@ function applyMobDetail(){
   var mob = w > 0 && w < 600;
   if(mob){
     row.style.flexWrap      = 'wrap';
-    row.style.gap           = '10px 14px';
+    row.style.gap           = '6px 12px';   /* 위아래 6 · 섬네일과 오른쪽 사이 12 */
     row.style.paddingBottom = '14px';
     row.style.marginBottom  = '16px';
-    if(thumb){ thumb.style.width='48px'; thumb.style.height='48px'; thumb.style.flexShrink='0'; }   /* 폰 섬네일 80→48 */
+    if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }   /* 폰 섬네일 80 유지 (옆에 코드+버튼) */
     if(hdrText){ hdrText.style.flex='1'; hdrText.style.minWidth='0'; }
     if(holder){ holder.style.width='100%'; holder.style.padding='0'; holder.style.order='3'; }
     if(btns){ btns.style.width='100%'; btns.style.flexDirection='row'; btns.style.marginLeft='0'; btns.style.gap='8px'; btns.style.order='4'; }
