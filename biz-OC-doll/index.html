@@ -724,7 +724,16 @@ body{top:0 !important}
 .chars-scope .detail-overlay-inner.wide{max-width:1080px}
 /* ── MOBILE ── */
 .chars-scope .ep-nav-short{display:none}
+/* 오른쪽 조작법 안내 · 왼쪽 정보 블록은 기본으로 숨김 (데스크탑 넓은 화면에서만 켜짐) */
+.chars-scope .detail-help,.chars-scope .detail-side{display:none}
 @media(max-width:600px){
+/* 폰: 조작법·정보 블록은 어떤 경우에도 안 보이게 */
+.chars-scope .detail-help,.chars-scope .detail-side{display:none !important}
+/* 폰: 아래 이전·목록·다음 줄 위 구분선 없앰 (데스크탑과 통일) — 간격은 이미지 위쪽과 같은 30px */
+.chars-scope .detail-overlay-inner .ep-nav{border-top:none;padding-top:0}
+/* 폰 전용 '넓게 보기' = 시트 좌우 여백 없애고 화면 끝까지 꽉 채우기 */
+.chars-scope .detail-overlay-inner.wide .sheet-slot{margin-left:-16px;margin-right:-16px}
+.chars-scope .detail-overlay-inner.wide .sheet-slot img.sheet-img{border-radius:0 !important}
 .chars-scope .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh;min-height:100dvh}
 .chars-scope .sheet-wrap{padding:20px 16px 32px}
 .chars-scope .top-bar{padding:6px 14px}
@@ -3605,7 +3614,7 @@ function applyMobDetail(){
       b.style.flex='1'; b.style.justifyContent='center'; b.style.minWidth='0';
     });
     if(overlay){ overlay.style.margin='0'; overlay.style.borderRadius='0'; }
-    if(wrap){ wrap.style.padding='20px 16px 32px'; }
+    if(wrap){ wrap.style.padding='20px 16px 30px'; }   /* 아래 30: 이미지 위 간격(14+16)과 맞춤 */
   } else {
     row.style.flexWrap=''; row.style.gap='20px'; row.style.paddingBottom='8px'; row.style.marginBottom='12px';   /* 여백 줄임: 20→8, 24→12 */
     if(thumb){ thumb.style.width='56px'; thumb.style.height='56px'; thumb.style.flexShrink='0'; }
