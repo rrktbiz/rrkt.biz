@@ -739,6 +739,29 @@ body{
 .pd-doc .deep-dive-summary:hover .dd-cta{color:#FFD23F;}
 .pd-doc .deep-dive-summary:hover .dd-divider{background:#444;}
 .pd-doc .deep-dive-wrap .deep-content{border:2px dashed #111;border-top:none;border-radius:0 0 4px 4px;background:#fff;padding:24px 22px;}
+
+/* ── 룩북 배너 (PART 02, 시그니처 위) ── */
+.lookbook-hero{background:#111;border-radius:6px;padding:22px 22px 18px;margin:32px 0 28px;}
+.lookbook-hero .lb-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:3px;color:#E51937;margin-bottom:6px;}
+.lookbook-hero .lb-title{font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.3px;margin-bottom:4px;}
+.lookbook-hero .lb-sub{font-size:13px;color:#aaa;line-height:1.6;margin-bottom:16px;}
+.lookbook-hero .lb-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.lookbook-hero .lb-card{display:block;border:1px solid #333;border-radius:4px;overflow:hidden;text-decoration:none;background:#1c1c1c;transition:border-color .2s;}
+.lookbook-hero .lb-card:hover{border-color:#E51937;}
+.lookbook-hero .lb-card:focus-visible{outline:2px solid #E51937;outline-offset:2px;}
+.lookbook-hero .lb-thumb{aspect-ratio:16/10;background:#2a2a2a;overflow:hidden;}
+.lookbook-hero .lb-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.lookbook-hero .lb-card:hover .lb-thumb img{transform:scale(1.03);}
+.lookbook-hero .lb-bar{background:#E51937;color:#fff;padding:10px 14px;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+.lookbook-hero .lb-note{font-size:11.5px;color:#888;line-height:1.6;margin:14px 0 0;}
+@media (max-width:600px){
+  .lookbook-hero{padding:18px 16px 14px;}
+  .lookbook-hero .lb-title{font-size:19px;}
+  .lookbook-hero .lb-grid{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion:reduce){
+  .lookbook-hero .lb-card:hover .lb-thumb img{transform:none;}
+}
 </style>
 </head>
 <body>
@@ -822,6 +845,24 @@ PD의 질문: "이미 비슷한 거 많은데, 이걸 왜 해야 해?" — 이 �
 
     <h4 data-num="③">비주얼 코드의 시대성</h4>
     <p>뉴트로의 가장 즉각적인 진입점은 시각입니다. 독자는 본문을 펼치기 전, 표지·일러스트·캐릭터 디자인의 첫 인상만으로 작품의 시대성과 장르를 0초 만에 판단합니다. 본 작품의 캐릭터 비주얼은 2000년대 일본 학원·다크 판타지 애니가 축적해 온 비주얼 — 고딕·양식미·과장된 헤어 실루엣, 코스튬 변주 등 변신 기호의 풍부함 — 을 의도적으로 차용합니다. 이는 진입 장벽을 가장 빠르게 통과시키는 동시에, 굿즈·일러스트집·2차 창작 등 IP 확장 라인에서의 인지도를 미리 확보하는 핵심 장치이기도 합니다.</p>
+
+    <!-- ══ 룩북 배너 : ③ 비주얼 코드의 시대성 → 룩북 → 작가의 시그니처 ══ -->
+    <div class="lookbook-hero">
+      <div class="lb-label">VISUAL LOOKBOOK</div>
+      <div class="lb-title">글보다 먼저, 그림으로 보세요</div>
+      <div class="lb-sub">캐릭터 의상 · 배경 · 색감 — 애니메이션화 대비 시각 레퍼런스</div>
+      <div class="lb-grid">
+        <a class="lb-card" href="https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link" target="_blank" rel="noopener">
+          <div class="lb-thumb"><img src="../Blood_High_School/images/pd/lookbook_1.png" alt="1부 룩북 표지" loading="lazy"></div>
+          <div class="lb-bar"><span>1부 · 용의 부활편</span><span>보기 &rarr;</span></div>
+        </a>
+        <a class="lb-card" href="https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link" target="_blank" rel="noopener">
+          <div class="lb-thumb"><img src="../Blood_High_School/images/pd/lookbook_2.png" alt="2부 룩북 표지" loading="lazy"></div>
+          <div class="lb-bar"><span>2부 · 류오가편</span><span>보기 &rarr;</span></div>
+        </a>
+      </div>
+      <p class="lb-note">제작에는 AI를 부분적으로 활용했으며, 트레이싱·리터칭·전체 생성 등 사용 방식은 룩북 각 장에 개별 표기되어 있습니다.</p>
+    </div>
 
     <div class="deep-dive-wrap" id="authorSignature">
       <div class="deep-dive-summary" onclick="toggleSignature()">
@@ -1026,19 +1067,6 @@ PD의 질문: "이 캐릭터로 굿즈 나와? 팬덤 붙어? 서사가 n부작 
   </div>
 
   <div class="content">
-    <div style="margin-bottom:28px; border: 1.5px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
-      <div style="background:#E51937; padding:7px 18px;">
-        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;color:#fff;">비주얼 레퍼런스</span>
-      </div>
-      <div style="padding:18px 20px; background:#fff;">
-        <div style="font-size:13px;font-weight:700;letter-spacing:0.3px;margin-bottom:8px;">룩북 (캐릭터·배경 시각 레퍼런스)</div>
-        <p style="font-size:13px;color:#555;line-height:1.65;margin:0 0 14px;">캐릭터 의상, 배경, 색감·분위기를 정리한 애니메이션화 대비 시각 참고 자료입니다. 제작에는 AI를 부분적으로 활용했으며, 트레이싱·리터칭·전체 생성 등 사용 방식은 문서 내 각 장에 개별 표기되어 있습니다.</p>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a href="https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block; padding:9px 18px; background:#111; color:#fff; font-size:13px; font-weight:700; border-radius:4px; text-decoration:none;">1부 룩북 보기 &rarr;</a>
-          <a href="https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block; padding:9px 18px; background:#111; color:#fff; font-size:13px; font-weight:700; border-radius:4px; text-decoration:none;">2부 룩북 보기 &rarr;</a>
-        </div>
-      </div>
-    </div>
     <div style="margin-bottom:28px; border: 1.5px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
       <div style="background:#E51937; padding:7px 18px;">
         <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;color:#fff;">캐릭터 설계</span>
