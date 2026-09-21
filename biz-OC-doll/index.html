@@ -107,7 +107,7 @@
      ══════════════════════════════════════════════════ -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
 
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 /* ═══ 공용 컴포넌트 스타일 (구 common.css — 이 파일 안으로 합침) ═══
    상단바 문의 버튼 · 언어 안내 각주 · 제작자 소개/문의 오버레이
@@ -534,6 +534,210 @@ body{top:0 !important}
 #panel-intro .sec-first{margin-top: 0; padding-top: 28px;}
 }
 </style>
+
+<!-- ══════════════════════════════════════════════════
+     캐릭터 탭 스타일 (원래 doll_charlist.html 에 있던 것)
+     모든 규칙 앞에 .chars-scope 를 붙여서 캐릭터 탭 안에서만 먹히게 가뒀습니다.
+     (.chars-scope 는 캐릭터 목록 패널과, 캐릭터 상세 창 두 군데에 붙어 있습니다)
+     ══════════════════════════════════════════════════ -->
+<style id="css-chars">
+.chars-scope *,
+.chars-scope *::before,
+.chars-scope *::after{box-sizing:border-box;margin:0;padding:0}
+.chars-scope{--bg:#ffffff;--sb:#fff;--bd:#e2e2e2;--bd2:#c6c6c6;
+  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
+  --fn:'Inter','Noto Sans KR',sans-serif;}
+.chars-scope{min-height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
+.chars-scope button{font-family:var(--fn);cursor:pointer}
+.chars-scope::-webkit-scrollbar, .chars-scope ::-webkit-scrollbar{width:4px}
+.chars-scope::-webkit-scrollbar-track, .chars-scope ::-webkit-scrollbar-track{background:transparent}
+.chars-scope::-webkit-scrollbar-thumb, .chars-scope ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+/* ── TOP BAR ── */
+.chars-scope .top-bar{padding:10px 20px;background:var(--sb);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10;flex-wrap:nowrap;min-width:0}
+.chars-scope .tb-back{background:transparent;border:none;color:var(--tx3);font-size:12px;padding:4px 8px;border-radius:5px;transition:all .12s;font-family:var(--fn);white-space:nowrap;flex-shrink:0}
+.chars-scope .tb-back:hover{background:var(--bg);color:var(--tx)}
+.chars-scope .tb-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
+.chars-scope .tb-crumb{font-size:10px;font-weight:500;color:var(--tx3);white-space:nowrap;flex-shrink:0}
+.chars-scope .tb-arr{font-size:10px;color:var(--bd2);flex-shrink:0}
+.chars-scope .tb-cur{font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.chars-scope .tb-crumbs-mid{display:inline-flex;align-items:center;gap:8px;flex-shrink:1;min-width:0}
+@media(max-width:520px){
+.chars-scope .tb-crumbs-mid{display:none}
+}
+/* ── CHAR LIST ── */
+.chars-scope .char-page{padding:14px 24px 48px}
+.chars-scope .char-filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;overflow:visible;}
+.chars-scope .filter-break{display:none;width:100%;height:0;flex-shrink:0}
+@media(max-width:640px){
+.chars-scope .filter-break{display:block}
+.chars-scope .char-filter-tabs{flex-shrink:0}
+.chars-scope .char-search{max-width:none;flex:1;min-width:0}
+.chars-scope .char-count{flex-shrink:0}
+.chars-scope .width-toggle-btn{margin-left:auto;flex-shrink:0}
+}
+.chars-scope .char-filter-tabs{display:flex;gap:0;background:var(--sb);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.chars-scope .char-tab{padding:8px 16px;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;border-right:1px solid var(--bd);transition:all .12s}
+.chars-scope .char-tab:last-child{border-right:none}
+.chars-scope .char-tab:hover{background:var(--bg);color:var(--tx)}
+.chars-scope .char-tab.active{background:#5a90b0;color:#fff;font-weight:700}
+.chars-scope .char-search{flex:1;min-width:100px;max-width:180px;padding:7px 12px;border:1px solid var(--bd);border-radius:8px;font-size:16px;transform-origin:left center;font-family:var(--fn);background:var(--sb);color:var(--tx);outline:none;transition:border-color .12s}
+.chars-scope .char-search:focus{border-color:var(--bd2)}
+.chars-scope .char-count{font-size:11px;color:var(--tx3);white-space:nowrap}
+.chars-scope .char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
+.chars-scope .char-card{cursor:pointer;text-align:center}
+.chars-scope .char-card:hover .char-thumb{box-shadow:0 2px 10px #0002;transform:translateY(-2px)}
+.chars-scope .char-thumb{width:100%;aspect-ratio:1;border-radius:8px;border:1px solid var(--bd);overflow:hidden;transition:transform .14s,box-shadow .14s;display:flex;align-items:center;justify-content:center;position:relative;background:#d8d8d8}
+.chars-scope .char-thumb-inner{width:100%;height:100%;filter:grayscale(1);opacity:.6}
+.chars-scope .char-thumb-face{width:100%;height:100%}
+.chars-scope .char-like-overlay{position:absolute;top:6px;right:6px;z-index:2;touch-action:manipulation;background:transparent;border:1.5px solid rgba(255,255,255,0.8);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;line-height:1;transition:all .15s;padding:0;padding-top:1.5px;color:rgba(255,255,255,0.15);-webkit-text-stroke:1.2px rgba(255,255,255,0.85)}
+.chars-scope .char-like-overlay:hover{border-color:#fff;transform:scale(1.1);color:rgba(255,255,255,0.2);-webkit-text-stroke:1.2px #fff}
+.chars-scope .char-like-overlay.liked{border-color:rgba(255,255,255,0.4);color:#f43f5e;-webkit-text-stroke:0px}
+/* ── 하트 터치 영역 ──
+   보이는 하트는 26px 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 position:absolute 라 flex 배치에서 빠지므로 ♥ 위치에 영향이 없고,
+   배경이 없어 화면에도 나타나지 않습니다.
+
+   26 + 6 + 12 = 44px (애플 권장 최소 터치 크기)
+   위·오른쪽은 썸네일 모서리까지만 넓히고, 남는 만큼을 아래·왼쪽으로 보냅니다.
+   (.char-thumb 이 overflow:hidden 이라 밖으로 나가면 잘립니다)
+
+   마우스 환경에는 적용되지 않습니다 — 데스크탑은 지금 크기가 적당합니다. */
+@media(hover:none) and (pointer:coarse){
+.chars-scope .char-like-overlay::after{content:'';
+    position:absolute;
+    top:-6px;
+    right:-6px;
+    bottom:-12px;
+    left:-12px;}
+}
+.chars-scope .char-name-row{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:5px;gap:1px}
+.chars-scope .char-code-prefix{font-size:9px;font-weight:400;color:var(--tx3);font-family:'Inter',monospace;letter-spacing:.5px}
+.chars-scope .char-code{font-size:13px;font-weight:600;color:var(--tx);font-family:'Inter',monospace;letter-spacing:.5px}
+.chars-scope .char-sub{font-size:11px;color:var(--tx3);margin-top:1px}
+.chars-scope .like-notice{margin:28px 0 4px;text-align:center;font-size:11px;line-height:1.7;color:var(--tx3);opacity:.72;letter-spacing:.2px}
+.chars-scope .char-empty{grid-column:1/-1;padding:48px 0;text-align:center;font-size:12px;color:var(--tx3)}
+.chars-scope .char-sort-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;background:var(--sb);border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn)}
+.chars-scope .char-sort-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.chars-scope .char-sort-btn.asc .sort-arrow{display:inline-block;transform:scaleY(-1)}
+.chars-scope .sort-arrow{display:inline-block;font-size:10px;transition:transform .15s}
+.chars-scope .char-tab.liked-tab{letter-spacing:.5px}
+.chars-scope .sort-dropdown-wrap{position:relative;display:inline-flex}
+.chars-scope .sort-dropdown-menu{display:none;position:absolute;top:calc(100% + 4px);right:0;background:var(--sb);border:1px solid var(--bd);border-radius:8px;overflow:hidden;z-index:50;min-width:100px;box-shadow:0 4px 16px #0001}
+.chars-scope .sort-dropdown-menu.open{display:block}
+.chars-scope .sort-dropdown-item{display:block;width:100%;padding:8px 14px;font-size:12px;font-weight:500;color:var(--tx2);background:transparent;border:none;cursor:pointer;text-align:left;font-family:var(--fn);transition:background .1s}
+.chars-scope .sort-dropdown-item:hover{background:var(--bg);color:var(--tx)}
+.chars-scope .sort-dropdown-item.active{color:var(--tx);font-weight:700}
+/* ── SHEET ACTION BTNS ── */
+.chars-scope .sheet-action-btns{margin-left:auto;display:flex;flex-direction:column;gap:7px;align-self:center}
+.chars-scope .sheet-action-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:500;color:var(--tx2);font-family:var(--fn);cursor:pointer;transition:all .12s;min-width:120px;letter-spacing:.3px}
+.chars-scope .sheet-action-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.chars-scope .sheet-action-btn svg{width:13px;height:13px;flex-shrink:0;opacity:.45;transition:opacity .12s}
+.chars-scope .sheet-action-btn:hover svg{opacity:.8}
+/* ── 좋아요 버튼 (상세 시트) ── */
+.chars-scope .sheet-action-btn.like-btn .like-heart{font-size:15px;line-height:1;flex-shrink:0;color:var(--tx3);transition:color .12s,transform .12s}
+.chars-scope .sheet-action-btn.like-btn:hover .like-heart{color:#f4869b}
+.chars-scope .sheet-action-btn.like-btn.liked{border-color:#f2c2cd;background:#fff5f7;color:#e0526d}
+.chars-scope .sheet-action-btn.like-btn.liked:hover{background:#ffe9ee;border-color:#eaa4b4;color:#e0526d}
+.chars-scope .sheet-action-btn.like-btn.liked .like-heart{color:#f43f5e}
+.chars-scope .sheet-action-btn.like-btn.pop .like-heart{animation:likePop .34s ease}
+@keyframes likePop{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.45)}
+  60%{transform:scale(.92)}
+  100%{transform:scale(1)}
+}
+/* ── CHAR DETAIL ── */
+.chars-scope .sheet-wrap{max-width:800px;margin:0 auto;padding:32px 32px 48px;transition:max-width .2s}
+.chars-scope .detail-overlay-inner.wide .sheet-wrap{max-width:1080px}
+.chars-scope .sheet-meta-right{font-size:10px;color:var(--tx3);letter-spacing:.5px;margin-left:auto;align-self:flex-end}
+/* 헤더 행: 썸네일 + 텍스트 */
+.chars-scope .sheet-header-row{display:flex;align-items:center;gap:20px;padding-bottom:20px;margin-bottom:24px}
+.chars-scope .sheet-thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;border:1px solid var(--bd);flex-shrink:0}
+.chars-scope .sheet-thumb-inner{width:100%;height:100%;filter:grayscale(1);opacity:.7}
+.chars-scope .sheet-header-text{display:flex;flex-direction:column;gap:6px}
+.chars-scope .sheet-info-label{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.chars-scope .sheet-info-code{font-size:28px;font-weight:400;color:var(--tx);font-family:'Share Tech Mono',monospace;letter-spacing:1px;line-height:1}
+.chars-scope .sheet-holder-block{padding:12px 20px;display:flex;flex-direction:column;gap:6px;align-self:center}
+.chars-scope .sheet-holder-label{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.chars-scope .sheet-holder-value{font-size:20px;font-weight:400;color:var(--tx);font-family:'Share Tech Mono',monospace}
+/* [Holder 숨김] 나중에 다시 쓰려면 아래 한 줄만 지우면 원래대로 보임 */
+.chars-scope .sheet-holder-block{display:none}
+/* 시트 슬롯 */
+.chars-scope .sheet-slot{min-height:320px;border:1px dashed var(--bd2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.chars-scope .sheet-slot.has-image{border:none;min-height:0;border-radius:0}
+.chars-scope .sheet-hint-icon{font-size:22px;opacity:.15}
+.chars-scope .sheet-hint-text{font-size:10px;color:var(--tx3);line-height:1.8;text-align:center}
+/* ── EP NAV ── */
+.chars-scope .ep-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 24px;border-top:1px solid var(--bd);background:var(--sb)}
+.chars-scope .ep-nav-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-size:12px;font-weight:500;transition:all .12s;min-width:0;max-width:260px}
+.chars-scope .ep-nav-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.chars-scope .ep-nav-btn.disabled{opacity:.3;cursor:default;pointer-events:none}
+.chars-scope .ep-nav-btn:first-child{justify-self:start}
+.chars-scope .ep-nav-btn:last-child{justify-self:end}
+.chars-scope .ep-nav-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ── PAGE SECTIONS ── */
+.chars-scope #list-view{display:block}
+.chars-scope #detail-view{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.45);overflow-y:auto}
+.chars-scope .detail-overlay-inner{background:var(--bg);margin:40px auto;max-width:800px;border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.18);transition:max-width .2s}
+.chars-scope .detail-overlay-inner.wide{max-width:1080px}
+/* ── MOBILE ── */
+.chars-scope .ep-nav-short{display:none}
+@media(max-width:600px){
+.chars-scope .detail-overlay-inner{margin:0;border-radius:0;min-height:100vh;min-height:100dvh}
+.chars-scope .sheet-wrap{padding:20px 16px 32px}
+.chars-scope .top-bar{padding:6px 14px}
+.chars-scope .ep-nav-full{display:none}
+.chars-scope .ep-nav-short{display:inline}
+}
+/* ── CASSETTE NAV ARROWS ── */
+.chars-scope .cassette-nav-arrow{display:flex;align-items:center;justify-content:center;
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:72px;
+  background:transparent;border:none;padding:0;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  z-index:5;}
+.chars-scope .cassette-nav-arrow.prev{left:8px}
+.chars-scope .cassette-nav-arrow.next{right:8px}
+.chars-scope .cassette-nav-arrow svg{filter:drop-shadow(2px 0 6px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))}
+.chars-scope .cassette-nav-arrow.next svg{filter:drop-shadow(-2px 0 6px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))}
+.chars-scope .cassette-nav-arrow.disabled{opacity:0;pointer-events:none}
+/* ── WIDTH CONTROL ── */
+.chars-scope .char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
+.chars-scope .char-page-inner.wide{max-width:none}
+.chars-scope .width-toggle-btn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;background:var(--sb);border:1px solid var(--bd);border-radius:7px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .12s;white-space:nowrap;font-family:var(--fn);flex-shrink:0}
+.chars-scope .width-toggle-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.chars-scope .detail-close-btn{touch-action:manipulation;position:relative;width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;background:var(--sb);border:1px solid var(--bd);border-radius:7px;color:var(--tx3);cursor:pointer;transition:all .12s}
+.chars-scope .detail-close-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
+.chars-scope .detail-close-btn svg{width:13px;height:13px}
+/* ── HERO ── */
+.chars-scope .hero{background:#fff;padding:32px 24px 0px;text-align:center;position:relative;overflow:visible;}
+.chars-scope .hero-label{font-size:10px;font-weight:700;letter-spacing:3px;color:#5a90b0;text-transform:uppercase;margin-bottom:10px;position:relative;z-index:2;}
+.chars-scope .hero-title{font-size:clamp(20px,3.5vw,30px);font-weight:100;color:#3a6a88;letter-spacing:0.22em;line-height:1.1;margin-bottom:10px;font-family:'Josefin Sans',sans-serif;position:relative;z-index:2;}
+.chars-scope .hero-title-row{display:inline-flex;align-items:center;gap:10px;position:relative;z-index:2;margin-bottom:0;}
+/* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
+.chars-scope .brandname{text-transform:none !important}
+/* ══════════════════════════════════════════════════
+   닫기 버튼 터치 영역
+   보이는 크기는 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   ::after 는 배경이 없어 화면에 나타나지 않고,
+   position:absolute 라 배치에도 영향을 주지 않습니다.
+   마우스 환경에는 적용되지 않습니다.
+   ══════════════════════════════════════════════════ */
+@media(hover:none) and (pointer:coarse){
+/* .detail-close-btn — 28px → 44x44px · 왼쪽=너비전환 버튼(gap 8) */
+.chars-scope .detail-close-btn::after{content:'';position:absolute;top:-8px;right:-12px;bottom:-8px;left:-4px}
+}
+
+/* ── 본체에 들어오면서 바꾼 두 가지 ──
+   ① 상세 창: 예전엔 캐릭터 탭 칸 안에서 화면을 덮었습니다.
+      이제는 본체 전체가 아니라 '탭 아래 영역'만 덮도록 absolute 로 둡니다.
+      (상단바·탭바는 그대로 보임 — 예전과 같은 모습)
+   ② 폰 화면 높이: 100vh 는 이제 본체 전체 높이라 너무 길어집니다. 상세 창 높이에 맞춥니다. */
+.chars-scope #detail-view{position:absolute}
+@media(max-width:600px){
+  .chars-scope .detail-overlay-inner{min-height:100%}
+}
+</style>
 </head>
 <body>
 
@@ -802,9 +1006,113 @@ body{top:0 !important}
       </div>
     </div>
 
-    <div class="panel" id="panel-chars"></div>
+    <!-- ══════════════════════════════════════════════════
+         캐릭터 탭 — 원래 doll_charlist.html 이던 목록 부분
+         (캐릭터를 눌렀을 때 뜨는 상세 창은 아래 #chars-detail-host 에 있습니다)
+         ══════════════════════════════════════════════════ -->
+    <div class="panel chars-scope" id="panel-chars">
+      <!-- ── LIST VIEW ── -->
+      <div id="list-view">
+        <!-- HERO -->
+        <div class="hero">
+          <div class="hero-label"><span class="brandname">biz-OC-doll</span> · CHARACTERS</div>
+          <div class="hero-title-row">
+            <span class="hero-title">CHARACTERS</span>
+          </div>
+        </div>
+        <div class="char-page">
+          <div class="char-page-inner" id="char-page-inner">
+          <div class="char-filter-row">
+            <div class="char-filter-tabs" id="filter-tabs"></div>
+            <div class="filter-break"></div>
+            <input class="char-search" type="text" placeholder="코드 검색..." id="char-search-input" oninput="setSearch(this.value)" />
+            <div class="sort-dropdown-wrap" id="sort-dropdown-wrap">
+              <button class="char-sort-btn" id="sort-btn" onclick="toggleSortMenu()" title="정렬 순서 변경">
+                <span class="sort-arrow">↓</span>
+                <span id="sort-label">최신순</span>
+              </button>
+              <div class="sort-dropdown-menu" id="sort-dropdown-menu">
+                <button class="sort-dropdown-item active" id="sort-opt-newest" onclick="setSort('newest')">최신순</button>
+                <button class="sort-dropdown-item" id="sort-opt-oldest" onclick="setSort('oldest')">오래된순</button>
+              </div>
+            </div>
+            <span class="char-count" id="char-count-lbl"></span>
+            <button class="width-toggle-btn" id="width-toggle-btn" onclick="toggleWidth()" title="너비 전환">⇔ <span id="width-toggle-label">전체 너비</span></button>
+          </div>
+          <div class="char-grid" id="char-grid"></div>
+          <p class="like-notice">♥ 좋아요는 익명으로 집계됩니다. 누가 눌렀는지는 기록하지 않습니다.</p>
+          </div><!-- /char-page-inner -->
+        </div>
+      </div>
+    </div>
 
     <div class="panel" id="panel-event"></div>
+
+    <!-- 캐릭터 상세 창 — 탭 아래 영역 전체를 덮습니다.
+         display:contents 라서 이 겉상자 자체는 화면에 자리를 차지하지 않습니다. -->
+    <div class="chars-scope" id="chars-detail-host" style="display:contents">
+      <!-- ── DETAIL VIEW ── -->
+      <div id="detail-view" onclick="if(event.target===this)showList()">
+        <div class="detail-overlay-inner">
+        <div class="top-bar">
+          <span class="tb-crumbs-mid">
+            <span class="tb-crumb">biz-OC-doll</span>
+            <span class="tb-arr">›</span>
+            <span class="tb-crumb">캐릭터 일람</span>
+            <span class="tb-arr">›</span>
+          </span>
+          <span class="tb-cur" id="detail-breadcrumb"></span>
+          <button class="width-toggle-btn" id="sheet-wide-btn" onclick="toggleSheetWidth()" title="시트 너비 전환" style="margin-left:auto">⇔ <span id="sheet-wide-label">넓게 보기</span></button>
+          <button class="detail-close-btn" onclick="showList()" title="닫기" aria-label="닫기">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3L13 13M13 3L3 13"/></svg>
+          </button>
+        </div>
+
+        <div class="sheet-wrap">
+          <!-- 헤더 행 -->
+          <div class="sheet-header-row">
+            <div class="sheet-thumb">
+              <div class="sheet-thumb-inner" id="detail-illust-inner"></div>
+            </div>
+            <div class="sheet-header-text">
+              <div class="sheet-info-label">Code</div>
+              <div class="sheet-info-code" id="detail-id-code"></div>
+            </div>
+            <div class="sheet-holder-block">
+              <div class="sheet-holder-label">Holder</div>
+              <div class="sheet-holder-value" id="detail-holder">—</div>
+            </div>
+
+            <div class="sheet-action-btns">
+              <button class="sheet-action-btn like-btn" id="detail-like-btn" onclick="toggleLikeDetail()" title="이 캐릭터를 좋아요">
+                <span>좋아요</span><span class="like-heart" id="detail-like-heart">&#9825;</span>
+              </button>
+              <button class="sheet-action-btn" onclick="copyCharLink()" title="이 캐릭터 링크 복사"><span id="copy-link-label">링크 복사</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg></button>
+            </div>
+
+          </div>
+
+          <div class="sheet-slot" style="position:relative" id="detail-sheet-slot">
+            <div class="sheet-hint-icon">◻</div>
+            <div class="sheet-hint-text">캐릭터 시트 / 일러스트<br><span style="opacity:.5">visual sheet · reference · SNS</span></div>
+            <div id="detail-date-badge" style="display:none;position:absolute;top:0;right:0;z-index:10;background:rgba(0,0,0,0.06);padding:4px 10px;font-size:10px;color:#000;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;border-bottom-left-radius:8px">—</div>
+            <button class="cassette-nav-arrow prev" id="cassette-prev" onclick="navChar(-1)" aria-label="이전 캐릭터">
+              <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 4L4 22L16 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="cassette-nav-arrow next" id="cassette-next" onclick="navChar(1)" aria-label="다음 캐릭터">
+              <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L16 22L4 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="ep-nav">
+          <button class="ep-nav-btn" id="nav-prev" onclick="navChar(-1)"><span>←</span><span class="ep-nav-title"><span class="ep-nav-full" id="nav-prev-name"></span><span class="ep-nav-short" id="nav-prev-short"></span></span></button>
+          <button class="ep-nav-btn" style="justify-self:center" onclick="showList()" title="목록으로">목록으로</button>
+          <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title"><span class="ep-nav-full" id="nav-next-name"></span><span class="ep-nav-short" id="nav-next-short"></span></span><span>→</span></button>
+        </div>
+        </div><!-- /detail-overlay-inner -->
+      </div>
+    </div>
 
   </div>
 </div>
@@ -1401,13 +1709,14 @@ window.googleTranslateElementInit = googleTranslateElementInit;
    biz-OC-doll SPA
    - 탭 전환·에피소드 읽기 모두 새로고침 없음
    - 소개 탭 = 이 파일 안에 직접 들어 있음 (native)
-   - 캐릭터·이벤트 탭 = 아직 개별 파일 iframe 지연 로드 (하나씩 옮기는 중)
+   - 캐릭터 탭 = 이 파일 안에 직접 들어 있음 (native)
+   - 이벤트 탭 = 아직 개별 파일 iframe 지연 로드
    - 스토리 탭은 없앴습니다. story.html 은 PD 페이지(doll_pd.html)에서만 들어갑니다
    ══════════════════════════════════════════════════ */
 
 var TABS = {
   intro:   { native:true, onShow:function(){ if(window.introRedraw) introRedraw(); } },   /* 본체에 직접 들어 있음 */
-  chars:   { src:'doll_charlist.html'            },
+  chars:   { native:true },   /* 본체에 직접 들어 있음. nav 는 캐릭터 스크립트가 붙입니다 */
   event:   { src:'event.html'                    }
 };
 var DEFAULT_TAB = 'intro';
@@ -1435,6 +1744,8 @@ function parseHash(){
 
 function go(tab, push){
   if(!TABS[tab]) tab = DEFAULT_TAB;
+  /* 캐릭터 상세 창이 열린 채로 다른 탭으로 가면 창을 닫습니다 (탭 아래를 덮고 있어서) */
+  if(current === 'chars' && tab !== 'chars' && window.charState && window.charState.activeId != null && window.showList) showList(false);
   document.querySelectorAll('.tab').forEach(function(b){
     b.classList.toggle('active', b.dataset.tab === tab);
   });
@@ -1505,6 +1816,8 @@ function subHash(tab){
 }
 function frameOf(tab){ return document.querySelector('#panel-' + tab + ' iframe'); }
 function frameNav(tab, route){
+  var cfg = TABS[tab];
+  if(cfg && cfg.native){ if(cfg.nav) cfg.nav(route); return; }   /* 본체에 들어 있는 탭 */
   var fr = frameOf(tab);
   if(fr && fr.contentWindow) try{ fr.contentWindow.postMessage({type:'biz-doll-nav', tab:tab, route:route}, '*'); }catch(e){}
 }
@@ -1603,7 +1916,7 @@ function hookSwipe(doc){
     doc.addEventListener('touchstart', function(e){
       if(!window.matchMedia('(max-width: 768px)').matches){ on = false; return; }
       if(e.touches.length !== 1){ on = false; return; }
-      if(e.target.closest && e.target.closest('#tabbar')){ on = false; return; }
+      if(e.target.closest && e.target.closest('#tabbar, #detail-view')){ on = false; return; }   /* 탭바·캐릭터 상세 창 위에서는 탭 넘기기 안 함 */
       sx = e.touches[0].clientX;
       sy = e.touches[0].clientY;
       on = true;
@@ -1652,6 +1965,7 @@ function hookPTR(doc, getScrollEl){
 
     doc.addEventListener('touchstart', function(e){
       if(_ptrRefreshing || e.touches.length !== 1){ active = false; return; }
+      if(e.target.closest && e.target.closest('#detail-view')){ active = false; return; }   /* 캐릭터 상세 창 안에서는 당겨서 새로고침 안 함 */
       if(window.innerWidth > 768){ active = false; return; }
       var el = getScrollEl();
       var top = el ? (el.scrollTop || 0) : 0;
@@ -1886,6 +2200,583 @@ function openFormPopup() {
   };
   window.introRedraw();
   window.addEventListener('resize', window.introRedraw);
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════
+     캐릭터 탭 스크립트 (원래 doll_charlist.html 에 있던 것)
+     구글시트에서 캐릭터 목록을 읽어오고, 좋아요·상세 창·딥링크를 처리합니다.
+     ══════════════════════════════════════════════════ -->
+<script>
+(function(){   /* 캐릭터 탭 전용 칸막이 — 안쪽 변수 이름이 본체·소개 탭과 부딪히지 않게 */
+/* ── DATA — 구글시트 OC-characters 탭 CSV에서 로드 ── */
+(function(){
+  if(window.CHARACTERS) return;
+  window.CHARACTERS = []; // 로드 전 빈 배열 (renderList는 fetch 후 다시 호출)
+
+  const GRADIENTS=[
+    "135deg,#e0e7ff,#a5b4fc","135deg,#fce7f3,#f9a8d4",
+    "135deg,#d1fae5,#6ee7b7","135deg,#fef3c7,#fcd34d",
+    "135deg,#ffe4e6,#fda4af","135deg,#e0f2fe,#7dd3fc",
+    "135deg,#f3e8ff,#c4b5fd","135deg,#ecfccb,#a3e635",
+    "135deg,#fff7ed,#fdba74","135deg,#f0fdf4,#86efac",
+  ];
+
+  /* 로딩 상태 — renderList 의 빈 화면 문구가 이 값을 봅니다.
+     'loading' 불러오는 중 / 'ok' 정상 / 'empty' 시트는 읽었는데 캐릭터 0명 / 'error' 실패 */
+  window._charLoadState = 'loading';
+
+  /* 불러오는 동안 회색 안내를 띄워둡니다.
+     (renderList 를 여기서 부를 수 없습니다 — 아래쪽 state 변수가 아직 안 만들어졌습니다) */
+  (function(){
+    const g = document.getElementById('char-grid');
+    if(g) g.innerHTML = '<div class="char-empty">불러오는 중...</div>';
+  })();
+
+  async function loadChars(){
+    /* ⚠ 이 한 줄을 지우지 마세요.
+       아래 try 안에서 곧바로(await 전에) 오류가 나면 catch 도 곧바로 실행되는데,
+       그 시점에는 이 아래쪽 'const state' 가 아직 안 만들어져 있습니다.
+       그대로 renderList() 를 부르면 스크립트 전체가 죽어서
+       화면이 하얗게 멈춥니다. (config.js 가 안 열렸을 때가 그 경우입니다)
+       이 줄이 실행 순서를 한 박자 미뤄서 그걸 막습니다. */
+    await null;
+
+    try{
+      // config.js 의 SHEET_CSV() 헬퍼 사용
+      const url = (typeof SHEET_CSV === 'function')
+        ? SHEET_CSV('OC-characters')
+        : null;
+      if(!url) throw new Error('config.js 미로드');
+
+      /* 10초 안에 응답이 없으면 포기합니다.
+         이게 없으면 구글이 응답을 안 줄 때 '불러오는 중...'이 영원히 돕니다. */
+      const ctrl = new AbortController();
+      const timer = setTimeout(()=>ctrl.abort(), 10000);
+      const res = await fetch(url, {signal: ctrl.signal});
+      clearTimeout(timer);
+
+      if(!res.ok) throw new Error('CSV fetch 실패 ' + res.status);
+      const csv = await res.text();
+
+      // CSV 파싱
+      const rows = csv.trim().split('\n').map(r=>{
+        const cols=[]; let cur='', inQ=false;
+        for(const ch of r){
+          if(ch==='"'){inQ=!inQ;}
+          else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+          else cur+=ch;
+        }
+        cols.push(cur.trim());
+        return cols;
+      });
+      /* 시트는 읽었는데 내용이 헤더뿐인 경우.
+         예전에는 여기서 그냥 멈춰서 '불러오는 중...'이 영원히 남았습니다. */
+      if(rows.length < 2){
+        window.CHARACTERS = [];
+        window._charLoadState = 'empty';
+        renderList();
+        return;
+      }
+
+      // 헤더: code / type / holder / status / updated
+      // 완료 · 작업중 캐릭터만 표시
+      window.CHARACTERS = rows.slice(1)
+        .filter(r=>(r[0]||'').trim())
+        .map((r,i)=>{
+          const code = (r[0]||'').trim();
+          const num  = parseInt(code.replace('BIZOCDOLL','')) || (i+1);
+          return {
+            id:     num,
+            idCode: code,
+            type:   (r[1]||'').trim(),
+            holder: (r[2]||'—').trim() || '—',
+            status:  (r[3]||'').trim(),
+            updated: (r[4]||'').trim(),
+            grad:   GRADIENTS[(num-1) % GRADIENTS.length],
+          };
+        })
+        .filter(c=>c.status==='완료' || c.status==='작업중');
+
+      window._charLoadState = window.CHARACTERS.length ? 'ok' : 'empty';
+      renderList(); // 데이터 로드 후 리스트 재렌더
+      applyInitialRoute();
+    }catch(e){
+      /* ── 불러오기 실패 ──────────────────────────────────
+         예전에는 여기서 '빈 캐릭터 200개'를 만들어 뿌렸습니다.
+         그러면 방문자 눈에는 고장이 아니라
+         '이 프로젝트 텅 비어 있네'로 보입니다. 첫인상이 망가집니다.
+
+         그래서 지금은 아무것도 만들지 않고 안내문만 띄웁니다.
+         (문구는 renderList 안 char-empty 부분에 있습니다)
+
+         실패하는 흔한 이유:
+           · 구글시트 공유가 '링크가 있는 모든 사용자 → 뷰어'가 아님
+           · 시트 탭 이름이 OC-characters 가 아님
+           · 방문자 쪽 인터넷 문제 / 구글 일시 장애
+         ────────────────────────────────────────────────── */
+      console.warn('캐릭터 CSV 불러오기 실패:', e.message);
+      window.CHARACTERS = [];
+      window._charLoadState = 'error';
+      renderList();
+    }
+  }
+  loadChars();
+})();
+
+/* ── STATE ── */
+window.charState = window.charState || { filter:"ALL", search:"", activeId:null, sort:"newest" };
+window.charState.activeId = null;
+const state = window.charState;
+/* 예전에 저장된 '인기순' 설정이 남아 있으면 최신순으로 되돌립니다 */
+if(state.sort === 'popular') state.sort = 'newest';
+
+/* ══════════════════════════════════════════════════
+   좋아요
+
+   화면에는 '내가 누른 것'만 보입니다.
+   전체 몇 명이 눌렀는지는 어디에도 표시하지 않습니다.
+   집계는 시트에 쌓이며, 공개 여부는 아직 정해지지 않았습니다.
+   ══════════════════════════════════════════════════ */
+function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem('doll_liked')||'[]'))}catch{return new Set()} }
+function saveLiked(s){ localStorage.setItem('doll_liked', JSON.stringify([...s])) }
+
+/* ── 브라우저마다 고정 딱지 ──
+   이름도 이메일도 IP도 아닙니다. 그냥 무작위 문자열이에요.
+   "같은 브라우저인가, 다른 브라우저인가"만 구별하려고 씁니다.
+   같은 사람이 100번 눌러도 1로 세기 위해 필요합니다. */
+function likerId(){
+  const k = 'bzd_liker';
+  try{
+    let v = localStorage.getItem(k);
+    if(!v){
+      v = (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
+      localStorage.setItem(k, v);
+    }
+    return v;
+  }catch(e){ return 'anon'; }
+}
+
+/* ── 서버 전송 ──
+   '+1 해줘 / -1 해줘' 가 아니라 '이 사람의 042번 = 켜짐/꺼짐' 을 보냅니다.
+   그래서 요청을 위조해도 자기 줄 하나만 바뀌고, 남의 숫자는 못 건드립니다.
+   취소도 자동으로 반영됩니다 — 꺼진 줄은 셀 때 빠지니까요.
+
+   여러 개를 연달아 누르는 일이 많아서 0.8초 모았다가 한 번에 보냅니다.
+   실패해도 화면은 그대로입니다. 좋아요의 원본은 이 브라우저이고,
+   서버에 가는 건 집계용 사본이니까요. */
+const _likeQueue = new Map();
+let _likeTimer = null;
+
+function queueLike(id, on){
+  _likeQueue.set(id, on ? 1 : 0);
+  clearTimeout(_likeTimer);
+  _likeTimer = setTimeout(flushLikes, 800);
+}
+
+function flushLikes(){
+  if(_likeQueue.size === 0) return;
+  const api = (typeof API !== 'undefined' && API) ? API
+            : (typeof CONFIG !== 'undefined' && CONFIG.API) ? CONFIG.API : '';
+  const items = [..._likeQueue.entries()].map(([c, s]) => ({ c, s }));
+  _likeQueue.clear();
+  if(!api) return;
+
+  fetch(api, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action:'like', liker: likerId(), items })
+  }).catch(()=>{});   /* 조용히 실패 — 사용자 화면에는 영향 없음 */
+}
+
+/* 탭을 닫거나 다른 앱으로 넘어갈 때 남은 것 마저 보내기 */
+window.addEventListener('pagehide', flushLikes);
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) flushLikes(); });
+
+window.toggleLike = function(id, e){
+  e.stopPropagation();
+  const liked = getLiked();
+  const willLike = !liked.has(id);
+  willLike ? liked.add(id) : liked.delete(id);
+  saveLiked(liked);
+  queueLike(id, willLike);
+  renderList();
+};
+
+/* ── FILTERED LIST HELPER — state 기반 즉시 계산 ── */
+function getFilteredChars(){
+  const q = state.search.trim().toLowerCase();
+  const liked = getLiked();
+  let filtered = window.CHARACTERS.filter(c=>
+    (state.filter==="ALL" || c.type===state.filter || (state.filter==="♥" && liked.has(c.id))) &&
+    (!q || c.idCode.toLowerCase().includes(q))
+  );
+  filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
+  return filtered;
+}
+
+/* ── RENDER LIST ── */
+function renderList(){
+  const q = state.search.trim().toLowerCase();
+  const liked = getLiked();
+
+  let filtered = window.CHARACTERS.filter(c=>
+    (state.filter==="ALL" || c.type===state.filter || (state.filter==="♥" && liked.has(c.id))) &&
+    (!q || c.idCode.toLowerCase().includes(q))
+  );
+
+  // 정렬
+  filtered = [...filtered].sort((a,b)=>state.sort==='oldest' ? a.id-b.id : b.id-a.id);
+
+  // 정렬 버튼 UI 동기화
+  const sortLabel = document.getElementById('sort-label');
+  if(sortLabel) sortLabel.textContent = {newest:'최신순',oldest:'오래된순'}[state.sort]||'최신순';
+  ['newest','oldest'].forEach(k=>{
+    const el=document.getElementById('sort-opt-'+k);
+    if(el) el.className='sort-dropdown-item'+(state.sort===k?' active':'');
+  });
+
+  const counts={ALL:0,M:0,N:0,F:0,O:0};
+  window.CHARACTERS.forEach(c=>{counts[c.type]++;counts.ALL++;});
+  const likedCount = liked.size;
+
+  const tabs = [
+    {key:"ALL", label:"ALL", count:counts.ALL},
+    {key:"M",   label:"M",  count:counts.M},
+    {key:"N",   label:"N",  count:counts.N},
+    {key:"F",   label:"F",  count:counts.F},
+    {key:"O",   label:"O",  count:counts.O},
+    {key:"♥",   label:"♥",    count:likedCount},
+  ];
+
+  document.getElementById('filter-tabs').innerHTML = tabs.map(t=>`
+    <button class="char-tab ${state.filter===t.key?"active":""} ${t.key==="♥"?"liked-tab":""}" onclick="setFilter('${t.key}')">
+      ${t.label} <span style="font-size:10px;opacity:.5">${t.count}</span>
+    </button>
+  `).join("");
+
+  window._filteredChars = filtered;
+  document.getElementById('char-count-lbl').textContent = filtered.length + "개 표시";
+
+  /* 화면이 비었을 때 무슨 말을 띄울지.
+     '검색 결과 없음'과 '불러오기 실패'는 완전히 다른 상황이라 구분합니다. */
+  const emptyMsg = (function(){
+    const st = window._charLoadState;
+    if(st === 'loading') return '불러오는 중...';
+    if(st === 'error')   return '캐릭터 목록을 불러오지 못했습니다.'
+                              + '<br><span style="opacity:.7">잠시 후 다시 시도해 주세요.</span>'
+                              + '<br><button onclick="location.reload()" style="margin-top:14px;padding:7px 18px;font-size:11px;font-family:inherit;background:none;border:1px solid var(--bd2, #c6c6c6);border-radius:6px;color:inherit;cursor:pointer">다시 불러오기</button>';
+    if(st === 'empty')   return '아직 공개된 캐릭터가 없습니다.';
+    if(state.filter === "♥") return '좋아요한 캐릭터가 없습니다 ♥';
+    return '검색 결과 없음';
+  })();
+
+  document.getElementById('char-grid').innerHTML = filtered.length===0
+    ? `<div class="char-empty">${emptyMsg}</div>`
+    : filtered.map(c=>{
+        const isLiked = liked.has(c.id);
+        const iconNum = String(c.id).padStart(3,'0');
+        const iconSrc = `images/character_sheet/${iconNum}_icon.png`;
+        const thumbContent = `<img src="${iconSrc}" class="char-thumb-face" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="char-thumb-inner" style="display:none;background:linear-gradient(${c.grad})"></div>`;
+        return `
+        <div class="char-card" onclick="openChar(${c.id})">
+          <div class="char-thumb">
+            ${thumbContent}
+            <button class="char-like-overlay${isLiked?" liked":""}" onclick="toggleLike(${c.id},event)" title="좋아요">
+              ♥
+            </button>
+          </div>
+          <div class="char-name-row">
+            <span class="char-code-prefix">BIZOCDOLL</span>
+            <span class="char-code">${String(c.id).padStart(3,"0")}</span>
+          </div>
+        </div>`;
+      }).join("");
+}
+
+/* ── RENDER DETAIL ── */
+function renderDetail(id){
+  const c = window.CHARACTERS.find(ch=>ch.id===id);
+  if(!c) return;
+
+  document.getElementById('detail-breadcrumb').textContent = c.idCode;
+  document.getElementById('detail-id-code').textContent = c.idCode;
+  document.getElementById('detail-illust-inner').style.background = `linear-gradient(${c.grad})`;
+  const iconNum2 = String(c.id).padStart(3,'0');
+  const thumbEl = document.getElementById('detail-illust-inner');
+  thumbEl.innerHTML = `<img src="images/character_sheet/${iconNum2}_icon.png" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.remove()">`;
+  document.getElementById('detail-holder').textContent = c.holder;
+
+  // sheet-slot 이미지 로드 (sheet.png → sheet2.png 순, 없으면 힌트 유지)
+  const sheetNum = String(c.id).padStart(3,'0');
+  const slot = document.getElementById('detail-sheet-slot');
+  if(slot){
+    // 기존 이미지 제거, 힌트 복원
+    slot.querySelectorAll('img.sheet-img').forEach(el=>el.remove());
+    slot.querySelector('.sheet-hint-icon').style.display='';
+    slot.querySelector('.sheet-hint-text').style.display='';
+    slot.classList.remove('has-image');
+
+    function tryLoadSheet(filename, onLoaded){
+      const img = document.createElement('img');
+      img.className = 'sheet-img';
+      img.src = `images/character_sheet/${filename}`;
+      img.style.cssText = 'width:100%;display:block;border-radius:8px';
+      img.onload = ()=>{ slot.prepend(img); onLoaded && onLoaded(); };
+    }
+    // sheet.png 먼저
+    const img1 = document.createElement('img');
+    img1.className = 'sheet-img';
+    img1.src = `images/character_sheet/${sheetNum}_sheet.png`;
+    img1.style.cssText = 'width:100%;display:block;border-radius:8px';
+    img1.onload = ()=>{
+      slot.querySelector('.sheet-hint-icon').style.display='none';
+      slot.querySelector('.sheet-hint-text').style.display='none';
+      slot.classList.add('has-image');
+      slot.prepend(img1);
+      // sheet2.png도 시도
+      const img2 = document.createElement('img');
+      img2.className = 'sheet-img';
+      img2.src = `images/character_sheet/${sheetNum}_sheet2.png`;
+      img2.style.cssText = 'width:100%;display:block;border-radius:8px;margin-top:8px';
+      img2.onload = ()=>{ slot.appendChild(img2); };
+    };
+    slot.appendChild(img1);
+  }
+  const badge = document.getElementById('detail-date-badge');
+  if(badge){
+    // gviz CSV 날짜 정규화 (2026. 4. 9. → 2026-04-09)
+    function normalizeDate(v){
+      if(!v) return '';
+      if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+      const m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+      if(m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+      return v;
+    }
+    const dateStr = normalizeDate(c.updated);
+    if(dateStr){
+      badge.textContent = dateStr;
+      badge.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // Prev / Next — 현재 필터/정렬 순서 기준 (즉시 계산)
+  const list = getFilteredChars();
+  const idx = list.findIndex(ch=>ch.id===c.id);
+  const prev = list[idx-1]||null;
+  const next = list[idx+1]||null;
+  document.getElementById('nav-prev-name').textContent = prev ? prev.idCode : "없음";
+  document.getElementById('nav-next-name').textContent = next ? next.idCode : "없음";
+  document.getElementById('nav-prev-short').textContent = prev ? prev.idCode.replace(/^\D+/,'') : "없음";
+  document.getElementById('nav-next-short').textContent = next ? next.idCode.replace(/^\D+/,'') : "없음";
+  document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
+  document.getElementById('nav-next').className = "ep-nav-btn"+(next?"":" disabled");
+  const cp = document.getElementById('cassette-prev');
+  const cn = document.getElementById('cassette-next');
+  if(cp) cp.classList.toggle('disabled', !prev);
+  if(cn) cn.classList.toggle('disabled', !next);
+
+  updateDetailLikeBtn();
+}
+
+/* ── 상세 시트 좋아요 ── */
+function updateDetailLikeBtn(){
+  const btn = document.getElementById('detail-like-btn');
+  if(!btn) return;
+  const on = state.activeId != null && getLiked().has(state.activeId);
+  btn.classList.toggle('liked', on);
+  const heart = document.getElementById('detail-like-heart');
+  if(heart) heart.innerHTML = on ? '&#9829;' : '&#9825;';
+  btn.title = on ? '좋아요 취소' : '이 캐릭터를 좋아요';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+window.toggleLikeDetail = function(){
+  const id = state.activeId;
+  if(id == null) return;
+  const liked = getLiked();
+  const willLike = !liked.has(id);
+  willLike ? liked.add(id) : liked.delete(id);
+  saveLiked(liked);
+  queueLike(id, willLike);
+  updateDetailLikeBtn();
+
+  /* 켤 때만 하트 튀는 연출 */
+  const btn = document.getElementById('detail-like-btn');
+  if(btn && willLike){
+    btn.classList.remove('pop');
+    void btn.offsetWidth;   /* 애니메이션 재시작 */
+    btn.classList.add('pop');
+  }
+
+  /* 뒤에 있는 목록 그리드도 같이 갱신 (♥ 필터·개수 반영) */
+  renderList();
+}
+
+
+/* ── ACTIONS ── */
+window.toggleSheetWidth = function(){
+  const overlay = document.querySelector('.detail-overlay-inner');
+  const label = document.getElementById('sheet-wide-label');
+  const isWide = overlay.classList.toggle('wide');
+  label.textContent = isWide ? '좁게 보기' : '넓게 보기';
+};
+window.toggleSortMenu = function(){
+  const menu = document.getElementById('sort-dropdown-menu');
+  if(menu) menu.classList.toggle('open');
+};
+window.setSort = function(val){
+  state.sort = val;
+  const menu = document.getElementById('sort-dropdown-menu');
+  if(menu) menu.classList.remove('open');
+  renderList();
+};
+document.addEventListener('click', function(e){
+  const wrap = document.getElementById('sort-dropdown-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    const menu = document.getElementById('sort-dropdown-menu');
+    if(menu) menu.classList.remove('open');
+  }
+});
+window.toggleWidth = function(){
+  const inner = document.getElementById('char-page-inner');
+  const label = document.getElementById('width-toggle-label');
+  const isWide = inner.classList.toggle('wide');
+  label.textContent = isWide ? '좁게 보기' : '전체 너비';
+};
+window.setFilter = function(f){ state.filter=f; renderList(); };
+window.setSearch = function(v){ state.search=v; renderList(); };
+window.openChar = function(id, push){
+  state.activeId=id;
+  renderDetail(id);
+  document.getElementById('detail-view').style.display='block';
+  document.body.style.overflow='hidden';
+  requestAnimationFrame(applyMobDetail);
+  if(push !== false) charRoute(String(id).padStart(3,'0'));
+};
+window.showList = function(push){
+  state.activeId=null;
+  document.getElementById('detail-view').style.display='none';
+  document.body.style.overflow='';
+  renderList();
+  if(push !== false) charRoute('');
+};
+window.navChar = function(dir){
+  const list = getFilteredChars();
+  const idx = list.findIndex(ch=>ch.id===state.activeId);
+  const target = list[idx+dir];
+  if(target) openChar(target.id);
+};
+
+/* ══════════════════════════════════════════════════
+   캐릭터 딥링크 —  #/chars/042
+   캐릭터 탭이 이제 본체 안에 있으므로 주소창을 직접 고칩니다.
+   ══════════════════════════════════════════════════ */
+function charRoute(route){
+  var h = route ? ('#/chars/' + route) : '#/chars';
+  if(location.hash !== h) history.pushState(null, '', h);
+}
+
+/* '042' · '42' · 'BIZOCDOLL042' 전부 받아줍니다 */
+function parseCharRoute(raw){
+  const v = String(raw||'').trim().toUpperCase().replace(/^BIZOCDOLL/,'');
+  if(!/^\d+$/.test(v)) return null;
+  return parseInt(v, 10);
+}
+function navToChar(raw, push){
+  const id = parseCharRoute(raw);
+  if(id === null || !window.CHARACTERS.some(c=>c.id===id)){ showList(push); return; }
+  openChar(id, push);
+}
+
+/* 목록이 아직 안 왔으면 들고 있다가, 다 불러온 뒤에 엽니다 */
+let _pendingRoute = (function(){ var h = parseHash(); return h.tab === 'chars' ? h.sub : ''; })();
+function applyInitialRoute(){
+  if(!_pendingRoute) return;
+  const r = _pendingRoute; _pendingRoute = '';
+  navToChar(r, false);
+}
+
+/* 본체 라우터가 부르는 이동 요청 — 뒤로가기·탭 재클릭 (TABS.chars.nav) */
+TABS.chars.nav = function(route){
+  if(window.CHARACTERS.length === 0){ _pendingRoute = route || ''; return; }
+  navToChar(route, false);
+};
+
+/* ── 링크 복사 ── */
+window.copyCharLink = function(){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  const num = String(c.id).padStart(3,'0');
+
+  let url;
+  try{
+    /* 부모 주소에서 해시만 갈아 끼웁니다 (도메인이 바뀌어도 알아서 따라감) */
+    const base = location.href;
+    url = base.split('#')[0] + '#/chars/' + num;
+  }catch(e){
+    url = 'https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/#/chars/' + num;
+  }
+
+  const label = document.getElementById('copy-link-label');
+  const done = () => {
+    if(!label) return;
+    label.textContent = '복사됨!';
+    setTimeout(()=>{ label.textContent = '링크 복사'; }, 1400);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done).catch(()=>prompt('아래 주소를 복사하세요', url));
+  } else {
+    prompt('아래 주소를 복사하세요', url);
+  }
+};
+
+/* ── INIT ── */
+renderList();
+
+function applyMobDetail(){
+  var row     = document.querySelector('.sheet-header-row');
+  var thumb   = document.querySelector('.detail-overlay-inner .sheet-thumb');
+  var hdrText = document.querySelector('.sheet-header-text');
+  var holder  = document.querySelector('.sheet-holder-block');
+  var btns    = document.querySelector('.sheet-action-btns');
+  var overlay = document.querySelector('.detail-overlay-inner');
+  var wrap    = document.querySelector('.sheet-wrap');
+  if(!row) return;
+  var w = document.documentElement.clientWidth;
+  var mob = w > 0 && w < 600;
+  if(mob){
+    row.style.flexWrap      = 'wrap';
+    row.style.gap           = '10px 14px';
+    row.style.paddingBottom = '14px';
+    row.style.marginBottom  = '16px';
+    if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }
+    if(hdrText){ hdrText.style.flex='1'; hdrText.style.minWidth='0'; }
+    if(holder){ holder.style.width='100%'; holder.style.padding='0'; holder.style.order='3'; }
+    if(btns){ btns.style.width='100%'; btns.style.flexDirection='row'; btns.style.marginLeft='0'; btns.style.gap='8px'; btns.style.order='4'; }
+    document.querySelectorAll('.sheet-action-btn').forEach(function(b){
+      b.style.flex='1'; b.style.justifyContent='center'; b.style.minWidth='0';
+    });
+    if(overlay){ overlay.style.margin='0'; overlay.style.borderRadius='0'; }
+    if(wrap){ wrap.style.padding='20px 16px 32px'; }
+  } else {
+    row.style.flexWrap=''; row.style.gap='20px'; row.style.paddingBottom='20px'; row.style.marginBottom='24px';
+    if(thumb){ thumb.style.width='80px'; thumb.style.height='80px'; thumb.style.flexShrink='0'; }
+    if(hdrText){ hdrText.style.flex=''; hdrText.style.minWidth=''; }
+    if(holder){ holder.style.width=''; holder.style.padding='12px 20px'; holder.style.order=''; }
+    if(btns){ btns.style.width=''; btns.style.flexDirection='column'; btns.style.marginLeft='auto'; btns.style.gap='7px'; btns.style.order=''; }
+    document.querySelectorAll('.sheet-action-btn').forEach(function(b){
+      b.style.flex=''; b.style.justifyContent=''; b.style.minWidth='120px';
+    });
+    if(overlay){ overlay.style.margin='40px auto'; overlay.style.borderRadius='14px'; }
+    if(wrap){ wrap.style.padding=''; }
+  }
+}
+window.addEventListener('resize', applyMobDetail);
 })();
 </script>
 
