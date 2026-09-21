@@ -701,6 +701,8 @@ body{top:0 !important}
 .chars-scope .cassette-nav-arrow svg{filter:drop-shadow(2px 0 6px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))}
 .chars-scope .cassette-nav-arrow.next svg{filter:drop-shadow(-2px 0 6px rgba(0,0,0,0.28)) drop-shadow(0 2px 4px rgba(0,0,0,0.18))}
 .chars-scope .cassette-nav-arrow.disabled{opacity:0;pointer-events:none}
+/* 누르고 난 뒤 버튼에 남던 검은 네모(포커스 표시) 없앰 */
+.chars-scope .cassette-nav-arrow:focus,.chars-scope .cassette-nav-arrow:focus-visible{outline:none}
 /* ── WIDTH CONTROL ── */
 .chars-scope .char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
 .chars-scope .char-page-inner.wide{max-width:none}
@@ -776,7 +778,7 @@ body{top:0 !important}
 @media(min-width:1320px){ body.detail-open .chars-scope .detail-help{display:flex} }
 /* ── 왼쪽 빈 공간: 캐릭터 정보 + 출처 문구 ──
    상세 창 왼쪽 끝에서 150px 떨어진 곳을 중심으로 흰 글씨로 띄웁니다.
-   복사 버튼만 눌리고, 나머지 글씨 위를 누르면 바깥을 누른 것과 똑같이 닫힙니다. */
+   출처 문구 상자 3개만 눌리고(누르면 복사), 나머지 글씨 위를 누르면 바깥을 누른 것과 똑같이 닫힙니다. */
 .chars-scope .detail-side{display:none;position:fixed;top:50%;left:calc(50% - 400px - 150px);transform:translate(-50%,-50%);
   width:240px;flex-direction:column;gap:34px;pointer-events:none;color:rgba(255,255,255,.92);
   font-family:'Noto Sans KR',sans-serif;z-index:1}
@@ -787,11 +789,12 @@ body{top:0 !important}
 .chars-scope .detail-side-v{font-family:'Share Tech Mono',monospace;font-size:16px;text-align:right;word-break:break-all}
 .chars-scope .detail-side-title{font-size:15px;font-weight:500}
 .chars-scope .detail-side-note{font-size:13px;line-height:1.7;opacity:.85}
-.chars-scope .detail-side-credit{font-size:12px;line-height:1.7;padding:10px 12px;border:1px solid rgba(255,255,255,.35);border-radius:8px;opacity:.9}
-.chars-scope .detail-side-btn{pointer-events:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;
-  background:transparent;border:1px solid rgba(255,255,255,.75);border-radius:8px;color:#fff;font-size:13px;font-weight:500;
-  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:background .12s}
-.chars-scope .detail-side-btn:hover{background:rgba(255,255,255,.14)}
+.chars-scope .detail-side-credit{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;font-size:12px;line-height:1.7;color:rgba(255,255,255,.92);
+  padding:9px 12px;background:transparent;border:1px solid rgba(255,255,255,.35);border-radius:8px;transition:background .12s,border-color .12s}
+.chars-scope .detail-side-credit:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
+.chars-scope .detail-side-credit-txt{flex:1;min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+.chars-scope .detail-side-credit-copy{flex-shrink:0;font-size:11px;font-weight:500;opacity:.8;white-space:nowrap}
 @media(min-width:1340px){ body.detail-open .chars-scope .detail-side{display:flex} }
 @media(max-width:1619px){ .chars-scope .detail-overlay-inner.wide ~ .detail-side{display:none !important} }
 @media(max-width:1599px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
@@ -1464,8 +1467,9 @@ body{top:0 !important}
           <div class="detail-side-block">
             <div class="detail-side-title">이 캐릭터로 창작하기</div>
             <div class="detail-side-note">개인 SNS · 소규모 창작은 자유롭게<br>연재 · 상업 창작은 출처 표기 필수</div>
-            <div class="detail-side-credit">본 작품에 등장하는 캐릭터 [캐릭터 이름] 은(는) biz-OC-doll 프로젝트의 <span id="side-credit-code">—</span> 캐릭터를 기반으로 창작되었습니다.</div>
-            <button class="detail-side-btn" onclick="copyCredit()"><span id="side-credit-label">출처 문구 복사</span></button>
+            <button class="detail-side-credit" onclick="copyCredit(0)"><span class="detail-side-credit-txt" id="side-credit-0">—</span><span class="detail-side-credit-copy" id="side-credit-label-0">복사</span></button>
+            <button class="detail-side-credit" onclick="copyCredit(1)"><span class="detail-side-credit-txt" id="side-credit-1">—</span><span class="detail-side-credit-copy" id="side-credit-label-1">복사</span></button>
+            <button class="detail-side-credit" onclick="copyCredit(2)"><span class="detail-side-credit-txt" id="side-credit-2">—</span><span class="detail-side-credit-copy" id="side-credit-label-2">복사</span></button>
           </div>
         </div>
         <!-- 조작법 안내 (데스크탑 오른쪽 여백) -->
@@ -2882,14 +2886,25 @@ function fillDetailSide(c){
   set('side-holder',  c.holder || '—');
   set('side-status',  c.status || '—');
   set('side-updated', normDate(c.updated) || '—');
-  set('side-credit-code', c.idCode);
+  /* TYPE 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로) */
+  const typeEl = document.getElementById('side-type');
+  if(typeEl) typeEl.style.color = c.type==='M' ? '#9CC4DC' : c.type==='F' ? '#B4A3D4' : '';
+  creditTexts(c).forEach((t,i)=>set('side-credit-'+i, t));
 }
-window.copyCredit = function(){
+/* 출처 표기 3종 (소개탭 예시와 같은 문구, 코드만 채움) */
+function creditTexts(c){
+  return [
+    `본 작품에 등장하는 캐릭터 [캐릭터 이름] 은(는) biz-OC-doll 프로젝트의 ${c.idCode} 캐릭터를 기반으로 창작되었습니다.`,
+    `[캐릭터 이름] Original Character by biz-OC-doll`,
+    `#${c.idCode}`
+  ];
+}
+window.copyCredit = function(n){
   const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
   if(!c) return;
-  const text = `본 작품에 등장하는 캐릭터 [캐릭터 이름] 은(는) biz-OC-doll 프로젝트의 ${c.idCode} 캐릭터를 기반으로 창작되었습니다.`;
-  const label = document.getElementById('side-credit-label');
-  const done = ()=>{ if(!label) return; label.textContent = '복사됨!'; setTimeout(()=>{ label.textContent = '출처 문구 복사'; }, 1400); };
+  const text = creditTexts(c)[n];
+  const label = document.getElementById('side-credit-label-'+n);
+  const done = ()=>{ if(!label) return; label.textContent = '복사됨!'; setTimeout(()=>{ label.textContent = '복사'; }, 1400); };
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(done).catch(()=>prompt('아래 문구를 복사하세요', text));
   } else { prompt('아래 문구를 복사하세요', text); }
@@ -2919,7 +2934,7 @@ function renderDetail(id){
     /* ── 부드럽게 넘기기 ──
        예전: 이전 그림을 먼저 지우고 → 빈 칸(점선 상자)이 잠깐 보이고 → 새 그림이 '툭' 나타남.
        지금: 이전 그림을 그대로 둔 채 새 그림을 몰래 받아두고,
-             다 받아지면 그 위에 0.25초 동안 서서히 겹쳐 띄운 뒤 이전 그림을 치웁니다.
+             다 받아지면 그 순간 바로 바꿔 끼웁니다. (서서히 겹치는 효과는 없음)
        빠르게 여러 번 넘겨도 늦게 도착한 옛 그림이 끼어들지 않도록 번호표(_tok)로 걸러냅니다. */
     const tok = (slot._tok = (slot._tok || 0) + 1);
     const hintIcon = slot.querySelector('.sheet-hint-icon');
@@ -2930,23 +2945,11 @@ function renderDetail(id){
     img1.style.cssText = 'width:100%;display:block;border-radius:8px';
     img1.onload = ()=>{
       if(slot._tok !== tok) return;
-      const olds = Array.prototype.slice.call(slot.querySelectorAll('img.sheet-img'));
-      const main = olds[0] || null;
-      olds.slice(1).forEach(el=>el.remove());
+      slot.querySelectorAll('img.sheet-img').forEach(el=>el.remove());
       hintIcon.style.display='none';
       hintText.style.display='none';
       slot.classList.add('has-image');
-
-      img1.style.opacity = '0';
-      img1.style.transition = 'opacity .25s ease';
-      if(main){ img1.style.position='absolute'; img1.style.top='0'; img1.style.left='0'; }
       slot.prepend(img1);
-      img1.getBoundingClientRect();
-      img1.style.opacity = '1';
-      setTimeout(()=>{
-        if(main && main !== img1) main.remove();
-        img1.style.position=''; img1.style.top=''; img1.style.left=''; img1.style.transition='';
-      }, 270);
 
       // sheet2.png도 시도
       const img2 = document.createElement('img');
