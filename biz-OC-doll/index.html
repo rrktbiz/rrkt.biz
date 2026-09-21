@@ -633,10 +633,25 @@ body{top:0 !important}
 .chars-scope .share-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:20;min-width:190px;padding:5px;
   background:var(--sb);border:1px solid var(--bd);border-radius:10px;box-shadow:0 10px 34px rgba(0,0,0,.12);flex-direction:column}
 .chars-scope .share-menu.open{display:flex}
+.chars-scope .share-menu{max-height:70vh;overflow-y:auto}
+/* ── QR코드 상자 ── */
+.chars-scope .share-qr{display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:21;width:220px;padding:10px 14px 14px;
+  background:var(--sb);border:1px solid var(--bd);border-radius:10px;box-shadow:0 10px 34px rgba(0,0,0,.12);flex-direction:column;align-items:center;gap:8px}
+.chars-scope .share-qr.open{display:flex}
+.chars-scope .share-qr-head{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3)}
+.chars-scope .share-qr-x{background:transparent;border:none;color:var(--tx3);font-size:12px;cursor:pointer;padding:2px 4px}
+.chars-scope .share-qr-x:hover{color:var(--tx)}
+.chars-scope .share-qr-box{width:168px;height:168px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tx3)}
+.chars-scope .share-qr-box img,.chars-scope .share-qr-box canvas{display:block;width:168px;height:168px}
+.chars-scope .share-qr-code{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--tx);letter-spacing:.5px}
+.chars-scope .share-qr-note{font-size:11px;line-height:1.6;color:var(--tx2);text-align:center}
+.chars-scope .share-qr-note span{color:var(--tx3);font-size:10px}
 .chars-scope .share-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;background:transparent;border:none;border-radius:7px;
   font-size:12px;font-weight:500;color:var(--tx2);font-family:var(--fn);cursor:pointer;text-align:left;white-space:nowrap;transition:background .12s,color .12s}
 .chars-scope .share-item:hover{background:#f4f4f4;color:var(--tx)}
 .chars-scope .share-item svg{flex-shrink:0;opacity:.7}
+.chars-scope .share-group{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--tx3);padding:9px 11px 3px}
+.chars-scope .share-sep{height:1px;background:var(--bd);margin:5px 6px}
 .chars-scope .sheet-action-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:500;color:var(--tx2);font-family:var(--fn);cursor:pointer;transition:all .12s;min-width:120px;letter-spacing:.3px}
 .chars-scope .sheet-action-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
 .chars-scope .sheet-action-btn svg{width:13px;height:13px;flex-shrink:0;opacity:.45;transition:opacity .12s}
@@ -803,9 +818,6 @@ body{top:0 !important}
 .chars-scope .detail-side-credit:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 .chars-scope .detail-side-credit-txt{flex:1;min-width:0;word-break:keep-all;overflow-wrap:anywhere}
 .chars-scope .detail-side-credit-copy{flex-shrink:0;font-size:11px;font-weight:500;opacity:.8;white-space:nowrap}
-.chars-scope .detail-side-v.type-m,.chars-scope .detail-side-v.type-f{padding:1px 9px;border-radius:6px;border:1px solid;font-weight:700}
-.chars-scope .detail-side-v.type-m{background:#E4F0F8;border-color:#9CC4DC;color:#3D6C88}
-.chars-scope .detail-side-v.type-f{background:#EDE7F6;border-color:#B4A3D4;color:#6B559B}
 @media(min-width:1340px){ body.detail-open .chars-scope .detail-side{display:flex} }
 @media(max-width:1619px){ .chars-scope .detail-overlay-inner.wide ~ .detail-side{display:none !important} }
 @media(max-width:1599px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
@@ -1449,8 +1461,29 @@ body{top:0 !important}
                 <button class="share-item" role="menuitem" onclick="copyCharLink()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg><span id="copy-link-label">링크 복사</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('x')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg><span>X(트위터)에 공유</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('threads')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.9 7.4c-.3-2-1.6-3-3.3-3-2 0-3.3 1.5-3.3 3.8 0 2.4 1.4 4.1 3.7 4.1 1.9 0 3.5-1.1 3.5-2.9 0-1.5-1.2-2.3-2.8-2.3-1.3 0-2.2.7-2.2 1.6 0 .8.7 1.4 1.7 1.4 1.8 0 2.5-1.6 2.5-3.9"/><path d="M8 1.5c3.8 0 6.5 2.6 6.5 6.5S11.8 14.5 8 14.5 1.5 11.9 1.5 8 4.2 1.5 8 1.5"/></svg><span>스레드에 공유</span></button>
-                <button class="share-item" role="menuitem" onclick="shareChar('facebook')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M9.2 15V8.7h2.1l.3-2.5H9.2V4.7c0-.7.2-1.2 1.2-1.2h1.3V1.3c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.2-3.2 3.3v1.8H4.5v2.5h2.1V15h2.6z"/></svg><span>페이스북에 공유</span></button>
-                <button class="share-item" role="menuitem" id="share-native" onclick="shareChar('native')" style="display:none"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2M5 4.5L8 1.5l3 3"/><path d="M3.5 7.5v6h9v-6"/></svg><span>다른 앱으로 공유</span></button>
+                <div class="share-group">영어권</div>
+                <button class="share-item" role="menuitem" onclick="shareChar('tumblr')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>텀블러 (Tumblr)</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('bluesky')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>블루스카이 (Bluesky)</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('reddit')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>레딧 (Reddit)</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('pinterest')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>핀터레스트 (Pinterest)</span></button>
+                <div class="share-group">일본</div>
+                <button class="share-item" role="menuitem" onclick="shareChar('line')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>라인 (LINE)</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('misskey')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>미스키 (Misskey)</span></button>
+                <div class="share-group">중국</div>
+                <button class="share-item" role="menuitem" onclick="shareChar('weibo')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>웨이보 (微博)</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('xhs')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M10.5 5V3.5A1.5 1.5 0 0 0 9 2H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5H5"/></svg><span id="share-lbl-xhs">샤오홍슈 (小红书) · 복사 후 열기</span></button>
+                <div class="share-group">커뮤니티</div>
+                <button class="share-item" role="menuitem" onclick="shareChar('discord')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M10.5 5V3.5A1.5 1.5 0 0 0 9 2H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5H5"/></svg><span id="share-lbl-discord">디스코드 · 복사 후 열기</span></button>
+                <div class="share-sep"></div>
+                <button class="share-item" role="menuitem" id="share-native" onclick="shareChar('native')" style="display:none"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2M5 4.5L8 1.5l3 3"/><path d="M3.5 7.5v6h9v-6"/></svg><span>다른 앱으로 공유 (인스타·카톡 등)</span></button>
+                <button class="share-item" role="menuitem" onclick="openShareQR(event)"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="4.5" height="4.5"/><rect x="9.5" y="2" width="4.5" height="4.5"/><rect x="2" y="9.5" width="4.5" height="4.5"/><path d="M9.5 9.5h2v2h-2zM12 12h2v2h-2z" fill="currentColor"/></svg><span>QR코드 보기 (위챗 등)</span></button>
+              </div>
+              <!-- QR코드 상자 (공유 메뉴의 'QR코드 보기'를 누르면 같은 자리에 뜸) -->
+              <div class="share-qr" id="share-qr">
+                <div class="share-qr-head"><span>QR코드</span><button class="share-qr-x" onclick="closeShareQR()" aria-label="닫기">✕</button></div>
+                <div class="share-qr-box" id="share-qr-box"></div>
+                <div class="share-qr-code" id="share-qr-code">—</div>
+                <div class="share-qr-note">휴대폰 카메라로 찍으면<br>이 캐릭터로 바로 이동해요<br><span>위챗 · 라인 스캔으로도 공유할 수 있어요</span></div>
               </div>
             </div>
 
@@ -2931,14 +2964,10 @@ function fillDetailSide(c){
   set('side-holder',  c.holder || '—');
   set('side-status',  c.status || '—');
   set('side-updated', normDate(c.updated) || '—');
-  /* TYPE 표시: M = 남자편 블루, F = 여자편 라일락 — 스토리 편 버튼과 같은 색 조합의 작은 칩
-     (회색 배경 위에서 연한 색 글씨만으로는 잘 안 읽혀서 밝은 바탕 + 진한 글씨로) 그 외는 흰 글씨 그대로 */
+  /* TYPE 글씨 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로)
+     회색 배경 위에서 잘 읽히도록 같은 색 계열에서 밝은 쪽으로 골랐습니다. */
   const typeEl = document.getElementById('side-type');
-  if(typeEl){
-    typeEl.classList.remove('type-m','type-f');
-    if(c.type==='M') typeEl.classList.add('type-m');
-    if(c.type==='F') typeEl.classList.add('type-f');
-  }
+  if(typeEl) typeEl.style.color = c.type==='M' ? '#B9D9EE' : c.type==='F' ? '#DCCFF7' : '';
   creditTexts(c).forEach((t,i)=>set('side-credit-'+i, t));
 }
 /* 출처 표기 3종 (소개탭 예시와 같은 문구, 코드만 채움) */
@@ -2962,6 +2991,7 @@ window.copyCredit = function(n){
 
 function renderDetail(id){
   if(window.closeShareMenu) closeShareMenu();
+  if(window.closeShareQR) closeShareQR();
   const c = window.CHARACTERS.find(ch=>ch.id===id);
   if(!c) return;
 
@@ -3167,6 +3197,8 @@ document.addEventListener('keydown', function(e){
   if(state.activeId == null) return;
   var sm = document.getElementById('share-menu');
   if(sm && sm.classList.contains('open')){ closeShareMenu(); return; }   /* 공유 메뉴가 떠 있으면 메뉴만 닫힘 */
+  var sq = document.getElementById('share-qr');
+  if(sq && sq.classList.contains('open')){ closeShareQR(); return; }     /* QR 상자가 떠 있으면 QR만 닫힘 */
   var dv = document.getElementById('detail-view');
   if(!dv || dv.style.display !== 'block' || !dv.getClientRects().length) return;
   var co = document.getElementById('contact-overlay');
@@ -3254,6 +3286,7 @@ window.toggleShareMenu = function(e){
   const b = document.getElementById('share-btn');
   if(!m) return;
   const willOpen = !m.classList.contains('open');
+  closeShareQR();
   if(willOpen){
     const nat = document.getElementById('share-native');
     if(nat) nat.style.display = navigator.share ? '' : 'none';   /* 폰처럼 기기 공유창이 있는 곳에서만 보임 */
@@ -3278,7 +3311,32 @@ window.shareChar = function(where){
   let go = '';
   if(where === 'x')        go = 'https://twitter.com/intent/tweet?text=' + E(text) + '&url=' + E(url);
   if(where === 'threads')  go = 'https://www.threads.net/intent/post?text=' + E(text + ' ' + url);
-  if(where === 'facebook') go = 'https://www.facebook.com/sharer/sharer.php?u=' + E(url);
+  /* 영어권 */
+  if(where === 'tumblr')    go = 'https://www.tumblr.com/widgets/share/tool?posttype=link&canonicalUrl=' + E(url) + '&title=' + E(text);
+  if(where === 'bluesky')   go = 'https://bsky.app/intent/compose?text=' + E(text + ' ' + url);
+  if(where === 'reddit')    go = 'https://www.reddit.com/submit?url=' + E(url) + '&title=' + E(text);
+  if(where === 'pinterest'){
+    /* 핀터레스트는 그림을 같이 보내야 해서 캐릭터 시트 그림 주소를 붙입니다 */
+    const img = location.href.split('#')[0].replace(/[^\/]*$/, '') + 'images/character_sheet/' + String(c.id).padStart(3,'0') + '_sheet.png';
+    go = 'https://www.pinterest.com/pin/create/button/?url=' + E(url) + '&media=' + E(img) + '&description=' + E(text);
+  }
+  /* 일본 */
+  if(where === 'line')      go = 'https://social-plugins.line.me/lineit/share?url=' + E(url);
+  if(where === 'misskey')   go = 'https://misskey-hub.net/share/?text=' + E(text + ' ' + url) + '&visibility=public&localOnly=0';
+  /* 중국 */
+  if(where === 'weibo')     go = 'https://service.weibo.com/share/share.php?url=' + E(url) + '&title=' + E(text);
+  /* 샤오홍슈·디스코드는 웹에서 '바로 공유' 기능을 열어두지 않아서,
+     글+링크를 복사해 두고 사이트를 열어줍니다 → 거기서 붙여넣기(Ctrl+V) 하면 됩니다.
+     (디스코드는 링크를 붙여넣으면 미리보기 카드가 자동으로 붙습니다) */
+  if(where === 'xhs' || where === 'discord'){
+    const lbl = document.getElementById('share-lbl-' + where);
+    const orig = lbl ? lbl.textContent : '';
+    const payload = text + ' ' + url;
+    try{ if(navigator.clipboard) navigator.clipboard.writeText(payload); }catch(err){}
+    if(lbl){ lbl.textContent = '복사됨! 붙여넣기 하세요'; setTimeout(()=>{ lbl.textContent = orig; }, 1600); }
+    window.open(where === 'xhs' ? 'https://www.xiaohongshu.com/explore' : 'https://discord.com/channels/@me', '_blank', 'noopener,noreferrer');
+    return;
+  }
   if(where === 'native'){
     if(navigator.share) navigator.share({ title: text, text: text, url: url }).catch(()=>{});
     closeShareMenu();
@@ -3287,6 +3345,46 @@ window.shareChar = function(where){
   if(go) window.open(go, '_blank', 'noopener,noreferrer,width=600,height=560');
   closeShareMenu();
 };
+
+/* ── QR코드 ──
+   누를 때 한 번만 QR 그림 도구(qrcodejs)를 불러와서 이 캐릭터 주소로 QR을 그립니다. */
+function loadQRLib(cb){
+  if(window.QRCode) return cb();
+  const sc = document.createElement('script');
+  sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  sc.onload = cb;
+  sc.onerror = ()=>{ const b = document.getElementById('share-qr-box'); if(b) b.textContent = 'QR코드를 불러오지 못했어요'; };
+  document.head.appendChild(sc);
+}
+window.closeShareQR = function(){
+  const q = document.getElementById('share-qr');
+  if(q) q.classList.remove('open');
+};
+window.openShareQR = function(e){
+  if(e) e.stopPropagation();
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  closeShareMenu();
+  const q = document.getElementById('share-qr');
+  const box = document.getElementById('share-qr-box');
+  const code = document.getElementById('share-qr-code');
+  if(!q || !box) return;
+  if(code) code.textContent = c.idCode;
+  box.textContent = '불러오는 중…';
+  q.classList.add('open');
+  const url = charShareUrl(c, true);
+  loadQRLib(()=>{
+    box.innerHTML = '';
+    new QRCode(box, { text: url, width: 336, height: 336, colorDark: '#111111', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  });
+};
+/* QR 상자 바깥을 누르면 닫힘 */
+document.addEventListener('click', function(e){
+  const q = document.getElementById('share-qr');
+  if(!q || !q.classList.contains('open')) return;
+  if(e.target.closest && e.target.closest('#share-qr')) return;
+  closeShareQR();
+});
 
 window.copyCharLink = function(){
   const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
