@@ -773,6 +773,12 @@ body{top:0 !important}
   body.detail-open #stage{z-index:200}
   body.detail-open .chars-scope #detail-view{position:fixed}
   .chars-scope .detail-overlay-inner{margin:16px auto;position:relative}
+  /* ── 창을 화면 세로 한가운데에 ──
+     상세 창이 열려 있을 때(= display:block 이 붙어 있을 때)만 바깥 층을 세로 줄 세우기로 바꾸고
+     창의 위아래 여백을 auto 로 두어 가운데로 모읍니다.
+     창이 화면보다 길면 자동으로 위에 붙고 스크롤됩니다. 최소 여백은 위아래 16px. */
+  body.detail-open .chars-scope #detail-view[style*="block"]{display:flex !important;flex-direction:column;padding:16px 0;box-sizing:border-box}
+  body.detail-open .chars-scope #detail-view[style*="block"] > .detail-overlay-inner{margin:auto !important;width:100%;flex-shrink:0}
   /* ── 경로 줄 + 코드 줄 한 줄로 합치기 ──
      맨 위 경로 줄(biz-OC-doll › 캐릭터 일람 › 코드)은 숨기고,
      '넓게 보기'와 ✕ 버튼만 코드 줄 오른쪽 끝으로 올려 붙입니다.
@@ -1461,18 +1467,14 @@ body{top:0 !important}
                 <button class="share-item" role="menuitem" onclick="copyCharLink()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg><span id="copy-link-label">링크 복사</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('x')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg><span>X(트위터)에 공유</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('threads')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.9 7.4c-.3-2-1.6-3-3.3-3-2 0-3.3 1.5-3.3 3.8 0 2.4 1.4 4.1 3.7 4.1 1.9 0 3.5-1.1 3.5-2.9 0-1.5-1.2-2.3-2.8-2.3-1.3 0-2.2.7-2.2 1.6 0 .8.7 1.4 1.7 1.4 1.8 0 2.5-1.6 2.5-3.9"/><path d="M8 1.5c3.8 0 6.5 2.6 6.5 6.5S11.8 14.5 8 14.5 1.5 11.9 1.5 8 4.2 1.5 8 1.5"/></svg><span>스레드에 공유</span></button>
-                <div class="share-group">영어권</div>
                 <button class="share-item" role="menuitem" onclick="shareChar('tumblr')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>텀블러 (Tumblr)</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('bluesky')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>블루스카이 (Bluesky)</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('reddit')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>레딧 (Reddit)</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('pinterest')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>핀터레스트 (Pinterest)</span></button>
-                <div class="share-group">일본</div>
                 <button class="share-item" role="menuitem" onclick="shareChar('line')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>라인 (LINE)</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('misskey')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>미스키 (Misskey)</span></button>
-                <div class="share-group">중국</div>
                 <button class="share-item" role="menuitem" onclick="shareChar('weibo')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>웨이보 (微博)</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('xhs')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M10.5 5V3.5A1.5 1.5 0 0 0 9 2H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5H5"/></svg><span id="share-lbl-xhs">샤오홍슈 (小红书) · 복사 후 열기</span></button>
-                <div class="share-group">커뮤니티</div>
                 <button class="share-item" role="menuitem" onclick="shareChar('discord')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M10.5 5V3.5A1.5 1.5 0 0 0 9 2H3.5A1.5 1.5 0 0 0 2 3.5V9a1.5 1.5 0 0 0 1.5 1.5H5"/></svg><span id="share-lbl-discord">디스코드 · 복사 후 열기</span></button>
                 <div class="share-sep"></div>
                 <button class="share-item" role="menuitem" id="share-native" onclick="shareChar('native')" style="display:none"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2M5 4.5L8 1.5l3 3"/><path d="M3.5 7.5v6h9v-6"/></svg><span>다른 앱으로 공유 (인스타·카톡 등)</span></button>
