@@ -834,7 +834,9 @@ body{top:0 !important}
 .chars-scope .detail-help-key:active{transform:scale(.94)}
 .chars-scope .detail-help-key:focus{outline:none}
 .chars-scope .detail-help-key svg{display:block}
-.chars-scope .detail-help-key.disabled{opacity:.3;pointer-events:none}
+/* ← → 두 키 묶음 전체(키 사이 틈 포함)가 클릭을 받아서, 잘못 눌러도 창이 닫히지 않게 합니다.
+   끝 캐릭터에서 더 갈 곳이 없으면 눌러도 아무 일 없이 그대로 있습니다. */
+.chars-scope .detail-help-keys{pointer-events:auto;padding:6px;margin:-6px}
   .chars-scope .detail-help-txt{font-size:15px;font-weight:500;line-height:1.6;letter-spacing:.02em;white-space:nowrap}
 }
 @media(min-width:1320px){ body.detail-open .chars-scope .detail-help{display:flex} }
@@ -3139,10 +3141,6 @@ function renderDetail(id){
   const cn = document.getElementById('cassette-next');
   if(cp) cp.classList.toggle('disabled', !prev);
   if(cn) cn.classList.toggle('disabled', !next);
-  const hp = document.getElementById('help-prev');
-  const hn = document.getElementById('help-next');
-  if(hp) hp.classList.toggle('disabled', !prev);   /* 오른쪽 안내 키도 갈 곳 없으면 흐리게 */
-  if(hn) hn.classList.toggle('disabled', !next);
 
   updateDetailLikeBtn();
 }
