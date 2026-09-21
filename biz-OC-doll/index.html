@@ -634,6 +634,25 @@ body{top:0 !important}
   background:var(--sb);border:1px solid var(--bd);border-radius:10px;box-shadow:0 10px 34px rgba(0,0,0,.12);flex-direction:column}
 .chars-scope .share-menu.open{display:flex}
 .chars-scope .share-menu{max-height:70vh;overflow-y:auto}
+/* 공유 메뉴의 '시트 이미지 저장'은 왼쪽 '받기' 버튼이 안 보이는 화면(폭 1340px 미만·폰)에서만 보입니다 */
+.chars-scope .share-item.share-dl{display:none}
+@media(max-width:1339px){ .chars-scope .share-menu.open .share-item.share-dl{display:flex} }
+/* ── 폰: 공유 메뉴·QR 상자를 화면 아래에서 올라오는 판으로 ──
+   버튼 아래로 펼치면 길어서 잘리므로, 화면 아래에 붙여 띄우고 두 칸으로 나눠 길이를 절반으로 줄입니다.
+   그래도 넘치면 판 안에서 스크롤됩니다. */
+@media(max-width:600px){
+  .chars-scope .share-menu{position:fixed;top:auto;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));
+    min-width:0;max-height:70vh;max-height:70dvh;z-index:10001;padding:8px;border-radius:14px;box-shadow:0 -6px 30px rgba(0,0,0,.18)}
+  .chars-scope .share-menu.open{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+  .chars-scope .share-menu .share-item{padding:12px 10px;white-space:normal;line-height:1.35}
+  .chars-scope .share-menu .share-item:first-child,
+  .chars-scope .share-menu .share-item.share-dl,
+  .chars-scope .share-menu .share-item:last-child,
+  .chars-scope .share-menu #share-native{grid-column:1 / -1}
+  .chars-scope .share-menu .share-sep{grid-column:1 / -1}
+  .chars-scope .share-qr{position:fixed;top:auto;left:50%;right:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));
+    transform:translateX(-50%);z-index:10001;box-shadow:0 -6px 30px rgba(0,0,0,.18)}
+}
 /* ── QR코드 상자 ── */
 .chars-scope .share-qr{display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:21;width:220px;padding:10px 14px 14px;
   background:var(--sb);border:1px solid var(--bd);border-radius:10px;box-shadow:0 10px 34px rgba(0,0,0,.12);flex-direction:column;align-items:center;gap:8px}
@@ -824,6 +843,10 @@ body{top:0 !important}
 .chars-scope .detail-side-v{font-family:'Share Tech Mono',monospace;font-size:16px;text-align:right;word-break:break-all}
 .chars-scope .detail-side-title{font-size:15px;font-weight:500}
 .chars-scope .detail-side-note{font-size:13px;line-height:1.7;opacity:.85}
+.chars-scope .detail-side-dl{pointer-events:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;
+  background:transparent;border:1px solid rgba(255,255,255,.75);border-radius:8px;color:#fff;font-size:13px;font-weight:500;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:background .12s}
+.chars-scope .detail-side-dl:hover{background:rgba(255,255,255,.14)}
 .chars-scope .detail-side-credit{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;cursor:pointer;
   font-family:'Noto Sans KR',sans-serif;font-size:12px;line-height:1.7;color:rgba(255,255,255,.92);
   padding:9px 12px;background:transparent;border:1px solid rgba(255,255,255,.35);border-radius:8px;transition:background .12s,border-color .12s}
@@ -1471,6 +1494,7 @@ body{top:0 !important}
               <!-- 공유 메뉴 (공유하기 버튼 아래에 펼쳐짐) -->
               <div class="share-menu" id="share-menu" role="menu">
                 <button class="share-item" role="menuitem" onclick="copyCharLink()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg><span id="copy-link-label">링크 복사</span></button>
+                <button class="share-item share-dl" role="menuitem" onclick="downloadSheet('menu')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5"/><path d="M2.5 11v2.5h11V11"/></svg><span id="sheet-dl-label-menu">시트 이미지 저장</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('x')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg><span>X(트위터)에 공유</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('threads')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.9 7.4c-.3-2-1.6-3-3.3-3-2 0-3.3 1.5-3.3 3.8 0 2.4 1.4 4.1 3.7 4.1 1.9 0 3.5-1.1 3.5-2.9 0-1.5-1.2-2.3-2.8-2.3-1.3 0-2.2.7-2.2 1.6 0 .8.7 1.4 1.7 1.4 1.8 0 2.5-1.6 2.5-3.9"/><path d="M8 1.5c3.8 0 6.5 2.6 6.5 6.5S11.8 14.5 8 14.5 1.5 11.9 1.5 8 4.2 1.5 8 1.5"/></svg><span>스레드에 공유</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('tumblr')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>텀블러 (Tumblr)</span></button>
@@ -1527,6 +1551,7 @@ body{top:0 !important}
           <div class="detail-side-block">
             <div class="detail-side-title">이 캐릭터로 창작하기</div>
             <div class="detail-side-note">개인 SNS · 소규모 창작은 자유롭게<br>연재 · 상업 창작은 출처 표기 필수</div>
+            <button class="detail-side-dl" onclick="downloadSheet('side')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5"/><path d="M2.5 11v2.5h11V11"/></svg><span id="sheet-dl-label-side">시트 이미지 받기</span></button>
             <button class="detail-side-credit" onclick="copyCredit(0)"><span class="detail-side-credit-txt" id="side-credit-0">—</span><span class="detail-side-credit-copy" id="side-credit-label-0">복사</span></button>
             <button class="detail-side-credit" onclick="copyCredit(1)"><span class="detail-side-credit-txt" id="side-credit-1">—</span><span class="detail-side-credit-copy" id="side-credit-label-1">복사</span></button>
             <button class="detail-side-credit" onclick="copyCredit(2)"><span class="detail-side-credit-txt" id="side-credit-2">—</span><span class="detail-side-credit-copy" id="side-credit-label-2">복사</span></button>
@@ -3484,6 +3509,45 @@ document.addEventListener('click', function(e){
   if(e.target.closest && e.target.closest('#share-qr')) return;
   closeShareQR();
 });
+
+/* ── 시트 이미지 받기 ──
+   파일 이름에 캐릭터 코드를 붙여서 받습니다 → biz-OC-doll_BIZOCDOLL001.png
+   폰(손가락 화면)에서는 기기 공유창을 띄워 '이미지 저장'으로 사진첩에 바로 넣을 수 있게 하고,
+   그게 안 되는 기기나 컴퓨터에서는 파일로 내려받습니다. */
+window.downloadSheet = function(where){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  const num = String(c.id).padStart(3,'0');
+  const src = 'images/character_sheet/' + num + '_sheet.png';
+  const name = 'biz-OC-doll_' + c.idCode + '.png';
+  const label = document.getElementById('sheet-dl-label-' + where);
+  const orig = label ? label.textContent : '';
+  const say = (t, back)=>{ if(!label) return; label.textContent = t; if(back) setTimeout(()=>{ label.textContent = orig; }, 1600); };
+
+  say('받는 중…');
+  fetch(src).then(res=>{
+    if(!res.ok) throw new Error('no image');
+    return res.blob();
+  }).then(blob=>{
+    let touch = false;
+    try{ touch = window.matchMedia('(pointer:coarse)').matches; }catch(e){}
+    const file = (typeof File === 'function') ? new File([blob], name, {type: blob.type || 'image/png'}) : null;
+    if(touch && file && navigator.canShare && navigator.canShare({files:[file]})){
+      say(orig);
+      navigator.share({ files:[file], title: name }).catch(()=>{});
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 4000);
+      say('받기 완료', true);
+    }
+    if(where === 'menu') setTimeout(closeShareMenu, 900);
+  }).catch(()=>{
+    say('아직 시트 이미지가 없어요', true);
+  });
+};
 
 window.copyCharLink = function(){
   const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
