@@ -827,6 +827,14 @@ body{top:0 !important}
   .chars-scope .detail-help-item{display:flex;flex-direction:column;align-items:center;gap:12px}
   .chars-scope .detail-help-keys{display:flex;gap:8px}
   .chars-scope .detail-help-keys svg{display:block}
+/* 안내 키 그림도 실제 버튼으로 동작 (← 이전 · → 다음 · ✕ 목록으로) */
+.chars-scope .detail-help-key{pointer-events:auto;display:block;padding:0;background:transparent;border:none;border-radius:9px;color:inherit;cursor:pointer;
+  transition:background .12s,transform .12s,opacity .15s;-webkit-tap-highlight-color:transparent}
+.chars-scope .detail-help-key:hover{background:rgba(255,255,255,.16)}
+.chars-scope .detail-help-key:active{transform:scale(.94)}
+.chars-scope .detail-help-key:focus{outline:none}
+.chars-scope .detail-help-key svg{display:block}
+.chars-scope .detail-help-key.disabled{opacity:.3;pointer-events:none}
   .chars-scope .detail-help-txt{font-size:15px;font-weight:500;line-height:1.6;letter-spacing:.02em;white-space:nowrap}
 }
 @media(min-width:1320px){ body.detail-open .chars-scope .detail-help{display:flex} }
@@ -1559,13 +1567,13 @@ body{top:0 !important}
           </div>
         </div>
         <!-- 조작법 안내 (데스크탑 오른쪽 여백) -->
-        <div class="detail-help" aria-hidden="true">
+        <div class="detail-help">
           <div class="detail-help-item">
-            <div class="detail-help-keys"><svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M20 11L13 17L20 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M14 11L21 17L14 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="detail-help-keys"><button class="detail-help-key" id="help-prev" onclick="navChar(-1)" aria-label="이전 캐릭터" title="이전 캐릭터"><svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M20 11L13 17L20 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="detail-help-key" id="help-next" onclick="navChar(1)" aria-label="다음 캐릭터" title="다음 캐릭터"><svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M14 11L21 17L14 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
             <div class="detail-help-txt">방향키로<br>이전 · 다음 캐릭터</div>
           </div>
           <div class="detail-help-item">
-            <svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M12 12L22 22M22 12L12 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <button class="detail-help-key" onclick="showList()" aria-label="목록으로" title="목록으로"><svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M12 12L22 22M22 12L12 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
             <div class="detail-help-txt">Esc 또는 바깥을 누르면<br>목록으로</div>
           </div>
         </div>
@@ -3131,6 +3139,10 @@ function renderDetail(id){
   const cn = document.getElementById('cassette-next');
   if(cp) cp.classList.toggle('disabled', !prev);
   if(cn) cn.classList.toggle('disabled', !next);
+  const hp = document.getElementById('help-prev');
+  const hn = document.getElementById('help-next');
+  if(hp) hp.classList.toggle('disabled', !prev);   /* 오른쪽 안내 키도 갈 곳 없으면 흐리게 */
+  if(hn) hn.classList.toggle('disabled', !next);
 
   updateDetailLikeBtn();
 }
