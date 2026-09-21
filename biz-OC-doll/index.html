@@ -774,6 +774,26 @@ body{top:0 !important}
   .chars-scope .detail-help-txt{font-size:15px;font-weight:500;line-height:1.6;letter-spacing:.02em;white-space:nowrap}
 }
 @media(min-width:1320px){ body.detail-open .chars-scope .detail-help{display:flex} }
+/* ── 왼쪽 빈 공간: 캐릭터 정보 + 출처 문구 ──
+   상세 창 왼쪽 끝에서 150px 떨어진 곳을 중심으로 흰 글씨로 띄웁니다.
+   복사 버튼만 눌리고, 나머지 글씨 위를 누르면 바깥을 누른 것과 똑같이 닫힙니다. */
+.chars-scope .detail-side{display:none;position:fixed;top:50%;left:calc(50% - 400px - 150px);transform:translate(-50%,-50%);
+  width:240px;flex-direction:column;gap:34px;pointer-events:none;color:rgba(255,255,255,.92);
+  font-family:'Noto Sans KR',sans-serif;z-index:1}
+.chars-scope .detail-overlay-inner.wide ~ .detail-side{left:calc(50% - 540px - 150px)}
+.chars-scope .detail-side-block{display:flex;flex-direction:column;gap:10px}
+.chars-scope .detail-side-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.28)}
+.chars-scope .detail-side-k{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;opacity:.75}
+.chars-scope .detail-side-v{font-family:'Share Tech Mono',monospace;font-size:16px;text-align:right;word-break:break-all}
+.chars-scope .detail-side-title{font-size:15px;font-weight:500}
+.chars-scope .detail-side-note{font-size:13px;line-height:1.7;opacity:.85}
+.chars-scope .detail-side-credit{font-size:12px;line-height:1.7;padding:10px 12px;border:1px solid rgba(255,255,255,.35);border-radius:8px;opacity:.9}
+.chars-scope .detail-side-btn{pointer-events:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;
+  background:transparent;border:1px solid rgba(255,255,255,.75);border-radius:8px;color:#fff;font-size:13px;font-weight:500;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:background .12s}
+.chars-scope .detail-side-btn:hover{background:rgba(255,255,255,.14)}
+@media(min-width:1340px){ body.detail-open .chars-scope .detail-side{display:flex} }
+@media(max-width:1619px){ .chars-scope .detail-overlay-inner.wide ~ .detail-side{display:none !important} }
 @media(max-width:1599px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
 </style>
 
@@ -1433,6 +1453,21 @@ body{top:0 !important}
           <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title"><span class="ep-nav-full" id="nav-next-name"></span><span class="ep-nav-short" id="nav-next-short"></span></span><span>→</span></button>
         </div>
         </div><!-- /detail-overlay-inner -->
+        <!-- 캐릭터 정보 + 출처 문구 (데스크탑 왼쪽 여백) -->
+        <div class="detail-side">
+          <div class="detail-side-block">
+            <div class="detail-side-row"><span class="detail-side-k">TYPE</span><span class="detail-side-v" id="side-type">—</span></div>
+            <div class="detail-side-row"><span class="detail-side-k">HOLDER</span><span class="detail-side-v" id="side-holder">—</span></div>
+            <div class="detail-side-row"><span class="detail-side-k">STATUS</span><span class="detail-side-v" id="side-status">—</span></div>
+            <div class="detail-side-row"><span class="detail-side-k">UPDATED</span><span class="detail-side-v" id="side-updated">—</span></div>
+          </div>
+          <div class="detail-side-block">
+            <div class="detail-side-title">이 캐릭터로 창작하기</div>
+            <div class="detail-side-note">개인 SNS · 소규모 창작은 자유롭게<br>연재 · 상업 창작은 출처 표기 필수</div>
+            <div class="detail-side-credit">본 작품에 등장하는 캐릭터 [캐릭터 이름] 은(는) biz-OC-doll 프로젝트의 <span id="side-credit-code">—</span> 캐릭터를 기반으로 창작되었습니다.</div>
+            <button class="detail-side-btn" onclick="copyCredit()"><span id="side-credit-label">출처 문구 복사</span></button>
+          </div>
+        </div>
         <!-- 조작법 안내 (데스크탑 오른쪽 여백) -->
         <div class="detail-help" aria-hidden="true">
           <div class="detail-help-item">
@@ -1441,7 +1476,7 @@ body{top:0 !important}
           </div>
           <div class="detail-help-item">
             <svg width="48" height="48" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M12 12L22 22M22 12L12 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <div class="detail-help-txt">바깥을 누르면<br>목록으로</div>
+            <div class="detail-help-txt">Esc 또는 바깥을 누르면<br>목록으로</div>
           </div>
         </div>
       </div>
@@ -2832,6 +2867,34 @@ function renderList(){
 }
 
 /* ── RENDER DETAIL ── */
+var _sheetPreload = [];
+
+/* 왼쪽 여백 안내(정보 카드 + 출처 문구) 채우기 */
+function normDate(v){
+  if(!v) return '';
+  if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  const m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+  return m ? `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}` : v;
+}
+function fillDetailSide(c){
+  const set = (id, v)=>{ const el = document.getElementById(id); if(el) el.textContent = v; };
+  set('side-type',    c.type || '—');
+  set('side-holder',  c.holder || '—');
+  set('side-status',  c.status || '—');
+  set('side-updated', normDate(c.updated) || '—');
+  set('side-credit-code', c.idCode);
+}
+window.copyCredit = function(){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  const text = `본 작품에 등장하는 캐릭터 [캐릭터 이름] 은(는) biz-OC-doll 프로젝트의 ${c.idCode} 캐릭터를 기반으로 창작되었습니다.`;
+  const label = document.getElementById('side-credit-label');
+  const done = ()=>{ if(!label) return; label.textContent = '복사됨!'; setTimeout(()=>{ label.textContent = '출처 문구 복사'; }, 1400); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>prompt('아래 문구를 복사하세요', text));
+  } else { prompt('아래 문구를 복사하세요', text); }
+};
+
 function renderDetail(id){
   const c = window.CHARACTERS.find(ch=>ch.id===id);
   if(!c) return;
@@ -2841,44 +2904,65 @@ function renderDetail(id){
   document.getElementById('detail-illust-inner').style.background = `linear-gradient(${c.grad})`;
   const iconNum2 = String(c.id).padStart(3,'0');
   const thumbEl = document.getElementById('detail-illust-inner');
-  thumbEl.innerHTML = `<img src="images/character_sheet/${iconNum2}_icon.png" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.remove()">`;
+  const thumbTok = (thumbEl._tok = (thumbEl._tok || 0) + 1);
+  const thumbImg = new Image();
+  thumbImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+  thumbImg.onload  = ()=>{ if(thumbEl._tok === thumbTok){ thumbEl.innerHTML=''; thumbEl.appendChild(thumbImg); } };
+  thumbImg.onerror = ()=>{ if(thumbEl._tok === thumbTok) thumbEl.innerHTML=''; };
+  thumbImg.src = `images/character_sheet/${iconNum2}_icon.png`;
   document.getElementById('detail-holder').textContent = c.holder;
 
   // sheet-slot 이미지 로드 (sheet.png → sheet2.png 순, 없으면 힌트 유지)
   const sheetNum = String(c.id).padStart(3,'0');
   const slot = document.getElementById('detail-sheet-slot');
   if(slot){
-    // 기존 이미지 제거, 힌트 복원
-    slot.querySelectorAll('img.sheet-img').forEach(el=>el.remove());
-    slot.querySelector('.sheet-hint-icon').style.display='';
-    slot.querySelector('.sheet-hint-text').style.display='';
-    slot.classList.remove('has-image');
+    /* ── 부드럽게 넘기기 ──
+       예전: 이전 그림을 먼저 지우고 → 빈 칸(점선 상자)이 잠깐 보이고 → 새 그림이 '툭' 나타남.
+       지금: 이전 그림을 그대로 둔 채 새 그림을 몰래 받아두고,
+             다 받아지면 그 위에 0.25초 동안 서서히 겹쳐 띄운 뒤 이전 그림을 치웁니다.
+       빠르게 여러 번 넘겨도 늦게 도착한 옛 그림이 끼어들지 않도록 번호표(_tok)로 걸러냅니다. */
+    const tok = (slot._tok = (slot._tok || 0) + 1);
+    const hintIcon = slot.querySelector('.sheet-hint-icon');
+    const hintText = slot.querySelector('.sheet-hint-text');
 
-    function tryLoadSheet(filename, onLoaded){
-      const img = document.createElement('img');
-      img.className = 'sheet-img';
-      img.src = `images/character_sheet/${filename}`;
-      img.style.cssText = 'width:100%;display:block;border-radius:8px';
-      img.onload = ()=>{ slot.prepend(img); onLoaded && onLoaded(); };
-    }
-    // sheet.png 먼저
     const img1 = document.createElement('img');
     img1.className = 'sheet-img';
-    img1.src = `images/character_sheet/${sheetNum}_sheet.png`;
     img1.style.cssText = 'width:100%;display:block;border-radius:8px';
     img1.onload = ()=>{
-      slot.querySelector('.sheet-hint-icon').style.display='none';
-      slot.querySelector('.sheet-hint-text').style.display='none';
+      if(slot._tok !== tok) return;
+      const olds = Array.prototype.slice.call(slot.querySelectorAll('img.sheet-img'));
+      const main = olds[0] || null;
+      olds.slice(1).forEach(el=>el.remove());
+      hintIcon.style.display='none';
+      hintText.style.display='none';
       slot.classList.add('has-image');
+
+      img1.style.opacity = '0';
+      img1.style.transition = 'opacity .25s ease';
+      if(main){ img1.style.position='absolute'; img1.style.top='0'; img1.style.left='0'; }
       slot.prepend(img1);
+      img1.getBoundingClientRect();
+      img1.style.opacity = '1';
+      setTimeout(()=>{
+        if(main && main !== img1) main.remove();
+        img1.style.position=''; img1.style.top=''; img1.style.left=''; img1.style.transition='';
+      }, 270);
+
       // sheet2.png도 시도
       const img2 = document.createElement('img');
       img2.className = 'sheet-img';
-      img2.src = `images/character_sheet/${sheetNum}_sheet2.png`;
       img2.style.cssText = 'width:100%;display:block;border-radius:8px;margin-top:8px';
-      img2.onload = ()=>{ slot.appendChild(img2); };
+      img2.onload = ()=>{ if(slot._tok === tok) slot.appendChild(img2); };
+      img2.src = `images/character_sheet/${sheetNum}_sheet2.png`;
     };
-    slot.appendChild(img1);
+    img1.onerror = ()=>{
+      if(slot._tok !== tok) return;
+      slot.querySelectorAll('img.sheet-img').forEach(el=>el.remove());
+      hintIcon.style.display='';
+      hintText.style.display='';
+      slot.classList.remove('has-image');
+    };
+    img1.src = `images/character_sheet/${sheetNum}_sheet.png`;
   }
   const badge = document.getElementById('detail-date-badge');
   if(badge){
@@ -2908,6 +2992,18 @@ function renderDetail(id){
   document.getElementById('nav-next-name').textContent = next ? next.idCode : "없음";
   document.getElementById('nav-prev-short').textContent = prev ? prev.idCode.replace(/^\D+/,'') : "없음";
   document.getElementById('nav-next-short').textContent = next ? next.idCode.replace(/^\D+/,'') : "없음";
+
+  /* 이전·다음 캐릭터 그림을 미리 받아둡니다 → 넘길 때 기다림 없이 바로 바뀜 */
+  [prev, next].forEach(n=>{
+    if(!n) return;
+    const k = String(n.id).padStart(3,'0');
+    ['_sheet.png','_icon.png'].forEach(sfx=>{
+      const im = new Image(); im.src = `images/character_sheet/${k}${sfx}`; _sheetPreload.push(im);
+    });
+  });
+  if(_sheetPreload.length > 12) _sheetPreload.splice(0, _sheetPreload.length - 12);
+
+  fillDetailSide(c);
   document.getElementById('nav-prev').className = "ep-nav-btn"+(prev?"":" disabled");
   document.getElementById('nav-next').className = "ep-nav-btn"+(next?"":" disabled");
   const cp = document.getElementById('cassette-prev');
@@ -3008,6 +3104,18 @@ window.navChar = function(dir){
   const target = list[idx+dir];
   if(target) openChar(target.id);
 };
+
+/* Esc 로 상세 창 닫기
+   문의창이 떠 있을 때는 문의창만 닫히도록, 문의창 닫기보다 먼저 확인합니다(capture). */
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  if(state.activeId == null) return;
+  var dv = document.getElementById('detail-view');
+  if(!dv || dv.style.display !== 'block' || !dv.getClientRects().length) return;
+  var co = document.getElementById('contact-overlay');
+  if(co && !co.classList.contains('hidden')) return;
+  showList();
+}, true);
 
 /* 방향키 ← → 로 이전·다음 캐릭터 (상세 창이 열려 있을 때만)
    글자 입력 중이거나 문의창이 떠 있을 때는 작동하지 않습니다. */
