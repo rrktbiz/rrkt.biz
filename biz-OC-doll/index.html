@@ -153,6 +153,12 @@
 .contact-mailrow span.mail{font-size:13px;font-weight:600;color:#1a1a1a;font-family:'Inter',sans-serif}
 .biq-copy-btn{background:transparent;border:1px solid #e2e2e2;border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:#a0a0a0;cursor:pointer;transition:all .15s;flex-shrink:0}
 .biq-copy-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
+/* ── 문의 카드 안 PD 페이지 링크 (블하스 문의창과 같은 모양, 색만 biz-OC-doll 파랑) ── */
+.contact-pd{margin-top:20px;padding-top:16px;border-top:1px solid #ececec}
+.contact-pd-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:7px}
+.contact-pd-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #d8d8d8;padding-bottom:2px;transition:color .12s,border-color .12s}
+.contact-pd-link:hover{color:#477693;border-color:#5a90b0}
+.contact-pd-note{margin-top:9px;font-size:11px;line-height:1.7;color:#a0a0a0}
 </style>
 <script src="../config.js"></script>
 <style>
@@ -272,6 +278,262 @@ body{top:0 !important}
   .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
 }
 </style>
+
+<!-- ══════════════════════════════════════════════════
+     소개 탭 스타일 (원래 doll_intro.html 에 있던 것)
+     모든 규칙 앞에 #panel-intro 를 붙여서, 소개 탭 안에서만 먹히게 가뒀습니다.
+     글자 크기·색을 고칠 땐 여기서 고치면 됩니다.
+     ══════════════════════════════════════════════════ -->
+<style id="css-intro">
+#panel-intro *,
+#panel-intro *::before,
+#panel-intro *::after{box-sizing: border-box; margin: 0; padding: 0;}
+#panel-intro{--white: #ffffff;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e8e8e8;
+  --gray-400: #a3a3a3;
+  --gray-600: #525252;
+  --gray-900: #111111;
+  --blue: #5a90b0;              /* 버튼·테두리·장식용 */
+  --blue-ink: #477693;          /* 작은 글씨용 (흰 배경 4.91:1, AA 통과) */
+  --gray-450: #6e6e6e;          /* 보조설명용 (회 배경 4.89:1, AA 통과) */
+  --red: #d93025;
+  --font: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;}
+#panel-intro{background: var(--white);
+  color: var(--gray-900);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;}
+/* HERO */
+#panel-intro .hero{background:
+    radial-gradient(ellipse 160px 120px at 8% 22%, rgba(185,210,230,0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 110px 90px at 22% 65%, rgba(210,195,230,0.28) 0%, transparent 100%),
+    radial-gradient(ellipse 140px 100px at 38% 18%, rgba(230,215,195,0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 100px 120px at 52% 72%, rgba(175,220,225,0.25) 0%, transparent 100%),
+    radial-gradient(ellipse 150px 90px at 67% 30%, rgba(220,210,235,0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 120px 140px at 80% 70%, rgba(190,215,235,0.28) 0%, transparent 100%),
+    radial-gradient(ellipse 130px 90px at 92% 18%, rgba(225,205,210,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 100px 110px at 15% 85%, rgba(200,225,220,0.22) 0%, transparent 100%),
+    radial-gradient(ellipse 120px 100px at 45% 45%, rgba(215,210,230,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 110px 120px at 73% 55%, rgba(185,220,230,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 90px 80px at 60% 10%, rgba(230,220,205,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 130px 70px at 30% 40%, rgba(200,190,225,0.16) 0%, transparent 100%),
+    radial-gradient(ellipse 80px 110px at 88% 45%, rgba(195,225,235,0.2) 0%, transparent 100%),
+    linear-gradient(145deg, #eef4f8 0%, #f2eff8 35%, #f5f2ee 65%, #edf5f7 100%);
+  padding: 72px 24px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;}
+/* GLITTER */
+#panel-intro .glitter-canvas{position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;}
+#panel-intro .spark{position: absolute;
+  pointer-events: none;
+  opacity: 0.7;}
+#panel-intro .spark svg{display: block;}
+#panel-intro .hero-label{font-size: 11px; font-weight: 600; letter-spacing: 3px; color: var(--blue); text-transform: uppercase; margin-bottom: 28px; position: relative; z-index: 2;}
+#panel-intro .hero-title{font-size: clamp(28px, 5vw, 42px); font-weight: 100; color: #4a5560; letter-spacing: 0.22em; line-height: 1.0; margin-bottom: 20px; font-family: 'Josefin Sans', sans-serif; position: relative; z-index: 2;}
+#panel-intro .diamond-i{position: relative; display: inline-block;}
+#panel-intro .diamond-i::after{content: '';
+  position: absolute;
+  top: -0.18em;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 0.18em;
+  height: 0.18em;
+  background: currentColor;}
+#panel-intro .diamond-o{position: relative; display: inline-block;}
+#panel-intro .diamond-o::after{content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%) rotate(45deg);
+  width: 0.18em;
+  height: 0.18em;
+  background: currentColor;}
+#panel-intro .hero-sub{display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 0 auto 28px; position: relative; z-index: 2;}
+#panel-intro .hero-hashtag{font-size: 13px; color: rgba(90,144,176,0.65); font-weight: 400; letter-spacing: 0.02em;}
+#panel-intro .hero-tags{display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center;}
+#panel-intro .tag{font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 100px; background: rgba(255,255,255,0.4); border: 1px solid rgba(90,144,176,0.3); color: var(--blue);}
+#panel-intro .btn-report{font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 100px; background: rgba(90,144,176,0.1); border: 1px solid rgba(90,144,176,0.35); color: var(--blue); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; text-decoration: none; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2;}
+#panel-intro .btn-report:hover{background: rgba(90,144,176,0.18); transform: scale(1.02);}
+/* PAGE */
+#panel-intro .page{max-width: 720px; margin: 0 auto; padding: 0 24px 80px;}
+/* SECTION */
+#panel-intro .sec{padding-top: 56px; margin-top: 56px; border-top: 1px solid var(--gray-200);}
+#panel-intro .sec-first{border-top: none; padding-top: 12px;}
+#panel-intro .sec-eyebrow{font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--blue-ink); text-transform: uppercase; margin-bottom: 8px;}
+#panel-intro .sec-title{font-size: 22px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; line-height: 1.3; margin-bottom: 32px;}
+/* CONCEPTS */
+#panel-intro .concepts{display: flex; flex-direction: column; gap: 0; margin-bottom: 36px; border-top: 1px solid var(--gray-200);}
+#panel-intro .concept-item{padding: 16px 0; border-bottom: 1px solid var(--gray-200); display: flex; gap: 24px; align-items: flex-start;}
+#panel-intro .concept-num{font-size: 10px; font-weight: 600; color: var(--gray-400); letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; width: 44px; padding-top: 2px;}
+#panel-intro .concept-content{flex: 1;}
+#panel-intro .concept-title{font-size: 15px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 4px; line-height: 1.35;}
+#panel-intro .concept-body{font-size: 13px; color: var(--gray-600); line-height: 1.6;}
+/* INTENT */
+#panel-intro .intent-quote{font-size: 14px; color: var(--gray-400); font-style: italic; line-height: 1.9; padding-left: 16px; border-left: 2px solid var(--blue); margin-bottom: 32px;}
+#panel-intro .intent-heading{font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.02em; margin-bottom: 20px;}
+#panel-intro .dash-list{list-style: none; display: flex; flex-direction: column; gap: 8px;}
+#panel-intro .dash-list li{font-size: 15px; color: var(--gray-600); line-height: 1.55;}
+/* GUIDE */
+#panel-intro .guide-pair{display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--gray-200); border-radius: 16px; overflow: hidden; margin-bottom: 20px;}
+#panel-intro .guide-cell{background: var(--white); padding: 24px;}
+#panel-intro .guide-cell:first-child{border-radius: 14px 0 0 14px;}
+#panel-intro .guide-cell:last-child{border-radius: 0 14px 14px 0;}
+#panel-intro .guide-label{font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--gray-400); text-transform: uppercase; margin-bottom: 10px;}
+#panel-intro .guide-label-section{font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--gray-900); text-transform: none; margin-bottom: 14px;}
+#panel-intro .guide-label-section-red{font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: #b91c1c; text-transform: none; margin-bottom: 14px;}
+#panel-intro .guide-label-red{color: #b91c1c;}
+#panel-intro .guide-body{font-size: 15px; color: var(--gray-600); line-height: 1.8;}
+/* SOURCE */
+#panel-intro .source-block{border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; margin-bottom: 20px;}
+#panel-intro .source-row{display: flex; align-items: flex-start; gap: 14px; padding: 17px 20px; border-bottom: 1px solid var(--gray-100);}
+#panel-intro .source-row:last-of-type{border-bottom: none;}
+#panel-intro .badge{font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 2px;}
+#panel-intro .badge-opt{background: var(--gray-100); color: var(--gray-600);}
+#panel-intro .badge-req{background: #fff3e0; color: #b45309;}
+#panel-intro .source-text{font-size: 15px; color: var(--gray-600); line-height: 1.75;}
+#panel-intro .source-text strong{color: var(--gray-900); font-weight: 600;}
+#panel-intro .cite-box{background: var(--gray-50); border-top: 1px solid var(--gray-100); padding: 16px 20px;}
+#panel-intro .cite-label{font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--gray-400); text-transform: uppercase; margin-bottom: 12px;}
+#panel-intro .cite-item{display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--gray-200);}
+#panel-intro .cite-item:last-child{border-bottom: none; padding-bottom: 0;}
+#panel-intro .cite-num{font-size: 10px; font-weight: 700; color: var(--gray-400); flex-shrink: 0; min-width: 14px; padding-top: 3px;}
+#panel-intro .cite-line{font-size: 13px; color: var(--gray-600); line-height: 1.7; font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;}
+/* FILL — 창작자가 직접 채워야 하는 자리.
+   파랑(정보)·빨강(금지)과 겹치지 않는 색을 씁니다. */
+#panel-intro .fill{background: #fff3d4; color: #92400e; font-weight: 700;
+  padding: 1px 5px; border-radius: 4px;
+  box-shadow: inset 0 -1px 0 #eec97a;
+  font-family: var(--font);}
+#panel-intro .cite-guide{font-size: 12.5px; color: var(--gray-600); line-height: 1.75;
+  padding-bottom: 12px; margin-bottom: 2px;
+  border-bottom: 1px solid var(--gray-200);}
+#panel-intro .cite-guide b{color: var(--gray-900); font-weight: 700;}
+#panel-intro .cite-done{margin-top: 14px; padding: 13px 15px;
+  background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px;}
+#panel-intro .cite-done-head{font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--blue-ink); margin-bottom: 6px;}
+#panel-intro .cite-done-sub{font-size: 12.5px; color: var(--gray-400); line-height: 1.6; margin-bottom: 9px;}
+/* RESTRICT */
+#panel-intro .restrict-note{font-size: 15px; color: var(--gray-600); line-height: 1.8; background: #fff8f8; border: 1px solid #fde2e2; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;}
+#panel-intro .restrict-list{border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden;}
+#panel-intro .restrict-item{display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-bottom: 1px solid var(--gray-100);}
+#panel-intro .restrict-item:last-child{border-bottom: none;}
+#panel-intro .restrict-num{font-size: 11px; font-weight: 700; color: var(--red); flex-shrink: 0; min-width: 16px; padding-top: 2px;}
+#panel-intro .restrict-title{font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; letter-spacing: -0.01em;}
+#panel-intro .restrict-body{font-size: 15px; color: var(--gray-600); line-height: 1.75;}
+/* ── 푸터 — 저작권 표기는 어차피 모든 페이지의 표준 요소 ── */
+#panel-intro .site-footer{border-top:1px solid #ececec;background:#fafafa;padding:18px 24px 22px;font-family:var(--font)}
+#panel-intro .site-footer-inner{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+#panel-intro .sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
+#panel-intro .sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
+#panel-intro .sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+#panel-intro .sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
+#panel-intro .sf-links a:hover{text-decoration:underline}
+/* LEDGER — 이 프로젝트의 본질은 '누가 무엇을 정하는가'의 분업이다.
+   그래서 2단 표를 페이지의 기본 도형으로 쓴다. 장식이 아니라 구조. */
+#panel-intro .ledger{display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--gray-200); border: 1px solid var(--gray-200);
+  border-radius: 16px; overflow: hidden; margin-bottom: 20px;}
+#panel-intro .ledger-cell{background: var(--white); padding: 22px 24px;}
+#panel-intro .ledger-cell.is-fixed{background: var(--gray-50);}
+#panel-intro .ledger-head{font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--gray-600); margin-bottom: 15px;}
+#panel-intro .ledger-cell.is-yours .ledger-head{color: var(--blue-ink);}
+#panel-intro .ledger-cell.is-no    .ledger-head{color: #b91c1c;}
+#panel-intro .ledger-list{list-style: none; display: flex; flex-direction: column; gap: 10px;}
+#panel-intro .ledger-list li{font-size: 14.5px; font-weight: 500; color: var(--gray-900); line-height: 1.5; letter-spacing: -0.015em;}
+#panel-intro .ledger-cell.is-fixed .ledger-list li{font-weight: 400; color: var(--gray-600);}
+#panel-intro .ledger-list li small{display: block; font-size: 12.5px; font-weight: 400; color: var(--gray-450); margin-top: 3px; letter-spacing: 0;}
+#panel-intro .ledger-foot{font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 8px;}
+#panel-intro .ledger-foot strong{color: var(--gray-900); font-weight: 600;}
+@media (max-width: 580px){
+#panel-intro .ledger{grid-template-columns: 1fr;}
+/* 장부 1만 모바일에서도 2단 유지.
+     항목이 짧은 명사라 줄바꿈이 없고(320px 까지 확인),
+     무엇보다 '공식 ↔ 당신' 대조는 나란히 놓여야 성립합니다.
+     장부 2는 항목이 긴 구(句)라 2단으로 만들면 4줄까지 쪼개져서 제외. */
+#panel-intro .ledger--split{grid-template-columns: 1fr 1fr;}
+#panel-intro .ledger--split .ledger-cell{padding: 17px 14px;}
+#panel-intro .ledger-cell{padding: 19px 20px;}
+}
+/* REG ROW — 등록 창구. 대상이 극소수라 지면도 그만큼만 쓴다. */
+#panel-intro .reg-row{display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+  margin-top: 18px; padding: 16px 20px;
+  border: 1px solid rgba(90,144,176,0.22);
+  background: rgba(90,144,176,0.05);
+  border-radius: 14px; scroll-margin-top: 32px;}
+#panel-intro .reg-text{flex: 1; min-width: 220px; font-size: 13.5px; color: var(--gray-600); line-height: 1.7;}
+#panel-intro .reg-text b{display: block; margin-bottom: 3px; font-size: 14px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em;}
+#panel-intro .reg-btn{display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--blue-ink);
+  background: var(--white); border: 1px solid rgba(90,144,176,0.3);
+  border-radius: 100px; padding: 13px 20px; cursor: pointer; transition: background 0.15s;}
+#panel-intro .reg-btn:hover{background: rgba(90,144,176,0.1);}
+/* PULL — 문단이 아니라 '한 문장'으로 서야 하는 자리 */
+#panel-intro .pull{font-size: 15px; color: var(--gray-900); line-height: 1.85;
+  letter-spacing: -0.015em; padding-left: 16px;
+  border-left: 2px solid var(--blue); margin-bottom: 34px;}
+#panel-intro .pull b{font-weight: 700;}
+#panel-intro .pull .go{position: relative; display: inline-flex; align-items: center; gap: 5px; color: var(--blue-ink); font-weight: 700; text-decoration: none; white-space: nowrap;}
+/* ③ 줄 높이를 건드리지 않고 히트 영역만 46px 로 확장 */
+#panel-intro .pull .go::before{content: ''; position: absolute; inset: -9px -10px;}
+#panel-intro .pull .go:hover{text-decoration: underline;}
+/* 히어로 태그라인 — 기획의도 전문은 페이지 맨 아래. 여기엔 한 줄만. */
+#panel-intro .hero-tagline{position: relative; z-index: 2;
+  font-family: 'Zen Kurenaido', 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 400; color: #9faebc;
+  letter-spacing: 0.01em; line-height: 1.65; margin: -4px auto 20px;
+  max-width: 30em;}
+@media (max-width: 580px){
+#panel-intro .hero-tagline{display: none;}
+}
+/* FOLD — 정보를 지우지 않고 접는다. 접힌 안쪽은 상업 창작자용 상세. */
+#panel-intro .fold > summary{list-style: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px; font-weight: 600; color: var(--blue-ink);
+  letter-spacing: -0.01em;
+  padding: 14px 0;             /* ③ 탭 타깃 17px → 45px */}
+#panel-intro .fold > summary::-webkit-details-marker{display: none;}
+#panel-intro .fold > summary::before{content: '\25B8'; font-size: 10px; transition: transform 0.18s ease;}
+#panel-intro .fold[open] > summary::before{transform: rotate(90deg);}
+#panel-intro .fold > summary:hover{text-decoration: underline;}
+#panel-intro .fold > summary:focus-visible{outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px;}
+/* 출처 표기 예시 — source-block 안쪽 */
+#panel-intro .source-block .fold{border-top: 1px solid var(--gray-100);}
+#panel-intro .source-block .fold > summary{padding: 15px 20px;}
+#panel-intro .source-block .fold[open] > summary{padding-bottom: 12px;}
+/* ③ 펼친 뒤에도 탭 타깃 44px 유지 */
+/* 종교 항목 상세 — restrict-item 안쪽 */
+#panel-intro .restrict-item .fold > summary{padding: 9px 0 0; font-size: 12px;}
+#panel-intro .restrict-fold-body{margin-top: 10px; padding: 12px 14px;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px;
+  font-size: 13.5px; color: var(--gray-600); line-height: 1.75;}
+@media (prefers-reduced-motion: reduce){
+#panel-intro .fold > summary::before{transition: none;}
+}
+/* RESPONSIVE */
+@media (max-width: 580px){
+#panel-intro .page{padding: 0 20px 64px;}
+#panel-intro .concepts{grid-template-columns: 1fr;}
+#panel-intro .concept-item{border-radius: 0 !important;}
+#panel-intro .concept-item:first-child{border-radius: 14px 14px 0 0 !important;}
+#panel-intro .concept-item:last-child{border-radius: 0 0 14px 14px !important;}
+#panel-intro .guide-pair{grid-template-columns: 1fr;}
+#panel-intro .guide-cell{border-radius: 0 !important;}
+#panel-intro .guide-cell:first-child{border-radius: 14px 14px 0 0 !important;}
+#panel-intro .guide-cell:last-child{border-radius: 0 0 14px 14px !important;}
+#panel-intro .sec{margin-top: 44px; padding-top: 44px;}
+/* 모바일 전용: 히어로 공백 축소 + 타이틀 굵기 보정 */
+#panel-intro .hero{padding: 36px 20px 32px;}
+#panel-intro .hero-title{font-weight: 300;}
+#panel-intro .sec-first{margin-top: 0; padding-top: 28px;}
+}
+</style>
 </head>
 <body>
 
@@ -287,7 +549,6 @@ body{top:0 !important}
   <div id="tabbar">
     <button class="tab active" data-tab="intro">소개</button>
     <button class="tab" data-tab="chars">캐릭터</button>
-    <button class="tab" data-tab="story">스토리</button>
     <button class="tab" data-tab="event">이벤트</button>
   </div>
 
@@ -295,12 +556,253 @@ body{top:0 !important}
 
     <div id="ptr"><div class="ptr-ico"></div></div>
 
-    <div class="panel active" id="panel-intro"></div>
+    <!-- ══════════════════════════════════════════════════
+         소개 탭 — 원래 doll_intro.html 이던 내용이 여기 직접 들어 있습니다.
+         문구는 여기서 바로 고치면 됩니다.
+         ══════════════════════════════════════════════════ -->
+    <div class="panel active" id="panel-intro">
+      <div class="hero">
+        <div class="hero-diamonds">
+          <svg viewBox="0 0 1200 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
+            <defs>
+              <linearGradient id="intro-d1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c8dff0" stop-opacity="0.6"/><stop offset="50%" stop-color="#ddeef8" stop-opacity="0.2"/><stop offset="100%" stop-color="#e8f2f8" stop-opacity="0.25"/></linearGradient>
+              <linearGradient id="intro-d2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#d0e8f8" stop-opacity="0.25"/><stop offset="50%" stop-color="#e4f0f8" stop-opacity="0.15"/><stop offset="100%" stop-color="#c8e0f4" stop-opacity="0.2"/></linearGradient>
+              <linearGradient id="intro-d3" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d8e8f5" stop-opacity="0.2"/><stop offset="100%" stop-color="#e8f0f8" stop-opacity="0.15"/></linearGradient>
+            </defs>
+            <!-- geometric lines -->
+            <g stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none">
+              <!-- large triangle left -->
+              <polygon points="-40,320 180,-20 400,320"/>
+              <!-- large triangle right -->
+              <polygon points="800,320 1050,-20 1280,320"/>
+              <!-- crossing diagonals -->
+              <line x1="-60" y1="0" x2="480" y2="340"/>
+              <line x1="1260" y1="0" x2="720" y2="340"/>
+              <!-- wide flat triangle center -->
+              <polygon points="300,340 600,-40 900,340"/>
+              <!-- inner echo left -->
+              <polygon points="20,320 200,40 360,320" stroke-width="0.6" stroke="rgba(255,255,255,0.3)"/>
+              <!-- inner echo right -->
+              <polygon points="840,320 1040,40 1200,320" stroke-width="0.6" stroke="rgba(255,255,255,0.3)"/>
+              <!-- horizontal slice lines -->
+              <line x1="-60" y1="180" x2="1260" y2="80" stroke="rgba(255,255,255,0.25)" stroke-width="0.6"/>
+              <line x1="-60" y1="260" x2="1260" y2="160" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
+            </g>
+            <polygon points="80,10 130,50 80,115 30,50" fill="url(#intro-d1)" stroke="rgba(255,255,255,0.25)" stroke-width="0.5"/>
+            <polygon points="80,50 130,50 80,85 30,50" fill="rgba(255,255,255,0.1)"/>
+            <polygon points="320,0 390,55 320,130 250,55" fill="url(#intro-d2)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+            <polygon points="320,55 390,55 320,95 250,55" fill="rgba(255,255,255,0.08)"/>
+            <polygon points="900,5 965,50 900,115 835,50" fill="url(#intro-d3)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+            <polygon points="900,50 965,50 900,85 835,50" fill="rgba(255,255,255,0.08)"/>
+            <polygon points="1150,30 1200,70 1150,130 1100,70" fill="url(#intro-d2)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <!-- small diamonds -->
+            <polygon points="190,60 220,85 190,120 160,85" fill="url(#intro-d3)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="460,25 485,50 460,85 435,50" fill="url(#intro-d1)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="750,40 775,60 750,90 725,60" fill="url(#intro-d2)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="1050,60 1080,85 1050,120 1020,85" fill="url(#intro-d1)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="30,180 55,205 30,240 5,205" fill="url(#intro-d2)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="1170,180 1195,200 1170,230 1145,200" fill="url(#intro-d3)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="420,200 445,220 420,250 395,220" fill="url(#intro-d1)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" opacity="0.6"/>
+            <polygon points="830,170 860,195 830,230 800,195" fill="url(#intro-d2)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" opacity="0.6"/>
+            <!-- tiny accents -->
+            <polygon points="250,155 265,170 250,190 235,170" fill="rgba(200,220,240,0.18)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+            <polygon points="700,240 715,255 700,275 685,255" fill="rgba(210,225,240,0.15)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <polygon points="1000,240 1015,255 1000,275 985,255" fill="rgba(200,225,245,0.15)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <polygon points="150,270 162,282 150,298 138,282" fill="rgba(215,225,240,0.15)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <div class="glitter-canvas" id="glitter"></div>
+        <canvas id="mol-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+
+        <div class="hero-label">OPEN OC PROJECT</div>
+        <div class="hero-title">b<span class="diamond-i">&#x131;</span>z-OC-d<span class="diamond-o">o</span>ll</div>
+        <!-- ④ 태그라인. 한글판으로 바꾸려면 아래 두 줄을 서로 바꿔 주세요 -->
+        <div class="hero-tagline">Even if the story ends, I hope these characters never do.</div>
+        <!-- <div class="hero-tagline">작품은 끝나도, 이 캐릭터들은 끝나지 않길.</div> -->
+        <div class="hero-sub">
+          <span class="hero-hashtag">#비즈돌</span>
+          <span class="hero-hashtag">#비즈오씨돌</span>
+        </div>
+        <!-- ══════════════════════════════════════════════════
+             히어로 버튼 — 하나만 둡니다.
+             '연재/상업 등록'은 페이지 하단에 있습니다.
+             (제작자 노트·기업 협업 원칙은 PD 페이지 doll_pd.html 로 옮겼습니다)
+
+             ※ 부모 셸의 탭에 캐릭터 탭이 이미 잘 보인다면
+               아래 <div> 한 덩어리를 통째로 지우셔도 됩니다.
+             ══════════════════════════════════════════════════ -->
+        <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+          <a class="btn-report" href="#/chars" onclick="goChars();return false;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            캐릭터 보러 가기
+          </a>
+        </div>
+      </div>
+
+      <div class="page">
+
+        <!-- ══════════════════════════════════════════════════
+             1 · 이런 프로젝트입니다
+             컨셉 카드 3장을 표 하나로 합쳤습니다.
+             ══════════════════════════════════════════════════ -->
+        <div class="sec sec-first">
+          <div class="sec-eyebrow">What this is</div>
+          <div class="sec-title">이런 프로젝트입니다</div>
+
+          <p class="guide-body" style="margin-bottom:26px">이름 없는 캐릭터가 계속 나옵니다.<br>이름도, 성격도, 이야기도 당신이 정합니다.</p>
+
+          <div class="ledger ledger--split">
+            <div class="ledger-cell is-fixed">
+              <div class="ledger-head">공식이 주는 것</div>
+              <ul class="ledger-list">
+                <li>고유 코드</li>
+                <li>캐릭터 시트</li>
+                <li>표정 몇 가지</li>
+              </ul>
+            </div>
+            <div class="ledger-cell is-yours">
+              <div class="ledger-head">당신이 정하는 것</div>
+              <ul class="ledger-list">
+                <li>이름 · 성격</li>
+                <li>말투 · 서사</li>
+                <li>나이 · 키</li>
+                <li>그 외의 모든 것</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pull">빈 공간은 <b>자유롭게 가지고 놀라고</b> 남겨둔 자리입니다.<br>채우는 방법에 정답은 없고, <b>굳이 채우지 않아도 됩니다.</b></div>
+
+          <div class="pull">캐릭터를 다 알 필요는 없습니다. <b>한 명만 마음에 들면 그걸로 충분합니다.</b>
+            <a class="go" href="#/chars" onclick="goChars();return false;">캐릭터 보러 가기
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+        </div>
+
+
+        <!-- ══════════════════════════════════════════════════
+             2 · 규칙
+             '된다'와 '안 된다'를 한 표에 나란히 둡니다.
+             ══════════════════════════════════════════════════ -->
+        <div class="sec">
+          <div class="sec-eyebrow">Rules</div>
+          <div class="sec-title">해도 되는 것, 안 되는 것</div>
+
+          <div class="ledger">
+            <div class="ledger-cell is-yours">
+              <div class="ledger-head">됩니다</div>
+              <ul class="ledger-list">
+                <li>이름 붙이기 · 설정 만들기</li>
+                <li>그림 · 글 · 영상 · 게임</li>
+                <li>개인 굿즈 제작과 판매</li>
+                <li>포스타입 유료 발행</li>
+                <li>플랫폼 연재 · 상업 게임 출시</li>
+                <li>다른 작품에 출연시키기</li>
+              </ul>
+            </div>
+            <div class="ledger-cell is-no">
+              <div class="ledger-head">안 됩니다</div>
+              <ul class="ledger-list">
+                <li>정치 견해 표명 · 혐오 조장 · 분쟁 유발 목적</li>
+                <li>현실 종교 포교물에 사용<small>작품 속 종교 설정은 허용</small></li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="ledger-foot"><strong>공식은 배당을 요구하지 않습니다.</strong> 당신이 만든 것의 권리는 당신 것입니다. 공식은 무단으로 쓰지 않고, 소유권을 주장하지 않습니다.</p>
+          <p class="ledger-foot"><strong>공식은 창작물을 하나하나 검열하지 않습니다.</strong> 위 '안 됩니다' 두 가지만 피해주시면 됩니다.</p>
+          <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 공식은 전체 이용가 분위기로 유지할 예정이라 굿즈·게임에는 쓰지 않습니다.</p>
+
+          <details class="fold" style="margin-bottom:20px">
+            <summary>종교 관련 허용 / 금지 구분 자세히</summary>
+            <div class="restrict-fold-body">
+              <div style="display:flex;gap:8px;margin-bottom:10px;align-items:flex-start">
+                <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#e8f5e9;color:#2e7d32;flex-shrink:0;margin-top:2px">O 허용</span>
+                <span>캐릭터가 각종 콘텐츠(웹소설, 웹툰, 일러스트, 영상, 게임 등) 및 미디어 서사 내에서 종교적 설정(사제, 수녀, 불교 신자 등)으로 등장하거나 관련 복식을 착용하는 창작 행위. 그로 인한 3차 창작도 허용합니다.</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-start">
+                <span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:#fff0f0;color:#c62828;flex-shrink:0;margin-top:2px">X 금지</span>
+                <span>캐릭터를 현실 종교의 포교용 홍보물(포스터, 전단지 등)에 무단 사용하는 행위. 캐릭터를 특정 종교의 상징물로 전락시켜 선전 도구로 쓰는 것을 금지합니다.</span>
+              </div>
+            </div>
+          </details>
+
+          <div class="guide-label-section" style="margin-bottom:12px">출처 표기</div>
+          <div class="source-block" style="margin-bottom:0">
+            <div class="source-row">
+              <span class="badge badge-opt">자율</span>
+              <div class="source-text">개인 SNS · 소규모 창작은 표기 의무 없음. 원하면 <strong>#biz-OC-doll</strong></div>
+            </div>
+            <div class="source-row">
+              <span class="badge badge-req">필수</span>
+              <div class="source-text">플랫폼 연재 · 상업 게임 · 대규모 판매는 작품 하단이나 크레딧에 기재해 주세요.</div>
+            </div>
+            <details class="fold">
+              <summary>출처 표기 예시 3종</summary>
+              <div class="cite-box">
+                <div class="cite-guide">
+                  <b class="fill">[ ]</b> 로 칠해진 곳만 직접 바꿔 넣으시면 됩니다. <b>대괄호도 같이 지워주세요.</b> 나머지는 그대로 복사하셔도 됩니다.
+                </div>
+                <div class="cite-item">
+                  <span class="cite-num">1</span>
+                  <div class="cite-line">본 작품에 등장하는 캐릭터 <span class="fill">[캐릭터 이름]</span>은(는) biz-OC-doll 프로젝트의 <span class="fill">[BIZOCDOLL000]</span> 캐릭터를 기반으로 창작되었습니다.</div>
+                </div>
+                <div class="cite-item">
+                  <span class="cite-num">2</span>
+                  <div class="cite-line"><span class="fill">[캐릭터 이름]</span> Original Character by biz-OC-doll</div>
+                </div>
+                <div class="cite-item">
+                  <span class="cite-num">3</span>
+                  <div class="cite-line">#BIZOCDOLL<span class="fill">[000]</span></div>
+                </div>
+                <div class="cite-done">
+                  <div class="cite-done-head">이렇게 채우면 됩니다</div>
+                  <div class="cite-done-sub">이름을 &lsquo;레이&rsquo;로 정했고, 캐릭터 코드가 042라면 &mdash;</div>
+                  <div class="cite-line">본 작품에 등장하는 캐릭터 레이는 biz-OC-doll 프로젝트의 BIZOCDOLL042 캐릭터를 기반으로 창작되었습니다.</div>
+                  <div class="cite-line" style="margin-top:6px">#BIZOCDOLL042</div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <!-- 연재·상업 창작 등록
+               출처 표기 '필수' 안내 바로 뒤에 두어, 흐름상 자연스럽게
+               이어지도록 배치했습니다. 강조는 하지 않습니다. -->
+          <div id="fan-work-registration" class="reg-row">
+            <div class="reg-text">
+              <b>연재·상업 창작을 하고 계신가요?</b>
+              등록해 두시면 공식이 확인하고, 나중에 굿즈·게임 연계를 검토할 때 먼저 봅니다. 의무는 아닙니다.
+            </div>
+            <button class="reg-btn" onclick="openFormPopup()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              등록 폼
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
+      <div class="site-footer">
+        <div class="site-footer-inner">
+          <span class="sf-copy">&copy; rrkt.biz. All rights reserved.</span>
+          <span class="sf-sep"></span>
+          <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
+          <span class="sf-links">
+            <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
+            <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
+          </span>
+        </div>
+      </div>
+    </div>
 
     <div class="panel" id="panel-chars"></div>
-
-    <div class="panel" id="panel-story">
-    </div>
 
     <div class="panel" id="panel-event"></div>
 
@@ -390,6 +892,18 @@ var BIZ = window.BIZ = {
         <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         <span class="biq-copy-txt">복사</span>
       </button>
+    </div>
+
+    <!-- PD 페이지 입구 — PD 페이지는 메뉴에 나오지 않고, 여기서만 들어갑니다.
+         ※ 이 링크는 본페이지(이 파일)에만 있습니다.
+            story.html · doll_pd.html 의 같은 공용 블록에는 일부러 넣지 않았습니다. -->
+    <div class="contact-pd">
+      <div class="contact-pd-lbl">For PD</div>
+      <a class="contact-pd-link" href="doll_pd.html">
+        기획 자료 열기
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </a>
+      <div class="contact-pd-note">공식 원작 설정과 권리 관계, 협업 원칙을 모아 둔 페이지입니다.</div>
     </div>
   </div>
 </div>`;
@@ -886,14 +1400,14 @@ window.googleTranslateElementInit = googleTranslateElementInit;
 /* ══════════════════════════════════════════════════
    biz-OC-doll SPA
    - 탭 전환·에피소드 읽기 모두 새로고침 없음
-   - 각 탭 = 개별 파일 iframe 지연 로드
-   - 스토리 = story_editor.json 직접 렌더 (네이티브)
+   - 소개 탭 = 이 파일 안에 직접 들어 있음 (native)
+   - 캐릭터·이벤트 탭 = 아직 개별 파일 iframe 지연 로드 (하나씩 옮기는 중)
+   - 스토리 탭은 없앴습니다. story.html 은 PD 페이지(doll_pd.html)에서만 들어갑니다
    ══════════════════════════════════════════════════ */
 
 var TABS = {
-  intro:   { src:'doll_intro.html'               },
+  intro:   { native:true, onShow:function(){ if(window.introRedraw) introRedraw(); } },   /* 본체에 직접 들어 있음 */
   chars:   { src:'doll_charlist.html'            },
-  story:   { src:'story.html'                    },
   event:   { src:'event.html'                    }
 };
 var DEFAULT_TAB = 'intro';
@@ -904,14 +1418,12 @@ var current = null;
 /* ── 라우팅 ──
    #/chars        캐릭터 목록
    #/chars/042    042번 캐릭터 (딥링크)
-   #/story        스토리 목록
-   #/story/3      3화
-   #/story/world  세계관
+   (옛 #/story 주소로 들어오면 소개 탭이 열립니다)
 
    iframe 안쪽 주소는 주소창에 안 나옵니다.
    그래서 '지금 뭘 보고 있는지'를 여기서 대신 적어 줍니다.
    ── */
-var SUB_TABS = { story:true, chars:true };
+var SUB_TABS = { chars:true };
 
 function parseHash(){
   var raw = (location.hash || '').replace(/^#\/?/, '');
@@ -936,6 +1448,7 @@ function go(tab, push){
   }
   setBarsHidden(false);
   if(changed) mount(tab);
+  if(changed && TABS[tab].onShow) TABS[tab].onShow();   /* 예: 소개 탭 배경 그림 다시 그리기 */
   else if(SUB_TABS[tab] && push !== false) frameNav(tab, '');   /* 같은 탭 재클릭 = 목록으로 */
 
   var btn = document.querySelector('.tab[data-tab="' + tab + '"]');
@@ -949,6 +1462,7 @@ function mount(tab){
 
   if(panel.dataset.mounted === '1') return;
   panel.dataset.mounted = '1';
+  if(cfg.native) return;   /* 본체에 이미 들어 있는 탭 — 불러올 파일 없음 */
 
   var load = document.createElement('div');
   load.className = 'loading';
@@ -961,7 +1475,7 @@ function mount(tab){
   fr.addEventListener('load', function(){
     load.classList.add('gone');
     setTimeout(function(){ if(load.parentNode) load.parentNode.removeChild(load); }, 300);
-    if(tab !== 'story') hookScroll(fr.contentWindow, fr.contentDocument);  /* story.html 은 자체 처리 후 postMessage */
+    hookScroll(fr.contentWindow, fr.contentDocument);
     hookSwipe(fr.contentDocument);
     hookPTR(fr.contentDocument, function(){
       var d = fr.contentDocument;
@@ -994,7 +1508,6 @@ function frameNav(tab, route){
   var fr = frameOf(tab);
   if(fr && fr.contentWindow) try{ fr.contentWindow.postMessage({type:'biz-doll-nav', tab:tab, route:route}, '*'); }catch(e){}
 }
-function storyNav(route){ frameNav('story', route); }
 function _onScrollY(y, lastRef){
   if(window.innerWidth > 768){ setBarsHidden(false); lastRef.y = 0; return; }
   if(y > lastRef.y && y > 70)      setBarsHidden(true);
@@ -1192,25 +1705,20 @@ window.addEventListener('resize', function(){
   if(window.innerWidth > 768) setBarsHidden(false);
 });
 
-/* ── iframe(doll_intro) → 부모 탭 전환 요청 ── */
+/* ── 자식 파일(캐릭터 탭) → 본체 탭 전환 요청 ── */
 window.addEventListener('message', function(ev){
   var d = ev.data;
   if(!d) return;
 
   if(d.type === 'biz-doll-go'){
-    if(d.target === 'worldview'){
-      go('story');
-      setTimeout(function(){ storyNav('world'); }, 80);
-    } else if(d.target === 'chars'){
-      go('chars');
-    }
+    if(d.target === 'chars') go('chars');
     return;
   }
 
-  /* 자식 프레임이 알려주는 현재 위치를 주소창에 반영
-     (story.html 은 tab 을 안 보내던 옛 버전이라 기본값을 story 로 둡니다) */
+  /* 자식 프레임이 알려주는 현재 위치를 주소창에 반영 */
   if(d.type === 'biz-doll-route'){
-    var rtab = TABS[d.tab] ? d.tab : 'story';
+    if(!TABS[d.tab]) return;
+    var rtab = d.tab;
     var h = (!d.route) ? '#/' + rtab : '#/' + rtab + '/' + encodeURIComponent(d.route);
     if(location.hash !== h) history.pushState(null, '', h);
     return;
@@ -1226,7 +1734,158 @@ document.querySelectorAll('.panel').forEach(hookPanelScroll);
   var h = parseHash();
   current = null;
   go(h.tab, false);   /* 딥링크는 mount() 가 자식 파일 해시로 넘깁니다 */
-  if(!location.hash) history.replaceState(null, '', '#/' + h.tab);
+  /* 주소가 없거나, 없는 탭(옛 #/story 등)이면 주소창을 실제 열린 탭으로 고쳐 둡니다 */
+  var first = (location.hash || '').replace(/^#\/?/, '').split('/')[0];
+  if(!location.hash || first !== h.tab) history.replaceState(null, '', '#/' + h.tab);
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════
+     소개 탭 스크립트 (원래 doll_intro.html 에 있던 것)
+     ══════════════════════════════════════════════════ -->
+<script>
+/* ── 탭 이동 ──
+   이제 소개 탭이 본체 안에 직접 들어 있으므로, 본체의 탭 전환을 바로 부릅니다. */
+function goChars() { goAnimated('chars'); }
+
+/* ══════════════════════════════════════════════════
+   연재·상업 창작 등록
+   등록 폼(archive_form.html)은 구글폼으로 옮겼습니다.
+   아래 주소만 바꿔 끼우면 됩니다. 코드는 안 건드리셔도 됩니다.
+
+   ↓ 구글폼 만드신 뒤 따옴표 사이에 주소를 붙여넣으세요
+   ══════════════════════════════════════════════════ */
+var 등록폼_주소 = 'https://forms.gle/u4sSNJrKtPnVAuAP7';
+
+function openFormPopup() {
+  if (등록폼_주소) {
+    window.open(등록폼_주소, '_blank', 'noopener');
+    return;
+  }
+  /* 아직 폼이 없을 때 — 링크가 깨져 보이지 않도록 메일로 넘깁니다 */
+  window.location.href = 'mailto:rrkt.biz@proton.me'
+    + '?subject=' + encodeURIComponent('[biz-OC-doll] 연재·상업 창작 등록')
+    + '&body='    + encodeURIComponent(
+        '작품명 :\n'
+      + '창작자 :\n'
+      + '플랫폼 :\n'
+      + '사용한 캐릭터 코드 :\n'
+      + '작품 링크 :\n'
+      );
+}
+
+// GLITTER
+(function() {
+  const container = document.getElementById('glitter');
+  const sparkSVG = (size, color) => `<svg width="${size}" height="${size}" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 0 C10 0 10.6 7 13 10 C10.6 13 10 20 10 20 C10 20 9.4 13 7 10 C9.4 7 10 0 10 0Z" fill="${color}" opacity="0.9"/>
+    <path d="M0 10 C0 10 7 10.6 10 13 C13 10.6 20 10 20 10 C20 10 13 9.4 10 7 C7 9.4 0 10 0 10Z" fill="${color}" opacity="0.9"/>
+  </svg>`;
+  const colors = [
+    'rgba(255,255,255,0.98)',
+    'rgba(255,255,255,0.95)',
+    'rgba(255,255,255,0.92)',
+    'rgba(255,255,255,0.88)',
+    'rgba(240,248,255,0.95)',
+    'rgba(255,255,255,0.98)',
+    'rgba(210,235,250,0.9)',
+    'rgba(255,255,255,0.95)',
+    'rgba(225,240,250,0.9)',
+    'rgba(255,255,255,0.98)',
+  ];
+  const positions = [
+    [3,8],[22,30],[43,25],[62,35],[80,40],[90,68],
+    [6,90],[25,20],[45,42],[65,28],[86,12],
+    [10,5],[30,72],[54,28],[74,35],
+  ];
+  positions.forEach(([x, y], i) => {
+    const size = 6 + Math.random() * 14;
+    const color = colors[i % colors.length];
+    const dur = (2 + Math.random() * 3.5).toFixed(2);
+    const delay = (Math.random() * 6).toFixed(2);
+    const el = document.createElement('div');
+    el.className = 'spark';
+    el.style.cssText = `left:${x}%;top:${y}%;width:${size}px;height:${size}px;--dur:${dur}s;--delay:${delay}s;`;
+    el.innerHTML = sparkSVG(size, color);
+    container.appendChild(el);
+  });
+})();
+
+// MOLECULAR NETWORK
+(function() {
+  const hero = document.querySelector('.hero');
+  const canvas = document.getElementById('mol-canvas');
+  function draw() {
+    const W = hero.offsetWidth;
+    const H = hero.offsetHeight;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, W, H);
+
+    const CONNECT_DIST = 110;
+
+    // grid-based even distribution — always equally spaced regardless of W/H
+    const COLS = W < 500 ? 4 : W < 800 ? 6 : 8;
+    const ROWS = W < 500 ? 2 : W < 800 ? 3 : 4;
+    const nodes = [];
+    const bigPositions = new Set([2, 6, 11, 17, 22, 27, 30]);
+    let idx = 0;
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        // jitter within each cell so it doesn't look like a grid
+        const jx = (Math.sin(idx * 7.3) * 0.5 + 0.5) * 0.5 + 0.25;
+        const jy = (Math.cos(idx * 5.1) * 0.5 + 0.5) * 0.5 + 0.25;
+        nodes.push({
+          x: (col + jx) / COLS * W,
+          y: (row + jy) / ROWS * H,
+          big: bigPositions.has(idx)
+        });
+        idx++;
+      }
+    }
+
+    // draw lines
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < CONNECT_DIST) {
+          const alpha = (1 - dist / CONNECT_DIST) * 0.65;
+          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // draw nodes with glow
+    nodes.forEach(n => {
+      const r = n.big ? 4 : 2.2;
+      // outer glow
+      const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 5);
+      glow.addColorStop(0, `rgba(255,255,255,${n.big ? 0.3 : 0.15})`);
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r * 5, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+      // core dot
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = n.big ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.7)';
+      ctx.fill();
+    });
+  }
+  window.introRedraw = function(){
+    if (hero.offsetWidth > 0) draw();   /* 가려져 있을 땐 건너뜀 */
+  };
+  window.introRedraw();
+  window.addEventListener('resize', window.introRedraw);
 })();
 </script>
 
