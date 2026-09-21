@@ -750,6 +750,12 @@ body{top:0 !important}
 .chars-scope .detail-overlay-inner .sheet-info-code{font-size:22px}
 .chars-scope .detail-overlay-inner .sheet-info-label{font-size:9px}
 .chars-scope .share-lbl-short{display:none}
+/* ── 폰: 내용을 화면 세로 한가운데에 ──
+   흰 판(창)은 화면을 꽉 채운 채로, 안의 내용 묶음(코드 줄~아래 버튼 줄)만 위아래 남는 공간을 똑같이 나눠 가운데로 옵니다.
+   내용이 화면보다 길면 자연스럽게 위에서부터 시작하고 스크롤됩니다.
+   ⇔ · ✕ 버튼도 내용과 같이 움직이도록 폰에서는 버튼 묶음을 내용 묶음 안으로 옮겨 둡니다(스크립트). */
+.chars-scope .detail-overlay-inner{display:flex;flex-direction:column;justify-content:center}
+.chars-scope .detail-overlay-inner .sheet-wrap{position:relative;width:100%;box-sizing:border-box}
 /* 아주 좁은 폰(폭 380px 미만)에서는 '공유하기' → '공유' */
 @media(max-width:379px){
   .chars-scope .share-lbl-full{display:none}
@@ -3643,6 +3649,9 @@ function applyMobDetail(){
     });
     if(overlay){ overlay.style.margin='0'; overlay.style.borderRadius='0'; }
     if(wrap){ wrap.style.padding='14px 16px 20px'; }   /* 이미지 아래 간격 30→20 (위와 같게) */
+    /* ⇔ · ✕ 묶음을 내용 묶음(sheet-wrap) 안으로 — 세로 가운데 정렬 때 코드 줄과 같이 움직이게 */
+    var tbM = document.querySelector('.detail-overlay-inner .top-bar');
+    if(tbM && wrap && tbM.parentNode !== wrap) wrap.insertBefore(tbM, wrap.firstChild);
   } else {
     row.style.flexWrap=''; row.style.gap='20px'; row.style.paddingBottom='8px'; row.style.marginBottom='12px';   /* 여백 줄임: 20→8, 24→12 */
     if(thumb){ thumb.style.width='56px'; thumb.style.height='56px'; thumb.style.flexShrink='0'; }
@@ -3653,7 +3662,10 @@ function applyMobDetail(){
       b.style.flex=''; b.style.justifyContent=''; b.style.minWidth='120px';
     });
     if(overlay){ overlay.style.margin='16px auto'; overlay.style.borderRadius='14px'; }   /* 위쪽 여백 40→16 */
-    if(wrap){ wrap.style.padding='20px 32px 20px'; }   /* 위 여백 20 (경로 줄이 빠진 만큼 살짝 여유) · 아래 여백 20 */
+    if(wrap){ wrap.style.padding='20px 32px 20px'; }
+    /* 데스크탑으로 돌아오면 ⇔ · ✕ 묶음을 원래 자리(창 바로 안쪽)로 되돌림 */
+    var tbD = document.querySelector('.detail-overlay-inner .top-bar');
+    if(tbD && overlay && wrap && tbD.parentNode !== overlay) overlay.insertBefore(tbD, wrap);   /* 위 여백 20 (경로 줄이 빠진 만큼 살짝 여유) · 아래 여백 20 */
   }
 }
 window.addEventListener('resize', applyMobDetail);
