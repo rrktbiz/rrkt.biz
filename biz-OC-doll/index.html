@@ -647,7 +647,7 @@ body{top:0 !important}
   100%{transform:scale(1)}
 }
 /* ── CHAR DETAIL ── */
-.chars-scope .sheet-wrap{max-width:800px;margin:0 auto;padding:16px 32px 48px;transition:max-width .2s}
+.chars-scope .sheet-wrap{max-width:800px;margin:0 auto;padding:16px 32px 20px;transition:max-width .2s}
 .chars-scope .detail-overlay-inner.wide .sheet-wrap{max-width:1080px}
 .chars-scope .sheet-meta-right{font-size:10px;color:var(--tx3);letter-spacing:.5px;margin-left:auto;align-self:flex-end}
 /* 헤더 행: 썸네일 + 텍스트 */
@@ -3073,7 +3073,7 @@ function applyMobDetail(){
       b.style.flex=''; b.style.justifyContent=''; b.style.minWidth='120px';
     });
     if(overlay){ overlay.style.margin='16px auto'; overlay.style.borderRadius='14px'; }   /* 위쪽 여백 40→16 */
-    if(wrap){ wrap.style.padding='16px 32px 48px'; }   /* 위 여백 32→16 */
+    if(wrap){ wrap.style.padding='16px 32px 20px'; }   /* 위 여백 32→16 · 아래 여백 48→20 (이미지 위 간격 20px과 맞춤) */
   }
 }
 window.addEventListener('resize', applyMobDetail);
