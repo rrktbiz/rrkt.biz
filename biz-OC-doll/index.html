@@ -3118,6 +3118,80 @@ function updateDetailLikeBtn(){
   btn.setAttribute('aria-pressed', on ? 'true' : 'false');
 }
 
+/* ══════════════════════════════════════════════════
+   좋아요 연출 — '두 개의 별'
+   ① 남자별(블루)·여자별(라일락)이 꼬리를 끌며 한 바퀴 돌다가 가운데로 합쳐지고 (0.45초)
+   ② 합쳐지는 순간 하트가 톡 튀고, 링 하나 + 반짝 별 12개가 보석 색으로 '팡' 퍼집니다.
+   창 테두리에 잘리지 않도록 화면 맨 위 층(body)에 잠깐 붙였다가 끝나면 지웁니다.
+   '동작 줄이기'를 켜 둔 기기에서는 별 연출 없이 하트만 톡 튑니다.
+   색·개수·속도는 아래 LIKE_FX 에서 바꿀 수 있습니다.
+   ══════════════════════════════════════════════════ */
+var LIKE_FX = {
+  STAR_M: '#9CC4DC',                              /* 남자별 블루 */
+  STAR_F: '#B4A3D4',                              /* 여자별 라일락 */
+  BURST:  ['#cfe6f4', '#9CC4DC', '#E6DDF5'],      /* 팡 터지는 조각 색 (보석 계열) */
+  RING:   '#9CC4DC',
+  COUNT:  12,                                     /* 터지는 별 개수 */
+  ORBIT_MS: 450                                   /* 별이 도는 시간 */
+};
+function likeTwinStars(btn){
+  const heartPop = ()=>{ btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); };
+  let reduce = false;
+  try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  if(reduce || !btn.animate){ heartPop(); return; }
+
+  const heart = btn.querySelector('.like-heart') || btn;
+  const r = heart.getBoundingClientRect();
+  const layer = document.createElement('div');
+  layer.style.cssText = 'position:fixed;left:'+(r.left+r.width/2)+'px;top:'+(r.top+r.height/2)+'px;width:0;height:0;pointer-events:none;z-index:9000';
+  document.body.appendChild(layer);
+
+  const T = (x,y,ex)=>'translate(calc(-50% + '+x+'px),calc(-50% + '+y+'px))'+(ex||'');
+  const rnd = (a,b)=>a+Math.random()*(b-a);
+  const piece = (html, css, frames, opt)=>{
+    const e = document.createElement('span');
+    e.innerHTML = html;
+    e.style.cssText = 'position:absolute;left:0;top:0;line-height:1;display:block;' + (css||'');
+    layer.appendChild(e);
+    const a = e.animate(frames, Object.assign({duration:700, easing:'cubic-bezier(.2,.7,.3,1)', fill:'forwards'}, opt||{}));
+    a.onfinish = ()=>e.remove();
+  };
+
+  /* ① 두 별이 돌며 합쳐짐 (꼬리 3겹) */
+  const D = LIKE_FX.ORBIT_MS;
+  [LIKE_FX.STAR_M, LIKE_FX.STAR_F].forEach((c,k)=>{
+    const fr = [];
+    for(let j=0;j<=14;j++){
+      const t = j/14, ang = (k?Math.PI:0) + t*Math.PI*2, rr = 52*(1-t*t);
+      fr.push({ transform: T(Math.cos(ang)*rr, Math.sin(ang)*rr*.55, ' scale('+(0.7+t*.7)+')'), opacity: j===14?0:1 });
+    }
+    piece('&#10022;', 'color:'+c+';font-size:16px', fr, {duration:D, easing:'ease-in'});
+    for(let q=1;q<=3;q++){
+      piece('&#10022;', 'color:'+c+';font-size:'+(16-q*3)+'px',
+        fr.map((f,i)=>({transform:f.transform, opacity:i===14?0:.35/q})), {duration:D, delay:q*45, easing:'ease-in'});
+    }
+  });
+
+  /* ② 합쳐지는 순간 팡 */
+  setTimeout(()=>{
+    heartPop();
+    btn.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(.97)'},{transform:'scale(1)'}], {duration:380, easing:'ease-out'});
+    piece('', 'width:40px;height:40px;border-radius:50%;border:2px solid '+LIKE_FX.RING+';box-sizing:border-box',
+      [{transform:T(0,0,' scale(.4)'), opacity:1}, {transform:T(0,0,' scale(2.8)'), opacity:0}], {duration:650, easing:'ease-out'});
+    const N = LIKE_FX.COUNT;
+    for(let i=0;i<N;i++){
+      const a = i/N*Math.PI*2 + rnd(-.15,.15), rr = rnd(42,58), c = LIKE_FX.BURST[i % LIKE_FX.BURST.length], rot = rnd(160,360);
+      piece('&#10022;', 'color:'+c+';font-size:'+rnd(11,18).toFixed(1)+'px', [
+        {transform:T(0,0,' scale(.3) rotate(0deg)'), opacity:1},
+        {transform:T(Math.cos(a)*rr, Math.sin(a)*rr, ' scale(1) rotate('+(rot*.7)+'deg)'), opacity:1, offset:.7},
+        {transform:T(Math.cos(a)*rr*1.1, Math.sin(a)*rr*1.1+10, ' scale(.5) rotate('+rot+'deg)'), opacity:0}
+      ], {duration:800});
+    }
+  }, D);
+
+  setTimeout(()=>layer.remove(), D + 1000);
+}
+
 window.toggleLikeDetail = function(){
   const id = state.activeId;
   if(id == null) return;
@@ -3129,13 +3203,9 @@ window.toggleLikeDetail = function(){
   if(willLike && window.bizLikeSound) window.bizLikeSound();
   updateDetailLikeBtn();
 
-  /* 켤 때만 하트 튀는 연출 */
+  /* 켤 때만 '두 개의 별' 연출 → 합쳐지는 순간 하트가 톡 튐 */
   const btn = document.getElementById('detail-like-btn');
-  if(btn && willLike){
-    btn.classList.remove('pop');
-    void btn.offsetWidth;   /* 애니메이션 재시작 */
-    btn.classList.add('pop');
-  }
+  if(btn && willLike) likeTwinStars(btn);
 
   /* 뒤에 있는 목록 그리드도 같이 갱신 (♥ 필터·개수 반영) */
   renderList();
