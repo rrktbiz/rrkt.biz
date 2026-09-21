@@ -726,6 +726,12 @@ body{top:0 !important}
 .chars-scope .cassette-nav-arrow.disabled{opacity:0;pointer-events:none}
 /* 누르고 난 뒤 버튼에 남던 검은 네모(포커스 표시) 없앰 */
 .chars-scope .cassette-nav-arrow:focus,.chars-scope .cassette-nav-arrow:focus-visible{outline:none}
+/* ── 좌우 이동 누르는 영역 넓히기 (데스크탑·모바일 공통) ──
+   보이는 화살표 모양·위치는 그대로이고, 눌리는 범위만
+   시트 왼쪽 30% / 오른쪽 30% 의 위아래 전체로 넓힙니다. (가운데 40%는 눌러도 아무 일 없음) */
+.chars-scope .cassette-nav-arrow{top:0;bottom:0;height:auto;width:30%;transform:none;padding:0 8px;box-sizing:border-box}
+.chars-scope .cassette-nav-arrow.prev{left:0;justify-content:flex-start}
+.chars-scope .cassette-nav-arrow.next{right:0;justify-content:flex-end}
 /* ── WIDTH CONTROL ── */
 .chars-scope .char-page-inner{max-width:720px;margin:0 auto;transition:max-width .2s}
 .chars-scope .char-page-inner.wide{max-width:none}
