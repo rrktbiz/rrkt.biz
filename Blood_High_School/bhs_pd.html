@@ -457,6 +457,16 @@ body{
     border-radius: 4px;
   }
 
+  /* 실제 이미지가 채워진 가로 배너/장면 컷 (placeholder 대체) — 잘림 없이 원본 비율 그대로 */
+  .pd-doc .pd-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+  }
+  .pd-doc .pd-photo.banner { margin: 24px 0; }
+  .pd-doc .pd-photo.scene { margin: 14px 0 18px; }
+
   .pd-doc .img-placeholder.banner {
     aspect-ratio: 16 / 7;
     width: 100%;
@@ -797,10 +807,7 @@ PD의 질문: "이미 비슷한 거 많은데, 이걸 왜 해야 해?" — 이 �
     <p>본 작품의 '뉴트로'는 단순한 향수의 재생이 아니라 <strong>필터링된 향수</strong>의 재구성입니다. 옛 작품 특유의 정서적 좌표 (호흡, 비주얼, 클리셰 운용)는 그대로 가져오되, 동시대 감각으로 보면 거슬리는 요소들 (무조건적인 가족애의 강요, 불필요한 가학성, 늘어지는 서사) 은 의도적으로 제거하고 재조립했습니다. "그 시절 그 작품"을 다시 보고 싶지만 막상 펼쳐 보면 요즘 감성과 맞지 않는 부분이 많아 끝까지 가지 못하는 독자층 — 본 작품은 바로 이 아쉬운 부분을 정확히 채워주고자 합니다.</p>
     <p>이러한 포지셔닝은 현 한국 서브컬처 시장의 주류(회귀·빙의·먼치킨)와 직접 경쟁하지 않고 별도의 좌표에 자리잡습니다.</p>
 
-    <div class="img-placeholder banner">
-      <div class="ph-label">Reference · Banner</div>
-      <div class="ph-desc">뉴트로 분위기를 드러내는 가로 배너<br>(작품의 시각 톤을 한눈에 보여주는 컷)</div>
-    </div>
+    <div class="pd-photo banner"><img src="../Blood_High_School/images/pd/newtro.png" alt="뉴트로 분위기 배너" loading="lazy"></div>
 
     <h3 style="display:inline-block;background:#111;color:#FFD23F;font-size:17px;font-weight:900;padding:6px 18px;letter-spacing:-0.3px;margin-top:28px;margin-bottom:10px;">대표코드 '뉴트로'의 정의</h3>
     <p>본 작품에서 칭하는 '뉴트로'는 1990~2008(또는~2010)년대 일본 소년 애니의 문법을 지금 시점에서 자각적으로 재구성한다는 의미입니다.</p>
@@ -988,10 +995,7 @@ PD의 질문: "이 세계가 n부작 버틸 만큼 넓어? 설정에 모순은 �
   </div>
 
   <div class="content">
-    <div class="img-placeholder scene">
-      <div class="ph-label">Reference · Scene</div>
-      <div class="ph-desc">용족 / 류오가 신사 일러스트<br>(천 년 전 용의 강림 또는 류오가 신사 외관)</div>
-    </div>
+    <div class="pd-photo scene"><img src="../Blood_High_School/images/pd/worldview_Ryuoh.png" alt="용족 / 류오가 세계관 일러스트" loading="lazy"></div>
     <p><strong>용족과 류오가(龍王家):</strong> 천 년 전 하늘에서 내려온 용들이 황폐한 땅에 축복을 내리고 '신'으로 숭배받으며 왕국을 세웠으나, 왕국이 멸망한 뒤 인간 사이에 섞여 용족이라는 사실조차 잊었습니다. 그 멸망의 인과는 작품 안에서 두 단계로 벗겨집니다 — 전설은 최강의 흑룡 라크니스가 왕국을 멸망시켰다고 전하며 1부의 헤르바켄도 이를 믿고 라크니스를 처단하려 움직입니다. 2부에서 그 배후의 인과가 드러납니다. 용족이 스스로를 신이라 착각하다 '신의 힘'을 잃었고, 축복이 끊긴 땅이 지옥으로 변하는 것을 지켜보던 라크니스가 끝내 절망해 '파괴에 의한 구원'으로 모든 것을 태웠다는 것입니다. <strong>전설은 사실 관계에서는 옳았고, 지워져 있던 것은 동기였습니다.</strong> 이 구조가 2부 후반의 정서적 정점을 만듭니다 — 가문의 죄와 부모의 죽음을 알게 된 쿠로가, 천 년 전과 완전히 동일한 논리에 도달해 같은 선택을 반복하려 하기 때문입니다. 류오가는 그 용족의 피가 흐르는 가문으로, 천 년 만에 라크니스의 힘이 발현됩니다. 겉으로는 신사·온천·요식업을 운영하는 전통 가문이나, 선대 당주 테츠야 시대에 자선사업을 가장한 부패와 카게히라가와의 결탁이 있었고, 요시유키가 이를 청산하다 살해당했습니다. 현재는 쿠로의 대에서 재건 중입니다. 당주 자리는 지지에서 두 아들 테츠야·요시유키로 이어졌으나 두 사람 모두 세상을 떠나며 지지가 다시 당주를 맡았고, 2부에서 쿠로가 이를 물려받습니다.</p>
 
     <div class="img-placeholder scene">
@@ -1000,10 +1004,7 @@ PD의 질문: "이 세계가 n부작 버틸 만큼 넓어? 설정에 모순은 �
     </div>
     <p><strong>카게히라가(影片家):</strong> 금술(禁術)을 쓰는 뒷가문. 자신의 목숨을 대가로 저주를 실행하는 주술사 집단. 류오가의 테츠야와 결탁해 거대화했으나, 테츠야 사후 버려져 3만 명 규모의 교리 집단으로 변질. 현 당주 아오이는 혈연이 아닌 양자 출신으로, 이 지옥의 문지기를 자처합니다. 혈족이 아님에도 금술을 실행할 때마다 제 수명을 대가로 내놓기에, 그 역시 단명의 운명 위에 서 있습니다.</p>
 
-    <div class="img-placeholder scene">
-      <div class="ph-label">Reference · Scene</div>
-      <div class="ph-desc">성 세인츠 학원 일러스트<br>(고딕 양식 외관 또는 학원의 7대 전설 분위기)</div>
-    </div>
+    <div class="pd-photo scene"><img src="../Blood_High_School/images/pd/worldview_Saints.png" alt="성 세인츠 학원 세계관 일러스트" loading="lazy"></div>
     <p><strong>성 세인츠 학원:</strong> 고딕 양식의 외관에 서양식과 일본식이 혼재된 괴짜 학원. 08년도 설립. 복도에는 용의 전설 벽화, 뒤편에는 버려진 성지, 지하에는 비밀 통로가 있습니다. 뱀파이어, 마리오네트, 마물 등이 존재하며 '7대 전설'이라는 형태로 학원의 역사와 연결됩니다.</p>
 
     <p><strong>가문 간 정치적 긴장:</strong> 류오가는 테츠야 사후 뒷세계와 단절했으나, 과거 류오가를 중심으로 여러 가문이 결탁한 조직의 잔재가 남아 있습니다. 카게히라가는 타 가문과 철저히 선을 그으며 독립 의뢰 방식을 유지해왔으나, 류오가와의 합류로 처음으로 외부와 경계를 허물게 됩니다. 이 움직임은 뒷가문 사이에 "류오가가 카게히라가에 이용당하고 있다"는 소문으로 번지고 있습니다.</p>
