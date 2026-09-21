@@ -759,7 +759,22 @@ body{top:0 !important}
   .chars-scope .detail-overlay-inner .sheet-header-row{padding-right:136px}
   /* 아래 이전·목록으로·다음 줄 위의 구분선 없앰 (위쪽에 선이 없어진 것과 맞춤) */
   .chars-scope .detail-overlay-inner .ep-nav{border-top:none;padding-top:0}   /* 위쪽 안쪽 여백 14→0 : 이미지 아래 간격을 위쪽과 같은 20px로 */
+
+  /* ── 오른쪽 빈 공간 조작법 안내 ──
+     상세 창 오른쪽 회색 여백 한가운데에 흰 글씨로 띄웁니다.
+     글씨 위를 눌러도 바깥을 누른 것과 똑같이 목록으로 돌아갑니다(pointer-events:none).
+     여백이 좁은 화면에서는 자동으로 숨습니다. */
+  .chars-scope .detail-help{display:none;position:fixed;top:50%;left:calc(75% + 200px);transform:translate(-50%,-50%);
+    flex-direction:column;align-items:center;gap:22px;pointer-events:none;color:rgba(255,255,255,.92);
+    font-family:'Noto Sans KR',sans-serif;text-align:center;z-index:1}
+  .chars-scope .detail-overlay-inner.wide ~ .detail-help{left:calc(75% + 270px)}
+  .chars-scope .detail-help-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .chars-scope .detail-help-keys{display:flex;gap:6px}
+  .chars-scope .detail-help-keys svg{display:block}
+  .chars-scope .detail-help-txt{font-size:12px;line-height:1.6;letter-spacing:.02em}
 }
+@media(min-width:1240px){ body.detail-open .chars-scope .detail-help{display:flex} }
+@media(max-width:1519px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
 </style>
 
 <!-- ══════════════════════════════════════════════════
@@ -1418,6 +1433,17 @@ body{top:0 !important}
           <button class="ep-nav-btn" id="nav-next" onclick="navChar(1)"><span class="ep-nav-title"><span class="ep-nav-full" id="nav-next-name"></span><span class="ep-nav-short" id="nav-next-short"></span></span><span>→</span></button>
         </div>
         </div><!-- /detail-overlay-inner -->
+        <!-- 조작법 안내 (데스크탑 오른쪽 여백) -->
+        <div class="detail-help" aria-hidden="true">
+          <div class="detail-help-item">
+            <div class="detail-help-keys"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M20 11L13 17L20 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M14 11L21 17L14 23" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="detail-help-txt">방향키로<br>이전 · 다음 캐릭터</div>
+          </div>
+          <div class="detail-help-item">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="7" stroke="currentColor" stroke-width="1.5"/><path d="M12 12L22 22M22 12L12 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <div class="detail-help-txt">바깥을 누르면<br>목록으로</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2982,6 +3008,22 @@ window.navChar = function(dir){
   const target = list[idx+dir];
   if(target) openChar(target.id);
 };
+
+/* 방향키 ← → 로 이전·다음 캐릭터 (상세 창이 열려 있을 때만)
+   글자 입력 중이거나 문의창이 떠 있을 때는 작동하지 않습니다. */
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  if(e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+  if(state.activeId == null) return;
+  var dv = document.getElementById('detail-view');
+  if(!dv || dv.style.display !== 'block' || !dv.getClientRects().length) return;
+  var co = document.getElementById('contact-overlay');
+  if(co && !co.classList.contains('hidden')) return;
+  var t = e.target;
+  if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  e.preventDefault();
+  navChar(e.key === 'ArrowLeft' ? -1 : 1);
+});
 
 /* ══════════════════════════════════════════════════
    캐릭터 딥링크 —  #/chars/042
