@@ -737,6 +737,18 @@ body{top:0 !important}
 @media(max-width:600px){
   .chars-scope .detail-overlay-inner{min-height:100%}
 }
+
+/* ── 데스크탑: 상세 창이 상단바·탭바 위까지 덮기 ──
+   상단바·탭바 자리와 위쪽 여백(40px→16px)을 시트 이미지에 내줘서
+   1:1 시트가 한 화면에 들어오도록 합니다.
+   상세 창이 열려 있을 때만 body 에 detail-open 이 붙고,
+   그동안 #stage 를 상단바보다 위 층으로 올립니다. (닫으면 원래대로)
+   폰 화면(600px 이하)은 건드리지 않았습니다. */
+@media(min-width:601px){
+  body.detail-open #stage{z-index:200}
+  body.detail-open .chars-scope #detail-view{position:fixed}
+  .chars-scope .detail-overlay-inner{margin:16px auto}
+}
 </style>
 
 <!-- ══════════════════════════════════════════════════
@@ -2941,6 +2953,7 @@ window.openChar = function(id, push){
   renderDetail(id);
   document.getElementById('detail-view').style.display='block';
   document.body.style.overflow='hidden';
+  document.body.classList.add('detail-open');   /* 데스크탑: 상단바 위까지 덮기 */
   requestAnimationFrame(applyMobDetail);
   if(push !== false) charRoute(String(id).padStart(3,'0'));
 };
@@ -2948,6 +2961,7 @@ window.showList = function(push){
   state.activeId=null;
   document.getElementById('detail-view').style.display='none';
   document.body.style.overflow='';
+  document.body.classList.remove('detail-open');
   renderList();
   if(push !== false) charRoute('');
 };
