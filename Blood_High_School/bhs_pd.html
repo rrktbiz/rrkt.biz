@@ -445,6 +445,18 @@ body{
     margin: 0 auto 24px;
   }
 
+  /* 실제 메인 비주얼 이미지 (cover placeholder 대체) — 잘림 없이 원본 비율 그대로 */
+  .pd-doc .cover-photo {
+    width: 200px;
+    margin: 0 auto 24px;
+  }
+  .pd-doc .cover-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+  }
+
   .pd-doc .img-placeholder.banner {
     aspect-ratio: 16 / 7;
     width: 100%;
@@ -746,9 +758,8 @@ PD가 제일 먼저 보는 스펙표. "이거 뭔데? 몇 자야? 어디까지 �
   </div>
 
   <div class="content">
-    <div class="img-placeholder cover">
-      <div class="ph-label">Illustration · Reference</div>
-      <div class="ph-desc">메인 비주얼 / 표지<br>(작품 대표 이미지)</div>
+    <div class="cover-photo">
+      <img src="../Blood_High_School/bhs_main1_cover.png" alt="블러드하이스쿨 메인 비주얼">
     </div>
     <table>
       <tr><th>항목</th><th>내용</th></tr>
