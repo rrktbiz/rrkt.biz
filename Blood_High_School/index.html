@@ -525,8 +525,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 
 /* ── 에피소드 보드 ── */
 #view-story .ep-board{margin:16px auto 12px;max-width:700px;width:calc(100% - 40px);background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
-#view-story .ep-board-head{display:grid;grid-template-columns:44px 1fr 120px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
-#view-story .ep-row{display:grid;grid-template-columns:44px 1fr 120px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
+#view-story .ep-board-head{display:grid;grid-template-columns:44px 1fr 90px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
+#view-story .ep-row{display:grid;grid-template-columns:44px 1fr 90px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
 #view-story .ep-row:last-child{border-bottom:none}
 #view-story .ep-row:hover{background:#ebebeb}
 #view-story .ep-row-locked{cursor:default}
@@ -538,8 +538,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .ep-status-badge.done{background:#ffe4e4;color:#c0392b}
 #view-story .ep-status-badge.wip{background:#F9F4CA;color:#F9CB4C}
 #view-story .ep-status-badge.plan{background:#f0f0f0;color:#aaa}
-#view-story .ep-date-col{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:6px;font-size:10px;color:var(--tx3);text-align:right;white-space:nowrap}
-#view-story .ep-cc-txt{font-size:10px;color:var(--tx3);opacity:.6}
+#view-story .ep-date-col{font-size:10px;color:var(--tx3);text-align:right;white-space:nowrap}
 
 /* ── 볼륨 네비 + 목록 모달 ── */
 #view-story .vol-nav-outer{background:var(--sb);padding:8px 0 28px}
@@ -591,7 +590,6 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .postype-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 #view-story .postype-date{font-size:12px;color:var(--tx3)}
 #view-story .postype-status-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px}
-#view-story .postype-charcount{font-size:12px;color:var(--tx3)}
 #view-story .postype-body{font-family:var(--fn);font-size:16px;line-height:2.0;color:#1a1a1a;letter-spacing:.01em;word-break:normal;overflow-wrap:break-word}
 #view-story .postype-text{white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.9;font-size:17px}
 #view-story .postype-text .ptl{margin:0;padding:0;font:inherit;line-height:inherit;color:inherit}
@@ -1468,7 +1466,7 @@ var BHS_VOLUMES = [
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_1part_cast.png',
    /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
-   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:[] },
+   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:['Blood_High_School/images/Thumb/1.png','Blood_High_School/images/Thumb/2.png','Blood_High_School/images/Thumb/3.png'] },
    notes:[
      '안녕하세요!',
      '2017년 애니메이션, 2023년 웹툰을 거쳐 드디어 2026년 『블러드 하이스쿨』이 웹소설로 찾아왔습니다.',
@@ -1510,7 +1508,7 @@ var BHS_VOLUMES = [
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_2part_cast.png',
    /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
-   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:[] },
+   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:['Blood_High_School/images/Thumb/4.png','Blood_High_School/images/Thumb/5.png','Blood_High_School/images/Thumb/6.png'] },
    notes:[
      '드디어 류오가 편, 그리고 『블러드하이스쿨』 2부가 마무리되었습니다.',
      '2부는 웹툰 시절부터 가장 오래 고민하며 시간을 들인 만큼, 완성했다는 사실 자체가 저에게는 큰 성공입니다.',
@@ -1788,25 +1786,6 @@ function bhsTextPath(volId, epId, lang){
   if(lang === 'pure_ko') return BHS_TEXT_ROOT + 'texts_pure_ko/' + base + '_pure_ko.txt';
   if(lang === 'jp')      return BHS_TEXT_ROOT + 'texts_jp/' + base + '_jp.txt';
   return BHS_TEXT_ROOT + 'texts/' + base + '.txt';
-}
-
-/* ── 글자수 세기 ──
-   화별로 한 번 구한 글자수는 BHS_CHARCOUNT 에 기억해두고 재사용합니다
-   (탭을 왔다 갔다 해도 파일을 다시 안 불러옵니다).
-   띄어쓰기·줄바꿈(엔터)까지 전부 포함해서, 글자 하나하나 그대로 셉니다. */
-var BHS_CHARCOUNT = {};
-function bhsCCKey(volId, epId){ return volId + '-' + epId; }
-function bhsNumFmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
-async function bhsCountEpChars(volId, epId){
-  var key = bhsCCKey(volId, epId);
-  if(BHS_CHARCOUNT[key] !== undefined) return BHS_CHARCOUNT[key];
-  try{
-    var text = await bhsFetchText(bhsTextPath(volId, epId, 'ko'));
-    BHS_CHARCOUNT[key] = text.length;
-  }catch(e){
-    BHS_CHARCOUNT[key] = null;   /* 못 구하면 화면엔 그냥 안 보여줍니다 */
-  }
-  return BHS_CHARCOUNT[key];
 }
 
 /* ── 본문 fetch (번호 zero-padding 유무 모두 시도) ── */
@@ -2362,29 +2341,12 @@ function bhsRenderEpList(){
              + '<span class="ep-num">' + e.id + '</span>'
              + '<span class="ep-title-col"><span class="ep-title-text">' + bhsEsc(e.title) + '</span>'
              + '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + e.status + '</span></span>'
-             + '<span class="ep-date-col" id="ep-cc-' + v.id + '-' + e.id + '">'
-             + (ok ? '<span class="ep-cc-txt"></span>' : '')
-             + '<span>' + (e.date || '&mdash;') + '</span>'
-             + '</span>'
+             + '<span class="ep-date-col">' + (e.date || '&mdash;') + '</span>'
              + '</div>';
       }).join('')
     + '</div>'
     + bhsBuildVolNav(v)
     + BHS_FOOTER_HTML;
-
-  /* ── 글자수 채우기 ──
-     목록이 먼저 뜨고, 완료된 화들의 글자수는 파일을 백그라운드에서 읽어온 뒤
-     하나씩 채워 넣습니다 (한 번 읽은 화는 기억해뒀다가 재사용). */
-  eps.forEach(function(e){
-    if(!bhsCanRead(e)) return;
-    var wrapId = 'ep-cc-' + v.id + '-' + e.id;
-    bhsCountEpChars(v.id, e.id).then(function(count){
-      var wrap = document.getElementById(wrapId);
-      if(!wrap || count == null) return;
-      var cc = wrap.querySelector('.ep-cc-txt');
-      if(cc) cc.textContent = bhsNumFmt(count) + '자';
-    });
-  });
 }
 
 /* ══════════════════════════════════════════════════════
@@ -2638,9 +2600,7 @@ function bhsRenderReader(){
         e.status === '완료'   ? 'background:#ffe4e4;color:#c0392b' :
         e.status === '작업중' ? 'background:#F9F4CA;color:#F9CB4C' :
                                 'background:#f0f0f0;color:#aaa'
-      ) + '">' + e.status + '</span>'
-    + '<span class="postype-charcount" id="postype-charcount"></span>'
-    + '</div>'
+      ) + '">' + e.status + '</span></div>'
     + '<div style="display:flex;align-items:center;gap:6px;margin-top:12px">'
     + '<button id="deepl-translate-btn" onclick="onDeepLBtnClick()" style="margin-top:0">'
     + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button>'
@@ -2754,12 +2714,6 @@ async function bhsLoadText(volId, epId){
   _epOriginalLines = text.split('\n');
   var jpMode = (lang === 'ja');
   el.innerHTML = '<div class="postype-text' + (jpMode ? ' notranslate' : '') + '">' + bhsLines(text) + '</div>';
-
-  /* ── 글자수 표시 (엔터·띄어쓰기까지 포함, 지금 보고 있는 판본 기준) ── */
-  var ccEl = document.getElementById('postype-charcount');
-  if(ccEl) ccEl.textContent = bhsNumFmt(text.length) + '자';
-  /* 기본(한본어) 판을 읽은 거면, 목록 화면에서도 이 숫자를 그대로 재사용합니다 */
-  if(srcLang === 'ko') BHS_CHARCOUNT[bhsCCKey(volId, epId)] = text.length;
 
   if(jpMode)         _tlBadge('jp');
   else if(isForeign) _tlBadge('google');
