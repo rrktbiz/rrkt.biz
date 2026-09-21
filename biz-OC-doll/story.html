@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biz-OC-doll · 스토리</title>
+<!-- PD 페이지(doll_pd.html)에서만 들어오는 페이지라 검색엔진에 안 뜨게 막아 둡니다.
+     나중에 스토리를 일반 방문자에게도 공개하고 싶으면 이 한 줄만 지우면 됩니다. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<!-- 탭 아이콘(보석). 이제 단독으로 열리는 페이지라 필요합니다. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ═══ 공용 컴포넌트 스타일 (구 common.css — 이 파일 안으로 합침) ═══
@@ -383,11 +388,35 @@ body{top:0 !important}
 <body>
 
 <div id="solo-topbar">
-  <a class="tb-back" href="index.html#/story">&larr; biz-OC-doll</a>
+  <!-- 왼쪽 위 버튼 — 들어온 길에 따라 모양이 바뀝니다 (아래 스크립트)
+       · PD 페이지에서 새 탭으로 열렸으면 → "✕ 닫기"  : 이 탭을 닫고 뒤에 있던 PD 페이지로
+       · 주소로 직접 들어왔으면           → "← 기획 자료" : 이 탭에서 PD 페이지로 이동 -->
+  <a class="tb-back" id="tb-back" href="doll_pd.html">&larr; 기획 자료</a>
   <div class="tb-sep"></div>
   <span class="tb-title">STORY</span>
   <div class="tb-right" style="position:relative"><!-- 아래 공용 블록이 채웁니다 --></div>
 </div>
+
+<script>
+/* ── 왼쪽 위 버튼: 새 탭이면 '닫기' ──
+   PD 페이지에서 왔는지는 '어느 페이지에서 눌러서 왔나'(referrer)로 판단합니다.
+
+   ※ 브라우저가 탭 닫기를 막는 경우가 있습니다.
+      (회차를 몇 개 넘겨 본 뒤라든가, 브라우저 설정에 따라)
+      그때는 먹통이 되지 않도록 이 탭에서 PD 페이지로 넘어갑니다. */
+(function(){
+  var btn = document.getElementById('tb-back');
+  if(!btn) return;
+  if(!/doll_pd\.html/.test(document.referrer || '')) return;   /* 직접 들어옴 → 링크 그대로 */
+  btn.innerHTML = '&#10005; 닫기';
+  btn.title = '이 탭 닫기';
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    window.close();
+    setTimeout(function(){ location.href = 'doll_pd.html'; }, 250);   /* 안 닫혔을 때만 실행됨 */
+  });
+})();
+</script>
 
 <div id="story-list"></div>
 <div id="story-reader"></div>
