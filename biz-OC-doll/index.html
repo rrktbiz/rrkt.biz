@@ -974,6 +974,30 @@ body{top:0 !important}
 @media(min-width:1340px){ body.detail-open .chars-scope .detail-side{display:flex} }
 @media(max-width:1619px){ .chars-scope .detail-overlay-inner.wide ~ .detail-side{display:none !important} }
 @media(max-width:1599px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
+/* ── AI 활용 표기 ──
+   캐릭터 그림은 직접 그리고, 200명 공용 시트 틀만 AI 로 만든 것을 밝힙니다.
+   (시트 이미지 오른쪽 아래에도 "Frame: AI-generated / Art: ..." 가 따로 박혀 있음)
+   · 넓은 화면 : 왼쪽 여백(해시태그 복사 칸 아래)에 작은 글씨
+   · 그 외 화면 : 왼쪽 여백이 안 보이므로, 시트 그림 왼쪽 아래에 ⓘ 아이콘 → 누르면 말풍선
+   ⓘ 가 보이는 조건은 위 .detail-side 가 숨는 조건과 정확히 반대로 맞춰 두었습니다.
+   왼쪽 여백 표시 조건(1340px / 넓게보기 1620px)을 고치면 여기 숫자도 같이 고치세요. */
+.chars-scope .detail-side-ai{margin-top:6px;font-size:11.5px;line-height:1.7;opacity:.6;word-break:keep-all}
+.chars-scope .detail-side-ai .ai-en{display:block;margin-top:4px}
+.chars-scope .sheet-ai-info{display:none;position:absolute;left:10px;bottom:10px;z-index:6}
+.chars-scope .sheet-slot.has-image .sheet-ai-info{display:block}
+@media(min-width:1340px){ .chars-scope .detail-overlay-inner:not(.wide) .sheet-ai-info{display:none !important} }
+@media(min-width:1620px){ .chars-scope .detail-overlay-inner.wide .sheet-ai-info{display:none !important} }
+.chars-scope .sheet-ai-btn{position:relative;width:26px;height:26px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.85);border:1px solid #d6d6d6;color:#6e6e6e;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.chars-scope .sheet-ai-btn:focus{outline:none}
+.chars-scope .sheet-ai-btn svg{width:15px;height:15px;display:block}
+/* 보이는 크기는 26px, 누르는 범위만 44px 로 넓힘 */
+.chars-scope .sheet-ai-btn::after{content:'';position:absolute;inset:-9px}
+.chars-scope .sheet-ai-bubble{display:none;position:absolute;left:0;bottom:34px;width:240px;max-width:calc(100vw - 60px);box-sizing:border-box;
+  padding:9px 11px;background:#fff;border:1px solid #e8e8e8;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);
+  font-family:'Noto Sans KR',sans-serif;font-size:11.5px;line-height:1.6;color:#525252;word-break:keep-all}
+.chars-scope .sheet-ai-bubble .ai-en{display:block;margin-top:5px;color:#6e6e6e}
+.chars-scope .sheet-ai-info.open .sheet-ai-bubble{display:block}
 </style>
 
 <!-- ══════════════════════════════════════════════════
@@ -1654,6 +1678,11 @@ body{top:0 !important}
             <button class="cassette-nav-arrow next" id="cassette-next" onclick="navChar(1)" aria-label="다음 캐릭터">
               <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L16 22L4 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
+            <!-- AI 활용 표기 ⓘ (왼쪽 여백이 안 보이는 화면에서만 나타남) -->
+            <div class="sheet-ai-info" id="sheet-ai-info">
+              <button class="sheet-ai-btn" onclick="toggleSheetAi(event)" aria-label="AI 활용 안내" title="AI 활용 안내"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.2v4"/><circle cx="8" cy="4.9" r=".45" fill="currentColor" stroke="none"/></svg></button>
+              <div class="sheet-ai-bubble">캐릭터 그림은 전부 작가가 직접 그렸으며, 시트의 배경 틀(기하학 프레임)만 생성형 AI로 만들었습니다.<span class="ai-en notranslate" translate="no">Character art is hand-drawn by the artist. Only the sheet frame design was made with generative AI.</span></div>
+            </div>
           </div>
         </div>
 
@@ -1678,6 +1707,8 @@ body{top:0 !important}
             <button class="detail-side-credit" onclick="copyCredit(0)"><span class="detail-side-credit-txt" id="side-credit-0">—</span><span class="detail-side-credit-copy" id="side-credit-label-0">복사</span></button>
             <button class="detail-side-credit" onclick="copyCredit(1)"><span class="detail-side-credit-txt" id="side-credit-1">—</span><span class="detail-side-credit-copy" id="side-credit-label-1">복사</span></button>
             <button class="detail-side-credit" onclick="copyCredit(2)"><span class="detail-side-credit-txt" id="side-credit-2">—</span><span class="detail-side-credit-copy" id="side-credit-label-2">복사</span></button>
+            <!-- AI 활용 표기 (넓은 화면) -->
+            <div class="detail-side-ai">캐릭터 그림은 전부 작가가 직접 그렸으며, 시트의 배경 틀(기하학 프레임)만 생성형 AI로 만들었습니다.<span class="ai-en notranslate" translate="no">Character art is hand-drawn by the artist. Only the sheet frame design was made with generative AI.</span></div>
           </div>
         </div>
         <!-- 조작법 안내 (데스크탑 오른쪽 여백) -->
@@ -3177,6 +3208,7 @@ function renderDetail(id){
              다 받아지면 그 순간 바로 바꿔 끼웁니다. (서서히 겹치는 효과는 없음)
        빠르게 여러 번 넘겨도 늦게 도착한 옛 그림이 끼어들지 않도록 번호표(_tok)로 걸러냅니다. */
     const tok = (slot._tok = (slot._tok || 0) + 1);
+    if(typeof closeSheetAi==='function') closeSheetAi();   /* 다른 캐릭터로 넘어가면 AI 안내 말풍선은 닫음 */
     const hintIcon = slot.querySelector('.sheet-hint-icon');
     const hintText = slot.querySelector('.sheet-hint-text');
 
@@ -3785,5 +3817,21 @@ window.evSwitchTab  = evSwitchTab;
 
 <div id="google_translate_element"></div>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>/* ── AI 활용 안내 ⓘ 말풍선 ──
+   ⓘ 를 누르면 열리고, 한 번 더 누르거나 바깥 아무 데나 누르면 닫힙니다. */
+function toggleSheetAi(e){
+  if(e) e.stopPropagation();
+  var box = document.getElementById('sheet-ai-info');
+  if(box) box.classList.toggle('open');
+}
+function closeSheetAi(){
+  var box = document.getElementById('sheet-ai-info');
+  if(box) box.classList.remove('open');
+}
+document.addEventListener('click', function(e){
+  var box = document.getElementById('sheet-ai-info');
+  if(box && box.classList.contains('open') && !box.contains(e.target)) closeSheetAi();
+});
+</script>
 </body>
 </html>
