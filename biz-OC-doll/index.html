@@ -738,6 +738,175 @@ body{top:0 !important}
   .chars-scope .detail-overlay-inner{min-height:100%}
 }
 </style>
+
+<!-- ══════════════════════════════════════════════════
+     이벤트 탭 스타일 (원래 event.html 에 있던 것)
+     모든 규칙 앞에 #panel-event 를 붙여서 이벤트 탭 안에서만 먹히게 가뒀습니다.
+     ══════════════════════════════════════════════════ -->
+<style id="css-event">
+#panel-event *,
+#panel-event *::before,
+#panel-event *::after{box-sizing:border-box;margin:0;padding:0}
+#panel-event{--bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e2e2e2;--bd2:#c6c6c6;
+  --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
+  --acc:#5a90b0;
+  --fn:'Inter','Noto Sans KR',sans-serif;}
+#panel-event{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
+#panel-event::-webkit-scrollbar, #panel-event ::-webkit-scrollbar{width:4px}
+#panel-event::-webkit-scrollbar-track, #panel-event ::-webkit-scrollbar-track{background:transparent}
+#panel-event::-webkit-scrollbar-thumb, #panel-event ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+/* ── 헤더 ── */
+#panel-event .page-hero{padding:36px 40px 28px;
+  border-bottom:1px solid var(--bd);
+  background:var(--sb);}
+#panel-event .page-hero-inner{max-width:700px;margin:0 auto;text-align:center}
+#panel-event .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;color:#5a90b0;text-transform:uppercase;margin-bottom:10px}
+#panel-event .page-title{font-family:'Josefin Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);font-weight:100;color:#3a6a88;letter-spacing:.22em;line-height:1.1;margin-bottom:10px}
+#panel-event .page-desc{font-size:12px;color:#7aa0b8;line-height:1.75}
+/* ── 바디 ── */
+#panel-event .page-body{padding:28px 40px 60px;max-width:700px;margin:0 auto}
+/* ── 이벤트 카드 ── */
+#panel-event .event-card{border:1px solid var(--bd);border-radius:12px;overflow:hidden;
+  background:var(--sb);margin-bottom:14px;}
+#panel-event .event-card-banner{height:150px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;position:relative;}
+#panel-event .event-card-inner{padding:16px 20px 18px}
+#panel-event .event-status{display:inline-block;font-size:8px;font-weight:700;
+  padding:2px 8px;border-radius:10px;margin-bottom:8px;}
+#panel-event .event-status.ongoing{background:#e8f5e9;color:#2e7d32}
+#panel-event .event-status.upcoming{background:#fff8e1;color:#c77700}
+#panel-event .event-status.ended{background:#f0f0f0;color:#888}
+#panel-event .event-title{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px;line-height:1.4}
+#panel-event .event-period{font-size:11px;color:var(--tx3);margin-bottom:10px}
+#panel-event .event-desc{font-size:13px;color:var(--tx2);line-height:1.75}
+#panel-event .event-tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+#panel-event .event-tag{font-size:10px;padding:3px 9px;border-radius:20px;
+  background:var(--bg);border:1px solid var(--bd);color:var(--tx3);}
+/* ── 카드 토글 ── */
+#panel-event .card-toggle{touch-action:manipulation;
+  position:absolute;bottom:10px;right:14px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.55);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.7);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .12s;
+  color:var(--tx2);font-size:13px;line-height:1;
+  user-select:none;z-index:2;}
+#panel-event .card-toggle:hover{background:rgba(255,255,255,.8)}
+#panel-event .card-toggle svg{transition:transform .2s;display:block}
+#panel-event .event-card.collapsed .card-toggle svg{transform:rotate(180deg)}
+#panel-event .event-card.collapsed .event-card-inner{display:none}
+/* ── 개최 전(잠금) 상태 ──
+   카드 전체를 흐리게 죽입니다. 자물쇠와 '준비 중' 은 검정이라
+   같이 흐려져도 회색으로 남아 읽힙니다. (흰색은 배경에 묻혀 사라집니다)
+
+   투표를 열 때는 세 군데만 고치면 됩니다.
+     ① <div class="event-card is-locked">  에서  is-locked 삭제
+     ② <div class="lock-veil"> ... </div>  통째로 삭제
+     ③ <button class="event-btn disabled"> 에서  disabled 삭제
+   흐림 정도는 아래 .42 숫자 하나로 조절합니다. */
+#panel-event .event-card.is-locked{opacity:.42}
+#panel-event .lock-veil{position:absolute;inset:0;z-index:3;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:#1a1a1a;pointer-events:none;}
+#panel-event .lock-veil span{font-size:11px;font-weight:600;letter-spacing:.14em}
+#panel-event .title-row{position:absolute;bottom:0;left:0;right:0;
+  padding:10px 50px 10px 20px;}
+#panel-event .title-row .event-title{color:#fff;margin-bottom:0;font-size:17px;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.3)}
+#panel-event .event-btn{display:inline-flex;align-items:center;gap:6px;
+  margin-top:14px;padding:9px 18px;
+  background:var(--acc);color:#fff;border:none;
+  border-radius:8px;font-size:12px;font-weight:600;
+  font-family:var(--fn);cursor:pointer;transition:opacity .12s;}
+#panel-event .event-btn:hover{opacity:.85}
+#panel-event .event-btn.disabled{background:var(--bd);color:var(--tx3);cursor:default;pointer-events:none}
+/* ── 탭 ── */
+#panel-event .tab-bar{border-bottom:1px solid var(--bd);
+  background:var(--sb);
+  padding:0 40px;
+  display:flex;gap:0;}
+#panel-event .tab-bar-inner{max-width:700px;margin:0 auto;width:100%;
+  display:flex;gap:0;justify-content:center;}
+#panel-event .tab-btn{font-size:13px;font-weight:600;color:var(--tx3);
+  padding:10px 22px;border:none;background:none;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  cursor:pointer;font-family:var(--fn);transition:color .12s;
+  letter-spacing:.02em;}
+#panel-event .tab-btn:hover{color:var(--tx2)}
+#panel-event .tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
+/* ── 로그 ── */
+#panel-event .log-year-block{margin-bottom:36px}
+#panel-event .log-year-label{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--tx3);
+  text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--bd);}
+#panel-event .log-table{width:100%;border-collapse:collapse}
+#panel-event .log-table th{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);
+  text-transform:uppercase;text-align:left;padding:6px 10px;
+  border-bottom:1px solid var(--bd);}
+#panel-event .log-table td{font-size:12px;color:var(--tx2);padding:8px 10px;
+  border-bottom:1px solid var(--bg);vertical-align:middle;}
+#panel-event .log-table tr:hover td{background:var(--sm)}
+#panel-event .log-rank{font-size:11px;font-weight:700;color:var(--tx3);width:36px}
+#panel-event .log-rank.top1{color:#c8a000}
+#panel-event .log-rank.top2{color:#888}
+#panel-event .log-rank.top3{color:#a0613a}
+#panel-event .log-char-num{display:inline-block;font-size:10px;font-weight:700;
+  padding:1px 7px;border-radius:10px;
+  background:var(--sm);border:1px solid var(--bd);color:var(--tx3);
+  margin-right:6px;font-variant-numeric:tabular-nums;}
+#panel-event .log-votes{font-size:11px;color:var(--tx3);text-align:right;width:60px}
+#panel-event .log-empty{text-align:center;padding:40px 20px;
+  color:var(--tx3);font-size:12px;line-height:1.8;
+  border:1px dashed var(--bd2);border-radius:10px;}
+/* ── 상시 투표 카드 (티켓형) ── */
+#panel-event .vote-card{border:1px solid var(--bd);border-radius:12px;overflow:hidden;
+  background:var(--sb);display:flex;align-items:stretch;margin-bottom:14px;}
+#panel-event .vote-ticket{width:136px;flex-shrink:0;background:#eaf4fa;
+  border-right:1px dashed #c5dced;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px 10px;text-align:center;}
+#panel-event .vote-ticket-label{font-size:9px;font-weight:700;letter-spacing:1.5px;
+  color:var(--acc);text-transform:uppercase;margin-bottom:7px;}
+#panel-event .vote-ticket-num{font-size:27px;font-weight:300;color:#3a6a88;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+#panel-event .vote-ticket-num span{font-size:14px;font-weight:400}
+#panel-event .vote-ticket-sub{font-size:11px;color:#7aa0b8;margin-top:6px}
+#panel-event .vote-body{flex:1;min-width:0;padding:18px 20px 20px}
+#panel-event .vote-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;
+  color:var(--tx3);text-transform:uppercase;margin-bottom:6px;}
+#panel-event .vote-title{font-size:16px;font-weight:600;color:var(--tx);margin-bottom:7px}
+#panel-event .vote-desc{font-size:13px;color:var(--tx2);line-height:1.75}
+#panel-event .vote-note{font-size:11.5px;color:var(--tx3);line-height:1.7;margin-top:5px}
+#panel-event .vote-btn{display:inline-flex;align-items:center;gap:6px;
+  margin-top:15px;padding:9px 16px;
+  background:transparent;color:var(--acc);
+  border:1px solid #b8d4e4;border-radius:8px;
+  font-size:12px;font-weight:600;font-family:var(--fn);
+  cursor:pointer;text-decoration:none;transition:background .12s;}
+#panel-event .vote-btn:hover{background:#f2f9fc}
+@media (max-width:560px){
+#panel-event .vote-card{flex-direction:column}
+#panel-event .vote-ticket{width:100%;flex-direction:row;gap:9px;align-items:baseline;justify-content:center;
+    padding:14px 10px;border-right:none;border-bottom:1px dashed #c5dced;}
+#panel-event .vote-ticket-label{margin-bottom:0}
+#panel-event .vote-ticket-sub{margin-top:0}
+#panel-event .page-hero,
+#panel-event .tab-bar{padding-left:20px;padding-right:20px}
+#panel-event .page-body{padding-left:20px;padding-right:20px}
+}
+/* ══════════════════════════════════════════════════
+   카드 접기 버튼 터치 영역
+   보이는 크기는 28px 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
+   마우스 환경에는 적용되지 않습니다.
+   ══════════════════════════════════════════════════ */
+@media(hover:none) and (pointer:coarse){
+/* .card-toggle — 28px → 44x44px */
+#panel-event .card-toggle::after{content:'';position:absolute;top:-8px;right:-8px;bottom:-8px;left:-8px}
+}
+/* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
+#panel-event .brandname{text-transform:none !important}
+</style>
 </head>
 <body>
 
@@ -1046,7 +1215,122 @@ body{top:0 !important}
       </div>
     </div>
 
-    <div class="panel" id="panel-event"></div>
+    <!-- ══════════════════════════════════════════════════
+         이벤트 탭 — 원래 event.html 이던 내용
+         투표 열기·Ko-fi 주소 등 고치는 법은 각 자리 주석에 그대로 있습니다.
+         (이벤트 안쪽 칸 이름은 ev-panel-event / ev-panel-log 로 바꿨습니다)
+         ══════════════════════════════════════════════════ -->
+    <div class="panel" id="panel-event">
+      <div class="page-hero">
+        <div class="page-hero-inner">
+          <div class="eyebrow"><span class="brandname">biz-OC-doll</span> · Event</div>
+          <div class="page-title">EVENT</div>
+          <div class="page-desc">이벤트 & 로그 정리페이지</div>
+        </div>
+      </div>
+
+
+      <!-- ── 탭 바 ── -->
+      <div class="tab-bar">
+        <div class="tab-bar-inner">
+          <button class="tab-btn active" onclick="evSwitchTab('event',this)">이벤트</button>
+          <button class="tab-btn" onclick="evSwitchTab('log',this)">로그</button>
+        </div>
+      </div>
+
+      <!-- ── 이벤트 패널 ── -->
+      <div id="ev-panel-event" class="page-body">
+
+        <!-- ══ 상시 투표 ══
+             Ko-fi 주소만 아래 KOFI_URL 에 넣으면 됩니다. 코드는 안 건드리셔도 됩니다. -->
+        <div class="vote-card">
+          <div class="vote-ticket">
+            <div class="vote-ticket-label">Ticket</div>
+            <div class="vote-ticket-num">10<span>표</span></div>
+            <div class="vote-ticket-sub">후원 1달러</div>
+          </div>
+          <div class="vote-body">
+            <div class="vote-eyebrow">상시 투표</div>
+            <div class="vote-title">투표로 마음 전하기</div>
+            <div class="vote-desc">좋아하는 비즈오씨돌에게 표를 보낼 수 있습니다. </div>
+            <div class="vote-note">집계 반영은 비정기적으로 이루어집니다.</div>
+            <a class="vote-btn" id="vote-kofi-btn" href="#" onclick="openKofi();return false;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><path d="M6.5 3H13v3.5a3 3 0 0 1-3 3H6.5z"/><path d="M13 4h.8a1.7 1.7 0 0 1 0 3.4H13"/><path d="M3 12.5h9"/></svg>
+              Ko-fi에서 표 보내기
+            </a>
+          </div>
+        </div>
+
+        <!-- ══ 제1회 인기투표 ══
+             구글폼 주소는 아래 스크립트의 VOTE_FORM_URL 에 있습니다.
+
+             지금은 '개최 전' 상태입니다. 투표를 열 때 두 군데만 고치면 됩니다.
+               ① <span class="event-status upcoming">개최 전</span>
+                  → <span class="event-status ongoing">진행 중</span>
+               ② <button class="event-btn disabled">  에서  disabled 만 삭제
+             끝난 뒤에는 ended / '종료' 로 바꾸고 disabled 를 다시 붙이세요. -->
+        <div class="event-card is-locked">
+          <div class="event-card-banner" style="background:linear-gradient(135deg,#7ba9c6 0%,#4a7a98 100%)">
+            <!-- 배너 이미지를 쓰시려면 위 style 을 아래처럼 바꾸세요
+                 style="background:url('images/event/vote01.png') center/cover" -->
+            <div class="title-row">
+              <div class="event-title">제1회 인기투표(무료)</div>
+            </div>
+            <button class="card-toggle" onclick="evToggleCard(this)" aria-label="접기 / 펼치기">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+            </button>
+            <!-- 잠금 막. 투표를 열 때 이 블록을 통째로 지우면 됩니다. -->
+            <div class="lock-veil">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              <span>준비 중</span>
+            </div>
+          </div>
+          <div class="event-card-inner">
+            <div class="event-desc">
+              <b>상시 투표</b>의 Ko-fi 후원표는 일반 투표와 합산되어 순위에 반영됩니다.
+            </div>
+
+            <button class="event-btn disabled" onclick="openVoteForm()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              투표하러 가기
+            </button>
+          </div>
+        </div>
+
+        <!-- 진행 중인 이벤트가 생기면 여기에 event-card 를 추가하세요 -->
+
+      </div>
+
+      <!-- ── 로그 패널 ── -->
+      <div id="ev-panel-log" class="page-body" style="display:none">
+
+        <div class="log-year-block">
+          <div class="log-year-label">인기투표 로그</div>
+          <div class="log-empty">아직 기록된 인기투표 결과가 없습니다.<br>결과 발표 후 이곳에 순위가 기록됩니다.</div>
+        </div>
+
+        <!-- 결과가 생기면 아래 블록을 복사해서 연도별로 추가하세요
+        <div class="log-year-block">
+          <div class="log-year-label">2025년 인기투표 결과</div>
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>순위</th><th>캐릭터</th><th style="text-align:right">득표</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="log-rank top1">1st</td>
+                <td><span class="log-char-num">042</span>캐릭터 이름</td>
+                <td class="log-votes">999표</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        -->
+
+      </div>
+    </div>
 
     <!-- 캐릭터 상세 창 — 탭 아래 영역 전체를 덮습니다.
          display:contents 라서 이 겉상자 자체는 화면에 자리를 차지하지 않습니다. -->
@@ -1710,14 +1994,16 @@ window.googleTranslateElementInit = googleTranslateElementInit;
    - 탭 전환·에피소드 읽기 모두 새로고침 없음
    - 소개 탭 = 이 파일 안에 직접 들어 있음 (native)
    - 캐릭터 탭 = 이 파일 안에 직접 들어 있음 (native)
-   - 이벤트 탭 = 아직 개별 파일 iframe 지연 로드
+   - 이벤트 탭 = 이 파일 안에 직접 들어 있음 (native)
+   - 이제 모든 탭이 이 파일 안에 있습니다. 아래 iframe 불러오기 코드는
+     나중에 따로 파일로 된 탭을 다시 붙일 때를 위해 남겨 둡니다.
    - 스토리 탭은 없앴습니다. story.html 은 PD 페이지(doll_pd.html)에서만 들어갑니다
    ══════════════════════════════════════════════════ */
 
 var TABS = {
   intro:   { native:true, onShow:function(){ if(window.introRedraw) introRedraw(); } },   /* 본체에 직접 들어 있음 */
   chars:   { native:true },   /* 본체에 직접 들어 있음. nav 는 캐릭터 스크립트가 붙입니다 */
-  event:   { src:'event.html'                    }
+  event:   { native:true }   /* 본체에 직접 들어 있음 */
 };
 var DEFAULT_TAB = 'intro';
 var current = null;
@@ -2777,6 +3063,48 @@ function applyMobDetail(){
   }
 }
 window.addEventListener('resize', applyMobDetail);
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════
+     이벤트 탭 스크립트 (원래 event.html 에 있던 것)
+     Ko-fi 주소 · 인기투표 구글폼 주소는 여기서 바꿉니다.
+     ══════════════════════════════════════════════════ -->
+<script>
+(function(){   /* 이벤트 탭 전용 칸막이 */
+/* ── Ko-fi 주소 ──
+   후원 페이지 주소를 따옴표 사이에 붙여넣으세요.
+   비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
+var KOFI_URL = 'https://ko-fi.com/rrktbiz/shop';
+
+/* ── 제1회 인기투표 구글폼 ──
+   주소를 바꾸려면 따옴표 사이만 교체하세요.
+   비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
+var VOTE_FORM_URL = 'https://forms.gle/gQ83jFanMiYDJz9x8';
+
+function openVoteForm(){
+  if(VOTE_FORM_URL){ window.open(VOTE_FORM_URL, '_blank', 'noopener'); return; }
+  alert('투표는 곧 열립니다.');
+}
+
+function openKofi(){
+  if(KOFI_URL){ window.open(KOFI_URL, '_blank', 'noopener'); return; }
+  alert('상시 투표는 곧 열립니다.');
+}
+
+function evToggleCard(btn) {
+  btn.closest('.event-card').classList.toggle('collapsed');
+}
+function evSwitchTab(name, btn) {
+  document.querySelectorAll('#panel-event .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ev-panel-event').style.display = name === 'event' ? '' : 'none';
+  document.getElementById('ev-panel-log').style.display   = name === 'log'   ? '' : 'none';
+}
+window.openVoteForm = openVoteForm;
+window.openKofi     = openKofi;
+window.evToggleCard = evToggleCard;
+window.evSwitchTab  = evSwitchTab;
 })();
 </script>
 
