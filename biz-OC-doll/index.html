@@ -647,7 +647,7 @@ body{top:0 !important}
   100%{transform:scale(1)}
 }
 /* ── CHAR DETAIL ── */
-.chars-scope .sheet-wrap{max-width:800px;margin:0 auto;padding:16px 32px 20px;transition:max-width .2s}
+.chars-scope .sheet-wrap{max-width:800px;margin:0 auto;padding:20px 32px 20px;transition:max-width .2s}
 .chars-scope .detail-overlay-inner.wide .sheet-wrap{max-width:1080px}
 .chars-scope .sheet-meta-right{font-size:10px;color:var(--tx3);letter-spacing:.5px;margin-left:auto;align-self:flex-end}
 /* 헤더 행: 썸네일 + 텍스트 */
@@ -747,7 +747,16 @@ body{top:0 !important}
 @media(min-width:601px){
   body.detail-open #stage{z-index:200}
   body.detail-open .chars-scope #detail-view{position:fixed}
-  .chars-scope .detail-overlay-inner{margin:16px auto}
+  .chars-scope .detail-overlay-inner{margin:16px auto;position:relative}
+  /* ── 경로 줄 + 코드 줄 한 줄로 합치기 ──
+     맨 위 경로 줄(biz-OC-doll › 캐릭터 일람 › 코드)은 숨기고,
+     '넓게 보기'와 ✕ 버튼만 코드 줄 오른쪽 끝으로 올려 붙입니다.
+     HTML은 그대로이고 위치만 옮긴 것이라, 이 묶음을 지우면 원래대로 돌아옵니다.
+     폰 화면은 예전 그대로입니다. */
+  .chars-scope .detail-overlay-inner .top-bar{position:absolute;top:20px;right:32px;height:56px;padding:0;background:transparent;border-bottom:none;gap:8px}
+  .chars-scope .detail-overlay-inner .top-bar .tb-crumbs-mid,
+  .chars-scope .detail-overlay-inner .top-bar .tb-cur{display:none}
+  .chars-scope .detail-overlay-inner .sheet-header-row{padding-right:136px}
 }
 </style>
 
@@ -3073,7 +3082,7 @@ function applyMobDetail(){
       b.style.flex=''; b.style.justifyContent=''; b.style.minWidth='120px';
     });
     if(overlay){ overlay.style.margin='16px auto'; overlay.style.borderRadius='14px'; }   /* 위쪽 여백 40→16 */
-    if(wrap){ wrap.style.padding='16px 32px 20px'; }   /* 위 여백 32→16 · 아래 여백 48→20 (이미지 위 간격 20px과 맞춤) */
+    if(wrap){ wrap.style.padding='20px 32px 20px'; }   /* 위 여백 20 (경로 줄이 빠진 만큼 살짝 여유) · 아래 여백 20 */
   }
 }
 window.addEventListener('resize', applyMobDetail);
