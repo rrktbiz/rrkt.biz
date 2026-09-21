@@ -17,6 +17,26 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script>
+/* 스킨 — 고른 색을 브라우저에 기억(bzd_skin)하고, 화면을 그리기 전에 먼저 입혀서 색이 번쩍 바뀌는 일이 없게 합니다 */
+(function(){
+  var k = 'blue';
+  try{ if(localStorage.getItem('bzd_skin') === 'lilac') k = 'lilac'; }catch(e){}
+  document.documentElement.setAttribute('data-skin', k);
+  window.setSkin = function(v){
+    v = (v === 'lilac') ? 'lilac' : 'blue';
+    document.documentElement.setAttribute('data-skin', v);
+    try{ localStorage.setItem('bzd_skin', v); }catch(e){}
+    var ds = document.querySelectorAll('.skin-dot');
+    for(var i=0;i<ds.length;i++){
+      var on = ds[i].getAttribute('data-skin') === v;
+      ds[i].classList.toggle('on', on);
+      ds[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  };
+  document.addEventListener('DOMContentLoaded', function(){ window.setSkin(k); });
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>biz-OC-doll</title>
 
@@ -157,7 +177,7 @@
 .contact-pd{margin-top:20px;padding-top:16px;border-top:1px solid #ececec}
 .contact-pd-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:7px}
 .contact-pd-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #d8d8d8;padding-bottom:2px;transition:color .12s,border-color .12s}
-.contact-pd-link:hover{color:#477693;border-color:#5a90b0}
+.contact-pd-link:hover{color:var(--sk-ink);border-color:var(--sk-main)}
 .contact-pd-note{margin-top:9px;font-size:11px;line-height:1.7;color:#a0a0a0}
 </style>
 <script src="../config.js"></script>
@@ -166,10 +186,54 @@
 :root{
   --bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e2e2e2;--bd2:#c6c6c6;
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
-  --blue:#5a90b0;--blue-d:#4a7a98;
+  --blue:var(--sk-main);--blue-d:var(--sk-tab);
   --fn:'Inter','Noto Sans KR',-apple-system,sans-serif;
   --h-top:46px;--h-tab:44px;
+
+  /* ── 스킨 색 (블루 = 남자별, 기본) ──
+     사이트의 포인트 색은 전부 이 여섯 개를 가져다 씁니다. */
+  --sk-main:#5a90b0;       /* 버튼·테두리·장식 */
+  --sk-ink:#477693;        /* 흰 바탕 위 작은 글씨 */
+  --sk-deep:#3a6a88;       /* 큰 제목 글씨 */
+  --sk-tab:#4a7a98;        /* 선택된 탭 */
+  --sk-fill:#5a90b0;       /* 색을 꽉 채우는 칸 (흰 글씨 얹음) */
+  --sk-rgb:90,144,176;     /* 옅은 바탕·테두리용 (투명도와 섞어 씀) */
+  /* 이벤트 탭 전용 */
+  --sk-soft:#eaf4fa;       /* 티켓 칸 옅은 바탕 */
+  --sk-soft-bd:#c5dced;    /* 티켓 점선 */
+  --sk-btn-bd:#b8d4e4;     /* Ko-fi 버튼 테두리 */
+  --sk-hover:#f2f9fc;      /* 버튼 올렸을 때 */
+  --sk-muted:#7aa0b8;      /* 흐린 설명 글씨 */
+  --sk-banner-a:#7ba9c6;   /* 인기투표 카드 배너 (그라데이션 시작) */
+  --sk-banner-b:#4a7a98;   /*                    (그라데이션 끝) */
 }
+/* ── 라일락 스킨 (여자별) ──
+   #B4A3D4 는 흰 바탕 위 글씨로는 연해서, 글씨는 진한 보라 #6B559B, 채우는 칸은 #9C88C4 로 짝지었습니다. */
+html[data-skin="lilac"]{
+  --sk-main:#9C88C4;
+  --sk-ink:#6B559B;
+  --sk-deep:#7a64a8;
+  --sk-tab:#6B559B;
+  --sk-fill:#9C88C4;
+  --sk-rgb:180,163,212;
+  --sk-soft:#f2eef9;
+  --sk-soft-bd:#d8cdea;
+  --sk-btn-bd:#d3c7e8;
+  --sk-hover:#f8f5fc;
+  --sk-muted:#9a88bd;
+  --sk-banner-a:#bcaede;
+  --sk-banner-b:#7a64a8;
+}
+/* ── 스킨 고르는 동그라미 (탭바 오른쪽 끝) ── */
+.skin-dots{margin-left:auto;display:flex;align-items:center;gap:9px;padding:0 6px 0 12px;flex-shrink:0}
+.skin-dot{width:16px;height:16px;border-radius:50%;border:none;padding:0;cursor:pointer;flex-shrink:0;
+  transition:box-shadow .15s,transform .12s;-webkit-tap-highlight-color:transparent}
+.skin-dot:hover{transform:scale(1.12)}
+.skin-dot:focus{outline:none}
+.skin-dot.blue{background:#5a90b0}
+.skin-dot.lilac{background:#B4A3D4}
+.skin-dot.on.blue{box-shadow:0 0 0 2px #fff,0 0 0 3.5px #5a90b0}
+.skin-dot.on.lilac{box-shadow:0 0 0 2px #fff,0 0 0 3.5px #B4A3D4}
 html,body{height:100%;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased;overflow:hidden}
 button{font-family:var(--fn);cursor:pointer}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -295,8 +359,8 @@ body{top:0 !important}
   --gray-400: #a3a3a3;
   --gray-600: #525252;
   --gray-900: #111111;
-  --blue: #5a90b0;              /* 버튼·테두리·장식용 */
-  --blue-ink: #477693;          /* 작은 글씨용 (흰 배경 4.91:1, AA 통과) */
+  --blue: var(--sk-main);       /* 버튼·테두리·장식용 (스킨 따라 바뀜) */
+  --blue-ink: var(--sk-ink);    /* 작은 글씨용 (스킨 따라 바뀜) */
   --gray-450: #6e6e6e;          /* 보조설명용 (회 배경 4.89:1, AA 통과) */
   --red: #d93025;
   --font: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;}
@@ -355,11 +419,11 @@ body{top:0 !important}
   height: 0.18em;
   background: currentColor;}
 #panel-intro .hero-sub{display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 0 auto 28px; position: relative; z-index: 2;}
-#panel-intro .hero-hashtag{font-size: 13px; color: rgba(90,144,176,0.65); font-weight: 400; letter-spacing: 0.02em;}
+#panel-intro .hero-hashtag{font-size: 13px; color: rgba(var(--sk-rgb),0.65); font-weight: 400; letter-spacing: 0.02em;}
 #panel-intro .hero-tags{display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center;}
-#panel-intro .tag{font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 100px; background: rgba(255,255,255,0.4); border: 1px solid rgba(90,144,176,0.3); color: var(--blue);}
-#panel-intro .btn-report{font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 100px; background: rgba(90,144,176,0.1); border: 1px solid rgba(90,144,176,0.35); color: var(--blue); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; text-decoration: none; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2;}
-#panel-intro .btn-report:hover{background: rgba(90,144,176,0.18); transform: scale(1.02);}
+#panel-intro .tag{font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 100px; background: rgba(255,255,255,0.4); border: 1px solid rgba(var(--sk-rgb),0.3); color: var(--blue);}
+#panel-intro .btn-report{font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 100px; background: rgba(var(--sk-rgb),0.1); border: 1px solid rgba(var(--sk-rgb),0.35); color: var(--blue); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.01em; text-decoration: none; transition: background 0.15s, transform 0.15s; position: relative; z-index: 2;}
+#panel-intro .btn-report:hover{background: rgba(var(--sk-rgb),0.18); transform: scale(1.02);}
 /* PAGE */
 #panel-intro .page{max-width: 720px; margin: 0 auto; padding: 0 24px 80px;}
 /* SECTION */
@@ -432,7 +496,7 @@ body{top:0 !important}
 #panel-intro .sf-copy{font-size:11px;font-weight:600;color:#5f5f5f;letter-spacing:-.01em}
 #panel-intro .sf-note{font-size:10.5px;color:#a0a0a0;line-height:1.7}
 #panel-intro .sf-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
-#panel-intro .sf-links a{font-size:10.5px;color:#5a90b0;text-decoration:none;font-weight:600}
+#panel-intro .sf-links a{font-size:10.5px;color:var(--sk-main);text-decoration:none;font-weight:600}
 #panel-intro .sf-links a:hover{text-decoration:underline}
 /* LEDGER — 이 프로젝트의 본질은 '누가 무엇을 정하는가'의 분업이다.
    그래서 2단 표를 페이지의 기본 도형으로 쓴다. 장식이 아니라 구조. */
@@ -464,16 +528,16 @@ body{top:0 !important}
 #panel-intro .reg-row{display: flex; align-items: center; justify-content: space-between;
   gap: 18px; flex-wrap: wrap;
   margin-top: 18px; padding: 16px 20px;
-  border: 1px solid rgba(90,144,176,0.22);
-  background: rgba(90,144,176,0.05);
+  border: 1px solid rgba(var(--sk-rgb),0.22);
+  background: rgba(var(--sk-rgb),0.05);
   border-radius: 14px; scroll-margin-top: 32px;}
 #panel-intro .reg-text{flex: 1; min-width: 220px; font-size: 13.5px; color: var(--gray-600); line-height: 1.7;}
 #panel-intro .reg-text b{display: block; margin-bottom: 3px; font-size: 14px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em;}
 #panel-intro .reg-btn{display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
   font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--blue-ink);
-  background: var(--white); border: 1px solid rgba(90,144,176,0.3);
+  background: var(--white); border: 1px solid rgba(var(--sk-rgb),0.3);
   border-radius: 100px; padding: 13px 20px; cursor: pointer; transition: background 0.15s;}
-#panel-intro .reg-btn:hover{background: rgba(90,144,176,0.1);}
+#panel-intro .reg-btn:hover{background: rgba(var(--sk-rgb),0.1);}
 /* PULL — 문단이 아니라 '한 문장'으로 서야 하는 자리 */
 #panel-intro .pull{font-size: 15px; color: var(--gray-900); line-height: 1.85;
   letter-spacing: -0.015em; padding-left: 16px;
@@ -579,7 +643,7 @@ body{top:0 !important}
 .chars-scope .char-tab{padding:8px 16px;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;border-right:1px solid var(--bd);transition:all .12s}
 .chars-scope .char-tab:last-child{border-right:none}
 .chars-scope .char-tab:hover{background:var(--bg);color:var(--tx)}
-.chars-scope .char-tab.active{background:#5a90b0;color:#fff;font-weight:700}
+.chars-scope .char-tab.active{background:var(--sk-fill);color:#fff;font-weight:700}
 .chars-scope .char-search{flex:1;min-width:100px;max-width:180px;padding:7px 12px;border:1px solid var(--bd);border-radius:8px;font-size:16px;transform-origin:left center;font-family:var(--fn);background:var(--sb);color:var(--tx);outline:none;transition:border-color .12s}
 .chars-scope .char-search:focus{border-color:var(--bd2)}
 .chars-scope .char-count{font-size:11px;color:var(--tx3);white-space:nowrap}
@@ -804,8 +868,8 @@ body{top:0 !important}
 .chars-scope .detail-close-btn svg{width:13px;height:13px}
 /* ── HERO ── */
 .chars-scope .hero{background:#fff;padding:32px 24px 0px;text-align:center;position:relative;overflow:visible;}
-.chars-scope .hero-label{font-size:10px;font-weight:700;letter-spacing:3px;color:#5a90b0;text-transform:uppercase;margin-bottom:10px;position:relative;z-index:2;}
-.chars-scope .hero-title{font-size:clamp(20px,3.5vw,30px);font-weight:100;color:#3a6a88;letter-spacing:0.22em;line-height:1.1;margin-bottom:10px;font-family:'Josefin Sans',sans-serif;position:relative;z-index:2;}
+.chars-scope .hero-label{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--sk-main);text-transform:uppercase;margin-bottom:10px;position:relative;z-index:2;}
+.chars-scope .hero-title{font-size:clamp(20px,3.5vw,30px);font-weight:100;color:var(--sk-deep);letter-spacing:0.22em;line-height:1.1;margin-bottom:10px;font-family:'Josefin Sans',sans-serif;position:relative;z-index:2;}
 .chars-scope .hero-title-row{display:inline-flex;align-items:center;gap:10px;position:relative;z-index:2;margin-bottom:0;}
 /* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
 .chars-scope .brandname{text-transform:none !important}
@@ -922,7 +986,7 @@ body{top:0 !important}
 #panel-event *::after{box-sizing:border-box;margin:0;padding:0}
 #panel-event{--bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e2e2e2;--bd2:#c6c6c6;
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
-  --acc:#5a90b0;
+  --acc:var(--sk-main);
   --fn:'Inter','Noto Sans KR',sans-serif;}
 #panel-event{height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
 #panel-event::-webkit-scrollbar, #panel-event ::-webkit-scrollbar{width:4px}
@@ -933,9 +997,9 @@ body{top:0 !important}
   border-bottom:1px solid var(--bd);
   background:var(--sb);}
 #panel-event .page-hero-inner{max-width:700px;margin:0 auto;text-align:center}
-#panel-event .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;color:#5a90b0;text-transform:uppercase;margin-bottom:10px}
-#panel-event .page-title{font-family:'Josefin Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);font-weight:100;color:#3a6a88;letter-spacing:.22em;line-height:1.1;margin-bottom:10px}
-#panel-event .page-desc{font-size:12px;color:#7aa0b8;line-height:1.75}
+#panel-event .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--sk-main);text-transform:uppercase;margin-bottom:10px}
+#panel-event .page-title{font-family:'Josefin Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);font-weight:100;color:var(--sk-deep);letter-spacing:.22em;line-height:1.1;margin-bottom:10px}
+#panel-event .page-desc{font-size:12px;color:var(--sk-muted);line-height:1.75}
 /* ── 바디 ── */
 #panel-event .page-body{padding:28px 40px 60px;max-width:700px;margin:0 auto}
 /* ── 이벤트 카드 ── */
@@ -1035,16 +1099,16 @@ body{top:0 !important}
 /* ── 상시 투표 카드 (티켓형) ── */
 #panel-event .vote-card{border:1px solid var(--bd);border-radius:12px;overflow:hidden;
   background:var(--sb);display:flex;align-items:stretch;margin-bottom:14px;}
-#panel-event .vote-ticket{width:136px;flex-shrink:0;background:#eaf4fa;
-  border-right:1px dashed #c5dced;
+#panel-event .vote-ticket{width:136px;flex-shrink:0;background:var(--sk-soft);
+  border-right:1px dashed var(--sk-soft-bd);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:24px 10px;text-align:center;}
 #panel-event .vote-ticket-label{font-size:9px;font-weight:700;letter-spacing:1.5px;
   color:var(--acc);text-transform:uppercase;margin-bottom:7px;}
-#panel-event .vote-ticket-num{font-size:27px;font-weight:300;color:#3a6a88;line-height:1;
+#panel-event .vote-ticket-num{font-size:27px;font-weight:300;color:var(--sk-deep);line-height:1;
   font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
 #panel-event .vote-ticket-num span{font-size:14px;font-weight:400}
-#panel-event .vote-ticket-sub{font-size:11px;color:#7aa0b8;margin-top:6px}
+#panel-event .vote-ticket-sub{font-size:11px;color:var(--sk-muted);margin-top:6px}
 #panel-event .vote-body{flex:1;min-width:0;padding:18px 20px 20px}
 #panel-event .vote-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;
   color:var(--tx3);text-transform:uppercase;margin-bottom:6px;}
@@ -1054,14 +1118,14 @@ body{top:0 !important}
 #panel-event .vote-btn{display:inline-flex;align-items:center;gap:6px;
   margin-top:15px;padding:9px 16px;
   background:transparent;color:var(--acc);
-  border:1px solid #b8d4e4;border-radius:8px;
+  border:1px solid var(--sk-btn-bd);border-radius:8px;
   font-size:12px;font-weight:600;font-family:var(--fn);
   cursor:pointer;text-decoration:none;transition:background .12s;}
-#panel-event .vote-btn:hover{background:#f2f9fc}
+#panel-event .vote-btn:hover{background:var(--sk-hover)}
 @media (max-width:560px){
 #panel-event .vote-card{flex-direction:column}
 #panel-event .vote-ticket{width:100%;flex-direction:row;gap:9px;align-items:baseline;justify-content:center;
-    padding:14px 10px;border-right:none;border-bottom:1px dashed #c5dced;}
+    padding:14px 10px;border-right:none;border-bottom:1px dashed var(--sk-soft-bd);}
 #panel-event .vote-ticket-label{margin-bottom:0}
 #panel-event .vote-ticket-sub{margin-top:0}
 #panel-event .page-hero,
@@ -1096,6 +1160,11 @@ body{top:0 !important}
     <button class="tab active" data-tab="intro">소개</button>
     <button class="tab" data-tab="chars">캐릭터</button>
     <button class="tab" data-tab="event">이벤트</button>
+    <!-- 스킨 고르기 (블루 = 남자별 / 라일락 = 여자별) -->
+    <div class="skin-dots" role="group" aria-label="사이트 색 고르기">
+      <button class="skin-dot blue" data-skin="blue" onclick="setSkin('blue')" title="블루" aria-label="블루 스킨"></button>
+      <button class="skin-dot lilac" data-skin="lilac" onclick="setSkin('lilac')" title="라일락" aria-label="라일락 스킨"></button>
+    </div>
   </div>
 
   <div id="stage">
@@ -1443,7 +1512,7 @@ body{top:0 !important}
                ② <button class="event-btn disabled">  에서  disabled 만 삭제
              끝난 뒤에는 ended / '종료' 로 바꾸고 disabled 를 다시 붙이세요. -->
         <div class="event-card is-locked">
-          <div class="event-card-banner" style="background:linear-gradient(135deg,#7ba9c6 0%,#4a7a98 100%)">
+          <div class="event-card-banner" style="background:linear-gradient(135deg,var(--sk-banner-a) 0%,var(--sk-banner-b) 100%)">
             <!-- 배너 이미지를 쓰시려면 위 style 을 아래처럼 바꾸세요
                  style="background:url('images/event/vote01.png') center/cover" -->
             <div class="title-row">
