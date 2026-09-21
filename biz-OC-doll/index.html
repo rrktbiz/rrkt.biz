@@ -843,10 +843,11 @@ body{top:0 !important}
 .chars-scope .detail-side-v{font-family:'Share Tech Mono',monospace;font-size:16px;text-align:right;word-break:break-all}
 .chars-scope .detail-side-title{font-size:15px;font-weight:500}
 .chars-scope .detail-side-note{font-size:13px;line-height:1.7;opacity:.85}
+/* 색 반전: 흰 바탕 + 진한 글씨 → 회색 배경 위에서 가장 눈에 띄게 */
 .chars-scope .detail-side-dl{pointer-events:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;
-  background:transparent;border:1px solid rgba(255,255,255,.75);border-radius:8px;color:#fff;font-size:13px;font-weight:500;
-  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:background .12s}
-.chars-scope .detail-side-dl:hover{background:rgba(255,255,255,.14)}
+  background:#fff;border:1px solid #fff;border-radius:8px;color:#4a5560;font-size:13px;font-weight:500;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:background .12s,border-color .12s}
+.chars-scope .detail-side-dl:hover{background:#eef4f8;border-color:#eef4f8}
 .chars-scope .detail-side-credit{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;cursor:pointer;
   font-family:'Noto Sans KR',sans-serif;font-size:12px;line-height:1.7;color:rgba(255,255,255,.92);
   padding:9px 12px;background:transparent;border:1px solid rgba(255,255,255,.35);border-radius:8px;transition:background .12s,border-color .12s}
