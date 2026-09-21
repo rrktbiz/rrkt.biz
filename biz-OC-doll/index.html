@@ -2856,6 +2856,8 @@ document.addEventListener('visibilitychange', ()=>{ if(document.hidden) flushLik
 
 window.toggleLike = function(id, e){
   e.stopPropagation();
+  const likeBtnRect = (e.currentTarget && e.currentTarget.getBoundingClientRect) ? e.currentTarget.getBoundingClientRect()
+                    : (e.target && e.target.closest && e.target.closest('.char-like-overlay') ? e.target.closest('.char-like-overlay').getBoundingClientRect() : null);
   const liked = getLiked();
   const willLike = !liked.has(id);
   willLike ? liked.add(id) : liked.delete(id);
@@ -2863,6 +2865,7 @@ window.toggleLike = function(id, e){
   queueLike(id, willLike);
   if(willLike && window.bizLikeSound) window.bizLikeSound();
   renderList();
+  if(willLike && likeBtnRect) likeTwinStarsThumb(id, likeBtnRect);   /* 두 개의 별 연출 (조금 작게) */
 };
 
 /* ── FILTERED LIST HELPER — state 기반 즉시 계산 ── */
@@ -2944,7 +2947,7 @@ function renderList(){
         <div class="char-card" onclick="openChar(${c.id})">
           <div class="char-thumb">
             ${thumbContent}
-            <button class="char-like-overlay${isLiked?" liked":""}" onclick="toggleLike(${c.id},event)" title="좋아요">
+            <button class="char-like-overlay${isLiked?" liked":""}" data-like-id="${c.id}" onclick="toggleLike(${c.id},event)" title="좋아요">
               ♥
             </button>
           </div>
@@ -3134,16 +3137,14 @@ var LIKE_FX = {
   COUNT:  12,                                     /* 터지는 별 개수 */
   ORBIT_MS: 450                                   /* 별이 도는 시간 */
 };
-function likeTwinStars(btn){
-  const heartPop = ()=>{ btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); };
+/* 공용 연출 — cx, cy: 화면 기준 가운데 좌표 / k: 크기 배율 / onBurst: 팡 터지는 순간 할 일 */
+function likeTwinStarsAt(cx, cy, k, onBurst){
   let reduce = false;
   try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
-  if(reduce || !btn.animate){ heartPop(); return; }
+  if(reduce || !document.body.animate){ onBurst && onBurst(); return; }
 
-  const heart = btn.querySelector('.like-heart') || btn;
-  const r = heart.getBoundingClientRect();
   const layer = document.createElement('div');
-  layer.style.cssText = 'position:fixed;left:'+(r.left+r.width/2)+'px;top:'+(r.top+r.height/2)+'px;width:0;height:0;pointer-events:none;z-index:9000';
+  layer.style.cssText = 'position:fixed;left:'+cx+'px;top:'+cy+'px;width:0;height:0;pointer-events:none;z-index:9000';
   document.body.appendChild(layer);
 
   const T = (x,y,ex)=>'translate(calc(-50% + '+x+'px),calc(-50% + '+y+'px))'+(ex||'');
@@ -3159,37 +3160,57 @@ function likeTwinStars(btn){
 
   /* ① 두 별이 돌며 합쳐짐 (꼬리 3겹) */
   const D = LIKE_FX.ORBIT_MS;
-  [LIKE_FX.STAR_M, LIKE_FX.STAR_F].forEach((c,k)=>{
+  [LIKE_FX.STAR_M, LIKE_FX.STAR_F].forEach((c,n)=>{
     const fr = [];
     for(let j=0;j<=14;j++){
-      const t = j/14, ang = (k?Math.PI:0) + t*Math.PI*2, rr = 52*(1-t*t);
+      const t = j/14, ang = (n?Math.PI:0) + t*Math.PI*2, rr = 52*k*(1-t*t);
       fr.push({ transform: T(Math.cos(ang)*rr, Math.sin(ang)*rr*.55, ' scale('+(0.7+t*.7)+')'), opacity: j===14?0:1 });
     }
-    piece('&#10022;', 'color:'+c+';font-size:16px', fr, {duration:D, easing:'ease-in'});
+    piece('&#10022;', 'color:'+c+';font-size:'+(16*k)+'px', fr, {duration:D, easing:'ease-in'});
     for(let q=1;q<=3;q++){
-      piece('&#10022;', 'color:'+c+';font-size:'+(16-q*3)+'px',
+      piece('&#10022;', 'color:'+c+';font-size:'+((16-q*3)*k)+'px',
         fr.map((f,i)=>({transform:f.transform, opacity:i===14?0:.35/q})), {duration:D, delay:q*45, easing:'ease-in'});
     }
   });
 
   /* ② 합쳐지는 순간 팡 */
   setTimeout(()=>{
-    heartPop();
-    btn.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(.97)'},{transform:'scale(1)'}], {duration:380, easing:'ease-out'});
-    piece('', 'width:40px;height:40px;border-radius:50%;border:2px solid '+LIKE_FX.RING+';box-sizing:border-box',
+    onBurst && onBurst();
+    const ring = Math.round(40*k);
+    piece('', 'width:'+ring+'px;height:'+ring+'px;border-radius:50%;border:2px solid '+LIKE_FX.RING+';box-sizing:border-box',
       [{transform:T(0,0,' scale(.4)'), opacity:1}, {transform:T(0,0,' scale(2.8)'), opacity:0}], {duration:650, easing:'ease-out'});
     const N = LIKE_FX.COUNT;
     for(let i=0;i<N;i++){
-      const a = i/N*Math.PI*2 + rnd(-.15,.15), rr = rnd(42,58), c = LIKE_FX.BURST[i % LIKE_FX.BURST.length], rot = rnd(160,360);
-      piece('&#10022;', 'color:'+c+';font-size:'+rnd(11,18).toFixed(1)+'px', [
+      const a = i/N*Math.PI*2 + rnd(-.15,.15), rr = rnd(42,58)*k, c = LIKE_FX.BURST[i % LIKE_FX.BURST.length], rot = rnd(160,360);
+      piece('&#10022;', 'color:'+c+';font-size:'+(rnd(11,18)*k).toFixed(1)+'px', [
         {transform:T(0,0,' scale(.3) rotate(0deg)'), opacity:1},
         {transform:T(Math.cos(a)*rr, Math.sin(a)*rr, ' scale(1) rotate('+(rot*.7)+'deg)'), opacity:1, offset:.7},
-        {transform:T(Math.cos(a)*rr*1.1, Math.sin(a)*rr*1.1+10, ' scale(.5) rotate('+rot+'deg)'), opacity:0}
+        {transform:T(Math.cos(a)*rr*1.1, Math.sin(a)*rr*1.1+10*k, ' scale(.5) rotate('+rot+'deg)'), opacity:0}
       ], {duration:800});
     }
   }, D);
 
   setTimeout(()=>layer.remove(), D + 1000);
+}
+
+/* 상세 창 좋아요 버튼용 */
+function likeTwinStars(btn){
+  const heartPop = ()=>{
+    btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+    if(btn.animate) btn.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(.97)'},{transform:'scale(1)'}], {duration:380, easing:'ease-out'});
+  };
+  const heart = btn.querySelector('.like-heart') || btn;
+  const r = heart.getBoundingClientRect();
+  likeTwinStarsAt(r.left + r.width/2, r.top + r.height/2, 1, heartPop);
+}
+
+/* 목록 섬네일의 작은 하트용 — 목록이 새로 그려지므로 팡 순간에 새 버튼을 다시 찾아 톡 튀게 합니다 */
+function likeTwinStarsThumb(id, rect){
+  const pop = ()=>{
+    const b = document.querySelector('.char-like-overlay[data-like-id="'+id+'"]');
+    if(b && b.animate) b.animate([{transform:'scale(1)'},{transform:'scale(1.45)'},{transform:'scale(.9)'},{transform:'scale(1)'}], {duration:380, easing:'ease-out'});
+  };
+  likeTwinStarsAt(rect.left + rect.width/2, rect.top + rect.height/2, 0.75, pop);
 }
 
 window.toggleLikeDetail = function(){
