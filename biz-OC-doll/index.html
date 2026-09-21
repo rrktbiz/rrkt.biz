@@ -628,7 +628,15 @@ body{top:0 !important}
 .chars-scope .sort-dropdown-item:hover{background:var(--bg);color:var(--tx)}
 .chars-scope .sort-dropdown-item.active{color:var(--tx);font-weight:700}
 /* ── SHEET ACTION BTNS ── */
-.chars-scope .sheet-action-btns{margin-left:auto;display:flex;flex-direction:row;gap:8px;align-self:center}
+.chars-scope .sheet-action-btns{margin-left:auto;display:flex;flex-direction:row;gap:8px;align-self:center;position:relative}
+/* ── 공유 메뉴 ── 공유하기 버튼 아래 오른쪽 정렬로 펼쳐집니다 */
+.chars-scope .share-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:20;min-width:190px;padding:5px;
+  background:var(--sb);border:1px solid var(--bd);border-radius:10px;box-shadow:0 10px 34px rgba(0,0,0,.12);flex-direction:column}
+.chars-scope .share-menu.open{display:flex}
+.chars-scope .share-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;background:transparent;border:none;border-radius:7px;
+  font-size:12px;font-weight:500;color:var(--tx2);font-family:var(--fn);cursor:pointer;text-align:left;white-space:nowrap;transition:background .12s,color .12s}
+.chars-scope .share-item:hover{background:#f4f4f4;color:var(--tx)}
+.chars-scope .share-item svg{flex-shrink:0;opacity:.7}
 .chars-scope .sheet-action-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-weight:500;color:var(--tx2);font-family:var(--fn);cursor:pointer;transition:all .12s;min-width:120px;letter-spacing:.3px}
 .chars-scope .sheet-action-btn:hover{background:var(--bg);border-color:var(--bd2);color:var(--tx)}
 .chars-scope .sheet-action-btn svg{width:13px;height:13px;flex-shrink:0;opacity:.45;transition:opacity .12s}
@@ -795,6 +803,9 @@ body{top:0 !important}
 .chars-scope .detail-side-credit:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 .chars-scope .detail-side-credit-txt{flex:1;min-width:0;word-break:keep-all;overflow-wrap:anywhere}
 .chars-scope .detail-side-credit-copy{flex-shrink:0;font-size:11px;font-weight:500;opacity:.8;white-space:nowrap}
+.chars-scope .detail-side-v.type-m,.chars-scope .detail-side-v.type-f{padding:1px 9px;border-radius:6px;border:1px solid;font-weight:700}
+.chars-scope .detail-side-v.type-m{background:#E4F0F8;border-color:#9CC4DC;color:#3D6C88}
+.chars-scope .detail-side-v.type-f{background:#EDE7F6;border-color:#B4A3D4;color:#6B559B}
 @media(min-width:1340px){ body.detail-open .chars-scope .detail-side{display:flex} }
 @media(max-width:1619px){ .chars-scope .detail-overlay-inner.wide ~ .detail-side{display:none !important} }
 @media(max-width:1599px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
@@ -1432,7 +1443,15 @@ body{top:0 !important}
               <button class="sheet-action-btn like-btn" id="detail-like-btn" onclick="toggleLikeDetail()" title="이 캐릭터를 좋아요">
                 <span>좋아요</span><span class="like-heart" id="detail-like-heart">&#9825;</span>
               </button>
-              <button class="sheet-action-btn" onclick="copyCharLink()" title="이 캐릭터 링크 복사"><span id="copy-link-label">링크 복사</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg></button>
+              <button class="sheet-action-btn" id="share-btn" onclick="toggleShareMenu(event)" title="이 캐릭터 공유하기" aria-haspopup="true" aria-expanded="false"><span>공유하기</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.5" r="1.8"/><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="12.5" r="1.8"/><path d="M5.6 7.1l4.8-2.7M5.6 8.9l4.8 2.7"/></svg></button>
+              <!-- 공유 메뉴 (공유하기 버튼 아래에 펼쳐짐) -->
+              <div class="share-menu" id="share-menu" role="menu">
+                <button class="share-item" role="menuitem" onclick="copyCharLink()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg><span id="copy-link-label">링크 복사</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('x')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg><span>X(트위터)에 공유</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('threads')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.9 7.4c-.3-2-1.6-3-3.3-3-2 0-3.3 1.5-3.3 3.8 0 2.4 1.4 4.1 3.7 4.1 1.9 0 3.5-1.1 3.5-2.9 0-1.5-1.2-2.3-2.8-2.3-1.3 0-2.2.7-2.2 1.6 0 .8.7 1.4 1.7 1.4 1.8 0 2.5-1.6 2.5-3.9"/><path d="M8 1.5c3.8 0 6.5 2.6 6.5 6.5S11.8 14.5 8 14.5 1.5 11.9 1.5 8 4.2 1.5 8 1.5"/></svg><span>스레드에 공유</span></button>
+                <button class="share-item" role="menuitem" onclick="shareChar('facebook')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M9.2 15V8.7h2.1l.3-2.5H9.2V4.7c0-.7.2-1.2 1.2-1.2h1.3V1.3c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.2-3.2 3.3v1.8H4.5v2.5h2.1V15h2.6z"/></svg><span>페이스북에 공유</span></button>
+                <button class="share-item" role="menuitem" id="share-native" onclick="shareChar('native')" style="display:none"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2M5 4.5L8 1.5l3 3"/><path d="M3.5 7.5v6h9v-6"/></svg><span>다른 앱으로 공유</span></button>
+              </div>
             </div>
 
           </div>
@@ -1725,6 +1744,28 @@ BIZ.mount();
     }catch(e){}
   }
 
+  /* 좋아요 소리 — '둥근 뿅' (280Hz → 820Hz 로 0.18초 동안 쑥 올라가는 부드러운 소리)
+     스피커 버튼의 켜기·끄기와 소리 크기를 그대로 따릅니다.
+     좋아요를 '켤 때'만 이 소리가 나고, 끌 때는 평소 클릭음이 납니다. */
+  window.bizLikeSound = function(){
+    if(!on || vol <= 0) return;
+    try{
+      if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === 'suspended') ctx.resume();
+      var k = vol / 100, t = ctx.currentTime;
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(280, t);
+      o.frequency.exponentialRampToValueAtTime(820, t + 0.18);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(Math.max(0.32 * k, 0.0005), t + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      o.start(t);
+      o.stop(t + 0.2);
+    }catch(e){}
+  };
+
   /* 스피커 아이콘 세 종류 — 큰 소리 / 작은 소리 / 꺼짐 */
   var _S = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
   var ICON_ON  = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
@@ -1817,6 +1858,9 @@ BIZ.mount();
     /* 스피커 버튼·조절바를 만질 때는 클릭음이 겹쳐 울리지 않게 걸러냅니다 */
     if(t && t.closest && t.closest('#tb-sound-wrap')) return;
     popClose();
+    /* 아직 안 누른 좋아요를 누르는 순간엔 클릭음 대신 좋아요 소리가 나므로 건너뜁니다 */
+    var lb = t && t.closest && t.closest('.like-btn, .char-like-overlay');
+    if(lb && !lb.classList.contains('liked')) return;
     _tick();
   }
 
@@ -2776,6 +2820,7 @@ window.toggleLike = function(id, e){
   willLike ? liked.add(id) : liked.delete(id);
   saveLiked(liked);
   queueLike(id, willLike);
+  if(willLike && window.bizLikeSound) window.bizLikeSound();
   renderList();
 };
 
@@ -2886,9 +2931,14 @@ function fillDetailSide(c){
   set('side-holder',  c.holder || '—');
   set('side-status',  c.status || '—');
   set('side-updated', normDate(c.updated) || '—');
-  /* TYPE 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로) */
+  /* TYPE 표시: M = 남자편 블루, F = 여자편 라일락 — 스토리 편 버튼과 같은 색 조합의 작은 칩
+     (회색 배경 위에서 연한 색 글씨만으로는 잘 안 읽혀서 밝은 바탕 + 진한 글씨로) 그 외는 흰 글씨 그대로 */
   const typeEl = document.getElementById('side-type');
-  if(typeEl) typeEl.style.color = c.type==='M' ? '#9CC4DC' : c.type==='F' ? '#B4A3D4' : '';
+  if(typeEl){
+    typeEl.classList.remove('type-m','type-f');
+    if(c.type==='M') typeEl.classList.add('type-m');
+    if(c.type==='F') typeEl.classList.add('type-f');
+  }
   creditTexts(c).forEach((t,i)=>set('side-credit-'+i, t));
 }
 /* 출처 표기 3종 (소개탭 예시와 같은 문구, 코드만 채움) */
@@ -2911,6 +2961,7 @@ window.copyCredit = function(n){
 };
 
 function renderDetail(id){
+  if(window.closeShareMenu) closeShareMenu();
   const c = window.CHARACTERS.find(ch=>ch.id===id);
   if(!c) return;
 
@@ -3037,6 +3088,7 @@ window.toggleLikeDetail = function(){
   willLike ? liked.add(id) : liked.delete(id);
   saveLiked(liked);
   queueLike(id, willLike);
+  if(willLike && window.bizLikeSound) window.bizLikeSound();
   updateDetailLikeBtn();
 
   /* 켤 때만 하트 튀는 연출 */
@@ -3113,6 +3165,8 @@ window.navChar = function(dir){
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
   if(state.activeId == null) return;
+  var sm = document.getElementById('share-menu');
+  if(sm && sm.classList.contains('open')){ closeShareMenu(); return; }   /* 공유 메뉴가 떠 있으면 메뉴만 닫힘 */
   var dv = document.getElementById('detail-view');
   if(!dv || dv.style.display !== 'block' || !dv.getClientRects().length) return;
   var co = document.getElementById('contact-overlay');
@@ -3172,25 +3226,78 @@ TABS.chars.nav = function(route){
 };
 
 /* ── 링크 복사 ── */
+/* ── 공유하기 ──
+   SNS에 올릴 주소는 링크 복사와 같은 #/chars/000 주소입니다.
+   ※ 나중에 캐릭터별 명찰 파일(/c/001.html)이 다 갖춰지면 USE_OG_STUB 를 true 로 바꾸세요.
+     그러면 SNS에 캐릭터별 미리보기 그림이 뜨는 명찰 주소로 공유됩니다.
+     (명찰 파일이 없는 번호가 있으면 그 번호는 링크가 깨지므로, 다 만든 뒤에 켜야 합니다) */
+const USE_OG_STUB = false;
+
+function charShareUrl(c, forSns){
+  const num = String(c.id).padStart(3,'0');
+  let base;
+  try{ base = location.href.split('#')[0]; }
+  catch(e){ base = 'https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/'; }
+  if(forSns && USE_OG_STUB) return base.replace(/[^\/]*$/, '') + 'c/' + num + '.html';
+  return base + '#/chars/' + num;
+}
+
+window.closeShareMenu = function(){
+  const m = document.getElementById('share-menu');
+  const b = document.getElementById('share-btn');
+  if(m) m.classList.remove('open');
+  if(b) b.setAttribute('aria-expanded','false');
+};
+window.toggleShareMenu = function(e){
+  if(e) e.stopPropagation();
+  const m = document.getElementById('share-menu');
+  const b = document.getElementById('share-btn');
+  if(!m) return;
+  const willOpen = !m.classList.contains('open');
+  if(willOpen){
+    const nat = document.getElementById('share-native');
+    if(nat) nat.style.display = navigator.share ? '' : 'none';   /* 폰처럼 기기 공유창이 있는 곳에서만 보임 */
+  }
+  m.classList.toggle('open', willOpen);
+  if(b) b.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+};
+/* 메뉴 바깥을 누르면 닫힘 */
+document.addEventListener('click', function(e){
+  const m = document.getElementById('share-menu');
+  if(!m || !m.classList.contains('open')) return;
+  if(e.target.closest && e.target.closest('#share-menu, #share-btn')) return;
+  closeShareMenu();
+});
+
+window.shareChar = function(where){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c) return;
+  const url  = charShareUrl(c, true);
+  const text = 'biz-OC-doll ' + c.idCode;
+  const E = encodeURIComponent;
+  let go = '';
+  if(where === 'x')        go = 'https://twitter.com/intent/tweet?text=' + E(text) + '&url=' + E(url);
+  if(where === 'threads')  go = 'https://www.threads.net/intent/post?text=' + E(text + ' ' + url);
+  if(where === 'facebook') go = 'https://www.facebook.com/sharer/sharer.php?u=' + E(url);
+  if(where === 'native'){
+    if(navigator.share) navigator.share({ title: text, text: text, url: url }).catch(()=>{});
+    closeShareMenu();
+    return;
+  }
+  if(go) window.open(go, '_blank', 'noopener,noreferrer,width=600,height=560');
+  closeShareMenu();
+};
+
 window.copyCharLink = function(){
   const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
   if(!c) return;
-  const num = String(c.id).padStart(3,'0');
-
-  let url;
-  try{
-    /* 부모 주소에서 해시만 갈아 끼웁니다 (도메인이 바뀌어도 알아서 따라감) */
-    const base = location.href;
-    url = base.split('#')[0] + '#/chars/' + num;
-  }catch(e){
-    url = 'https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/#/chars/' + num;
-  }
+  const url = charShareUrl(c, false);
 
   const label = document.getElementById('copy-link-label');
   const done = () => {
     if(!label) return;
     label.textContent = '복사됨!';
-    setTimeout(()=>{ label.textContent = '링크 복사'; }, 1400);
+    setTimeout(()=>{ label.textContent = '링크 복사'; closeShareMenu(); }, 900);
   };
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(url).then(done).catch(()=>prompt('아래 주소를 복사하세요', url));
