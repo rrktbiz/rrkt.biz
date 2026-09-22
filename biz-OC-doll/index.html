@@ -78,12 +78,12 @@
      ※ 그림을 바꿔도 카톡은 옛날 걸 한동안 계속 보여줍니다.
         developers.kakao.com/tool/debugger/sharing 에서 [초기화]
      ══════════════════════════════════════════════════ -->
-<meta name="description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 당신이 정합니다.">
+<meta name="description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 여러분이 정합니다.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="biz-OC-doll">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="biz-OC-doll">
-<meta property="og:description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 당신이 정합니다.">
+<meta property="og:description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 여러분이 정합니다.">
 <meta property="og:url" content="https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/">
 <meta property="og:image" content="https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/images/og/main.png">
 <meta property="og:image:width" content="1200">
@@ -538,6 +538,13 @@ body{top:0 !important}
   background: var(--white); border: 1px solid rgba(var(--sk-rgb),0.3);
   border-radius: 100px; padding: 13px 20px; cursor: pointer; transition: background 0.15s;}
 #panel-intro .reg-btn:hover{background: rgba(var(--sk-rgb),0.1);}
+/* EX-SHOTS — 활용예시 참고 그림 칸. 지금은 빈 자리이고, 그림이 준비되면 .ex-slot 안의 .ex-ph 를 <img src="..." alt="..."> 로 바꿔 넣으면 됩니다. */
+#panel-intro .ex-shots{display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 4px 0 26px;}
+#panel-intro .ex-slot{margin: 0; text-align: center;}
+#panel-intro .ex-slot img, #panel-intro .ex-ph{display: block; width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; object-fit: contain;}
+#panel-intro .ex-ph{border: 1px dashed var(--gray-200); background: var(--gray-50); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--gray-400);}
+#panel-intro .ex-slot figcaption{margin-top: 6px; font-size: 12.5px; color: var(--gray-900); font-weight: 700; line-height: 1.4;}
+#panel-intro .ex-slot figcaption span{display: block; font-weight: 400; color: var(--gray-600); font-size: 11.5px;}
 /* PULL — 문단이 아니라 '한 문장'으로 서야 하는 자리 */
 #panel-intro .pull{font-size: 15px; color: var(--gray-900); line-height: 1.85;
   letter-spacing: -0.015em; padding-left: 16px;
@@ -1286,14 +1293,17 @@ body{top:0 !important}
              컨셉 카드 3장을 표 하나로 합쳤습니다.
              ══════════════════════════════════════════════════ -->
         <div class="sec sec-first">
-          <div class="sec-eyebrow">What this is</div>
-          <div class="sec-title">이런 프로젝트입니다</div>
+          <div class="sec-eyebrow">How to Play</div>
+          <div class="sec-title">참여 안내</div>
+          <p class="guide-body" style="margin:14px 0 26px">본 프로젝트는 캐릭터를 자유롭게 사용하는 오픈 캐릭터 프로젝트입니다.<br> 마음에 드는 캐릭터가 있다면 이렇게 즐겨주세요.</p>
 
-          <p class="guide-body" style="margin-bottom:26px">이름 없는 캐릭터가 계속 나옵니다.<br>이름도, 성격도, 이야기도 당신이 정합니다.</p>
+          <!-- 홀더 소개 — 초대 문구 → '홀더란?' 설명 → 아래 표로 이어집니다. -->
+          <div class="pull" style="font-size:17px"><b>비즈오씨돌의 홀더가 되어주세요!</b></div>
+          <p class="guide-body" style="margin:14px 0 26px"><b>홀더란?</b><br>비즈오씨돌 공식이 내놓은 비즈오씨돌에게 이름을 붙이는 순간, 당신은 홀더가 됩니다.<br>그렇게 이름이 붙은 캐릭터는 홀더의 것이 됩니다. 비즈오씨돌 공식이 가지는 건 모두에게 열려 있는 코드 원본뿐이고, 이름과 이야기가 더해진 캐릭터에는 관여하지 않습니다.</p>
 
           <div class="ledger ledger--split">
             <div class="ledger-cell is-fixed">
-              <div class="ledger-head">공식이 주는 것</div>
+              <div class="ledger-head">비즈오씨돌 공식이 주는 것</div>
               <ul class="ledger-list">
                 <li>고유 코드</li>
                 <li>캐릭터 시트</li>
@@ -1301,7 +1311,7 @@ body{top:0 !important}
               </ul>
             </div>
             <div class="ledger-cell is-yours">
-              <div class="ledger-head">당신이 정하는 것</div>
+              <div class="ledger-head">홀더가 정하는 것</div>
               <ul class="ledger-list">
                 <li>이름 · 성격</li>
                 <li>말투 · 서사</li>
@@ -1311,9 +1321,32 @@ body{top:0 !important}
             </div>
           </div>
 
-          <div class="pull">빈 공간은 <b>자유롭게 가지고 놀라고</b> 남겨둔 자리입니다.<br>채우는 방법에 정답은 없고, <b>굳이 채우지 않아도 됩니다.</b></div>
+          <!-- 활용 예시 — '리오' 042번은 아래 출처 표기 예시와 같은 캐릭터라 흐름이 이어집니다. -->
+          <div class="pull" style="margin-top:26px"><b>활용예시</b></div>
+          <p class="guide-body" style="margin:10px 0 18px">먼저 마음에 드는 비즈오씨돌에게 이름을 지어 주세요. 042번에게 "리오"라는 이름을 붙였다면, 그때부터 그 캐릭터는 리오가 되고 이름을 붙인 사람은 리오의 홀더가 됩니다.<br><br>같은 042번이라도 홀더마다 다른 이름을 가질 수 있고, 전혀 다른 캐해석을 할 수 있습니다. 리오가 선역이라면, 다른 홀더는 같은 042번에게 "노아"라는 이름을 붙여 악역으로 그릴 수도 있습니다. 이름도 캐해석도 다르지만 리오와 노아는 같은 042번으로 취급됩니다.</p>
 
-          <div class="pull">캐릭터를 다 알 필요는 없습니다. <b>한 명만 마음에 들면 그걸로 충분합니다.</b>
+          <!-- 참고 그림 1줄 — 042번 원본(기존 시트 잘라 쓰기) / 리오 / 노아 -->
+          <div class="ex-shots">
+            <figure class="ex-slot"><div class="ex-ph">042 원본</div><figcaption>042번<span>이름 없는 원본</span></figcaption></figure>
+            <figure class="ex-slot"><div class="ex-ph">SD 1</div><figcaption>리오<span>선역</span></figcaption></figure>
+            <figure class="ex-slot"><div class="ex-ph">SD 2</div><figcaption>노아<span>악역</span></figcaption></figure>
+          </div>
+
+          <p class="guide-body" style="margin:0 0 18px">자신의 작품 속에서 자연스럽게 쓸 수 있도록, 혹은 취향껏 캐릭터 모습을 조금씩 바꾸는 것도 괜찮습니다. 의상교체는 물론, 어린이 캐릭터가 필요하면 어리게 그리셔도 됩니다. 눈 색이 조금 아쉬웠다면 바꾸셔도 되고, 종족을 바꿔도 상관없습니다.</p>
+
+          <!-- 참고 그림 2줄 — 리오 기준 변형: 교복 / 어린이 캐릭터 / 눈 색 -->
+          <div class="ex-shots">
+            <figure class="ex-slot"><div class="ex-ph">SD 3</div><figcaption>교복<span>옷 갈아입히기</span></figcaption></figure>
+            <figure class="ex-slot"><div class="ex-ph">SD 4</div><figcaption>어린이 캐릭터<span>나이 바꾸기</span></figcaption></figure>
+            <figure class="ex-slot"><div class="ex-ph">SD 5</div><figcaption>눈 색 변경<span>나머지는 그대로</span></figcaption></figure>
+          </div>
+
+          <div class="pull" style="margin-top:26px"><b>이 프로젝트를 즐기는 자세</b></div>
+
+  <p class="guide-body" style="margin:0 0 26px">
+캐릭터가 어떤 형태든 "이게 제 최애예요"라고 우겨 주세요. 같은 코드를 전혀 다르게 즐기는 홀더를 만나더라도 누가 맞고 틀린 건 없으니, 이곳이 각자 자기 캐릭터를 사랑하면서 누구보다 재밌게 즐기는 곳이었으면 합니다. 덕질은 기세니까, 마음껏 밀고 나가 주세요. </p>
+
+          <div class="pull">
             <a class="go" href="#/chars" onclick="goChars();return false;">캐릭터 보러 가기
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </a>
@@ -1323,16 +1356,16 @@ body{top:0 !important}
 
 
         <!-- ══════════════════════════════════════════════════
-             2 · 규칙
+             2 · 가이드라인
              '된다'와 '안 된다'를 한 표에 나란히 둡니다.
              ══════════════════════════════════════════════════ -->
         <div class="sec">
-          <div class="sec-eyebrow">Rules</div>
-          <div class="sec-title">해도 되는 것, 안 되는 것</div>
+          <div class="sec-eyebrow">Guideline</div>
+          <div class="sec-title">가이드라인</div>
 
           <div class="ledger">
             <div class="ledger-cell is-yours">
-              <div class="ledger-head">됩니다</div>
+              <div class="ledger-head">OK</div>
               <ul class="ledger-list">
                 <li>이름 붙이기 · 설정 만들기</li>
                 <li>그림 · 글 · 영상 · 게임</li>
@@ -1343,7 +1376,7 @@ body{top:0 !important}
               </ul>
             </div>
             <div class="ledger-cell is-no">
-              <div class="ledger-head">안 됩니다</div>
+              <div class="ledger-head">NG</div>
               <ul class="ledger-list">
                 <li>정치 견해 표명 · 혐오 조장 · 분쟁 유발 목적</li>
                 <li>현실 종교 포교물에 사용<small>작품 속 종교 설정은 허용</small></li>
@@ -1351,9 +1384,9 @@ body{top:0 !important}
             </div>
           </div>
 
-          <p class="ledger-foot"><strong>공식은 배당을 요구하지 않습니다.</strong> 당신이 만든 것의 권리는 당신 것입니다. 공식은 무단으로 쓰지 않고, 소유권을 주장하지 않습니다.</p>
-          <p class="ledger-foot"><strong>공식은 창작물을 하나하나 검열하지 않습니다.</strong> 위 '안 됩니다' 두 가지만 피해주시면 됩니다.</p>
-          <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 공식은 전체 이용가 분위기로 유지할 예정이라 굿즈·게임에는 쓰지 않습니다.</p>
+          <p class="ledger-foot"><strong>비즈오씨돌 공식은 배당을 요구하지 않습니다.</strong> 홀더가 이름 붙인 캐릭터와 그 창작물의 권리는 홀더에게 있습니다. 비즈오씨돌 공식은 이를 무단으로 쓰지 않고, 소유권을 주장하지 않습니다. 협업이 필요할 때는 먼저 제안드릴 수 있지만, 강요하지 않습니다.</p>
+          <p class="ledger-foot"><strong>비즈오씨돌 공식은 창작물을 하나하나 검열하지 않습니다.</strong> 위 NG 두 가지만 피해주시면 됩니다.</p>
+          <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 비즈오씨돌 공식은 전체 이용가 분위기를 지킬 예정이라, 수위가 있는 창작물은 굿즈·게임 연계에 쓰지 않습니다.</p>
 
           <details class="fold" style="margin-bottom:20px">
             <summary>종교 관련 허용 / 금지 구분 자세히</summary>
@@ -1373,12 +1406,14 @@ body{top:0 !important}
           <div class="source-block" style="margin-bottom:0">
             <div class="source-row">
               <span class="badge badge-opt">자율</span>
-              <div class="source-text">개인 SNS · 소규모 창작은 표기 의무 없음. 원하면 <strong>#biz-OC-doll</strong></div>
+              <div class="source-text">개인 SNS · 소규모 창작은 표기 의무 없음. 원하면 <strong>#bizOCdoll</strong></div>
             </div>
             <div class="source-row">
               <span class="badge badge-req">필수</span>
               <div class="source-text">플랫폼 연재 · 상업 게임 · 대규모 판매는 작품 하단이나 크레딧에 기재해 주세요.</div>
             </div>
+            <!-- 모습을 바꾼 캐릭터의 표기 기준 (활용예시에서 옮겨 옴) -->
+            <div class="source-text" style="padding:10px 2px 4px;font-size:13px;color:var(--gray-600);line-height:1.7">모습을 바꾼 캐릭터도 표기 기준은 같습니다. 코드는 원래 캐릭터의 코드를 그대로 적어 주세요.</div>
             <details class="fold">
               <summary>출처 표기 예시 3종</summary>
               <div class="cite-box">
@@ -1399,8 +1434,8 @@ body{top:0 !important}
                 </div>
                 <div class="cite-done">
                   <div class="cite-done-head">이렇게 채우면 됩니다</div>
-                  <div class="cite-done-sub">이름을 &lsquo;레이&rsquo;로 정했고, 캐릭터 코드가 042라면 &mdash;</div>
-                  <div class="cite-line">본 작품에 등장하는 캐릭터 레이는 biz-OC-doll 프로젝트의 BIZOCDOLL042 캐릭터를 기반으로 창작되었습니다.</div>
+                  <div class="cite-done-sub">이름을 "리오"로 정했고, 캐릭터 코드가 042라면 &mdash;</div>
+                  <div class="cite-line">본 작품에 등장하는 캐릭터 리오는 biz-OC-doll 프로젝트의 BIZOCDOLL042 캐릭터를 기반으로 창작되었습니다.</div>
                   <div class="cite-line" style="margin-top:6px">#BIZOCDOLL042</div>
                 </div>
               </div>
@@ -1412,8 +1447,8 @@ body{top:0 !important}
                이어지도록 배치했습니다. 강조는 하지 않습니다. -->
           <div id="fan-work-registration" class="reg-row">
             <div class="reg-text">
-              <b>연재·상업 창작을 하고 계신가요?</b>
-              등록해 두시면 공식이 확인하고, 나중에 굿즈·게임 연계를 검토할 때 먼저 봅니다. 의무는 아닙니다.
+              <b>비즈오씨돌 공식에게 나의 활동을 알려주기</b>
+              등록해 두시면 나중에 굿즈·게임 연계를 검토할 때 먼저 찾아봅니다. 의무는 아닙니다.
             </div>
             <button class="reg-btn" onclick="openFormPopup()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -1629,7 +1664,7 @@ body{top:0 !important}
               <div class="sheet-info-code" id="detail-id-code"></div>
             </div>
             <div class="sheet-holder-block">
-              <div class="sheet-holder-label">Holder</div>
+              <div class="sheet-holder-label">Title Holder</div>
               <div class="sheet-holder-value" id="detail-holder">—</div>
             </div>
 
@@ -1696,7 +1731,7 @@ body{top:0 !important}
         <div class="detail-side">
           <div class="detail-side-block">
             <div class="detail-side-row"><span class="detail-side-k">TYPE</span><span class="detail-side-v" id="side-type">—</span></div>
-            <div class="detail-side-row"><span class="detail-side-k">HOLDER</span><span class="detail-side-v" id="side-holder">—</span></div>
+            <div class="detail-side-row"><span class="detail-side-k">TITLE HOLDER</span><span class="detail-side-v" id="side-holder">—</span></div>
             <div class="detail-side-row"><span class="detail-side-k">STATUS</span><span class="detail-side-v" id="side-status">—</span></div>
             <div class="detail-side-row"><span class="detail-side-k">UPDATED</span><span class="detail-side-v" id="side-updated">—</span></div>
           </div>
