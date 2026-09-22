@@ -1353,8 +1353,11 @@ body{top:0 !important}
 
           <!-- 홀더 소개 — 초대 문구 → '홀더란?' 설명 → 아래 표로 이어집니다. -->
           <div class="pull" style="font-size:17px"><b><span class="i18n-term notranslate" translate="no" data-term="doll">비즈오씨돌</span>의 <span class="i18n-term notranslate" translate="no" data-term="holder">홀더</span>가 되어주세요!</b></div>
-          <!-- 🌐 홀더 정의 — 핵심 용어라 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'holder_def') -->
-          <p class="guide-body" style="margin:14px 0 26px" data-i18n="holder_def"><b>홀더란?</b><br>코드로만 불리는 비즈오씨돌에게 이름을 붙이는 순간, 당신은 그 캐릭터의 홀더가 됩니다. 이름을 붙인 캐릭터는 당신의 것입니다.</p>
+          <!-- 🌐 홀더 정의 — 핵심 용어라 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'holder_def')
+               ※ 홀더는 코드(비즈오씨돌)에 붙는 말입니다. '042번의 홀더'는 여러 명일 수 있고,
+                 이름 붙은 캐릭터(리오)는 그중 한 사람의 것입니다. '리오의 홀더'라고 쓰지 않습니다.
+                 TITLE HOLDER 도 코드 단위라서 이 구분과 맞물립니다. -->
+          <p class="guide-body" style="margin:14px 0 26px" data-i18n="holder_def"><b>홀더란?</b><br>코드로만 불리는 비즈오씨돌에게 이름을 붙이는 순간, 당신은 그 비즈오씨돌의 홀더가 됩니다. 이름을 붙인 캐릭터는 당신의 것입니다.</p>
 
           <div class="ledger ledger--split">
             <div class="ledger-cell is-fixed">
@@ -1381,7 +1384,7 @@ body{top:0 !important}
           <!-- 🌐 '캐해석' 같은 슬랭이 있어서 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'example')
                마지막 문장(공식은 원본만 가진다)은 '홀더란?'에서 옮겨 왔습니다.
                홀더 정의는 짧게, 궁금해할 내용은 예시 쪽에, 절대 규칙은 아래 가이드라인에 둡니다. -->
-          <p class="guide-body" style="margin:10px 0 18px" data-i18n="example">먼저 마음에 드는 비즈오씨돌을 골라 이름을 붙여 주세요. 042번에게 "리오"라는 이름을 붙였다면, 그때부터 그 캐릭터는 리오가 되고 이름을 붙인 사람은 리오의 홀더가 됩니다.<br><br>같은 042번이라도 홀더마다 다른 이름을 가질 수 있고, 전혀 다른 캐해석을 할 수 있습니다. 리오가 선역이라면, 다른 홀더는 같은 042번에게 "노아"라는 이름을 붙여 악역으로 그릴 수도 있습니다. 이름도 캐해석도 다르지만 리오와 노아는 같은 042번으로 취급됩니다.<br><br>비즈오씨돌 공식이 가지는 건 모두에게 열려 있는 042번 원본뿐이고, 이름이 붙은 캐릭터에는 관여하지 않습니다.</p>
+          <p class="guide-body" style="margin:10px 0 18px" data-i18n="example">먼저 마음에 드는 비즈오씨돌을 골라 이름을 붙여 주세요. 042번에게 "리오"라는 이름을 붙였다면, 그때부터 그 캐릭터는 리오가 됩니다. 이름을 붙인 사람은 042번의 홀더가 되고, 리오는 그 사람의 것이 됩니다.<br><br>같은 042번이라도 홀더마다 다른 이름을 가질 수 있고, 전혀 다른 캐해석을 할 수 있습니다. 리오가 선역이라면, 다른 홀더는 같은 042번에게 "노아"라는 이름을 붙여 악역으로 그릴 수도 있습니다. 이름도 캐해석도 다르지만 리오와 노아는 같은 042번으로 취급됩니다.<br><br>비즈오씨돌 공식이 가지는 건 모두에게 열려 있는 042번 원본뿐이고, 이름이 붙은 캐릭터에는 관여하지 않습니다.</p>
 
           <!-- 참고 그림 1줄 — 042번 원본(기존 시트 잘라 쓰기) / 리오 / 노아 -->
           <div class="ex-shots">
@@ -2838,16 +2841,16 @@ var I18N_BLOCKS = {
 
   /* 홀더란? */
   holder_def: {
-    en: '<b>What is a Holder?</b><br>The moment you give a name to a biz-OC-doll known only by its code, you become that character\'s Holder. The character you named is yours.',
-    ja: '<b>ホルダーとは？</b><br>コードでしか呼ばれていないbiz-OC-dollに名前をつけた瞬間、あなたはそのキャラクターのホルダーになります。名前をつけたキャラクターは、あなたのものです。',
-    zh: '<b>什么是持有者？</b><br>当你为只有编号的biz-OC-doll起名的那一刻，你就成为了这个角色的持有者。你起名的角色，就是你的。'
+    en: '<b>What is a Holder?</b><br>The moment you give a name to a biz-OC-doll known only by its code, you become that biz-OC-doll\'s Holder. The character you named is yours.',
+    ja: '<b>ホルダーとは？</b><br>コードでしか呼ばれていないbiz-OC-dollに名前をつけた瞬間、あなたはそのbiz-OC-dollのホルダーになります。名前をつけたキャラクターは、あなたのものです。',
+    zh: '<b>什么是持有者？</b><br>当你为只有编号的biz-OC-doll起名的那一刻，你就成为了这个biz-OC-doll的持有者。你起名的角色，就是你的。'
   },
 
   /* 활용 예시 (한국어판의 '캐해석') */
   example: {
-    en: 'First, pick a biz-OC-doll you like and give it a name. If you name No. 042 "Rio," it becomes Rio from that moment on, and the person who named it becomes Rio\'s Holder.<br><br>The same No. 042 can go by a different name with every Holder, and be read in a completely different way. If Rio is one of the good guys, another Holder might name the same 042 "Noah" and cast Noah as the villain. Different names, different takes, but Rio and Noah both count as No. 042.<br><br>biz-OC-doll Official keeps only the original No. 042, which stays open to everyone, and does not interfere with characters that have been given a name.',
-    ja: 'まずは気に入ったbiz-OC-dollを選んで、名前をつけてください。042番に「リオ」と名前をつけたら、その瞬間からその子はリオになり、名前をつけた人はリオのホルダーになります。<br><br>同じ042番でも、ホルダーごとに違う名前を持てますし、まったく違うキャラ解釈をしてもかまいません。リオが正義側なら、別のホルダーは同じ042番に「ノア」と名前をつけて、悪役として描くこともできます。名前も解釈も違いますが、リオもノアも同じ042番として扱われます。<br><br>biz-OC-doll公式が持っているのは、誰にでも開かれた042番の原本だけで、名前がついたキャラクターには関与しません。',
-    zh: '首先，选一个你喜欢的biz-OC-doll，给它起个名字吧。如果你给042号起名"里奥"，从那一刻起它就是里奥，起名的人就成了里奥的持有者。<br><br>同一个042号，在每位持有者那里都可以有不同的名字，也可以有完全不同的角色解读。如果里奥是正派，另一位持有者也可以给同一个042号起名"诺亚"，把诺亚画成反派。名字不同，解读也不同，但里奥和诺亚都算作042号。<br><br>biz-OC-doll官方拥有的只是向所有人开放的042号原本，不会干涉已经有了名字的角色。'
+    en: 'First, pick a biz-OC-doll you like and give it a name. If you name No. 042 "Rio," it becomes Rio from that moment on. The person who named it becomes a Holder of No. 042, and Rio is theirs.<br><br>The same No. 042 can go by a different name with every Holder, and be read in a completely different way. If Rio is one of the good guys, another Holder might name the same 042 "Noah" and cast Noah as the villain. Different names, different takes, but Rio and Noah both count as No. 042.<br><br>biz-OC-doll Official keeps only the original No. 042, which stays open to everyone, and does not interfere with characters that have been given a name.',
+    ja: 'まずは気に入ったbiz-OC-dollを選んで、名前をつけてください。042番に「リオ」と名前をつけたら、その瞬間からその子はリオになります。名前をつけた人は042番のホルダーになり、リオはその人のものになります。<br><br>同じ042番でも、ホルダーごとに違う名前を持てますし、まったく違うキャラ解釈をしてもかまいません。リオが正義側なら、別のホルダーは同じ042番に「ノア」と名前をつけて、悪役として描くこともできます。名前も解釈も違いますが、リオもノアも同じ042番として扱われます。<br><br>biz-OC-doll公式が持っているのは、誰にでも開かれた042番の原本だけで、名前がついたキャラクターには関与しません。',
+    zh: '首先，选一个你喜欢的biz-OC-doll，给它起个名字吧。如果你给042号起名"里奥"，从那一刻起它就是里奥。起名的人成为042号的持有者，里奥也就归这个人所有。<br><br>同一个042号，在每位持有者那里都可以有不同的名字，也可以有完全不同的角色解读。如果里奥是正派，另一位持有者也可以给同一个042号起名"诺亚"，把诺亚画成反派。名字不同，解读也不同，但里奥和诺亚都算作042号。<br><br>biz-OC-doll官方拥有的只是向所有人开放的042号原本，不会干涉已经有了名字的角色。'
   },
 
   /* 이 프로젝트를 즐기는 자세 (한국어판의 '최애', '덕질은 기세') */
