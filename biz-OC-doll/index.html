@@ -603,6 +603,18 @@ body{top:0 !important}
 #panel-intro .ex-ph{border: 1px dashed var(--gray-200); background: var(--gray-50); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--gray-400); padding: 0 16px; text-align: center; line-height: 1.7;}
 #panel-intro .ex-slot figcaption{margin-top: 6px; font-size: 12.5px; color: var(--gray-900); font-weight: 700; line-height: 1.4;}
 #panel-intro .ex-slot figcaption span{display: block; font-weight: 400; color: var(--gray-600); font-size: 11.5px;}
+/* BONUS — 활용 예시 뒤 번외 상자 (외관 수정). 상자 테두리 자체가 '여기부터는 덤'이라는 표시입니다.
+   라벨 색은 --blue-ink 라서 상단 스킨(블루/라일락)을 따라 바뀝니다. */
+#panel-intro .bonus{margin: 6px 0 0; padding: 22px 22px 20px; border: 1px solid var(--gray-200); border-radius: 16px; background: var(--gray-50);}
+#panel-intro .bonus-label{font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--blue-ink); text-transform: uppercase; margin-bottom: 6px;}
+#panel-intro .bonus-title{font-size: 16px; font-weight: 700; color: var(--gray-900); line-height: 1.5; margin-bottom: 8px;}
+#panel-intro .bonus .guide-body{margin: 0 0 16px;}
+/* 상자 안 그림 — 아래 여백만 없애서 상자 바닥과 맞춥니다 */
+#panel-intro .bonus .ex-shots{margin: 0;}
+#panel-intro .bonus .ex-ph{background: var(--white);}
+@media (max-width: 580px){
+  #panel-intro .bonus{padding: 18px 16px 16px;}
+}
 /* PULL — 문단이 아니라 '한 문장'으로 서야 하는 자리 */
 #panel-intro .pull{font-size: 15px; color: var(--gray-900); line-height: 1.85;
   letter-spacing: -0.015em; padding-left: 16px;
@@ -1387,30 +1399,62 @@ body{top:0 !important}
           <!-- 활용 예시 — 캐릭터는 A · B 로 부릅니다. (아래 출처 표기 예시는 실제 이름처럼 보이도록 '리오'를 씁니다) -->
           <div class="pull" style="margin-top:26px"><b>활용 예시</b></div>
           <!-- 🌐 첫 문단 — 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'example') -->
-          <p class="guide-body" style="margin:10px 0 18px" data-i18n="example">042번에게 "A"라는 이름을 붙였다면, 그때부터 그 캐릭터는 A가 됩니다. 이름을 붙인 사람은 042번의 홀더가 되고, A는 그 사람의 것이 됩니다.</p>
-
-          <!-- 외관 수정 — A 이야기에 바로 이어지도록 '같은 042번' 문단보다 앞에 둡니다 -->
-          <p class="guide-body" style="margin:0 0 18px">A를 작품에 맞추기 위해서든 취향 때문이든, 외관을 조금 수정해도 괜찮습니다. 의상 교체, 연령 변화, 종족 변화, 일부 컬러링 등을 자유롭게 바꾸셔도 됩니다.</p>
-
-          <!-- 참고 그림 1 — A 기준 외관 수정: 의상 교체 / 연령 변화 / 종족 변화 / 일부 컬러링을 가로로 긴 그림 한 장에.
-               그림이 준비되면 아래 <div class="ex-ph">…</div> 한 덩어리를 <img src="..." alt="..."> 로 바꾸세요.
-               칸 안의 설명은 그림을 넣기 전까지 보이는 안내입니다. alt 에는 같은 설명을 짧게 적어 두면 좋습니다. -->
-          <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 1<br>A의 외관 수정<br>의상 교체 · 연령 변화 · 종족 변화 · 일부 컬러링</span></div></figure>
-          </div>
+          <p class="guide-body" style="margin:10px 0 18px" data-i18n="example">042번에게 "A"라는 이름을 붙였다면, 그때부터 그 캐릭터는 A가 됩니다.</p>
 
           <!-- 🌐 '캐해석' 같은 슬랭이 있어서 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'example_same')
                '공식은 원본만 가진다' 문장은 아래 '즐기는 자세'로 옮겼습니다. -->
           <p class="guide-body" style="margin:0 0 18px" data-i18n="example_same">같은 042번이라도 홀더마다 붙이는 이름도, 캐해석도 전혀 다를 수 있습니다. 그렇게 생겨난 캐릭터들은 모두 같은 042번으로 취급됩니다.</p>
 
-          <!-- 참고 그림 2 — 042번 원본(기존 시트 잘라 쓰기) / A / B 를 가로로 긴 그림 한 장에.
-               본문에는 B 를 쓰지 않습니다. 비교는 그림으로 보여줍니다. -->
+          <!-- 참고 그림 1 — 042번 원본(기존 시트 잘라 쓰기) / A / B 를 가로로 긴 그림 한 장에.
+               B 는 다른 홀더가 같은 042번에 붙인 이름입니다. 비교는 그림으로 보여주고,
+               본문에서는 아래 '같이 놀기' 문단에서 처음 이름으로 나옵니다. -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 2<br>042번 원본 · A · B<br>같은 042번, 다른 이름</span></div></figure>
+            <figure class="ex-slot"><div class="ex-ph"><span>그림 1<br>042번 원본 · A · B<br>같은 042번, 다른 이름</span></div></figure>
+          </div>
+
+          <!-- A와 놀기 — 이름 붙인 뒤 A로 무엇을 하는지 장면으로 보여줍니다.
+               아래 가이드라인 OK 목록(허락 범위)과 겹치지 않게, 종류를 나열하지 않고 장면으로 씁니다.
+               마지막 문장은 위 표의 '홀더가 정하는 것 / 그 외의 모든 것'을 다시 받는 말입니다.
+               🌐 '동인지'가 있어서 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'play_solo') -->
+          <p class="guide-body" style="margin:0 0 18px" data-i18n="play_solo">이름을 붙였다면 이제 A를 내 웹소설의 주인공으로 세워도 되고, 만들고 있는 게임에 출연시켜도 되고, A로 동인지를 내서 행사에서 팔아도 됩니다. 어디에 어떻게 쓸지는 전부 홀더가 정하면 됩니다.</p>
+
+          <!-- 참고 그림 2 — A의 활동 모습: 동인지 표지 / 게임 화면 / 프로필 카드 등을 가로로 긴 그림 한 장에.
+               그리기 부담되면 이 <div class="ex-shots"> 한 덩어리를 통째로 지워도 흐름은 이어집니다. -->
+          <div class="ex-shots">
+            <figure class="ex-slot"><div class="ex-ph"><span>그림 2<br>A와 놀기<br>동인지 표지 · 게임 화면 · 프로필 카드</span></div></figure>
+          </div>
+
+          <!-- 같이 놀기 (3차 창작) — 이름 붙은 캐릭터는 그 홀더의 것이라 '허락'을 조건으로 씁니다.
+               공식은 권리를 넉넉히 내주지만, 홀더끼리는 입장이 다를 수 있어서입니다.
+               B 는 그림 1에 나온, 다른 홀더가 같은 042번에 붙인 이름입니다.
+               🌐 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'play_together') -->
+          <p class="guide-body" style="margin:0 0 18px" data-i18n="play_together">다른 홀더의 캐릭터와 같이 놀 수도 있지만, 이름이 붙은 캐릭터는 그 홀더의 것이라 내 작품에 등장시키고 싶다면 먼저 그 홀더에게 허락을 받아 주세요. 허락을 받았다면 A와 B가 한 작품에서 만나는 것도, 그 뒷이야기를 또 다른 홀더가 이어 쓰는 것도 가능합니다.</p>
+
+          <!-- 참고 그림 3 — A와 B: 같은 042번에서 태어난 두 캐릭터가 한 장면에 함께 있는 그림. -->
+          <div class="ex-shots">
+            <figure class="ex-slot"><div class="ex-ph"><span>그림 3<br>A와 B<br>같은 042번에서 태어난 두 캐릭터가 한 장면에</span></div></figure>
+          </div>
+
+          <!-- ══ 번외 · 외관 수정 ══
+               대부분은 원래 모습 그대로 놀 거라고 보고, 활용 예시 흐름에서 떼어 상자에 담았습니다.
+               외관까지 허락하는 건 흔치 않아서, 제목은 '의외로 이것까지 된다'는 쪽으로 씁니다.
+               바로 아래 '나의 최애는 나의 정답'(다르게 즐기는 홀더를 만나도 흔들리지 마세요)과 이어집니다.
+               출처 표기 쪽 '외관을 수정한 캐릭터도 표기 기준은 같습니다'와 짝입니다.
+               🌐 제목·본문은 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'bonus_title', 'bonus_body') -->
+          <div class="bonus">
+            <div class="bonus-label notranslate" translate="no">Bonus</div>
+            <div class="bonus-title" data-i18n="bonus_title">외관이 변해도 042번입니다</div>
+            <p class="guide-body" data-i18n="bonus_body">A를 내 작품에 쓰고 싶은데, 이미 정해진 주인공의 눈 색과 겹쳐서 망설여질 수 있습니다. 그럴 땐 A의 눈 색을 바꾸셔도 됩니다. 작품에 맞추기 위해서든 취향 때문이든, 의상 교체, 연령 변화, 종족 변화, 눈 색 같은 일부 컬러링까지 자유롭게 커스터마이징하셔도 됩니다.</p>
+            <!-- 참고 그림 4 — 내 주인공 / 눈 색이 겹치는 A / 눈 색을 바꾼 A 를 가로로 긴 그림 한 장에.
+                 본문의 '눈 색이 겹쳐서 망설여지는' 장면을 그림만 봐도 알아채게 하려는 칸입니다.
+                 그림이 준비되면 아래 <div class="ex-ph">…</div> 한 덩어리를 <img src="..." alt="..."> 로 바꾸세요. -->
+            <div class="ex-shots">
+              <figure class="ex-slot"><div class="ex-ph"><span>그림 4<br>내 주인공 · 눈 색이 겹치는 A · 눈 색을 바꾼 A<br>작품에 맞춘 커스터마이징</span></div></figure>
+            </div>
           </div>
 
           <!-- 🌐 제목도 슬랭 느낌이라 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'attitude_title') -->
-          <div class="pull" style="margin-top:26px" data-i18n="attitude_title"><b>당신의 최애는 당신의 정답</b></div>
+          <div class="pull" style="margin-top:26px" data-i18n="attitude_title"><b>나의 최애는 나의 정답</b></div>
 
           <!-- 🌐 '최애', '덕질은 기세' 같은 슬랭이 있어서 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'attitude')
                '비즈오씨돌 공식도 관여하지 않는다' 문장은 활용 예시에서 옮겨 와 짧게 줄였습니다.
@@ -1418,13 +1462,7 @@ body{top:0 !important}
                '애정 하나면 충분합니다'는 비즈오씨돌이 좋아한다/만족한다로 쓰지 않습니다.
                비즈오씨돌은 감정이 없다는 게 공식 설정이라, 감정 표현 대신 '충분하다'로 씁니다.
                홀더 정의는 짧게, 궁금해할 내용은 예시·즐기는 자세 쪽에, 절대 규칙은 아래 가이드라인에 둡니다. -->
-          <p class="guide-body" style="margin:0 0 26px" data-i18n="attitude">같은 코드를 전혀 다르게 즐기는 홀더를 만나더라도 흔들리지 마세요. 누가 맞고 틀린 건 없으니, 이곳이 각자 자기 캐릭터를 사랑하면서 누구보다 재밌게 노는 곳이었으면 합니다. 비즈오씨돌 공식도 이름이 붙은 캐릭터를 어떻게 활용하시든 관여하지 않습니다. 그림을 못 그려도, 글을 쓰지 않아도 괜찮습니다. 비즈오씨돌에게는 당신의 애정 하나면 충분합니다. 덕질은 기세니까, 마음껏 밀고 나가 주세요.</p>
-
-          <div class="pull">
-            <a class="go" href="#/chars" onclick="goChars();return false;">캐릭터 보러 가기
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-            </a>
-          </div>
+          <p class="guide-body" style="margin:0 0 26px" data-i18n="attitude">같은 코드를 전혀 다르게 즐기는 홀더를 만나더라도 흔들리지 마세요. 누가 맞고 틀린 건 없으니, 이곳이 각자 자기 캐릭터를 사랑하면서 누구보다 재밌게 노는 곳이었으면 합니다. 비즈오씨돌 공식도 이름이 붙은 캐릭터를 어떻게 활용하시든 관여하지 않습니다. 그림을 못 그려도, 글을 쓰지 않아도 괜찮습니다. 비즈오씨돌에게는 홀더의 애정 하나면 충분합니다. 덕질은 기세니까, 마음껏 밀고 나가 주세요.</p>
 
         </div>
 
@@ -2861,9 +2899,9 @@ var I18N_BLOCKS = {
 
   /* 활용 예시 — 첫 문단 */
   example: {
-    en: 'If you name No. 042 "A," it becomes A from that moment on. The person who named it becomes a Holder of No. 042, and A is theirs.',
-    ja: '042番に「A」と名前をつけたら、その瞬間からその子はAになります。名前をつけた人は042番のホルダーになり、Aはその人のものになります。',
-    zh: '如果你给042号起名"A"，从那一刻起它就是A。起名的人成为042号的持有者，A也就归这个人所有。'
+    en: 'If you name No. 042 "A," it becomes A from that moment on.',
+    ja: '042番に「A」と名前をつけたら、その瞬間からその子はAになります。',
+    zh: '如果你给042号起名"A"，从那一刻起它就是A。'
   },
 
   /* 활용 예시 — 같은 042번 (한국어판의 '캐해석') */
@@ -2873,18 +2911,46 @@ var I18N_BLOCKS = {
     zh: '即使是同一个042号，每位持有者起的名字和角色解读也可以完全不同。这样诞生的角色，都算作042号。'
   },
 
-  /* 이 프로젝트를 즐기는 자세 (한국어판의 '최애', '덕질은 기세') */
-  attitude: {
-    en: 'Whatever form your character takes, go ahead and insist, "This one\'s my fave." You may meet Holders who enjoy the same code in a completely different way, but nobody is right or wrong here. We hope this becomes a place where everyone loves their own character and has more fun than anyone else. Nor does biz-OC-doll Official interfere with how you use a character that has been given a name. You don\'t have to draw or write anything. Your love alone is enough for a biz-OC-doll. Fandom runs on sheer conviction, so go all in.',
-    ja: 'キャラクターがどんな姿になっても、「この子が私の推しです」と言い張ってください。同じコードをまったく違う形で楽しむホルダーに出会っても、どちらが正しいということはありません。ここが、それぞれ自分のキャラクターを愛しながら、誰よりも楽しめる場所になってほしいと思っています。biz-OC-doll公式も、名前がついたキャラクターをどう活用しても関与しません。絵が描けなくても、文章を書かなくても大丈夫です。biz-OC-dollには、あなたの愛情だけで十分です。推し活は勢いが大事なので、思いきり突き進んでください。',
-    zh: '不管角色变成什么样子，都请理直气壮地说"这就是我的本命"。即使遇到用完全不同的方式享受同一个编号的持有者，也没有谁对谁错。希望这里能成为每个人都爱着自己的角色、玩得比谁都开心的地方。已经有了名字的角色，无论你怎么使用，biz-OC-doll官方也不会干涉。不会画画、不写文章也没关系。对biz-OC-doll来说，有你的喜爱就足够了。爱角色就要有气势，尽管放手去冲吧。'
+  /* 활용 예시 — A와 놀기 (한국어판의 '동인지') */
+  play_solo: {
+    en: 'Once A has a name, you can make A the lead of your web novel, cast A in the game you\'re making, or put out a fan comic starring A and sell it at an event. Where and how you use A is entirely up to you, the Holder.',
+    ja: '名前をつけたら、Aを自分のWeb小説の主人公にしても、作っているゲームに出演させても、Aの同人誌を出してイベントで頒布してもかまいません。どこでどう使うかは、すべてホルダーが決めればいいんです。',
+    zh: '起好名字之后，就可以让A当你网络小说的主角，可以让A出演你正在做的游戏，也可以出A的同人本拿到展会上卖。用在哪里、怎么用，全都由持有者决定。'
   },
 
-  /* 당신의 최애가 당신의 정답 (제목) */
+  /* 활용 예시 — 다른 홀더와 같이 놀기 (허락이 조건) */
+  play_together: {
+    en: 'You can also play with other Holders\' characters, but a named character belongs to its Holder, so if you want to bring one into your work, please ask that Holder for permission first. With permission, A and B can meet in the same story, and yet another Holder can even pick up where that story left off.',
+    ja: 'ほかのホルダーのキャラクターと一緒に遊ぶこともできますが、名前がついたキャラクターはそのホルダーのものなので、自分の作品に登場させたいときは、まずそのホルダーに許可をもらってください。許可をもらえたら、AとBが同じ作品で出会うことも、その続きをまた別のホルダーが書き継ぐこともできます。',
+    zh: '你也可以和其他持有者的角色一起玩，但有了名字的角色属于它的持有者，如果想让它出现在你的作品里，请先征得那位持有者的同意。得到同意后，A和B可以在同一部作品里相遇，后续的故事也可以由另一位持有者接着写下去。'
+  },
+
+  /* 번외 상자 — 외관 수정 (제목) */
+  bonus_title: {
+    en: 'A new look, still No. 042',
+    ja: '見た目が変わっても042番です',
+    zh: '外观变了也还是042号'
+  },
+
+  /* 번외 상자 — 외관 수정 (본문, 한국어판의 '커스터마이징') */
+  bonus_body: {
+    en: 'You might want to use A in your own work, only to hesitate because A\'s eye color is the same as your established main character\'s. If that happens, go ahead and change A\'s eye color. Whether it\'s to fit your work or just your taste, you\'re free to customize A with new outfits, a different age or species, or some recoloring such as eye color.',
+    ja: 'Aを自分の作品に使いたいのに、すでに決まっている主人公の目の色とかぶって迷うこともあるかもしれません。そんなときは、Aの目の色を変えてかまいません。作品に合わせるためでも好みのためでも、衣装の変更、年齢の変化、種族の変化、目の色などの一部の配色まで、自由にカスタマイズしてください。',
+    zh: '想在自己的作品里用A，却可能因为和已经定好的主角瞳色撞了而犹豫。这时，可以直接改掉A的瞳色。无论是为了配合作品还是出于个人喜好，换装、改变年龄、改变种族、调整瞳色等部分配色，都可以自由定制。'
+  },
+
+  /* 이 프로젝트를 즐기는 자세 (한국어판의 '최애', '덕질은 기세') */
+  attitude: {
+    en: 'You may meet Holders who enjoy the same code in a completely different way, but don\'t let that shake you. Nobody is right or wrong here, and we hope this becomes a place where everyone loves their own character and has more fun than anyone else. Nor does biz-OC-doll Official interfere with how you use a character that has been given a name. You don\'t have to draw or write anything. A Holder\'s love alone is enough for a biz-OC-doll. Fandom runs on sheer conviction, so go all in.',
+    ja: '同じコードをまったく違う形で楽しむホルダーに出会っても、揺らがないでください。どちらが正しいということはないので、ここが、それぞれ自分のキャラクターを愛しながら誰よりも楽しく遊べる場所になってほしいと思っています。biz-OC-doll公式も、名前がついたキャラクターをどう活用しても関与しません。絵が描けなくても、文章を書かなくても大丈夫です。biz-OC-dollには、ホルダーの愛情だけで十分です。推し活は勢いが大事なので、思いきり突き進んでください。',
+    zh: '即使遇到用完全不同的方式享受同一个编号的持有者，也不要动摇。没有谁对谁错，希望这里能成为每个人都爱着自己的角色、玩得比谁都开心的地方。已经有了名字的角色，无论你怎么使用，biz-OC-doll官方也不会干涉。不会画画、不写文章也没关系。对biz-OC-doll来说，有持有者的喜爱就足够了。爱角色就要有气势，尽管放手去冲吧。'
+  },
+
+  /* 나의 최애는 나의 정답 (제목) */
   attitude_title: {
-    en: '<b>Your fave is your answer</b>',
-    ja: '<b>あなたの推しが、あなたの正解</b>',
-    zh: '<b>你的本命，就是你的答案</b>'
+    en: '<b>My fave is my answer</b>',
+    ja: '<b>私の推しが、私の正解</b>',
+    zh: '<b>我的本命，就是我的答案</b>'
   },
 
   /* 출처 표기 예시 — 안내 문장 */
