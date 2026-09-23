@@ -1082,6 +1082,22 @@ body{top:0 !important}
   font-family:'Noto Sans KR',sans-serif;font-size:11.5px;line-height:1.6;color:#525252;word-break:keep-all}
 .chars-scope .sheet-ai-bubble .ai-en{display:block;margin-top:5px;color:#6e6e6e}
 .chars-scope .sheet-ai-info.open .sheet-ai-bubble{display:block}
+/* ── TITLE HOLDER 딱지 (폰 전용) ──
+   AI ⓘ(왼쪽 10px, 크기 26px) 바로 오른쪽에 같은 높이로 붙입니다.
+   시트 그림이 있을 때 + 폰 화면(600px 이하) + 타이틀 홀더가 있을 때만 보입니다. */
+.chars-scope .sheet-th-badge{display:none}
+/* 공유 메뉴의 '타이틀 홀더를 X에 공유' 줄: 타이틀 홀더가 없으면 숨김 */
+.chars-scope .share-item[hidden]{display:none !important}
+@media(max-width:600px){
+  .chars-scope .sheet-slot.has-image .sheet-th-badge:not([hidden]){display:flex}
+  .chars-scope .sheet-th-badge{position:absolute;left:42px;bottom:12px;z-index:6;pointer-events:none;
+    align-items:center;gap:6px;height:22px;padding:0 10px;max-width:calc(100% - 58px);box-sizing:border-box;
+    background:rgba(255,255,255,.85);border:1px solid #d6d6d6;border-radius:11px;color:#525252;white-space:nowrap}
+  .chars-scope .sheet-th-badge .th-k{flex-shrink:0;font-family:'Inter',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:1px;color:#8a8a8a}
+  .chars-scope .sheet-th-badge .th-n{min-width:0;overflow:hidden;text-overflow:ellipsis;font-family:'Share Tech Mono',monospace;font-size:11.5px;color:#333}
+  .chars-scope .sheet-th-badge .th-p{flex-shrink:0;font-family:'Share Tech Mono',monospace;font-size:11px;color:#6e6e6e}
+  .chars-scope .sheet-th-badge .th-p:empty{display:none}
+}
 </style>
 
 <!-- ══════════════════════════════════════════════════
@@ -1845,6 +1861,8 @@ body{top:0 !important}
                 <button class="share-item" role="menuitem" onclick="copyCharLink()"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.6.1l2.4-2.4a2.5 2.5 0 0 0-3.5-3.5l-1 1"/><path d="M9.5 6.5a2.5 2.5 0 0 0-3.6-.1L3.5 8.8a2.5 2.5 0 0 0 3.5 3.5l1-1"/></svg><span id="copy-link-label">링크 복사</span></button>
                 <button class="share-item share-dl" role="menuitem" onclick="downloadSheet('menu')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5"/><path d="M2.5 11v2.5h11V11"/></svg><span id="sheet-dl-label-menu">시트 이미지 저장</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('x')"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg><span>X(트위터)에 공유</span></button>
+                <!-- 타이틀 홀더가 있는 코드에서만 보이는 줄 (폰에서 타이틀 홀더를 공유할 때 씀) -->
+                <button class="share-item" role="menuitem" id="share-th-item" onclick="closeShareMenu();shareTitleHolder()" hidden><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg><span>타이틀 홀더를 X에 공유</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('threads')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.9 7.4c-.3-2-1.6-3-3.3-3-2 0-3.3 1.5-3.3 3.8 0 2.4 1.4 4.1 3.7 4.1 1.9 0 3.5-1.1 3.5-2.9 0-1.5-1.2-2.3-2.8-2.3-1.3 0-2.2.7-2.2 1.6 0 .8.7 1.4 1.7 1.4 1.8 0 2.5-1.6 2.5-3.9"/><path d="M8 1.5c3.8 0 6.5 2.6 6.5 6.5S11.8 14.5 8 14.5 1.5 11.9 1.5 8 4.2 1.5 8 1.5"/></svg><span>스레드에 공유</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('tumblr')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>텀블러 (Tumblr)</span></button>
                 <button class="share-item" role="menuitem" onclick="shareChar('bluesky')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h7v7"/><path d="M13 3L4 12"/></svg><span>블루스카이 (Bluesky)</span></button>
@@ -1880,6 +1898,11 @@ body{top:0 !important}
             <button class="cassette-nav-arrow next" id="cassette-next" onclick="navChar(1)" aria-label="다음 캐릭터">
               <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L16 22L4 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
+            <!-- TITLE HOLDER 딱지 (폰 전용 · 시트 그림 왼쪽 아래, AI ⓘ 바로 오른쪽)
+                 폰 머리 부분엔 자리가 없어서 그림 위에 얹습니다. 타이틀 홀더가 있을 때만 보입니다.
+                 닉네임이 길면 이름 끝만 말줄임표(…)로 잘리고, 금액은 그대로 보입니다.
+                 딱지는 눌리지 않습니다(누르면 원래처럼 이전 캐릭터로 넘어감). -->
+            <div class="sheet-th-badge" id="sheet-th-badge" hidden><span class="th-k">TITLE HOLDER</span><span class="th-n" id="sheet-th-name">—</span><span class="th-p" id="sheet-th-pledge"></span></div>
             <!-- AI 활용 표기 ⓘ (왼쪽 여백이 안 보이는 화면에서만 나타남) -->
             <div class="sheet-ai-info" id="sheet-ai-info">
               <button class="sheet-ai-btn" onclick="toggleSheetAi(event)" aria-label="AI 활용 안내" title="AI 활용 안내"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.2v4"/><circle cx="8" cy="4.9" r=".45" fill="currentColor" stroke="none"/></svg></button>
@@ -3549,7 +3572,16 @@ function fillDetailSide(c){
   set('side-holder',  c.holder || '—');
   set('side-pledge',  c.pledge ? ('$' + c.pledge) : '—');
   const thBtn = document.getElementById('side-th-share');
-  if(thBtn) thBtn.hidden = !(c.holder && c.holder !== '—');
+  const hasTH = !!(c.holder && c.holder !== '—');
+  if(thBtn) thBtn.hidden = !hasTH;
+  const thItem = document.getElementById('share-th-item');
+  if(thItem) thItem.hidden = !hasTH;
+  const thBadge = document.getElementById('sheet-th-badge');
+  if(thBadge){
+    thBadge.hidden = !hasTH;
+    set('sheet-th-name',   hasTH ? c.holder : '—');
+    set('sheet-th-pledge', (hasTH && c.pledge) ? ('$' + c.pledge) : '');
+  }
   set('side-updated', normDate(c.updated) || '—');
   /* TYPE 글씨 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로)
      회색 배경 위에서 잘 읽히도록 같은 색 계열에서 밝은 쪽으로 골랐습니다. */
