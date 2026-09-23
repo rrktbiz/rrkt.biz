@@ -517,6 +517,9 @@ body{top:0 !important}
 #panel-intro .badge-req{background: #fff3e0; color: #b45309;}
 #panel-intro .source-text{font-size: 15px; color: var(--gray-600); line-height: 1.75;}
 #panel-intro .source-text strong{color: var(--gray-900); font-weight: 600;}
+/* 출처 표기 상자 안 덧붙임 줄 (외관 수정 캐릭터 기준) — 위 줄들보다 한 단계 작게 */
+#panel-intro .source-note{padding: 12px 20px 14px;}
+#panel-intro .source-note .source-text{font-size: 13px; line-height: 1.7;}
 #panel-intro .cite-box{background: var(--gray-50); border-top: 1px solid var(--gray-100); padding: 16px 20px;}
 #panel-intro .cite-label{font-size: 10px; font-weight: 600; letter-spacing: 1px; color: var(--gray-400); text-transform: uppercase; margin-bottom: 12px;}
 #panel-intro .cite-item{display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--gray-200);}
@@ -1566,8 +1569,13 @@ body{top:0 !important}
               <!-- 버튜버는 규모와 상관없이 필수입니다. 캐릭터의 얼굴로 계속 활동하는 거라 원래 코드가 늘 보여야 합니다. -->
               <div class="source-text">플랫폼 연재 · 상업 게임 · 대규모 판매는 작품 하단이나 크레딧에, 버튜버 활동은 규모와 상관없이 채널·프로필 소개란에 기재해 주세요.</div>
             </div>
-            <!-- 모습을 바꾼 캐릭터의 표기 기준 (활용예시에서 옮겨 옴) -->
-            <div class="source-text" style="padding:10px 2px 4px;font-size:13px;color:var(--gray-600);line-height:1.7">외관을 수정한 캐릭터도 표기 기준은 같습니다. 코드는 원래 캐릭터의 코드를 그대로 적어 주세요.</div>
+            <!-- 모습을 바꾼 캐릭터의 표기 기준 (활용예시에서 옮겨 옴)
+                 위 두 줄과 같은 칸 구조로 넣어서, 글 시작 위치가 '자율'·'필수' 옆 글과 딱 맞습니다.
+                 앞의 배지는 자리만 차지하고 보이지 않습니다. -->
+            <div class="source-row source-note">
+              <span class="badge" aria-hidden="true" style="visibility:hidden">필수</span>
+              <div class="source-text">외관을 수정한 캐릭터도 표기 기준은 같습니다. 코드는 원래 캐릭터의 코드를 그대로 적어 주세요.</div>
+            </div>
             <!-- 🌐 출처 표기 예시는 팬이 그대로 복사해 가는 글이라 번역기에 맡기지 않습니다.
                  외국어는 I18N_BLOCKS 의 'cite_' 로 시작하는 항목이 나옵니다.
                  코드·태그 칸에는 번역 금지 표시가 붙어 있습니다. -->
