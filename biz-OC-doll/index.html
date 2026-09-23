@@ -1082,22 +1082,27 @@ body{top:0 !important}
   font-family:'Noto Sans KR',sans-serif;font-size:11.5px;line-height:1.6;color:#525252;word-break:keep-all}
 .chars-scope .sheet-ai-bubble .ai-en{display:block;margin-top:5px;color:#6e6e6e}
 .chars-scope .sheet-ai-info.open .sheet-ai-bubble{display:block}
-/* ── TITLE HOLDER 딱지 (폰 전용) ──
-   AI ⓘ(왼쪽 10px, 크기 26px) 바로 오른쪽에 같은 높이로 붙입니다.
-   시트 그림이 있을 때 + 폰 화면(600px 이하) + 타이틀 홀더가 있을 때만 보입니다. */
-.chars-scope .sheet-th-badge{display:none}
+/* ── 코드 위 타이틀 홀더 줄 ──
+   타이틀 홀더가 있으면(.has-th) 'Code' 글자를 숨기고 그 자리에 왕관 · 이름 · 금액 한 줄.
+   줄 하나를 바꿔 끼우는 것이라 높이는 그대로입니다.
+   왼쪽 정보칸이 보이는 화면(1340px 이상 / 넓게 보기는 1620px 이상)에서는 원래대로 'Code'. */
+.chars-scope .sheet-th-line{display:none;align-items:center;gap:5px;min-width:0;height:12px;line-height:12px;white-space:nowrap}
+.chars-scope .sheet-header-text.has-th .sheet-info-label{display:none}
+.chars-scope .sheet-header-text.has-th .sheet-th-line{display:flex}
+.chars-scope .sheet-th-line .th-ic{flex-shrink:0;display:inline-flex;color:var(--sk-deep)}
+.chars-scope .sheet-th-line .th-n{min-width:0;overflow:hidden;text-overflow:ellipsis;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--tx)}
+.chars-scope .sheet-th-line .th-p{flex-shrink:0;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--tx3)}
+.chars-scope .sheet-th-line .th-p:empty{display:none}
+@media(min-width:1340px){
+  .chars-scope .detail-overlay-inner:not(.wide) .sheet-header-text.has-th .sheet-info-label{display:block}
+  .chars-scope .detail-overlay-inner:not(.wide) .sheet-header-text.has-th .sheet-th-line{display:none}
+}
+@media(min-width:1620px){
+  .chars-scope .detail-overlay-inner.wide .sheet-header-text.has-th .sheet-info-label{display:block}
+  .chars-scope .detail-overlay-inner.wide .sheet-header-text.has-th .sheet-th-line{display:none}
+}
 /* 공유 메뉴의 '타이틀 홀더를 X에 공유' 줄: 타이틀 홀더가 없으면 숨김 */
 .chars-scope .share-item[hidden]{display:none !important}
-@media(max-width:600px){
-  .chars-scope .sheet-slot.has-image .sheet-th-badge:not([hidden]){display:flex}
-  .chars-scope .sheet-th-badge{position:absolute;left:42px;bottom:12px;z-index:6;pointer-events:none;
-    align-items:center;gap:6px;height:22px;padding:0 10px;max-width:calc(100% - 58px);box-sizing:border-box;
-    background:rgba(255,255,255,.85);border:1px solid #d6d6d6;border-radius:11px;color:#525252;white-space:nowrap}
-  .chars-scope .sheet-th-badge .th-k{flex-shrink:0;font-family:'Inter',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:1px;color:#8a8a8a}
-  .chars-scope .sheet-th-badge .th-n{min-width:0;overflow:hidden;text-overflow:ellipsis;font-family:'Share Tech Mono',monospace;font-size:11.5px;color:#333}
-  .chars-scope .sheet-th-badge .th-p{flex-shrink:0;font-family:'Share Tech Mono',monospace;font-size:11px;color:#6e6e6e}
-  .chars-scope .sheet-th-badge .th-p:empty{display:none}
-}
 </style>
 
 <!-- ══════════════════════════════════════════════════
@@ -1844,6 +1849,10 @@ body{top:0 !important}
             </div>
             <div class="sheet-header-text">
               <div class="sheet-info-label">Code</div>
+              <!-- 타이틀 홀더 줄: 타이틀 홀더가 있으면 위 'Code' 글자 대신 이 줄이 보입니다.
+                   왕관 = TITLE HOLDER (이벤트 탭 카드와 같은 아이콘). 이름이 길면 이름만 말줄임표로 잘리고 금액은 남습니다.
+                   PC 넓은 화면처럼 왼쪽 정보칸이 보일 때는 원래대로 'Code'가 보입니다. -->
+              <div class="sheet-th-line" id="sheet-th-line"><span class="th-ic" aria-label="TITLE HOLDER"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4 3.5L12 5l4.5 6.5 4-3.5-1.8 10H5.3z"/><path d="M5.3 20.5h13.4"/></svg></span><span class="th-n" id="sheet-th-name">—</span><span class="th-p" id="sheet-th-price"></span></div>
               <div class="sheet-info-code" id="detail-id-code"></div>
             </div>
             <div class="sheet-holder-block">
@@ -1898,11 +1907,6 @@ body{top:0 !important}
             <button class="cassette-nav-arrow next" id="cassette-next" onclick="navChar(1)" aria-label="다음 캐릭터">
               <svg width="20" height="44" viewBox="0 0 20 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L16 22L4 40" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <!-- TITLE HOLDER 딱지 (폰 전용 · 시트 그림 왼쪽 아래, AI ⓘ 바로 오른쪽)
-                 폰 머리 부분엔 자리가 없어서 그림 위에 얹습니다. 타이틀 홀더가 있을 때만 보입니다.
-                 닉네임이 길면 이름 끝만 말줄임표(…)로 잘리고, 금액은 그대로 보입니다.
-                 딱지는 눌리지 않습니다(누르면 원래처럼 이전 캐릭터로 넘어감). -->
-            <div class="sheet-th-badge" id="sheet-th-badge" hidden><span class="th-k">TITLE HOLDER</span><span class="th-n" id="sheet-th-name">—</span><span class="th-p" id="sheet-th-pledge"></span></div>
             <!-- AI 활용 표기 ⓘ (왼쪽 여백이 안 보이는 화면에서만 나타남) -->
             <div class="sheet-ai-info" id="sheet-ai-info">
               <button class="sheet-ai-btn" onclick="toggleSheetAi(event)" aria-label="AI 활용 안내" title="AI 활용 안내"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.2v4"/><circle cx="8" cy="4.9" r=".45" fill="currentColor" stroke="none"/></svg></button>
@@ -3576,12 +3580,13 @@ function fillDetailSide(c){
   if(thBtn) thBtn.hidden = !hasTH;
   const thItem = document.getElementById('share-th-item');
   if(thItem) thItem.hidden = !hasTH;
-  const thBadge = document.getElementById('sheet-th-badge');
-  if(thBadge){
-    thBadge.hidden = !hasTH;
-    set('sheet-th-name',   hasTH ? c.holder : '—');
-    set('sheet-th-pledge', (hasTH && c.pledge) ? ('$' + c.pledge) : '');
-  }
+  /* 코드 위 'CODE' 글자 자리 → 타이틀 홀더 줄 (왼쪽 정보칸이 안 보이는 화면에서만) */
+  const hdrText = document.querySelector('.sheet-header-text');
+  if(hdrText) hdrText.classList.toggle('has-th', hasTH);
+  set('sheet-th-name',  hasTH ? c.holder : '—');
+  set('sheet-th-price', (hasTH && c.pledge) ? ('$' + c.pledge) : '');
+  const thLine = document.getElementById('sheet-th-line');
+  if(thLine) thLine.title = hasTH ? ('TITLE HOLDER · ' + c.holder + (c.pledge ? ' · $' + c.pledge : '')) : '';
   set('side-updated', normDate(c.updated) || '—');
   /* TYPE 글씨 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로)
      회색 배경 위에서 잘 읽히도록 같은 색 계열에서 밝은 쪽으로 골랐습니다. */
