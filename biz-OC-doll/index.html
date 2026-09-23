@@ -1035,6 +1035,13 @@ body{top:0 !important}
 .chars-scope .detail-side-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.28)}
 .chars-scope .detail-side-k{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;opacity:.75}
 .chars-scope .detail-side-v{font-family:'Share Tech Mono',monospace;font-size:16px;text-align:right;word-break:break-all}
+/* TITLE HOLDER 값 + X 공유 버튼을 한 줄에 */
+.chars-scope .detail-side-vwrap{display:flex;align-items:center;gap:8px;min-width:0}
+.chars-scope .side-th-share{pointer-events:auto;flex-shrink:0;width:24px;height:24px;padding:0;border-radius:6px;
+  border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;transition:background .12s,border-color .12s}
+.chars-scope .side-th-share:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.8)}
+.chars-scope .side-th-share[hidden]{display:none}
 .chars-scope .detail-side-title{font-size:15px;font-weight:500}
 .chars-scope .detail-side-note{font-size:13px;line-height:1.7;opacity:.85}
 /* 색 반전: 흰 바탕 + 진한 글씨 → 회색 배경 위에서 가장 눈에 띄게 */
@@ -1223,6 +1230,18 @@ body{top:0 !important}
   font-size:12px;font-weight:600;font-family:var(--fn);
   cursor:pointer;text-decoration:none;transition:background .12s;}
 #panel-event .vote-btn:hover{background:var(--sk-hover)}
+/* ── TITLE HOLDER 카드: 왕관 아이콘 · ⓘ 펼치기 ── */
+#panel-event .th-crown{color:var(--sk-deep);display:flex;justify-content:center}
+#panel-event .th-title-row{display:flex;align-items:center;gap:7px}
+#panel-event .th-info{width:17px;height:17px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--sk-btn-bd);background:transparent;color:var(--acc);
+  font:italic 700 10.5px/1 Georgia,serif;cursor:pointer;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;transition:background .12s;}
+#panel-event .th-info:hover,
+#panel-event .th-info[aria-expanded="true"]{background:var(--sk-hover)}
+#panel-event .th-more{margin-top:10px;padding:11px 13px;border-radius:8px;
+  background:var(--sk-soft);font-size:12px;color:var(--tx2);line-height:1.75;}
+#panel-event .th-more[hidden]{display:none}
 @media (max-width:560px){
 #panel-event .vote-card{flex-direction:column}
 #panel-event .vote-ticket{width:100%;flex-direction:row;gap:9px;align-items:baseline;justify-content:center;
@@ -1416,7 +1435,7 @@ body{top:0 !important}
                아래 가이드라인 OK 목록(허락 범위)과 겹치지 않게, 종류를 나열하지 않고 장면으로 씁니다.
                마지막 문장은 위 표의 '홀더가 정하는 것 / 그 외의 모든 것'을 다시 받는 말입니다.
                🌐 '동인지'가 있어서 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'play_solo') -->
-          <p class="guide-body" style="margin:0 0 18px" data-i18n="play_solo">이름을 붙였다면 이제 A를 내 웹소설의 주인공으로 세워도 되고, 만들고 있는 게임에 출연시켜도 되고, A로 동인지를 내서 행사에서 팔아도 됩니다. 어디에 어떻게 쓸지는 전부 홀더가 정하면 됩니다.</p>
+          <p class="guide-body" style="margin:0 0 18px" data-i18n="play_solo">이름을 붙였다면 이제 A를 내 웹소설의 주인공으로 세워도 되고, 만들고 있는 게임에 출연시켜도 되고, A로 동인지를 내서 행사에서 팔아도 되고, A의 모습으로 버튜버 활동을 해도 됩니다. 어디에 어떻게 쓸지는 전부 홀더가 정하면 됩니다.</p>
 
           <!-- 참고 그림 2 — A의 활동 모습: 동인지 표지 / 게임 화면 / 프로필 카드 등을 가로로 긴 그림 한 장에.
                그리기 부담되면 이 <div class="ex-shots"> 한 덩어리를 통째로 지워도 흐름은 이어집니다. -->
@@ -1485,6 +1504,7 @@ body{top:0 !important}
                 <li>유료 글 발행</li>
                 <li>플랫폼 연재 · 상업 게임 출시</li>
                 <li>다른 작품에 출연시키기</li>
+                <li>버튜버 활동</li>
               </ul>
             </div>
             <div class="ledger-cell is-no">
@@ -1522,7 +1542,8 @@ body{top:0 !important}
             </div>
             <div class="source-row">
               <span class="badge badge-req">필수</span>
-              <div class="source-text">플랫폼 연재 · 상업 게임 · 대규모 판매는 작품 하단이나 크레딧에 기재해 주세요.</div>
+              <!-- 버튜버는 규모와 상관없이 필수입니다. 캐릭터의 얼굴로 계속 활동하는 거라 원래 코드가 늘 보여야 합니다. -->
+              <div class="source-text">플랫폼 연재 · 상업 게임 · 대규모 판매는 작품 하단이나 크레딧에, 버튜버 활동은 규모와 상관없이 채널·프로필 소개란에 기재해 주세요.</div>
             </div>
             <!-- 모습을 바꾼 캐릭터의 표기 기준 (활용예시에서 옮겨 옴) -->
             <div class="source-text" style="padding:10px 2px 4px;font-size:13px;color:var(--gray-600);line-height:1.7">외관을 수정한 캐릭터도 표기 기준은 같습니다. 코드는 원래 캐릭터의 코드를 그대로 적어 주세요.</div>
@@ -1656,6 +1677,37 @@ body{top:0 !important}
 
       <!-- ── 이벤트 패널 ── -->
       <div id="ev-panel-event" class="page-body">
+
+        <!-- ══ TITLE HOLDER ══
+             사이트 오픈 날부터 열어 두는 카드입니다. 맨 위에 둡니다.
+             버튼 주소는 아래 스크립트의 TITLE_HOLDER_URL 한 곳만 바꾸면 됩니다.
+             (Ko-fi 샵에서 TITLE HOLDER 카테고리를 만든 뒤, 그 카테고리 주소로 바꿔 주세요)
+             모양은 상시 투표 카드(티켓형)를 그대로 빌려 쓰고, 왼쪽엔 가격 대신 왕관 아이콘만 둡니다.
+             (가격은 Ko-fi에 보이니 사이트에 적지 않습니다)
+             ※ 소개탭의 '홀더'(이름을 붙인 모든 팬)와 헷갈리지 않게,
+               '코드마다 한 명뿐'을 기본 문장에, 자세한 차이는 ⓘ 펼침 칸에 적어 둡니다.
+             ※ 의미 부여 문구는 붙이지 않고 조건만 적습니다. (운영 매뉴얼 13장) -->
+        <div class="vote-card">
+          <div class="vote-ticket">
+            <div class="vote-ticket-label">Title</div>
+            <div class="vote-ticket-num th-crown"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M3.5 8l4 3.5L12 5l4.5 6.5 4-3.5-1.8 10H5.3z"/><path d="M5.3 20.5h13.4"/></svg></div>
+          </div>
+          <div class="vote-body">
+            <div class="vote-eyebrow">상시 오픈</div>
+            <div class="vote-title th-title-row">
+              <span class="notranslate" translate="no">TITLE HOLDER</span>
+              <!-- ⓘ 를 누르면 아래 설명 칸이 열리고, 다시 누르면 닫힙니다. (휴대폰에서도 되도록 누르는 방식) -->
+              <button type="button" class="th-info" aria-expanded="false" aria-controls="thMore" onclick="toggleThInfo(this)" title="타이틀 홀더란?">i</button>
+            </div>
+            <div class="vote-desc">캐릭터 상세 창에 이름이 오르는 자리입니다. 코드마다 한 명뿐입니다.</div>
+            <!-- 펼치면 나오는 설명. 가격·권리·환불·닉네임 안내는 Ko-fi 상품 페이지와 이용 조건에 적습니다. -->
+            <div class="th-more" id="thMore" hidden>이름을 붙인 홀더는 누구나 될 수 있지만, 타이틀 홀더는 코드마다 한 명뿐입니다. 비어 있는 코드는 언제든 먼저 가져간 분의 것이고, 이미 타이틀 홀더가 있는 코드는 시즌이 열릴 때 그 금액 이상으로 도전할 수 있습니다. 낸 금액은 이름과 함께 표시됩니다.</div>
+            <a class="vote-btn" href="#" onclick="openTitleHolder();return false;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><path d="M6.5 3H13v3.5a3 3 0 0 1-3 3H6.5z"/><path d="M13 4h.8a1.7 1.7 0 0 1 0 3.4H13"/><path d="M3 12.5h9"/></svg>
+              Ko-fi에서 타이틀 가져가기
+            </a>
+          </div>
+        </div>
 
         <!-- ══ 상시 투표 ══
              Ko-fi 주소만 아래 KOFI_URL 에 넣으면 됩니다. 코드는 안 건드리셔도 됩니다. -->
@@ -1846,13 +1898,17 @@ body{top:0 !important}
         <div class="detail-side">
           <div class="detail-side-block">
             <div class="detail-side-row"><span class="detail-side-k">TYPE</span><span class="detail-side-v" id="side-type">—</span></div>
-            <div class="detail-side-row"><span class="detail-side-k">TITLE HOLDER</span><span class="detail-side-v" id="side-holder">—</span></div>
-            <div class="detail-side-row"><span class="detail-side-k">STATUS</span><span class="detail-side-v" id="side-status">—</span></div>
+            <!-- TITLE HOLDER 옆 X 버튼: 타이틀 홀더가 있을 때만 보입니다. 누르면 X(트위터) 글쓰기 창이 문구와 링크가 채워진 채로 열립니다. -->
+            <div class="detail-side-row"><span class="detail-side-k">TITLE HOLDER</span><span class="detail-side-vwrap"><span class="detail-side-v" id="side-holder">—</span><button class="side-th-share" id="side-th-share" onclick="shareTitleHolder()" title="X(트위터)에 타이틀 홀더 공유" aria-label="X(트위터)에 타이틀 홀더 공유" hidden><svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg></button></span></div>
+            <!-- 예전 STATUS(완료) 줄 자리. 지금 타이틀 홀더가 낸 금액을 보여줍니다.
+                 구글시트 OC-characters 탭의 F열(여섯 번째 칸)에 숫자만 적으면 됩니다. 예: 50
+                 (STATUS 열은 목록에 띄울지 거르는 데 계속 쓰니 시트에서 지우지 마세요) -->
+            <div class="detail-side-row"><span class="detail-side-k">PLEDGED</span><span class="detail-side-v" id="side-pledge">—</span></div>
             <div class="detail-side-row"><span class="detail-side-k">UPDATED</span><span class="detail-side-v" id="side-updated">—</span></div>
           </div>
           <div class="detail-side-block">
             <div class="detail-side-title">이 캐릭터로 창작하기</div>
-            <div class="detail-side-note">개인 SNS · 소규모 창작은 자유롭게<br>연재 · 상업 창작은 출처 표기 필수</div>
+            <div class="detail-side-note">개인 SNS · 소규모 창작은 자유롭게<br>연재 · 상업 창작 · 버튜버는 출처 표기 필수</div>
             <button class="detail-side-dl" onclick="downloadSheet('side')"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5"/><path d="M2.5 11v2.5h11V11"/></svg><span id="sheet-dl-label-side">시트 이미지 받기</span></button>
             <button class="detail-side-credit" onclick="copyCredit(0)"><span class="detail-side-credit-txt" id="side-credit-0">—</span><span class="detail-side-credit-copy" id="side-credit-label-0">복사</span></button>
             <button class="detail-side-credit" onclick="copyCredit(1)"><span class="detail-side-credit-txt" id="side-credit-1">—</span><span class="detail-side-credit-copy" id="side-credit-label-1">복사</span></button>
@@ -2913,9 +2969,9 @@ var I18N_BLOCKS = {
 
   /* 활용 예시 — A와 놀기 (한국어판의 '동인지') */
   play_solo: {
-    en: 'Once A has a name, you can make A the lead of your web novel, cast A in the game you\'re making, or put out a fan comic starring A and sell it at an event. Where and how you use A is entirely up to you, the Holder.',
-    ja: '名前をつけたら、Aを自分のWeb小説の主人公にしても、作っているゲームに出演させても、Aの同人誌を出してイベントで頒布してもかまいません。どこでどう使うかは、すべてホルダーが決めればいいんです。',
-    zh: '起好名字之后，就可以让A当你网络小说的主角，可以让A出演你正在做的游戏，也可以出A的同人本拿到展会上卖。用在哪里、怎么用，全都由持有者决定。'
+    en: 'Once A has a name, you can make A the lead of your web novel, cast A in the game you\'re making, put out a fan comic starring A and sell it at an event, or become a VTuber with A\'s look. Where and how you use A is entirely up to you, the Holder.',
+    ja: '名前をつけたら、Aを自分のWeb小説の主人公にしても、作っているゲームに出演させても、Aの同人誌を出してイベントで頒布しても、Aの姿でVTuberとして活動してもかまいません。どこでどう使うかは、すべてホルダーが決めればいいんです。',
+    zh: '起好名字之后，就可以让A当你网络小说的主角，可以让A出演你正在做的游戏，也可以出A的同人本拿到展会上卖，还可以用A的形象当虚拟主播。用在哪里、怎么用，全都由持有者决定。'
   },
 
   /* 활용 예시 — 다른 홀더와 같이 놀기 (허락이 조건) */
@@ -3255,7 +3311,7 @@ function openFormPopup() {
         return;
       }
 
-      // 헤더: code / type / holder / status / updated
+      // 헤더: code / type / holder / status / updated / pledge(타이틀 홀더가 낸 금액, 숫자만)
       // 완료 · 작업중 캐릭터만 표시
       window.CHARACTERS = rows.slice(1)
         .filter(r=>(r[0]||'').trim())
@@ -3269,6 +3325,7 @@ function openFormPopup() {
             holder: (r[2]||'—').trim() || '—',
             status:  (r[3]||'').trim(),
             updated: (r[4]||'').trim(),
+            pledge:  ((r[5]||'').replace(/[^0-9.]/g,'')),
             grad:   GRADIENTS[(num-1) % GRADIENTS.length],
           };
         })
@@ -3490,7 +3547,9 @@ function fillDetailSide(c){
   const set = (id, v)=>{ const el = document.getElementById(id); if(el) el.textContent = v; };
   set('side-type',    c.type || '—');
   set('side-holder',  c.holder || '—');
-  set('side-status',  c.status || '—');
+  set('side-pledge',  c.pledge ? ('$' + c.pledge) : '—');
+  const thBtn = document.getElementById('side-th-share');
+  if(thBtn) thBtn.hidden = !(c.holder && c.holder !== '—');
   set('side-updated', normDate(c.updated) || '—');
   /* TYPE 글씨 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로)
      회색 배경 위에서 잘 읽히도록 같은 색 계열에서 밝은 쪽으로 골랐습니다. */
@@ -3919,6 +3978,21 @@ document.addEventListener('click', function(e){
   closeShareMenu();
 });
 
+/* ── TITLE HOLDER 공유 (옆 정보칸의 X 버튼) ──
+   '몸값'이라는 말 대신 '이 자리에 걸린 값'으로 돌려 씁니다. 해외 팬도 읽게 영어 한 줄을 같이 붙입니다. */
+window.shareTitleHolder = function(){
+  const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
+  if(!c || !c.holder || c.holder === '—') return;
+  const url = charShareUrl(c, true);
+  const ko = c.idCode + '의 현재 TITLE HOLDER는 ' + c.holder + ' 님입니다.'
+           + (c.pledge ? ' 이 자리에 걸린 값은 $' + c.pledge + '.' : '');
+  const en = 'Current TITLE HOLDER of ' + c.idCode + ': ' + c.holder
+           + (c.pledge ? ' ($' + c.pledge + ' on the title)' : '');
+  const text = ko + '\n' + en + '\n#bizOCdoll #' + c.idCode;
+  const E = encodeURIComponent;
+  window.open('https://twitter.com/intent/tweet?text=' + E(text) + '&url=' + E(url), '_blank', 'noopener');
+};
+
 window.shareChar = function(where){
   const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
   if(!c) return;
@@ -4127,6 +4201,25 @@ var KOFI_URL = 'https://ko-fi.com/rrktbiz/shop';
    비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
 var VOTE_FORM_URL = 'https://forms.gle/gQ83jFanMiYDJz9x8';
 
+/* ── TITLE HOLDER (이벤트 탭 맨 위 카드) ──
+   지금은 Ko-fi 샵 첫 화면으로 갑니다.
+   샵에 TITLE HOLDER 카테고리를 만든 뒤, 그 카테고리를 눌렀을 때 주소창에 뜨는 주소로 바꿔 주세요.
+   비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
+var TITLE_HOLDER_URL = 'https://ko-fi.com/rrktbiz/shop';
+
+function toggleThInfo(btn){
+  var box = document.getElementById('thMore');
+  if(!box) return;
+  var open = box.hasAttribute('hidden');
+  if(open){ box.removeAttribute('hidden'); } else { box.setAttribute('hidden',''); }
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function openTitleHolder(){
+  if(TITLE_HOLDER_URL){ window.open(TITLE_HOLDER_URL, '_blank', 'noopener'); return; }
+  alert('TITLE HOLDER는 곧 열립니다.');
+}
+
 function openVoteForm(){
   if(VOTE_FORM_URL){ window.open(VOTE_FORM_URL, '_blank', 'noopener'); return; }
   alert('투표는 곧 열립니다.');
@@ -4148,6 +4241,8 @@ function evSwitchTab(name, btn) {
 }
 window.openVoteForm = openVoteForm;
 window.openKofi     = openKofi;
+window.openTitleHolder = openTitleHolder;
+window.toggleThInfo = toggleThInfo;
 window.evToggleCard = evToggleCard;
 window.evSwitchTab  = evSwitchTab;
 })();
