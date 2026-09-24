@@ -1332,14 +1332,21 @@ body{top:0 !important}
 #panel-event .thl-code{display:inline-block;font-family:var(--fn);font-size:10.5px;font-weight:700;
   padding:2px 8px;border-radius:10px;background:var(--sk-soft);border:1px solid var(--sk-soft-bd);
   color:var(--sk-ink);font-variant-numeric:tabular-nums;letter-spacing:.02em;line-height:1.4;flex-shrink:0}
-#panel-event button.thl-code{cursor:pointer;transition:background .12s}
-#panel-event button.thl-code:hover{background:var(--sk-hover);border-color:var(--sk-btn-bd)}
+#panel-event .thl-char{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
+  background:none;border:none;padding:0;font:inherit;color:inherit;text-align:left}
+#panel-event button.thl-char{cursor:pointer}
+#panel-event .thl-thumb{display:block;width:34px;height:34px;border-radius:7px;overflow:hidden;flex-shrink:0;
+  border:1px solid var(--bd);background:#ececec;transition:border-color .12s}
+#panel-event .thl-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+#panel-event .thl-card .thl-thumb{width:38px;height:38px;border-radius:8px}
+#panel-event button.thl-char:hover .thl-thumb{border-color:var(--sk-btn-bd)}
+#panel-event button.thl-char:hover .thl-code{background:var(--sk-hover);border-color:var(--sk-btn-bd)}
 #panel-event .thl-crown{display:inline-flex;color:var(--sk-deep);flex-shrink:0}
 #panel-event .thl-amt{font-size:13px;font-weight:600;color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* 날짜순 */
 #panel-event .thl-year{margin-bottom:28px}
-#panel-event .thl-row{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;
+#panel-event .thl-row{display:grid;grid-template-columns:48px auto 1fr auto;gap:12px;align-items:center;
   padding:11px 6px;border-bottom:1px solid #f0f0f0}
 #panel-event .thl-row:last-child{border-bottom:none}
 #panel-event .thl-date{font-size:11px;color:var(--tx3);font-variant-numeric:tabular-nums}
@@ -1369,7 +1376,7 @@ body{top:0 !important}
 @media (max-width:560px){
 #panel-event .thl-grid{grid-template-columns:1fr}
 #panel-event .thl-search{max-width:none}
-#panel-event .thl-row{grid-template-columns:42px 1fr auto;gap:10px}
+#panel-event .thl-row{grid-template-columns:40px auto 1fr auto;gap:10px}
 }
 /* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
 #panel-event .brandname{text-transform:none !important}
@@ -1802,8 +1809,8 @@ body{top:0 !important}
       <!-- ── 탭 바 ── -->
       <div class="tab-bar">
         <div class="tab-bar-inner">
-          <button class="tab-btn active" onclick="evSwitchTab('event',this)">이벤트</button>
-          <button class="tab-btn" onclick="evSwitchTab('log',this)">로그</button>
+          <button class="tab-btn active" data-ev="event" onclick="evSwitchTab('event')">이벤트</button>
+          <button class="tab-btn" data-ev="log" onclick="evSwitchTab('log')">로그</button>
         </div>
       </div>
 
@@ -1917,8 +1924,8 @@ body{top:0 !important}
       <div id="ev-panel-log" class="page-body" style="display:none">
 
         <div class="log-switch">
-          <button type="button" class="log-sw on notranslate" translate="no" data-log="th" onclick="evLogSwitch('th',this)">TITLE HOLDER</button>
-          <button type="button" class="log-sw" data-log="vote" onclick="evLogSwitch('vote',this)">인기투표</button>
+          <button type="button" class="log-sw on notranslate" translate="no" data-log="th" onclick="evLogSwitch('th')">TITLE HOLDER</button>
+          <button type="button" class="log-sw" data-log="vote" onclick="evLogSwitch('vote')">인기투표</button>
         </div>
 
         <!-- ══ TITLE HOLDER 기록 ══ -->
@@ -1929,8 +1936,8 @@ body{top:0 !important}
           </div>
           <div class="thl-tools">
             <div class="thl-seg">
-              <button type="button" class="on" data-view="time" onclick="thlSetView('time',this)">날짜순</button>
-              <button type="button" data-view="code" onclick="thlSetView('code',this)">코드별</button>
+              <button type="button" class="on" data-view="time" onclick="thlSetView('time')">날짜순</button>
+              <button type="button" data-view="code" onclick="thlSetView('code')">코드별</button>
             </div>
             <input type="search" class="thl-search" id="thlSearch" placeholder="코드 또는 이름" autocomplete="off" oninput="thlSearch(this.value)">
           </div>
@@ -2747,18 +2754,23 @@ var current = null;
 /* ── 라우팅 ──
    #/chars        캐릭터 목록
    #/chars/042    042번 캐릭터 (딥링크)
+   #/event                이벤트 목록
+   #/event/log            로그 · TITLE HOLDER (날짜순)
+   #/event/log/code       로그 · TITLE HOLDER (코드별)
+   #/event/log/vote       로그 · 인기투표
    (옛 #/story 주소로 들어오면 소개 탭이 열립니다)
 
    iframe 안쪽 주소는 주소창에 안 나옵니다.
    그래서 '지금 뭘 보고 있는지'를 여기서 대신 적어 줍니다.
    ── */
-var SUB_TABS = { chars:true };
+var SUB_TABS = { chars:true, event:true };
 
 function parseHash(){
   var raw = (location.hash || '').replace(/^#\/?/, '');
   var parts = raw.split('/');
   var tab = TABS[parts[0]] ? parts[0] : DEFAULT_TAB;
-  var sub = (SUB_TABS[tab] && parts[1] !== undefined) ? decodeURIComponent(parts[1]) : '';
+  /* 탭 이름 뒤는 전부 sub 로 넘깁니다. (이벤트는 log/code 처럼 두 칸까지 씁니다) */
+  var sub = (SUB_TABS[tab] && parts.length > 1) ? parts.slice(1).map(decodeURIComponent).join('/') : '';
   return { tab: tab, sub: sub };
 }
 
@@ -4422,22 +4434,52 @@ function openKofi(){
 function evToggleCard(btn) {
   btn.closest('.event-card').classList.toggle('collapsed');
 }
-function evSwitchTab(name, btn) {
-  document.querySelectorAll('#panel-event .tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('ev-panel-event').style.display = name === 'event' ? '' : 'none';
-  document.getElementById('ev-panel-log').style.display   = name === 'log'   ? '' : 'none';
-  if(name === 'log') thlLoad();   /* 로그를 처음 열 때 한 번만 시트를 읽습니다 */
-}
-
 /* ══════════════════════════════════════════════════
-   로그 — TITLE HOLDER / 인기투표 전환
+   이벤트 탭 주소
+     #/event              이벤트 목록
+     #/event/log          로그 · TITLE HOLDER 날짜순
+     #/event/log/code     로그 · TITLE HOLDER 코드별
+     #/event/log/vote     로그 · 인기투표
+   버튼을 누르면 주소가 바뀌고(evGo), 주소가 바뀌면 화면이 따라갑니다(evApply).
+   그래서 주소를 복사해 주면 받은 사람도 같은 화면으로 들어옵니다.
    ══════════════════════════════════════════════════ */
-function evLogSwitch(which, btn){
-  document.querySelectorAll('#panel-event .log-sw').forEach(function(b){ b.classList.toggle('on', b === btn); });
+var evLastLog = 'log';   /* '로그' 버튼을 다시 누르면 마지막으로 보던 로그 화면으로 */
+
+function evApply(route){
+  var p = String(route || '').split('/');
+  var isLog = p[0] === 'log';
+  var sub = isLog ? (p[1] || '') : '';
+  if(isLog && sub !== 'code' && sub !== 'vote') sub = '';   /* 모르는 주소는 기본 로그로 */
+
+  document.querySelectorAll('#panel-event .tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.dataset.ev === (isLog ? 'log' : 'event'));
+  });
+  document.getElementById('ev-panel-event').style.display = isLog ? 'none' : '';
+  document.getElementById('ev-panel-log').style.display   = isLog ? '' : 'none';
+  if(!isLog) return;
+
+  evLastLog = 'log' + (sub ? '/' + sub : '');
+  var which = sub === 'vote' ? 'vote' : 'th';
+  document.querySelectorAll('#panel-event .log-sw').forEach(function(b){ b.classList.toggle('on', b.dataset.log === which); });
   document.getElementById('log-th').hidden   = which !== 'th';
   document.getElementById('log-vote').hidden = which !== 'vote';
+  if(which === 'th'){
+    thl.view = sub === 'code' ? 'code' : 'time';
+    document.querySelectorAll('#panel-event .thl-seg button').forEach(function(b){ b.classList.toggle('on', b.dataset.view === thl.view); });
+    if(thl.state === 'ok' || thl.state === 'error') thlRender();
+    else thlLoad();   /* 로그를 처음 열 때 한 번만 시트를 읽습니다 */
+  }
 }
+function evGo(route){
+  var h = '#/event' + (route ? '/' + route : '');
+  if(location.hash !== h) history.pushState(null, '', h);
+  evApply(route);
+}
+/* 본체 라우터(뒤로가기·앞으로가기·이벤트 탭 재클릭)가 부르는 입구 */
+if(window.TABS && TABS.event) TABS.event.nav = evApply;
+
+function evSwitchTab(name){ evGo(name === 'log' ? evLastLog : ''); }
+function evLogSwitch(which){ evGo(which === 'vote' ? 'log/vote' : (thl.view === 'code' ? 'log/code' : 'log')); }
 
 /* ══════════════════════════════════════════════════
    TITLE HOLDER 기록
@@ -4574,10 +4616,21 @@ function thlCanOpen(code){
   var id = parseInt(code, 10);
   return (window.CHARACTERS || []).some(function(c){ return c.id === id; });
 }
-function codeChip(code){
+/* 썸네일 + 코드 한 덩어리. 캐릭터 목록과 같은 그림(images/character_sheet/000_icon.png)을 작게 씁니다.
+   그림이 없으면 회색 네모만 남습니다. 공개된 캐릭터면 눌러서 상세 창으로 갑니다. */
+function codeChip(code, noThumb){
+  var inner = (noThumb ? '' : '<span class="thl-thumb"><img src="images/character_sheet/' + code + '_icon.png" alt="" loading="lazy" onerror="this.remove()"></span>')
+            + '<span class="thl-code notranslate" translate="no">' + code + '</span>';
   return thlCanOpen(code)
-    ? '<button type="button" class="thl-code notranslate" translate="no" onclick="thlOpenChar(\'' + code + '\')" title="' + code + ' 상세 보기">' + code + '</button>'
-    : '<span class="thl-code notranslate" translate="no">' + code + '</span>';
+    ? '<button type="button" class="thl-char" onclick="thlOpenChar(\'' + code + '\')" title="' + code + ' 상세 보기">' + inner + '</button>'
+    : '<span class="thl-char">' + inner + '</span>';
+}
+/* 썸네일만 (날짜순 줄 왼쪽 칸용) */
+function thumbOnly(code){
+  var img = '<span class="thl-thumb"><img src="images/character_sheet/' + code + '_icon.png" alt="" loading="lazy" onerror="this.remove()"></span>';
+  return thlCanOpen(code)
+    ? '<button type="button" class="thl-char" tabindex="-1" onclick="thlOpenChar(\'' + code + '\')" aria-hidden="true">' + img + '</button>'
+    : img;
 }
 function thlOpenChar(code){
   /* 주소를 #/chars/042 로 바꾸고, 뒤로가기와 같은 길로 캐릭터 탭 + 상세 창을 엽니다.
@@ -4629,8 +4682,9 @@ function thlTimeView(list){
             : ('이전 <span class="notranslate" translate="no">' + esc(r.prev.name) + '</span>' + (r.prev.amt != null ? ' · ' + fmtAmt(r.prev.amt) : ''));
     html += '<div class="thl-row">'
           +   '<div class="thl-date">' + (r.date ? r.date.slice(5).replace('-', '.') : '—') + '</div>'
+          +   thumbOnly(r.code)
           +   '<div class="thl-main">'
-          +     '<div class="thl-line">' + codeChip(r.code)
+          +     '<div class="thl-line">' + codeChip(r.code, true)
           +       '<span class="thl-name notranslate" translate="no">' + esc(r.name) + '</span>'
           +       (r.now ? '<span class="thl-crown" title="현재 타이틀 홀더">' + CROWN_SVG + '</span>' : '')
           +     '</div>'
@@ -4682,11 +4736,7 @@ function thlCodeView(byCode){
   return html + '</div>';
 }
 
-function thlSetView(v, btn){
-  thl.view = v;
-  document.querySelectorAll('#panel-event .thl-seg button').forEach(function(b){ b.classList.toggle('on', b === btn); });
-  thlRender();
-}
+function thlSetView(v){ evGo(v === 'code' ? 'log/code' : 'log'); }
 var _thlQT = null;
 function thlSearch(v){
   clearTimeout(_thlQT);
@@ -4702,6 +4752,12 @@ window.openTitleHolder = openTitleHolder;
 window.toggleThInfo = toggleThInfo;
 window.evToggleCard = evToggleCard;
 window.evSwitchTab  = evSwitchTab;
+
+/* 처음 들어온 주소가 #/event/... 이면 그 화면으로 엽니다 */
+(function(){
+  var raw = (location.hash || '').replace(/^#\/?/, '').split('/');
+  if(raw[0] === 'event' && raw.length > 1) evApply(raw.slice(1).join('/'));
+})();
 })();
 </script>
 
