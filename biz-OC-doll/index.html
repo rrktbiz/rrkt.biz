@@ -1285,6 +1285,92 @@ body{top:0 !important}
 /* .card-toggle — 28px → 44x44px */
 #panel-event .card-toggle::after{content:'';position:absolute;top:-8px;right:-8px;bottom:-8px;left:-8px}
 }
+/* ══════════════════════════════════════════════════
+   무료 투표 카드 (티켓형) — 상태 단어 하나로 전부 바뀝니다
+   is-locked(개최 전) / 없음(진행 중) / is-ended(종료)
+   흐림 정도는 아래 .5 숫자 하나로 조절합니다.
+   ══════════════════════════════════════════════════ */
+#panel-event .ev-vote .st{display:none;align-items:center;gap:6px}
+#panel-event .ev-vote:not(.is-locked):not(.is-ended) .st-open,
+#panel-event .ev-vote.is-locked .st-lock,
+#panel-event .ev-vote.is-ended .st-end{display:inline-flex}
+#panel-event .vote-card.is-locked,
+#panel-event .vote-card.is-ended{opacity:.5}
+#panel-event .vote-card.is-locked .vote-btn,
+#panel-event .vote-card.is-ended .vote-btn{pointer-events:none;cursor:default;color:var(--tx3);border-color:var(--bd)}
+
+/* ══════════════════════════════════════════════════
+   로그 — 위쪽 전환 버튼 (TITLE HOLDER / 인기투표)
+   ══════════════════════════════════════════════════ */
+#panel-event .log-switch{display:flex;gap:6px;justify-content:center;margin-bottom:26px}
+#panel-event .log-sw{font-family:var(--fn);font-size:11px;font-weight:600;letter-spacing:.06em;
+  padding:7px 15px;border-radius:20px;border:1px solid var(--bd);background:var(--sb);
+  color:var(--tx3);cursor:pointer;transition:color .12s,border-color .12s,background .12s}
+#panel-event .log-sw:hover{color:var(--tx2)}
+#panel-event .log-sw.on{color:var(--sk-ink);border-color:var(--sk-btn-bd);background:var(--sk-soft)}
+#panel-event section[hidden]{display:none}
+
+/* ══════════════════════════════════════════════════
+   TITLE HOLDER 기록
+   ══════════════════════════════════════════════════ */
+#panel-event .thl-head{text-align:center;margin-bottom:20px}
+#panel-event .thl-eyebrow{font-size:10px;font-weight:700;letter-spacing:.22em;color:var(--sk-ink);margin-bottom:8px}
+#panel-event .thl-desc{font-size:12px;color:var(--tx3);line-height:1.8}
+#panel-event .thl-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;
+  margin-bottom:18px;flex-wrap:wrap}
+#panel-event .thl-seg{display:inline-flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden;flex-shrink:0}
+#panel-event .thl-seg button{font-family:var(--fn);font-size:12px;font-weight:600;color:var(--tx3);
+  background:var(--sb);border:none;padding:7px 14px;cursor:pointer;transition:color .12s,background .12s}
+#panel-event .thl-seg button + button{border-left:1px solid var(--bd)}
+#panel-event .thl-seg button.on{color:var(--sk-ink);background:var(--sk-soft)}
+#panel-event .thl-search{flex:1;min-width:140px;max-width:220px;font-family:var(--fn);font-size:12px;color:var(--tx);
+  padding:7px 11px;border:1px solid var(--bd);border-radius:8px;background:var(--sb);outline:none}
+#panel-event .thl-search:focus{border-color:var(--sk-btn-bd)}
+#panel-event .thl-search::placeholder{color:var(--tx3)}
+
+/* 코드 칩 (누르면 그 캐릭터 상세 창) */
+#panel-event .thl-code{display:inline-block;font-family:var(--fn);font-size:10.5px;font-weight:700;
+  padding:2px 8px;border-radius:10px;background:var(--sk-soft);border:1px solid var(--sk-soft-bd);
+  color:var(--sk-ink);font-variant-numeric:tabular-nums;letter-spacing:.02em;line-height:1.4;flex-shrink:0}
+#panel-event button.thl-code{cursor:pointer;transition:background .12s}
+#panel-event button.thl-code:hover{background:var(--sk-hover);border-color:var(--sk-btn-bd)}
+#panel-event .thl-crown{display:inline-flex;color:var(--sk-deep);flex-shrink:0}
+#panel-event .thl-amt{font-size:13px;font-weight:600;color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 날짜순 */
+#panel-event .thl-year{margin-bottom:28px}
+#panel-event .thl-row{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;
+  padding:11px 6px;border-bottom:1px solid #f0f0f0}
+#panel-event .thl-row:last-child{border-bottom:none}
+#panel-event .thl-date{font-size:11px;color:var(--tx3);font-variant-numeric:tabular-nums}
+#panel-event .thl-main{min-width:0}
+#panel-event .thl-line{display:flex;align-items:center;gap:8px;min-width:0}
+#panel-event .thl-name{font-size:13px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#panel-event .thl-sub{font-size:11px;color:var(--tx3);margin-top:3px;line-height:1.5}
+
+/* 코드별 */
+#panel-event .thl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+#panel-event .thl-card{border:1px solid var(--bd);border-radius:12px;background:var(--sb);padding:14px 16px 12px}
+#panel-event .thl-card-top{display:flex;align-items:center;gap:8px;min-width:0}
+#panel-event .thl-card-top .thl-name{flex:1;min-width:0}
+#panel-event .thl-meta{font-size:10.5px;color:var(--tx3);margin-top:7px}
+#panel-event .thl-path{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:10px;
+  font-size:11px;color:var(--tx3);font-variant-numeric:tabular-nums}
+#panel-event .thl-path b{font-weight:600;color:var(--sk-ink)}
+#panel-event .thl-path i{font-style:normal;color:var(--bd2)}
+#panel-event .thl-hist{list-style:none;margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd)}
+#panel-event .thl-hist li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:5px 0;font-size:12px;color:var(--tx2)}
+#panel-event .thl-hist .thl-hname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#panel-event .thl-hist .thl-hamt{text-align:right;font-variant-numeric:tabular-nums;color:var(--tx3)}
+#panel-event .thl-hist .thl-range{grid-column:1 / -1;font-size:10.5px;color:var(--tx3);font-variant-numeric:tabular-nums}
+#panel-event .thl-hist li.now .thl-hname{color:var(--tx);font-weight:600}
+#panel-event .thl-hist li.now .thl-hamt{color:var(--tx)}
+#panel-event .thl-none{text-align:center;padding:28px 10px;font-size:12px;color:var(--tx3)}
+@media (max-width:560px){
+#panel-event .thl-grid{grid-template-columns:1fr}
+#panel-event .thl-search{max-width:none}
+#panel-event .thl-row{grid-template-columns:42px 1fr auto;gap:10px}
+}
 /* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
 #panel-event .brandname{text-transform:none !important}
 </style>
@@ -1549,7 +1635,7 @@ body{top:0 !important}
 
           <p class="ledger-foot"><strong><span class="i18n-term notranslate" translate="no" data-term="official">비즈오씨돌 공식</span>은 배당을 요구하지 않습니다.</strong> <span class="i18n-term notranslate" translate="no" data-term="holder">홀더</span>가 이름 붙인 캐릭터와 그 창작물의 권리는 <span class="i18n-term notranslate" translate="no" data-term="holder">홀더</span>에게 있습니다. <span class="i18n-term notranslate" translate="no" data-term="official">비즈오씨돌 공식</span>은 이를 무단으로 쓰거나 소유권을 주장하지 않습니다. 협업이 필요할 때는 먼저 제안드릴 수 있지만, 강요하지 않습니다.</p>
           <p class="ledger-foot"><strong>창작물을 하나하나 검열하지 않습니다.</strong> 위 NG 세 가지만 피해주시면 됩니다.</p>
-          <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 전체 이용가 분위기를 지킬 예정이라, 수위가 있는 창작물은 굿즈·게임 연계에 쓰지 않습니다.</p>
+          <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 공식은 전체 이용가 분위기를 지킬 예정이라, 수위가 있는 창작물은 굿즈·게임 연계에 쓰지 않습니다.</p>
 
           <details class="fold" style="margin-bottom:20px">
             <summary>정치 · 종교 관련 허용 / 금지 구분 자세히</summary>
@@ -1776,39 +1862,32 @@ body{top:0 !important}
           </div>
         </div>
 
-        <!-- ══ 제1회 인기투표 ══
+        <!-- ══ 제1회 인기투표 (무료) ══
              구글폼 주소는 아래 스크립트의 VOTE_FORM_URL 에 있습니다.
+             모양은 위 두 카드(티켓형)와 똑같이 맞췄습니다. 왼쪽 티켓은 Round 01 · $0.
 
-             지금은 '개최 전' 상태입니다. 투표를 열 때 두 군데만 고치면 됩니다.
-               ① <span class="event-status upcoming">개최 전</span>
-                  → <span class="event-status ongoing">진행 중</span>
-               ② <button class="event-btn disabled">  에서  disabled 만 삭제
-             끝난 뒤에는 ended / '종료' 로 바꾸고 disabled 를 다시 붙이세요. -->
-        <div class="event-card is-locked">
-          <div class="event-card-banner" style="background:linear-gradient(135deg,var(--sk-banner-a) 0%,var(--sk-banner-b) 100%)">
-            <!-- 배너 이미지를 쓰시려면 위 style 을 아래처럼 바꾸세요
-                 style="background:url('images/event/vote01.png') center/cover" -->
-            <div class="title-row">
-              <div class="event-title">제1회 인기투표(무료)</div>
-            </div>
-            <button class="card-toggle" onclick="evToggleCard(this)" aria-label="접기 / 펼치기">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
-            </button>
-            <!-- 잠금 막. 투표를 열 때 이 블록을 통째로 지우면 됩니다. -->
-            <div class="lock-veil">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-              <span>준비 중</span>
-            </div>
+             ★ 상태는 아래 <div class="vote-card ev-vote ..."> 한 줄의 단어 하나로만 바꿉니다.
+               개최 전 : class="vote-card ev-vote is-locked"   (지금)
+               진행 중 : class="vote-card ev-vote"
+               종료    : class="vote-card ev-vote is-ended"
+             위쪽 작은 글씨(개최 전/진행 중/종료)와 버튼 글자·잠김은 알아서 따라 바뀝니다.
+             다음 회차를 열 때는 이 카드를 통째로 복사해서 '01'과 '제1회', id 를 바꾸면 됩니다. -->
+        <div class="vote-card ev-vote is-locked" id="freeVoteCard">
+          <div class="vote-ticket">
+            <div class="vote-ticket-label">Round</div>
+            <div class="vote-ticket-num">01</div>
+            <div class="vote-ticket-sub notranslate" translate="no">$0</div>
           </div>
-          <div class="event-card-inner">
-            <div class="event-desc">
-              <b>상시 투표</b>의 Ko-fi 후원표는 일반 투표와 합산되어 순위에 반영됩니다.
-            </div>
-
-            <button class="event-btn disabled" onclick="openVoteForm()">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-              투표하러 가기
-            </button>
+          <div class="vote-body">
+            <div class="vote-eyebrow">무료 투표 · <span class="st st-lock">개최 전</span><span class="st st-open">진행 중</span><span class="st st-end">종료</span></div>
+            <div class="vote-title">제1회 인기투표</div>
+            <div class="vote-desc">누구나 무료로 참여할 수 있는 투표입니다.</div>
+            <div class="vote-note">상시 투표의 Ko-fi 후원표는 일반 투표와 합산되어 순위에 반영됩니다.</div>
+            <a class="vote-btn" href="#" onclick="openVoteForm();return false;">
+              <span class="st st-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>투표하러 가기</span>
+              <span class="st st-lock"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>준비 중</span>
+              <span class="st st-end">종료된 투표</span>
+            </a>
           </div>
         </div>
 
@@ -1816,33 +1895,77 @@ body{top:0 !important}
 
       </div>
 
-      <!-- ── 로그 패널 ── -->
+      <!-- ── 로그 패널 ──
+           위쪽 버튼 두 개로 'TITLE HOLDER 기록'과 '인기투표 로그'를 바꿔 봅니다.
+
+           ★ TITLE HOLDER 기록은 공용 구글시트의 '타이틀기록' 탭을 읽습니다.
+             (이름은 스크립트의 TH_RECORD_TAB 한 곳에 있습니다)
+             탭 모양 — 1행 제목, 2행부터 한 줄에 한 번의 판매:
+               A 날짜 | B 코드 | C 이름 | D 금액
+               2027-03-15 | 042 | rio_lover | 20
+             · 날짜 칸 제목에 '날짜', 코드 칸 제목에 '코드'가 꼭 들어가야 합니다.
+               (탭이 없을 때 구글이 엉뚱한 탭을 대신 보내는 걸 이 제목으로 걸러냅니다)
+             · 지우지 않고 아래로 계속 쌓기만 합니다. 순서는 상관없습니다(날짜로 정렬).
+             · 자동 기록(매뉴얼 3-7)을 붙이면 QUERY 식이 이 모양 그대로 채워 줍니다.
+             · 이메일 같은 개인 정보는 이 탭에 절대 적지 않습니다. (공개 시트)
+
+             깜빡하고 이 탭에 안 적어도, OC-characters 탭 holder·pledge 칸에 적힌
+             현재 타이틀 홀더는 '날짜 미기록'으로 자동으로 끼워 넣어 보여 줍니다.
+
+           ※ 금액 큰 순 정렬·순위표는 일부러 만들지 않았습니다. (운영 매뉴얼 2장)
+             보기는 '날짜순'과 '코드별(번호순)' 두 가지뿐입니다. -->
       <div id="ev-panel-log" class="page-body" style="display:none">
 
-        <div class="log-year-block">
-          <div class="log-year-label">인기투표 로그</div>
-          <div class="log-empty">아직 기록된 인기투표 결과가 없습니다.<br>결과 발표 후 이곳에 순위가 기록됩니다.</div>
+        <div class="log-switch">
+          <button type="button" class="log-sw on notranslate" translate="no" data-log="th" onclick="evLogSwitch('th',this)">TITLE HOLDER</button>
+          <button type="button" class="log-sw" data-log="vote" onclick="evLogSwitch('vote',this)">인기투표</button>
         </div>
 
-        <!-- 결과가 생기면 아래 블록을 복사해서 연도별로 추가하세요
-        <div class="log-year-block">
-          <div class="log-year-label">2025년 인기투표 결과</div>
-          <table class="log-table">
-            <thead>
-              <tr>
-                <th>순위</th><th>캐릭터</th><th style="text-align:right">득표</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="log-rank top1">1st</td>
-                <td><span class="log-char-num">042</span>캐릭터 이름</td>
-                <td class="log-votes">999표</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        -->
+        <!-- ══ TITLE HOLDER 기록 ══ -->
+        <section id="log-th">
+          <div class="thl-head">
+            <div class="thl-eyebrow notranslate" translate="no">TITLE HOLDER · RECORD</div>
+            <div class="thl-desc">코드마다 타이틀이 오간 기록입니다. 타이틀이 넘어가도 이름은 이곳에 남습니다.<br>금액은 그때 낸 금액입니다.</div>
+          </div>
+          <div class="thl-tools">
+            <div class="thl-seg">
+              <button type="button" class="on" data-view="time" onclick="thlSetView('time',this)">날짜순</button>
+              <button type="button" data-view="code" onclick="thlSetView('code',this)">코드별</button>
+            </div>
+            <input type="search" class="thl-search" id="thlSearch" placeholder="코드 또는 이름" autocomplete="off" oninput="thlSearch(this.value)">
+          </div>
+          <div id="thlBody"><div class="log-empty">기록을 불러오는 중입니다…</div></div>
+        </section>
+
+        <!-- ══ 인기투표 로그 ══ -->
+        <section id="log-vote" hidden>
+
+          <div class="log-year-block">
+            <div class="log-year-label">인기투표 로그</div>
+            <div class="log-empty">아직 기록된 인기투표 결과가 없습니다.<br>결과 발표 후 이곳에 순위가 기록됩니다.</div>
+          </div>
+
+          <!-- 결과가 생기면 아래 블록을 복사해서 연도별로 추가하세요
+          <div class="log-year-block">
+            <div class="log-year-label">2025년 인기투표 결과</div>
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>순위</th><th>캐릭터</th><th style="text-align:right">득표</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="log-rank top1">1st</td>
+                  <td><span class="log-char-num">042</span>캐릭터 이름</td>
+                  <td class="log-votes">999표</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          -->
+
+        </section>
 
       </div>
     </div>
@@ -4284,6 +4407,9 @@ function openTitleHolder(){
 }
 
 function openVoteForm(){
+  /* 카드가 개최 전(is-locked)·종료(is-ended)면 아무것도 안 합니다 */
+  var card = document.getElementById('freeVoteCard');
+  if(card && (card.classList.contains('is-locked') || card.classList.contains('is-ended'))) return;
   if(VOTE_FORM_URL){ window.open(VOTE_FORM_URL, '_blank', 'noopener'); return; }
   alert('투표는 곧 열립니다.');
 }
@@ -4301,7 +4427,275 @@ function evSwitchTab(name, btn) {
   btn.classList.add('active');
   document.getElementById('ev-panel-event').style.display = name === 'event' ? '' : 'none';
   document.getElementById('ev-panel-log').style.display   = name === 'log'   ? '' : 'none';
+  if(name === 'log') thlLoad();   /* 로그를 처음 열 때 한 번만 시트를 읽습니다 */
 }
+
+/* ══════════════════════════════════════════════════
+   로그 — TITLE HOLDER / 인기투표 전환
+   ══════════════════════════════════════════════════ */
+function evLogSwitch(which, btn){
+  document.querySelectorAll('#panel-event .log-sw').forEach(function(b){ b.classList.toggle('on', b === btn); });
+  document.getElementById('log-th').hidden   = which !== 'th';
+  document.getElementById('log-vote').hidden = which !== 'vote';
+}
+
+/* ══════════════════════════════════════════════════
+   TITLE HOLDER 기록
+   공용 시트 '타이틀기록' 탭 (A 날짜 | B 코드 | C 이름 | D 금액) 을 읽습니다.
+   + OC-characters 탭의 현재 타이틀 홀더가 기록에 없으면 '날짜 미기록'으로 끼워 넣습니다.
+
+   ※ 이름은 팬이 적은 글자라, 화면에 넣기 전에 전부 글자로만 바꿔 넣습니다(esc).
+     이름 칸에 코드 같은 걸 적어도 사이트에서 실행되지 않습니다.
+   ══════════════════════════════════════════════════ */
+var TH_RECORD_TAB = '타이틀기록';
+var thl = { state:'idle', rows:[], view:'time', q:'', tries:0 };
+
+var CROWN_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M3.5 8l4 3.5L12 5l4.5 6.5 4-3.5-1.8 10H5.3z"/></svg>';
+
+function esc(v){
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* 따옴표 안의 쉼표·줄바꿈까지 제대로 나누는 CSV 읽기 */
+function parseCSV(text){
+  var rows = [], row = [], cur = '', q = false;
+  for(var i = 0; i < text.length; i++){
+    var ch = text[i];
+    if(q){
+      if(ch === '"'){ if(text[i+1] === '"'){ cur += '"'; i++; } else q = false; }
+      else cur += ch;
+    }else{
+      if(ch === '"') q = true;
+      else if(ch === ','){ row.push(cur); cur = ''; }
+      else if(ch === '\n'){ row.push(cur); rows.push(row); row = []; cur = ''; }
+      else if(ch !== '\r') cur += ch;
+    }
+  }
+  if(cur !== '' || row.length){ row.push(cur); rows.push(row); }
+  return rows.map(function(r){ return r.map(function(c){ return c.trim(); }); });
+}
+
+/* '42' · '042' · 'BIZOCDOLL042' · 'TITLE HOLDER · 042' → '042' */
+function normCode(v){
+  var m = String(v || '').match(/(\d{1,3})(?!.*\d)/);
+  return m ? m[1].padStart(3, '0') : '';
+}
+/* 2027-03-15 · 2027. 3. 15. · 2027/3/15 · 3/15/2027 → 2027-03-15 */
+function normDate(v){
+  v = String(v || '').trim();
+  if(!v) return '';
+  var m = v.match(/(\d{4})\s*[-.\/]\s*(\d{1,2})\s*[-.\/]\s*(\d{1,2})/);
+  if(m) return m[1] + '-' + m[2].padStart(2,'0') + '-' + m[3].padStart(2,'0');
+  m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m) return m[3] + '-' + m[1].padStart(2,'0') + '-' + m[2].padStart(2,'0');
+  return '';
+}
+function normAmt(v){
+  var n = parseFloat(String(v || '').replace(/[^0-9.]/g, ''));
+  return isFinite(n) ? n : null;
+}
+function fmtAmt(n){ return n == null ? '' : '$' + n.toLocaleString('en-US'); }
+
+async function thlLoad(){
+  if(thl.state === 'loading' || thl.state === 'ok') return;
+  thl.state = 'loading';
+  var rows = [];
+  try{
+    if(typeof SHEET_CSV !== 'function') throw new Error('config.js 미로드');
+    var ctrl = new AbortController();
+    var timer = setTimeout(function(){ ctrl.abort(); }, 10000);
+    var res = await fetch(SHEET_CSV(TH_RECORD_TAB), { signal: ctrl.signal });
+    clearTimeout(timer);
+    if(!res.ok) throw new Error('타이틀기록 fetch 실패 ' + res.status);
+    var data = parseCSV(await res.text());
+    /* 탭이 없으면 구글이 첫 번째 탭을 대신 보냅니다.
+       1행 제목이 '날짜 | 코드' 로 시작할 때만 진짜 타이틀기록 탭으로 봅니다. */
+    var head = data[0] || [];
+    var ok = /날짜|date/i.test(head[0] || '') && /코드|code/i.test(head[1] || '');
+    if(ok){
+      data.slice(1).forEach(function(r){
+        var code = normCode(r[1]);
+        var name = (r[2] || '').trim();
+        if(!code || !name) return;
+        rows.push({ date: normDate(r[0]), code: code, name: name, amt: normAmt(r[3]) });
+      });
+    }
+    thl.state = 'ok';
+  }catch(e){
+    console.warn('타이틀기록 불러오기 실패:', e.message);
+    thl.state = 'error';
+  }
+  thl.rows = rows;
+  thlRender();
+}
+
+/* 기록 탭 + (빠진) 현재 타이틀 홀더를 합쳐서 코드별로 묶습니다 */
+function thlBuild(){
+  var list = thl.rows.slice();
+  var chars = window.CHARACTERS || [];
+  var byCode = {};
+  list.forEach(function(r){ (byCode[r.code] = byCode[r.code] || []).push(r); });
+  Object.keys(byCode).forEach(function(k){ byCode[k].sort(thlAsc); });
+
+  chars.forEach(function(c){
+    var h = (c.holder || '').trim();
+    if(!h || h === '—' || h === '-') return;
+    var code = String(c.id).padStart(3, '0');
+    var arr = byCode[code] || [];
+    var last = arr[arr.length - 1];
+    if(last && last.name === h) return;   /* 이미 기록돼 있음 */
+    var r = { date:'', code:code, name:h, amt: normAmt(c.pledge), guess:true };
+    list.push(r);
+    (byCode[code] = arr).push(r);
+  });
+
+  Object.keys(byCode).forEach(function(k){
+    var arr = byCode[k];
+    arr.forEach(function(r, i){
+      r.prev  = arr[i-1] || null;
+      r.next  = arr[i+1] || null;
+      r.first = i === 0;
+      r.now   = i === arr.length - 1;
+    });
+  });
+  return { list: list, byCode: byCode };
+}
+/* 오래된 것 → 최신 (날짜 미기록은 맨 뒤 = 가장 최근으로 봄) */
+function thlAsc(a, b){
+  if(!a.date && !b.date) return 0;
+  if(!a.date) return 1;
+  if(!b.date) return -1;
+  return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
+}
+
+function thlCanOpen(code){
+  var id = parseInt(code, 10);
+  return (window.CHARACTERS || []).some(function(c){ return c.id === id; });
+}
+function codeChip(code){
+  return thlCanOpen(code)
+    ? '<button type="button" class="thl-code notranslate" translate="no" onclick="thlOpenChar(\'' + code + '\')" title="' + code + ' 상세 보기">' + code + '</button>'
+    : '<span class="thl-code notranslate" translate="no">' + code + '</span>';
+}
+function thlOpenChar(code){
+  /* 주소를 #/chars/042 로 바꾸고, 뒤로가기와 같은 길로 캐릭터 탭 + 상세 창을 엽니다.
+     상세 창을 닫고 뒤로가기를 누르면 이 로그로 돌아옵니다. */
+  history.pushState(null, '', '#/chars/' + code);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+}
+
+function thlMatch(r, q){
+  if(!q) return true;
+  var n = q.replace(/^bizocdoll/i, '');
+  if(/^\d+$/.test(n) && r.code === n.padStart(3, '0')) return true;
+  return r.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+}
+
+function thlRender(){
+  var body = document.getElementById('thlBody');
+  if(!body) return;
+  if(thl.state === 'loading' || thl.state === 'idle'){ body.innerHTML = '<div class="log-empty">기록을 불러오는 중입니다…</div>'; return; }
+
+  /* 캐릭터 목록이 아직 안 왔으면 조금 기다렸다가 다시 그립니다 (최대 약 8초) */
+  if(!window._charLoadState && thl.tries < 10){ thl.tries++; setTimeout(thlRender, 800); }
+
+  var built = thlBuild();
+  if(!built.list.length){
+    body.innerHTML = thl.state === 'error'
+      ? '<div class="log-empty">기록을 불러오지 못했습니다.<br>잠시 뒤 다시 열어 주세요.</div>'
+      : '<div class="log-empty">아직 TITLE HOLDER 기록이 없습니다.<br>첫 타이틀 홀더가 생기면 이곳에 기록됩니다.</div>';
+    return;
+  }
+  body.innerHTML = thl.view === 'code' ? thlCodeView(built.byCode) : thlTimeView(built.list);
+}
+
+/* ── 날짜순: 최신이 위, 연도별로 묶음 ── */
+function thlTimeView(list){
+  var q = thl.q;
+  var rows = list.filter(function(r){ return thlMatch(r, q); })
+    .sort(function(a, b){ return -thlAsc(a, b); });
+  if(!rows.length) return '<div class="thl-none">찾는 기록이 없습니다.</div>';
+  var html = '', year = null;
+  rows.forEach(function(r){
+    var y = r.date ? r.date.slice(0, 4) : '날짜 미기록';
+    if(y !== year){
+      if(year !== null) html += '</div>';
+      html += '<div class="thl-year"><div class="log-year-label">' + y + '</div>';
+      year = y;
+    }
+    var sub = r.first ? '첫 타이틀 홀더'
+            : ('이전 <span class="notranslate" translate="no">' + esc(r.prev.name) + '</span>' + (r.prev.amt != null ? ' · ' + fmtAmt(r.prev.amt) : ''));
+    html += '<div class="thl-row">'
+          +   '<div class="thl-date">' + (r.date ? r.date.slice(5).replace('-', '.') : '—') + '</div>'
+          +   '<div class="thl-main">'
+          +     '<div class="thl-line">' + codeChip(r.code)
+          +       '<span class="thl-name notranslate" translate="no">' + esc(r.name) + '</span>'
+          +       (r.now ? '<span class="thl-crown" title="현재 타이틀 홀더">' + CROWN_SVG + '</span>' : '')
+          +     '</div>'
+          +     '<div class="thl-sub">' + sub + '</div>'
+          +   '</div>'
+          +   '<div class="thl-amt notranslate" translate="no">' + fmtAmt(r.amt) + '</div>'
+          + '</div>';
+  });
+  return html + '</div>';
+}
+
+/* ── 코드별: 번호순 카드. 현재 타이틀 홀더 + 금액 흐름 + 역대 목록 ── */
+function thlCodeView(byCode){
+  var q = thl.q;
+  var codes = Object.keys(byCode).sort().filter(function(k){
+    return byCode[k].some(function(r){ return thlMatch(r, q); });
+  });
+  if(!codes.length) return '<div class="thl-none">찾는 기록이 없습니다.</div>';
+  var html = '<div class="thl-grid">';
+  codes.forEach(function(k){
+    var arr = byCode[k], cur = arr[arr.length - 1];
+    var firstDate = arr[0].date;
+    var path = '';
+    if(arr.length > 1){
+      path = '<div class="thl-path notranslate" translate="no">' + arr.map(function(r, i){
+        var t = r.amt == null ? '?' : fmtAmt(r.amt);
+        return (i ? '<i>→</i>' : '') + (i === arr.length - 1 ? '<b>' + t + '</b>' : '<span>' + t + '</span>');
+      }).join('') + '</div>';
+    }
+    var hist = arr.slice().reverse().map(function(r){
+      var range = (r.date || '날짜 미기록') + ' ~ ' + (r.now ? '현재' : (r.next && r.next.date ? r.next.date : ''));
+      return '<li' + (r.now ? ' class="now"' : '') + '>'
+           +   '<span class="thl-range">' + range + '</span>'
+           +   '<span class="thl-hname notranslate" translate="no">' + esc(r.name) + '</span>'
+           +   '<span class="thl-hamt notranslate" translate="no">' + fmtAmt(r.amt) + '</span>'
+           + '</li>';
+    }).join('');
+    html += '<div class="thl-card">'
+          +   '<div class="thl-card-top">' + codeChip(k)
+          +     '<span class="thl-crown">' + CROWN_SVG + '</span>'
+          +     '<span class="thl-name notranslate" translate="no">' + esc(cur.name) + '</span>'
+          +     '<span class="thl-amt notranslate" translate="no">' + fmtAmt(cur.amt) + '</span>'
+          +   '</div>'
+          +   '<div class="thl-meta">첫 기록 ' + (firstDate || '—') + ' · 기록 ' + arr.length + '건</div>'
+          +   path
+          +   (arr.length > 1 ? '<ol class="thl-hist">' + hist + '</ol>' : '')   /* 기록이 한 건이면 위 줄과 같아서 목록은 생략 */
+          + '</div>';
+  });
+  return html + '</div>';
+}
+
+function thlSetView(v, btn){
+  thl.view = v;
+  document.querySelectorAll('#panel-event .thl-seg button').forEach(function(b){ b.classList.toggle('on', b === btn); });
+  thlRender();
+}
+var _thlQT = null;
+function thlSearch(v){
+  clearTimeout(_thlQT);
+  _thlQT = setTimeout(function(){ thl.q = String(v || '').trim(); thlRender(); }, 150);
+}
+window.evLogSwitch = evLogSwitch;
+window.thlSetView  = thlSetView;
+window.thlSearch   = thlSearch;
+window.thlOpenChar = thlOpenChar;
 window.openVoteForm = openVoteForm;
 window.openKofi     = openKofi;
 window.openTitleHolder = openTitleHolder;
