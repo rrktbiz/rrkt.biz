@@ -1728,8 +1728,8 @@ body{top:0 !important}
              사이트 오픈 날부터 열어 두는 카드입니다. 맨 위에 둡니다.
              버튼 주소는 아래 스크립트의 TITLE_HOLDER_URL 한 곳만 바꾸면 됩니다.
              (Ko-fi 샵에서 TITLE HOLDER 카테고리를 만든 뒤, 그 카테고리 주소로 바꿔 주세요)
-             모양은 상시 투표 카드(티켓형)를 그대로 빌려 쓰고, 왼쪽엔 가격 대신 왕관 아이콘만 둡니다.
-             (가격은 Ko-fi에 보이니 사이트에 적지 않습니다)
+             모양은 상시 투표 카드(티켓형)를 그대로 빌려 쓰고, 왼쪽엔 왕관 아이콘과 그 아래 시작 가격($20)을 둡니다.
+             (시작 가격이 바뀌면 왕관 아래 '$20' 한 곳만 고치면 됩니다. 운영 매뉴얼 2장의 20달러와 맞춰 둘 것)
              ※ 소개탭의 '홀더'(이름을 붙인 모든 팬)와 헷갈리지 않게,
                '코드마다 한 명뿐'을 기본 문장에, 자세한 차이는 ⓘ 펼침 칸에 적어 둡니다.
              ※ 의미 부여 문구는 붙이지 않고 조건만 적습니다. (운영 매뉴얼 13장) -->
@@ -1737,6 +1737,7 @@ body{top:0 !important}
           <div class="vote-ticket">
             <div class="vote-ticket-label">Title</div>
             <div class="vote-ticket-num th-crown"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M3.5 8l4 3.5L12 5l4.5 6.5 4-3.5-1.8 10H5.3z"/><path d="M5.3 20.5h13.4"/></svg></div>
+            <div class="vote-ticket-sub notranslate" translate="no">$20</div>
           </div>
           <div class="vote-body">
             <div class="vote-eyebrow">상시 오픈</div>
@@ -1761,7 +1762,7 @@ body{top:0 !important}
           <div class="vote-ticket">
             <div class="vote-ticket-label">Ticket</div>
             <div class="vote-ticket-num">10<span>표</span></div>
-            <div class="vote-ticket-sub">후원 1달러</div>
+            <div class="vote-ticket-sub">$1</div>
           </div>
           <div class="vote-body">
             <div class="vote-eyebrow">상시 투표</div>
@@ -4256,7 +4257,7 @@ window.addEventListener('resize', applyMobDetail);
 /* ── Ko-fi 주소 ──
    후원 페이지 주소를 따옴표 사이에 붙여넣으세요.
    비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
-var KOFI_URL = 'https://ko-fi.com/rrktbiz/shop';
+var KOFI_URL = 'https://ko-fi.com/rrktbiz/shop/titleholder';
 
 /* ── 제1회 인기투표 구글폼 ──
    주소를 바꾸려면 따옴표 사이만 교체하세요.
@@ -4267,7 +4268,7 @@ var VOTE_FORM_URL = 'https://forms.gle/gQ83jFanMiYDJz9x8';
    지금은 Ko-fi 샵 첫 화면으로 갑니다.
    샵에 TITLE HOLDER 카테고리를 만든 뒤, 그 카테고리를 눌렀을 때 주소창에 뜨는 주소로 바꿔 주세요.
    비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
-var TITLE_HOLDER_URL = 'https://ko-fi.com/rrktbiz/shop';
+var TITLE_HOLDER_URL = 'https://ko-fi.com/rrktbiz/shop/vote';
 
 function toggleThInfo(btn){
   var box = document.getElementById('thMore');
