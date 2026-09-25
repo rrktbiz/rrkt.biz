@@ -72,6 +72,7 @@ button.on .i-fill{fill:currentColor}
 #guide li::before{content:"-";position:absolute;left:0;color:#000}
 #guide p{margin-top:4px}
 #guide h3 .i,#guide h2 .i{width:15px;height:15px}
+#guide > summary .i{margin-right:6px}
 #guide h3.no{color:#c0392b}          /* 받지 않는 것: 빨강 */
 #guide h3.yes .i{color:var(--ac)}
 
@@ -304,7 +305,7 @@ var T = {
   backList:'← 목록', backAll:'← 전체 보기', notFound:'없거나 숨겨진 글이에요.',
   more:'더 보기', less:'접기', loadMore:'제안 더 보기', cmtOpen:'댓글 달기', cancel:'취소',
   reply:'답글', replyPh:'{who}에게 답글을 적어 주세요.', replyTo:'{who}에게',
-  copyLink:'링크 복사', copied:'복사했어요',
+  copyLink:'링크 복사', copied:'복사했어요', retry:'다시 시도',
   op:'글쓴이', anon:'익명 ', picked:'공식 표시',
   cmtTitle:'댓글', cmtNone:'아직 댓글이 없어요.', cmtPh:'댓글을 적어 주세요.', cmtSend:'댓글 달기',
   newTitle:'제안하기', titlePh:'제목', bodyPh:'무엇이 불편했는지, 어떻게 바뀌면 좋을지 적어 주세요.', send:'올리기',
@@ -366,6 +367,11 @@ function errText(code){ return T.err[code] || T.err.other; }
 function apiGet(q){
   return fetch(BOARD.API + q, { redirect:'follow' }).then(function(r){ return r.json(); });
 }
+/* 읽기는 실패하면 한 번 더 시도합니다 (구글 서버가 가끔 첫 요청을 늦게 받거나 튕겨서) */
+function apiGetRetry(q){
+  return apiGet(q).then(function(d){ if(d && d.ok === false && d.error === 'server') throw new Error('server'); return d; })
+    .catch(function(){ return new Promise(function(r){ setTimeout(r, 900); }).then(function(){ return apiGet(q); }); });
+}
 function apiPost(body){
   body.tag = TAG;
   return fetch(BOARD.API, {
@@ -376,7 +382,7 @@ function apiPost(body){
 }
 function loadList(force){
   if(S.list && !force) return Promise.resolve(S.list);
-  return apiGet('?action=list').then(function(d){
+  return apiGetRetry('?action=list').then(function(d){
     if(!d.ok) throw new Error(d.error);
     S.list = d.posts; return S.list;
   });
@@ -426,12 +432,43 @@ S.shown = PAGE;
 function fetchDetail(id, force){
   if(!force && S.details[id]) return Promise.resolve(S.details[id]);
   if(!force && S.loading[id]) return S.loading[id];
-  S.loading[id] = apiGet('?action=post&id=' + encodeURIComponent(id) + '&tag=' + TAG).then(function(d){
+  S.loading[id] = apiGetRetry('?action=post&id=' + encodeURIComponent(id) + '&tag=' + TAG).then(function(d){
     delete S.loading[id];
     if(!d.ok) throw new Error(d.error || 'not_found');
     S.details[id] = d; return d;
   }, function(e){ delete S.loading[id]; throw e; });
   return S.loading[id];
+}
+
+/* 피드용: 아직 없는 글들을 요청 한 번으로 받아 옵니다 (최대 20개) */
+function fetchMany(ids){
+  ids = ids.filter(function(id){ return !S.details[id]; });
+  if(!ids.length) return Promise.resolve();
+  return apiGetRetry('?action=feed&ids=' + ids.join(',') + '&tag=' + TAG).then(function(d){
+    if(!d.ok) throw new Error(d.error || 'feed');
+    d.posts.forEach(function(b){ S.details[b.post.id] = b; });
+  });
+}
+/* 카드 여러 장을 한 번에 채우기. 실패한 카드에는 "다시 시도" 버튼 */
+function loadCards(items){
+  if(!items.length) return;
+  fetchMany(items.map(function(x){ return x.p.id; })).then(function(){
+    items.forEach(function(x){
+      if(!x.el.isConnected) return;
+      var d = S.details[x.p.id];
+      if(d) fillCard(x.el, d); else x.el.remove();   /* 그사이 숨겨진 글은 빼기 */
+    });
+  }).catch(function(){ items.forEach(markFail); });
+}
+function markFail(x){
+  if(!x.el.isConnected) return;
+  var box = x.el.querySelector('.cmts');
+  if(!box) return;
+  box.classList.remove('none');
+  box.replaceChildren(el('p', { cls:'muted small' }, [
+    T.loadFail + ' ',
+    el('button', { cls:'textbtn', onclick:function(){ box.replaceChildren(el('p', { cls:'muted small', text:T.loading })); loadCards([x]); } }, [ T.retry ])
+  ]));
 }
 
 function showFeed(){
@@ -463,12 +500,16 @@ function showFeed(){
     else rows.sort(function(a, b){ return b.id - a.id; });
     if(!rows.length){ box.replaceChildren(el('p', { cls:'empty', text: needle ? T.noMatch : T.empty })); return; }
     box.replaceChildren();
-    rows.slice(0, S.shown).forEach(function(p){ box.appendChild(card(p)); });
+    var first = [];
+    rows.slice(0, S.shown).forEach(function(p){ var c = card(p); box.appendChild(c); first.push({ el:c, p:p }); });
+    loadCards(first.filter(function(x){ return !S.details[x.p.id]; }));
     if(rows.length > S.shown){
       box.appendChild(el('button', { cls:'more-feed', text:T.loadMore, onclick:function(){
         var from = S.shown; S.shown += PAGE;
         this.remove();
-        rows.slice(from, S.shown).forEach(function(p){ box.appendChild(card(p)); });
+        var more = [];
+        rows.slice(from, S.shown).forEach(function(p){ var c = card(p); box.appendChild(c); more.push({ el:c, p:p }); });
+        loadCards(more.filter(function(x){ return !S.details[x.p.id]; }));
         if(rows.length > S.shown) box.appendChild(this);
       } }));
     }
@@ -483,7 +524,7 @@ function card(p){
   if(S.details[p.id]) fillCard(c, S.details[p.id]);
   else {
     fillCard(c, { post:{ id:p.id, at:p.at, title:p.title, body:p.ex, likes:p.likes, status:p.status, folded:p.folded, liked:false }, comments:null, n:p.comments });
-    fetchDetail(p.id).then(function(d){ if(c.isConnected) fillCard(c, d); }).catch(function(){});
+    /* 본문·댓글은 부른 쪽(loadCards)이 여러 장을 모아 한 번에 채웁니다 */
   }
   return c;
 }
