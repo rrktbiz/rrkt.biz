@@ -45,7 +45,7 @@ button.on{color:var(--ac);border-color:var(--ac)}
 .ac{color:var(--ac)}
 
 /* ── 틀 ── */
-.wrap{max-width:1040px;margin:0 auto;padding:22px 20px 60px;display:grid;grid-template-columns:270px 1fr;gap:36px;align-items:start}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 28px 60px;display:grid;grid-template-columns:350px 1fr;gap:52px;align-items:start}
 header{grid-column:1 / -1;display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--bd);padding-bottom:12px}
 header .home{font-size:12px;color:var(--tx3);text-decoration:none}
 header .home:hover{color:var(--tx2)}
@@ -53,10 +53,20 @@ header h1{font-size:14px;font-weight:600;letter-spacing:.01em}
 header h1 a{text-decoration:none}
 
 /* ── 왼쪽 안내문 (데스크탑에서 제자리에 붙어 있음) ── */
-#guide{position:sticky;top:18px;max-height:calc(100vh - 36px);overflow-y:auto;font-size:12.5px;line-height:1.75;color:var(--tx2);padding-right:4px}
-#guide summary{display:none}
+#guide{position:sticky;top:18px;max-height:calc(100vh - 36px);overflow-y:auto;font-size:12.5px;line-height:1.7;color:var(--tx2);padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
+#guide::-webkit-scrollbar{width:4px}
+#guide::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+#guide > summary{display:none}
 #guide h2{font-size:13px;color:var(--tx);font-weight:600;margin-bottom:4px}
-#guide h3{font-size:12px;color:var(--tx);font-weight:600;margin:16px 0 3px}
+#guide h3{font-size:12px;color:var(--tx);font-weight:600;margin:14px 0 3px}
+/* 덜 급한 안내는 접어 둡니다 (제목을 누르면 펼쳐짐) */
+#guide .more{margin-top:14px;border-top:1px solid var(--bd);padding-top:6px}
+#guide .sub{border-bottom:1px solid var(--bd)}
+#guide .sub > summary{display:flex;justify-content:space-between;cursor:pointer;list-style:none;font-size:12px;font-weight:600;color:var(--tx);padding:6px 0}
+#guide .sub > summary::-webkit-details-marker{display:none}
+#guide .sub > summary::after{content:"+";color:var(--tx3);font-weight:400}
+#guide .sub[open] > summary::after{content:"−"}
+#guide .sub > div{padding-bottom:8px}
 #guide ul{list-style:none}
 #guide li{padding-left:11px;position:relative}
 #guide li::before{content:"-";position:absolute;left:0;color:var(--tx3)}
@@ -122,10 +132,10 @@ main{min-width:0}
 @media (max-width:760px){
   .wrap{grid-template-columns:1fr;gap:14px;padding:16px 14px 50px}
   #guide{position:static;max-height:none;overflow:visible;border:1px solid var(--bd);padding:8px 11px}
-  #guide summary{display:block;cursor:pointer;font-size:12.5px;color:var(--tx2);list-style:none}
-  #guide summary::-webkit-details-marker{display:none}
+  #guide > summary{display:block;cursor:pointer;font-size:12.5px;color:var(--tx2);list-style:none}
+  #guide > summary::-webkit-details-marker{display:none}
   #guide:not([open]) .g-in{display:none}
-  #guide[open] summary{margin-bottom:8px}
+  #guide[open] > summary{margin-bottom:8px}
   .brief{display:block}
   .bar input[type=search]{width:100%;order:9}
   .list .m .c-l{display:none}
@@ -140,7 +150,9 @@ main{min-width:0}
     <h1><a href="#/">제안함</a></h1>
   </header>
 
-  <!-- ══ 안내문 ══ 데스크탑은 왼쪽에 붙어 있고, 휴대폰은 맨 위에서 눌러 펼칩니다 -->
+  <!-- ══ 안내문 ══ 데스크탑은 왼쪽에 붙어 있고, 휴대폰은 맨 위에서 눌러 펼칩니다
+       글 쓸 때 꼭 봐야 하는 세 묶음(받는 것 · 반영 기준 · 받지 않는 것)은 늘 펼쳐 두고,
+       나머지 네 묶음은 제목을 눌러야 펼쳐지게 접어 두었습니다. -->
   <details id="guide" open>
     <summary>안내 보기 ▾</summary>
     <div class="g-in">
@@ -178,32 +190,45 @@ main{min-width:0}
       </ul>
       <p>위에 해당하는 글은 안내 없이 숨겨요.</p>
 
-      <h3>다른 곳으로</h3>
-      <ul>
-        <li>TITLE HOLDER 이름 변경·결제·환불: Ko-fi 메시지</li>
-        <li>기업·협업 제안: 비즈니스 메일</li>
-        <li>연재·상업 창작 등록: 등록 폼</li>
-      </ul>
-      <p>이곳에 실명, 연락처, 결제 내역 같은 개인 정보는 적지 마세요.</p>
-
-      <h3>공식의 참여 방식</h3>
-      <ul>
-        <li>글은 틈틈이 읽어요.</li>
-        <li>답글은 달지 않아요. 결과는 상태 표시로만 알려요.</li>
-        <li>제안에 달린 좋은 답글에는 표시를 해 두기도 해요.</li>
-        <li>공감 수는 참고만 해요. 공감이 많다고 반영되는 건 아니에요.</li>
-      </ul>
-
-      <h3>상태 표시</h3>
-      <p>읽음 · 검토 중 · 반영함 · 반영 안 함</p>
-
-      <h3>기타</h3>
-      <ul>
-        <li>이 제안함에는 번역 기능이 없어요. 어떤 언어로 써도 돼요.</li>
-        <li>신고가 쌓인 글은 자동으로 접혀요.</li>
-        <li>올린 제안은 공식이 자유롭게 참고하고 반영할 수 있어요. 반영되어도 보상이나 이름 표기는 없어요.</li>
-        <li>제안함은 운영 상황에 따라 닫히거나 정리될 수 있어요.</li>
-      </ul>
+      <div class="more">
+        <details class="sub">
+          <summary>다른 곳으로</summary>
+          <div>
+            <ul>
+              <li>TITLE HOLDER 이름 변경·결제·환불: Ko-fi 메시지</li>
+              <li>기업·협업 제안: 비즈니스 메일</li>
+              <li>연재·상업 창작 등록: 등록 폼</li>
+            </ul>
+            <p>이곳에 실명, 연락처, 결제 내역 같은 개인 정보는 적지 마세요.</p>
+          </div>
+        </details>
+        <details class="sub">
+          <summary>공식의 참여 방식</summary>
+          <div>
+            <ul>
+              <li>글은 틈틈이 읽어요.</li>
+              <li>답글은 달지 않아요. 결과는 상태 표시로만 알려요.</li>
+              <li>제안에 달린 좋은 답글에는 표시를 해 두기도 해요.</li>
+              <li>공감 수는 참고만 해요. 공감이 많다고 반영되는 건 아니에요.</li>
+            </ul>
+          </div>
+        </details>
+        <details class="sub">
+          <summary>상태 표시</summary>
+          <div><p>읽음 · 검토 중 · 반영함 · 반영 안 함</p></div>
+        </details>
+        <details class="sub">
+          <summary>기타</summary>
+          <div>
+            <ul>
+              <li>이 제안함에는 번역 기능이 없어요. 어떤 언어로 써도 돼요.</li>
+              <li>신고가 쌓인 글은 자동으로 접혀요.</li>
+              <li>올린 제안은 공식이 자유롭게 참고하고 반영할 수 있어요. 반영되어도 보상이나 이름 표기는 없어요.</li>
+              <li>제안함은 운영 상황에 따라 닫히거나 정리될 수 있어요.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
     </div>
   </details>
 
