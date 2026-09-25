@@ -56,18 +56,20 @@ header h1 a{text-decoration:none}
    바탕색 있는 블록. 안쪽 스크롤바는 없습니다.
    화면보다 짧으면 위에 붙어 있고, 길면 페이지를 내리다가 안내문 끝이 보이는 순간부터 그 자리에 붙습니다.
    (붙는 위치는 아래 스크립트의 fitGuide 가 화면 높이에 맞춰 계산) */
-#guide{position:sticky;top:18px;font-size:13.5px;line-height:1.75;color:var(--tx2);
+#guide{position:sticky;top:18px;font-size:13.5px;line-height:1.75;color:#000;
   background:#f4f8fb;border:1px solid #e1eaf0;border-radius:6px;padding:20px 22px 22px}
 #guide > summary{display:none}
-#guide h2{font-size:15px;color:var(--tx);font-weight:600;margin-bottom:4px}
-#guide h3{font-size:13.5px;color:var(--tx);font-weight:600;margin:18px 0 4px;padding-top:14px;border-top:1px solid #e1eaf0}
+#guide h2{font-size:15px;color:#000;font-weight:600;margin-bottom:4px}
+#guide h3{font-size:13.5px;color:#000;font-weight:600;margin:18px 0 4px;padding-top:14px;border-top:1px solid #e1eaf0}
 #guide ul{list-style:none}
 #guide li{padding-left:12px;position:relative}
-#guide li::before{content:"-";position:absolute;left:0;color:var(--tx3)}
+#guide li::before{content:"-";position:absolute;left:0;color:#000}
 #guide p{margin-top:4px}
 
 /* ── 오른쪽 ── */
 main{min-width:0}
+/* 글쓰기 화면에서는 오른쪽 글쓰기 칸이 화면 위에 붙어 따라옵니다. 왼쪽 안내문을 읽으며 바로 쓸 수 있게 */
+main.is-write{position:sticky;top:18px}
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .bar .grow{flex:1}
 .bar input[type=search]{border:1px solid var(--bd);border-radius:3px;padding:3px 8px;min-width:0;width:170px;outline:none}
@@ -145,8 +147,9 @@ main{min-width:0}
 /* ── 휴대폰: 안내문은 맨 위에서 펼쳐 보기 ── */
 @media (max-width:760px){
   .wrap{grid-template-columns:1fr;gap:14px;padding:16px 14px 50px}
+  main.is-write{position:static}
   #guide{position:static;top:auto !important;padding:12px 14px;font-size:13.5px}
-  #guide > summary{display:block;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--tx);list-style:none}
+  #guide > summary{display:block;cursor:pointer;font-size:13.5px;font-weight:600;color:#000;list-style:none}
   #guide > summary::-webkit-details-marker{display:none}
   #guide:not([open]) .g-in{display:none}
   #guide[open] > summary{margin-bottom:10px}
@@ -663,6 +666,7 @@ function findSimilar(title, box){
 function route(){
   var h = location.hash || '#/';
   var m = h.match(/^#\/p\/(\d+)$/);
+  view.classList.toggle('is-write', h === '#/new');
   if(m) showSingle(Number(m[1]));
   else if(h === '#/new') showNew();
   else showFeed();
