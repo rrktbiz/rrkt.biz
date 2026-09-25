@@ -166,6 +166,13 @@ body{top:0 !important}
 .pd-contact{margin-top:20px;display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:100px;border:1px solid var(--blue);background:transparent;color:var(--blue-ink);font-size:13px;font-weight:600;transition:background .15s}
 .pd-contact:hover{background:rgba(90,144,176,.08)}
 .pd-contact:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+/* 제안함 입구 버튼: is-locked 가 붙어 있으면 흐리게, 누를 수 없게, '준비 중' */
+a.pd-contact{text-decoration:none}
+.pd-board .ic-open,.pd-board .lbl-open{display:none}
+.pd-board .ic-lock,.pd-board .lbl-lock{display:none}
+.pd-board:not(.is-locked) .ic-open,.pd-board:not(.is-locked) .lbl-open{display:inline}
+.pd-board.is-locked .ic-lock,.pd-board.is-locked .lbl-lock{display:inline}
+.pd-board.is-locked{opacity:.45;cursor:default;pointer-events:none}
 
 /* ── 말투 개편 때 추가 (여는 글 · 소제목 · 문단 간격 · 기획 개요 표) ── */
 .pd-lede + .pd-lede{margin-top:16px}
@@ -179,10 +186,25 @@ body{top:0 !important}
 .pd-facts th{width:30%;font-weight:600;color:var(--blue-ink);background:#fafafa;white-space:nowrap}
 .pd-facts td{color:#111111}
 
+/* ── 막 전환 — 제작자 노트(~해요)에서 Business(~습니다)로 넘어가는 자리 ──
+   다른 섹션처럼 회색 선 한 줄이 아니라, 넉넉한 여백 + 보석 + BUSINESS 글자로
+   '여기서부터 다른 문서'라는 걸 보여 줍니다. 보석은 사이트 워드마크·파비콘과 같은 모티프입니다.
+   보석 색은 .pd-part-gem 의 background, 여백은 .pd-part 의 margin-top 만 바꾸면 됩니다. */
+.pd-part{margin-top:104px;text-align:center}
+.pd-part-mark{display:flex;align-items:center;justify-content:center;gap:14px}
+.pd-part-line{width:64px;height:1px;background:#d6dde3}
+.pd-part-gem{width:9px;height:9px;background:#B4A3D4;transform:rotate(45deg);flex-shrink:0}
+.pd-part-label{margin-top:18px;font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:13px;letter-spacing:.32em;color:#4a5560}
+.pd-part-note{margin-top:12px;font-size:12.5px;color:#6e6e6e;line-height:1.75}
+.sec.sec-after-part{border-top:none;margin-top:48px;padding-top:0}   /* 막 전환 바로 뒤 섹션은 회색 선 없이 */
+
 @media(max-width:520px){
   #pd-home{padding:28px 18px 80px}
   .sec{padding-top:40px;margin-top:40px}
   .sec-first{margin-top:0;padding-top:12px}   /* 위 줄이 첫 섹션까지 덮지 않게 */
+  .pd-part{margin-top:80px}
+  .pd-part-line{width:44px}
+  .sec.sec-after-part{margin-top:40px;padding-top:0}
   .sec-title{font-size:20px}
   .pd-lede{font-size:14.5px}
   .pd-body{font-size:14px}
@@ -262,21 +284,42 @@ body{top:0 !important}
 
     <div class="pd-sub">공식이 지키는 분위기</div>
 
-    <p class="pd-body">비즈오씨돌에는 밝고 쾌활하고 귀여운 캐릭터들이 많아서, 보석처럼 맑고 반짝이는 고유의 분위기가 있어요. 공식은 이 분위기를 지키려고 해요. 캐릭터와 운영까지 이 분위기에서 벗어나지 않게 하는 게 만드는 쪽의 몫이라고 생각해요.</p>
+    <p class="pd-body">비즈오씨돌 공식은 보석같이 맑고 반짝이는 고유의 분위기를 지키려고 해요. 지금 보고 계신 이 사이트의 느낌 그대로요. 캐릭터와 운영까지 이 분위기에서 벗어나지 않게 하는 게 만드는 쪽의 몫이라고 생각해요.</p>
 
-    <p class="pd-body">미리 안심시켜 드리자면, 공식이 판을 흔드는 쪽이 되지는 않을 거예요. 이 프로젝트를 보면 팬덤이 어떻게 움직이는지 꽤 잘 아는 사람이 만들었다는 게 느껴지실 텐데, 그래서 오히려 판을 손바닥 위에 올려 두고 주무르려는 건 아닐까 걱정되는 분도 계실 것 같아요. 팬덤을 안다는 건 그런 운영이 판에 어떤 상처를 남기는지도 안다는 뜻이라, 그런 일은 하지 않아요. 반응을 보려고 자극적인 떡밥이나 논란거리를 먼저 던지는 일도, 팬덤을 두고 무언가를 시험해 보는 일도 없을 거예요. 나중에 "사실 이건 사회 실험이었습니다" 같은 말을 꺼낼 일은 없다는 뜻이에요.</p>
+    <p class="pd-body">미리 안심시켜 드리자면, 공식이 판을 흔드는 쪽이 되지는 않을 거예요. 혹시 이 프로젝트의 구조를 보고, 판을 손바닥 위에 올려 두고 주무르려는 건 아닐까 걱정되는 분이 계실지도 몰라요. 그런 운영이 판에 어떤 상처를 남기는지 알기에, 그런 일은 하지 않아요. 반응을 보려고 자극적인 떡밥이나 논란거리를 먼저 던지는 일도, 팬덤을 두고 무언가를 시험해 보는 일도 없을 거예요. 나중에 "사실 이건 사회 실험이었습니다" 같은 말을 꺼낼 일은 없다는 뜻이에요.</p>
 
     <p class="pd-body">판의 분위기는 결국 공식이 꾸준히 내놓는 것을 닮아 간다고 생각해요. 그래서 공식이 할 수 있는 가장 확실한 일은, 이 분위기를 흔들림 없이 계속 내놓는 것뿐이에요. 공식이 흔들리면 팬덤이 편하게 놀 수 없게 되거든요. 그래서 공식이 무엇을 지키려는지 미리 이렇게 적어 두고, 공식은 캐릭터를 내놓는 일에 집중하려고 해요.</p>
+
+    <!-- ══ 제안함 입구 ══
+         제안함 주소는 같은 폴더의 board.html 입니다.
+         ★ 제안함을 열 때는 아래 <a class="pd-contact pd-board is-locked" ...> 에서 is-locked 한 단어만 지우세요.
+           버튼 글자(준비 중 → 제안함 가기), 자물쇠 아이콘, 흐림, 눌림 막기가 전부 같이 풀립니다.
+           그리고 둘째 문단(아직은 준비 중이에요…)은 지우거나 바꾸면 됩니다. -->
+    <div class="pd-sub">제안함</div>
+    <p class="pd-body">메일로 보내기엔 가볍고, 그냥 넘기기엔 아쉬운 이야기가 있다면 여기에 남겨 주세요. 사이트를 쓰다 불편했던 점도, 이런 게 있으면 좋겠다는 생각도 괜찮아요.</p>
+    <p class="pd-body">아직은 준비 중이에요. 판이 조금 더 커지면 열려고 해요.</p>
+    <a class="pd-contact pd-board is-locked" href="board.html" onclick="if(this.classList.contains('is-locked')) return false;">
+      <svg class="ic-lock" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <svg class="ic-open" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+      <span class="lbl-lock">제안함 · 준비 중</span><span class="lbl-open">제안함 가기</span>
+    </a>
 
   </div>
 
   <!-- 3 · 함께 만든다면 (지키려는 것 + 공식 원작 + 기업 협업 원칙)
        공식 원작은 감성 파트가 아니라 협업 검토용 정보라 이 블록 안에 둡니다. (기획안에 가까움, 공개 조건 두 가지)
        원칙 1~6은 계약 조항에 가까워서 '~다'체를 그대로 둡니다. -->
-  <div class="sec">
-    <div class="sec-eyebrow">Business</div>
+  <!-- 막 전환 — 여기서부터 페이지 끝까지가 비즈니스 파트입니다.
+       안내 문구는 원래 '함께 만든다면' 제목 아래 있던 것을 이 자리로 옮겼습니다. -->
+  <div class="pd-part">
+    <div class="pd-part-mark" aria-hidden="true"><span class="pd-part-line"></span><span class="pd-part-gem"></span><span class="pd-part-line"></span></div>
+    <div class="pd-part-label notranslate" translate="no">BUSINESS</div>
+    <p class="pd-part-note">여기서부터는 협업을 검토하시는 분들을 위해 조금 더 정리된 말투로 적겠습니다.</p>
+  </div>
+
+  <div class="sec sec-after-part">
+    <div class="sec-eyebrow">Collaboration</div>
     <div class="sec-title">함께 만든다면</div>
-    <p class="pd-note" style="margin-bottom:14px">여기서부터는 협업을 검토하시는 분들을 위해 조금 더 정리된 말투로 적겠습니다.</p>
     <p class="pd-body">IP가 어떤 모습으로 넓어지든 형태에는 크게 제한을 두지 않으려 합니다. 게임, 영상, 굿즈 모두 열려 있습니다. 다만 분위기만큼은 지키고자 합니다. 기준은 전체 이용가에서 12세 이용가 정도로, 누구나 편하게 볼 수 있는 선입니다. 따라서 과금을 지나치게 밀어붙이는 운영이나 자극만 노린 홍보, 프로젝트와 결이 맞지 않는 협업은 피하려 합니다. 판단이 어려울 때는 지금까지 함께해 온 팬들이 받아들일 수 있을지를 먼저 생각합니다.</p>
       <p class="pd-body">팬들이 무엇이든 나와 주길 기다리는 마음도 잘 알고 있습니다. 그래도 크게 성공하는 것보다 이 프로젝트다운 방식으로 오래 살아남는 쪽을 더 중요하게 생각합니다. 가장 반가운 경우는 이 프로젝트가 왜 이렇게 만들어졌는지 이해한 곳에서 먼저 연락을 주시는 때입니다. 공식이 생각하지 못한 좋은 아이디어를 가져오신다면 더욱 환영합니다. 이 프로젝트만으로는 닿을 수 없는 곳까지 함께 갈 수 있다는 뜻이기 때문입니다.</p>
     <div class="pd-sub">공식 원작</div>
