@@ -86,6 +86,26 @@ main{min-width:0}
 .list .fold .t{color:var(--tx3)}
 .empty{padding:28px 2px;color:var(--tx3);font-size:13px}
 
+/* 피드 카드 */
+.feed{border-top:1px solid var(--bd)}
+.card{padding:18px 2px 20px;border-bottom:1px solid var(--bd)}
+.card .meta{margin:0 0 3px}
+.card h2{font-size:16px;font-weight:600;line-height:1.45;word-break:break-word}
+.card .body{margin:8px 0 6px}
+.clamp{display:-webkit-box;-webkit-line-clamp:8;-webkit-box-orient:vertical;overflow:hidden}
+.textbtn{border:none;padding:0;color:var(--tx3);font-size:12.5px}
+.textbtn:hover{color:var(--tx2)}
+.card .acts{margin-top:10px}
+.card .acts .grow{flex:1}
+.card .cmts{margin-top:14px;border-top:none;background:var(--bg2);border-radius:4px;padding:2px 14px 8px}
+.card .cmts.none{background:none;padding:0;margin-top:6px}
+.card .cmt{padding:9px 0}
+.card .cmt:last-of-type{border-bottom:none}
+.card .add-c{margin-top:8px}
+.small{font-size:12px;padding:8px 0}
+.c-form{margin-top:10px}
+.more-feed{display:block;width:100%;margin-top:16px;padding:9px;color:var(--tx2)}
+
 /* 글 보기 */
 .post h2{font-size:17px;font-weight:600;line-height:1.45;word-break:break-word}
 .meta{font-size:12px;color:var(--tx3);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
@@ -234,7 +254,9 @@ var T = {
   closed:'지금은 제안함이 닫혀 있어요. 읽기만 할 수 있어요.',
   likes:'공감', comments:'댓글', report:'신고',
   foldedPost:'신고가 쌓여 접힌 글이에요.', foldedCmt:'신고가 쌓여 접힌 댓글이에요.', unfold:'펼치기',
-  backList:'← 목록', notFound:'없거나 숨겨진 글이에요.',
+  backList:'← 목록', backAll:'← 전체 보기', notFound:'없거나 숨겨진 글이에요.',
+  more:'더 보기', less:'접기', loadMore:'제안 더 보기', cmtOpen:'+ 댓글 달기', cancel:'취소',
+  copyLink:'링크 복사', copied:'복사했어요',
   op:'글쓴이', anon:'익명 ', picked:'◆ 공식 표시',
   cmtTitle:'댓글', cmtNone:'아직 댓글이 없어요.', cmtPh:'댓글을 적어 주세요.', cmtSend:'댓글 달기',
   newTitle:'제안하기', titlePh:'제목', bodyPh:'무엇이 불편했는지, 어떻게 바뀌면 좋을지 적어 주세요.', send:'올리기',
@@ -338,66 +360,159 @@ function needHuman(){
   return '';
 }
 
-/* ══════════ 화면 1: 목록 ══════════ */
-function showList(){
-  unmountHuman();
+/* ══════════ 화면 1: 피드 ══════════
+   SNS처럼 글과 댓글이 한 화면에 쭉 이어집니다. 10개씩 보여 주고, 아래 "더 보기"로 이어서 불러옵니다.
+   목록을 먼저 그려 두고, 글마다 본문·댓글을 뒤이어 채웁니다. */
+var PAGE = 10;
+S.details = {};      /* 글 번호 → 본문·댓글 (한 번 불러오면 기억) */
+S.loading = {};
+S.shown = PAGE;
+
+function fetchDetail(id, force){
+  if(!force && S.details[id]) return Promise.resolve(S.details[id]);
+  if(!force && S.loading[id]) return S.loading[id];
+  S.loading[id] = apiGet('?action=post&id=' + encodeURIComponent(id) + '&tag=' + TAG).then(function(d){
+    delete S.loading[id];
+    if(!d.ok) throw new Error(d.error || 'not_found');
+    S.details[id] = d; return d;
+  }, function(e){ delete S.loading[id]; throw e; });
+  return S.loading[id];
+}
+
+function showFeed(){
+  closeForm();
   var bar = el('div', { cls:'bar' });
-  var sNew = el('button', { text:T.newest, onclick:function(){ S.sort = 'new'; draw(); } });
-  var sTop = el('button', { text:T.top,    onclick:function(){ S.sort = 'top'; draw(); } });
+  var sNew = el('button', { text:T.newest, onclick:function(){ S.sort = 'new'; S.shown = PAGE; draw(); } });
+  var sTop = el('button', { text:T.top,    onclick:function(){ S.sort = 'top'; S.shown = PAGE; draw(); } });
   var q = el('input', { type:'search', placeholder:T.search, value:S.q });
-  q.addEventListener('input', function(){ S.q = q.value; draw(); });
+  q.addEventListener('input', function(){ S.q = q.value; S.shown = PAGE; draw(); });
   bar.appendChild(sNew); bar.appendChild(sTop); bar.appendChild(q);
   bar.appendChild(el('span', { cls:'grow' }));
   if(S.open) bar.appendChild(el('button', { text:T.write, cls:'on', onclick:function(){ location.hash = '#/new'; } }));
 
-  var box = el('div');
+  var box = el('div', { cls:'feed' });
   view.replaceChildren();
   if(!S.open) view.appendChild(el('div', { cls:'notice', text:T.closed }));
   view.appendChild(bar);
   view.appendChild(box);
 
   function draw(){
+    closeForm();
     sNew.classList.toggle('on', S.sort === 'new');
     sTop.classList.toggle('on', S.sort === 'top');
     var rows = (S.list || []).slice();
     var needle = S.q.trim().toLowerCase();
-    if(needle) rows = rows.filter(function(p){ return p.title.toLowerCase().indexOf(needle) !== -1; });
+    if(needle) rows = rows.filter(function(p){ return (p.title + ' ' + p.ex).toLowerCase().indexOf(needle) !== -1; });
     if(S.sort === 'top') rows.sort(function(a, b){ return (b.likes - a.likes) || (b.id - a.id); });
     else rows.sort(function(a, b){ return b.id - a.id; });
     if(!rows.length){ box.replaceChildren(el('p', { cls:'empty', text: needle ? T.noMatch : T.empty })); return; }
-    var ul = el('ul', { cls:'list' });
-    rows.forEach(function(p){
-      var t = el('span', { cls:'t' }, [
-        p.status ? el('span', { cls:'st', text:'[' + T.status[p.status] + ']' }) : null,
-        p.folded ? T.foldedPost : p.title
-      ]);
-      ul.appendChild(el('li', { cls: p.folded ? 'fold' : '' }, [
-        el('a', { href:'#/p/' + p.id }, [
-          el('span', { cls:'n', text:String(p.id) }),
-          t,
-          el('span', { cls:'m' }, [
-            el('span', { cls:'c-l', text:T.likes + ' ' }), String(p.likes), ' · ',
-            el('span', { cls:'c-l', text:T.comments + ' ' }), String(p.comments), ' · ', day(p.at).slice(5)
-          ])
-        ])
-      ]));
-    });
-    box.replaceChildren(ul);
+    box.replaceChildren();
+    rows.slice(0, S.shown).forEach(function(p){ box.appendChild(card(p)); });
+    if(rows.length > S.shown){
+      box.appendChild(el('button', { cls:'more-feed', text:T.loadMore, onclick:function(){
+        var from = S.shown; S.shown += PAGE;
+        this.remove();
+        rows.slice(from, S.shown).forEach(function(p){ box.appendChild(card(p)); });
+        if(rows.length > S.shown) box.appendChild(this);
+      } }));
+    }
   }
   box.replaceChildren(el('p', { cls:'muted', text:T.loading }));
   loadList(false).then(draw).catch(function(){ box.replaceChildren(el('p', { cls:'empty', text:T.loadFail })); });
 }
 
-/* ══════════ 화면 2: 글 보기 ══════════ */
-function showPost(id){
-  unmountHuman();
-  view.replaceChildren(el('a', { cls:'back', href:'#/', text:T.backList }), el('p', { cls:'muted', text:T.loading }));
-  apiGet('?action=post&id=' + encodeURIComponent(id) + '&tag=' + TAG).then(function(d){
-    if(location.hash !== '#/p/' + id) return;          /* 그사이 다른 화면으로 갔으면 그리지 않음 */
-    if(!d.ok){ view.replaceChildren(el('a', { cls:'back', href:'#/', text:T.backList }), el('p', { cls:'empty', text:T.notFound })); return; }
-    drawPost(d);
+/* 글 한 장. 목록 정보로 먼저 그리고, 본문·댓글이 오면 다시 채웁니다 */
+function card(p){
+  var c = el('article', { cls:'card', id:'post-' + p.id });
+  if(S.details[p.id]) fillCard(c, S.details[p.id]);
+  else {
+    fillCard(c, { post:{ id:p.id, at:p.at, title:p.title, body:p.ex, likes:p.likes, status:p.status, folded:p.folded, liked:false }, comments:null, n:p.comments });
+    fetchDetail(p.id).then(function(d){ if(c.isConnected) fillCard(c, d); }).catch(function(){});
+  }
+  return c;
+}
+
+function fillCard(c, d){
+  var p = d.post, ready = d.comments !== null;
+  var head = el('div', { cls:'c-head' }, [
+    el('div', { cls:'meta' }, [
+      el('span', { text:'#' + p.id }), el('span', { text:day(p.at) }),
+      p.status ? el('span', { cls:'ac', text:T.status[p.status] }) : null
+    ]),
+    el('h2', { text:p.title })
+  ]);
+
+  var body = el('div', { cls:'body clamp', text:p.body });
+  var moreBody = el('button', { cls:'textbtn', text:T.more });
+  moreBody.style.display = 'none';
+  moreBody.addEventListener('click', function(){
+    var open = body.classList.toggle('clamp');
+    moreBody.textContent = open ? T.more : T.less;
+  });
+  requestAnimationFrame(function(){ if(body.scrollHeight > body.clientHeight + 2) moreBody.style.display = ''; });
+
+  var nCmt = ready ? d.comments.length : (d.n || 0);
+  var acts = el('div', { cls:'acts' });
+  if(ready && S.open){
+    acts.appendChild(likeBtn('post', p));
+    acts.appendChild(el('button', { text:T.comments + ' ' + nCmt, onclick:function(){ openForm(c, p.id); } }));
+  }else{
+    acts.appendChild(el('span', { cls:'muted', text:T.likes + ' ' + p.likes + ' · ' + T.comments + ' ' + nCmt }));
+  }
+  acts.appendChild(el('span', { cls:'grow' }));
+  acts.appendChild(shareBtn(p.id));
+  if(ready && S.open) acts.appendChild(reportBtn('post', p));
+
+  var bodyBlock = el('div', {}, [ body, moreBody, acts ]);
+
+  var cm = el('div', { cls:'cmts' });
+  if(!ready) cm.appendChild(el('p', { cls:'muted small', text:T.loading }));
+  else d.comments.forEach(function(x){
+    var inner = el('div', {}, [
+      el('div', { cls:'tx', text:x.body }),
+      el('div', { cls:'acts' }, S.open ? [ likeBtn('comment', x), reportBtn('comment', x) ] : [ el('span', { cls:'muted', text:T.likes + ' ' + x.likes }) ])
+    ]);
+    cm.appendChild(el('div', { cls:'cmt' + (x.picked ? ' is-pick' : '') }, [
+      el('div', { cls:'who' }, [
+        x.who === 'OP' ? T.op : T.anon + x.who,
+        el('span', { cls:'d', text:day(x.at) }),
+        x.picked ? el('span', { cls:'pick', text:T.picked }) : null
+      ]),
+      foldable(x.folded, T.foldedCmt, inner)
+    ]));
+  });
+  if(ready && S.open){
+    cm.appendChild(el('button', { cls:'textbtn add-c', text:T.cmtOpen, onclick:function(){ openForm(c, p.id); } }));
+  }
+  if(ready && !d.comments.length){ if(S.open) cm.classList.add('none'); else cm.style.display = 'none'; }   /* 댓글이 없으면 회색 상자 없이 '+ 댓글 달기'만 */
+
+  c.replaceChildren(head, foldable(p.folded, T.foldedPost, el('div', {}, [ bodyBlock, cm ])));
+}
+
+/* 링크 복사: 이 글만 보이는 주소 (#/p/12) */
+function shareBtn(id){
+  var b = el('button', { cls:'muted', text:T.copyLink });
+  b.addEventListener('click', function(){
+    var url = location.href.split('#')[0] + '#/p/' + id;
+    var done = function(){ b.textContent = T.copied; setTimeout(function(){ b.textContent = T.copyLink; }, 1500); };
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function(){ prompt('', url); });
+    else prompt('', url);
+  });
+  return b;
+}
+
+/* ══════════ 화면 2: 글 하나만 (공유 링크로 들어왔을 때) ══════════ */
+function showSingle(id){
+  closeForm();
+  var holder = el('div', { cls:'feed' }, [ el('p', { cls:'muted', text:T.loading }) ]);
+  view.replaceChildren(el('a', { cls:'back', href:'#/', text:T.backAll }), holder);
+  fetchDetail(id, true).then(function(d){
+    if(location.hash !== '#/p/' + id) return;
+    var c = el('article', { cls:'card', id:'post-' + id });
+    fillCard(c, d);
+    holder.replaceChildren(c);
   }).catch(function(){
-    view.replaceChildren(el('a', { cls:'back', href:'#/', text:T.backList }), el('p', { cls:'empty', text:T.loadFail }));
+    holder.replaceChildren(el('p', { cls:'empty', text:T.notFound }));
   });
 }
 
@@ -439,43 +554,28 @@ function foldable(isFolded, msg, inner){
   return holder;
 }
 
-function drawPost(d){
-  var p = d.post;
-  var head = el('div', { cls:'post' }, [
-    el('h2', { text: p.title }),
-    el('div', { cls:'meta' }, [
-      el('span', { text:'#' + p.id }), el('span', { text:day(p.at) }),
-      p.status ? el('span', { cls:'ac', text:T.status[p.status] }) : null
-    ])
-  ]);
-  var bodyBlock = el('div', {}, [
-    el('div', { cls:'body', text:p.body }),
-    el('div', { cls:'acts' }, S.open ? [ likeBtn('post', p), reportBtn('post', p) ] : [ el('span', { cls:'muted', text:T.likes + ' ' + p.likes }) ])
-  ]);
-
-  var cm = el('div', { cls:'cmts' }, [ el('h3', { text:T.cmtTitle + ' ' + d.comments.length }) ]);
-  if(!d.comments.length) cm.appendChild(el('p', { cls:'muted', style:'font-size:12.5px;padding:4px 0 10px', text:T.cmtNone }));
-  d.comments.forEach(function(c){
-    var inner = el('div', {}, [
-      el('div', { cls:'tx', text:c.body }),
-      el('div', { cls:'acts' }, S.open ? [ likeBtn('comment', c), reportBtn('comment', c) ] : [ el('span', { cls:'muted', text:T.likes + ' ' + c.likes }) ])
-    ]);
-    cm.appendChild(el('div', { cls:'cmt' + (c.picked ? ' is-pick' : '') }, [
-      el('div', { cls:'who' }, [
-        c.who === 'OP' ? T.op : T.anon + c.who,
-        el('span', { cls:'d', text:day(c.at) }),
-        c.picked ? el('span', { cls:'pick', text:T.picked }) : null
-      ]),
-      foldable(c.folded, T.foldedCmt, inner)
-    ]));
+/* ── 댓글 입력칸: 한 번에 한 글에만 열립니다 (사람 확인 칸이 하나뿐이라서) ── */
+var openedForm = null;
+function closeForm(){
+  unmountHuman();
+  if(openedForm){ openedForm.remove(); openedForm = null; }
+}
+function openForm(c, pid){
+  if(openedForm && openedForm.dataset.pid === String(pid)){ openedForm.querySelector('textarea').focus(); return; }
+  closeForm();
+  var f = commentForm(pid, function(){
+    closeForm();
+    fetchDetail(pid, true).then(function(d){ if(c.isConnected) fillCard(c, d); });
   });
-
-  var parts = [ el('a', { cls:'back', href:'#/', text:T.backList }), head, foldable(p.folded, T.foldedPost, bodyBlock), cm ];
-  if(S.open) parts.push(commentForm(p.id));
-  view.replaceChildren.apply(view, parts);
+  f.dataset.pid = String(pid);
+  var cm = c.querySelector('.cmts');
+  (cm || c).appendChild(f);
+  var add = c.querySelector('.add-c'); if(add) add.style.display = 'none';
+  openedForm = f;
+  f.querySelector('textarea').focus();
 }
 
-function commentForm(pid){
+function commentForm(pid, onDone){
   var ta = el('textarea', { placeholder:T.cmtPh, maxlength:String(BOARD.COMMENT_MAX), rows:'3' });
   ta.value = S.cmtDraft[pid] || '';
   var cnt = el('span', { cls:'count' });
@@ -490,11 +590,11 @@ function commentForm(pid){
     var h = needHuman(); if(h){ msg.textContent = h; return; }
     send.disabled = true;
     apiPost({ action:'comment', post_id:pid, body:ta.value, token:human.token }).then(function(r){
-      if(r.ok){ S.cmtDraft[pid] = ''; S.list = null; showPost(pid); }
+      if(r.ok){ S.cmtDraft[pid] = ''; S.list = null; onDone(); }
       else { msg.textContent = errText(r.error); resetHuman(); send.disabled = false; }
     }).catch(function(){ msg.textContent = T.err.net; resetHuman(); send.disabled = false; });
   });
-  var f = el('div', { cls:'form' }, [ ta, hb, el('div', { cls:'row' }, [ send, cnt ]), msg ]);
+  var f = el('div', { cls:'form c-form' }, [ ta, hb, el('div', { cls:'row' }, [ send, el('button', { cls:'textbtn', text:T.cancel, onclick:function(){ var c = f.closest('.card'); closeForm(); var a = c && c.querySelector('.add-c'); if(a) a.style.display = ''; } }), cnt ]), msg ]);
   setTimeout(function(){ mountHuman(hb); }, 0);
   return f;
 }
@@ -502,6 +602,7 @@ function commentForm(pid){
 /* ══════════ 화면 3: 글쓰기 ══════════ */
 function showNew(){
   if(!S.open){ location.hash = '#/'; return; }
+  closeForm();
   var ti = el('input', { type:'text', placeholder:T.titlePh, maxlength:String(BOARD.TITLE_MAX) });
   var ta = el('textarea', { placeholder:T.bodyPh, maxlength:String(BOARD.BODY_MAX), rows:'9' });
   ti.value = S.draft.title; ta.value = S.draft.body;
@@ -522,7 +623,7 @@ function showNew(){
     var h = needHuman(); if(h){ msg.textContent = h; return; }
     send.disabled = true;
     apiPost({ action:'post', title:ti.value, body:ta.value, token:human.token }).then(function(r){
-      if(r.ok){ S.draft = { title:'', body:'' }; S.list = null; location.hash = '#/p/' + r.id; }
+      if(r.ok){ S.draft = { title:'', body:'' }; S.list = null; S.sort = 'new'; S.q = ''; S.shown = PAGE; location.hash = '#/'; }
       else { msg.textContent = errText(r.error); resetHuman(); send.disabled = false; }
     }).catch(function(){ msg.textContent = T.err.net; resetHuman(); send.disabled = false; });
   });
@@ -562,9 +663,9 @@ function findSimilar(title, box){
 function route(){
   var h = location.hash || '#/';
   var m = h.match(/^#\/p\/(\d+)$/);
-  if(m) showPost(Number(m[1]));
+  if(m) showSingle(Number(m[1]));
   else if(h === '#/new') showNew();
-  else showList();
+  else showFeed();
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
