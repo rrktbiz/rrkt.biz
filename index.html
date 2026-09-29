@@ -329,10 +329,6 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .cal-mm-cell.hw-bh{background:color-mix(in srgb,#c0392b 15%,transparent);color:#c0392b;font-weight:700}
 .cal-mm-cell.hw-biz{background:color-mix(in srgb,#3a9ed4 15%,transparent);color:#1a7aaa;font-weight:700}
 .cal-mm-cell.hw-both{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 50%,color-mix(in srgb,#3a9ed4 15%,transparent) 50%);color:#7a3a7a;font-weight:700}
-.cal-mm-cell.hw-st{background:color-mix(in srgb,#8a9aa8 20%,transparent);color:#5f6d80;font-weight:700}
-.cal-mm-cell.hw-bh-st{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 50%,color-mix(in srgb,#8a9aa8 20%,transparent) 50%);color:#8a5548;font-weight:700}
-.cal-mm-cell.hw-biz-st{background:linear-gradient(135deg,color-mix(in srgb,#3a9ed4 15%,transparent) 50%,color-mix(in srgb,#8a9aa8 20%,transparent) 50%);color:#43728a;font-weight:700}
-.cal-mm-cell.hw-all{background:linear-gradient(135deg,color-mix(in srgb,#c0392b 15%,transparent) 33%,color-mix(in srgb,#3a9ed4 15%,transparent) 33% 66%,color-mix(in srgb,#8a9aa8 20%,transparent) 66%);color:#6a5570;font-weight:700}
 .cal-mm-cell.td{background:#3558c0;color:#fff;font-weight:800;border-radius:50%}
 /* ── TIMELINE VIEW ── */
 .cal-timeline{padding-bottom:32px}
@@ -1108,30 +1104,6 @@ const PROJECTS = [
     intro:"혈액형이 운명을 결정하는 세계. 전학 온 주인공이 숨겨진 비밀과 마주하며 성장하는 다크 판타지 학원물입니다. 권력, 혈통, 그리고 그 너머의 진실을 쫓아가는 이야기.",
     tags:["다크판타지","학원물","액션","병맛개그","소년만화","뉴트로"]
   },
-  {
-    id:"stock",
-    label:"AI글창고",
-    acc:"#8a9aa8", acc2:"#6e7d8a",
-    illust:"stock_home.png",
-    illustDesc:"",
-    status:"active",
-    keepSub:false, landOnIntro:false,
-    subType:"default",
-    intro:"떠오른 소재를 짧은 소설로 적어 쌓아두는 창고. 무엇을 쓸지는 직접 정하고, 문장은 생성형 AI가 씁니다.",
-    tags:["AI활용","조각글","웹소설"]
-  },
-  {
-    id:"goods-shop",
-    label:"Goods Shop",
-    acc:"#7b8a9e", acc2:"#5f6d80",
-    illust:"",                    /* 표지 이미지 나오면 파일명 넣기 */
-    illustDesc:"",
-    status:"prep",                /* prep = 오픈 준비중 (홈에 표시되지만 클릭 불가) */
-    keepSub:false, landOnIntro:false,
-    subType:"default",
-    intro:"",
-    tags:[]
-  },
 
 ];
 
@@ -1870,19 +1842,13 @@ function renderCalendar(){
       const ds_=ds(yr,mo,d);
       const _entries=WORK_LOG[ds_]||[];
       /* ★ 여기서 세는 프로젝트만 연간 전체보기에 색이 칠해집니다.
-         프로젝트가 늘면 아래 has~ 한 줄과 hwCls 분기를 같이 늘려야 합니다.
-         (예전에 AI글창고가 안 뜬 이유가 이 줄이 빠져 있어서였습니다) */
+         프로젝트가 늘면 아래 has~ 한 줄과 hwCls 분기를 같이 늘려야 합니다. */
       const hasBH=_entries.some(e=>e.projId==="blood-highschool");
       const hasBiz=_entries.some(e=>e.projId==="biz-oc-doll");
-      const hasSt=_entries.some(e=>e.projId==="stock");
-      const hw=hasBH||hasBiz||hasSt;
-      const hwCls= (hasBH&&hasBiz&&hasSt) ? " hw-all"
-                 : (hasBH&&hasBiz)        ? " hw-both"
-                 : (hasBH&&hasSt)         ? " hw-bh-st"
-                 : (hasBiz&&hasSt)        ? " hw-biz-st"
-                 : hasBH                  ? " hw-bh"
-                 : hasBiz                 ? " hw-biz"
-                 : hasSt                  ? " hw-st"
+      const hw=hasBH||hasBiz;
+      const hwCls= (hasBH&&hasBiz) ? " hw-both"
+                 : hasBH           ? " hw-bh"
+                 : hasBiz          ? " hw-biz"
                  : "";
       const isToday=yr===_tn.getFullYear()&&mo===_tn.getMonth()&&d===_tn.getDate();
       if(hw) cnt++;
@@ -1973,8 +1939,6 @@ function renderCalendar(){
       const yearCount=yearEntries.length;
       const navCall=w=>w.isChar
         ?`goDollChar()`
-        :w.isStock
-        ?`goStockItem('${w.stockId}')`
         :w.projId==="biz-oc-doll"
         ?`goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')`
         :`goRecentWork('${w.projId}','${w.volId}',${w.epId},null)`;
@@ -2113,7 +2077,7 @@ function renderCalendar(){
         <div>
           <div class="cal-top-row"><button class="cal-nav-btn" onclick="prevMonth()">&#8249;</button><span class="cal-month-lbl">${monthStr}</span><button class="cal-nav-btn" onclick="nextMonth()">&#8250;</button></div>
           <div class="cal-full"><div class="cal-dnames">${DNAMES.map((n,i)=>`<div class="cal-dn ${DCLS[i]}">${n}</div>`).join("")}</div><div class="cal-grid-rows">${cellsHtml}</div></div>
-          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.isStock?`onclick="goStockItem('${w.stockId}')" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?'캐릭터 시트':w.isStock?'조각글':w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
+          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?'캐릭터 시트':w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden">
@@ -2143,8 +2107,6 @@ function goCal(){S.view="calendar";S.activeProj=null;pushHash();render();}
 const PROJECT_SITES = {
   "blood-highschool": "Blood_High_School/index.html",
   "biz-oc-doll":      "biz-OC-doll/index.html",
-  "goods-shop":      "goods_shop/index.html",
-  "stock":           "stock/index.html",
 };
 function goSite(pid, hash){
   const base = PROJECT_SITES[pid];
@@ -2153,9 +2115,6 @@ function goSite(pid, hash){
 }
 function goIntro(pid){ goSite(pid, pid === "blood-highschool" ? "#intro" : "#/intro"); }
 function goDollChar(){ goSite("biz-oc-doll", "#/chars"); }
-/* 달력에서 조각글을 누르면 그 글이 바로 열립니다.
-   id 가 없으면 창고 첫 화면으로 보냅니다. */
-function goStockItem(id){ goSite("stock", id ? ("#/f/" + id) : ""); }
 function goRecentWork(projId, volId, epId){
   if(projId === "biz-oc-doll"){ goSite("biz-oc-doll", "#/story"); return; }
   goSite(projId, volId ? ("#" + volId + (epId ? "/" + epId : "")) : "");
@@ -2539,116 +2498,12 @@ loadCharDataFromSheets().then(ok=>{
 loadDollStoryFromJson().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
 });
-loadStockDataFromSheets().then(ok=>{
-  if(ok){ injectStockDatesIntoWorkLog(); render(); }
-});
 
-
-/* ══════════════════════════════════════════════════════════════
-   ★ AI글창고 조각글 날짜도 구글시트에서 받아옵니다 ★
-
-   출처: 구글시트 "stock" 탭 (공개 CSV, API 키 불필요)
-
-   시트 열 구조 (1행 헤더):
-     A=id  B=제목  C=날짜  D=공개  E=씨앗
-
-   하는 일: window._STOCK_DATA 배열에 담아둠 (여기까지가 이 함수)
-   그 다음: injectStockDatesIntoWorkLog() 가 날짜를
-            WORK_LOG 에 isStock:true 항목으로 꽂아 넣음 → 캘린더 표시
-
-   ※ 조각글 목록을 이 HTML 에서 찾으려 하지 마세요. 없습니다.
-     전부 위 시트에 있습니다.
-   ※ 본문(txt)은 여기서 읽지 않습니다. 캘린더에는 제목과 날짜만 있으면 됩니다.
-══════════════════════════════════════════════════════════════ */
-async function loadStockDataFromSheets(){
-  try{
-    const _csvFn = (typeof SHEET_CSV === 'function')
-      ? SHEET_CSV
-      : (t => `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(t)}`);
-    const res = await fetch(_csvFn('stock'));
-    if(!res.ok) throw new Error('CSV fetch 실패 ' + res.status);
-    const csv = await res.text();
-
-    // CSV 파싱 (쉼표+따옴표 처리. "" 는 따옴표 한 개로 봅니다)
-    const rows = csv.trim().split('\n').map(r=>{
-      const cols=[]; let cur='', inQ=false;
-      for(let i=0;i<r.length;i++){
-        const ch = r[i];
-        if(ch==='"'){ if(inQ && r[i+1]==='"'){ cur+='"'; i++; } else inQ=!inQ; }
-        else if(ch===','&&!inQ){ cols.push(cur.trim()); cur=''; }
-        else cur+=ch;
-      }
-      cols.push(cur.trim());
-      return cols;
-    });
-    if(rows.length < 2) return false;
-
-    /* 구글시트는 001 을 '숫자 1' 로 봅니다. 세 자리로 되돌려 놓습니다.
-       창고 사이트(stock/index.html)도 같은 규칙을 쓰므로 링크가 맞아떨어집니다. */
-    const padId = v => { v = String(v==null?'':v).trim();
-      return /^\d+$/.test(v) ? v.padStart(3,'0') : v; };
-
-    // 헤더: id / 제목 / 날짜 / 공개 / 씨앗
-    // '공개' 칸이 O·Y·TRUE·공개 인 것만 씁니다. 창고 사이트와 같은 기준입니다.
-    window._STOCK_DATA = rows.slice(1).map(r=>({
-      id:    padId(r[0]),
-      title: (r[1]||'').trim(),
-      date:  (r[2]||'').trim(),
-      open:  (r[3]||'').trim().toUpperCase(),
-      seed:  (r[4]||'').trim(),
-    })).filter(x => x.id && (x.open==='O'||x.open==='Y'||x.open==='TRUE'||x.open==='공개'));
-
-    return true;
-  }catch(e){
-    console.warn('AI글창고 CSV 불러오기 실패:', e.message);
-    return false;
-  }
-}
-
-/* ── 조각글 날짜 → WORK_LOG 주입 ──
-   위 loadStockDataFromSheets() 가 받아온 구글시트 stock 탭 데이터를
-   캘린더가 읽는 WORK_LOG 형태로 옮기는 함수입니다.
-   여기서 넣는 항목만 isStock:true 가 붙어 있고,
-   rebuildWorkLog() 이 다시 돌 때 중복 방지를 위해 먼저 싹 지웠다가 다시 넣습니다.
-   (캐릭터 쪽 injectCharDatesIntoWorkLog() 와 같은 방식입니다) */
-function injectStockDatesIntoWorkLog(){
-  const items = window._STOCK_DATA || [];
-  const proj  = PROJECTS.find(p=>p.id==='stock');
-  const acc   = proj ? proj.acc : '#8a9aa8';
-
-  // 기존 stock 항목 제거 (중복 방지)
-  Object.keys(WORK_LOG).forEach(k=>{
-    WORK_LOG[k] = WORK_LOG[k].filter(w=>!w.isStock);
-    if(!WORK_LOG[k].length) delete WORK_LOG[k];
-  });
-
-  items.forEach(x=>{
-    if(!x.date) return;
-    // 날짜 정규화: "2026. 8. 14." → "2026-08-14"
-    let dateStr = x.date;
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)){
-      const mm = dateStr.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
-      if(!mm) return;
-      dateStr = `${mm[1]}-${mm[2].padStart(2,'0')}-${mm[3].padStart(2,'0')}`;
-    }
-    if(!WORK_LOG[dateStr]) WORK_LOG[dateStr] = [];
-    WORK_LOG[dateStr].push({
-      proj:   'AI글창고',
-      title:  x.title || x.id,
-      status: '완료',
-      acc,
-      projId: 'stock',
-      isStock: true,
-      stockId: x.id,
-    });
-  });
-}
 
 function rebuildWorkLog(){
   Object.keys(WORK_LOG).forEach(k=>delete WORK_LOG[k]);
   buildWorkLog();
   injectCharDatesIntoWorkLog();
-  injectStockDatesIntoWorkLog();   /* 이 줄이 빠지면 조각글이 달력에 떴다가 사라집니다 */
 }
 
 
