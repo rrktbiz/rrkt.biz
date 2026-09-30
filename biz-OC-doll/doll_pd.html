@@ -1,34 +1,84 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>biz-OC-doll · Project Note</title>
 <!-- ══════════════════════════════════════════════════
-     PD 페이지 (Project Note)
+     Project Note page (deployed as doll_pd.html)
+     Not in the site menu — reached only from the link inside the main
+     page's contact window. The robots line keeps it out of search engines.
 
-     ※ 사이트 메뉴에는 나오지 않고, 본페이지 문의창의 링크로만 들어옵니다.
-        위의 robots 태그는 검색엔진에 뜨지 않게 막아 두는 한 줄입니다.
-
-     ※ story.html 을 바탕으로 만든 파일입니다. (공용 상단바 · 번역 · 문의창)
-        세계관(EP.00)과 회차는 story.html 에만 있습니다.
-        이 페이지의 '데모 게임' 카드가 story.html 로 가는 입구입니다.
+     Languages: English is written in this file. Japanese, Simplified Chinese
+     and Traditional Chinese are prepared AI translations in the I18N dictionary
+     at the bottom (same key as data-i18n="..."). Other languages use Google Translate.
      ══════════════════════════════════════════════════ -->
+<script>
+/* Language — decided before the page is drawn.
+   A saved choice (localStorage 'bzd_lang') wins; otherwise the browser language.
+   Japanese / Chinese browsers get the human translations, everyone else gets English. */
+(function(){
+  var DICT = { 'ja':'ja', 'zh-CN':'zh-Hans', 'zh-TW':'zh-Hant' };
+  var FONT = { 'ja':'Noto+Sans+JP', 'zh-CN':'Noto+Sans+SC', 'zh-TW':'Noto+Sans+TC' };
+
+  function norm(c){
+    var l = String(c || '').toLowerCase();
+    if(!l || l.indexOf('en') === 0) return 'en';
+    if(l.indexOf('ja') === 0) return 'ja';
+    if(l.indexOf('zh') === 0) return /hant|-tw|-hk|-mo/.test(l) ? 'zh-TW' : 'zh-CN';
+    return String(c);
+  }
+  function detect(){
+    var ls = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
+    var n = norm(ls[0]);
+    return DICT[n] ? n : 'en';
+  }
+
+  window.bzdLangNorm = norm;
+  window.bzdDictKey  = function(c){ return DICT[norm(c)] || null; };
+  window.bzdHtmlLang = function(c){ document.documentElement.lang = DICT[norm(c)] || 'en'; };
+  window.bzdFont     = function(c){
+    var f = FONT[norm(c)];
+    if(!f || document.getElementById('font-' + f)) return;
+    var ln = document.createElement('link');
+    ln.id = 'font-' + f; ln.rel = 'stylesheet';
+    ln.href = 'https://fonts.googleapis.com/css2?family=' + f + ':wght@300;400;500;700&display=swap';
+    document.head.appendChild(ln);
+  };
+
+  var saved = null;
+  try{ saved = localStorage.getItem('bzd_lang'); }catch(e){}
+  var lang = saved ? norm(saved) : detect();
+
+  /* Google Translate reads its own cookie — keep it in step with our choice */
+  var x = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  if(lang === 'en' || DICT[lang]){
+    document.cookie = 'googtrans=;path=/' + x;
+    document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + x;
+  }else{
+    document.cookie = 'googtrans=/en/' + lang + ';path=/';
+    document.cookie = 'googtrans=/en/' + lang + ';path=/;domain=.' + location.hostname;
+  }
+
+  window.__bzdLang = lang;
+  if(DICT[lang]){ window.bzdHtmlLang(lang); window.bzdFont(lang); }
+})();
+</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ═══ 공용 컴포넌트 스타일 ═══
-   상단바 문의 버튼 · 언어 안내 각주 · 제작자 소개/문의 오버레이
-   ※ index.html 에도 같은 블록이 있습니다. 한쪽 고치면 반대쪽도. */
+/* ═══ Shared components ═══
+   Contact button · language-menu note · contact window
+   (the main page has the same block) */
 #tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
 #tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
 
-/* 번역 안내 각주 — 언어를 궁금해하는 바로 그 순간에만 보이게 */
+/* Note at the bottom of the language menu */
 .tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
 .tb-lang-note b{color:#5f5f5f;font-weight:600}
 
-/* ── 제작자 소개 · 비즈니스 문의 오버레이 (다른 rrkt.biz 사이트와 같은 컴포넌트) ── */
+/* ── Contact window ── */
 #contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #contact-overlay.hidden{display:none}
 .contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
@@ -49,7 +99,7 @@
 </style>
 <script src="../config.js"></script>
 <script>
-/* iframe 안인지 먼저 판별 — 단독 상단바가 깜빡이지 않게 페인트 전에 */
+/* Detect an iframe before drawing, so the standalone top bar doesn't flash */
 try{ if(window.parent !== window) document.documentElement.className = 'embed'; }
 catch(e){ document.documentElement.className = 'embed'; }
 </script>
@@ -59,16 +109,22 @@ catch(e){ document.documentElement.className = 'embed'; }
   --bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e2e2e2;--bd2:#c6c6c6;
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
   --blue:#5a90b0;--blue-d:#4a7a98;
-  --fn:'Inter','Noto Sans KR',-apple-system,sans-serif;
+  --fn:'Inter',var(--cjk),-apple-system,sans-serif;
+  --cjk:'Inter';   /* swapped by page language (see below) */
   --h-top:46px;
 }
+/* ── Japanese / Chinese pages: local fonts, and line breaks between characters ── */
+html:lang(ja){--cjk:'Noto Sans JP'}
+html:lang(zh-Hans){--cjk:'Noto Sans SC'}
+html:lang(zh-Hant){--cjk:'Noto Sans TC'}
+html:lang(ja) *,html:lang(zh) *{word-break:normal !important;line-break:strict}
 body{background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
 button{font-family:var(--fn);cursor:pointer}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 
-/* ── 단독 열람용 상단바 — iframe 안에서는 부모 상단바를 쓰므로 숨김 ── */
+/* ── Standalone top bar (hidden inside an iframe) ── */
 #solo-topbar{
   height:var(--h-top);background:var(--sb);border-bottom:1px solid var(--bd);
   display:flex;align-items:center;gap:10px;padding:0 16px;
@@ -90,7 +146,7 @@ html.embed #solo-topbar{display:none}
 .goog-te-banner-frame,.skiptranslate{display:none !important}
 body{top:0 !important}
 
-/* ── 데모 게임 카드 (story.html 의 EP.00 카드와 같은 모양) ── */
+/* ── Demo game card ── */
 .world-card{
   position:relative;margin:14px 24px 4px;border-radius:14px;overflow:hidden;cursor:pointer;
   border:1px solid rgba(90,144,176,.22);
@@ -111,33 +167,30 @@ body{top:0 !important}
 .world-card-badge{display:inline-block;margin-left:7px;vertical-align:middle;font-size:9px;font-weight:700;letter-spacing:.4px;padding:2px 7px;border-radius:10px;background:rgba(90,144,176,.12);border:1px solid rgba(90,144,176,.28);color:var(--blue)}
 .world-card-sub{font-size:12px;font-style:italic;font-weight:300;color:var(--tx2);line-height:1.6}
 .world-card-go{position:relative;z-index:1;flex-shrink:0;font-size:12px;font-weight:600;color:var(--blue);display:flex;align-items:center;gap:5px}
-.world-card-go span{font-size:15px;transition:transform .16s ease;display:inline-block}
-.world-card:hover .world-card-go span{transform:translateX(3px)}
+.world-card-go .arr{font-size:15px;transition:transform .16s ease;display:inline-block}
+.world-card:hover .world-card-go .arr{transform:translateX(3px)}
 @media(max-width:520px){
   .world-card{margin:12px 16px 4px;padding:17px 18px;gap:10px}
   .world-card-title{font-size:15px}
   .world-card-sub{font-size:11px}
 }
 
-/* 프로젝트 명칭은 대문자 변환에서 제외 — 표기는 항상 biz-OC-doll */
+/* The project name is never uppercased — always biz-OC-doll */
 .brandname{text-transform:none !important}
 
 /* ══════════════════════════════════════════════════
-   닫기 버튼 터치 영역
-   보이는 크기는 그대로입니다. 손가락이 닿는 범위만 넓힙니다.
-   ::after 는 배경이 없어 화면에 나타나지 않고,
-   position:absolute 라 배치에도 영향을 주지 않습니다.
-   마우스 환경에는 적용되지 않습니다.
+   Close button tap area
+   Same visible size; only the touch area grows (touch screens only).
    ══════════════════════════════════════════════════ */
 @media(hover:none) and (pointer:coarse){
-  /* .contact-close — 26px → 44x44px · 모달 카드 · 이웃 없음 */
+  /* .contact-close — 26px → 44x44px */
   .contact-close::after{content:'';position:absolute;top:-9px;right:-9px;bottom:-9px;left:-9px}
 }
 /* ══════════════════════════════════════════════════
-   PD 페이지 전용
-   섹션 모양은 본페이지 소개 탭과 같은 규칙입니다.
+   Project Note page
+   Sections follow the same rules as the main page's intro tab.
    ══════════════════════════════════════════════════ */
-:root{--blue-ink:#477693}   /* 흰 배경 위 작은 파란 글씨 (명도 대비 통과 색) */
+:root{--blue-ink:#477693}   /* small blue text on white (passes contrast) */
 
 #pd-home{max-width:720px;margin:0 auto;padding:40px 24px 96px}
 .sec{padding-top:48px;margin-top:48px;border-top:1px solid #e8e8e8}
@@ -148,16 +201,16 @@ body{top:0 !important}
 .pd-body{font-size:14.5px;color:#525252;line-height:1.95;letter-spacing:-.01em}
 .pd-note{font-size:12.5px;color:#6e6e6e;line-height:1.75}
 
-/* 데모 게임 카드 — 링크로 쓰므로 밑줄·글자색만 정리 */
+/* Demo game card used as a link — reset underline and color */
 .pd-cards{margin-top:24px}
 .pd-cards .world-card{margin:0;text-decoration:none;color:inherit}
-/* 데모 게임 카드 잠금: is-locked 가 붙어 있으면 누를 수 없고 '준비 중' */
+/* Demo card lock: with is-locked it can't be clicked and shows 'Coming soon' */
 .world-card .lbl-lock{display:none}
 .world-card.is-locked{pointer-events:none;cursor:default;opacity:.7}
 .world-card.is-locked .lbl-open{display:none}
 .world-card.is-locked .lbl-lock{display:flex;color:#6e6e6e;font-weight:500}
 
-/* 기업 협업 원칙 — 번호는 "3번 원칙"처럼 짚어 말할 수 있게 남겨 둡니다 */
+/* Collaboration principles — numbered so they can be referred to ("principle 3") */
 .pd-rules{list-style:none;margin:0;padding:0;border:1px solid #e8e8e8;border-radius:12px;overflow:hidden}
 .pd-rules li{display:flex;gap:14px;align-items:flex-start;padding:13px 18px;border-top:1px solid #e8e8e8;font-size:14px;color:#111111;line-height:1.75}
 .pd-rules li:first-child{border-top:none}
@@ -167,7 +220,7 @@ body{top:0 !important}
 .pd-contact{margin-top:20px;display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:100px;border:1px solid var(--blue);background:transparent;color:var(--blue-ink);font-size:13px;font-weight:600;transition:background .15s}
 .pd-contact:hover{background:rgba(90,144,176,.08)}
 .pd-contact:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-/* 제안함 입구 버튼: is-locked 가 붙어 있으면 흐리게, 누를 수 없게, '준비 중' */
+/* Suggestion box button: with is-locked it fades, can't be clicked, shows 'Coming soon' */
 a.pd-contact{text-decoration:none}
 .pd-board .ic-open,.pd-board .lbl-open{display:none}
 .pd-board .ic-lock,.pd-board .lbl-lock{display:none}
@@ -175,7 +228,7 @@ a.pd-contact{text-decoration:none}
 .pd-board.is-locked .ic-lock,.pd-board.is-locked .lbl-lock{display:inline}
 .pd-board.is-locked{opacity:.45;cursor:default;pointer-events:none}
 
-/* ── 여는 글 · 소제목 · 문단 간격 · 기획 개요 표 ── */
+/* ── Opening · subheads · paragraph spacing · overview table ── */
 .pd-lede + .pd-lede{margin-top:16px}
 .pd-body + .pd-body{margin-top:14px}
 .pd-sub{font-size:15px;font-weight:700;color:#111111;letter-spacing:-.02em;margin:34px 0 10px}
@@ -187,32 +240,32 @@ a.pd-contact{text-decoration:none}
 .pd-facts th{width:30%;font-weight:600;color:var(--blue-ink);background:#fafafa;white-space:nowrap}
 .pd-facts td{color:#111111}
 
-/* ── 막 전환 — 제작자 노트에서 BUSINESS 로 넘어가는 자리 ──
-   보석 → 큰 BUSINESS 글자(워드마크와 같은 폰트) → 짧은 파란 선 → 안내 한 줄.
-   보석 색은 .pd-part-gem 의 background, 글자 크기는 .pd-part-label 의 font-size 만 바꾸면 됩니다. */
+/* ── Part break — from the creator's note to BUSINESS ──
+   gem → large BUSINESS (wordmark font) → short blue line → one-line note.
+   Gem color: .pd-part-gem background. Text size: .pd-part-label font-size. */
 .pd-part{margin-top:104px;text-align:center}
 .pd-part-gem{width:12px;height:12px;margin:0 auto;background:#B4A3D4;transform:rotate(45deg)}
 .pd-part-label{margin-top:22px;font-family:'Josefin Sans',sans-serif;font-weight:100;font-size:44px;line-height:1;letter-spacing:.38em;padding-left:.38em;color:#4a5560}
 .pd-part-rule{width:48px;height:1px;margin:22px auto 0;background:var(--blue)}
 .pd-part-note{margin-top:14px;font-size:12.5px;color:#6e6e6e;line-height:1.75}
-.sec.sec-after-part{border-top:none;margin-top:48px;padding-top:0}   /* 막 전환 바로 뒤 섹션은 회색 선 없이 */
+.sec.sec-after-part{border-top:none;margin-top:48px;padding-top:0}   /* no gray line right after the part break */
 
 
-/* ── BUSINESS 바로 가기 (여는 글 아래) ── */
+/* ── Skip-to-BUSINESS link (under the opening) ── */
 .pd-jump{display:inline-block;margin-top:18px;font-size:12.5px;font-weight:600;color:var(--blue-ink);text-decoration:none}
 .pd-jump:hover{text-decoration:underline}
 .pd-jump:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:3px}
 
-/* ── BUSINESS 영역 ──
-   페이지 끝까지 옅은 회색 바탕. 바탕색은 .pd-biz 의 background 한 곳만 바꾸면 됩니다.
-   안쪽 카드·표·원칙 상자는 흰색으로 띄웁니다. */
+/* ── BUSINESS area ──
+   Light gray to the end of the page (change .pd-biz background).
+   Cards, table and principle box inside stay white. */
 #pd-home{padding-bottom:0}
 .pd-biz{background:#fafafa;border-top:1px solid #e8e8e8;margin-top:104px;scroll-margin-top:0}
 .pd-biz-inner{max-width:720px;margin:0 auto;padding:0 24px 96px}
 .pd-biz .pd-part{margin-top:0;padding-top:56px}
 .pd-biz .pd-rules,.pd-biz .pd-facts,.pd-biz .pd-foot{background:#ffffff}
 
-/* ── BUSINESS 소제목 줄 — 넓은 화면은 왼쪽 칸에 소제목, 오른쪽에 본문 ── */
+/* ── BUSINESS rows — label on the left, text on the right (wide screens) ── */
 .pd-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;padding:22px 0;border-top:1px solid #e8e8e8}
 .pd-body + .pd-row{margin-top:26px}
 .pd-row-label{font-size:13px;font-weight:700;color:var(--blue-ink);letter-spacing:-.01em;line-height:1.9;padding-top:1px}
@@ -227,7 +280,7 @@ a.pd-contact{text-decoration:none}
   .pd-row{display:block;padding:20px 0}
   .pd-row-label{margin-bottom:8px}
   .sec{padding-top:40px;margin-top:40px}
-  .sec-first{margin-top:0;padding-top:12px}   /* 위 줄이 첫 섹션까지 덮지 않게 */
+  .sec-first{margin-top:0;padding-top:12px}   /* keep the rule above from reaching the first section */
   .pd-part-label{font-size:30px;letter-spacing:.3em;padding-left:.3em;margin-top:18px}
   .pd-part-rule{margin-top:18px}
   .sec.sec-after-part{margin-top:40px;padding-top:0}
@@ -241,97 +294,86 @@ a.pd-contact{text-decoration:none}
 <body>
 
 <div id="solo-topbar">
-  <a class="tb-back" href="index.html#/intro">&larr; biz-OC-doll</a>
+  <a class="tb-back notranslate" translate="no" href="index.html#/intro">&larr; biz-OC-doll</a>
   <div class="tb-sep"></div>
-  <span class="tb-title">FOR PD</span>
-  <div class="tb-right" style="position:relative"><!-- 아래 공용 블록이 채웁니다 --></div>
+  <span class="tb-title notranslate" translate="no">FOR PD</span>
+  <div class="tb-right" style="position:relative"><!-- filled by the shared block below --></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     PD 페이지 본문
-     글자는 여기서 바로 고치면 됩니다.
+     Page body. English is written here; translations live in I18N
+     (search the key after data-i18n=).
      ══════════════════════════════════════════════════ -->
 <div id="pd-home">
 
-  <!-- 1 · 여는 글 -->
+  <!-- 1 · Opening -->
   <div class="sec sec-first">
-    <div class="sec-eyebrow">Project Note</div>
-    <div class="sec-title"><span class="brandname">biz-OC-doll</span> 프로젝트 노트</div>
+    <div class="sec-eyebrow notranslate" translate="no">Project Note</div>
+    <div class="sec-title" data-i18n="pd_title"><span class="brandname">biz-OC-doll</span> Project Note</div>
 
-
-    <p class="pd-note" style="margin-bottom:14px">2026년 9월 30일 작성</p>
-    <p class="pd-lede">여기까지 들어와 주셔서 감사해요. IP 사업 이야기를 하기 전에, 이 무모한 프로젝트를 왜 시작했고 왜 지금의 모양이 됐는지부터 하나씩 말씀드리고 싶어요. 조금 길지만, 이 기획을 보며 떠올렸을 의문에 대한 답은 대부분 여기에 있어요.</p>
-    <!-- BUSINESS 바로 가기 -->
-    <a class="pd-jump" href="#pd-business" onclick="document.getElementById('pd-business').scrollIntoView({behavior:'smooth'});return false;">협업을 검토 중이라면 <span class="notranslate" translate="no">BUSINESS</span>로 바로 가기 <span aria-hidden="true">&darr;</span></a>
-
+    <p class="pd-note" style="margin-bottom:14px" data-i18n="pd_date">Written September 30, 2026</p>
+    <p class="pd-lede" data-i18n="pd_lede">Thank you for finding your way here. Before we get to the IP business side, we'd like to walk you through why this reckless project began and how it came to look the way it does. It's a little long, but most of the questions this project may have raised for you are answered here.</p>
+    <a class="pd-jump" href="#pd-business" onclick="document.getElementById('pd-business').scrollIntoView({behavior:'smooth'});return false;" data-i18n="pd_jump">Considering a collaboration? Skip to <span class="notranslate" translate="no">BUSINESS</span> <span aria-hidden="true">&darr;</span></a>
   </div>
 
-  <!-- 2 · 제작자 노트 -->
+  <!-- 2 · Creator's Note -->
   <div class="sec">
-    <div class="sec-eyebrow">Creator's Note</div>
+    <div class="sec-eyebrow notranslate" translate="no">Creator's Note</div>
+    <div class="sec-title" data-i18n="cn_title">Why it's made this way</div>
 
-    <div class="sec-title">이렇게 만든 이유</div>
+    <div class="pd-sub" data-i18n="s1_h">The culture we grew up with</div>
+    <p class="pd-body" data-i18n="s1_p1">We used to love the Vocaloid fan culture. Even with only a few lines of character info, people spun stories out of it, others made something new from those stories, and it all spread out into all kinds of content. That was the fun of it. Beyond Vocaloid, too, there used to be a livelier culture than today of fan works, and works built on those, that stood on their own as real creations.</p>
+    <p class="pd-body" data-i18n="s1_p2">In the ten-odd years since, subculture has grown far bigger. Mobile games now sit at the center of it all, and a clear flow has settled in: the official side releases new characters and stories, fans take them in and enjoy them through art and cosplay, then go looking for them in merch and pop-up stores. It's an era where showing love through spending feels natural, and it's true that this has let many more people enjoy the culture. But by the same token, the sight of people freely setting each other's creativity alight from almost nothing has become hard to find. We don't think that's anyone's fault. It's a change that came naturally with the times. So rather than waiting for those days to return, this project is closer to a struggle to make even one place where that kind of scene could happen again.</p>
+    <p class="pd-body" data-i18n="s1_p3">That's why the character structure of this project was designed the way it is below. Even if the story ends, we hope these characters never do.</p>
 
-    <div class="pd-sub">보고 자란 문화</div>
-    <p class="pd-body">과거에 보컬로이드 동인 문화를 참 좋아했어요. 캐릭터 정보가 몇 줄 안 되는데도 사람들이 그걸 가지고 이야기를 만들고, 그 이야기로 또 다른 사람이 뭔가를 만들고, 그렇게 여러 콘텐츠로 퍼져 나가는 게 재밌었어요. 보컬로이드가 아닌 다른 작품들에서도 2차 창작을 넘어 작품성을 갖춘 2~3차 창작이 이어지는 문화가 지금보다 활발했고요.</p>
-    <p class="pd-body">그로부터 10년 남짓 지나는 동안 서브컬처는 훨씬 커졌어요. 이제는 모바일 게임이 이 판의 중심이 됐고, 공식이 새 캐릭터와 이야기를 내놓으면 팬들이 그걸 받아 그림과 코스프레로 즐기고, 굿즈와 팝업스토어로 찾아가는 흐름이 자리를 잡았어요. 좋아하는 마음을 소비로 표현하는 게 자연스러운 시대죠. 덕분에 더 많은 사람이 이 문화를 즐기게 된 것도 사실이에요. 다만 그만큼, 거의 아무것도 없는 데서 자유롭게 서로의 창작에 불을 붙여 가던 풍경은 보기 어려워졌어요. 누구의 잘못이라기보다 시대에 맞게 자연스럽게 생긴 변화라고 생각해요. 그래서 이 프로젝트는 그 시절이 돌아오길 기다리기보다, 그런 판이 다시 생길 수 있는 자리를 하나라도 만들어 보려는 발버둥에 가까워요.</p>
-    <p class="pd-body">그래서 이 프로젝트의 캐릭터 구조를 아래 방식으로 설계했어요. 작품은 끝나도, 이 캐릭터들은 끝나지 않았으면 해서요.</p>
+    <div class="pd-sub" data-i18n="s2_h">What fan culture taught us</div>
+    <p class="pd-body" data-i18n="s2_p1">Watching fan culture for a long time taught us that the less the official side says, the more fans fill in. So the character sheets are made to be closer to raw material than a finished product. If you're used to receiving a finished story and enjoying it, this approach may feel unfamiliar at first, since you have to fill in the spaces the official side leaves open yourself.</p>
+    <p class="pd-body" data-i18n="s2_p2">Like any creator, when we first imagined this project, it wasn't easy to let the characters go. Then, as we shifted to a structure where one character branches out differently with each Holder, we were able to loosen our grip a little. Now fans are welcome to interpret the characters freely, and it's fine if their take becomes more famous than what was first imagined. That's what this project was built hoping for in the first place. Someday the official side may also name a character and create with it, standing in the same place as every other Holder. Even then, the name and personality will change from work to work, so the official version will be just one of that code's many faces, never the right answer.</p>
 
-    <div class="pd-sub">동인 문화에 대한 이해</div>
-    <p class="pd-body">공식이 말을 아낄수록 팬들이 더 많이 채운다는 건, 동인 문화를 오래 보면서 자연스럽게 알게 됐어요. 그래서 캐릭터 시트는 완성품이라기보다 재료에 가깝게 만들고 있어요. 완성된 이야기를 받아서 즐기는 데 익숙한 분들께는 이런 방식이 처음엔 낯설게 느껴질 수도 있어요. 공식이 채워 주지 않은 자리를 직접 채워야 하니까요.</p>
+    <div class="pd-sub" data-i18n="s3_h">Never ending it</div>
+    <p class="pd-body" data-i18n="s3_p1">This project has no finale and no finished state. Not ending is its baseline. Taking Cinderella Girls as a reference, we set the goal at 200 characters or more, but it's hard to promise how far it will go. Not everything always goes to plan. What we promise instead is not to stop.</p>
+    <p class="pd-body" data-i18n="s3_p2">The release order, too, follows whichever character we feel like making at the time rather than some complex strategy. Keeping the character sheets rough and the workload light is for the same reason. That's how it can keep going for a long time.</p>
 
-    <p class="pd-body">
+    <div class="pd-sub" data-i18n="s4_h">Branding / one color</div>
+    <p class="pd-body" data-i18n="s4_p1">biz-OC-doll is filled only with characters the official side genuinely loves. They're made to the official side's taste, and that direction isn't going to change. Just as a good label has a color you can recognize at a glance, we believe this project needs a color of its own too. If that color started to waver, the solidity holding this project up would fade along with it. The color gives the official side strength as well. It feels like growing a collection of favorite things one piece at a time, and that's what makes it possible to stay with this project for a long time.</p>
+    <p class="pd-body" data-i18n="s4_p2">Because of that, there will surely be people who wish their favorite type of character were here. If those people start open character projects of their own, we'd be truly glad. Characters with that place's own color would come out of it. We wouldn't see that as following us or copying us. If anything, many projects like this springing up and filling the scene with their own colors is closer to the picture we described earlier.</p>
 
-창작자라면 누구나 그렇듯, 처음 이 프로젝트를 구상할 때는 캐릭터들을 쉽게 놓아주지 못했어요. 그러다 하나의 캐릭터가 홀더마다 다른 갈래로 뻗어 나가는 구조로 바꾸면서, 조금은 내려놓을 수 있게 됐어요. 이제는 팬들이 자유롭게 캐해석을 해도 좋고, 그 해석이 원래 떠올린 모습보다 더 유명해져도 좋아요. 애초에 그렇게 되길 바라면서 만든 프로젝트이기도 하고요. 언젠가는 공식도 다른 홀더들과 같은 위치에서 이름을 붙이고 창작을 할지도 몰라요. 그때도 작품마다 이름도 성격도 바꿔 가며 쓸 테니, 공식이 그린 모습 역시 그 코드의 여러 모습 중 하나일 뿐 정답이 되지는 않을 거예요.</p>
+    <div class="pd-sub" data-i18n="s5_h">The scene we want to see</div>
+    <p class="pd-body" data-i18n="s5_p1">The scene we most want to see from this project is biz-OC-dolls appearing in all kinds of works, like actors. A character who's the lead in one artist's webcomic shows up as a villain in someone else's game, and as a supporting role who passes by for a moment in yet another web novel. The name and personality differ in every work, but follow them back to the original code and it's the same face, and all those appearances add up to that character's filmography. If that happens a lot, we think it will be the most moving scene this project can show.</p>
+    <p class="pd-body" data-i18n="s5_p2">Part of what led to this structure is a regret the official side has carried for a long time. Whenever a work with a beloved character reached its end, it always felt sad, as if the character had ended along with it. We wanted to keep loving them, but with nothing new coming out, the affection would cool on its own, and it felt like the character was trapped inside the work. We wanted to keep seeing them by giving them new stories, at least in our own original works, but of course we couldn't use someone else's character as we pleased. In the end we let them go with a bitter feeling, and after that happened again and again, it became hard to find the courage to love a new character. Wanting a way out of that dilemma is what became this structure.</p>
+    <p class="pd-body" data-i18n="s5_p3">For a fandom to never end, someone has to keep making things, and for that, anyone has to be able to come back easily. Every otaku has that one fandom they can always go back to, don't they? Not blazing brightly, but quietly staying alive, with people still there whenever you return. We hope biz-OC-doll becomes that kind of fandom, a place where scattered tastes gather and anyone can rekindle the fire at any time. Here, going beyond fan works, simply taking a character into your own work makes you a creator who moves the whole scene. Instead of just watching a beloved work come to an end, you can keep the scene you love going yourself. Staying around for a long time as a fandom built together like that is what this project hopes to be.</p>
 
-    <div class="pd-sub">끝내지 않는다는 것</div>
-    <p class="pd-body">이 프로젝트는 완결도 완성도 없이, 끝내지 않는 걸 기준으로 삼았어요. 데레마스를 레퍼런스 삼아 목표는 200명 이상으로 잡았지만, 어디까지 이어질지는 장담하기 어려워요. 모든 일이 늘 계획대로 되지는 않으니까요. 대신 멈추지 않는 걸 약속으로 삼았어요.</p>
+    <div class="pd-sub" data-i18n="s6_h">So you can create with peace of mind</div>
+    <p class="pd-body" data-i18n="s6_p1">A few years ago, while this project was still taking shape, we casually suggested to a creator we're close with that they make something using a biz-OC-doll character. They happily agreed, but as time went on, we could see them growing uneasy. They asked whether using someone else's character might cause legal trouble later, and whether they should sign some kind of contract. This was even though we were simply happy to see the character used and had no intention of asking for anything.</p>
+    <p class="pd-body" data-i18n="s6_p2">That's when we learned that, for the person using the character, this can bring up quite complicated feelings. Love alone isn't enough; people need to be able to trust before they can create with peace of mind. It was then that we took to heart that this project can only work if the trust between the official side and Holders is solid.</p>
+    <p class="pd-body" data-i18n="s6_p3">So as long as your work follows the published rules, there's no need to come ask for permission. Those rules are the official side's permission.</p>
 
-    <p class="pd-body">공개 순서도 복잡한 전략보다는 그때그때 만들고 싶은 캐릭터를 따라가려고 해요. 캐릭터 시트를 러프하게 두고 작업을 가볍게 유지하는 것도 같은 이유예요. 그래야 오래 이어 갈 수 있으니까요.</p>
+    <div class="pd-sub" data-i18n="s7_h">The atmosphere we protect</div>
+    <p class="pd-body" data-i18n="s7_p1">biz-OC-doll Official aims to protect its own atmosphere, clear and sparkling like a gem, just like the feel of this site you're looking at now. We think it's the makers' job to keep everything, from the characters to how things are run, from straying out of that atmosphere.</p>
+    <p class="pd-body" data-i18n="s7_p2">To put your mind at ease up front: the official side will never be the one shaking up the scene. Looking at how this project is built, some of you may worry that it's all a way to hold the scene in the palm of our hand and play with it. We know the kind of scars that sort of management leaves on a community, so we won't do it. We won't throw out provocative bait or controversies to see how people react, and we won't test anything on the fandom. In other words, there will never be a day when we say, "Actually, this was a social experiment."</p>
+    <p class="pd-body" data-i18n="s7_p3">In the end, we believe a scene's atmosphere comes to resemble what the official side steadily puts out. So the surest thing the official side can do is hold the center. If the official side wavers, the fandom can't play at ease. That's why we're writing down here what the official side intends to protect, and then focusing on releasing characters.</p>
 
-    <div class="pd-sub">브랜딩 / 하나의 색깔</div>
-    <p class="pd-body">비즈오씨돌은 공식이 애정을 느끼는 캐릭터들로만 채워져요. 공식의 취향으로 만든 캐릭터들이고, 앞으로도 그 방향은 바꾸지 않으려고 해요. 기획사마다 한눈에 알아볼 수 있는 색깔이 있듯이, 이 프로젝트에도 그런 색깔이 하나 있어야 한다고 생각하거든요. 그 색깔이 흔들리기 시작하면 이 프로젝트를 지탱하는 단단함도 함께 옅어질 것 같아요. 이 색깔은 공식에게도 힘이 돼요. 좋아하는 것들로 채운 컬렉션을 하나씩 늘려 가는 기분이라, 이 프로젝트를 오래 붙잡고 있을 수 있는 이유가 되어 주거든요.</p>
-    <p class="pd-body">그러다 보니 원하는 타입의 캐릭터가 없어서 아쉬운 분들도 분명 있을 거예요. 그런 분들이 자기만의 오픈 캐릭터 프로젝트를 시작한다면 정말 반가울 것 같아요. 거기서는 또 그곳만의 색깔을 가진 캐릭터들이 나올 테니까요. 그걸 두고 따라 했다거나 베꼈다고 생각하지 않아요. 오히려 이런 프로젝트가 여러 개 생겨서 저마다의 색깔로 판을 채워 가는 모습이, 앞에서 말한 그 풍경에 더 가깝다고 생각해요.</p>
+    <div class="pd-sub" data-i18n="s8_h">Even with a worldview</div>
+    <p class="pd-body" data-i18n="s8_p1">biz-OC-doll has an official worldview ready. It hasn't been revealed yet, but the foundation of the world the characters live in is already decided. That said, hearing that there's a separate official worldview might actually feel like pressure. When official settings exist, you may feel self-conscious about taking your biz-OC-doll your own way, and start to wonder whether you're wrong if it differs from the official version.</p>
+    <p class="pd-body" data-i18n="s8_p2">So the very first rule we set when building the worldview was that it must not clash with what happens in this project. We can't go into detail yet, but in that world too, biz-OC-dolls share the same face based on their code while each living with a different way of talking and a different story. Choosing a biz-OC-doll, naming it, and raising it in your own way were all made to carry over naturally into that world as well.</p>
+    <p class="pd-body" data-i18n="s8_p3">So it's fine not to know the worldview, and it's fine to create stories completely different from it. The official worldview isn't a frame that locks in Holders' biz-OC-dolls. It's built as a world where that kind of creativity is welcome in any amount. If we get to show it someday as a demo game, you'll be able to feel better what we meant by this.</p>
 
-    <div class="pd-sub">보고 싶은 장면</div>
-    <p class="pd-body">이 프로젝트에서 가장 보고 싶은 장면은 비즈오씨돌이 배우처럼 여러 작품에 출연하는 모습이에요. 어떤 작가의 웹툰에서는 주인공이던 캐릭터가 다른 사람의 게임에서는 악역으로, 또 다른 웹소설에서는 잠깐 스쳐 가는 조연으로 나오는 거요. 작품마다 이름도 성격도 다르지만 원래 코드를 따라가 보면 같은 얼굴이고, 그렇게 쌓인 출연작들이 그 캐릭터의 필모그래피가 되는 거죠. 그런 일이 많이 일어난다면, 그게 이 프로젝트가 보여 줄 수 있는 가장 벅차오르는 장면일 거라고 생각해요.</p>
-    <p class="pd-body">이런 구조를 떠올린 데에는 공식이 오래 품어 온 아쉬움도 있어요. 좋아하는 캐릭터가 나오는 작품이 완결되면, 그 캐릭터까지 같이 끝나 버린 것 같아서 늘 슬펐어요. 계속 좋아하고 싶은데 새로 나오는 게 없으니 애정이 자연스럽게 식기도 하고, 캐릭터가 작품 안에 갇혀 있는 느낌도 들었어요. 직접 만드는 1차 창작 안에서라도 서사를 만들어 계속 보고 싶었지만, 당연하게도 남의 캐릭터를 마음대로 쓸 수는 없었고요. 결국엔 씁쓸한 마음으로 떠나보냈고, 그걸 반복하다 보니 새로운 캐릭터를 좋아할 용기가 나지 않았어요. 이 딜레마에서 벗어나고 싶은 마음이 지금의 구조가 됐어요.</p>
-    <p class="pd-body">끝나지 않는 장르가 되려면 누군가 계속 만들어 줘야 하고, 그러려면 누구나 편하게 돌아올 수 있어야 한다고 생각해요. 오타쿠에게는 언제든 돌아가기 편한 장르가 하나쯤 있잖아요. 크게 타오르지는 않아도 은은하게 계속 살아 있고, 돌아가면 여전히 사람들이 있는 곳이요. 비즈오씨돌이 그런 장르가 되어서, 잘게 흩어진 취향들이 한데 모이고 언제든 누구든 다시 불을 지필 수 있었으면 해요. 여기서는 2차 창작을 넘어, 캐릭터를 데리고 자기 작품을 내는 것만으로도 이 판을 움직이는 창작자가 될 수 있어요. 좋아하던 작품이 끝나는 걸 지켜보기만 하는 대신, 좋아하는 판을 직접 이어 갈 수 있는 거죠. 그렇게 함께 만들어 가는 장르로 오래 남는 게 이 프로젝트가 바라는 모습이에요.</p>
+    <div class="pd-sub" data-i18n="s9_h">Official merch</div>
+    <p class="pd-body" data-i18n="s9_p1">Some of you may be waiting for the official side to release some merch, especially those who love the characters as their codes are, before any name is given. However, biz-OC-doll Official has no plans to make merch directly for now. We think official merch is more likely to come out through collaborations with companies. When a collaboration happens, many kinds of merch often come out all at once, so we hope you'll wait just a little for that time.</p>
+    <p class="pd-body" data-i18n="s9_p2">In the meantime, we'd love for merch made by Holders to fill that space. We hope a culture takes root in this fandom where merch made by Holders is treasured just as much as official merch. If unofficial goods fill the official place until official ones arrive, we think that too is very much in the spirit of this project.</p>
 
-    <div class="pd-sub">믿고 쓸 수 있도록</div>
-    <p class="pd-body">이 프로젝트를 구상하던 몇 년 전, 가까운 창작자 한 분께 비즈오씨돌 캐릭터를 써서 작품을 하나 만들어 보자고 가볍게 제안한 적이 있어요. 흔쾌히 써 주긴 했는데, 시간이 지날수록 불안해하는 게 보였어요. 남의 캐릭터를 쓰는 게 나중에 법적으로 문제가 되지 않을지, 계약서 같은 걸 써야 하지 않겠냐고 묻더라고요. 그저 캐릭터를 써 주는 게 즐겁기만 했고, 무언가를 요구할 생각은 전혀 없었는데도요.</p>
-    <p class="pd-body">그때 쓰는 사람 입장에서는 이게 꽤 복잡한 마음이 드는 일이라는 걸 알게 됐어요. 좋아하는 마음만으로는 부족하고, 믿을 수 있어야 마음 놓고 만들 수 있다는 것도요. 이 프로젝트는 공식과 홀더 사이의 신뢰가 단단해야만 굴러갈 수 있다는 걸, 그때 깊이 새겼어요.</p>
-    <p class="pd-body">그래서 공개된 규칙 안에서 만든 작품이라면 따로 허락을 받으러 오지 않아도 괜찮아요. 그 규칙이 곧 공식의 허락이니까요.</p>
-
-    <div class="pd-sub">공식이 지키는 분위기</div>
-
-    <p class="pd-body">비즈오씨돌 공식은 보석같이 맑고 반짝이는 고유의 분위기를 지키려고 해요. 지금 보고 계신 이 사이트의 느낌 그대로요. 캐릭터와 운영까지 이 분위기에서 벗어나지 않게 하는 게 만드는 쪽의 몫이라고 생각해요.</p>
-
-    <p class="pd-body">미리 안심시켜 드리자면, 공식이 판을 흔드는 쪽이 되지는 않을 거예요. 혹시 이 프로젝트의 구조를 보고, 판을 손바닥 위에 올려 두고 주무르려는 건 아닐까 걱정되는 분이 계실지도 몰라요. 그런 운영이 판에 어떤 상처를 남기는지 알기에, 그런 일은 하지 않아요. 반응을 보려고 자극적인 떡밥이나 논란거리를 먼저 던지는 일도, 팬덤을 두고 무언가를 시험해 보는 일도 없을 거예요. 나중에 "사실 이건 사회 실험이었습니다" 같은 말을 꺼낼 일은 없다는 뜻이에요.</p>
-
-    <p class="pd-body">판의 분위기는 결국 공식이 꾸준히 내놓는 것을 닮아 간다고 생각해요. 그래서 공식이 할 수 있는 가장 확실한 일은, 중심을 지키는 거예요. 공식이 흔들리면 팬덤이 편하게 놀 수 없게 되거든요. 그래서 공식이 무엇을 지키려는지 미리 이렇게 적어 두고, 공식은 캐릭터를 내놓는 일에 집중하려고 해요.</p>
-
-    <div class="pd-sub">세계관이 있어도</div>
-    <p class="pd-body">비즈오씨돌에는 공식 세계관이 준비되어 있어요. 아직 공개하지는 않았지만, 캐릭터들이 살아가는 세계의 바탕은 이미 정해 두었어요. 다만 공식 세계관이 따로 있다는 말이 오히려 부담스럽게 들릴 수도 있을 것 같아요. 공식 설정이 정해져 있으면 내 비즈오씨돌을 내 방식대로 밀고 나가기가 괜히 눈치 보이고, 공식이 그린 모습과 다르면 틀린 건 아닐까 싶어지니까요.</p>
-    <p class="pd-body">그래서 세계관을 짤 때 가장 먼저 세운 기준이, 이 프로젝트에서 일어날 일들과 어긋나지 않는 것이었어요. 아직 자세히 말씀드릴 수는 없지만, 그 세계에서도 비즈오씨돌들은 코드를 베이스로 같은 얼굴을 한 채 저마다 다른 말투와 이야기를 가지고 살아가요. 비즈오씨돌을 고르고, 이름을 붙이고, 각자 다르게 키워 가는 일이 그 세계 안에서도 자연스러운 일로 이어지게 만들었어요. </p>
-    <p class="pd-body">그러니 세계관을 몰라도, 세계관과 전혀 다른 이야기를 만들어도 괜찮아요. 공식 세계관은 홀더들의 비즈오씨돌을 가두는 틀이 아니라, 그런 창작이 얼마든지 있어도 되는 세계로 만들어 두었어요. 언젠가 데모 게임으로 보여 드리게 된다면, 이 말이 어떤 뜻이었는지 더 잘 느끼실 수 있을 거예요.</p>
-
-    <div class="pd-sub">공식 굿즈</div>
-    <p class="pd-body">공식이 굿즈를 하나쯤 내주길 기다리는 분들도 계실 거예요. 이름을 붙이기 전, 코드 그대로의 모습을 좋아해 주시는 분들이라면 더 그럴 거고요. 다만 비즈오씨돌 공식이 직접 굿즈를 만들 계획은 지금으로서는 없어요. 공식 굿즈는 기업과의 협업을 통해 나올 가능성이 더 높다고 보고 있어요. 협업이 이루어지면 굿즈가 여러 종류로 한꺼번에 나오는 경우가 많으니, 그때를 조금만 기다려 주셨으면 해요.</p>
-    <p class="pd-body">그동안은 홀더들이 만든 굿즈가 그 자리를 채워 주면 좋겠어요. 이 장르에서는 홀더가 만든 굿즈도 공식 굿즈만큼 소중하게 여겨지는 문화가 자리 잡았으면 해요. 공식이 나오기 전까지 비공식이 공식의 자리를 채워 가는 흐름이라면, 그것도 이 프로젝트다운 모습이라고 생각해요.</p>
-
-    <!-- ══ 제안함 입구 ══
-         제안함 주소는 같은 폴더의 board.html 입니다.
-         ★ 제안함을 열 때는 아래 <a class="pd-contact pd-board is-locked" ...> 에서 is-locked 한 단어만 지우세요.
-           버튼 글자(준비 중 → 제안함 가기), 자물쇠 아이콘, 흐림, 눌림 막기가 전부 같이 풀립니다.
-           그리고 둘째 문단(아직은 준비 중이에요…)은 지우거나 바꾸면 됩니다. -->
-    <div class="pd-sub">제안함</div>
-    <p class="pd-body">메일로 보내기엔 가볍고, 그냥 넘기기엔 아쉬운 이야기가 있다면 여기에 남겨 주세요. 사이트를 쓰다 불편했던 점도, 이런 게 있으면 좋겠다는 생각도 괜찮아요.</p>
-    <p class="pd-body">아직은 준비 중이에요. 판이 조금 더 커지면 열려고 해요.</p>
+    <!-- ══ Suggestion box ══
+         Address: board.html in the same folder.
+         To open it, delete the single word is-locked from the <a> below
+         (label, lock icon, fade and click-block all switch together),
+         then remove or change the second paragraph (board_p2). -->
+    <div class="pd-sub" data-i18n="board_h">Suggestion box</div>
+    <p class="pd-body" data-i18n="board_p1">If you have something too small for an email but too good to let slide, leave it here. Things that bugged you while using the site, or ideas for things you'd like to see, are all welcome.</p>
+    <p class="pd-body" data-i18n="board_p2">It's still being prepared. We plan to open it once the scene grows a bit more.</p>
     <a class="pd-contact pd-board is-locked" href="board.html" onclick="if(this.classList.contains('is-locked')) return false;">
       <svg class="ic-lock" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       <svg class="ic-open" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
-      <span class="lbl-lock">제안함 · 준비 중</span><span class="lbl-open">제안함 가기</span>
+      <span class="lbl-lock" data-i18n="board_lock">Suggestion box · Coming soon</span><span class="lbl-open" data-i18n="board_open">Go to the suggestion box</span>
     </a>
 
   </div>
@@ -339,55 +381,54 @@ a.pd-contact{text-decoration:none}
 </div>
 
 <!-- ══════════════════════════════════════════════════
-     BUSINESS — 여기서부터 페이지 끝까지 회색 바탕 영역
+     BUSINESS — gray area from here to the end of the page
      ══════════════════════════════════════════════════ -->
 <div class="pd-biz" id="pd-business">
 <div class="pd-biz-inner">
 
-  <!-- 막 전환 -->
   <div class="pd-part">
     <div class="pd-part-gem" aria-hidden="true"></div>
     <div class="pd-part-label notranslate" translate="no">BUSINESS</div>
     <div class="pd-part-rule" aria-hidden="true"></div>
-    <p class="pd-part-note">여기서부터는 협업을 검토하시는 분들을 위해 조금 더 정리된 말투로 적겠습니다.</p>
+    <p class="pd-part-note" data-i18n="part_note">From here on, for those considering a collaboration, we'll write in a more organized, formal tone.</p>
   </div>
 
   <div class="sec sec-after-part">
-    <div class="sec-eyebrow">Collaboration</div>
-    <div class="sec-title">함께 만든다면</div>
+    <div class="sec-eyebrow notranslate" translate="no">Collaboration</div>
+    <div class="sec-title" data-i18n="collab_title">If we build it together</div>
 
-    <p class="pd-body"><span class="brandname">biz-OC-doll</span>은 처음부터 다른 곳과 협업할 수 있는 IP를 목표로 설계한 프로젝트입니다. 낭만이 오래 이어지려면 그 낭만을 받쳐 줄 설계도 필요하다고 생각해서, 비즈오씨돌 공식은 구조부터 먼저 짜 두었습니다. 그 중심에 있는 것이 캐릭터 수와 공식 세계관입니다.</p>
+    <p class="pd-body" data-i18n="biz_intro"><span class="brandname">biz-OC-doll</span> was designed from the start as an IP that can collaborate with others. For romance to last, it needs a design to support it, so biz-OC-doll Official built the structure first. At its center are the number of characters and the official worldview.</p>
 
     <div class="pd-row">
-      <div class="pd-row-label">캐릭터 수</div>
+      <div class="pd-row-label" data-i18n="row_count_h">Number of characters</div>
       <div class="pd-row-body">
-    <p class="pd-body">캐릭터 수를 목표 200명으로 크게 잡은 것은, 캐릭터마다 팬덤의 크기는 다르더라도, 캐릭터가 모여 협업을 검토할 수 있는 규모의 IP를 갖추기 위해서입니다. 모든 캐릭터가 같은 기준과 분위기 안에서 만들어지므로, 수가 늘어나도 하나의 IP로 묶여 보입니다.</p>
+    <p class="pd-body" data-i18n="row_count_p">The goal of 200 characters is set high so that, even if each character's fandom differs in size, together they form an IP at a scale worth considering for collaboration. Because every character is made under the same standards and atmosphere, they read as a single IP no matter how many there are.</p>
       </div>
     </div>
 
-    <!-- 공식 세계관 — 공개 시점이 바뀌면 둘째 문단의 '50명 이상쯤' 부분,
-         맨 아래 기획 개요 표의 '공식 세계관' 줄, 스크립트의 DEMO_OPEN_AT 을 같이 고치세요. -->
+    <!-- Official worldview — if the release timing changes, update row_world_p2,
+         ov_world in the overview table, and DEMO_OPEN_AT in the script at the bottom. -->
     <div class="pd-row">
-      <div class="pd-row-label">공식 세계관</div>
+      <div class="pd-row-label" data-i18n="row_world_h">Official worldview</div>
       <div class="pd-row-body">
-    <p class="pd-body">협업이 정해진 뒤에 세계관을 새로 만들면 시간에 쫓기기 쉽고, 협업 전후로 IP의 성격이 달라져 쌓아 온 팬들의 신뢰가 흔들리기 쉽습니다. 그래서 비즈오씨돌 공식은 프로젝트의 성격과 운영 방식, 세계관이 같은 방향을 가리키도록 처음부터 맞춰 두었습니다. 어떤 협업에서 타협하더라도 근본이 흔들리지 않게 하기 위해서이며, 팬 창작 역시 같은 구조 위에 있어 협업 작품이 기존 팬덤과 부딪힐 위험도 적습니다.</p>
-    <p class="pd-body">미리 정해 둔 것은 세계관이고, 그 위의 이야기는 협업에서 함께 조정할 수 있도록 열어 두었습니다. 세계관은 데모 게임으로 보여 드릴 예정이며, 공개는 캐릭터가 50명 이상쯤 쌓였을 때로 잡고 있습니다.</p>
-    <p class="pd-body">이 세계관이 정식 작품으로 이어지는 것은 팬덤이 충분히 자란 뒤의 일이라 길게는 10년이 걸릴 수 있고, 끝내 나오지 못할 가능성도 염두에 두고 있습니다. 그래도 데모 게임은 미리 만들어 둡니다. <span id="pd-demo-note" data-open="데모 게임과 세계관 정리는 아래에 모아 두었습니다.">데모 게임과 세계관 정리는 공개되면 아래에 모아 둘 예정입니다.</span></p>
+    <p class="pd-body" data-i18n="row_world_p1">Building a worldview only after a collaboration is decided tends to mean racing the clock, and the IP's character can shift before and after the collaboration, shaking the trust fans have built up. So biz-OC-doll Official aligned the project's character, the way it is run, and its worldview to point in the same direction from the start. This keeps the foundation firm whatever compromises a collaboration may involve, and because fan creations rest on the same structure, there is little risk of a collaboration clashing with the existing fandom.</p>
+    <p class="pd-body" data-i18n="row_world_p2">What has been set in advance is the worldview; the stories built on it are left open to be shaped together in a collaboration. The worldview will be shown through a demo game, planned for release once there are around 50 or more characters.</p>
+    <p class="pd-body"><span data-i18n="row_world_p3">Turning this worldview into a full-fledged work will only come after the fandom has grown enough, which could take as long as ten years, and we also keep in mind that it may never happen. Even so, the demo game is being made ahead of time.</span> <span id="pd-demo-note" data-open-key="demo_note_open" data-open="The demo game and worldview notes are collected below." data-i18n="demo_note">Once released, the demo game and worldview notes will be collected below.</span></p>
     <div class="pd-cards">
 
-      <!-- 데모 게임 입구 (story.html) — 새 탭으로 열립니다.
-           ★ 공개 캐릭터가 50명이 되면 자동으로 열립니다. (숫자는 맨 아래 스크립트의 DEMO_OPEN_AT)
-             그 전에 직접 열고 싶으면 아래 class 의 is-locked 한 단어와 tabindex="-1" aria-disabled="true" 를 지우세요.
-           같은 탭에서 열고 싶으면 target="_blank" rel="noopener" 를 지우면 됩니다. -->
-      <a class="world-card is-locked" href="story.html" target="_blank" rel="noopener" tabindex="-1" aria-disabled="true" onclick="if(this.classList.contains('is-locked')) return false;">
+      <!-- Demo game card — opens in a new tab.
+           It unlocks by itself when released characters reach DEMO_OPEN_AT
+           AND DEMO_URL (script at the bottom) is filled in.
+           To open it by hand: delete is-locked, tabindex="-1" and aria-disabled="true". -->
+      <a class="world-card is-locked" href="#" target="_blank" rel="noopener" tabindex="-1" aria-disabled="true" onclick="if(this.classList.contains('is-locked')) return false;">
         <div class="world-card-bg"></div>
         <div class="world-card-inner">
-          <div class="world-card-eyebrow">DEMO GAME</div>
-          <div class="world-card-title">데모 게임</div>
-          <div class="world-card-sub">공식 세계관을 담은 데모 게임과 세계관 정리를 모아 둘 곳입니다</div>
+          <div class="world-card-eyebrow notranslate" translate="no">DEMO GAME</div>
+          <div class="world-card-title" data-i18n="demo_title">Demo game</div>
+          <div class="world-card-sub" data-i18n="demo_sub">Where the demo game of the official worldview and its notes will be kept</div>
         </div>
-        <div class="world-card-go lbl-open">보기 <span>&rsaquo;</span></div>
-        <div class="world-card-go lbl-lock">준비 중</div>
+        <div class="world-card-go lbl-open"><span data-i18n="demo_go">View</span> <span class="arr">&rsaquo;</span></div>
+        <div class="world-card-go lbl-lock" data-i18n="demo_lock">Coming soon</div>
       </a>
 
     </div>
@@ -395,63 +436,61 @@ a.pd-contact{text-decoration:none}
     </div>
 
     <div class="pd-row">
-      <div class="pd-row-label">열려 있는 협업</div>
+      <div class="pd-row-label" data-i18n="row_open_h">Open to collaboration</div>
       <div class="pd-row-body">
-    <p class="pd-body">공식 세계관은 지금 시장이 반기는 방향과는 조금 거리가 있고, 취향을 타는 편입니다. 그래서 공식 세계관을 협업의 조건으로 두지 않습니다. 캐릭터 IP를 보고 찾아오신 경우라면, 공식 세계관과는 별개인 새 이야기로 가볍게 시작하는 쪽이 오히려 잘 맞을 수 있습니다. 짧게 운영되는 게임이나 실험적인 프로젝트, 캐릭터를 잠시 빌려 가는 작은 게임과 굿즈도 환영합니다. 비즈오씨돌의 협업 기록은 IP의 이력으로 남고, 협업하는 쪽에게도 기술을 펼쳐 보일 수 있으니 양쪽 모두에게 의미 있는 기록이 된다고 생각합니다.</p>
-    <p class="pd-body">이처럼 비즈오씨돌은 작품 하나의 결과에 IP 전체가 걸려 있지 않은 구조입니다. 협업으로 새로 만들어지는 이야기도 분명 비즈오씨돌이고, 원작과 공식 세계관은 그와 별개로 남아 있습니다. 그러니 새로운 시도에 크게 부담을 느끼지 않으셔도 괜찮습니다.</p>
-    <p class="pd-body">당장의 이야기는 아니지만, 방향만큼은 미리 적어 둡니다. 비즈오씨돌은 기술의 발전에 맞춰, 그 기술을 담아 보여 줄 수 있는 IP를 목표로 만들어지고 있습니다. 기술이 발전할수록 캐릭터는 더 입체적으로 살아나고, 더 많은 사람에게 더 가까이 닿을 수 있다고 봅니다. 그런 기술을 가진 곳이라면 규모와 상관없이 작은 실험부터 기꺼이 함께하려 합니다.</p>
-
-
+    <p class="pd-body" data-i18n="row_open_p1">The official worldview is somewhat removed from what the market currently favors and is fairly niche. For that reason, the official worldview is not a condition for collaboration. If you've come for the character IP, starting lightly with a new story separate from the official worldview may actually be the better fit. Short-running games, experimental projects, and small games or merch that borrow the characters for a while are all welcome. Every biz-OC-doll collaboration becomes part of the IP's track record and a chance for the partner to show off its technology, so we believe it becomes a meaningful record for both sides.</p>
+    <p class="pd-body" data-i18n="row_open_p2">In this way, biz-OC-doll is structured so that the whole IP never rides on the outcome of a single work. A new story made through a collaboration is still unmistakably biz-OC-doll, while the original and the official worldview remain separate from it. So there's no need to feel much pressure about trying something new.</p>
+    <p class="pd-body" data-i18n="row_open_p3">It isn't something for right now, but we'd like to note the direction in advance. biz-OC-doll is being built to be an IP that keeps pace with advancing technology and can showcase it. We believe that the further technology advances, the more vividly characters come to life and the more closely they can reach more people. If you have that kind of technology, we're glad to work together, starting with small experiments, whatever your size.</p>
       </div>
     </div>
 
     <div class="pd-row">
-      <div class="pd-row-label">협업 원칙</div>
+      <div class="pd-row-label" data-i18n="row_rules_h">Collaboration principles</div>
       <div class="pd-row-body">
-    <p class="pd-lede">협업에서 변하지 않는 원칙입니다.</p>
+    <p class="pd-lede" data-i18n="rules_lede">These principles do not change in any collaboration.</p>
     <ol class="pd-rules">
-      <li><span class="n">1</span><span>원저작권은 biz-OC-doll에 있다. 어떤 형태로도 이전되지 않는다.</span></li>
-      <li><span class="n">2</span><span>기업은 허가된 범위 안에서만 캐릭터를 활용할 수 있다.</span></li>
-      <li><span class="n">3</span><span>팬 창작물의 권리는 창작자에게 있다. 기업이 이를 활용하려면 창작자와 개별 협의를 거쳐야 한다.</span></li>
-      <li><span class="n">4</span><span>기업은 biz-OC-doll을 공식으로 자칭하거나 대표할 수 없다.</span></li>
-      <li><span class="n">5</span><span>프로젝트의 제작과 운영에 기업은 관여하지 않는다.</span></li>
-      <li><span class="n">6</span><span>개별 커스텀 요청은 받지 않는다.</span></li>
+      <li><span class="n">1</span><span data-i18n="rule_1">The original copyright belongs to biz-OC-doll and is not transferred in any form.</span></li>
+      <li><span class="n">2</span><span data-i18n="rule_2">Companies may use the characters only within the permitted scope.</span></li>
+      <li><span class="n">3</span><span data-i18n="rule_3">Rights to fan creations belong to their creators. A company wishing to use them must reach an individual agreement with the creator.</span></li>
+      <li><span class="n">4</span><span data-i18n="rule_4">Companies may not call themselves official or represent biz-OC-doll.</span></li>
+      <li><span class="n">5</span><span data-i18n="rule_5">Companies take no part in the production or operation of the project.</span></li>
+      <li><span class="n">6</span><span data-i18n="rule_6">Individual custom requests are not accepted.</span></li>
     </ol>
-    <!-- 둘째 줄은 데모 게임 카드가 열리면 자동으로 숨습니다 -->
-    <div class="pd-foot">협업의 구체적인 조건과 범위는 모두 <b>개별 계약</b>으로 정합니다.<span id="pd-demo-pre"><br>데모 게임은 공개 전이라도 요청해 주시면 준비되는 대로 먼저 전달드리겠습니다.</span></div>
-    <!-- 오른쪽 위 편지 아이콘과 같은 문의창을 엽니다 -->
+    <!-- The second line hides itself once the demo game card opens -->
+    <div class="pd-foot"><span data-i18n="rules_foot">All specific terms and scope of a collaboration are set by <b>individual contract</b>.</span><span id="pd-demo-pre"><br><span data-i18n="rules_pre">Even before its public release, the demo game can be shared with you first as soon as it's ready, on request.</span></span></div>
+    <!-- Opens the same contact window as the envelope icon at the top -->
     <button class="pd-contact" onclick="openContactOverlay()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
-      비즈니스 문의
+      <span data-i18n="biz_contact">Business inquiries</span>
     </button>
       </div>
     </div>
   </div>
 
-  <!-- 4 · 권리 관계 -->
+  <!-- 4 · Rights -->
   <div class="sec">
-    <div class="sec-eyebrow">Rights</div>
-    <div class="sec-title">권리 관계</div>
-    <p class="pd-body">창작자가 권리 관계를 제대로 정리해 두지 못해, 훗날 자기 캐릭터를 자기 작품에서조차 마음대로 쓰지 못하게 되는 일을 여러 번 봐 왔습니다. 그래서 공식은 캐릭터를 공개하기 전에 저작권 등록을 먼저 마치는 것을 원칙으로 하고 있습니다. 특정한 권리를 쥐거나 누군가를 단속하려는 목적이 아닙니다.</p>
+    <div class="sec-eyebrow notranslate" translate="no">Rights</div>
+    <div class="sec-title" data-i18n="rights_title">Rights</div>
+    <p class="pd-body" data-i18n="rights_p">We have seen, more than once, creators who failed to sort out their rights properly and later could not freely use their own characters even in their own works. So the official side makes it a rule to complete copyright registration before releasing a character. The purpose is not to hold on to particular rights or to police anyone.</p>
   </div>
 
-  <!-- 5 · 기획 개요 -->
+  <!-- 5 · Overview -->
   <div class="sec">
-    <div class="sec-eyebrow">Overview</div>
-    <div class="sec-title">기획 개요</div>
-    <p class="pd-note" style="margin-bottom:14px">필요한 정보만 간단히 정리했습니다. 캐릭터 관련 숫자는 공개 현황에 맞춰 자동으로 갱신됩니다.</p>
+    <div class="sec-eyebrow notranslate" translate="no">Overview</div>
+    <div class="sec-title" data-i18n="ov_title">Overview</div>
+    <p class="pd-note" style="margin-bottom:14px" data-i18n="ov_note">Only the essentials, in brief. Character-related numbers update automatically to match what has been released.</p>
     <div class="pd-facts-wrap">
       <table class="pd-facts">
-        <tr><th>형태</th><td>오픈 캐릭터 프로젝트</td></tr>
-        <tr><th>공식이 주는 것</th><td>고유 코드, 캐릭터 시트, 표정 몇 가지</td></tr>
-        <!-- 캐릭터 수 · 타이틀 홀더 — 구글 시트(OC-characters 탭)를 읽어 자동으로 채웁니다. 계산 방식은 맨 아래 스크립트 설명 참고.
-             시트를 못 읽으면 '현재 N명 공개' 부분과 타이틀 홀더 줄은 조용히 숨고, '목표 200명' 문구만 남습니다. -->
-        <tr><th>캐릭터 수</th><td><span id="pd-stat-count" hidden></span>목표 200명, 이후 추가 가능</td></tr>
-        <tr id="pd-stat-holder-row" hidden><th>타이틀 홀더</th><td id="pd-stat-holder"></td></tr>
-        <tr><th>공식 지향 연령</th><td>전체 이용가 ~ 12세 이용가</td></tr>
-        <tr><th>팬 이용 범위</th><td>상업 이용 포함 대부분 허용, 배당 없음</td></tr>
-        <tr><th>운영 트랙</th><td>팬 자유 창작 / 공식 세계관</td></tr>
-        <tr><th>공식 세계관</th><td id="pd-demo-row" data-open="데모 게임 공개 중">데모 게임으로 공개 예정 (캐릭터 50명 이상 시점, 변동 가능)</td></tr>
+        <tr><th data-i18n="ov_form_h">Format</th><td data-i18n="ov_form">Open character project</td></tr>
+        <tr><th data-i18n="ov_give_h">What's provided</th><td data-i18n="ov_give">A unique code, a character sheet, a few expressions</td></tr>
+        <!-- Character count and TITLE HOLDER are filled from the Google Sheet (OC-characters tab).
+             If the sheet can't be read, the count and the TITLE HOLDER row quietly stay hidden. -->
+        <tr><th data-i18n="ov_count_h">Characters</th><td><span id="pd-stat-count" hidden></span><span data-i18n="ov_count">Goal of 200, more may follow</span></td></tr>
+        <tr id="pd-stat-holder-row" hidden><th class="notranslate" translate="no">TITLE HOLDER</th><td id="pd-stat-holder"></td></tr>
+        <tr><th data-i18n="ov_age_h">Official target rating</th><td data-i18n="ov_age">All ages to 12+</td></tr>
+        <tr><th data-i18n="ov_use_h">Fan use</th><td data-i18n="ov_use">Mostly allowed, including commercial use; no revenue share</td></tr>
+        <tr><th data-i18n="ov_track_h">Tracks</th><td data-i18n="ov_track">Free fan creation / Official worldview</td></tr>
+        <tr><th data-i18n="ov_world_h">Official worldview</th><td id="pd-demo-row" data-open-key="ov_world_open" data-open="Demo game now available" data-i18n="ov_world">To be released as a demo game (at 50+ characters, subject to change)</td></tr>
       </table>
     </div>
   </div>
@@ -460,17 +499,544 @@ a.pd-contact{text-decoration:none}
 </div>
 
 <script>
+/* ══════════════════════════════════════════════════════════════
+   TRANSLATIONS — English (en) / Japanese / Simplified / Traditional Chinese
+   Elements marked data-i18n="key" show the entry for the current language.
+   data-i18n-title="key" does the same for tooltips.
+   · The English here is the same text as in the HTML above — edit both.
+   · Quotes: Japanese and Traditional Chinese use 「 」, Simplified uses " ".
+   ══════════════════════════════════════════════════════════════ */
+var I18N = {
+  pd_title: { 'en': "<span class=\"brandname\">biz-OC-doll</span> Project Note",
+    'ja': "<span class=\"brandname\">biz-OC-doll</span> プロジェクトノート",
+    'zh-Hans': "<span class=\"brandname\">biz-OC-doll</span> 企划笔记",
+    'zh-Hant': "<span class=\"brandname\">biz-OC-doll</span> 企劃筆記" },
+
+  pd_date: { 'en': "Written September 30, 2026",
+    'ja': "2026年9月30日 記",
+    'zh-Hans': "2026年9月30日 撰写",
+    'zh-Hant': "2026年9月30日 撰寫" },
+
+  pd_lede: { 'en': "Thank you for finding your way here. Before we get to the IP business side, we'd like to walk you through why this reckless project began and how it came to look the way it does. It's a little long, but most of the questions this project may have raised for you are answered here.",
+    'ja': "ここまで来てくださって、ありがとうございます。IPビジネスの話をする前に、この無謀なプロジェクトをなぜ始めたのか、なぜ今の形になったのかを、ひとつずつお話しさせてください。少し長くなりますが、この企画を見て浮かんだ疑問への答えは、ほとんどここにあります。",
+    'zh-Hans': "感谢你一路来到这里。在谈IP商务之前，想先一件件说明这个有些莽撞的企划为什么会开始，又为什么会是现在这个样子。内容有点长，但看到这个企划时可能产生的疑问，答案大多都在这里。",
+    'zh-Hant': "感謝你一路來到這裡。在談IP商務之前，想先一件件說明這個有些莽撞的企劃為什麼會開始，又為什麼會是現在這個樣子。內容有點長，但看到這個企劃時可能產生的疑問，答案大多都在這裡。" },
+
+  pd_jump: { 'en': "Considering a collaboration? Skip to <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>",
+    'ja': "コラボをご検討中の方は <span class=\"notranslate\" translate=\"no\">BUSINESS</span> へ <span aria-hidden=\"true\">&darr;</span>",
+    'zh-Hans': "正在考虑合作的话，直接跳到 <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>",
+    'zh-Hant': "正在考慮合作的話，直接跳到 <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>" },
+
+  cn_title: { 'en': "Why it's made this way",
+    'ja': "こうして作った理由",
+    'zh-Hans': "为什么这样做",
+    'zh-Hant': "為什麼這樣做" },
+
+  s1_h: { 'en': "The culture we grew up with",
+    'ja': "見て育った文化",
+    'zh-Hans': "看着长大的文化",
+    'zh-Hant': "看著長大的文化" },
+
+  s1_p1: { 'en': "We used to love the Vocaloid fan culture. Even with only a few lines of character info, people spun stories out of it, others made something new from those stories, and it all spread out into all kinds of content. That was the fun of it. Beyond Vocaloid, too, there used to be a livelier culture than today of fan works, and works built on those, that stood on their own as real creations.",
+    'ja': "かつて、ボーカロイドの同人文化がとても好きでした。キャラクターの情報はほんの数行しかないのに、人々がそこから物語を作り、その物語からまた別の誰かが何かを作り、そうしてさまざまなコンテンツへ広がっていくのが面白かったんです。ボーカロイド以外の作品でも、二次創作にとどまらず、作品として読み応えのある二次・三次創作が続いていく文化が、今よりも活発でした。",
+    'zh-Hans': "过去我们非常喜欢VOCALOID的同人文化。明明角色资料只有寥寥几行，大家却能以此编出故事，又有人根据那些故事做出新的东西，就这样扩散成各式各样的内容，这一点特别有意思。在VOCALOID以外的作品里，超越二次创作、本身就具有作品性的二次、三次创作接连出现的文化，也比现在活跃得多。",
+    'zh-Hant': "過去我們非常喜歡VOCALOID的同人文化。明明角色資料只有寥寥幾行，大家卻能以此編出故事，又有人根據那些故事做出新的東西，就這樣擴散成各式各樣的內容，這一點特別有意思。在VOCALOID以外的作品裡，超越二次創作、本身就具有作品性的二次、三次創作接連出現的文化，也比現在活躍得多。" },
+
+  s1_p2: { 'en': "In the ten-odd years since, subculture has grown far bigger. Mobile games now sit at the center of it all, and a clear flow has settled in: the official side releases new characters and stories, fans take them in and enjoy them through art and cosplay, then go looking for them in merch and pop-up stores. It's an era where showing love through spending feels natural, and it's true that this has let many more people enjoy the culture. But by the same token, the sight of people freely setting each other's creativity alight from almost nothing has become hard to find. We don't think that's anyone's fault. It's a change that came naturally with the times. So rather than waiting for those days to return, this project is closer to a struggle to make even one place where that kind of scene could happen again.",
+    'ja': "それから10年あまりのあいだに、サブカルチャーはずっと大きくなりました。今ではモバイルゲームがこの界隈の中心になり、公式が新しいキャラクターと物語を出すと、ファンがそれを受け取ってイラストやコスプレで楽しみ、グッズやポップアップストアへ足を運ぶ流れが定着しています。好きな気持ちを消費で表すのが自然な時代ですよね。そのおかげで、より多くの人がこの文化を楽しめるようになったのも事実です。ただそのぶん、ほとんど何もないところから、自由にお互いの創作に火をつけ合っていく光景は見かけにくくなりました。誰かのせいというより、時代に合わせて自然に生まれた変化だと思っています。だからこのプロジェクトは、あの頃が戻ってくるのを待つよりも、そんな場がもう一度生まれうる場所をひとつでも作ってみようという、あがきに近いものです。",
+    'zh-Hans': "从那之后的十多年里，亚文化变得庞大得多。如今手游成了这个圈子的中心，官方推出新角色和新故事，粉丝接收之后用绘画和cos来享受，再去周边和快闪店寻找它们，这样的流程已经固定下来。这是一个用消费来表达喜爱显得理所当然的时代，也确实因此让更多人能享受这份文化。只是相应地，从几乎一无所有的地方出发、自由地互相点燃创作的景象，已经很难看到了。与其说是谁的错，不如说是顺应时代自然产生的变化。所以这个企划与其说是在等那个时代回来，更像是在拼命挣扎，想至少打造一个能让那样的圈子再次诞生的地方。",
+    'zh-Hant': "從那之後的十多年裡，次文化變得龐大得多。如今手遊成了這個圈子的中心，官方推出新角色和新故事，粉絲接收之後用繪畫和cos來享受，再去周邊和快閃店尋找它們，這樣的流程已經固定下來。這是一個用消費來表達喜愛顯得理所當然的時代，也確實因此讓更多人能享受這份文化。只是相應地，從幾乎一無所有的地方出發、自由地互相點燃創作的景象，已經很難看到了。與其說是誰的錯，不如說是順應時代自然產生的變化。所以這個企劃與其說是在等那個時代回來，更像是在拼命掙扎，想至少打造一個能讓那樣的圈子再次誕生的地方。" },
+
+  s1_p3: { 'en': "That's why the character structure of this project was designed the way it is below. Even if the story ends, we hope these characters never do.",
+    'ja': "だから、このプロジェクトのキャラクター構造を次のように設計しました。作品は終わっても、このキャラクターたちは終わらないでほしいから。",
+    'zh-Hans': "所以，这个企划的角色结构是按下面的方式设计的。因为希望即使作品结束了，这些角色也不会结束。",
+    'zh-Hant': "所以，這個企劃的角色結構是按下面的方式設計的。因為希望即使作品結束了，這些角色也不會結束。" },
+
+  s2_h: { 'en': "What fan culture taught us",
+    'ja': "同人文化への理解",
+    'zh-Hans': "对同人文化的理解",
+    'zh-Hant': "對同人文化的理解" },
+
+  s2_p1: { 'en': "Watching fan culture for a long time taught us that the less the official side says, the more fans fill in. So the character sheets are made to be closer to raw material than a finished product. If you're used to receiving a finished story and enjoying it, this approach may feel unfamiliar at first, since you have to fill in the spaces the official side leaves open yourself.",
+    'ja': "公式が語らないほど、ファンがより多くを埋めていく。それは同人文化を長く見てきて、自然とわかったことです。だからキャラクターシートは、完成品というより素材に近い形で作っています。完成した物語を受け取って楽しむことに慣れている方は、最初はこのやり方に戸惑うかもしれません。公式が埋めていない部分を、自分で埋めなければならないので。",
+    'zh-Hans': "官方说得越少，粉丝就填补得越多——这是长期看着同人文化自然明白的事。所以角色设定图与其说是成品，不如说更接近素材。对于习惯接收完整故事来享受的人来说，这种方式一开始可能会有点陌生，因为官方没有填上的地方，需要自己去填。",
+    'zh-Hant': "官方說得越少，粉絲就填補得越多——這是長期看著同人文化自然明白的事。所以角色設定圖與其說是成品，不如說更接近素材。對於習慣接收完整故事來享受的人來說，這種方式一開始可能會有點陌生，因為官方沒有填上的地方，需要自己去填。" },
+
+  s2_p2: { 'en': "Like any creator, when we first imagined this project, it wasn't easy to let the characters go. Then, as we shifted to a structure where one character branches out differently with each Holder, we were able to loosen our grip a little. Now fans are welcome to interpret the characters freely, and it's fine if their take becomes more famous than what was first imagined. That's what this project was built hoping for in the first place. Someday the official side may also name a character and create with it, standing in the same place as every other Holder. Even then, the name and personality will change from work to work, so the official version will be just one of that code's many faces, never the right answer.",
+    'ja': "創作者なら誰でもそうであるように、最初にこのプロジェクトを構想したときは、キャラクターたちを簡単には手放せませんでした。けれど、ひとつのキャラクターがホルダーごとに違う方向へ枝分かれしていく構造に変えてから、少しは手放せるようになりました。今では、ファンが自由にキャラ解釈をしてもいいし、その解釈が最初に思い描いた姿より有名になってもかまいません。もともと、そうなることを願って作ったプロジェクトでもあります。いつか公式も、ほかのホルダーと同じ立場で名前をつけて創作するかもしれません。そのときも作品ごとに名前も性格も変えて使うので、公式が描いた姿もそのコードのいくつもの姿のひとつにすぎず、正解にはならないはずです。",
+    'zh-Hans': "就像所有创作者一样，最初构思这个企划时，我们也很难放手让角色离开。后来改成一个角色会随着每位持有者延伸出不同分支的结构，才终于能稍微放下。现在，粉丝可以自由地解读角色，那份解读就算比最初设想的样子更出名也没关系。这个企划本来就是抱着这样的期望做出来的。也许有一天，官方也会站在和其他持有者一样的位置，为角色起名并进行创作。到那时，每部作品里的名字和性格也都会不同，所以官方笔下的样子同样只是那个编号众多面貌中的一种，不会成为标准答案。",
+    'zh-Hant': "就像所有創作者一樣，最初構思這個企劃時，我們也很難放手讓角色離開。後來改成一個角色會隨著每位持有者延伸出不同分支的結構，才終於能稍微放下。現在，粉絲可以自由地解讀角色，那份解讀就算比最初設想的樣子更出名也沒關係。這個企劃本來就是抱著這樣的期望做出來的。也許有一天，官方也會站在和其他持有者一樣的位置，為角色取名並進行創作。到那時，每部作品裡的名字和性格也都會不同，所以官方筆下的樣子同樣只是那個編號眾多面貌中的一種，不會成為標準答案。" },
+
+  s3_h: { 'en': "Never ending it",
+    'ja': "終わらせないということ",
+    'zh-Hans': "所谓不完结",
+    'zh-Hant': "所謂不完結" },
+
+  s3_p1: { 'en': "This project has no finale and no finished state. Not ending is its baseline. Taking Cinderella Girls as a reference, we set the goal at 200 characters or more, but it's hard to promise how far it will go. Not everything always goes to plan. What we promise instead is not to stop.",
+    'ja': "このプロジェクトは、完結も完成もなく、終わらせないことを基準にしました。デレマスを参考に目標は200人以上としていますが、どこまで続くかは断言できません。すべてがいつも計画どおりにいくわけではないので。そのかわり、止まらないことを約束にしました。",
+    'zh-Hans': "这个企划没有完结，也没有完成，以不结束为基准。参考灰姑娘女孩，目标定在200人以上，但会延续到哪里，很难打包票。毕竟并不是所有事都能按计划进行。取而代之的，是把不停下来当作承诺。",
+    'zh-Hant': "這個企劃沒有完結，也沒有完成，以不結束為基準。參考灰姑娘女孩，目標定在200人以上，但會延續到哪裡，很難打包票。畢竟並不是所有事都能按計畫進行。取而代之的，是把不停下來當作承諾。" },
+
+  s3_p2: { 'en': "The release order, too, follows whichever character we feel like making at the time rather than some complex strategy. Keeping the character sheets rough and the workload light is for the same reason. That's how it can keep going for a long time.",
+    'ja': "公開の順番も、複雑な戦略よりは、そのときどきで作りたいキャラクターについていこうと思っています。キャラクターシートをラフなままにして、作業を軽く保っているのも同じ理由です。そうしてこそ、長く続けていけるので。",
+    'zh-Hans': "发布顺序也不走复杂的策略，而是跟着当下想做的角色走。角色设定图保持粗略、让工作保持轻量，也是同样的理由。这样才能长久地走下去。",
+    'zh-Hant': "發布順序也不走複雜的策略，而是跟著當下想做的角色走。角色設定圖保持粗略、讓工作保持輕量，也是同樣的理由。這樣才能長久地走下去。" },
+
+  s4_h: { 'en': "Branding / one color",
+    'ja': "ブランディング / ひとつのカラー",
+    'zh-Hans': "品牌 / 唯一的色彩",
+    'zh-Hant': "品牌 / 唯一的色彩" },
+
+  s4_p1: { 'en': "biz-OC-doll is filled only with characters the official side genuinely loves. They're made to the official side's taste, and that direction isn't going to change. Just as a good label has a color you can recognize at a glance, we believe this project needs a color of its own too. If that color started to waver, the solidity holding this project up would fade along with it. The color gives the official side strength as well. It feels like growing a collection of favorite things one piece at a time, and that's what makes it possible to stay with this project for a long time.",
+    'ja': "biz-OC-dollは、公式が愛着を感じるキャラクターだけで満たされています。公式の好みで作ったキャラクターたちで、これからもその方向は変えないつもりです。レーベルごとにひと目でわかるカラーがあるように、このプロジェクトにもそんなカラーがひとつ必要だと思っているからです。そのカラーが揺らぎはじめたら、このプロジェクトを支える芯の強さも一緒に薄れていく気がします。このカラーは公式にとっても力になります。好きなものを集めたコレクションをひとつずつ増やしていく感覚なので、このプロジェクトを長く続けていける理由になってくれるんです。",
+    'zh-Hans': "biz-OC-doll里只会有官方真心喜爱的角色。这些角色是按照官方的喜好做出来的，今后这个方向也不打算改变。就像每个厂牌都有一眼就能认出的色彩，我们认为这个企划也需要一种这样的色彩。一旦这种色彩开始动摇，支撑这个企划的那份坚实感也会跟着变淡。这种色彩对官方来说也是一种力量。那种感觉就像是把喜欢的东西一件件收进收藏里，正因为如此，才能长久地坚持做这个企划。",
+    'zh-Hant': "biz-OC-doll裡只會有官方真心喜愛的角色。這些角色是按照官方的喜好做出來的，今後這個方向也不打算改變。就像每個廠牌都有一眼就能認出的色彩，我們認為這個企劃也需要一種這樣的色彩。一旦這種色彩開始動搖，支撐這個企劃的那份堅實感也會跟著變淡。這種色彩對官方來說也是一種力量。那種感覺就像是把喜歡的東西一件件收進收藏裡，正因為如此，才能長久地堅持做這個企劃。" },
+
+  s4_p2: { 'en': "Because of that, there will surely be people who wish their favorite type of character were here. If those people start open character projects of their own, we'd be truly glad. Characters with that place's own color would come out of it. We wouldn't see that as following us or copying us. If anything, many projects like this springing up and filling the scene with their own colors is closer to the picture we described earlier.",
+    'ja': "そのぶん、好みのタイプのキャラクターがいなくて残念に思う方も、きっといると思います。そんな方が自分だけのオープンキャラクタープロジェクトを始めてくれたら、本当にうれしいです。そこからは、またその場所ならではのカラーを持ったキャラクターが生まれるはずなので。それを真似したとか、パクったとは思いません。むしろ、こういうプロジェクトがいくつも生まれて、それぞれのカラーで界隈を満たしていく姿のほうが、先ほどお話しした光景に近いと思っています。",
+    'zh-Hans': "也因此，一定会有人因为没有自己喜欢的类型而觉得遗憾。如果那些人能开始属于自己的开放角色企划，我们会非常高兴。因为那里又会诞生带有那个地方独特色彩的角色。我们不会把那看作模仿或抄袭。反而，像这样的企划出现很多个、各自用自己的色彩填满这个圈子的样子，才更接近前面说的那幅景象。",
+    'zh-Hant': "也因此，一定會有人因為沒有自己喜歡的類型而覺得遺憾。如果那些人能開始屬於自己的開放角色企劃，我們會非常高興。因為那裡又會誕生帶有那個地方獨特色彩的角色。我們不會把那看作模仿或抄襲。反而，像這樣的企劃出現很多個、各自用自己的色彩填滿這個圈子的樣子，才更接近前面說的那幅景象。" },
+
+  s5_h: { 'en': "The scene we want to see",
+    'ja': "見たい光景",
+    'zh-Hans': "想看到的画面",
+    'zh-Hant': "想看到的畫面" },
+
+  s5_p1: { 'en': "The scene we most want to see from this project is biz-OC-dolls appearing in all kinds of works, like actors. A character who's the lead in one artist's webcomic shows up as a villain in someone else's game, and as a supporting role who passes by for a moment in yet another web novel. The name and personality differ in every work, but follow them back to the original code and it's the same face, and all those appearances add up to that character's filmography. If that happens a lot, we think it will be the most moving scene this project can show.",
+    'ja': "このプロジェクトでいちばん見たい光景は、biz-OC-dollが俳優のようにいろいろな作品に出演する姿です。ある作家のWebマンガでは主人公だったキャラクターが、別の人のゲームでは悪役として、また別のWeb小説ではほんの一瞬すれ違う脇役として登場するんです。作品ごとに名前も性格も違うけれど、元のコードをたどれば同じ顔で、そうして積み重なった出演作がそのキャラクターのフィルモグラフィーになる。そんなことがたくさん起きたら、それがこのプロジェクトが見せられるいちばん胸が熱くなる光景だと思います。",
+    'zh-Hans': "这个企划最想看到的画面，是biz-OC-doll像演员一样出演各种作品的样子。在某位作者的条漫里是主角的角色，到了别人的游戏里成了反派，在另一部网络小说里又是一闪而过的配角。每部作品里的名字和性格都不一样，但顺着原本的编号找回去，就是同一张脸，这样累积起来的出演作品，就成了那个角色的作品履历。如果这样的事能大量发生，我们认为那会是这个企划能展现的最令人心潮澎湃的画面。",
+    'zh-Hant': "這個企劃最想看到的畫面，是biz-OC-doll像演員一樣出演各種作品的樣子。在某位作者的網路漫畫裡是主角的角色，到了別人的遊戲裡成了反派，在另一部網路小說裡又是一閃而過的配角。每部作品裡的名字和性格都不一樣，但順著原本的編號找回去，就是同一張臉，這樣累積起來的出演作品，就成了那個角色的作品履歷。如果這樣的事能大量發生，我們認為那會是這個企劃能展現的最令人心潮澎湃的畫面。" },
+
+  s5_p2: { 'en': "Part of what led to this structure is a regret the official side has carried for a long time. Whenever a work with a beloved character reached its end, it always felt sad, as if the character had ended along with it. We wanted to keep loving them, but with nothing new coming out, the affection would cool on its own, and it felt like the character was trapped inside the work. We wanted to keep seeing them by giving them new stories, at least in our own original works, but of course we couldn't use someone else's character as we pleased. In the end we let them go with a bitter feeling, and after that happened again and again, it became hard to find the courage to love a new character. Wanting a way out of that dilemma is what became this structure.",
+    'ja': "こうした構造を思いついた背景には、公式が長いあいだ抱えてきた寂しさもあります。好きなキャラクターが出る作品が完結すると、そのキャラクターまで一緒に終わってしまったようで、いつも悲しかったんです。ずっと好きでいたいのに、新しく出るものがないから愛情も自然と冷めていくし、キャラクターが作品の中に閉じ込められているようにも感じました。自分で作る一次創作の中だけでも物語を作って見続けたかったけれど、当然ながら他人のキャラクターを勝手に使うことはできません。結局は苦い気持ちで見送り、それを繰り返すうちに、新しいキャラクターを好きになる勇気が出なくなりました。このジレンマから抜け出したいという気持ちが、今の構造になりました。",
+    'zh-Hans': "会想出这样的结构，也是因为官方一直以来怀着的一份遗憾。每当喜欢的角色所在的作品完结，就好像那个角色也跟着一起结束了，总是很难过。明明想继续喜欢下去，却没有新的东西出来，喜爱也就自然而然地冷却了，还会觉得角色被困在了作品里。哪怕只是在自己做的原创作品里，也想给他们编故事、继续看下去，但理所当然，不能随意使用别人的角色。最后只能怀着苦涩的心情送他们离开，这样反复几次之后，就再也提不起喜欢新角色的勇气了。想从这个两难中走出来的心情，成就了现在的结构。",
+    'zh-Hant': "會想出這樣的結構，也是因為官方一直以來懷著的一份遺憾。每當喜歡的角色所在的作品完結，就好像那個角色也跟著一起結束了，總是很難過。明明想繼續喜歡下去，卻沒有新的東西出來，喜愛也就自然而然地冷卻了，還會覺得角色被困在了作品裡。哪怕只是在自己做的原創作品裡，也想給他們編故事、繼續看下去，但理所當然，不能隨意使用別人的角色。最後只能懷著苦澀的心情送他們離開，這樣反覆幾次之後，就再也提不起喜歡新角色的勇氣了。想從這個兩難中走出來的心情，成就了現在的結構。" },
+
+  s5_p3: { 'en': "For a fandom to never end, someone has to keep making things, and for that, anyone has to be able to come back easily. Every otaku has that one fandom they can always go back to, don't they? Not blazing brightly, but quietly staying alive, with people still there whenever you return. We hope biz-OC-doll becomes that kind of fandom, a place where scattered tastes gather and anyone can rekindle the fire at any time. Here, going beyond fan works, simply taking a character into your own work makes you a creator who moves the whole scene. Instead of just watching a beloved work come to an end, you can keep the scene you love going yourself. Staying around for a long time as a fandom built together like that is what this project hopes to be.",
+    'ja': "終わらないジャンルになるには、誰かが作り続けてくれなければならないし、そのためには誰もが気軽に戻ってこられなければならないと思います。オタクには、いつでも気軽に戻れるジャンルがひとつくらいありますよね。大きく燃え上がらなくても、静かにずっと生きていて、戻ればまだ人がいる場所。biz-OC-dollがそんなジャンルになって、細かく散らばった好みがひとつに集まり、いつでも誰でもまた火をつけられる場所になってほしいです。ここでは二次創作を超えて、キャラクターを連れて自分の作品を出すだけで、この界隈を動かす創作者になれます。好きだった作品が終わるのをただ見届けるかわりに、好きな界隈を自分の手でつないでいけるんです。そうやってみんなで作っていくジャンルとして長く残ること。それが、このプロジェクトが願う姿です。",
+    'zh-Hans': "要成为一个不会结束的圈子，就需要有人一直创作下去；而要做到这一点，就得让任何人都能轻松地回来。每个宅都有那么一个随时都能轻松回去的圈子吧。不会烧得轰轰烈烈，却一直静静地活着，回去的时候依然有人在。希望biz-OC-doll能成为那样的圈子，让零散的喜好聚到一起，任何人在任何时候都能重新点燃它。在这里，不只是二次创作，只要带着角色推出自己的作品，就能成为推动这个圈子的创作者。不再只是眼看着喜欢的作品走向结局，而是能亲手让喜欢的圈子延续下去。像这样作为大家一起打造的圈子长久地存在下去，就是这个企划所期望的样子。",
+    'zh-Hant': "要成為一個不會結束的圈子，就需要有人一直創作下去；而要做到這一點，就得讓任何人都能輕鬆地回來。每個宅都有那麼一個隨時都能輕鬆回去的圈子吧。不會燒得轟轟烈烈，卻一直靜靜地活著，回去的時候依然有人在。希望biz-OC-doll能成為那樣的圈子，讓零散的喜好聚到一起，任何人在任何時候都能重新點燃它。在這裡，不只是二次創作，只要帶著角色推出自己的作品，就能成為推動這個圈子的創作者。不再只是眼看著喜歡的作品走向結局，而是能親手讓喜歡的圈子延續下去。像這樣作為大家一起打造的圈子長久地存在下去，就是這個企劃所期望的樣子。" },
+
+  s6_h: { 'en': "So you can create with peace of mind",
+    'ja': "安心して使えるように",
+    'zh-Hans': "为了能放心使用",
+    'zh-Hant': "為了能放心使用" },
+
+  s6_p1: { 'en': "A few years ago, while this project was still taking shape, we casually suggested to a creator we're close with that they make something using a biz-OC-doll character. They happily agreed, but as time went on, we could see them growing uneasy. They asked whether using someone else's character might cause legal trouble later, and whether they should sign some kind of contract. This was even though we were simply happy to see the character used and had no intention of asking for anything.",
+    'ja': "このプロジェクトを構想していた数年前、親しい創作者の方に、biz-OC-dollのキャラクターを使って作品をひとつ作ってみないかと、軽く提案したことがあります。快く使ってくれたのですが、時間が経つにつれて不安そうにしているのがわかりました。他人のキャラクターを使うのは後で法的に問題にならないか、契約書のようなものを書いたほうがいいんじゃないかと聞かれたんです。こちらはただキャラクターを使ってもらえるのがうれしいだけで、何かを求めるつもりはまったくなかったのに。",
+    'zh-Hans': "几年前构思这个企划时，曾经随口向一位亲近的创作者提议，用biz-OC-doll的角色来做一部作品。对方爽快地用了，但随着时间过去，能看出对方越来越不安。对方问，用别人的角色以后会不会有法律问题，是不是该签个合同之类的。明明这边只是单纯为角色能被使用而高兴，完全没有打算要求什么。",
+    'zh-Hant': "幾年前構思這個企劃時，曾經隨口向一位親近的創作者提議，用biz-OC-doll的角色來做一部作品。對方爽快地用了，但隨著時間過去，能看出對方越來越不安。對方問，用別人的角色以後會不會有法律問題，是不是該簽個合約之類的。明明這邊只是單純為角色能被使用而高興，完全沒有打算要求什麼。" },
+
+  s6_p2: { 'en': "That's when we learned that, for the person using the character, this can bring up quite complicated feelings. Love alone isn't enough; people need to be able to trust before they can create with peace of mind. It was then that we took to heart that this project can only work if the trust between the official side and Holders is solid.",
+    'ja': "そのとき、使う側からすると、これはかなり複雑な気持ちになることなのだと知りました。好きという気持ちだけでは足りず、信頼できてこそ安心して作れるということも。このプロジェクトは、公式とホルダーのあいだの信頼がしっかりしていなければ回らない。そのことを、あのとき深く胸に刻みました。",
+    'zh-Hans': "那时才明白，站在使用者的角度，这是一件会让人心情相当复杂的事。光有喜欢是不够的，要能够信任，才能安心创作。这个企划只有在官方和持有者之间的信任足够牢固时才能运转——那时，我们把这一点深深记在了心里。",
+    'zh-Hant': "那時才明白，站在使用者的角度，這是一件會讓人心情相當複雜的事。光有喜歡是不夠的，要能夠信任，才能安心創作。這個企劃只有在官方和持有者之間的信任足夠牢固時才能運轉——那時，我們把這一點深深記在了心裡。" },
+
+  s6_p3: { 'en': "So as long as your work follows the published rules, there's no need to come ask for permission. Those rules are the official side's permission.",
+    'ja': "だから、公開しているルールの範囲で作った作品なら、わざわざ許可を取りに来なくても大丈夫です。そのルールこそが、公式の許可だからです。",
+    'zh-Hans': "所以，只要是在公开的规则范围内创作的作品，就不需要特地来请求许可。那些规则本身就是官方的许可。",
+    'zh-Hant': "所以，只要是在公開的規則範圍內創作的作品，就不需要特地來請求許可。那些規則本身就是官方的許可。" },
+
+  s7_h: { 'en': "The atmosphere we protect",
+    'ja': "公式が守る雰囲気",
+    'zh-Hans': "官方守护的氛围",
+    'zh-Hant': "官方守護的氛圍" },
+
+  s7_p1: { 'en': "biz-OC-doll Official aims to protect its own atmosphere, clear and sparkling like a gem, just like the feel of this site you're looking at now. We think it's the makers' job to keep everything, from the characters to how things are run, from straying out of that atmosphere.",
+    'ja': "biz-OC-doll公式は、宝石のように澄んできらめく、独自の雰囲気を守っていこうと思っています。今ご覧になっているこのサイトの雰囲気、そのままです。キャラクターから運営まで、この雰囲気から外れないようにするのが、作る側の役目だと考えています。",
+    'zh-Hans': "biz-OC-doll官方想守护一种像宝石一样清澈闪耀的独特氛围，就是你现在看到的这个网站的感觉。我们认为，让角色乃至运营都不偏离这种氛围，是制作方的责任。",
+    'zh-Hant': "biz-OC-doll官方想守護一種像寶石一樣清澈閃耀的獨特氛圍，就是你現在看到的這個網站的感覺。我們認為，讓角色乃至營運都不偏離這種氛圍，是製作方的責任。" },
+
+  s7_p2: { 'en': "To put your mind at ease up front: the official side will never be the one shaking up the scene. Looking at how this project is built, some of you may worry that it's all a way to hold the scene in the palm of our hand and play with it. We know the kind of scars that sort of management leaves on a community, so we won't do it. We won't throw out provocative bait or controversies to see how people react, and we won't test anything on the fandom. In other words, there will never be a day when we say, \"Actually, this was a social experiment.\"",
+    'ja': "先にお伝えしておくと、公式が界隈を揺さぶる側になることはありません。もしかすると、このプロジェクトの構造を見て、界隈を手のひらの上で転がそうとしているのではと心配される方もいるかもしれません。そうした運営が界隈にどんな傷を残すかを知っているからこそ、そういうことはしません。反応を見るために刺激的な燃料や火種を先に投げることも、ファンダムを相手に何かを試すこともありません。あとになって「実はこれは社会実験でした」なんて言い出すことはない、ということです。",
+    'zh-Hans': "先让大家安心：官方不会成为搅动圈子的那一方。看到这个企划的结构，也许有人会担心，这是不是想把圈子放在手心里随意摆弄。正因为知道那样的运营会给圈子留下怎样的伤痕，所以不会那样做。不会为了看反应而抛出刺激性的饵或争议话题，也不会拿粉丝群体来测试什么。也就是说，以后绝不会冒出\"其实这是一场社会实验\"这种话。",
+    'zh-Hant': "先讓大家安心：官方不會成為攪動圈子的那一方。看到這個企劃的結構，也許有人會擔心，這是不是想把圈子放在手心裡隨意擺弄。正因為知道那樣的營運會給圈子留下怎樣的傷痕，所以不會那樣做。不會為了看反應而拋出刺激性的餌或爭議話題，也不會拿粉絲群體來測試什麼。也就是說，以後絕不會冒出「其實這是一場社會實驗」這種話。" },
+
+  s7_p3: { 'en': "In the end, we believe a scene's atmosphere comes to resemble what the official side steadily puts out. So the surest thing the official side can do is hold the center. If the official side wavers, the fandom can't play at ease. That's why we're writing down here what the official side intends to protect, and then focusing on releasing characters.",
+    'ja': "界隈の雰囲気は、結局のところ公式がコツコツと出していくものに似ていくのだと思います。だから公式にできるいちばん確かなことは、軸を守ることです。公式が揺らげば、ファンダムは安心して遊べなくなりますから。そこで、公式が何を守ろうとしているのかをこうして先に書いておき、公式はキャラクターを出すことに集中しようと思っています。",
+    'zh-Hans': "我们认为，圈子的氛围最终会越来越像官方持续推出的东西。所以官方能做的最确实的事，就是守住中心。官方一旦动摇，粉丝就没法安心地玩了。因此我们先把官方想守护什么写在这里，之后官方会专注于推出角色。",
+    'zh-Hant': "我們認為，圈子的氛圍最終會越來越像官方持續推出的東西。所以官方能做的最確實的事，就是守住中心。官方一旦動搖，粉絲就沒法安心地玩了。因此我們先把官方想守護什麼寫在這裡，之後官方會專注於推出角色。" },
+
+  s8_h: { 'en': "Even with a worldview",
+    'ja': "世界観があっても",
+    'zh-Hans': "即使有世界观",
+    'zh-Hant': "即使有世界觀" },
+
+  s8_p1: { 'en': "biz-OC-doll has an official worldview ready. It hasn't been revealed yet, but the foundation of the world the characters live in is already decided. That said, hearing that there's a separate official worldview might actually feel like pressure. When official settings exist, you may feel self-conscious about taking your biz-OC-doll your own way, and start to wonder whether you're wrong if it differs from the official version.",
+    'ja': "biz-OC-dollには公式の世界観が用意されています。まだ公開していませんが、キャラクターたちが生きる世界の土台はすでに決めてあります。ただ、公式の世界観が別にあると聞くと、かえって負担に感じるかもしれません。公式設定が決まっていると、自分のbiz-OC-dollを自分のやり方で推し進めることに、なんとなく気が引けてしまうし、公式が描いた姿と違ったら間違いなのかなと思えてしまいますから。",
+    'zh-Hans': "biz-OC-doll准备了官方世界观。虽然还没有公开，但角色们生活的世界的基础已经定好了。只是，听到另外还有官方世界观，反而可能会觉得有压力。官方设定一旦存在，按自己的方式推进自己的biz-OC-doll时就难免会有所顾虑，和官方描绘的样子不一样时，也会怀疑自己是不是错了。",
+    'zh-Hant': "biz-OC-doll準備了官方世界觀。雖然還沒有公開，但角色們生活的世界的基礎已經定好了。只是，聽到另外還有官方世界觀，反而可能會覺得有壓力。官方設定一旦存在，按自己的方式推進自己的biz-OC-doll時就難免會有所顧慮，和官方描繪的樣子不一樣時，也會懷疑自己是不是錯了。" },
+
+  s8_p2: { 'en': "So the very first rule we set when building the worldview was that it must not clash with what happens in this project. We can't go into detail yet, but in that world too, biz-OC-dolls share the same face based on their code while each living with a different way of talking and a different story. Choosing a biz-OC-doll, naming it, and raising it in your own way were all made to carry over naturally into that world as well.",
+    'ja': "だから世界観を組み立てるとき、最初に決めた基準は、このプロジェクトで起きることと食い違わないことでした。まだ詳しくはお話しできませんが、その世界でもbiz-OC-dollたちは、コードをベースに同じ顔をしたまま、それぞれ違う口調と物語を持って生きています。biz-OC-dollを選び、名前をつけ、それぞれ違うふうに育てていくことが、その世界の中でも自然なこととしてつながるように作りました。",
+    'zh-Hans': "所以在构建世界观时，最先定下的标准，就是不能和这个企划里会发生的事相矛盾。虽然现在还不能细说，但在那个世界里，biz-OC-doll们同样以编号为基础，长着同一张脸，却各自带着不同的说话方式和故事生活着。挑选biz-OC-doll、为它起名、各自以不同的方式培养它——这些在那个世界里也被设计成了自然而然的事。",
+    'zh-Hant': "所以在建構世界觀時，最先定下的標準，就是不能和這個企劃裡會發生的事相矛盾。雖然現在還不能細說，但在那個世界裡，biz-OC-doll們同樣以編號為基礎，長著同一張臉，卻各自帶著不同的說話方式和故事生活著。挑選biz-OC-doll、為它取名、各自以不同的方式培養它——這些在那個世界裡也被設計成了自然而然的事。" },
+
+  s8_p3: { 'en': "So it's fine not to know the worldview, and it's fine to create stories completely different from it. The official worldview isn't a frame that locks in Holders' biz-OC-dolls. It's built as a world where that kind of creativity is welcome in any amount. If we get to show it someday as a demo game, you'll be able to feel better what we meant by this.",
+    'ja': "だから、世界観を知らなくても、世界観とまったく違う物語を作っても大丈夫です。公式の世界観は、ホルダーたちのbiz-OC-dollを閉じ込める枠ではなく、そうした創作がいくらあってもいい世界として作ってあります。いつかデモゲームでお見せできたら、この言葉がどういう意味だったのか、もっとよく感じていただけると思います。",
+    'zh-Hans': "所以，不了解世界观也没关系，创作出和世界观完全不同的故事也没关系。官方世界观不是把持有者们的biz-OC-doll关起来的框架，而是被打造成一个容得下任何这类创作的世界。如果有一天能以试玩游戏的形式展示出来，应该就能更好地体会这句话的意思了。",
+    'zh-Hant': "所以，不了解世界觀也沒關係，創作出和世界觀完全不同的故事也沒關係。官方世界觀不是把持有者們的biz-OC-doll關起來的框架，而是被打造成一個容得下任何這類創作的世界。如果有一天能以試玩遊戲的形式展示出來，應該就能更好地體會這句話的意思了。" },
+
+  s9_h: { 'en': "Official merch",
+    'ja': "公式グッズ",
+    'zh-Hans': "官方周边",
+    'zh-Hant': "官方周邊" },
+
+  s9_p1: { 'en': "Some of you may be waiting for the official side to release some merch, especially those who love the characters as their codes are, before any name is given. However, biz-OC-doll Official has no plans to make merch directly for now. We think official merch is more likely to come out through collaborations with companies. When a collaboration happens, many kinds of merch often come out all at once, so we hope you'll wait just a little for that time.",
+    'ja': "公式がグッズを出してくれるのを待っている方もいると思います。名前をつける前の、コードそのままの姿を好きでいてくださる方なら、なおさらでしょう。ただ、biz-OC-doll公式が直接グッズを作る予定は、今のところありません。公式グッズは、企業とのコラボを通じて出る可能性のほうが高いと考えています。コラボが実現すると、グッズが何種類もまとめて出ることが多いので、そのときまで少しだけ待っていただけたらうれしいです。",
+    'zh-Hans': "也许有人在等官方推出一些周边，特别是喜欢在起名之前、角色原本编号模样的人。不过，biz-OC-doll官方目前没有亲自制作周边的计划。我们认为官方周边更有可能通过与企业的合作推出。一旦合作成真，周边往往会一次推出很多种，所以希望大家能稍微等一等那个时候。",
+    'zh-Hant': "也許有人在等官方推出一些周邊，特別是喜歡在取名之前、角色原本編號模樣的人。不過，biz-OC-doll官方目前沒有親自製作周邊的計畫。我們認為官方周邊更有可能透過與企業的合作推出。一旦合作成真，周邊往往會一次推出很多種，所以希望大家能稍微等一等那個時候。" },
+
+  s9_p2: { 'en': "In the meantime, we'd love for merch made by Holders to fill that space. We hope a culture takes root in this fandom where merch made by Holders is treasured just as much as official merch. If unofficial goods fill the official place until official ones arrive, we think that too is very much in the spirit of this project.",
+    'ja': "それまでは、ホルダーたちが作ったグッズがその場所を埋めてくれたらうれしいです。このジャンルでは、ホルダーが作ったグッズも公式グッズと同じくらい大切にされる文化が根づいてほしいと思っています。公式が出るまで非公式が公式の場所を埋めていく流れなら、それもまたこのプロジェクトらしい姿だと思います。",
+    'zh-Hans': "在那之前，希望持有者们做的周边能填补那个位置。希望在这个圈子里，持有者做的周边也能像官方周边一样被珍视，形成这样的文化。在官方推出之前，由非官方来填补官方的位置——如果是这样的走向，我们觉得那也很有这个企划的风格。",
+    'zh-Hant': "在那之前，希望持有者們做的周邊能填補那個位置。希望在這個圈子裡，持有者做的周邊也能像官方周邊一樣被珍視，形成這樣的文化。在官方推出之前，由非官方來填補官方的位置——如果是這樣的走向，我們覺得那也很有這個企劃的風格。" },
+
+  board_h: { 'en': "Suggestion box",
+    'ja': "提案箱",
+    'zh-Hans': "建议箱",
+    'zh-Hant': "建議箱" },
+
+  board_p1: { 'en': "If you have something too small for an email but too good to let slide, leave it here. Things that bugged you while using the site, or ideas for things you'd like to see, are all welcome.",
+    'ja': "メールで送るほどではないけれど、そのまま流すのはもったいない話があれば、ここに残してください。サイトを使っていて不便だったことも、こういうのがあったらいいなという思いつきも大歓迎です。",
+    'zh-Hans': "如果有些话发邮件显得太轻，就这么放过又觉得可惜，欢迎留在这里。使用网站时觉得不方便的地方，或是希望能有某某功能的想法，都可以。",
+    'zh-Hant': "如果有些話寄郵件顯得太輕，就這麼放過又覺得可惜，歡迎留在這裡。使用網站時覺得不方便的地方，或是希望能有某某功能的想法，都可以。" },
+
+  board_p2: { 'en': "It's still being prepared. We plan to open it once the scene grows a bit more.",
+    'ja': "今はまだ準備中です。界隈がもう少し大きくなったら開く予定です。",
+    'zh-Hans': "目前还在准备中。等圈子再大一点就会开放。",
+    'zh-Hant': "目前還在準備中。等圈子再大一點就會開放。" },
+
+  board_lock: { 'en': "Suggestion box · Coming soon",
+    'ja': "提案箱 · 準備中",
+    'zh-Hans': "建议箱 · 准备中",
+    'zh-Hant': "建議箱 · 準備中" },
+
+  board_open: { 'en': "Go to the suggestion box",
+    'ja': "提案箱へ",
+    'zh-Hans': "前往建议箱",
+    'zh-Hant': "前往建議箱" },
+
+  part_note: { 'en': "From here on, for those considering a collaboration, we'll write in a more organized, formal tone.",
+    'ja': "ここからは、コラボをご検討中の方に向けて、もう少し整理した言葉でお伝えします。",
+    'zh-Hans': "以下内容面向正在考虑合作的各位，将以更正式、有条理的方式说明。",
+    'zh-Hant': "以下內容面向正在考慮合作的各位，將以更正式、有條理的方式說明。" },
+
+  collab_title: { 'en': "If we build it together",
+    'ja': "一緒に作るなら",
+    'zh-Hans': "如果一起打造",
+    'zh-Hant': "如果一起打造" },
+
+  biz_intro: { 'en': "<span class=\"brandname\">biz-OC-doll</span> was designed from the start as an IP that can collaborate with others. For romance to last, it needs a design to support it, so biz-OC-doll Official built the structure first. At its center are the number of characters and the official worldview.",
+    'ja': "<span class=\"brandname\">biz-OC-doll</span>は、最初から外部とコラボできるIPを目指して設計したプロジェクトです。ロマンを長く続けるには、そのロマンを支える設計も必要だと考え、biz-OC-doll公式はまず構造から組み立てました。その中心にあるのが、キャラクターの数と公式の世界観です。",
+    'zh-Hans': "<span class=\"brandname\">biz-OC-doll</span>从一开始就是以能与外部合作的IP为目标设计的企划。我们认为，浪漫要长久延续，也需要支撑这份浪漫的设计，因此biz-OC-doll官方先把结构搭好了。其核心是角色数量与官方世界观。",
+    'zh-Hant': "<span class=\"brandname\">biz-OC-doll</span>從一開始就是以能與外部合作的IP為目標設計的企劃。我們認為，浪漫要長久延續，也需要支撐這份浪漫的設計，因此biz-OC-doll官方先把結構搭好了。其核心是角色數量與官方世界觀。" },
+
+  row_count_h: { 'en': "Number of characters",
+    'ja': "キャラクター数",
+    'zh-Hans': "角色数量",
+    'zh-Hant': "角色數量" },
+
+  row_count_p: { 'en': "The goal of 200 characters is set high so that, even if each character's fandom differs in size, together they form an IP at a scale worth considering for collaboration. Because every character is made under the same standards and atmosphere, they read as a single IP no matter how many there are.",
+    'ja': "キャラクター数の目標を200人と大きく設定したのは、キャラクターごとにファンダムの大きさが違っても、キャラクターが集まることでコラボを検討できる規模のIPになるためです。すべてのキャラクターが同じ基準と雰囲気のもとで作られるため、数が増えてもひとつのIPとしてまとまって見えます。",
+    'zh-Hans': "将角色数量目标定为200人这样的大数目，是为了即使每个角色的粉丝规模不同，角色聚集起来也能构成值得考虑合作的IP规模。所有角色都在同样的标准和氛围下制作，因此数量再多，看起来也是一个统一的IP。",
+    'zh-Hant': "將角色數量目標定為200人這樣的大數目，是為了即使每個角色的粉絲規模不同，角色聚集起來也能構成值得考慮合作的IP規模。所有角色都在同樣的標準和氛圍下製作，因此數量再多，看起來也是一個統一的IP。" },
+
+  row_world_h: { 'en': "Official worldview",
+    'ja': "公式の世界観",
+    'zh-Hans': "官方世界观",
+    'zh-Hant': "官方世界觀" },
+
+  row_world_p1: { 'en': "Building a worldview only after a collaboration is decided tends to mean racing the clock, and the IP's character can shift before and after the collaboration, shaking the trust fans have built up. So biz-OC-doll Official aligned the project's character, the way it is run, and its worldview to point in the same direction from the start. This keeps the foundation firm whatever compromises a collaboration may involve, and because fan creations rest on the same structure, there is little risk of a collaboration clashing with the existing fandom.",
+    'ja': "コラボが決まってから世界観を新しく作ると時間に追われやすく、コラボの前後でIPの性格が変わり、積み上げてきたファンの信頼が揺らぎやすくなります。そこでbiz-OC-doll公式は、プロジェクトの性格と運営方針、世界観が同じ方向を向くよう、最初からそろえてあります。どのようなコラボで歩み寄ることがあっても根幹が揺らがないようにするためであり、ファンの創作も同じ構造の上にあるため、コラボ作品が既存のファンダムとぶつかるリスクも小さくなっています。",
+    'zh-Hans': "如果在合作确定后才新建世界观，往往会被时间追着跑，而且合作前后IP的性质会发生变化，粉丝积累起来的信任也容易动摇。因此，biz-OC-doll官方从一开始就让企划的性质、运营方式和世界观指向同一个方向。这是为了无论在何种合作中做出妥协，根本都不会动摇；而粉丝创作也建立在同样的结构之上，合作作品与现有粉丝群体发生冲突的风险也较小。",
+    'zh-Hant': "如果在合作確定後才新建世界觀，往往會被時間追著跑，而且合作前後IP的性質會發生變化，粉絲累積起來的信任也容易動搖。因此，biz-OC-doll官方從一開始就讓企劃的性質、營運方式和世界觀指向同一個方向。這是為了無論在何種合作中做出妥協，根本都不會動搖；而粉絲創作也建立在同樣的結構之上，合作作品與現有粉絲群體發生衝突的風險也較小。" },
+
+  row_world_p2: { 'en': "What has been set in advance is the worldview; the stories built on it are left open to be shaped together in a collaboration. The worldview will be shown through a demo game, planned for release once there are around 50 or more characters.",
+    'ja': "あらかじめ決めてあるのは世界観で、その上の物語はコラボの中で一緒に調整できるよう開いてあります。世界観はデモゲームでお見せする予定で、公開はキャラクターが50人以上ほどそろった時点を目安にしています。",
+    'zh-Hans': "事先定好的是世界观，建立在其上的故事则保持开放，可以在合作中共同调整。世界观预计以试玩游戏的形式展示，公开时间定在角色累积到约50人以上时。",
+    'zh-Hant': "事先定好的是世界觀，建立在其上的故事則保持開放，可以在合作中共同調整。世界觀預計以試玩遊戲的形式展示，公開時間定在角色累積到約50人以上時。" },
+
+  row_world_p3: { 'en': "Turning this worldview into a full-fledged work will only come after the fandom has grown enough, which could take as long as ten years, and we also keep in mind that it may never happen. Even so, the demo game is being made ahead of time.",
+    'ja': "この世界観が正式な作品につながるのはファンダムが十分に育ってからのことなので、長ければ10年かかる可能性があり、最後まで実現しない可能性も視野に入れています。それでも、デモゲームは先に作っておきます。",
+    'zh-Hans': "这个世界观要发展成正式作品，得等粉丝群体充分成长之后，长则可能需要十年，我们也考虑到了最终无法推出的可能性。即便如此，试玩游戏仍会提前做好。",
+    'zh-Hant': "這個世界觀要發展成正式作品，得等粉絲群體充分成長之後，長則可能需要十年，我們也考慮到了最終無法推出的可能性。即便如此，試玩遊戲仍會提前做好。" },
+
+  demo_note: { 'en': "Once released, the demo game and worldview notes will be collected below.",
+    'ja': "デモゲームと世界観のまとめは、公開されたらこの下にまとめる予定です。",
+    'zh-Hans': "试玩游戏和世界观整理公开后将汇总在下方。",
+    'zh-Hant': "試玩遊戲和世界觀整理公開後將彙整在下方。" },
+
+  demo_note_open: { 'en': "The demo game and worldview notes are collected below.",
+    'ja': "デモゲームと世界観のまとめは、この下にまとめてあります。",
+    'zh-Hans': "试玩游戏和世界观整理已汇总在下方。",
+    'zh-Hant': "試玩遊戲和世界觀整理已彙整在下方。" },
+
+  demo_title: { 'en': "Demo game",
+    'ja': "デモゲーム",
+    'zh-Hans': "试玩游戏",
+    'zh-Hant': "試玩遊戲" },
+
+  demo_sub: { 'en': "Where the demo game of the official worldview and its notes will be kept",
+    'ja': "公式の世界観を収めたデモゲームと、世界観のまとめを置く場所です",
+    'zh-Hans': "收录官方世界观的试玩游戏与世界观整理将放在这里",
+    'zh-Hant': "收錄官方世界觀的試玩遊戲與世界觀整理將放在這裡" },
+
+  demo_go: { 'en': "View",
+    'ja': "見る",
+    'zh-Hans': "查看",
+    'zh-Hant': "查看" },
+
+  demo_lock: { 'en': "Coming soon",
+    'ja': "準備中",
+    'zh-Hans': "准备中",
+    'zh-Hant': "準備中" },
+
+  row_open_h: { 'en': "Open to collaboration",
+    'ja': "開かれたコラボ",
+    'zh-Hans': "开放的合作",
+    'zh-Hant': "開放的合作" },
+
+  row_open_p1: { 'en': "The official worldview is somewhat removed from what the market currently favors and is fairly niche. For that reason, the official worldview is not a condition for collaboration. If you've come for the character IP, starting lightly with a new story separate from the official worldview may actually be the better fit. Short-running games, experimental projects, and small games or merch that borrow the characters for a while are all welcome. Every biz-OC-doll collaboration becomes part of the IP's track record and a chance for the partner to show off its technology, so we believe it becomes a meaningful record for both sides.",
+    'ja': "公式の世界観は、いまの市場が好む方向とは少し距離があり、好みが分かれるタイプです。そのため、公式の世界観をコラボの条件にはしていません。キャラクターIPを見てお越しいただいた場合は、公式の世界観とは別の新しい物語で気軽に始めるほうが、かえって合うかもしれません。短期運営のゲームや実験的なプロジェクト、キャラクターを一時的に借りる小さなゲームやグッズも歓迎します。biz-OC-dollのコラボ実績はIPの経歴として残り、コラボ先にとっても技術を披露する場になるため、双方にとって意味のある記録になると考えています。",
+    'zh-Hans': "官方世界观与当下市场偏好的方向有些距离，属于比较挑受众的类型。因此，我们不把官方世界观作为合作的条件。如果是看中角色IP而来，用一个与官方世界观无关的新故事轻松起步，反而可能更合适。短期运营的游戏、实验性的项目，以及暂时借用角色的小型游戏和周边，我们也都欢迎。biz-OC-doll的合作记录会作为IP的履历留存，对合作方来说也是展示技术的机会，因此我们相信这对双方都会是有意义的记录。",
+    'zh-Hant': "官方世界觀與當下市場偏好的方向有些距離，屬於比較挑受眾的類型。因此，我們不把官方世界觀作為合作的條件。如果是看中角色IP而來，用一個與官方世界觀無關的新故事輕鬆起步，反而可能更合適。短期營運的遊戲、實驗性的專案，以及暫時借用角色的小型遊戲和周邊，我們也都歡迎。biz-OC-doll的合作紀錄會作為IP的履歷留存，對合作方來說也是展示技術的機會，因此我們相信這對雙方都會是有意義的紀錄。" },
+
+  row_open_p2: { 'en': "In this way, biz-OC-doll is structured so that the whole IP never rides on the outcome of a single work. A new story made through a collaboration is still unmistakably biz-OC-doll, while the original and the official worldview remain separate from it. So there's no need to feel much pressure about trying something new.",
+    'ja': "このように、biz-OC-dollはひとつの作品の結果にIP全体がかかっていない構造です。コラボで新しく作られる物語も間違いなくbiz-OC-dollであり、原作と公式の世界観はそれとは別に残ります。ですので、新しい試みに大きな負担を感じていただく必要はありません。",
+    'zh-Hans': "由此可见，biz-OC-doll的结构并不会让整个IP押在一部作品的成败上。通过合作新创作的故事同样是biz-OC-doll，而原作与官方世界观则独立于此保留。所以，尝试新事物时不必有太大压力。",
+    'zh-Hant': "由此可見，biz-OC-doll的結構並不會讓整個IP押在一部作品的成敗上。透過合作新創作的故事同樣是biz-OC-doll，而原作與官方世界觀則獨立於此保留。所以，嘗試新事物時不必有太大壓力。" },
+
+  row_open_p3: { 'en': "It isn't something for right now, but we'd like to note the direction in advance. biz-OC-doll is being built to be an IP that keeps pace with advancing technology and can showcase it. We believe that the further technology advances, the more vividly characters come to life and the more closely they can reach more people. If you have that kind of technology, we're glad to work together, starting with small experiments, whatever your size.",
+    'ja': "今すぐの話ではありませんが、方向性だけは先に書いておきます。biz-OC-dollは技術の発展に合わせて、その技術を載せて見せられるIPを目指して作られています。技術が発展するほど、キャラクターはより立体的に息づき、より多くの人のもとへ、より近く届けられると考えています。そうした技術をお持ちであれば、規模を問わず、小さな実験からでも喜んでご一緒します。",
+    'zh-Hans': "虽然不是眼下的事，但方向还是想先写在这里。biz-OC-doll正以能够跟上技术发展、并承载和展示这些技术的IP为目标而打造。我们认为，技术越进步，角色就越能立体地活起来，也能更贴近地触达更多人。只要拥有这样的技术，无论规模大小，我们都乐意从小型实验开始合作。",
+    'zh-Hant': "雖然不是眼下的事，但方向還是想先寫在這裡。biz-OC-doll正以能夠跟上技術發展、並承載和展示這些技術的IP為目標而打造。我們認為，技術越進步，角色就越能立體地活起來，也能更貼近地觸及更多人。只要擁有這樣的技術，無論規模大小，我們都樂意從小型實驗開始合作。" },
+
+  row_rules_h: { 'en': "Collaboration principles",
+    'ja': "コラボの原則",
+    'zh-Hans': "合作原则",
+    'zh-Hant': "合作原則" },
+
+  rules_lede: { 'en': "These principles do not change in any collaboration.",
+    'ja': "コラボにおいて変わらない原則です。",
+    'zh-Hans': "以下是合作中不会改变的原则。",
+    'zh-Hant': "以下是合作中不會改變的原則。" },
+
+  rule_1: { 'en': "The original copyright belongs to biz-OC-doll and is not transferred in any form.",
+    'ja': "原著作権はbiz-OC-dollにある。いかなる形でも譲渡されない。",
+    'zh-Hans': "原著作权归biz-OC-doll所有，不以任何形式转让。",
+    'zh-Hant': "原著作權歸biz-OC-doll所有，不以任何形式轉讓。" },
+
+  rule_2: { 'en': "Companies may use the characters only within the permitted scope.",
+    'ja': "企業は許可された範囲内でのみキャラクターを活用できる。",
+    'zh-Hans': "企业仅可在获得许可的范围内使用角色。",
+    'zh-Hant': "企業僅可在獲得許可的範圍內使用角色。" },
+
+  rule_3: { 'en': "Rights to fan creations belong to their creators. A company wishing to use them must reach an individual agreement with the creator.",
+    'ja': "ファン創作物の権利は創作者にある。企業がこれを活用するには、創作者との個別の協議を経なければならない。",
+    'zh-Hans': "粉丝创作物的权利归创作者所有。企业如需使用，须与创作者另行协商。",
+    'zh-Hant': "粉絲創作物的權利歸創作者所有。企業如需使用，須與創作者另行協商。" },
+
+  rule_4: { 'en': "Companies may not call themselves official or represent biz-OC-doll.",
+    'ja': "企業はbiz-OC-dollの公式を名乗ったり、代表したりすることはできない。",
+    'zh-Hans': "企业不得自称官方，也不得代表biz-OC-doll。",
+    'zh-Hant': "企業不得自稱官方，也不得代表biz-OC-doll。" },
+
+  rule_5: { 'en': "Companies take no part in the production or operation of the project.",
+    'ja': "プロジェクトの制作と運営に企業は関与しない。",
+    'zh-Hans': "企业不参与企划的制作与运营。",
+    'zh-Hant': "企業不參與企劃的製作與營運。" },
+
+  rule_6: { 'en': "Individual custom requests are not accepted.",
+    'ja': "個別のカスタム依頼は受け付けない。",
+    'zh-Hans': "不接受个别定制请求。",
+    'zh-Hant': "不接受個別客製請求。" },
+
+  rules_foot: { 'en': "All specific terms and scope of a collaboration are set by <b>individual contract</b>.",
+    'ja': "コラボの具体的な条件と範囲は、すべて<b>個別契約</b>で定めます。",
+    'zh-Hans': "合作的具体条件与范围，均通过<b>个别合同</b>确定。",
+    'zh-Hant': "合作的具體條件與範圍，均透過<b>個別合約</b>確定。" },
+
+  rules_pre: { 'en': "Even before its public release, the demo game can be shared with you first as soon as it's ready, on request.",
+    'ja': "デモゲームは公開前でも、ご依頼いただければ準備でき次第お先にお渡しします。",
+    'zh-Hans': "试玩游戏即使在公开之前，如有需要，也会在准备好后优先提供。",
+    'zh-Hant': "試玩遊戲即使在公開之前，如有需要，也會在準備好後優先提供。" },
+
+  biz_contact: { 'en': "Business inquiries",
+    'ja': "ビジネスのお問い合わせ",
+    'zh-Hans': "商务咨询",
+    'zh-Hant': "商務洽詢" },
+
+  rights_title: { 'en': "Rights",
+    'ja': "権利関係",
+    'zh-Hans': "权利关系",
+    'zh-Hant': "權利關係" },
+
+  rights_p: { 'en': "We have seen, more than once, creators who failed to sort out their rights properly and later could not freely use their own characters even in their own works. So the official side makes it a rule to complete copyright registration before releasing a character. The purpose is not to hold on to particular rights or to police anyone.",
+    'ja': "創作者が権利関係をきちんと整理できていなかったために、のちに自分のキャラクターを自分の作品でさえ自由に使えなくなる例を、何度も見てきました。そのため公式は、キャラクターを公開する前に著作権登録を済ませることを原則としています。特定の権利を握ったり、誰かを取り締まったりすることが目的ではありません。",
+    'zh-Hans': "我们多次见过创作者因为没有妥善整理权利关系，后来连在自己的作品里都无法自由使用自己的角色。因此，官方坚持在公开角色之前先完成著作权登记。这样做并不是为了握住某种权利或管控任何人。",
+    'zh-Hant': "我們多次見過創作者因為沒有妥善整理權利關係，後來連在自己的作品裡都無法自由使用自己的角色。因此，官方堅持在公開角色之前先完成著作權登記。這樣做並不是為了握住某種權利或管控任何人。" },
+
+  ov_title: { 'en': "Overview",
+    'ja': "企画概要",
+    'zh-Hans': "企划概要",
+    'zh-Hant': "企劃概要" },
+
+  ov_note: { 'en': "Only the essentials, in brief. Character-related numbers update automatically to match what has been released.",
+    'ja': "必要な情報だけを簡単にまとめました。キャラクター関連の数字は、公開状況に合わせて自動で更新されます。",
+    'zh-Hans': "仅简要整理了必要信息。与角色相关的数字会根据公开情况自动更新。",
+    'zh-Hant': "僅簡要整理了必要資訊。與角色相關的數字會根據公開情況自動更新。" },
+
+  ov_form_h: { 'en': "Format",
+    'ja': "形態",
+    'zh-Hans': "形式",
+    'zh-Hant': "形式" },
+
+  ov_form: { 'en': "Open character project",
+    'ja': "オープンキャラクタープロジェクト",
+    'zh-Hans': "开放角色企划",
+    'zh-Hant': "開放角色企劃" },
+
+  ov_give_h: { 'en': "What's provided",
+    'ja': "公式が用意するもの",
+    'zh-Hans': "官方提供的内容",
+    'zh-Hant': "官方提供的內容" },
+
+  ov_give: { 'en': "A unique code, a character sheet, a few expressions",
+    'ja': "固有コード、キャラクターシート、いくつかの表情",
+    'zh-Hans': "专属编号、角色设定图、几种表情",
+    'zh-Hant': "專屬編號、角色設定圖、幾種表情" },
+
+  ov_count_h: { 'en': "Characters",
+    'ja': "キャラクター数",
+    'zh-Hans': "角色数量",
+    'zh-Hant': "角色數量" },
+
+  ov_count: { 'en': "Goal of 200, more may follow",
+    'ja': "目標200人、以降も追加可能",
+    'zh-Hans': "目标200人，之后可继续增加",
+    'zh-Hant': "目標200人，之後可繼續增加" },
+
+  ov_age_h: { 'en': "Official target rating",
+    'ja': "公式の想定年齢",
+    'zh-Hans': "官方面向年龄",
+    'zh-Hant': "官方面向年齡" },
+
+  ov_age: { 'en': "All ages to 12+",
+    'ja': "全年齢〜12歳以上",
+    'zh-Hans': "全年龄～12岁以上",
+    'zh-Hant': "普遍級～輔12級" },
+
+  ov_use_h: { 'en': "Fan use",
+    'ja': "ファンの利用範囲",
+    'zh-Hans': "粉丝使用范围",
+    'zh-Hant': "粉絲使用範圍" },
+
+  ov_use: { 'en': "Mostly allowed, including commercial use; no revenue share",
+    'ja': "商業利用を含めほぼ許可、収益分配なし",
+    'zh-Hans': "包括商业用途在内基本允许，不收分成",
+    'zh-Hant': "包括商業用途在內基本允許，不收分潤" },
+
+  ov_track_h: { 'en': "Tracks",
+    'ja': "運営トラック",
+    'zh-Hans': "运营路线",
+    'zh-Hant': "營運路線" },
+
+  ov_track: { 'en': "Free fan creation / Official worldview",
+    'ja': "ファンの自由創作 / 公式の世界観",
+    'zh-Hans': "粉丝自由创作 / 官方世界观",
+    'zh-Hant': "粉絲自由創作 / 官方世界觀" },
+
+  ov_world_h: { 'en': "Official worldview",
+    'ja': "公式の世界観",
+    'zh-Hans': "官方世界观",
+    'zh-Hant': "官方世界觀" },
+
+  ov_world: { 'en': "To be released as a demo game (at 50+ characters, subject to change)",
+    'ja': "デモゲームとして公開予定（キャラクター50人以上の時点、変更の可能性あり）",
+    'zh-Hans': "将以试玩游戏形式公开（角色达50人以上时，可能变动）",
+    'zh-Hant': "將以試玩遊戲形式公開（角色達50人以上時，可能變動）" },
+
+  ov_world_open: { 'en': "Demo game now available",
+    'ja': "デモゲーム公開中",
+    'zh-Hans': "试玩游戏公开中",
+    'zh-Hant': "試玩遊戲公開中" },
+
+  stat_count: { 'en': "{n} released",
+    'ja': "現在{n}人公開",
+    'zh-Hans': "目前已公开{n}人",
+    'zh-Hant': "目前已公開{n}人" },
+
+  stat_holder: { 'en': "Assigned to {n} characters",
+    'ja': "{n}人のキャラクターに設定済み",
+    'zh-Hans': "已指定给{n}个角色",
+    'zh-Hant': "已指定給{n}個角色" },
+
+  ct_tag: { 'en': "Original works built on story and characters, made to grow into IP.",
+    'ja': "ストーリーとキャラクターを軸に、IPへと広がっていく原作を作っています。",
+    'zh-Hans': "以故事和角色为基础，打造可拓展为IP的原创作品。",
+    'zh-Hant': "以故事和角色為基礎，打造可拓展為IP的原創作品。" },
+
+  ct_desc: { 'en': "We only review emails that include a proposal or specific collaboration details.<br>Replies may take some time, and we may not be able to respond to every inquiry.",
+    'ja': "企画書、または具体的なコラボ内容が含まれたメールのみ確認しています。<br>お返事までお時間をいただく場合があり、すべてのお問い合わせにはお返事できないことがあります。",
+    'zh-Hans': "仅受理附有提案书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法回复所有咨询。",
+    'zh-Hant': "僅受理附有提案書或具體合作內容的郵件。<br>回覆可能需要一些時間，也可能無法回覆所有洽詢。" },
+
+  ct_copy: { 'en': "Copy",
+    'ja': "コピー",
+    'zh-Hans': "复制",
+    'zh-Hant': "複製" },
+
+  ct_done: { 'en': "Copied",
+    'ja': "完了",
+    'zh-Hans': "已复制",
+    'zh-Hant': "已複製" },
+
+  ct_close: { 'en': "Close",
+    'ja': "閉じる",
+    'zh-Hans': "关闭",
+    'zh-Hant': "關閉" },
+
+  tb_contact: { 'en': "About · Business inquiries",
+    'ja': "制作者紹介 · ビジネスのお問い合わせ",
+    'zh-Hans': "关于 · 商务咨询",
+    'zh-Hant': "關於 · 商務洽詢" }
+};
+
+/* Short text used by scripts (copy button, counters) */
+function i18nText(key, n){
+  var row = I18N[key]; if(!row) return '';
+  var k = (window.bzdDictKey && window.TL) ? bzdDictKey(TL.lang) : null;
+  var s = (k && row[k] != null) ? row[k] : row.en;
+  return (n != null) ? s.replace('{n}', n) : s;
+}
+window.i18nText = i18nText;
+
+/* Swap the page text. No need to edit below. */
+function i18nApply(code){
+  var k = window.bzdDictKey ? bzdDictKey(code) : null;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    if(el.__en === undefined) el.__en = el.innerHTML;
+    var row = I18N[el.getAttribute('data-i18n')];
+    el.innerHTML = (k && row && row[k] != null) ? row[k] : el.__en;
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(function(el){
+    var row = I18N[el.getAttribute('data-i18n-title')]; if(!row) return;
+    var s = (k && row[k] != null) ? row[k] : row.en;
+    if(el.hasAttribute('title')) el.setAttribute('title', s);
+    el.setAttribute('aria-label', s);
+  });
+  var cp = document.querySelector('.biq-copy-txt');
+  if(cp) cp.textContent = i18nText('ct_copy');
+}
+window.i18nApply = i18nApply;
+
+</script>
+<script>
 /* ═══════════════════════════════════════════════════════════
-   공용 UI + 번역 엔진
-
-   ⚠ 같은 블록이 index.html 에도 들어 있습니다.
-     특히 아래 두 가지는 index(부모) ↔ story(자식) 사이의 약속이라
-     한쪽만 고치면 화면은 멀쩡한데 번역만 조용히 안 먹습니다.
-       · postMessage 타입 문자열  'biz-tl-lang'
-       · _injectGT / _setIframeLang 동작
-     번역 관련을 건드리면 반드시 양쪽 다 같은 내용으로 맞추세요.
-
-   ── 값만 바꿀 거면 바로 아래 BIZ.MAIL / PROFILE_IMG / WHO_* / TL_NOTE ──
+   Shared UI + language engine
+   To change values only, edit BIZ.MAIL / PROFILE_IMG / WHO_NAME / TL_NOTE below.
+   The contact window's words are in I18N (ct_* keys).
    ═══════════════════════════════════════════════════════════ */
 
 var BIZ = window.BIZ = {
@@ -478,18 +1044,16 @@ var BIZ = window.BIZ = {
   MAIL:        'rrkt.biz@proton.me',
   PROFILE_IMG: '../profile.png',
   WHO_NAME:    'rrkt.biz',
-  WHO_TAG:     '스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.',
 
-
-  /* 언어 드롭다운 하단 안내문 — ⚠ index.html 에도 같은 값이 있음. 한쪽 고치면 반대쪽도 */
+  /* Note at the bottom of the language menu */
   TL_NOTE:
-    '이 페이지는 <b>Google 번역</b>으로 표시됩니다.<br>' +
-    '번역이 어색하면 <b>DeepL</b>로 다시 번역할 수 있습니다.',
+    '<b>Japanese and Chinese</b> are translated by AI.<br>' +
+    'Other languages are shown through <b>Google Translate</b>.',
 
-  /* ── 상단바 우측 ── */
+  /* ── Top bar, right side ── */
   topbarRightHtml: function(){
     return `      <span id="tl-badge"></span>
-      <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
+      <button id="tb-contact-btn" onclick="openContactOverlay()" data-i18n-title="tb_contact" title="About · Business inquiries" aria-label="About · Business inquiries">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       </button>
       <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
@@ -507,30 +1071,30 @@ var BIZ = window.BIZ = {
       </div>`;
   },
 
-  /* ── 문의 오버레이 ── */
+  /* ── Contact window ── */
   contactHtml: function(){
-    return `<!-- ===== 제작자 소개 · 비즈니스 문의 ===== -->
+    return `<!-- ===== Contact ===== -->
 <div id="contact-overlay" class="hidden" onclick="if(event.target===this)closeContactOverlay()">
   <div class="contact-card">
-    <button class="contact-close" onclick="closeContactOverlay()" aria-label="닫기">
+    <button class="contact-close" onclick="closeContactOverlay()" data-i18n-title="ct_close" aria-label="Close">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>
     <div class="contact-who">
       <div class="contact-who-thumb"><img src="${BIZ.PROFILE_IMG}" alt="${BIZ.WHO_NAME}" onerror="this.style.display='none'"></div>
       <div>
-        <div class="contact-who-name">${BIZ.WHO_NAME}</div>
-        <div class="contact-who-tag">${BIZ.WHO_TAG}</div>
+        <div class="contact-who-name notranslate" translate="no">${BIZ.WHO_NAME}</div>
+        <div class="contact-who-tag" data-i18n="ct_tag">Original works built on story and characters, made to grow into IP.</div>
       </div>
     </div>
     <div class="contact-eyebrow">Contact</div>
-    <div class="contact-title">비즈니스 문의</div>
-    <div class="contact-desc">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
+    <div class="contact-title" data-i18n="biz_contact">Business inquiries</div>
+    <div class="contact-desc" data-i18n="ct_desc">We only review emails that include a proposal or specific collaboration details.<br>Replies may take some time, and we may not be able to respond to every inquiry.</div>
     <div class="contact-mailrow">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a0a0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
-      <span class="mail">${BIZ.MAIL}</span>
-      <button class="biq-copy-btn" onclick="biqCopyEmail(this)" title="복사">
+      <span class="mail notranslate" translate="no">${BIZ.MAIL}</span>
+      <button class="biq-copy-btn" onclick="biqCopyEmail(this)">
         <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        <span class="biq-copy-txt">복사</span>
+        <span class="biq-copy-txt">${i18nText('ct_copy')}</span>
       </button>
     </div>
   </div>
@@ -544,19 +1108,19 @@ var BIZ = window.BIZ = {
     navigator.clipboard.writeText(BIZ.MAIL).then(function(){
       var svg = btn.querySelector('.biq-copy-svg'), txt = btn.querySelector('.biq-copy-txt');
       if(svg) svg.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-      if(txt) txt.textContent = '완료';
+      if(txt) txt.textContent = i18nText('ct_done');
       btn.style.borderColor = '#bbf7d0'; btn.style.background = '#f0fdf4'; btn.style.color = '#22c55e';
       setTimeout(function(){
         var s2 = btn.querySelector('.biq-copy-svg');
         if(s2) s2.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
         var t2 = btn.querySelector('.biq-copy-txt');
-        if(t2) t2.textContent = '복사';
+        if(t2) t2.textContent = i18nText('ct_copy');
         btn.style.borderColor = ''; btn.style.background = ''; btn.style.color = '';
       }, 1800);
     });
   },
 
-  /* ── 초기 주입 ── */
+  /* ── Insert into the page ── */
   mount: function(){
     var tbr = document.querySelector('.tb-right');
     if(tbr && !tbr.children.length) tbr.innerHTML = BIZ.topbarRightHtml();
@@ -565,7 +1129,6 @@ var BIZ = window.BIZ = {
   }
 };
 
-/* 기존 onclick / 기존 코드 호환 */
 window.openContactOverlay  = BIZ.openContact;
 window.closeContactOverlay = BIZ.closeContact;
 window.biqCopyEmail        = BIZ.copyEmail;
@@ -574,13 +1137,16 @@ document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') BIZ.closeContact();
 });
 
-BIZ.mount();
 
-
-/* ══ 번역 엔진 ══ */
+/* ══ Language engine ══
+   en                  → the text as written in this file
+   ja / zh-CN / zh-TW  → human translations (I18N dictionary, no machine translation)
+   anything else       → Google Translate from English
+   The chosen language is remembered in localStorage 'bzd_lang'.
+   (The first-visit choice is made in the small script in <head>.) */
 
 var TL = window.TL = {
-  lang:  'ko',
+  lang:  window.__bzdLang || 'en',
   hooks: [],
   onChange:   function(fn){ if(typeof fn === 'function') TL.hooks.push(fn); },
   badge:      function(engine){ _tlBadge(engine); },
@@ -588,7 +1154,7 @@ var TL = window.TL = {
   set:        function(lang){ setLang(lang); }
 };
 
-/* ── 번역 뱃지 ── */
+/* ── Machine-translation badge ── */
 function _tlBadge(engine){
   var el = document.getElementById('tl-badge'); if(!el) return;
   el.className = engine + ' show';
@@ -599,102 +1165,70 @@ function _tlBadgeReset(){
   el.className = ''; el.textContent = '';
 }
 
-/* ── Google Translate ── */
+/* ── Google Translate (other languages only) ── */
 function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage:'en', autoDisplay:false}, 'google_translate_element');
+}
+function _tlGoogleOn(){
+  return /googtrans=\/[^\/;]*\/[^;]+/.test(document.cookie);
+}
+function _tlGoogleClear(){
+  var x = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  document.cookie = 'googtrans=;path=/' + x;
+  document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + x;
 }
 function _tlGoogle(lang){
   _tlBadge('google');
+  document.cookie = 'googtrans=/en/' + lang + ';path=/';
+  document.cookie = 'googtrans=/en/' + lang + ';path=/;domain=.' + location.hostname;
   var sel = document.querySelector('.goog-te-combo');
   if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
-  /* 위젯 미로드 시 쿠키 방식 */
-  document.cookie = 'googtrans=/ko/' + lang + ';path=/';
-  document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
-  location.reload();
+  location.reload();   /* widget not loaded yet — the cookie applies it after reload */
 }
 
-/* ── iframe 탭에도 번역 적용 (같은 출처일 때만) ── */
-function _injectGT(fr){
-  try{
-    var d = fr.contentDocument, w = fr.contentWindow;
-    if(!d || !w || w.__gtInjected) return;
-    w.__gtInjected = true;
-    var slot = d.createElement('div');
-    slot.id = 'google_translate_element';
-    slot.style.display = 'none';
-    d.body.appendChild(slot);
-    w.googleTranslateElementInit = function(){
-      new w.google.translate.TranslateElement({pageLanguage:'ko', autoDisplay:false}, 'google_translate_element');
-    };
-    var sc = d.createElement('script');
-    sc.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    d.body.appendChild(sc);
-  }catch(e){}
-}
-function _setIframeLang(fr, lang, tries){
-  tries = tries || 0;
-  try{
-    var d = fr.contentDocument; if(!d) return;
-    var sel = d.querySelector('.goog-te-combo');
-    if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
-  }catch(e){ return; }
-  if(tries < 20) setTimeout(function(){ _setIframeLang(fr, lang, tries + 1); }, 350);
-}
-function _applyLangToIframes(lang){
-  document.querySelectorAll('.panel iframe').forEach(function(fr){
-    if(lang === 'ko') return;
-    _injectGT(fr);
-    _setIframeLang(fr, lang);
-    /* 자체 tl.js 를 가진 하위 페이지(story.html 등)에 언어를 알려줌 */
-    try{ fr.contentWindow.postMessage({type:'biz-tl-lang', lang:lang}, '*'); }catch(e){}
-  });
-}
-window._applyLangToIframes = _applyLangToIframes;
-
-/* 부모 프레임이 언어를 바꿨을 때 — 구글 위젯은 부모가 이미 주입하므로 상태만 맞춘다 */
-window.addEventListener('message', function(ev){
-  var d = ev.data;
-  if(!d || d.type !== 'biz-tl-lang' || d.lang === TL.lang) return;
-  TL.lang = d.lang;
-  TL.hooks.forEach(function(fn){ try{ fn(d.lang); }catch(e){ console.warn('[TL hook]', e); } });
-  _tlBadge('google');
-});
-
-/* ── 언어 전환 진입점 ── */
-function setLang(lang){
-  TL.lang = lang;
-
-  if(lang === 'ko'){
-    document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    location.reload();
-    return;
-  }
-
-  /* 페이지별 훅 — 스토리 본문 DeepL 등 (TL.onChange 로 등록) */
+function _tlRunHooks(lang){
   TL.hooks.forEach(function(fn){
     try{ fn(lang); }catch(e){ console.warn('[TL hook]', e); }
   });
+}
 
-  _tlGoogle(lang);
-  _applyLangToIframes(lang);
+/* ── Entry point ── */
+function setLang(code){
+  code = window.bzdLangNorm ? bzdLangNorm(code) : code;
+  try{ localStorage.setItem('bzd_lang', code); }catch(e){}
+
+  /* English or a language with human translations */
+  if(code === 'en' || bzdDictKey(code)){
+    if(_tlGoogleOn()){ _tlGoogleClear(); location.reload(); return; }   /* undo Google first */
+    TL.lang = code;
+    bzdHtmlLang(code);
+    bzdFont(code);
+    _tlBadgeReset();
+    _tlRunHooks(code);
+    return;
+  }
+
+  /* Other languages — put the English back, then let Google translate it */
+  if(bzdDictKey(TL.lang)){ bzdHtmlLang('en'); _tlRunHooks('en'); }
+  TL.lang = code;
+  _tlGoogle(code);
 }
 window.setLang = setLang;
 window.googleTranslateElementInit = googleTranslateElementInit;
 
-/* ══ 상단바 언어 드롭다운 ══ */
+/* ══ Language menu (top bar) ══ */
 (function(){
   var ALL_LANGS=[
     ['Afrikaans','af'],['Albanian','sq'],['Amharic','am'],['Arabic','ar'],['Armenian','hy'],
     ['Azerbaijani','az'],['Basque','eu'],['Belarusian','be'],['Bengali','bn'],['Bosnian','bs'],
-    ['Bulgarian','bg'],['Catalan','ca'],['Cebuano','ceb'],['Chinese (Simplified)','zh-CN'],
-    ['Chinese (Traditional)','zh-TW'],['Corsican','co'],['Croatian','hr'],['Czech','cs'],
+    ['Bulgarian','bg'],['Catalan','ca'],['Cebuano','ceb'],['Chinese (Simplified) · 简体中文','zh-CN'],
+    ['Chinese (Traditional) · 繁體中文','zh-TW'],['Corsican','co'],['Croatian','hr'],['Czech','cs'],
     ['Danish','da'],['Dutch','nl'],['English','en'],['Esperanto','eo'],['Estonian','et'],
     ['Finnish','fi'],['French','fr'],['Frisian','fy'],['Galician','gl'],['Georgian','ka'],
     ['German','de'],['Greek','el'],['Gujarati','gu'],['Haitian Creole','ht'],['Hausa','ha'],
     ['Hawaiian','haw'],['Hebrew','iw'],['Hindi','hi'],['Hmong','hmn'],['Hungarian','hu'],
     ['Icelandic','is'],['Igbo','ig'],['Indonesian','id'],['Irish','ga'],['Italian','it'],
-    ['Japanese','ja'],['Javanese','jv'],['Kannada','kn'],['Kazakh','kk'],['Khmer','km'],
+    ['Japanese · 日本語','ja'],['Javanese','jv'],['Kannada','kn'],['Kazakh','kk'],['Khmer','km'],
     ['Korean','ko'],['Kurdish','ku'],['Kyrgyz','ky'],['Lao','lo'],['Latin','la'],
     ['Latvian','lv'],['Lithuanian','lt'],['Luxembourgish','lb'],['Macedonian','mk'],
     ['Malagasy','mg'],['Malay','ms'],['Malayalam','ml'],['Maltese','mt'],['Maori','mi'],
@@ -709,7 +1243,7 @@ window.googleTranslateElementInit = googleTranslateElementInit;
     ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
   ];
   var _sel = null, _open = false;
-  var PRIORITY = ['ko','en','zh-CN','ja'];
+  var PRIORITY = ['en','ja','zh-CN','zh-TW'];
 
   function item(l){
     var name = l[0], code = l[1], isS = (_sel === code);
@@ -788,20 +1322,24 @@ window.googleTranslateElementInit = googleTranslateElementInit;
     if(_open && !e.target.closest('#tb-lang-drop-btn') && !e.target.closest('#tb-lang-dropdown')) close();
   });
 
-  /* 새로고침 후에도 선택 언어 라벨 유지 (googtrans 쿠키 기준) */
-  var m = document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/);
-  if(m && m[1] && m[1] !== 'ko'){
-    TL.lang = m[1];
-    _sel = m[1];
-    var found = ALL_LANGS.filter(function(l){ return l[1] === m[1]; })[0];
+  /* Show the current language on the button after a reload */
+  _sel = TL.lang || 'en';
+  if(_sel !== 'en'){
+    var found = ALL_LANGS.filter(function(l){ return l[1] === _sel; })[0];
     var lbl0 = document.getElementById('tb-lang-label');
     if(lbl0 && found) lbl0.textContent = found[0];
-    _tlBadge('google');
+    if(!bzdDictKey(_sel)) _tlBadge('google');
   }
 })();
+
+BIZ.mount();
+
+/* Apply the chosen language to the page (and on every change) */
+if(window.TL && TL.onChange) TL.onChange(i18nApply);
+if(bzdDictKey(TL.lang)) i18nApply(TL.lang);
 </script>
 <script>
-/* ══════ 모바일: 아래로 스크롤하면 상단바 숨김 ══════ */
+/* ══════ Mobile: hide the top bar while scrolling down ══════ */
 var _barsHidden = false;
 function bars(hide){
   if(_barsHidden === hide) return;
@@ -821,9 +1359,8 @@ function bars(hide){
   window.addEventListener('resize', function(){ if(window.innerWidth > 768) bars(false); });
 })();
 
-/* ── 초기화 ── */
+/* ── Load the Google Translate widget (used only for languages without I18N) ── */
 (function init(){
-  /* 구글 번역 위젯 로드 (이 페이지는 항상 단독으로 열립니다) */
   var slot = document.createElement('div');
   slot.id = 'google_translate_element'; slot.style.display = 'none';
   document.body.appendChild(slot);
@@ -833,24 +1370,45 @@ function bars(hide){
 })();
 </script>
 <script>
-/* ══ 기획 개요 표 · 숫자 자동 채우기 + 데모 게임 자동 열림 ══════════════
-   config.js 의 SHEET_CSV('OC-characters') 로 캐릭터 시트를 읽습니다.
-   (bizocdoll_index.html 이 캐릭터 목록을 읽는 것과 같은 시트, 같은 규칙입니다)
+/* ══ Overview numbers + demo game auto-open ══════════════════════════
+   Reads the character sheet with SHEET_CSV('OC-characters') from config.js
+   (same sheet and rules the main page uses for its character list).
 
-   시트 열 순서: code / type / holder / status / updated / pledge
-     · 공개 캐릭터  = status 가 '완료' 또는 '작업중'인 줄 (사이트 목록에 보이는 캐릭터와 같은 기준)
-     · 캐릭터 수    = 공개 캐릭터 수 → "현재 N명 공개"
-     · 타이틀 홀더  = holder 칸이 비어 있지 않은('—' 아닌) 캐릭터 수. 0명이면 줄을 숨깁니다.
-                      금액(pledge)은 이 페이지에 쓰지 않습니다.
-     · 데모 게임    = 공개 캐릭터가 DEMO_OPEN_AT 명 이상이면 카드가 열리고,
-                      data-open 이 붙은 문장들이 그 글자로 바뀌고, '공개 전이라도…' 줄이 숨습니다.
+   Columns: code / type / holder / status / updated / pledge
+     · Released     = rows whose status is in SHOWN_STATUS
+     · Characters   = number of released rows → "N released"
+     · TITLE HOLDER = released rows with a holder filled in. Hidden when 0.
+                      The pledge amount is not shown on this page.
+     · Demo game    = opens when released rows reach DEMO_OPEN_AT and DEMO_URL is set.
+                      Lines marked data-open-key switch to their "open" wording,
+                      and the "even before its public release" line hides.
 
-   시트를 못 읽으면(공유 설정 · 인터넷 문제 등) 아무 것도 바꾸지 않고 조용히 끝납니다.
-   (데모 게임 카드도 잠긴 채로 남습니다)
+   If the sheet can't be read, nothing changes (the demo card stays locked).
    ═══════════════════════════════════════════════════════════════════ */
 var DEMO_OPEN_AT = 50;
+var DEMO_URL     = '';   /* address of the demo game page, once it exists */
+
+/* Status values that count as released. The first two are the values
+   currently used in the sheet; the last two are ready for English values. */
+var SHOWN_STATUS = ['\uC644\uB8CC', '\uC791\uC5C5\uC911', 'done', 'wip'];
 
 (function(){
+  var stats = null;
+
+  function renderStats(){
+    if(!stats) return;
+    var countEl = document.getElementById('pd-stat-count');
+    if(countEl){
+      countEl.textContent = i18nText('stat_count', stats.count) + ' · ';
+      countEl.hidden = false;
+    }
+    if(stats.holders > 0){
+      document.getElementById('pd-stat-holder').textContent = i18nText('stat_holder', stats.holders);
+      document.getElementById('pd-stat-holder-row').hidden = false;
+    }
+  }
+  if(window.TL && TL.onChange) TL.onChange(function(){ renderStats(); });
+
   function parseCsv(csv){
     return csv.trim().split('\n').map(function(r){
       var cols=[], cur='', inQ=false;
@@ -865,15 +1423,19 @@ var DEMO_OPEN_AT = 50;
     });
   }
   function openDemo(){
+    if(!DEMO_URL) return;
     var card = document.querySelector('.world-card.is-locked');
     if(card){
+      card.setAttribute('href', DEMO_URL);
       card.classList.remove('is-locked');
       card.removeAttribute('tabindex');
       card.removeAttribute('aria-disabled');
     }
-    document.querySelectorAll('[data-open]').forEach(function(el){
-      el.textContent = el.getAttribute('data-open');
+    document.querySelectorAll('[data-open-key]').forEach(function(el){
+      el.__en = el.getAttribute('data-open');
+      el.setAttribute('data-i18n', el.getAttribute('data-open-key'));
     });
+    i18nApply(TL.lang);
     var pre = document.getElementById('pd-demo-pre');
     if(pre) pre.hidden = true;
   }
@@ -890,28 +1452,18 @@ var DEMO_OPEN_AT = 50;
 
       var chars = rows.slice(1)
         .filter(function(r){ return (r[0]||'').trim(); })
-        .filter(function(r){ var s=(r[3]||'').trim(); return s==='완료' || s==='작업중'; });
+        .filter(function(r){ return SHOWN_STATUS.indexOf((r[3]||'').trim().toLowerCase()) > -1; });
       if(!chars.length) return;
 
-      /* 캐릭터 수 */
-      var countEl = document.getElementById('pd-stat-count');
-      if(countEl){
-        countEl.textContent = '현재 ' + chars.length + '명 공개 · ';
-        countEl.hidden = false;
-      }
-
-      /* 타이틀 홀더 */
       var holders = chars.filter(function(r){
         var h=(r[2]||'').trim(); return h && h!=='—' && h!=='-';
       }).length;
-      if(holders > 0){
-        document.getElementById('pd-stat-holder').textContent = holders + '명의 캐릭터에 지정됨';
-        document.getElementById('pd-stat-holder-row').hidden = false;
-      }
 
-      /* 데모 게임 */
+      stats = { count: chars.length, holders: holders };
+      renderStats();
+
       if(chars.length >= DEMO_OPEN_AT) openDemo();
-    }catch(e){ /* 조용히 끝냄 — 표는 기본 문구 그대로 */ }
+    }catch(e){ /* stay quiet — the table keeps its default text */ }
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   else run();
