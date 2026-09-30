@@ -181,6 +181,8 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-proj-card.prep:hover .proj-thumb-img{transform:none}
 .home-proj-card.prep:hover .home-proj-thumb::after{content:none}
 .home-proj-card.prep .home-proj-title{color:var(--tx3)}
+.home-proj-card.prep .proj-thumb-img{filter:grayscale(1);opacity:.45}
+.home-proj-grid.proj-loading{visibility:hidden}
 .home-proj-badge{position:absolute;top:8px;left:8px;z-index:2;font-size:9px;font-weight:700;letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.55);padding:3px 9px;border-radius:20px;backdrop-filter:blur(2px)}
 .home-proj-prep-slot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--sm)}
 .home-proj-prep-slot .pp-mark{font-size:20px;color:var(--tx3);opacity:.35}
@@ -1079,6 +1081,8 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
 })();
 
 /* ── DATA ── */
+/* 프로젝트 카드 공개 상태를 구글시트에서 다 읽었는지 (loadProjStatusFromSheets 참고) */
+let _PROJ_READY = false;
 const PROJECTS = [
   {
     id:"biz-oc-doll",
@@ -1742,7 +1746,7 @@ function renderHome(){
       <!-- ── 단일 컬럼 ── -->
       <div style="display:flex;flex-direction:column;gap:14px">
           <!-- 프로젝트 이미지 카드 (별도 묶음) -->
-          <div class="home-proj-grid">
+          <div class="home-proj-grid${_PROJ_READY?'':' proj-loading'}">
             ${(()=>{
               /* status: 'active' = 정상 공개 / 'prep' = 오픈 준비중 / 'hidden' = 홈에서 숨김 */
               const shownProjs=PROJECTS.filter(p=>(p.status||'active')!=='hidden');
@@ -2281,6 +2285,68 @@ async function loadEpDataFromSheets(){
    ※ 캐릭터 목록/날짜를 이 HTML에서 찾으려 하지 마세요. 없습니다.
      전부 위 시트에 있습니다.
 ══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   ★ 프로젝트 카드 공개 상태 — 구글시트 "projects" 탭에서 읽음 ★
+
+   시트:  공용 시트(config.js 의 SHEETS_ID) 안의 "projects" 탭
+   모양:  A열 id  |  B열 status   (1행은 제목줄)
+          biz-oc-doll      | 공개
+          blood-highschool | 준비중
+
+   status 에 쓸 수 있는 말:
+     공개            → 카드 정상 표시, 클릭 가능
+     준비중 / 오픈준비중 → 카드는 보이지만 흑백·흐리게, 'OPEN 준비중' 뱃지, 클릭 안 됨
+     숨김            → 홈 목록에서 아예 사라짐
+     (영어 active / prep / hidden 도 똑같이 알아듣습니다)
+
+   ※ id 는 아래 PROJECTS 의 id 와 글자 하나까지 같아야 합니다.
+   ※ 시트에 없는 프로젝트 · 알 수 없는 말 → PROJECTS 에 적힌 status 그대로.
+   ※ 시트를 못 읽으면(4초 초과·비공개 등) → PROJECTS 에 적힌 status 그대로.
+   ※ 새 프로젝트 카드 자체(그림·소개글)는 여전히 PROJECTS 에 추가해야 합니다.
+     시트는 '보이기/숨기기'만 담당합니다.
+══════════════════════════════════════════════════════════════ */
+const PROJ_STATUS_WORDS = {
+  '공개':'active', 'active':'active', 'open':'active',
+  '준비중':'prep', '오픈준비중':'prep', '오픈 준비중':'prep', '오픈준비':'prep', 'prep':'prep',
+  '숨김':'hidden', '비공개':'hidden', 'hidden':'hidden'
+};
+async function loadProjStatusFromSheets(){
+  const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(()=>ctrl.abort(), 4000) : null;
+  try{
+    const _csvFn = (typeof SHEET_CSV === 'function')
+      ? SHEET_CSV
+      : (t => `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(t)}`);
+    const res = await fetch(_csvFn('projects'), ctrl ? {signal:ctrl.signal, cache:'no-cache'} : {cache:'no-cache'});
+    if(!res.ok) throw new Error('CSV fetch 실패 ' + res.status);
+    const csv = await res.text();
+    const rows = csv.trim().split('\n').map(r=>{
+      const cols=[]; let cur='', inQ=false;
+      for(const ch of r){
+        if(ch==='"'){inQ=!inQ;}
+        else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+        else cur+=ch;
+      }
+      cols.push(cur.trim());
+      return cols;
+    });
+    rows.slice(1).forEach(r=>{
+      const id  = (r[0]||'').trim();
+      const raw = (r[1]||'').trim().toLowerCase();
+      const st  = PROJ_STATUS_WORDS[raw];
+      const proj = PROJECTS.find(p=>p.id===id);
+      if(proj && st) proj.status = st;
+    });
+    return true;
+  }catch(e){
+    console.warn('프로젝트 상태 CSV 불러오기 실패 (HTML 기본값 사용):', e.message);
+    return false;
+  }finally{
+    if(timer) clearTimeout(timer);
+    _PROJ_READY = true;
+  }
+}
+
 async function loadCharDataFromSheets(){
   try{
     const _csvFn = (typeof SHEET_CSV === 'function')
@@ -2489,6 +2555,7 @@ render();
    셋은 서로 기다리지 않고 각자 끝나는 대로 화면을 갱신합니다.
    하나가 실패해도 나머지는 정상 표시되고, 콘솔에 경고만 남습니다.
 ══════════════════════════════════════════════════════════════ */
+loadProjStatusFromSheets().then(()=>{ render(); });
 loadEpDataFromSheets().then(ok=>{
   if(ok){ rebuildWorkLog(); render(); }
 });
