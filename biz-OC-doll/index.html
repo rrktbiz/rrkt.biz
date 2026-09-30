@@ -88,12 +88,8 @@
 <!-- ══════════════════════════════════════════════════
      링크 미리보기 (OG 태그)
 
-     이 프로젝트에서 제일 중요한 태그입니다.
-     사람들이 링크를 퍼뜨려서 크는 구조인데, 이게 없으면
-     퍼진 링크가 전부 그림 없는 회색 주소로 보입니다.
-
      ── 캐릭터별 미리보기는 여기가 아닙니다 ──
-       이 태그는 '사이트 대문'용입니다.
+       이 태그는 사이트 대문용입니다.
        #/chars/042 같은 딥링크를 붙여도 이 카드가 뜹니다.
        (# 뒤쪽은 서버로 전달되지 않기 때문입니다)
 
@@ -123,12 +119,12 @@
      ※ 그림을 바꿔도 카톡은 옛날 걸 한동안 계속 보여줍니다.
         developers.kakao.com/tool/debugger/sharing 에서 [초기화]
      ══════════════════════════════════════════════════ -->
-<meta name="description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 여러분이 정합니다.">
+<meta name="description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 당신이 정합니다.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="biz-OC-doll">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="biz-OC-doll">
-<meta property="og:description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 여러분이 정합니다.">
+<meta property="og:description" content="이름도, 성격도, 이야기도 아직 없습니다. 코드와 그림만 있는 캐릭터들. 나머지는 당신이 정합니다.">
 <meta property="og:url" content="https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/">
 <meta property="og:image" content="https://rrktbiz.github.io/rrkt.biz/biz-OC-doll/images/og/main.png">
 <meta property="og:image:width" content="1200">
@@ -140,7 +136,6 @@
 
      이미지 파일이 아니라 코드 안에 그림이 통째로 들어있습니다.
      따로 업로드할 파일이 없고, 폴더 구조가 바뀌어도 안 깨집니다.
-     (블러드하이스쿨 파비콘과 같은 방식입니다)
 
      ── 색 바꾸는 법 ──
        %23cfe6f4  보석 몸통 색  ← 여기만 바꾸면 됩니다
@@ -163,25 +158,20 @@
      여백을 늘리면 탭에서 보석이 그만큼 작게 보이니
      좌표는 되도록 건드리지 마세요.
 
-     ※ 소개·캐릭터·스토리·이벤트 파일에는 넣지 않아도 됩니다.
-        그 파일들은 이 페이지 안(iframe)에서 열리기 때문에
-        탭 아이콘을 바꾸지 않습니다.
-        나중에 /c/042.html 같은 미리보기 파일을 만들 때는
-        아래 한 줄을 그 파일에도 복사해 두세요.
-        (카톡 링크를 눌러 들어온 사람이 실제로 보는 탭입니다)
+     ※ /c/042.html 같은 명찰 파일에도 아래 한 줄을 복사해 둡니다.
+        (링크를 눌러 들어온 사람이 실제로 보는 탭입니다)
      ══════════════════════════════════════════════════ -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
 
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-/* ═══ 공용 컴포넌트 스타일 (구 common.css — 이 파일 안으로 합침) ═══
+/* ═══ 공용 컴포넌트 스타일 ═══
    상단바 문의 버튼 · 언어 안내 각주 · 제작자 소개/문의 오버레이
    ※ story.html 에도 같은 블록이 있습니다. 한쪽 고치면 반대쪽도. */
 #tb-contact-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
 #tb-contact-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
 /* ── 소리 켜기·끄기 버튼 + 소리 크기 조절바 ──────────────────────
-   ※ 세 사이트(허브 index.html · bizocdoll_index.html · bhs_index.html)가
-     똑같은 모양을 씁니다. 한 곳만 고치면 생김새가 갈라집니다. */
+   ※ 다른 rrkt.biz 사이트와 똑같은 모양을 씁니다. 한 곳만 고치면 생김새가 갈라집니다. */
 #tb-sound-wrap{position:relative;display:flex;align-items:center;flex-shrink:0}
 #tb-sound-btn{display:flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;cursor:pointer;transition:all .12s;flex-shrink:0}
 #tb-sound-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
@@ -200,7 +190,7 @@
 .tb-lang-note{padding:10px 14px 11px;border-top:1px solid #ececec;background:#fafafa;font-size:10.5px;line-height:1.7;color:#8a8a8a;letter-spacing:-.01em}
 .tb-lang-note b{color:#5f5f5f;font-weight:600}
 
-/* ── 제작자 소개 · 비즈니스 문의 오버레이 (허브와 동일 컴포넌트) ── */
+/* ── 제작자 소개 · 비즈니스 문의 오버레이 (다른 rrkt.biz 사이트와 같은 컴포넌트) ── */
 #contact-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #contact-overlay.hidden{display:none}
 .contact-card{position:relative;background:#fff;border:1px solid #e2e2e2;border-radius:14px;padding:28px 30px;max-width:440px;width:100%;box-shadow:0 12px 40px #00000026;font-family:var(--fn)}
@@ -218,7 +208,7 @@
 .contact-mailrow span.mail{font-size:13px;font-weight:600;color:#1a1a1a;font-family:'Inter',sans-serif}
 .biq-copy-btn{background:transparent;border:1px solid #e2e2e2;border-radius:6px;padding:4px 7px;display:flex;align-items:center;gap:4px;font-family:var(--fn);font-size:11px;font-weight:500;color:#a0a0a0;cursor:pointer;transition:all .15s;flex-shrink:0}
 .biq-copy-btn:hover{background:#fafafa;color:#1a1a1a;border-color:#c6c6c6}
-/* ── 문의 카드 안 PD 페이지 링크 (블하스 문의창과 같은 모양, 색만 biz-OC-doll 파랑) ── */
+/* ── 문의 카드 안 PD 페이지 링크 ── */
 .contact-pd{margin-top:20px;padding-top:16px;border-top:1px solid #ececec}
 .contact-pd-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#a0a0a0;text-transform:uppercase;margin-bottom:7px}
 .contact-pd-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#1a1a1a;text-decoration:none;border-bottom:1px solid #d8d8d8;padding-bottom:2px;transition:color .12s,border-color .12s}
@@ -235,7 +225,7 @@
   --fn:'Inter','Noto Sans KR',-apple-system,sans-serif;
   --h-top:46px;--h-tab:44px;
 
-  /* ── 스킨 색 (블루 = 남자별, 기본) ──
+  /* ── 스킨 색 (블루, 기본) ──
      사이트의 포인트 색은 전부 이 여섯 개를 가져다 씁니다. */
   --sk-main:#5a90b0;       /* 버튼·테두리·장식 */
   --sk-ink:#477693;        /* 흰 바탕 위 작은 글씨 */
@@ -252,7 +242,7 @@
   --sk-banner-a:#7ba9c6;   /* 인기투표 카드 배너 (그라데이션 시작) */
   --sk-banner-b:#4a7a98;   /*                    (그라데이션 끝) */
 }
-/* ── 라일락 스킨 (여자별) ──
+/* ── 라일락 스킨 ──
    #B4A3D4 는 흰 바탕 위 글씨로는 연해서, 글씨는 진한 보라 #6B559B, 채우는 칸은 #9C88C4 로 짝지었습니다. */
 html[data-skin="lilac"]{
   --sk-main:#9C88C4;
@@ -664,8 +654,8 @@ body{top:0 !important}
 </style>
 
 <!-- ══════════════════════════════════════════════════
-     캐릭터 탭 스타일 (원래 doll_charlist.html 에 있던 것)
-     모든 규칙 앞에 .chars-scope 를 붙여서 캐릭터 탭 안에서만 먹히게 가뒀습니다.
+     캐릭터 탭 스타일
+     모든 규칙 앞에 .chars-scope 를 붙여 캐릭터 탭 안에서만 적용됩니다.
      (.chars-scope 는 캐릭터 목록 패널과, 캐릭터 상세 창 두 군데에 붙어 있습니다)
      ══════════════════════════════════════════════════ -->
 <style id="css-chars">
@@ -949,11 +939,9 @@ body{top:0 !important}
 .chars-scope .detail-close-btn::after{content:'';position:absolute;top:-8px;right:-12px;bottom:-8px;left:-4px}
 }
 
-/* ── 본체에 들어오면서 바꾼 두 가지 ──
-   ① 상세 창: 예전엔 캐릭터 탭 칸 안에서 화면을 덮었습니다.
-      이제는 본체 전체가 아니라 '탭 아래 영역'만 덮도록 absolute 로 둡니다.
-      (상단바·탭바는 그대로 보임 — 예전과 같은 모습)
-   ② 폰 화면 높이: 100vh 는 이제 본체 전체 높이라 너무 길어집니다. 상세 창 높이에 맞춥니다. */
+/* ── 상세 창 위치와 높이 ──
+   ① 상세 창은 탭 아래 영역만 덮도록 absolute 로 둡니다. (상단바·탭바는 그대로 보임)
+   ② 폰 화면 높이는 100vh 대신 상세 창 높이에 맞춥니다. */
 .chars-scope #detail-view{position:absolute}
 @media(max-width:600px){
   .chars-scope .detail-overlay-inner{min-height:100%}
@@ -979,7 +967,7 @@ body{top:0 !important}
      맨 위 경로 줄(biz-OC-doll › 캐릭터 일람 › 코드)은 숨기고,
      '넓게 보기'와 ✕ 버튼만 코드 줄 오른쪽 끝으로 올려 붙입니다.
      HTML은 그대로이고 위치만 옮긴 것이라, 이 묶음을 지우면 원래대로 돌아옵니다.
-     폰 화면은 예전 그대로입니다. */
+     폰 화면에는 적용되지 않습니다. */
   .chars-scope .detail-overlay-inner .top-bar{position:absolute;top:20px;right:32px;height:56px;padding:0;background:transparent;border-bottom:none;gap:8px}
   .chars-scope .detail-overlay-inner .top-bar .tb-crumbs-mid,
   .chars-scope .detail-overlay-inner .top-bar .tb-cur{display:none}
@@ -1046,7 +1034,7 @@ body{top:0 !important}
 @media(max-width:1619px){ .chars-scope .detail-overlay-inner.wide ~ .detail-side{display:none !important} }
 @media(max-width:1599px){ .chars-scope .detail-overlay-inner.wide ~ .detail-help{display:none !important} }
 /* ── AI 활용 표기 ──
-   캐릭터 그림은 직접 그리고, 200명 공용 시트 틀만 AI 로 만든 것을 밝힙니다.
+   캐릭터 그림은 직접 그리고, 공용 시트 틀만 AI 로 만든 것을 밝힙니다.
    (시트 이미지 오른쪽 아래에도 "Frame: AI-generated / Art: ..." 가 따로 박혀 있음)
    · 넓은 화면 : 왼쪽 여백(해시태그 복사 칸 아래)에 작은 글씨
    · 그 외 화면 : 왼쪽 여백이 안 보이므로, 시트 그림 왼쪽 아래에 ⓘ 아이콘 → 누르면 말풍선
@@ -1093,8 +1081,8 @@ body{top:0 !important}
 </style>
 
 <!-- ══════════════════════════════════════════════════
-     이벤트 탭 스타일 (원래 event.html 에 있던 것)
-     모든 규칙 앞에 #panel-event 를 붙여서 이벤트 탭 안에서만 먹히게 가뒀습니다.
+     이벤트 탭 스타일
+     모든 규칙 앞에 #panel-event 를 붙여 이벤트 탭 안에서만 적용됩니다.
      ══════════════════════════════════════════════════ -->
 <style id="css-event">
 #panel-event *,
@@ -1381,7 +1369,7 @@ body{top:0 !important}
     <button class="tab active" data-tab="intro">소개</button>
     <button class="tab" data-tab="chars">캐릭터</button>
     <button class="tab" data-tab="event">이벤트</button>
-    <!-- 스킨 고르기 (블루 = 남자별 / 라일락 = 여자별) -->
+    <!-- 스킨 고르기 (블루 / 라일락) -->
     <div class="skin-dots" role="group" aria-label="사이트 색 고르기">
       <button class="skin-dot blue" data-skin="blue" onclick="setSkin('blue')" title="블루" aria-label="블루 스킨"></button>
       <button class="skin-dot lilac" data-skin="lilac" onclick="setSkin('lilac')" title="라일락" aria-label="라일락 스킨"></button>
@@ -1512,7 +1500,7 @@ body{top:0 !important}
 
           <!-- 참고 그림 1 — 042번 원본 · A · B -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 1<br>042번 원본 · A · B<br>이름도 캐해석도 달라도, 모두 042번<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
+            <figure class="ex-slot"><img src="images/ex_img/introduce1.png" alt="042번 원본과, 같은 042번에 서로 다른 이름을 붙인 A와 B" loading="lazy"></figure>
           </div>
 
           <!-- 🌐 I18N_BLOCKS 'play_solo' -->
@@ -1520,7 +1508,7 @@ body{top:0 !important}
 
           <!-- 참고 그림 2 — A로 할 수 있는 것 -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 2<br>A로 할 수 있는 것<br>웹소설 표지 · 게임 화면 · 동인지 부스 · 버튜버 방송<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
+            <figure class="ex-slot"><img src="images/ex_img/introduce2.png" alt="A가 웹소설 표지, 게임 화면, 동인지 부스, 버튜버 방송에 등장한 모습" loading="lazy"></figure>
           </div>
 
           <!-- 🌐 I18N_BLOCKS 'play_together' -->
@@ -1528,7 +1516,7 @@ body{top:0 !important}
 
           <!-- 참고 그림 3 — 다른 홀더의 캐릭터는 허락 먼저 -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 3<br>다른 홀더의 캐릭터는 허락 먼저<br>메시지로 묻고 답하는 장면<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
+            <figure class="ex-slot"><img src="images/ex_img/introduce3.png" alt="다른 홀더에게 캐릭터를 써도 되는지 메시지로 묻고 허락받는 장면" loading="lazy"></figure>
           </div>
 
           <!-- 번외 상자 — 외관 수정  🌐 I18N_BLOCKS 'bonus_title', 'bonus_body' -->
@@ -1538,7 +1526,7 @@ body{top:0 !important}
             <p class="guide-body" data-i18n="bonus_body">A를 내 작품에 쓰고 싶은데, 이미 정해진 주인공의 눈 색과 겹쳐서 망설여질 수 있습니다. 그럴 땐 A의 눈 색을 바꾸셔도 됩니다. 작품에 맞추기 위해서든 취향 때문이든, 의상 교체, 연령 변화, 종족 변화, 눈 색 같은 일부 컬러링까지 자유롭게 커스터마이징하셔도 됩니다.</p>
             <!-- 참고 그림 4 — 외관 수정 -->
             <div class="ex-shots">
-              <figure class="ex-slot"><div class="ex-ph"><span>그림 4<br>내 주인공 · 눈 색이 겹치는 A · 눈 색을 바꾼 A<br>눈 색이 바뀌어도 BIZOCDOLL042<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
+              <figure class="ex-slot"><img src="images/ex_img/introduce4.png" alt="내 주인공과 눈 색이 겹치는 A, 그리고 눈 색을 바꾼 A" loading="lazy"></figure>
             </div>
           </div>
 
@@ -1689,7 +1677,7 @@ body{top:0 !important}
     </div>
 
     <!-- ══════════════════════════════════════════════════
-         캐릭터 탭 — 원래 doll_charlist.html 이던 목록 부분
+         캐릭터 탭 — 목록
          (캐릭터를 눌렀을 때 뜨는 상세 창은 아래 #chars-detail-host 에 있습니다)
          ══════════════════════════════════════════════════ -->
     <div class="panel chars-scope" id="panel-chars">
@@ -1729,9 +1717,8 @@ body{top:0 !important}
     </div>
 
     <!-- ══════════════════════════════════════════════════
-         이벤트 탭 — 원래 event.html 이던 내용
-         투표 열기·Ko-fi 주소 등 고치는 법은 각 자리 주석에 그대로 있습니다.
-         (이벤트 안쪽 칸 이름은 ev-panel-event / ev-panel-log 로 바꿨습니다)
+         이벤트 탭
+         투표 열기·Ko-fi 주소 등 고치는 법은 각 자리 주석에 있습니다.
          ══════════════════════════════════════════════════ -->
     <div class="panel" id="panel-event">
       <div class="page-hero">
@@ -1755,14 +1742,8 @@ body{top:0 !important}
       <div id="ev-panel-event" class="page-body">
 
         <!-- ══ TITLE HOLDER ══
-             사이트 오픈 날부터 열어 두는 카드입니다. 맨 위에 둡니다.
              버튼 주소는 아래 스크립트의 TITLE_HOLDER_URL 한 곳만 바꾸면 됩니다.
-             (Ko-fi 샵에서 TITLE HOLDER 카테고리를 만든 뒤, 그 카테고리 주소로 바꿔 주세요)
-             모양은 상시 투표 카드(티켓형)를 그대로 빌려 쓰고, 왼쪽엔 왕관 아이콘과 그 아래 시작 가격($20)을 둡니다.
-             (시작 가격이 바뀌면 왕관 아래 '$20' 한 곳만 고치면 됩니다. 운영 매뉴얼 2장의 20달러와 맞춰 둘 것)
-             ※ 소개탭의 '홀더'(이름을 붙인 모든 팬)와 헷갈리지 않게,
-               '코드마다 한 명뿐'을 기본 문장에, 자세한 차이는 ⓘ 펼침 칸에 적어 둡니다.
-             ※ 의미 부여 문구는 붙이지 않고 조건만 적습니다. (운영 매뉴얼 13장) -->
+             시작 가격이 바뀌면 왕관 아래 '$20' 한 곳만 고칩니다. -->
         <div class="vote-card">
           <div class="vote-ticket">
             <div class="vote-ticket-label">Title</div>
@@ -1786,8 +1767,8 @@ body{top:0 !important}
           </div>
         </div>
 
-        <!-- ══ 상시 투표 ══
-             Ko-fi 주소만 아래 KOFI_URL 에 넣으면 됩니다. 코드는 안 건드리셔도 됩니다. -->
+        <!-- ══ 상시 투표 (유료, 누적) ══
+             Ko-fi 주소는 아래 스크립트의 KOFI_URL 에 있습니다. -->
         <div class="vote-card">
           <div class="vote-ticket">
             <div class="vote-ticket-label">Ticket</div>
@@ -1798,7 +1779,7 @@ body{top:0 !important}
             <div class="vote-eyebrow">상시 투표</div>
             <div class="vote-title">투표로 마음 전하기</div>
             <div class="vote-desc">좋아하는 비즈오씨돌에게 표를 보낼 수 있습니다. </div>
-            <div class="vote-note">집계 반영은 비정기적으로 이루어집니다.</div>
+            <div class="vote-note">보낸 표는 회차가 바뀌어도 사라지지 않고 계속 쌓이며, 집계 반영은 비정기적으로 이루어집니다.</div>
             <a class="vote-btn" id="vote-kofi-btn" href="#" onclick="openKofi();return false;">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><path d="M6.5 3H13v3.5a3 3 0 0 1-3 3H6.5z"/><path d="M13 4h.8a1.7 1.7 0 0 1 0 3.4H13"/><path d="M3 12.5h9"/></svg>
               Ko-fi에서 표 보내기
@@ -1808,14 +1789,14 @@ body{top:0 !important}
 
         <!-- ══ 제1회 인기투표 (무료) ══
              구글폼 주소는 아래 스크립트의 VOTE_FORM_URL 에 있습니다.
-             모양은 위 두 카드(티켓형)와 똑같이 맞췄습니다. 왼쪽 티켓은 Round 01 · $0.
 
              ★ 상태는 아래 <div class="vote-card ev-vote ..."> 한 줄의 단어 하나로만 바꿉니다.
-               개최 전 : class="vote-card ev-vote is-locked"   (지금)
+               개최 전 : class="vote-card ev-vote is-locked"
                진행 중 : class="vote-card ev-vote"
                종료    : class="vote-card ev-vote is-ended"
              위쪽 작은 글씨(개최 전/진행 중/종료)와 버튼 글자·잠김은 알아서 따라 바뀝니다.
-             다음 회차를 열 때는 이 카드를 통째로 복사해서 '01'과 '제1회', id 를 바꾸면 됩니다. -->
+             다음 회차를 열 때는 이 카드를 통째로 복사해서 '01'과 '제1회', id 를 바꾸고,
+             지난 카드는 is-ended 로 바꿉니다. -->
         <div class="vote-card ev-vote is-locked" id="freeVoteCard">
           <div class="vote-ticket">
             <div class="vote-ticket-label">Round</div>
@@ -1850,14 +1831,12 @@ body{top:0 !important}
              · 날짜 칸 제목에 '날짜', 코드 칸 제목에 '코드'가 꼭 들어가야 합니다.
                (탭이 없을 때 구글이 엉뚱한 탭을 대신 보내는 걸 이 제목으로 걸러냅니다)
              · 지우지 않고 아래로 계속 쌓기만 합니다. 순서는 상관없습니다(날짜로 정렬).
-             · 자동 기록(매뉴얼 3-7)을 붙이면 QUERY 식이 이 모양 그대로 채워 줍니다.
              · 이메일 같은 개인 정보는 이 탭에 절대 적지 않습니다. (공개 시트)
 
-             깜빡하고 이 탭에 안 적어도, OC-characters 탭 holder·pledge 칸에 적힌
+             이 탭에 안 적어도, OC-characters 탭 holder·pledge 칸에 적힌
              현재 타이틀 홀더는 '날짜 미기록'으로 자동으로 끼워 넣어 보여 줍니다.
 
-           ※ 금액 큰 순 정렬·순위표는 일부러 만들지 않았습니다. (운영 매뉴얼 2장)
-             보기는 '날짜순'과 '코드별(번호순)' 두 가지뿐입니다. -->
+           보기는 '날짜순'과 '코드별(번호순)' 두 가지입니다. -->
       <div id="ev-panel-log" class="page-body" style="display:none">
 
         <div class="log-switch">
@@ -1889,9 +1868,9 @@ body{top:0 !important}
             <div class="log-empty">아직 기록된 인기투표 결과가 없습니다.<br>결과 발표 후 이곳에 순위가 기록됩니다.</div>
           </div>
 
-          <!-- 결과가 생기면 아래 블록을 복사해서 연도별로 추가하세요
+          <!-- 결과가 생기면 아래 블록을 복사해서 회차별로 추가하세요
           <div class="log-year-block">
-            <div class="log-year-label">2025년 인기투표 결과</div>
+            <div class="log-year-label">제1회 인기투표 결과</div>
             <table class="log-table">
               <thead>
                 <tr>
@@ -2020,9 +1999,9 @@ body{top:0 !important}
             <div class="detail-side-row"><span class="detail-side-k">TYPE</span><span class="detail-side-v" id="side-type">—</span></div>
             <!-- TITLE HOLDER 옆 X 버튼: 타이틀 홀더가 있을 때만 보입니다. 누르면 X(트위터) 글쓰기 창이 문구와 링크가 채워진 채로 열립니다. -->
             <div class="detail-side-row"><span class="detail-side-k">TITLE HOLDER</span><span class="detail-side-vwrap"><span class="detail-side-v" id="side-holder">—</span><button class="side-th-share" id="side-th-share" onclick="shareTitleHolder()" title="X(트위터)에 타이틀 홀더 공유" aria-label="X(트위터)에 타이틀 홀더 공유" hidden><svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-3.9 4.5H1.3l5.2-5.9L1.1 1.5h4.5l3.1 4.1 3.5-4.1zm-.8 11.7h1.2L4.9 2.7H3.6l7.8 10.5z"/></svg></button></span></div>
-            <!-- 예전 STATUS(완료) 줄 자리. 지금 타이틀 홀더가 낸 금액을 보여줍니다.
+            <!-- 지금 타이틀 홀더가 낸 금액.
                  구글시트 OC-characters 탭의 F열(여섯 번째 칸)에 숫자만 적으면 됩니다. 예: 50
-                 (STATUS 열은 목록에 띄울지 거르는 데 계속 쓰니 시트에서 지우지 마세요) -->
+                 (STATUS 열은 목록에 띄울지 거르는 데 쓰니 시트에서 지우지 마세요) -->
             <div class="detail-side-row"><span class="detail-side-k">PLEDGED</span><span class="detail-side-v" id="side-pledge">—</span></div>
             <div class="detail-side-row"><span class="detail-side-k">UPDATED</span><span class="detail-side-v" id="side-updated">—</span></div>
           </div>
@@ -2059,7 +2038,7 @@ body{top:0 !important}
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   공용 UI + 번역 엔진  (구 common.js / tl.js — 이 파일 안으로 합침)
+   공용 UI + 번역 엔진
 
    ⚠ 같은 블록이 story.html 에도 들어 있습니다.
      특히 아래 두 가지는 index(부모) ↔ story(자식) 사이의 약속이라
@@ -2139,9 +2118,7 @@ var BIZ = window.BIZ = {
       </button>
     </div>
 
-    <!-- PD 페이지 입구 — PD 페이지는 메뉴에 나오지 않고, 여기서만 들어갑니다.
-         ※ 이 링크는 본페이지(이 파일)에만 있습니다.
-            story.html · doll_pd.html 의 같은 공용 블록에는 일부러 넣지 않았습니다. -->
+    <!-- PD 페이지 입구 (이 파일의 문의창에만 있음) -->
     <div class="contact-pd">
       <div class="contact-pd-lbl">For PD</div>
       <a class="contact-pd-link" href="doll_pd.html">
@@ -2200,7 +2177,7 @@ BIZ.mount();
    페이지 어디를 눌러도 아주 짧은 "틱" 소리가 납니다.
    상단바의 스피커 버튼으로 끄고 켤 수 있습니다.
    끈 상태는 rrkt_sound 라는 이름으로 브라우저에 저장되며,
-   허브 · 블러드하이스쿨과 같은 이름을 쓰기 때문에
+   다른 rrkt.biz 사이트와 같은 이름을 쓰기 때문에
    한 곳에서 끄면 나머지에서도 함께 꺼집니다.
    처음 방문한 사람에게는 켜진 상태로 시작합니다.
 
@@ -2209,14 +2186,13 @@ BIZ.mount();
    버튼 아래에 작은 조절바가 나타납니다. 0~100% 사이로 움직입니다.
    0까지 내리면 꺼진 것과 같고, 다시 올리면 켜집니다.
    이 값은 rrkt_sound_vol 이라는 이름으로 저장되며,
-   켜짐·꺼짐과 마찬가지로 세 사이트가 함께 씁니다.
+   켜짐·꺼짐과 마찬가지로 다른 rrkt.biz 사이트와 함께 씁니다.
 
    ── 소리 파일이 없습니다 ──
    음원을 내려받는 게 아니라 브라우저가 그 자리에서
    음을 만들어 냅니다. 그래서 용량도 로딩 시간도 늘지 않습니다.
 
    ── 어떤 소리인가요 ──
-   rrkt.biz 허브 페이지에서 쓰던 클릭음과 똑같은 소리입니다.
    음 두 개가 위에서 아래로 떨어집니다. (1200Hz → 900Hz)
    윈도우 XP 시절 버튼 소리와 비슷한 계열입니다.
 
@@ -2231,21 +2207,11 @@ BIZ.mount();
              시끄러우면 0.08 / 0.06 정도로 함께 내리세요.
              한쪽만 내리면 두 음의 균형이 깨집니다.
 
-   ※ 세 사이트가 같은 값을 씁니다. 여기만 고치면 소리가 갈라집니다.
-     바꾸려면 허브 index.html 과 bhs_index.html 도 함께 고치세요.
-
-   ── 소개·캐릭터·스토리·이벤트 탭도 소리가 납니다 ──
-   그 페이지들은 이 페이지 안(iframe)에 들어와 있습니다.
-   아래 코드가 그 안쪽까지 알아서 연결하므로
-   각 파일을 따로 고칠 필요가 없습니다.
-
-   ※ 내 컴퓨터에서 파일을 더블클릭해 열면 브라우저 보안 정책 탓에
-     안쪽 탭에서는 소리가 안 날 수 있습니다.
-     깃허브에 올린 뒤에는 정상 작동합니다.
+   ※ 다른 rrkt.biz 사이트와 같은 값을 씁니다. 여기만 고치면 소리가 갈라집니다.
    ══════════════════════════════════════════════════ */
 (function(){
 
-  /* 저장 이름 — 세 사이트가 같은 이름을 씁니다. 바꾸면 설정이 갈라집니다. */
+  /* 저장 이름 — 다른 rrkt.biz 사이트와 같은 이름을 씁니다. 바꾸면 설정이 갈라집니다. */
   var KEY     = 'rrkt_sound';       /* '1' 켜짐 / '0' 꺼짐 */
   var KEY_VOL = 'rrkt_sound_vol';   /* 소리 크기 0~100 */
 
@@ -2319,7 +2285,7 @@ BIZ.mount();
   var ICON_OFF = _S + '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
 
   /* 그림이 실제로 달라졌을 때만 다시 그립니다.
-     (허브는 화면을 다시 그릴 때마다 이 함수를 부르기 때문에,
+     (화면을 다시 그릴 때마다 이 함수를 부르는 페이지에서
       매번 손대면 서로를 계속 불러대는 무한 반복이 됩니다) */
   function paint(){
     var mute = (!on || vol === 0);
@@ -2669,13 +2635,9 @@ window.googleTranslateElementInit = googleTranslateElementInit;
 <script>
 /* ══════════════════════════════════════════════════
    biz-OC-doll SPA
-   - 탭 전환·에피소드 읽기 모두 새로고침 없음
-   - 소개 탭 = 이 파일 안에 직접 들어 있음 (native)
-   - 캐릭터 탭 = 이 파일 안에 직접 들어 있음 (native)
-   - 이벤트 탭 = 이 파일 안에 직접 들어 있음 (native)
-   - 이제 모든 탭이 이 파일 안에 있습니다. 아래 iframe 불러오기 코드는
-     나중에 따로 파일로 된 탭을 다시 붙일 때를 위해 남겨 둡니다.
-   - 스토리 탭은 없앴습니다. story.html 은 PD 페이지(doll_pd.html)에서만 들어갑니다
+   - 탭 전환은 새로고침 없음
+   - 소개 · 캐릭터 · 이벤트 탭 모두 이 파일 안에 있음
+   - 아래 iframe 불러오기 코드는 따로 파일로 된 탭을 붙일 때 씀
    ══════════════════════════════════════════════════ */
 
 var TABS = {
@@ -2695,7 +2657,7 @@ var current = null;
    #/event/log            로그 · TITLE HOLDER (날짜순)
    #/event/log/code       로그 · TITLE HOLDER (코드별)
    #/event/log/vote       로그 · 인기투표
-   (옛 #/story 주소로 들어오면 소개 탭이 열립니다)
+   (없는 탭 주소로 들어오면 소개 탭이 열립니다)
 
    iframe 안쪽 주소는 주소창에 안 나옵니다.
    그래서 '지금 뭘 보고 있는지'를 여기서 대신 적어 줍니다.
@@ -3017,7 +2979,7 @@ document.querySelectorAll('.panel').forEach(hookPanelScroll);
   var h = parseHash();
   current = null;
   go(h.tab, false);   /* 딥링크는 mount() 가 자식 파일 해시로 넘깁니다 */
-  /* 주소가 없거나, 없는 탭(옛 #/story 등)이면 주소창을 실제 열린 탭으로 고쳐 둡니다 */
+  /* 주소가 없거나 없는 탭이면 주소창을 실제 열린 탭으로 고쳐 둡니다 */
   var first = (location.hash || '').replace(/^#\/?/, '').split('/')[0];
   if(!location.hash || first !== h.tab) history.replaceState(null, '', '#/' + h.tab);
 })();
@@ -3354,7 +3316,7 @@ function openFormPopup() {
 </script>
 
 <!-- ══════════════════════════════════════════════════
-     캐릭터 탭 스크립트 (원래 doll_charlist.html 에 있던 것)
+     캐릭터 탭 스크립트
      구글시트에서 캐릭터 목록을 읽어오고, 좋아요·상세 창·딥링크를 처리합니다.
      ══════════════════════════════════════════════════ -->
 <script>
@@ -3420,8 +3382,7 @@ function openFormPopup() {
         cols.push(cur.trim());
         return cols;
       });
-      /* 시트는 읽었는데 내용이 헤더뿐인 경우.
-         예전에는 여기서 그냥 멈춰서 '불러오는 중...'이 영원히 남았습니다. */
+      /* 시트는 읽었는데 내용이 헤더뿐인 경우 */
       if(rows.length < 2){
         window.CHARACTERS = [];
         window._charLoadState = 'empty';
@@ -3454,11 +3415,7 @@ function openFormPopup() {
       applyInitialRoute();
     }catch(e){
       /* ── 불러오기 실패 ──────────────────────────────────
-         예전에는 여기서 '빈 캐릭터 200개'를 만들어 뿌렸습니다.
-         그러면 방문자 눈에는 고장이 아니라
-         '이 프로젝트 텅 비어 있네'로 보입니다. 첫인상이 망가집니다.
-
-         그래서 지금은 아무것도 만들지 않고 안내문만 띄웁니다.
+         캐릭터를 만들어 채우지 않고 안내문만 띄웁니다.
          (문구는 renderList 안 char-empty 부분에 있습니다)
 
          실패하는 흔한 이유:
@@ -3479,15 +3436,14 @@ function openFormPopup() {
 window.charState = window.charState || { filter:"ALL", search:"", activeId:null, sort:"newest" };
 window.charState.activeId = null;
 const state = window.charState;
-/* 예전에 저장된 '인기순' 설정이 남아 있으면 최신순으로 되돌립니다 */
+/* 저장된 정렬이 지금 없는 값이면 최신순으로 되돌립니다 */
 if(state.sort === 'popular') state.sort = 'newest';
 
 /* ══════════════════════════════════════════════════
    좋아요
 
    화면에는 '내가 누른 것'만 보입니다.
-   전체 몇 명이 눌렀는지는 어디에도 표시하지 않습니다.
-   집계는 시트에 쌓이며, 공개 여부는 아직 정해지지 않았습니다.
+   전체 몇 명이 눌렀는지는 화면에 표시하지 않습니다. 집계는 시트에 쌓입니다.
    ══════════════════════════════════════════════════ */
 function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem('doll_liked')||'[]'))}catch{return new Set()} }
 function saveLiked(s){ localStorage.setItem('doll_liked', JSON.stringify([...s])) }
@@ -3679,7 +3635,7 @@ function fillDetailSide(c){
   const thLine = document.getElementById('sheet-th-line');
   if(thLine) thLine.title = hasTH ? ('TITLE HOLDER · ' + c.holder + (c.pledge ? ' · $' + c.pledge : '')) : '';
   set('side-updated', normDate(c.updated) || '—');
-  /* TYPE 글씨 색: M = 남자편 블루 계열, F = 여자편 라일락 계열 (그 외는 흰색 그대로)
+  /* TYPE 글씨 색: M = 블루 계열, F = 라일락 계열 (그 외는 흰색 그대로)
      회색 배경 위에서 잘 읽히도록 같은 색 계열에서 밝은 쪽으로 골랐습니다. */
   const typeEl = document.getElementById('side-type');
   if(typeEl) typeEl.style.color = c.type==='M' ? '#B9D9EE' : c.type==='F' ? '#DCCFF7' : '';
@@ -3728,9 +3684,7 @@ function renderDetail(id){
   const slot = document.getElementById('detail-sheet-slot');
   if(slot){
     /* ── 부드럽게 넘기기 ──
-       예전: 이전 그림을 먼저 지우고 → 빈 칸(점선 상자)이 잠깐 보이고 → 새 그림이 '툭' 나타남.
-       지금: 이전 그림을 그대로 둔 채 새 그림을 몰래 받아두고,
-             다 받아지면 그 순간 바로 바꿔 끼웁니다. (서서히 겹치는 효과는 없음)
+       이전 그림을 그대로 둔 채 새 그림을 받아두고, 다 받아지면 바로 바꿔 끼웁니다.
        빠르게 여러 번 넘겨도 늦게 도착한 옛 그림이 끼어들지 않도록 번호표(_tok)로 걸러냅니다. */
     const tok = (slot._tok = (slot._tok || 0) + 1);
     if(typeof closeSheetAi==='function') closeSheetAi();   /* 다른 캐릭터로 넘어가면 AI 안내 말풍선은 닫음 */
@@ -3828,15 +3782,15 @@ function updateDetailLikeBtn(){
 
 /* ══════════════════════════════════════════════════
    좋아요 연출 — '두 개의 별'
-   ① 남자별(블루)·여자별(라일락)이 꼬리를 끌며 한 바퀴 돌다가 가운데로 합쳐지고 (0.45초)
+   ① 블루 별·라일락 별이 꼬리를 끌며 한 바퀴 돌다가 가운데로 합쳐지고 (0.45초)
    ② 합쳐지는 순간 하트가 톡 튀고, 링 하나 + 반짝 별 12개가 보석 색으로 '팡' 퍼집니다.
    창 테두리에 잘리지 않도록 화면 맨 위 층(body)에 잠깐 붙였다가 끝나면 지웁니다.
    '동작 줄이기'를 켜 둔 기기에서는 별 연출 없이 하트만 톡 튑니다.
    색·개수·속도는 아래 LIKE_FX 에서 바꿀 수 있습니다.
    ══════════════════════════════════════════════════ */
 var LIKE_FX = {
-  STAR_M: '#9CC4DC',                              /* 남자별 블루 */
-  STAR_F: '#B4A3D4',                              /* 여자별 라일락 */
+  STAR_M: '#9CC4DC',                              /* 블루 별 */
+  STAR_F: '#B4A3D4',                              /* 라일락 별 */
   BURST:  ['#cfe6f4', '#9CC4DC', '#E6DDF5'],      /* 팡 터지는 조각 색 (보석 계열) */
   RING:   '#9CC4DC',
   COUNT:  12,                                     /* 터지는 별 개수 */
@@ -4028,7 +3982,7 @@ document.addEventListener('keydown', function(e){
 
 /* ══════════════════════════════════════════════════
    캐릭터 딥링크 —  #/chars/042
-   캐릭터 탭이 이제 본체 안에 있으므로 주소창을 직접 고칩니다.
+   주소창을 직접 고칩니다.
    ══════════════════════════════════════════════════ */
 function charRoute(route){
   var h = route ? ('#/chars/' + route) : '#/chars';
@@ -4106,8 +4060,7 @@ document.addEventListener('click', function(e){
   closeShareMenu();
 });
 
-/* ── TITLE HOLDER 공유 (옆 정보칸의 X 버튼) ──
-   '몸값'이라는 말 대신 '이 자리에 걸린 값'으로 돌려 씁니다. 해외 팬도 읽게 영어 한 줄을 같이 붙입니다. */
+/* ── TITLE HOLDER 공유 (옆 정보칸의 X 버튼) ── 해외 팬도 읽게 영어 한 줄을 같이 붙입니다. */
 window.shareTitleHolder = function(){
   const c = window.CHARACTERS.find(ch=>ch.id===state.activeId);
   if(!c || !c.holder || c.holder === '—') return;
@@ -4314,24 +4267,22 @@ window.addEventListener('resize', applyMobDetail);
 </script>
 
 <!-- ══════════════════════════════════════════════════
-     이벤트 탭 스크립트 (원래 event.html 에 있던 것)
+     이벤트 탭 스크립트
      Ko-fi 주소 · 인기투표 구글폼 주소는 여기서 바꿉니다.
      ══════════════════════════════════════════════════ -->
 <script>
 (function(){   /* 이벤트 탭 전용 칸막이 */
-/* ── Ko-fi 주소 ──
-   후원 페이지 주소를 따옴표 사이에 붙여넣으세요.
+/* ── Ko-fi 상시 투표 주소 ──
    비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
 var KOFI_URL = 'https://ko-fi.com/rrktbiz/shop/vote';
 
-/* ── 제1회 인기투표 구글폼 ──
-   주소를 바꾸려면 따옴표 사이만 교체하세요.
+/* ── 무료 인기투표 구글폼 ──
+   회차를 새로 열 때 따옴표 사이 주소만 교체합니다.
    비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
 var VOTE_FORM_URL = 'https://forms.gle/gQ83jFanMiYDJz9x8';
 
 /* ── TITLE HOLDER (이벤트 탭 맨 위 카드) ──
-   지금은 Ko-fi 샵 첫 화면으로 갑니다.
-   샵에 TITLE HOLDER 카테고리를 만든 뒤, 그 카테고리를 눌렀을 때 주소창에 뜨는 주소로 바꿔 주세요.
+   Ko-fi 샵의 TITLE HOLDER 상품 모음 주소입니다.
    비워두면 버튼이 "준비 중입니다" 안내를 띄웁니다. */
 var TITLE_HOLDER_URL = 'https://ko-fi.com/rrktbiz/shop/titleholder';
 
