@@ -1083,6 +1083,12 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
 /* ── DATA ── */
 /* 프로젝트 카드 공개 상태를 구글시트에서 다 읽었는지 (loadProjStatusFromSheets 참고) */
 let _PROJ_READY = false;
+/* 프로젝트 지금 상태: 'active'(공개) / 'prep'(준비중) / 'hidden'(숨김)
+   카드 · 캘린더 · 이동 버튼이 전부 이 값 하나를 따릅니다. */
+function projStatus(pid){
+  const p = (typeof PROJECTS!=='undefined') ? PROJECTS.find(x=>x.id===pid) : null;
+  return p ? (p.status||'active') : 'active';
+}
 const PROJECTS = [
   {
     id:"biz-oc-doll",
@@ -1226,6 +1232,7 @@ const VOLUMES = {
 const WORK_LOG = {};
 function buildWorkLog(){
   ["blood-highschool"].forEach(pid=>{
+    if(projStatus(pid)==='hidden') return;   /* 숨김 → 캘린더에서도 뺌 */
     const proj = PROJECTS.find(p=>p.id===pid);
     (VOLUMES[pid]||[]).forEach(v=>v.episodes.forEach(e=>{
       if(!e.date)return;
@@ -1233,6 +1240,7 @@ function buildWorkLog(){
       WORK_LOG[e.date].push({proj:proj.label,volSub:v.sub||v.label,title:e.title,status:e.status,acc:proj.acc,projId:pid,volId:v.id,epId:e.id,volType:v.type||''});
     }));
   });
+  if(projStatus("biz-oc-doll")==='hidden') return;   /* 숨김 → 캘린더에서도 뺌 */
   const dollProj = PROJECTS.find(p=>p.id==="biz-oc-doll");
   const dv = VOLUMES["biz-oc-doll"];
   Object.entries(dv.episodes).forEach(([catId,eps])=>eps.forEach(e=>{
@@ -1962,14 +1970,15 @@ function renderCalendar(){
         const chips = groups.length
           ? groups.map(g=>{
               const count=g.entries.length;
-              const nav=navCall(g.entries[0]);
+              const _lock=projStatus(g.projId)!=='active';
+              const nav=_lock?'':navCall(g.entries[0]);
               const typeBadge=g.volType==='웹소설'
                 ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">웹소설</span>`
                 :g.volType==='웹툰'
                 ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">웹툰</span>`
                 :'';
               const volLabel=g.volSub?` ${g.volSub}`:'';
-              return`<span class="cal-tl-entry" onclick="${nav}" title="${g.proj}${volLabel} · ${count}화">
+              return`<span class="cal-tl-entry" ${_lock?'style="cursor:default"':`onclick="${nav}"`} title="${g.proj}${volLabel} · ${count}화">
                 <span class="cal-tl-entry-dot" style="background:${g.acc}"></span>
                 ${typeBadge}
                 <span class="cal-tl-entry-title">${g.proj}${volLabel}</span>
@@ -2081,7 +2090,7 @@ function renderCalendar(){
         <div>
           <div class="cal-top-row"><button class="cal-nav-btn" onclick="prevMonth()">&#8249;</button><span class="cal-month-lbl">${monthStr}</span><button class="cal-nav-btn" onclick="nextMonth()">&#8250;</button></div>
           <div class="cal-full"><div class="cal-dnames">${DNAMES.map((n,i)=>`<div class="cal-dn ${DCLS[i]}">${n}</div>`).join("")}</div><div class="cal-grid-rows">${cellsHtml}</div></div>
-          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?'캐릭터 시트':w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
+          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${projStatus(w.projId)!=='active'?'':w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?'캐릭터 시트':w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden">
@@ -2115,6 +2124,7 @@ const PROJECT_SITES = {
 function goSite(pid, hash){
   const base = PROJECT_SITES[pid];
   if(!base) return;
+  if(projStatus(pid)!=='active') return;   /* 준비중·숨김이면 이동 안 함 */
   location.href = base + (hash || "");
 }
 function goIntro(pid){ goSite(pid, pid === "blood-highschool" ? "#intro" : "#/intro"); }
@@ -2400,6 +2410,7 @@ function injectCharDatesIntoWorkLog(){
     WORK_LOG[k] = WORK_LOG[k].filter(w=>!w.isChar);
     if(!WORK_LOG[k].length) delete WORK_LOG[k];
   });
+  if(projStatus('biz-oc-doll')==='hidden') return;   /* 숨김 → 캐릭터 날짜도 캘린더에서 뺌 */
   chars.forEach(c=>{
     if(!c.updated) return;
     // 날짜 정규화: "2026. 4. 9." → "2026-04-09"
@@ -2555,16 +2566,19 @@ render();
    셋은 서로 기다리지 않고 각자 끝나는 대로 화면을 갱신합니다.
    하나가 실패해도 나머지는 정상 표시되고, 콘솔에 경고만 남습니다.
 ══════════════════════════════════════════════════════════════ */
-loadProjStatusFromSheets().then(()=>{ render(); });
-loadEpDataFromSheets().then(ok=>{
+/* 프로젝트 상태(공개/준비중/숨김)를 먼저 알아야
+   숨긴 프로젝트의 작업 기록이 캘린더에 잠깐 번쩍 보이는 일이 없습니다.
+   그래서 나머지 셋은 받아오기는 동시에 하되, 화면 반영은 상태 확인 뒤에 합니다. */
+const _projStatusDone = loadProjStatusFromSheets().then(()=>{ rebuildWorkLog(); render(); });
+loadEpDataFromSheets().then(ok=>_projStatusDone.then(()=>{
   if(ok){ rebuildWorkLog(); render(); }
-});
-loadCharDataFromSheets().then(ok=>{
+}));
+loadCharDataFromSheets().then(ok=>_projStatusDone.then(()=>{
   if(ok){ injectCharDatesIntoWorkLog(); render(); }
-});
-loadDollStoryFromJson().then(ok=>{
+}));
+loadDollStoryFromJson().then(ok=>_projStatusDone.then(()=>{
   if(ok){ rebuildWorkLog(); render(); }
-});
+}));
 
 
 function rebuildWorkLog(){
