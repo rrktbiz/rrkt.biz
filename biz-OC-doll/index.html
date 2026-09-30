@@ -602,7 +602,7 @@ body{top:0 !important}
 #panel-intro .ex-shots{display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; margin: 4px 0 26px;}
 #panel-intro .ex-slot{margin: 0; text-align: center;}
 #panel-intro .ex-slot img{display: block; width: 100%; height: auto; border-radius: 12px;}
-#panel-intro .ex-ph{display: block; width: 100%; aspect-ratio: 3 / 1; border-radius: 12px;}
+#panel-intro .ex-ph{display: block; width: 100%; aspect-ratio: 2.39 / 1; border-radius: 12px;}
 #panel-intro .ex-ph{border: 1px dashed var(--gray-200); background: var(--gray-50); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--gray-400); padding: 0 16px; text-align: center; line-height: 1.7;}
 #panel-intro .ex-slot figcaption{margin-top: 6px; font-size: 12.5px; color: var(--gray-900); font-weight: 700; line-height: 1.4;}
 #panel-intro .ex-slot figcaption span{display: block; font-weight: 400; color: var(--gray-600); font-size: 11.5px;}
@@ -1542,10 +1542,10 @@ body{top:0 !important}
           <p class="guide-body" style="margin:0 0 18px" data-i18n="example_same">같은 042번이라도 홀더마다 붙이는 이름도, 캐해석도 전혀 다를 수 있습니다. 그렇게 생겨난 캐릭터들은 모두 같은 042번으로 취급됩니다.</p>
 
           <!-- 참고 그림 1 — 042번 원본(기존 시트 잘라 쓰기) / A / B 를 가로로 긴 그림 한 장에.
-               B 는 다른 홀더가 같은 042번에 붙인 이름입니다. 비교는 그림으로 보여주고,
-               본문에서는 아래 '같이 놀기' 문단에서 처음 이름으로 나옵니다. -->
+               B 는 다른 홀더가 같은 042번에 붙인 이름입니다. 비교는 그림으로만 보여주고,
+               본문에는 B 라는 이름이 나오지 않습니다. -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 1<br>042번 원본 · A · B<br>같은 042번, 다른 이름</span></div></figure>
+            <figure class="ex-slot"><div class="ex-ph"><span>그림 1<br>042번 원본 · A · B<br>이름도 캐해석도 달라도, 모두 042번<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
           </div>
 
           <!-- A와 놀기 — 이름 붙인 뒤 A로 무엇을 하는지 장면으로 보여줍니다.
@@ -1557,18 +1557,19 @@ body{top:0 !important}
           <!-- 참고 그림 2 — A의 활동 모습: 동인지 표지 / 게임 화면 / 프로필 카드 등을 가로로 긴 그림 한 장에.
                그리기 부담되면 이 <div class="ex-shots"> 한 덩어리를 통째로 지워도 흐름은 이어집니다. -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 2<br>A와 놀기<br>동인지 표지 · 게임 화면 · 프로필 카드</span></div></figure>
+            <figure class="ex-slot"><div class="ex-ph"><span>그림 2<br>A로 할 수 있는 것<br>웹소설 표지 · 게임 화면 · 동인지 부스 · 버튜버 방송<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
           </div>
 
-          <!-- 같이 놀기 (3차 창작) — 이름 붙은 캐릭터는 그 홀더의 것이라 '허락'을 조건으로 씁니다.
+          <!-- 다른 홀더의 캐릭터 이용 — 이름 붙은 캐릭터는 그 홀더의 것이라 '허락'을 조건으로 씁니다.
                공식은 권리를 넉넉히 내주지만, 홀더끼리는 입장이 다를 수 있어서입니다.
-               B 는 그림 1에 나온, 다른 홀더가 같은 042번에 붙인 이름입니다.
+               '같이 놀 수 있다'고 권하는 말투가 아니라, 바로 위 문단(A로 무엇이든 해도 된다)에 붙는 '다만'으로 씁니다.
+               작품 등장에만 한정하지 않도록 '이용'이라는 넓은 말을 씁니다. (그림 · 굿즈 · 방송 등 전부 포함)
                🌐 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'play_together') -->
-          <p class="guide-body" style="margin:0 0 18px" data-i18n="play_together">다른 홀더의 캐릭터와 같이 놀 수도 있지만, 이름이 붙은 캐릭터는 그 홀더의 것이라 내 작품에 등장시키고 싶다면 먼저 그 홀더에게 허락을 받아 주세요. 허락을 받았다면 A와 B가 한 작품에서 만나는 것도, 그 뒷이야기를 또 다른 홀더가 이어 쓰는 것도 가능합니다.</p>
+          <p class="guide-body" style="margin:0 0 18px" data-i18n="play_together">다만 이름이 붙은 캐릭터는 그 홀더의 것이라, 다른 홀더의 캐릭터를 이용하고 싶다면 먼저 그 홀더에게 허락을 받아 주세요.</p>
 
           <!-- 참고 그림 3 — A와 B: 같은 042번에서 태어난 두 캐릭터가 한 장면에 함께 있는 그림. -->
           <div class="ex-shots">
-            <figure class="ex-slot"><div class="ex-ph"><span>그림 3<br>A와 B<br>같은 042번에서 태어난 두 캐릭터가 한 장면에</span></div></figure>
+            <figure class="ex-slot"><div class="ex-ph"><span>그림 3<br>다른 홀더의 캐릭터는 허락 먼저<br>메시지로 묻고 답하는 장면<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
           </div>
 
           <!-- ══ 번외 · 외관 수정 ══
@@ -1585,7 +1586,7 @@ body{top:0 !important}
                  본문의 '눈 색이 겹쳐서 망설여지는' 장면을 그림만 봐도 알아채게 하려는 칸입니다.
                  그림이 준비되면 아래 <div class="ex-ph">…</div> 한 덩어리를 <img src="..." alt="..."> 로 바꾸세요. -->
             <div class="ex-shots">
-              <figure class="ex-slot"><div class="ex-ph"><span>그림 4<br>내 주인공 · 눈 색이 겹치는 A · 눈 색을 바꾼 A<br>작품에 맞춘 커스터마이징</span></div></figure>
+              <figure class="ex-slot"><div class="ex-ph"><span>그림 4<br>내 주인공 · 눈 색이 겹치는 A · 눈 색을 바꾼 A<br>눈 색이 바뀌어도 BIZOCDOLL042<br>2.39:1 시네마스코프 · 1920×804px</span></div></figure>
             </div>
           </div>
 
@@ -1642,7 +1643,18 @@ body{top:0 !important}
 
           <p class="ledger-foot"><strong><span class="i18n-term notranslate" translate="no" data-term="official">비즈오씨돌 공식</span>은 배당을 요구하지 않습니다.</strong> <span class="i18n-term notranslate" translate="no" data-term="holder">홀더</span>가 이름 붙인 캐릭터와 그 창작물의 권리는 <span class="i18n-term notranslate" translate="no" data-term="holder">홀더</span>에게 있습니다. <span class="i18n-term notranslate" translate="no" data-term="official">비즈오씨돌 공식</span>은 이를 무단으로 쓰거나 소유권을 주장하지 않습니다. 협업이 필요할 때는 먼저 제안드릴 수 있지만, 강요하지 않습니다.</p>
           <p class="ledger-foot"><strong>창작물을 하나하나 검열하지 않습니다.</strong> 위 NG 세 가지만 피해주시면 됩니다.</p>
-          <p class="ledger-foot" style="margin-bottom:0"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 공식은 전체 이용가 분위기를 지킬 예정이라, 수위가 있는 창작물은 굿즈·게임 연계에 쓰지 않습니다.</p>
+          <!-- AI 활용 — 도구로 쓰는 건 자유, 그 이상(학습 등)은 막지 않되 판단은 창작자에게.
+               공식이 AI를 쓴다는 사실은 캐릭터 시트의 AI 활용 표기가 보여 줍니다. (그 표기를 지우면 이 문장의 근거가 사라지니 같이 유지)
+               "AI 막아 주세요" 같은 요청을 받지 않기 위한 문장이기도 합니다. -->
+          <p class="ledger-foot"><strong>AI를 창작 도구로 쓰는 것도 자유입니다.</strong> 그 이상의 활용도 NG 세 가지만 피한다면 막지 않지만, 공식이 판단하지 않는 만큼 판단은 창작자의 몫입니다.</p>
+          <!-- 소급 안 함 — '나중에 공식이 규칙을 멋대로 바꾸면 어떡하지' 하는 불안을 막는 한 줄.
+               규칙은 운영하며 바뀔 수 있지만, 이미 붙인 이름과 만든 창작물은 뒤집히지 않는다는 약속입니다.
+               (영원히 안 바꾼다는 약속이 아니라 '소급하지 않는다'는 약속이라 공식도 규칙을 고칠 자유가 남습니다) -->
+          <p class="ledger-foot"><strong>규칙이 바뀌더라도, 바뀌기 전에 붙인 이름과 만든 창작물에는 적용하지 않습니다.</strong></p>
+          <!-- 수위 — '전체 이용가'는 너무 좁아서 '양지'로 씁니다. (PD 페이지의 지향 연령: 전체 ~ 12세 이용가)
+               🌐 '양지'가 판 은어라 외국어는 사람이 쓴 번역으로 나옵니다 (I18N_BLOCKS 'rating_foot')
+                  영어 SFW / 일본어 健全 / 중국어 清水向 — 각 언어 팬덤에서 같은 뜻으로 쓰는 말입니다. -->
+          <p class="ledger-foot" style="margin-bottom:0" data-i18n="rating_foot"><strong>수위는 창작자 책임입니다.</strong> 연령 제한 표기와 열람 조치를 직접 챙겨주세요. 공식은 양지 분위기를 지킬 예정이라, 수위가 있는 창작물은 굿즈·게임 연계에 쓰지 않습니다.</p>
 
           <details class="fold" style="margin-bottom:20px">
             <summary>정치 · 종교 관련 허용 / 금지 구분 자세히</summary>
@@ -3161,11 +3173,18 @@ var I18N_BLOCKS = {
     zh: '起好名字之后，就可以让A当你网络小说的主角，可以让A出演你正在做的游戏，也可以出A的同人本拿到展会上卖，还可以用A的形象当虚拟主播。用在哪里、怎么用，全都由持有者决定。'
   },
 
-  /* 활용 예시 — 다른 홀더와 같이 놀기 (허락이 조건) */
+  /* 활용 예시 — 다른 홀더의 캐릭터 이용 (허락이 조건) */
   play_together: {
-    en: 'You can also play with other Holders\' characters, but a named character belongs to its Holder, so if you want to bring one into your work, please ask that Holder for permission first. With permission, A and B can meet in the same story, and yet another Holder can even pick up where that story left off.',
-    ja: 'ほかのホルダーのキャラクターと一緒に遊ぶこともできますが、名前がついたキャラクターはそのホルダーのものなので、自分の作品に登場させたいときは、まずそのホルダーに許可をもらってください。許可をもらえたら、AとBが同じ作品で出会うことも、その続きをまた別のホルダーが書き継ぐこともできます。',
-    zh: '你也可以和其他持有者的角色一起玩，但有了名字的角色属于它的持有者，如果想让它出现在你的作品里，请先征得那位持有者的同意。得到同意后，A和B可以在同一部作品里相遇，后续的故事也可以由另一位持有者接着写下去。'
+    en: 'That said, a named character belongs to its Holder, so if you want to use another Holder\'s character, please ask that Holder for permission first.',
+    ja: 'ただし、名前がついたキャラクターはそのホルダーのものなので、ほかのホルダーのキャラクターを使いたいときは、まずそのホルダーに許可をもらってください。',
+    zh: '不过，有了名字的角色属于它的持有者，如果想使用其他持有者的角色，请先征得那位持有者的同意。'
+  },
+
+  /* 이용 규칙 — 수위 ('양지'는 판 은어라 각 언어 팬덤의 같은 뜻 단어로 옮김: SFW / 健全 / 清水向) */
+  rating_foot: {
+    en: '<strong>Content rating is the creator\'s responsibility.</strong> Please take care of age-restriction labels and viewing limits yourself. The official side plans to keep things SFW, so works with mature content won\'t be used for goods or game tie-ins.',
+    ja: '<strong>表現の度合いは創作者の責任です。</strong>年齢制限の表記や閲覧制限は、ご自身で対応してください。公式は健全な雰囲気を守っていく予定のため、年齢制限のある創作物はグッズ・ゲームとの連携には使いません。',
+    zh: '<strong>尺度由创作者自行负责。</strong>请自行做好年龄限制标注和浏览限制。官方会保持清水向的氛围，因此带有尺度的作品不会用于周边或游戏联动。'
   },
 
   /* 번외 상자 — 외관 수정 (제목) */
