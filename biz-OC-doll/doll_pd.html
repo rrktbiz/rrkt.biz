@@ -151,6 +151,11 @@ body{top:0 !important}
 /* 데모 게임 카드 — 링크로 쓰므로 밑줄·글자색만 정리 */
 .pd-cards{margin-top:24px}
 .pd-cards .world-card{margin:0;text-decoration:none;color:inherit}
+/* 데모 게임 카드 잠금: is-locked 가 붙어 있으면 누를 수 없고 '준비 중' */
+.world-card .lbl-lock{display:none}
+.world-card.is-locked{pointer-events:none;cursor:default;opacity:.7}
+.world-card.is-locked .lbl-open{display:none}
+.world-card.is-locked .lbl-lock{display:flex;color:#6e6e6e;font-weight:500}
 
 /* 기업 협업 원칙 — 번호는 "3번 원칙"처럼 짚어 말할 수 있게 남겨 둡니다 */
 .pd-rules{list-style:none;margin:0;padding:0;border:1px solid #e8e8e8;border-radius:12px;overflow:hidden}
@@ -269,7 +274,7 @@ a.pd-contact{text-decoration:none}
 
     <div class="pd-sub">보고 자란 문화</div>
     <p class="pd-body">과거에 보컬로이드 동인 문화를 참 좋아했어요. 캐릭터 정보가 몇 줄 안 되는데도 사람들이 그걸 가지고 이야기를 만들고, 그 이야기로 또 다른 사람이 뭔가를 만들고, 그렇게 여러 콘텐츠로 퍼져 나가는 게 재밌었어요. 보컬로이드가 아닌 다른 작품들에서도 2차 창작을 넘어 작품성을 갖춘 2~3차 창작이 이어지는 문화가 지금보다 활발했고요.</p>
-    <p class="pd-body">그로부터 10년 남짓 지나는 동안 서브컬처는 훨씬 커졌어요. 이제는 모바일 게임이 이 판의 중심이 됐고, 공식이 새 캐릭터와 이야기를 내놓으면 팬들이 그걸 받아 그림과 코스프레로 즐기고, 굿즈와 팝업스토어로 찾아가는 흐름이 자리를 잡았어요. 좋아하는 마음을 소비로 표현하는 게 자연스러운 시대죠. 덕분에 더 많은 사람이 이 문화를 즐기게 된 것도 사실이에요. 다만 그만큼, 거의 아무것도 없는 데서 서로의 창작에 불을 붙여 가던 풍경은 보기 어려워졌어요. 취향도 점점 잘게 나뉘어서, 같은 걸 좋아하는 사람끼리 모이는 일 자체가 드물어졌고요. 누구의 잘못이라기보다 시대에 맞게 자연스럽게 생긴 변화라고 생각해요. 그래서 이 프로젝트는 그 시절이 돌아오길 기다리기보다, 그런 판이 다시 생길 수 있는 자리를 하나라도 만들어 보려는 발버둥에 가까워요.</p>
+    <p class="pd-body">그로부터 10년 남짓 지나는 동안 서브컬처는 훨씬 커졌어요. 이제는 모바일 게임이 이 판의 중심이 됐고, 공식이 새 캐릭터와 이야기를 내놓으면 팬들이 그걸 받아 그림과 코스프레로 즐기고, 굿즈와 팝업스토어로 찾아가는 흐름이 자리를 잡았어요. 좋아하는 마음을 소비로 표현하는 게 자연스러운 시대죠. 덕분에 더 많은 사람이 이 문화를 즐기게 된 것도 사실이에요. 다만 그만큼, 거의 아무것도 없는 데서 자유롭게 서로의 창작에 불을 붙여 가던 풍경은 보기 어려워졌어요. 누구의 잘못이라기보다 시대에 맞게 자연스럽게 생긴 변화라고 생각해요. 그래서 이 프로젝트는 그 시절이 돌아오길 기다리기보다, 그런 판이 다시 생길 수 있는 자리를 하나라도 만들어 보려는 발버둥에 가까워요.</p>
     <p class="pd-body">그래서 이 프로젝트의 캐릭터 구조를 아래 방식으로 설계했어요. 작품은 끝나도, 이 캐릭터들은 끝나지 않았으면 해서요.</p>
 
     <div class="pd-sub">동인 문화에 대한 이해</div>
@@ -277,9 +282,7 @@ a.pd-contact{text-decoration:none}
 
     <p class="pd-body">
 
-창작자라면 누구나 그렇듯, 처음 이 프로젝트를 구상할 때는 캐릭터들을 쉽게 놓아주지 못했어요. 그러다 하나의 캐릭터가 홀더마다 다른 갈래로 뻗어 나가는 구조로 바꾸면서, 조금은 내려놓을 수 있게 됐어요. 이제는 팬들이 자유롭게 캐해석을 해도 좋고, 그 해석이 원래 떠올린 모습보다 더 유명해져도 좋아요. 애초에 그렇게 되길 바라면서 만든 프로젝트이기도 하고요. 언젠가는 공식도 다른 홀더들과 같은 위치에서 이름을 붙이고 창작을 할지도 몰라요. 
-
-</p>
+창작자라면 누구나 그렇듯, 처음 이 프로젝트를 구상할 때는 캐릭터들을 쉽게 놓아주지 못했어요. 그러다 하나의 캐릭터가 홀더마다 다른 갈래로 뻗어 나가는 구조로 바꾸면서, 조금은 내려놓을 수 있게 됐어요. 이제는 팬들이 자유롭게 캐해석을 해도 좋고, 그 해석이 원래 떠올린 모습보다 더 유명해져도 좋아요. 애초에 그렇게 되길 바라면서 만든 프로젝트이기도 하고요. 언젠가는 공식도 다른 홀더들과 같은 위치에서 이름을 붙이고 창작을 할지도 몰라요. 그때도 작품마다 이름도 성격도 바꿔 가며 쓸 테니, 공식이 그린 모습 역시 그 코드의 여러 모습 중 하나일 뿐 정답이 되지는 않을 거예요.</p>
 
     <div class="pd-sub">끝내지 않는다는 것</div>
     <p class="pd-body">이 프로젝트는 완결도 완성도 없이, 끝내지 않는 걸 기준으로 삼았어요. 데레마스를 레퍼런스 삼아 목표는 200명 이상으로 잡았지만, 어디까지 이어질지는 장담하기 어려워요. 모든 일이 늘 계획대로 되지는 않으니까요. 대신 멈추지 않는 걸 약속으로 삼았어요.</p>
@@ -287,7 +290,7 @@ a.pd-contact{text-decoration:none}
     <p class="pd-body">공개 순서도 복잡한 전략보다는 그때그때 만들고 싶은 캐릭터를 따라가려고 해요. 캐릭터 시트를 러프하게 두고 작업을 가볍게 유지하는 것도 같은 이유예요. 그래야 오래 이어 갈 수 있으니까요.</p>
 
     <div class="pd-sub">브랜딩 / 하나의 색깔</div>
-    <p class="pd-body">비즈오씨돌은 공식이 애정을 느끼는 캐릭터들로만 채워져요. 공식의 취향으로 만든 캐릭터들이고, 앞으로도 그 방향은 바꾸지 않으려고 해요. 케이팝 기획사마다 한눈에 알아볼 수 있는 색깔이 있듯이, 이 프로젝트에도 그런 색깔이 하나 있어야 한다고 생각하거든요. 그 색깔이 흔들리기 시작하면 이 프로젝트를 지탱하는 단단함도 함께 옅어질 것 같아요. 이 색깔은 공식에게도 힘이 돼요. 좋아하는 것들로 채운 컬렉션을 하나씩 늘려 가는 기분이라, 이 프로젝트를 오래 붙잡고 있을 수 있는 이유가 되어 주거든요.</p>
+    <p class="pd-body">비즈오씨돌은 공식이 애정을 느끼는 캐릭터들로만 채워져요. 공식의 취향으로 만든 캐릭터들이고, 앞으로도 그 방향은 바꾸지 않으려고 해요. 기획사마다 한눈에 알아볼 수 있는 색깔이 있듯이, 이 프로젝트에도 그런 색깔이 하나 있어야 한다고 생각하거든요. 그 색깔이 흔들리기 시작하면 이 프로젝트를 지탱하는 단단함도 함께 옅어질 것 같아요. 이 색깔은 공식에게도 힘이 돼요. 좋아하는 것들로 채운 컬렉션을 하나씩 늘려 가는 기분이라, 이 프로젝트를 오래 붙잡고 있을 수 있는 이유가 되어 주거든요.</p>
     <p class="pd-body">그러다 보니 원하는 타입의 캐릭터가 없어서 아쉬운 분들도 분명 있을 거예요. 그런 분들이 자기만의 오픈 캐릭터 프로젝트를 시작한다면 정말 반가울 것 같아요. 거기서는 또 그곳만의 색깔을 가진 캐릭터들이 나올 테니까요. 그걸 두고 따라 했다거나 베꼈다고 생각하지 않아요. 오히려 이런 프로젝트가 여러 개 생겨서 저마다의 색깔로 판을 채워 가는 모습이, 앞에서 말한 그 풍경에 더 가깝다고 생각해요.</p>
 
     <div class="pd-sub">보고 싶은 장면</div>
@@ -311,7 +314,7 @@ a.pd-contact{text-decoration:none}
     <div class="pd-sub">세계관이 있어도</div>
     <p class="pd-body">비즈오씨돌에는 공식 세계관이 준비되어 있어요. 아직 공개하지는 않았지만, 캐릭터들이 살아가는 세계의 바탕은 이미 정해 두었어요. 다만 공식 세계관이 따로 있다는 말이 오히려 부담스럽게 들릴 수도 있을 것 같아요. 공식 설정이 정해져 있으면 내 비즈오씨돌을 내 방식대로 밀고 나가기가 괜히 눈치 보이고, 공식이 그린 모습과 다르면 틀린 건 아닐까 싶어지니까요.</p>
     <p class="pd-body">그래서 세계관을 짤 때 가장 먼저 세운 기준이, 이 프로젝트에서 일어날 일들과 어긋나지 않는 것이었어요. 아직 자세히 말씀드릴 수는 없지만, 그 세계에서도 비즈오씨돌들은 코드를 베이스로 같은 얼굴을 한 채 저마다 다른 말투와 이야기를 가지고 살아가요. 비즈오씨돌을 고르고, 이름을 붙이고, 각자 다르게 키워 가는 일이 그 세계 안에서도 자연스러운 일로 이어지게 만들었어요. </p>
-    <p class="pd-body">그러니 세계관을 몰라도, 세계관과 전혀 다른 이야기를 만들어도 괜찮아요. 공식 세계관은 여러분의 비즈오씨돌을 가두는 틀이 아니라, 그런 창작이 얼마든지 있어도 되는 세계로 만들어 두었어요. 언젠가 데모 게임으로 보여 드리게 된다면, 이 말이 어떤 뜻이었는지 더 잘 느끼실 수 있을 거예요.</p>
+    <p class="pd-body">그러니 세계관을 몰라도, 세계관과 전혀 다른 이야기를 만들어도 괜찮아요. 공식 세계관은 홀더들의 비즈오씨돌을 가두는 틀이 아니라, 그런 창작이 얼마든지 있어도 되는 세계로 만들어 두었어요. 언젠가 데모 게임으로 보여 드리게 된다면, 이 말이 어떤 뜻이었는지 더 잘 느끼실 수 있을 거예요.</p>
 
     <div class="pd-sub">공식 굿즈</div>
     <p class="pd-body">공식이 굿즈를 하나쯤 내주길 기다리는 분들도 계실 거예요. 이름을 붙이기 전, 코드 그대로의 모습을 좋아해 주시는 분들이라면 더 그럴 거고요. 다만 비즈오씨돌 공식이 직접 굿즈를 만들 계획은 지금으로서는 없어요. 공식 굿즈는 기업과의 협업을 통해 나올 가능성이 더 높다고 보고 있어요. 협업이 이루어지면 굿즈가 여러 종류로 한꺼번에 나오는 경우가 많으니, 그때를 조금만 기다려 주셨으면 해요.</p>
@@ -358,30 +361,33 @@ a.pd-contact{text-decoration:none}
     <div class="pd-row">
       <div class="pd-row-label">캐릭터 수</div>
       <div class="pd-row-body">
-    <p class="pd-body">캐릭터 수를 목표 200명으로 크게 잡은 것은, 캐릭터 하나하나의 팬덤이 아직 크지 않더라도 캐릭터 수로 IP의 몸집을 키워 협업을 검토할 수 있는 규모를 갖추기 위해서입니다. 모든 캐릭터가 같은 기준과 분위기 안에서 만들어지므로, 수가 늘어나도 하나의 IP로 묶여 보입니다.</p>
+    <p class="pd-body">캐릭터 수를 목표 200명으로 크게 잡은 것은, 캐릭터마다 팬덤의 크기는 다르더라도, 캐릭터가 모여 협업을 검토할 수 있는 규모의 IP를 갖추기 위해서입니다. 모든 캐릭터가 같은 기준과 분위기 안에서 만들어지므로, 수가 늘어나도 하나의 IP로 묶여 보입니다.</p>
       </div>
     </div>
 
-    <!-- 공식 세계관 — 공개 시점이 바뀌면 둘째 문단의 '50명 이상쯤' 부분과
-         맨 아래 기획 개요 표의 '공식 세계관' 줄을 같이 고치세요. -->
+    <!-- 공식 세계관 — 공개 시점이 바뀌면 둘째 문단의 '50명 이상쯤' 부분,
+         맨 아래 기획 개요 표의 '공식 세계관' 줄, 스크립트의 DEMO_OPEN_AT 을 같이 고치세요. -->
     <div class="pd-row">
       <div class="pd-row-label">공식 세계관</div>
       <div class="pd-row-body">
     <p class="pd-body">협업이 정해진 뒤에 세계관을 새로 만들면 시간에 쫓기기 쉽고, 협업 전후로 IP의 성격이 달라져 쌓아 온 팬들의 신뢰가 흔들리기 쉽습니다. 그래서 비즈오씨돌 공식은 프로젝트의 성격과 운영 방식, 세계관이 같은 방향을 가리키도록 처음부터 맞춰 두었습니다. 어떤 협업에서 타협하더라도 근본이 흔들리지 않게 하기 위해서이며, 팬 창작 역시 같은 구조 위에 있어 협업 작품이 기존 팬덤과 부딪힐 위험도 적습니다.</p>
     <p class="pd-body">미리 정해 둔 것은 세계관이고, 그 위의 이야기는 협업에서 함께 조정할 수 있도록 열어 두었습니다. 세계관은 데모 게임으로 보여 드릴 예정이며, 공개는 캐릭터가 50명 이상쯤 쌓였을 때로 잡고 있습니다.</p>
-    <p class="pd-body">이 세계관이 정식 작품으로 이어지는 것은 팬덤이 충분히 자란 뒤의 일이라 길게는 10년이 걸릴 수 있고, 끝내 나오지 못할 가능성도 염두에 두고 있습니다. 그래도 데모 게임은 미리 만들어 둡니다. 데모 게임과 세계관 정리는 아래에 모아 둘 예정이며, 공개 전까지는 세계관 기획 일부만 열어 두었습니다.</p>
+    <p class="pd-body">이 세계관이 정식 작품으로 이어지는 것은 팬덤이 충분히 자란 뒤의 일이라 길게는 10년이 걸릴 수 있고, 끝내 나오지 못할 가능성도 염두에 두고 있습니다. 그래도 데모 게임은 미리 만들어 둡니다. <span id="pd-demo-note" data-open="데모 게임과 세계관 정리는 아래에 모아 두었습니다.">데모 게임과 세계관 정리는 공개되면 아래에 모아 둘 예정입니다.</span></p>
     <div class="pd-cards">
 
       <!-- 데모 게임 입구 (story.html) — 새 탭으로 열립니다.
+           ★ 공개 캐릭터가 50명이 되면 자동으로 열립니다. (숫자는 맨 아래 스크립트의 DEMO_OPEN_AT)
+             그 전에 직접 열고 싶으면 아래 class 의 is-locked 한 단어와 tabindex="-1" aria-disabled="true" 를 지우세요.
            같은 탭에서 열고 싶으면 target="_blank" rel="noopener" 를 지우면 됩니다. -->
-      <a class="world-card" href="story.html" target="_blank" rel="noopener">
+      <a class="world-card is-locked" href="story.html" target="_blank" rel="noopener" tabindex="-1" aria-disabled="true" onclick="if(this.classList.contains('is-locked')) return false;">
         <div class="world-card-bg"></div>
         <div class="world-card-inner">
           <div class="world-card-eyebrow">DEMO GAME</div>
           <div class="world-card-title">데모 게임</div>
-          <div class="world-card-sub">공식 세계관을 담은 데모 게임과 세계관 정리를 모아 두는 곳입니다</div>
+          <div class="world-card-sub">공식 세계관을 담은 데모 게임과 세계관 정리를 모아 둘 곳입니다</div>
         </div>
-        <div class="world-card-go">보기 <span>&rsaquo;</span></div>
+        <div class="world-card-go lbl-open">보기 <span>&rsaquo;</span></div>
+        <div class="world-card-go lbl-lock">준비 중</div>
       </a>
 
     </div>
@@ -411,8 +417,8 @@ a.pd-contact{text-decoration:none}
       <li><span class="n">5</span><span>프로젝트의 제작과 운영에 기업은 관여하지 않는다.</span></li>
       <li><span class="n">6</span><span>개별 커스텀 요청은 받지 않는다.</span></li>
     </ol>
-    <!-- 데모 게임을 공개한 뒤에는 둘째 줄(<br> 뒤)을 지웁니다 -->
-    <div class="pd-foot">협업의 구체적인 조건과 범위는 모두 <b>개별 계약</b>으로 정합니다.<br>데모 게임은 공개 전이라도 요청해 주시면 준비되는 대로 먼저 전달드리겠습니다.</div>
+    <!-- 둘째 줄은 데모 게임 카드가 열리면 자동으로 숨습니다 -->
+    <div class="pd-foot">협업의 구체적인 조건과 범위는 모두 <b>개별 계약</b>으로 정합니다.<span id="pd-demo-pre"><br>데모 게임은 공개 전이라도 요청해 주시면 준비되는 대로 먼저 전달드리겠습니다.</span></div>
     <!-- 오른쪽 위 편지 아이콘과 같은 문의창을 엽니다 -->
     <button class="pd-contact" onclick="openContactOverlay()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
@@ -438,16 +444,14 @@ a.pd-contact{text-decoration:none}
       <table class="pd-facts">
         <tr><th>형태</th><td>오픈 캐릭터 프로젝트</td></tr>
         <tr><th>공식이 주는 것</th><td>고유 코드, 캐릭터 시트, 표정 몇 가지</td></tr>
-        <!-- 캐릭터 수 · 공개 속도 · 타이틀 홀더 — 구글 시트(OC-characters 탭)를 읽어 자동으로 채웁니다. 계산 방식은 맨 아래 스크립트 설명 참고.
-             시트를 못 읽으면 '현재 N명 공개' 부분과 자동 줄들은 조용히 숨고, '목표 200명' 문구만 남습니다. -->
+        <!-- 캐릭터 수 · 타이틀 홀더 — 구글 시트(OC-characters 탭)를 읽어 자동으로 채웁니다. 계산 방식은 맨 아래 스크립트 설명 참고.
+             시트를 못 읽으면 '현재 N명 공개' 부분과 타이틀 홀더 줄은 조용히 숨고, '목표 200명' 문구만 남습니다. -->
         <tr><th>캐릭터 수</th><td><span id="pd-stat-count" hidden></span>목표 200명, 이후 추가 가능</td></tr>
-        <tr id="pd-stat-pace-row" hidden><th>공개 속도</th><td id="pd-stat-pace"></td></tr>
         <tr id="pd-stat-holder-row" hidden><th>타이틀 홀더</th><td id="pd-stat-holder"></td></tr>
-        <tr><th>지향 연령</th><td>전체 이용가 ~ 12세 이용가</td></tr>
-        <tr><th>대상 지역</th><td>국내 및 해외 (영어권 · 일본 · 중국)</td></tr>
+        <tr><th>공식 지향 연령</th><td>전체 이용가 ~ 12세 이용가</td></tr>
         <tr><th>팬 이용 범위</th><td>상업 이용 포함 대부분 허용, 배당 없음</td></tr>
         <tr><th>운영 트랙</th><td>팬 자유 창작 / 공식 세계관</td></tr>
-        <tr><th>공식 세계관</th><td>데모 게임으로 공개 예정 (캐릭터 50명 이상 시점, 변동 가능)</td></tr>
+        <tr><th>공식 세계관</th><td id="pd-demo-row" data-open="데모 게임 공개 중">데모 게임으로 공개 예정 (캐릭터 50명 이상 시점, 변동 가능)</td></tr>
       </table>
     </div>
   </div>
@@ -473,7 +477,7 @@ var BIZ = window.BIZ = {
 
   MAIL:        'rrkt.biz@proton.me',
   PROFILE_IMG: '../profile.png',
-  WHO_NAME:    'BIZ',
+  WHO_NAME:    'rrkt.biz',
   WHO_TAG:     '스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.',
 
 
@@ -829,34 +833,24 @@ function bars(hide){
 })();
 </script>
 <script>
-/* ══ 기획 개요 표 · 숫자 자동 채우기 ══════════════════════════════
-   config.js 의 SHEET_CSV('OC-characters') 로 캐릭터 시트를 읽어서 표의 세 칸을 채웁니다.
+/* ══ 기획 개요 표 · 숫자 자동 채우기 + 데모 게임 자동 열림 ══════════════
+   config.js 의 SHEET_CSV('OC-characters') 로 캐릭터 시트를 읽습니다.
    (bizocdoll_index.html 이 캐릭터 목록을 읽는 것과 같은 시트, 같은 규칙입니다)
 
    시트 열 순서: code / type / holder / status / updated / pledge
      · 공개 캐릭터  = status 가 '완료' 또는 '작업중'인 줄 (사이트 목록에 보이는 캐릭터와 같은 기준)
-     · 공개 속도    = 공개 캐릭터들의 updated 날짜 중 가장 이른 날부터 오늘까지 기간을 달로 나눈 평균
-                      → "월 평균 약 N명"
-                      ※ updated 가 '처음 공개한 날'이 아니라 '마지막으로 고친 날'이면 숫자가 실제보다 빨라 보일 수 있습니다.
-                      ※ 기간이 한 달이 안 되거나 날짜가 적힌 캐릭터가 2명 미만이면 이 줄은 숨깁니다.
+     · 캐릭터 수    = 공개 캐릭터 수 → "현재 N명 공개"
      · 타이틀 홀더  = holder 칸이 비어 있지 않은('—' 아닌) 캐릭터 수. 0명이면 줄을 숨깁니다.
                       금액(pledge)은 이 페이지에 쓰지 않습니다.
+     · 데모 게임    = 공개 캐릭터가 DEMO_OPEN_AT 명 이상이면 카드가 열리고,
+                      data-open 이 붙은 문장들이 그 글자로 바뀌고, '공개 전이라도…' 줄이 숨습니다.
 
    시트를 못 읽으면(공유 설정 · 인터넷 문제 등) 아무 것도 바꾸지 않고 조용히 끝납니다.
+   (데모 게임 카드도 잠긴 채로 남습니다)
    ═══════════════════════════════════════════════════════════════════ */
+var DEMO_OPEN_AT = 50;
+
 (function(){
-  function parseDate(v){
-    v = String(v || '').trim();
-    if(!v) return null;
-    var m = v.match(/(\d{4})\s*[-.\/]\s*(\d{1,2})\s*[-.\/]\s*(\d{1,2})/);
-    if(!m){
-      m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      if(m) m = [m[0], m[3], m[1], m[2]];
-    }
-    if(!m) return null;
-    var d = new Date(+m[1], +m[2]-1, +m[3]);
-    return isNaN(d) ? null : d;
-  }
   function parseCsv(csv){
     return csv.trim().split('\n').map(function(r){
       var cols=[], cur='', inQ=false;
@@ -869,6 +863,19 @@ function bars(hide){
       cols.push(cur.trim());
       return cols;
     });
+  }
+  function openDemo(){
+    var card = document.querySelector('.world-card.is-locked');
+    if(card){
+      card.classList.remove('is-locked');
+      card.removeAttribute('tabindex');
+      card.removeAttribute('aria-disabled');
+    }
+    document.querySelectorAll('[data-open]').forEach(function(el){
+      el.textContent = el.getAttribute('data-open');
+    });
+    var pre = document.getElementById('pd-demo-pre');
+    if(pre) pre.hidden = true;
   }
   async function run(){
     try{
@@ -893,20 +900,6 @@ function bars(hide){
         countEl.hidden = false;
       }
 
-      /* 공개 속도 */
-      var dates = chars.map(function(r){ return parseDate(r[4]); }).filter(Boolean)
-                       .sort(function(a,b){ return a-b; });
-      if(dates.length >= 2){
-        var days = (Date.now() - dates[0].getTime()) / 86400000;
-        var months = days / 30.44;
-        if(months >= 1){
-          var perMonth = dates.length / months;
-          var shown = perMonth >= 10 ? Math.round(perMonth) : Math.round(perMonth*10)/10;
-          document.getElementById('pd-stat-pace').textContent = '월 평균 약 ' + shown + '명';
-          document.getElementById('pd-stat-pace-row').hidden = false;
-        }
-      }
-
       /* 타이틀 홀더 */
       var holders = chars.filter(function(r){
         var h=(r[2]||'').trim(); return h && h!=='—' && h!=='-';
@@ -915,6 +908,9 @@ function bars(hide){
         document.getElementById('pd-stat-holder').textContent = holders + '명의 캐릭터에 지정됨';
         document.getElementById('pd-stat-holder-row').hidden = false;
       }
+
+      /* 데모 게임 */
+      if(chars.length >= DEMO_OPEN_AT) openDemo();
     }catch(e){ /* 조용히 끝냄 — 표는 기본 문구 그대로 */ }
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
