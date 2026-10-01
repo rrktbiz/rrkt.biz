@@ -14,7 +14,7 @@
    작업 파일에만 프로젝트 이름을 붙여 두는 방식입니다.)
   ══════════════════════════════════════════════════════════════
 -->
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -42,18 +42,46 @@
   try{ saved = localStorage.getItem('bzd_lang'); }catch(e){}
   var lang = saved ? norm(saved) : detect();
 
+  /* English, Japanese and Korean use the prepared text below (no Google).
+     Any other language: the English page is machine-translated by Google. */
+  var OWN = (lang === 'en' || lang === 'ja' || lang === 'ko');
   var x = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'googtrans=;path=/' + x;
   document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + x;
-  if(lang !== 'ko'){
-    document.cookie = 'googtrans=/ko/' + lang + ';path=/';
-    document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  if(!OWN){
+    document.cookie = 'googtrans=/en/' + lang + ';path=/';
+    document.cookie = 'googtrans=/en/' + lang + ';path=/;domain=.' + location.hostname;
   }
   window.bhsLangNorm = norm;
   window.__bhsLang = lang;
+
+  /* Text language: 'ja' / 'ko' read the dictionary, everything else reads English */
+  var TL = (lang === 'ja' || lang === 'ko') ? lang : 'en';
+  window.__bhsTL = TL;
+  if(TL !== 'en'){
+    document.documentElement.lang = TL;
+    document.documentElement.classList.add('i18n-wait');
+    setTimeout(function(){ document.documentElement.classList.remove('i18n-wait'); }, 1500);
+  }
+  if(TL === 'ja'){
+    var ln = document.createElement('link');
+    ln.rel = 'stylesheet';
+    ln.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap';
+    document.head.appendChild(ln);
+  }
+
+  /* Dictionary: BHS_I18N[key] = {en, ja, ko}. T('key') gives the current language
+     (English if missing). {n} / {p} ... are filled from the second argument. */
+  window.BHS_I18N = window.BHS_I18N || {};
+  window.T = function(key, v){
+    var row = window.BHS_I18N[key]; if(!row) return key;
+    var s = (row[TL] != null) ? row[TL] : (row.en != null ? row.en : key);
+    if(v) for(var k in v) s = s.split('{' + k + '}').join(v[k]);
+    return s;
+  };
 })();
 </script>
-<title>블러드하이스쿨 — BLOOD HIGH SCHOOL</title>
+<title>BLOOD HIGH SCHOOL</title>
 
 <!-- ══════════════════════════════════════════════════
      링크 미리보기 (OG 태그)
@@ -83,12 +111,14 @@
      ※ 그림을 바꿔도 카톡은 옛날 걸 한동안 계속 보여줍니다.
         developers.kakao.com/tool/debugger/sharing 에서 [초기화]
      ══════════════════════════════════════════════════ -->
-<meta name="description" content="세상을 멸망시킬 수 있는 흑룡의 힘을 가진 평범한 고등학생이, 자신의 일상을 지키기 위해 싸우는 학원 판타지.">
+<meta name="description" content="An ordinary high schooler with the power of a world-ending black dragon fights to protect his everyday life. A school fantasy.">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="블러드하이스쿨">
-<meta property="og:locale" content="ko_KR">
-<meta property="og:title" content="블러드하이스쿨 — BLOOD HIGH SCHOOL">
-<meta property="og:description" content="세상을 멸망시킬 수 있는 흑룡의 힘을 가진 평범한 고등학생이, 자신의 일상을 지키기 위해 싸우는 학원 판타지.">
+<meta property="og:site_name" content="Blood High School">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta property="og:title" content="BLOOD HIGH SCHOOL">
+<meta property="og:description" content="An ordinary high schooler with the power of a world-ending black dragon fights to protect his everyday life. A school fantasy.">
 <meta property="og:url" content="https://rrktbiz.github.io/rrkt.biz/Blood_High_School/">
 <meta property="og:image" content="https://rrktbiz.github.io/rrkt.biz/Blood_High_School/images/og/main.png">
 <meta property="og:image:width" content="1200">
@@ -104,7 +134,7 @@
   --red:#E51937;--dark:#1a0000;--yellow:#FFD23F;--blue:#1A6FC4;
   --black:#111;--white:#fff;--bg:#fff;
   --tx:#111;--tx2:#444;--tx3:#888;
-  --fn:'Noto Sans KR',sans-serif;
+  --fn:var(--cjk),sans-serif;
   --display:'Passion One',cursive;
   --sfx:'Bangers',cursive;
   --serif:'Nanum Myeongjo',Georgia,serif;
@@ -181,7 +211,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .tab-wrap{max-width:700px;margin:0 auto;padding:0 28px;border-radius:20px;overflow:hidden;}
 .tabs{display:flex;gap:10px;margin-top:24px;margin-bottom:0}
 /* 3. 훅 귀여운 폰트 */
-.hook-cute{font-family:'Noto Sans KR',sans-serif;font-weight:400;font-style:italic;font-size:clamp(18px,3vw,24px);color:#fff;letter-spacing:.05em;display:inline;}
+.hook-cute{font-family:var(--cjk),sans-serif;font-weight:400;font-style:italic;font-size:clamp(18px,3vw,24px);color:#fff;letter-spacing:.05em;display:inline;}
 /* 6. hero-meta 시인성 강화 */
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
 .hero-meta-chip{display:flex;align-items:center;gap:7px;background:#fff;border:3px solid var(--black);border-radius:6px;padding:6px 14px;box-shadow:3px 3px 0 var(--black);}
@@ -282,19 +312,19 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .cast-overlay.show .cast-overlay-inner{transform:translateY(0);}
 .cast-overlay-hd{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:12px;background:#111;border:3px solid #111;border-bottom-width:3px;border-radius:8px 8px 0 0;padding:11px 12px 11px 16px;box-shadow:0 6px 18px rgba(0,0,0,.55);}
 .cast-overlay-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;background:var(--red);color:#fff;padding:4px 9px;border-radius:3px;flex:0 0 auto;}
-.cast-overlay-title{font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:900;letter-spacing:-.2px;color:#fff;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cast-overlay-zoom{flex:0 0 auto;background:var(--yellow);color:#111;border:2px solid #111;border-radius:5px;padding:6px 12px;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:900;cursor:pointer;transition:filter .12s;}
+.cast-overlay-title{font-family:var(--cjk),sans-serif;font-size:14px;font-weight:900;letter-spacing:-.2px;color:#fff;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cast-overlay-zoom{flex:0 0 auto;background:var(--yellow);color:#111;border:2px solid #111;border-radius:5px;padding:6px 12px;font-family:var(--cjk),sans-serif;font-size:12px;font-weight:900;cursor:pointer;transition:filter .12s;}
 .cast-overlay-zoom:hover{filter:brightness(1.08);}
 .cast-overlay-close{touch-action:manipulation;position:relative;flex:0 0 auto;background:var(--red);color:#fff;border:2px solid #111;border-radius:5px;width:30px;height:30px;font-size:14px;font-weight:900;line-height:1;cursor:pointer;transition:filter .12s;}
 .cast-overlay-close:hover{filter:brightness(1.12);}
 .cast-overlay-stage{border:3px solid #111;border-top:none;border-radius:0 0 10px 10px;background:#fff;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.5);}
 .cast-overlay-img{display:block;width:100%;height:auto;}
 .cast-overlay-inner.fit .cast-overlay-img{width:auto;max-width:100%;max-height:calc(100vh - 130px);margin:0 auto;}
-.cast-overlay-hint{margin-top:12px;text-align:center;font-family:'Noto Sans KR',sans-serif;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:-.1px;}
-.cast-overlay-error{display:none;margin-top:16px;padding:14px 18px;background:#2a0000;border:3px solid var(--red);border-radius:8px;color:#ffb3b3;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;line-height:1.7;word-break:break-all;text-align:center;}
+.cast-overlay-hint{margin-top:12px;text-align:center;font-family:var(--cjk),sans-serif;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:-.1px;}
+.cast-overlay-error{display:none;margin-top:16px;padding:14px 18px;background:#2a0000;border:3px solid var(--red);border-radius:8px;color:#ffb3b3;font-family:var(--cjk),sans-serif;font-size:13px;font-weight:700;line-height:1.7;word-break:break-all;text-align:center;}
 
 /* ===== 등장인물 HTML 카드 (번역 가능) ===== */
-.cast-doc{padding:20px 22px 26px;font-family:'Noto Sans KR',sans-serif;color:#111;}
+.cast-doc{padding:20px 22px 26px;font-family:var(--cjk),sans-serif;color:#111;}
 .cast-doc-hd{display:flex;align-items:stretch;border:3px solid #111;border-radius:7px;overflow:hidden;margin-bottom:6px;}
 .cast-doc-hd-l{flex:1;padding:12px 16px;min-width:0}
 .cast-doc-eng{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:3px;color:#111;}
@@ -309,7 +339,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .cast-doc-cast{display:block;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:1.6px;color:#888;margin-top:2px}
 .cast-sec{display:flex;align-items:center;gap:9px;margin:22px 0 11px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:2.5px;color:#111}
 .cast-sec i{width:17px;height:3px;background:var(--red);flex:0 0 auto;display:block}
-.cast-sec b{font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:900;letter-spacing:-.2px}
+.cast-sec b{font-family:var(--cjk),sans-serif;font-size:12px;font-weight:900;letter-spacing:-.2px}
 .cast-sec u{flex:1;height:1px;background:#e2e2e2;text-decoration:none}
 .cast-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 11px;align-items:stretch}
 .cast-grid.paired{row-gap:0}
@@ -359,14 +389,14 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 .note-overlay.show .note-overlay-inner{transform:translateY(0);}
 .note-card{background:#fff;border:1px solid #e6e4e0;border-radius:12px;overflow:hidden;}
 .note-hd{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;background:#fff;border-bottom:1px solid #eceae6;padding:15px 24px;}
-.note-hd-title{flex:1;min-width:0;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:500;color:#8c8a85;letter-spacing:.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.note-hd-title{flex:1;min-width:0;font-family:var(--cjk),sans-serif;font-size:12px;font-weight:500;color:#8c8a85;letter-spacing:.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .note-hd-close{touch-action:manipulation;position:relative;flex:0 0 auto;width:28px;height:28px;background:none;border:none;border-radius:6px;font-size:15px;line-height:1;color:#a3a19c;cursor:pointer;transition:background .12s,color .12s;}
 .note-hd-close:hover{background:#f4f2ef;color:#111;}
 .note-body{padding:38px 42px 44px;}
-.note-doc{font-family:'Noto Sans KR',sans-serif;font-size:20px;font-weight:500;line-height:1.45;color:#141412;letter-spacing:-.3px;margin-bottom:30px;}
-.note-p{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:400;line-height:2.05;color:#46443f;letter-spacing:-.15px;margin:0;}
+.note-doc{font-family:var(--cjk),sans-serif;font-size:20px;font-weight:500;line-height:1.45;color:#141412;letter-spacing:-.3px;margin-bottom:30px;}
+.note-p{font-family:var(--cjk),sans-serif;font-size:14.5px;font-weight:400;line-height:2.05;color:#46443f;letter-spacing:-.15px;margin:0;}
 .note-p + .note-p{margin-top:21px;}
-.note-overlay-hint{margin-top:16px;text-align:center;font-family:'Noto Sans KR',sans-serif;font-size:11px;font-weight:400;color:#b0aea9;letter-spacing:-.1px;}
+.note-overlay-hint{margin-top:16px;text-align:center;font-family:var(--cjk),sans-serif;font-size:11px;font-weight:400;color:#b0aea9;letter-spacing:-.1px;}
 @media(max-width:560px){
   .note-overlay-inner{width:94vw;padding:16px 0 52px;}
   .note-hd{padding:13px 16px;}
@@ -485,15 +515,19 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
 #tl-badge.en{background:#f3f3f3;color:#525252;border-color:#e2e2e2}
 #tl-badge.show{opacity:1}
-#tb-lang-drop-btn{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0;font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-drop-btn{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0;font-family:'Inter',var(--cjk),sans-serif;}
 #tb-lang-drop-btn:hover{background:#f7f7f7;border-color:#c6c6c6;color:#1a1a1a;}
 
-#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;width:280px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;z-index:9999;overflow:hidden;box-shadow:0 10px 34px rgba(0,0,0,.12);font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;width:280px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;z-index:9999;overflow:hidden;box-shadow:0 10px 34px rgba(0,0,0,.12);font-family:'Inter',var(--cjk),sans-serif;}
 .tb-lang-hd{padding:12px 14px 10px;border-bottom:1px solid #ececec;}
 .tb-lang-hd-t{font-size:11px;font-weight:600;letter-spacing:.5px;color:#a0a0a0;text-transform:uppercase;margin-bottom:8px;}
-#tb-lang-search{width:100%;padding:7px 10px;border:1px solid #e2e2e2;border-radius:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:'Inter','Noto Sans KR',sans-serif;}
+#tb-lang-search{width:100%;padding:7px 10px;border:1px solid #e2e2e2;border-radius:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:'Inter',var(--cjk),sans-serif;}
 #tb-lang-search:focus{border-color:#c6c6c6;}
 #tb-lang-list{max-height:260px;overflow-y:auto;}
+/* Language fonts: Korean by default, Japanese when the page is Japanese */
+:root{--cjk:'Noto Sans KR'}
+:root:lang(ja){--cjk:'Noto Sans JP'}
+html.i18n-wait body{visibility:hidden}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
 /* Hide Google Translate's top bar (the page shows its own 'Google' badge instead) */
 .goog-te-banner-frame,.skiptranslate{display:none !important}
@@ -538,7 +572,7 @@ body{top:0 !important}
   display:none;
   --bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e2e2e2;--bd2:#c6c6c6;
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;--ac:#c0392b;
-  --fn:'Inter','Noto Sans KR',sans-serif;
+  --fn:'Inter',var(--cjk),sans-serif;
   background:var(--bg);color:var(--tx);font-family:var(--fn);
   min-height:calc(100dvh - 92px);
 }
@@ -590,7 +624,7 @@ body{top:0 !important}
 #view-story .vol-nav-btn-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #view-story .vol-list-btn{justify-self:center;display:flex;align-items:center;gap:5px;padding:9px 18px;background:var(--sb);border:1px solid var(--bd2);border-radius:8px;font-size:11px;font-weight:600;color:var(--tx2);transition:all .12s}
 #view-story .vol-list-btn:hover{background:var(--bg);color:var(--tx)}
-.vol-picker-modal{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:#00000050;font-family:'Inter','Noto Sans KR',sans-serif}
+.vol-picker-modal{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:#00000050;font-family:'Inter',var(--cjk),sans-serif}
 .vol-picker-modal.hidden{display:none}
 .vol-picker-inner{background:#fff;border-radius:14px;box-shadow:0 8px 40px #0000002a;width:min(400px,90vw);max-height:60vh;display:flex;flex-direction:column;overflow:hidden}
 .vol-picker-hd{padding:14px 18px;border-bottom:1px solid #e2e2e2;display:flex;align-items:center;justify-content:space-between}
@@ -652,7 +686,7 @@ body{top:0 !important}
 #view-story .ep-nav-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #view-story .ep-picker-btn{justify-self:center;display:flex;align-items:center;gap:5px;padding:8px 16px;background:var(--sb);border:1px solid var(--bd2);border-radius:7px;font-size:11px;font-weight:600;color:var(--tx2);transition:all .12s;white-space:nowrap}
 #view-story .ep-picker-btn:hover{background:var(--bg);color:var(--tx)}
-.ep-picker-modal{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:#00000050;font-family:'Inter','Noto Sans KR',sans-serif}
+.ep-picker-modal{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:#00000050;font-family:'Inter',var(--cjk),sans-serif}
 .ep-picker-modal.hidden{display:none}
 .ep-picker-inner{background:#fff;border-radius:14px;box-shadow:0 8px 40px #0000002a;width:min(480px,90vw);max-height:70vh;display:flex;flex-direction:column;overflow:hidden}
 .ep-picker-hd{padding:14px 18px;border-bottom:1px solid #e2e2e2;display:flex;align-items:center;justify-content:space-between}
@@ -782,7 +816,7 @@ body{top:0 !important}
   opacity:0;
   transform:translateY(12px);
   pointer-events:none;
-  font-family:'Inter','Noto Sans KR',sans-serif;
+  font-family:'Inter',var(--cjk),sans-serif;
   transition:opacity .22s ease, transform .22s ease;
 }
 #float-ep-nav.active{display:flex}
@@ -829,7 +863,7 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   width:186px;padding:12px;
   background:#fff;border:1px solid #e2e2e2;border-radius:10px;
   box-shadow:0 10px 30px rgba(0,0,0,.13);
-  z-index:400;font-family:'Inter','Noto Sans KR',sans-serif;
+  z-index:400;font-family:'Inter',var(--cjk),sans-serif;
   text-align:left;
 }
 #rd-fs-panel.hidden{display:none}
@@ -1023,13 +1057,13 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
     <div class="bt-lang">
       <span id="tl-badge"></span>
       <span id="tb-sound-wrap">
-        <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
+        <button id="tb-sound-btn" onclick="bizSoundToggle()" title="Click sound on/off" aria-label="Click sound on/off" data-t-title="snd.toggle" data-t-aria="snd.toggle" aria-pressed="true"></button>
         <div id="tb-sound-pop">
-          <input id="tb-sound-range" type="range" min="0" max="100" step="5" value="100" aria-label="소리 크기">
+          <input id="tb-sound-range" type="range" min="0" max="100" step="5" value="100" aria-label="Volume" data-t-aria="snd.vol">
           <span id="tb-sound-val">100%</span>
         </div>
       </span>
-      <button id="tb-contact-btn" onclick="openContactOverlay()" title="제작자 소개 · 비즈니스 문의" aria-label="제작자 소개 · 비즈니스 문의">
+      <button id="tb-contact-btn" onclick="openContactOverlay()" title="About the creator · Business inquiries" aria-label="About the creator · Business inquiries" data-t-title="contact.btn" data-t-aria="contact.btn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       </button>
       <button id="tb-lang-drop-btn" onclick="tbLangToggle()">
@@ -1040,20 +1074,17 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
       <div id="tb-lang-dropdown">
         <div class="tb-lang-hd">
           <div class="tb-lang-hd-t">Language</div>
-          <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()">
+          <input id="tb-lang-search" type="text" placeholder="Search language..." data-t-ph="lang.search" oninput="tbLangFilter()">
         </div>
         <div id="tb-lang-list"></div>
-        <div class="tb-lang-note">
-          <b>DeepL 우선</b> · 한도 초과 시 <b>Google 번역</b> 자동 전환<br>
-          정식 번역은 <b>한 &rarr; 영 &rarr; 일 &rarr; 중</b> 순서로 제공될 예정입니다.
-        </div>
+        <div class="tb-lang-note" data-t="lang.note"><b>English · Japanese · Korean</b> are officially supported.<br>Other languages are machine-translated by <b>Google</b>.</div>
       </div>
     </div>
   </div>
   <div class="bt-tabs" id="bt-tabs">
-    <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGoAnimated('intro')">소개</button>
+    <button class="bt-tab active" id="bt-tab-intro" onclick="bhsGoAnimated('intro')" data-t="tab.intro">Intro</button>
     <!-- 각 부 탭은 bhsBuildTabs() 가 이 사이에 끼워 넣습니다 (로그 탭은 항상 맨 뒤) -->
-    <button class="bt-tab" id="bt-tab-history" onclick="bhsGoAnimated('history')">로그</button>
+    <button class="bt-tab" id="bt-tab-history" onclick="bhsGoAnimated('history')" data-t="tab.log">Log</button>
   </div>
 </div>
 
@@ -1064,25 +1095,25 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 <!-- ===== 제작자 소개 · 비즈니스 문의 ===== -->
 <div id="contact-overlay" class="hidden" onclick="if(event.target===this)closeContactOverlay()">
   <div class="contact-card">
-    <button class="contact-close" onclick="closeContactOverlay()" aria-label="닫기">
+    <button class="contact-close" onclick="closeContactOverlay()" aria-label="Close" data-t-aria="close">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 1.5l11 11M12.5 1.5l-11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>
     <div class="contact-who">
       <div class="contact-who-thumb"><img src="../profile.png" alt="BIZ" onerror="this.style.display='none'"></div>
       <div>
         <div class="contact-who-name">rrkt.biz</div>
-        <div class="contact-who-tag">스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.</div>
+        <div class="contact-who-tag" data-t="contact.tag">We create original stories and characters built to grow into IP.</div>
       </div>
     </div>
     <div class="contact-eyebrow">Contact</div>
-    <div class="contact-title">비즈니스 문의</div>
-    <div class="contact-desc">제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.</div>
+    <div class="contact-title" data-t="contact.title">Business Inquiries</div>
+    <div class="contact-desc" data-t="contact.desc">We only review emails that include a proposal or specific collaboration details.<br>Replies may take time, and we may not be able to respond to every inquiry.</div>
     <div class="contact-mailrow">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a0a0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
       <span class="mail">rrkt.biz@proton.me</span>
-      <button class="biq-copy-btn" onclick="biqCopyEmail(this)" title="복사">
+      <button class="biq-copy-btn" onclick="biqCopyEmail(this)" title="Copy" data-t-title="copy">
         <svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        <span class="biq-copy-txt">복사</span>
+        <span class="biq-copy-txt" data-t="copy">Copy</span>
       </button>
     </div>
 
@@ -1091,10 +1122,10 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
     <div class="contact-pd">
       <div class="contact-pd-lbl">For PD</div>
       <a class="contact-pd-link" href="bhs_pd.html">
-        IP 기획서 열기
+        <span data-t="pd.open">Open IP proposal</span>
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
       </a>
-      <div class="contact-pd-note">줄거리 · 결말 · 반전 등 작품 전체의 스포일러가 포함되어 있습니다.</div>
+      <div class="contact-pd-note" data-t="pd.note">Contains spoilers for the whole story, including the plot, ending, and twists.</div>
     </div>
   </div>
 </div>
@@ -1104,11 +1135,11 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   <div class="cast-overlay-inner" id="castOverlayInner">
     <div class="cast-overlay-hd">
       <span class="cast-overlay-tag">CAST</span>
-      <span class="cast-overlay-title" id="castOverlayTitle">등장인물</span>
+      <span class="cast-overlay-title" id="castOverlayTitle" data-t="cast.title">Characters</span>
       <button class="cast-overlay-close" onclick="bhsCloseCast()">&#10005;</button>
     </div>
     <div class="cast-overlay-stage" id="castOverlayBody"></div>
-    <div class="cast-overlay-hint">바깥 영역 클릭 또는 ESC 키로 닫기</div>
+    <div class="cast-overlay-hint" data-t="overlay.hint">Click outside or press ESC to close</div>
     <div class="cast-overlay-error" id="castOverlayError"></div>
   </div>
 </div>
@@ -1117,12 +1148,12 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
   <div class="note-overlay-inner" id="noteOverlayInner">
     <div class="note-card">
       <div class="note-hd">
-        <span class="note-hd-title" id="noteOverlayTitle">제작노트</span>
+        <span class="note-hd-title" id="noteOverlayTitle" data-t="note.title">Production Notes</span>
         <button class="note-hd-close" onclick="bhsCloseNote()">&#10005;</button>
       </div>
       <div class="note-body" id="noteOverlayBody"></div>
     </div>
-    <div class="note-overlay-hint">바깥 영역 클릭 또는 ESC 키로 닫기</div>
+    <div class="note-overlay-hint" data-t="overlay.hint">Click outside or press ESC to close</div>
   </div>
 </div>
 
@@ -1138,15 +1169,15 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
       <div class="hero-head">
         <div class="hero-badge">WEB NOVEL PROJECT</div>
         <h1 class="hero-title">BLOOD<br>HIGH SCHOOL</h1>
-        <p class="hero-title-kr">블 러 드 하 이 스 쿨</p>
+        <p class="hero-title-kr" data-t="hero.sub">Blood High School</p>
       </div>
       <div class="hero-cta">
-        <div class="hero-cta-label">작품 보러가기</div>
+        <div class="hero-cta-label" data-t="hero.cta">Read the story</div>
         <a class="cta-btn cta-1" href="#novel-1" onclick="return bhsGoNovel(event,'novel-1')">
-          <span class="cta-part">PART 01</span><span class="cta-go">1부 &rarr;</span>
+          <span class="cta-part">PART 01</span><span class="cta-go" data-t="cta.p1">Part 1 &rarr;</span>
         </a>
         <a class="cta-btn cta-2" href="#novel-2" onclick="return bhsGoNovel(event,'novel-2')">
-          <span class="cta-part">PART 02</span><span class="cta-go">2부 &rarr;</span>
+          <span class="cta-part">PART 02</span><span class="cta-go" data-t="cta.p2">Part 2 &rarr;</span>
         </a>
       </div>
     </div>
@@ -1154,25 +1185,25 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
     <div class="hero-meta">
       <div class="hero-meta-chip">
         <span class="hero-meta-label">AGE</span>
-        <span class="hero-meta-val">15세 이용가</span>
+        <span class="hero-meta-val" data-t="meta.age">Ages 15+</span>
       </div>
       <div class="hero-meta-chip">
         <span class="hero-meta-label">FORMAT</span>
-        <span class="hero-meta-val">시즌제</span>
+        <span class="hero-meta-val" data-t="meta.format">Seasonal</span>
       </div>
       <div class="hero-meta-chip">
         <span class="hero-meta-label">VOLUME</span>
-        <span class="hero-meta-val">시즌당 12화 &middot; 총 N부작 예정</span>
+        <span class="hero-meta-val" data-t="meta.volume">12 episodes per season &middot; N parts planned</span>
       </div>
     </div>
 
     <div class="hero-tags">
-      <span class="hero-tag t-white">#학원판타지</span>
-      <span class="hero-tag t-dark">#다크판타지</span>
-      <span class="hero-tag t-white">#소년만화</span>
-      <span class="hero-tag t-white">#성장물</span>
-      <span class="hero-tag t-yellow">#뉴트로</span>
-      <span class="hero-tag t-blue">#인외</span>
+      <span class="hero-tag t-white" data-t="tag.1">#SchoolFantasy</span>
+      <span class="hero-tag t-dark" data-t="tag.2">#DarkFantasy</span>
+      <span class="hero-tag t-white" data-t="tag.3">#Shonen</span>
+      <span class="hero-tag t-white" data-t="tag.4">#ComingOfAge</span>
+      <span class="hero-tag t-yellow" data-t="tag.5">#Newtro</span>
+      <span class="hero-tag t-blue" data-t="tag.6">#Nonhuman</span>
     </div>
   </div>
 </div>
@@ -1188,9 +1219,9 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
       <div class="v-sec-label">HOOK</div>
       <div class="hook-block">
         <p class="hook-text">
-          <span class="hook-cute">내 몸속에 세상을 멸망시킬 수 있는 힘이 <em style="color:var(--yellow);font-style:italic;">메.자.메.루.</em><br>
-          그런데... 난 평범하게 살고 싶어!</span>
-          <span class="hook-em">— 류오 쿠로, 흑룡 각성 직후</span>
+          <span class="hook-cute" data-t="hook">Inside me, a power that could destroy the world is <em style="color:var(--yellow);font-style:italic;">a.wa.ken.ing.</em><br>
+But... I just want to live a normal life!</span>
+          <span class="hook-em" data-t="hook.by">— Ryuo Kuro, right after his black dragon awakening</span>
         </p>
       </div>
     </div>
@@ -1199,13 +1230,13 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
       <div class="v-sec-label">STORY</div>
       <div class="preview-block">
         <div class="preview-body">
-          <p class="preview-scene">[전설의 용 라크니스.]<br>[그것은 세계를 멸망시킬 수 있는 힘을 가졌다는 어둠의 다크 드래곤.]<br>[천 년의 시간이 지난 지금 눈.을.뜬.다.]</p>
-          <p class="preview-text">
-            평범한 모범생 <strong>류오 쿠로</strong>는 성 세인츠 학원에 입학한 첫날, 뱀파이어 학생회장에게 피를 노림당한다. 그 순간 — 자신도 모르는 힘이 폭발하며, 쿠로의 안에서 천 년 동안 잠들어 있던 전설의 흑룡 <strong>라크니스</strong>가 깨어난다.<br><br>
-            뱀파이어의 장미 정원, 미쳐버린 마리오네트 교장, 버려진 성지의 마물, 영원한 1학년을 만드는 흑마법사 — 매주 터지는 기상천외한 사건의 뒤에는 언제나 쿠로의 의지와 상관없이 발동하는 흑룡의 힘이 있었다.<br><br>
-            문제는, <strong style="color:var(--red)">쿠로 자신은 아무것도 기억하지 못한다는 것.</strong><br><br>
-            싸우는 건 싫다. 평범하게 살고 싶을 뿐이다. 하지만 용의 힘이 깨어난 순간부터 세상은 쿠로를 가만두지 않는다. 다가오는 적, 짊어져야 할 가문의 무게, 그리고 그때마다 부서지고 다시 일어서야 하는 선택의 순간들 — 도망치고 싶은 마음과 눈앞의 소중한 것들 사이에서, 이 소년은 과연 자신 안의 힘을 받아들일 수 있을까.<br><br>
-            <span style="color:var(--red);font-weight:900">— 거대한 힘을 품은 소년의 이야기가 지금, 막을 올린다!</span>
+          <p class="preview-scene" data-t="story.scene">[Lackness, the dragon of legend.]<br>[A dark dragon of shadow, said to hold the power to destroy the world.]<br>[Now, after a thousand years, it a.wa.kens.]</p>
+          <p class="preview-text" data-t="story.text">
+Ordinary model student <strong>Ryuo Kuro</strong> enrolls at St. Saints Academy, and on his very first day the vampire student council president comes for his blood. In that instant, a power he never knew he had explodes, and <strong>Lackness</strong>, the legendary black dragon that has slept inside Kuro for a thousand years, awakens.<br><br>
+A vampire's rose garden, a marionette principal gone mad, a monster in an abandoned holy site, a dark mage who keeps students in first year forever. Behind every outlandish incident, week after week, is the black dragon's power, unleashed whether Kuro wants it or not.<br><br>
+The problem is, <strong style="color:var(--red)">Kuro doesn't remember any of it.</strong><br><br>
+He hates fighting. All he wants is a normal life. But from the moment the dragon's power woke, the world won't leave Kuro alone. Enemies closing in, the weight of his family name, and moment after moment of choices that break him and make him stand back up. Torn between wanting to run and the people he can't bear to lose, can this boy accept the power within him?<br><br>
+<span style="color:var(--red);font-weight:900">— The story of a boy who carries an immense power begins now!</span>
           </p>
         </div>
       </div>
@@ -1239,42 +1270,42 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
       <div class="char-list">
 
         <div class="char-card">
-          <div class="char-img"><img src="../Blood_High_School/images/char/1_kuro.png" alt="류오 쿠로" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
+          <div class="char-img"><img src="../Blood_High_School/images/char/1_kuro.png" alt="Ryuo Kuro" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
           <div class="char-body">
-            <p class="char-name-kr">류오 쿠로</p>
-            <p class="char-desc">안경 모범생. 겁이 많고 순하지만, 누구보다 상냥한 소년. 자기 안에 잠든 흑룡의 존재를 모른 채 <strong>평범하게 살고 싶어 한다.</strong> 하지만 운명은 그를 가만두지 않는다.</p>
+            <p class="char-name-kr" data-t="c.kuro.n">Ryuo Kuro</p>
+            <p class="char-desc" data-t="c.kuro.d">A bespectacled model student. Timid and gentle, yet kinder than anyone. Unaware of the black dragon sleeping inside him, <strong>he just wants to live a normal life.</strong> But fate won't leave him alone.</p>
           </div>
         </div>
 
         <div class="char-card">
-          <div class="char-img"><img src="../Blood_High_School/images/char/3_Eun-ho.png" alt="은호" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
+          <div class="char-img"><img src="../Blood_High_School/images/char/3_Eun-ho.png" alt="Eunho" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
           <div class="char-body">
-            <p class="char-name-kr">은호</p>
-            <p class="char-desc">쿠로의 소꿉친구. 능글거리고 장난기 많지만 쿠로가 위험에 처하면 <strong>누구보다 먼저 움직인다.</strong> 그에겐 쿠로도 모르는 비밀이 있다.</p>
+            <p class="char-name-kr" data-t="c.eunho.n">Eunho</p>
+            <p class="char-desc" data-t="c.eunho.d">Kuro's childhood friend. Sly and full of mischief, but when Kuro is in danger <strong>he moves before anyone else.</strong> He has a secret even Kuro doesn't know.</p>
           </div>
         </div>
 
         <div class="char-card">
-          <div class="char-img"><img src="../Blood_High_School/images/char/5_Herbaeken.png" alt="헤르바켄" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
+          <div class="char-img"><img src="../Blood_High_School/images/char/5_Herbaeken.png" alt="Herbaeken" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
           <div class="char-body">
-            <p class="char-name-kr">헤르바켄</p>
-            <p class="char-desc">타국에서 온 유학생이자 전설 오타쿠. 학원의 온갖 전설을 찾아 모험을 떠나자며 쿠로와 은호를 끌고 다닌다. 하지만 밝은 웃음 뒤에 숨긴 <strong>싸늘한 눈빛</strong>의 정체는 —?</p>
+            <p class="char-name-kr" data-t="c.herb.n">Herbaeken</p>
+            <p class="char-desc" data-t="c.herb.d">An exchange student from abroad and a die-hard legend otaku. He drags Kuro and Eunho off on adventures to hunt down every legend in the academy. But what lies behind the <strong>cold glint</strong> hidden beneath his bright smile—?</p>
           </div>
         </div>
 
         <div class="char-card">
-          <div class="char-img"><img src="../Blood_High_School/images/char/7_Siro.png" alt="류오 시로" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
+          <div class="char-img"><img src="../Blood_High_School/images/char/7_Siro.png" alt="Ryuo Shiro" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
           <div class="char-body">
-            <p class="char-name-kr">류오 시로</p>
-            <p class="char-desc">쿠로의 쌍둥이 동생. 순수하고 아이 같지만, 그 안에 깃든 또 하나의 용 '루멘시아'는 <strong>"오레사마가 세계 최강이다!!"</strong>를 외치며 학원을 통째로 자기 놀이터로 만들어 버린다.</p>
+            <p class="char-name-kr" data-t="c.shiro.n">Ryuo Shiro</p>
+            <p class="char-desc" data-t="c.shiro.d">Kuro's twin brother. Pure and childlike, but the other dragon dwelling within him, Lumensia, shouts <strong>"Ore-sama is the strongest in the world!!"</strong> and turns the whole academy into his playground.</p>
           </div>
         </div>
 
         <div class="char-card">
-          <div class="char-img"><img src="../Blood_High_School/images/char/13_Miko.png" alt="류오 미코" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
+          <div class="char-img"><img src="../Blood_High_School/images/char/13_Miko.png" alt="Ryuo Miko" loading="lazy" onerror="this.style.display='none';this.parentNode.classList.add('noimg')"></div>
           <div class="char-body">
-            <p class="char-name-kr">류오 미코</p>
-            <p class="char-desc">쿠로의 사촌이자 그 아버지 요시유키의 제자. 재능과 자존심 모두 하늘을 찌르는 소녀. 당주 자리를 두고 쿠로와 대립하지만, <strong>그녀에겐 그녀만의 절박한 이유</strong>가 있다.</p>
+            <p class="char-name-kr" data-t="c.miko.n">Ryuo Miko</p>
+            <p class="char-desc" data-t="c.miko.d">Kuro's cousin and a disciple of his father, Yoshiyuki. A girl whose talent and pride both reach the sky. She clashes with Kuro over who will lead the family, but <strong>she has desperate reasons of her own.</strong></p>
           </div>
         </div>
 
@@ -1283,13 +1314,13 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 
     <div class="v-section reveal">
       <div class="v-cta">
-        <div class="v-cta-label">지금 바로 작품 보러가기</div>
+        <div class="v-cta-label" data-t="v.cta">Start reading now</div>
         <div class="v-cta-btns">
           <a class="cta-btn cta-1" href="#novel-1" onclick="return bhsGoNovel(event,'novel-1')">
-            <span class="cta-part">PART 01</span><span class="cta-go">1부 &rarr;</span>
+            <span class="cta-part">PART 01</span><span class="cta-go" data-t="cta.p1">Part 1 &rarr;</span>
           </a>
           <a class="cta-btn cta-2" href="#novel-2" onclick="return bhsGoNovel(event,'novel-2')">
-            <span class="cta-part">PART 02</span><span class="cta-go">2부 &rarr;</span>
+            <span class="cta-part">PART 02</span><span class="cta-go" data-t="cta.p2">Part 2 &rarr;</span>
           </a>
         </div>
       </div>
@@ -1303,9 +1334,9 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 <!-- ===== 푸터 · 저작권 / 공식 백업 ===== -->
 <div class="site-footer">
   <div class="site-footer-inner">
-    <span class="sf-copy">&copy; rrkt.rrkt.biz. AII rights reserved.</span>
+    <span class="sf-copy">&copy; rrkt.biz. All rights reserved.</span>
     <span class="sf-sep"></span>
-    <span class="sf-note">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>
+    <span class="sf-note" data-t="footer.note">The author personally uploads backups of this work to the addresses below. These are official uploads, not reposts.</span>
     <span class="sf-links">
       <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
       <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
@@ -1328,12 +1359,522 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
 
 <!-- ===== 플로팅 에피소드 네비 (읽기 뷰 전용) ===== -->
 <div id="float-ep-nav">
-  <button class="fep-btn" id="fep-prev" onclick="bhsFloatEpNav('prev')" aria-label="이전 화">&#8249;</button>
+  <button class="fep-btn" id="fep-prev" onclick="bhsFloatEpNav('prev')" aria-label="Previous episode" data-t-aria="fep.prev">&#8249;</button>
   <div class="fep-div"></div>
-  <span class="fep-mid" onclick="bhsFloatEpNav('list')">목록</span>
+  <span class="fep-mid" onclick="bhsFloatEpNav('list')" data-t="list">List</span>
   <div class="fep-div"></div>
-  <button class="fep-btn" id="fep-next" onclick="bhsFloatEpNav('next')" aria-label="다음 화">&#8250;</button>
+  <button class="fep-btn" id="fep-next" onclick="bhsFloatEpNav('next')" aria-label="Next episode" data-t-aria="fep.next">&#8250;</button>
 </div>
+
+<script>
+/* Interface text in three languages (English is also written in the HTML).
+   To change a sentence, edit it here in every language. */
+Object.assign(window.BHS_I18N, {
+"doc.title": {
+"en": "BLOOD HIGH SCHOOL",
+"ja": "ブラッドハイスクール — BLOOD HIGH SCHOOL",
+"ko": "블러드하이스쿨 — BLOOD HIGH SCHOOL"
+},
+"brand": {
+"en": "Blood High School",
+"ja": "ブラッドハイスクール",
+"ko": "블러드하이스쿨"
+},
+"snd.toggle": {
+"en": "Click sound on/off",
+"ja": "クリック音のオン/オフ",
+"ko": "클릭 소리 켜기·끄기"
+},
+"snd.on": {
+"en": "Turn click sound on",
+"ja": "クリック音をオンにする",
+"ko": "클릭 소리 켜기"
+},
+"snd.off": {
+"en": "Turn click sound off (volume {n}%)",
+"ja": "クリック音をオフにする(音量 {n}%)",
+"ko": "클릭 소리 끄기 (크기 {n}%)"
+},
+"snd.vol": {
+"en": "Volume",
+"ja": "音量",
+"ko": "소리 크기"
+},
+"contact.btn": {
+"en": "About the creator · Business inquiries",
+"ja": "制作者紹介・ビジネスのお問い合わせ",
+"ko": "제작자 소개 · 비즈니스 문의"
+},
+"lang.search": {
+"en": "Search language...",
+"ja": "言語を検索...",
+"ko": "언어 검색..."
+},
+"lang.note": {
+"en": "<b>English · Japanese · Korean<\/b> are officially supported.<br>Other languages are machine-translated by <b>Google<\/b>.",
+"ja": "<b>英語・日本語・韓国語<\/b>に公式対応しています。<br>その他の言語は<b>Google<\/b>による機械翻訳です。",
+"ko": "<b>영어 · 일본어 · 한국어<\/b>는 공식 지원 언어입니다.<br>그 밖의 언어는 <b>Google<\/b> 기계 번역입니다."
+},
+"tab.intro": {
+"en": "Intro",
+"ja": "紹介",
+"ko": "소개"
+},
+"tab.log": {
+"en": "Log",
+"ja": "ログ",
+"ko": "로그"
+},
+"tab.soon": {
+"en": "Coming soon",
+"ja": "公開予定",
+"ko": "공개 예정"
+},
+"close": {
+"en": "Close",
+"ja": "閉じる",
+"ko": "닫기"
+},
+"contact.tag": {
+"en": "We create original stories and characters built to grow into IP.",
+"ja": "ストーリーとキャラクターを軸に、IPとして広がるオリジナル作品をつくります。",
+"ko": "스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다."
+},
+"contact.title": {
+"en": "Business Inquiries",
+"ja": "ビジネスのお問い合わせ",
+"ko": "비즈니스 문의"
+},
+"contact.desc": {
+"en": "We only review emails that include a proposal or specific collaboration details.<br>Replies may take time, and we may not be able to respond to every inquiry.",
+"ja": "企画書、または具体的な協業内容を含むメールのみ拝見しています。<br>返信までお時間をいただく場合があり、すべてのお問い合わせにお返事できないこともあります。",
+"ko": "제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다."
+},
+"copy": {
+"en": "Copy",
+"ja": "コピー",
+"ko": "복사"
+},
+"copied": {
+"en": "Copied",
+"ja": "コピー完了",
+"ko": "완료"
+},
+"pd.open": {
+"en": "Open IP proposal",
+"ja": "IP企画書を開く",
+"ko": "IP 기획서 열기"
+},
+"pd.note": {
+"en": "Contains spoilers for the whole story, including the plot, ending, and twists.",
+"ja": "あらすじ・結末・どんでん返しなど、作品全体のネタバレを含みます。",
+"ko": "줄거리 · 결말 · 반전 등 작품 전체의 스포일러가 포함되어 있습니다."
+},
+"cast.title": {
+"en": "Characters",
+"ja": "登場人物",
+"ko": "등장인물"
+},
+"cast.badge": {
+"en": "Character Guide",
+"ja": "登場人物紹介",
+"ko": "등장인물 소개"
+},
+"overlay.hint": {
+"en": "Click outside or press ESC to close",
+"ja": "外側をクリック、またはESCキーで閉じる",
+"ko": "바깥 영역 클릭 또는 ESC 키로 닫기"
+},
+"note.title": {
+"en": "Production Notes",
+"ja": "制作ノート",
+"ko": "제작노트"
+},
+"note.titleP": {
+"en": "{p} · Production Notes",
+"ja": "{p} 制作ノート",
+"ko": "{p} 제작노트"
+},
+"hero.sub": {
+"en": "Blood High School",
+"ja": "ブ ラ ッ ド ハ イ ス ク ー ル",
+"ko": "블 러 드 하 이 스 쿨"
+},
+"hero.cta": {
+"en": "Read the story",
+"ja": "作品を読む",
+"ko": "작품 보러가기"
+},
+"cta.p1": {
+"en": "Part 1 &rarr;",
+"ja": "第1部 &rarr;",
+"ko": "1부 &rarr;"
+},
+"cta.p2": {
+"en": "Part 2 &rarr;",
+"ja": "第2部 &rarr;",
+"ko": "2부 &rarr;"
+},
+"meta.age": {
+"en": "Ages 15+",
+"ja": "15歳以上",
+"ko": "15세 이용가"
+},
+"meta.format": {
+"en": "Seasonal",
+"ja": "シーズン制",
+"ko": "시즌제"
+},
+"meta.volume": {
+"en": "12 episodes per season &middot; N parts planned",
+"ja": "1シーズン12話 &middot; 全N部作予定",
+"ko": "시즌당 12화 &middot; 총 N부작 예정"
+},
+"tag.1": {
+"en": "#SchoolFantasy",
+"ja": "#学園ファンタジー",
+"ko": "#학원판타지"
+},
+"tag.2": {
+"en": "#DarkFantasy",
+"ja": "#ダークファンタジー",
+"ko": "#다크판타지"
+},
+"tag.3": {
+"en": "#Shonen",
+"ja": "#少年漫画",
+"ko": "#소년만화"
+},
+"tag.4": {
+"en": "#ComingOfAge",
+"ja": "#成長物語",
+"ko": "#성장물"
+},
+"tag.5": {
+"en": "#Newtro",
+"ja": "#ニュートロ",
+"ko": "#뉴트로"
+},
+"tag.6": {
+"en": "#Nonhuman",
+"ja": "#人外",
+"ko": "#인외"
+},
+"hook": {
+"en": "Inside me, a power that could destroy the world is <em style=\"color:var(--yellow);font-style:italic;\">a.wa.ken.ing.<\/em><br>\nBut... I just want to live a normal life!",
+"ja": "僕の中で、世界を滅ぼせる力が <em style=\"color:var(--yellow);font-style:italic;\">メ.ザ.メ.ル.<\/em><br>\nでも...僕は普通に生きたいんだ!",
+"ko": "내 몸속에 세상을 멸망시킬 수 있는 힘이 <em style=\"color:var(--yellow);font-style:italic;\">메.자.메.루.<\/em><br>\n그런데... 난 평범하게 살고 싶어!"
+},
+"hook.by": {
+"en": "— Ryuo Kuro, right after his black dragon awakening",
+"ja": "— 竜王クロ、黒龍覚醒直後",
+"ko": "— 류오 쿠로, 흑룡 각성 직후"
+},
+"story.scene": {
+"en": "[Lackness, the dragon of legend.]<br>[A dark dragon of shadow, said to hold the power to destroy the world.]<br>[Now, after a thousand years, it a.wa.kens.]",
+"ja": "[伝説の龍ラクニス。]<br>[それは世界を滅ぼす力を持つという、闇のダークドラゴン。]<br>[千年の時を経た今、目.を.覚.ま.す.]",
+"ko": "[전설의 용 라크니스.]<br>[그것은 세계를 멸망시킬 수 있는 힘을 가졌다는 어둠의 다크 드래곤.]<br>[천 년의 시간이 지난 지금 눈.을.뜬.다.]"
+},
+"story.text": {
+"en": "Ordinary model student <strong>Ryuo Kuro<\/strong> enrolls at St. Saints Academy, and on his very first day the vampire student council president comes for his blood. In that instant, a power he never knew he had explodes, and <strong>Lackness<\/strong>, the legendary black dragon that has slept inside Kuro for a thousand years, awakens.<br><br>\nA vampire's rose garden, a marionette principal gone mad, a monster in an abandoned holy site, a dark mage who keeps students in first year forever. Behind every outlandish incident, week after week, is the black dragon's power, unleashed whether Kuro wants it or not.<br><br>\nThe problem is, <strong style=\"color:var(--red)\">Kuro doesn't remember any of it.<\/strong><br><br>\nHe hates fighting. All he wants is a normal life. But from the moment the dragon's power woke, the world won't leave Kuro alone. Enemies closing in, the weight of his family name, and moment after moment of choices that break him and make him stand back up. Torn between wanting to run and the people he can't bear to lose, can this boy accept the power within him?<br><br>\n<span style=\"color:var(--red);font-weight:900\">— The story of a boy who carries an immense power begins now!<\/span>",
+"ja": "平凡な優等生<strong>竜王クロ<\/strong>は、聖セインツ学院に入学したその日、ヴァンパイアの生徒会長に血を狙われる。その瞬間——自分でも知らない力が爆発し、クロの中で千年眠っていた伝説の黒龍<strong>ラクニス<\/strong>が目を覚ます。<br><br>\nヴァンパイアの薔薇の庭、狂ったマリオネット校長、打ち捨てられた聖地の魔物、永遠の一年生を生み出す黒魔法使い——毎週巻き起こる奇想天外な事件の裏には、いつもクロの意思とは関係なく発動する黒龍の力があった。<br><br>\n問題は、<strong style=\"color:var(--red)\">クロ自身が何ひとつ覚えていないということ。<\/strong><br><br>\n戦うのは嫌だ。ただ普通に生きたいだけだ。けれど龍の力が目覚めたその瞬間から、世界はクロを放っておかない。迫りくる敵、背負うべき家の重み、そしてそのたびに砕けては立ち上がらなければならない選択の瞬間——逃げ出したい気持ちと、目の前の大切なものとの間で、この少年は自分の中の力を受け入れることができるのか。<br><br>\n<span style=\"color:var(--red);font-weight:900\">——巨大な力を秘めた少年の物語が、いま幕を開ける!<\/span>",
+"ko": "평범한 모범생 <strong>류오 쿠로<\/strong>는 성 세인츠 학원에 입학한 첫날, 뱀파이어 학생회장에게 피를 노림당한다. 그 순간 — 자신도 모르는 힘이 폭발하며, 쿠로의 안에서 천 년 동안 잠들어 있던 전설의 흑룡 <strong>라크니스<\/strong>가 깨어난다.<br><br>\n뱀파이어의 장미 정원, 미쳐버린 마리오네트 교장, 버려진 성지의 마물, 영원한 1학년을 만드는 흑마법사 — 매주 터지는 기상천외한 사건의 뒤에는 언제나 쿠로의 의지와 상관없이 발동하는 흑룡의 힘이 있었다.<br><br>\n문제는, <strong style=\"color:var(--red)\">쿠로 자신은 아무것도 기억하지 못한다는 것.<\/strong><br><br>\n싸우는 건 싫다. 평범하게 살고 싶을 뿐이다. 하지만 용의 힘이 깨어난 순간부터 세상은 쿠로를 가만두지 않는다. 다가오는 적, 짊어져야 할 가문의 무게, 그리고 그때마다 부서지고 다시 일어서야 하는 선택의 순간들 — 도망치고 싶은 마음과 눈앞의 소중한 것들 사이에서, 이 소년은 과연 자신 안의 힘을 받아들일 수 있을까.<br><br>\n<span style=\"color:var(--red);font-weight:900\">— 거대한 힘을 품은 소년의 이야기가 지금, 막을 올린다!<\/span>"
+},
+"c.kuro.n": {
+"en": "Ryuo Kuro",
+"ja": "竜王クロ",
+"ko": "류오 쿠로"
+},
+"c.kuro.d": {
+"en": "A bespectacled model student. Timid and gentle, yet kinder than anyone. Unaware of the black dragon sleeping inside him, <strong>he just wants to live a normal life.<\/strong> But fate won't leave him alone.",
+"ja": "メガネの優等生。臆病でおとなしいけれど、誰よりも優しい少年。自分の中に眠る黒龍の存在を知らないまま、<strong>普通に生きたいと願っている。<\/strong>しかし運命は彼を放っておかない。",
+"ko": "안경 모범생. 겁이 많고 순하지만, 누구보다 상냥한 소년. 자기 안에 잠든 흑룡의 존재를 모른 채 <strong>평범하게 살고 싶어 한다.<\/strong> 하지만 운명은 그를 가만두지 않는다."
+},
+"c.eunho.n": {
+"en": "Eunho",
+"ja": "ウンホ",
+"ko": "은호"
+},
+"c.eunho.d": {
+"en": "Kuro's childhood friend. Sly and full of mischief, but when Kuro is in danger <strong>he moves before anyone else.<\/strong> He has a secret even Kuro doesn't know.",
+"ja": "クロの幼なじみ。飄々としていてイタズラ好きだが、クロが危険にさらされると<strong>誰よりも先に動く。<\/strong>彼には、クロも知らない秘密がある。",
+"ko": "쿠로의 소꿉친구. 능글거리고 장난기 많지만 쿠로가 위험에 처하면 <strong>누구보다 먼저 움직인다.<\/strong> 그에겐 쿠로도 모르는 비밀이 있다."
+},
+"c.herb.n": {
+"en": "Herbaeken",
+"ja": "ヘルバーケン",
+"ko": "헤르바켄"
+},
+"c.herb.d": {
+"en": "An exchange student from abroad and a die-hard legend otaku. He drags Kuro and Eunho off on adventures to hunt down every legend in the academy. But what lies behind the <strong>cold glint<\/strong> hidden beneath his bright smile—?",
+"ja": "異国から来た留学生にして伝説オタク。学園のあらゆる伝説を探しに行こうと、クロとウンホを連れ回す。だが明るい笑顔の裏に隠した<strong>冷たい眼差し<\/strong>の正体は——?",
+"ko": "타국에서 온 유학생이자 전설 오타쿠. 학원의 온갖 전설을 찾아 모험을 떠나자며 쿠로와 은호를 끌고 다닌다. 하지만 밝은 웃음 뒤에 숨긴 <strong>싸늘한 눈빛<\/strong>의 정체는 —?"
+},
+"c.shiro.n": {
+"en": "Ryuo Shiro",
+"ja": "竜王シロ",
+"ko": "류오 시로"
+},
+"c.shiro.d": {
+"en": "Kuro's twin brother. Pure and childlike, but the other dragon dwelling within him, Lumensia, shouts <strong>\"Ore-sama is the strongest in the world!!\"<\/strong> and turns the whole academy into his playground.",
+"ja": "クロの双子の弟。純粋で子どものようだが、その中に宿るもう一体の龍「ルメンシア」は<strong>「俺様が世界最強だ!!」<\/strong>と叫び、学園をまるごと自分の遊び場にしてしまう。",
+"ko": "쿠로의 쌍둥이 동생. 순수하고 아이 같지만, 그 안에 깃든 또 하나의 용 '루멘시아'는 <strong>\"오레사마가 세계 최강이다!!\"<\/strong>를 외치며 학원을 통째로 자기 놀이터로 만들어 버린다."
+},
+"c.miko.n": {
+"en": "Ryuo Miko",
+"ja": "竜王ミコ",
+"ko": "류오 미코"
+},
+"c.miko.d": {
+"en": "Kuro's cousin and a disciple of his father, Yoshiyuki. A girl whose talent and pride both reach the sky. She clashes with Kuro over who will lead the family, but <strong>she has desperate reasons of her own.<\/strong>",
+"ja": "クロのいとこであり、その父ヨシユキの弟子。才能もプライドも天を突く少女。当主の座をめぐってクロと対立するが、<strong>彼女には彼女なりの切実な理由<\/strong>がある。",
+"ko": "쿠로의 사촌이자 그 아버지 요시유키의 제자. 재능과 자존심 모두 하늘을 찌르는 소녀. 당주 자리를 두고 쿠로와 대립하지만, <strong>그녀에겐 그녀만의 절박한 이유<\/strong>가 있다."
+},
+"v.cta": {
+"en": "Start reading now",
+"ja": "今すぐ作品を読む",
+"ko": "지금 바로 작품 보러가기"
+},
+"footer.note": {
+"en": "The author personally uploads backups of this work to the addresses below. These are official uploads, not reposts.",
+"ja": "本作品は作者本人が下記アドレスにもバックアップとして公式にアップロードしています。無断転載ではありません。",
+"ko": "본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다."
+},
+"st.done": {
+"en": "Available",
+"ja": "公開中",
+"ko": "완료"
+},
+"st.wip": {
+"en": "In progress",
+"ja": "執筆中",
+"ko": "작업중"
+},
+"st.plan": {
+"en": "Coming soon",
+"ja": "公開予定",
+"ko": "예정"
+},
+"type.novel": {
+"en": "Web Novel",
+"ja": "Web小説",
+"ko": "웹소설"
+},
+"list.of": {
+"en": "{t} List",
+"ja": "{t}一覧",
+"ko": "{t} 목록"
+},
+"list": {
+"en": "List",
+"ja": "一覧",
+"ko": "목록"
+},
+"back.list": {
+"en": "&larr; List",
+"ja": "&larr; 一覧",
+"ko": "&larr; 목록"
+},
+"vol.noPrev": {
+"en": "No previous part",
+"ja": "前の部はありません",
+"ko": "이전권 없음"
+},
+"vol.noNext": {
+"en": "No next part",
+"ja": "次の部はありません",
+"ko": "다음권 없음"
+},
+"vol.count": {
+"en": "{n} episodes",
+"ja": "全{n}話",
+"ko": "{n}화 수록"
+},
+"syn": {
+"en": "Synopsis",
+"ja": "あらすじ",
+"ko": "줄거리"
+},
+"cast.none": {
+"en": "No characters listed yet",
+"ja": "登場人物はまだ登録されていません",
+"ko": "등장인물이 아직 등록되지 않았습니다"
+},
+"note.none": {
+"en": "No production notes yet",
+"ja": "制作ノートはまだありません",
+"ko": "제작노트가 아직 작성되지 않았습니다"
+},
+"board.title": {
+"en": "Title",
+"ja": "タイトル",
+"ko": "제목"
+},
+"board.date": {
+"en": "Date",
+"ja": "日付",
+"ko": "날짜"
+},
+"lk.view": {
+"en": "View",
+"ja": "見る",
+"ko": "보기"
+},
+"lk.soon": {
+"en": "Coming soon",
+"ja": "準備中",
+"ko": "준비중"
+},
+"lk.pages": {
+"en": "{n} pages",
+"ja": "{n}ページ",
+"ko": "{n} 페이지"
+},
+"lk.all": {
+"en": "View all &rarr;",
+"ja": "すべて見る &rarr;",
+"ko": "전체 보기 &rarr;"
+},
+"fs.title": {
+"en": "Text size",
+"ja": "文字サイズ",
+"ko": "본문 글자 크기"
+},
+"fs.glyph": {
+"en": "Aa",
+"ja": "あ",
+"ko": "가"
+},
+"fs.hd": {
+"en": "Text size",
+"ja": "文字サイズ",
+"ko": "본문 크기"
+},
+"fs.minus": {
+"en": "Smaller",
+"ja": "小さく",
+"ko": "작게"
+},
+"fs.plus": {
+"en": "Larger",
+"ja": "大きく",
+"ko": "크게"
+},
+"fs.reset": {
+"en": "Reset",
+"ja": "元に戻す",
+"ko": "기본값으로"
+},
+"dl.btn": {
+"en": "Translate with DeepL",
+"ja": "DeepLで翻訳",
+"ko": "DeepL로 번역"
+},
+"dl.re": {
+"en": "Retranslate",
+"ja": "再翻訳",
+"ko": "재번역"
+},
+"dl.done": {
+"en": "Translated by DeepL",
+"ja": "DeepL翻訳済み",
+"ko": "DeepL 번역됨"
+},
+"dl.ing": {
+"en": "Translating with DeepL…",
+"ja": "DeepLで翻訳中…",
+"ko": "DeepL 번역 중…"
+},
+"loading": {
+"en": "Loading…",
+"ja": "読み込み中…",
+"ko": "불러오는 중…"
+},
+"ep.first": {
+"en": "First episode",
+"ja": "最初の話",
+"ko": "처음 화"
+},
+"ep.last": {
+"en": "Last episode",
+"ja": "最後の話",
+"ko": "마지막 화"
+},
+"ep.listBtn": {
+"en": "<span class=\"epb-long\">Episode <\/span>List",
+"ja": "<span class=\"epb-long\">エピソード<\/span>一覧",
+"ko": "<span class=\"epb-long\">에피소드 <\/span>목록"
+},
+"ep.list": {
+"en": "Episode List",
+"ja": "エピソード一覧",
+"ko": "에피소드 목록"
+},
+"ep.listOf": {
+"en": "{v} · Episodes",
+"ja": "{v} エピソード一覧",
+"ko": "{v} 에피소드 목록"
+},
+"err.nofile": {
+"en": "Couldn't find the text file for this episode",
+"ja": "本文ファイルが見つかりません",
+"ko": "본문 파일을 찾을 수 없습니다"
+},
+"err.load": {
+"en": "Failed to load",
+"ja": "読み込みに失敗しました",
+"ko": "불러오기 실패"
+},
+"err.http": {
+"en": "Failed to load (HTTP {n})",
+"ja": "読み込みに失敗しました (HTTP {n})",
+"ko": "불러오기 실패 (HTTP {n})"
+},
+"err.404": {
+"en": "File not found (404)",
+"ja": "ファイルが見つかりません (404)",
+"ko": "파일을 찾을 수 없습니다 (404)"
+},
+"fep.prev": {
+"en": "Previous episode",
+"ja": "前の話",
+"ko": "이전 화"
+},
+"fep.next": {
+"en": "Next episode",
+"ja": "次の話",
+"ko": "다음 화"
+},
+"hs.watch": {
+"en": "View",
+"ja": "見る",
+"ko": "보러가기"
+},
+"hs.yt": {
+"en": "Watch on YouTube",
+"ja": "YouTubeで見る",
+"ko": "유튜브에서 보기"
+}
+});
+
+/* Swap the HTML text to Japanese / Korean before the page is shown.
+   data-t = inner text, data-t-title / data-t-aria / data-t-ph = attributes. */
+function bhsI18nApply(){
+  if(window.__bhsTL !== 'en'){
+    document.title = T('doc.title');
+    document.querySelectorAll('[data-t]').forEach(function(n){ n.innerHTML = T(n.getAttribute('data-t')); });
+    document.querySelectorAll('[data-t-title]').forEach(function(n){ n.title = T(n.getAttribute('data-t-title')); });
+    document.querySelectorAll('[data-t-aria]').forEach(function(n){ n.setAttribute('aria-label', T(n.getAttribute('data-t-aria'))); });
+    document.querySelectorAll('[data-t-ph]').forEach(function(n){ n.placeholder = T(n.getAttribute('data-t-ph')); });
+  }
+  document.documentElement.classList.remove('i18n-wait');
+}
+document.addEventListener('DOMContentLoaded', bhsI18nApply);
+
+/* Episode status is stored as 완료 / 작업중 / 예정 inside the page; show it in the page language */
+function bhsStLabel(s){ return T('st.' + bhsStCls(s)); }
+function bhsTypeLabel(t){ return t === '웹소설' ? T('type.novel') : t; }
+</script>
 
 <script>
 /* ══════════════════════════════════════════════════════
@@ -1423,77 +1964,77 @@ var BHS_CAST_IMG = 'Blood_High_School/images/char/';
 var BHS_CAST = {
 
 'novel-1':{
-  part:'PART ONE', num:'1부', sub:'용의 부활편',
+  part:"PART ONE", num:{"en": "1", "ja": "第1部", "ko": "1부"}, sub:{"en": "Rise of the Dragon", "ja": "龍の復活編", "ko": "용의 부활편"},
   groups:[
-    {en:'MAIN CHARACTERS', ko:'주연', cols:[
-      [ {img:'1_kuro.png',   tags:[['human','인간']],  name:'류오 쿠로',
-         desc:'평범하고 순진한 모범생. 기가 약하고 겁이 많지만, 싸움이 싫은 만큼 관계를 소중히 여긴다.'},
-        {img:'2_Lackness.png',       tags:[['dragon','흑룡']], name:'라크니스',
-         desc:'쿠로의 몸속에 잠든 전설의 어둠의 다크 드래곤. 위기의 순간 쿠로를 대신해 나선다.'} ],
-      [ {img:'3_Eun-ho.png',         tags:[['human','인간']],  name:'은호',
-         desc:'쿠로의 소꿉친구. 능글거리고 장난이 많다. 쿨한 척하지만 쿠로와 관련된 일은 먼저 나선다.'},
-        {img:'4_Kitsune_no_Shinrei.png', tags:[['spirit','여우 신령']], name:'여우 신령',
-         desc:'은호의 본모습. 쿠로의 아버지인 요시유키의 부탁으로 쿠로를 지키는 천년 여우 신령.'} ],
-      [ {img:'5_Herbaeken.png',      tags:[['human','인간']],  name:'헤르바켄',
-         desc:'전설을 쫓아 건너온 전설 오타쿠. 매일 새로운 전설을 들고 와 쿠로와 은호를 끌어들인다.'},
-        {img:'6_Herbaeken_ver2.png', tags:[['herb','헤르바가문의 후예']], name:'헤르바켄',
-         desc:'천 년 전 멸망한 용족 왕국 백성의 후예. 라크니스를 처단해야 하는 숙명을 짊어졌다.'} ],
-      [ {img:'7_Siro.png',           tags:[['human','인간']],  name:'류오 시로',
-         desc:'쿠로의 쌍둥이 동생. 세상 경험이 별로 없어 어린아이 같은 상태. 와가마마 기질.'},
-        {img:'8_Lumensia.png',       tags:[['baek','백룡']],   name:'루멘시아',
-         desc:'봉인을 거부한 또 다른 용의 힘. 오레사마 기질로 세계 최강자를 노리며 서열 도장깨기 중.'} ]
+    {en:"MAIN CHARACTERS", sub:{"en": "", "ja": "主要人物", "ko": "주연"}, cols:[
+      [ {img:'1_kuro.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]],  name:{"en": "Ryuo Kuro", "ja": "竜王クロ", "ko": "류오 쿠로"},
+         desc:{"en": "An ordinary, naive model student. Timid and easily scared, but because he hates fighting, he treasures the bonds he has.", "ja": "平凡で素直な優等生。気が弱く臆病だが、争いが嫌いなぶん、人とのつながりを大切にする。", "ko": "평범하고 순진한 모범생. 기가 약하고 겁이 많지만, 싸움이 싫은 만큼 관계를 소중히 여긴다."}},
+        {img:'2_Lackness.png',       tags:[["dragon",{"en": "Black Dragon", "ja": "黒龍", "ko": "흑룡"}]], name:{"en": "Lackness", "ja": "ラクニス", "ko": "라크니스"},
+         desc:{"en": "The legendary dark dragon of shadow asleep inside Kuro. In moments of crisis, he steps forward in Kuro's place.", "ja": "クロの体の中に眠る、伝説の闇のダークドラゴン。危機の瞬間、クロに代わって表に出る。", "ko": "쿠로의 몸속에 잠든 전설의 어둠의 다크 드래곤. 위기의 순간 쿠로를 대신해 나선다."}} ],
+      [ {img:'3_Eun-ho.png',         tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]],  name:{"en": "Eunho", "ja": "ウンホ", "ko": "은호"},
+         desc:{"en": "Kuro's childhood friend. Sly and full of jokes. He plays it cool, but when it comes to Kuro, he's always the first to step in.", "ja": "クロの幼なじみ。飄々としていてイタズラ好き。クールなふりをしているが、クロのこととなると真っ先に動く。", "ko": "쿠로의 소꿉친구. 능글거리고 장난이 많다. 쿨한 척하지만 쿠로와 관련된 일은 먼저 나선다."}},
+        {img:'4_Kitsune_no_Shinrei.png', tags:[["spirit",{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령"}]], name:{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령"},
+         desc:{"en": "Eunho's true form. A thousand-year-old fox spirit who protects Kuro at the request of Kuro's father, Yoshiyuki.", "ja": "ウンホの本当の姿。クロの父ヨシユキの頼みでクロを守る、千年を生きる狐の神霊。", "ko": "은호의 본모습. 쿠로의 아버지인 요시유키의 부탁으로 쿠로를 지키는 천년 여우 신령."}} ],
+      [ {img:'5_Herbaeken.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]],  name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄"},
+         desc:{"en": "A legend otaku who came from abroad chasing legends. Every day he shows up with a new one and drags Kuro and Eunho along.", "ja": "伝説を追って海を渡ってきた伝説オタク。毎日新しい伝説を持ち込んでは、クロとウンホを巻き込む。", "ko": "전설을 쫓아 건너온 전설 오타쿠. 매일 새로운 전설을 들고 와 쿠로와 은호를 끌어들인다."}},
+        {img:'6_Herbaeken_ver2.png', tags:[["herb",{"en": "Herba Clan Heir", "ja": "ヘルバ家の末裔", "ko": "헤르바가문의 후예"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄"},
+         desc:{"en": "A descendant of the people of the dragon kingdom that fell a thousand years ago. He bears the fate of having to slay Lackness.", "ja": "千年前に滅んだ龍族の王国の民の末裔。ラクニスを討たねばならない宿命を背負っている。", "ko": "천 년 전 멸망한 용족 왕국 백성의 후예. 라크니스를 처단해야 하는 숙명을 짊어졌다."}} ],
+      [ {img:'7_Siro.png',           tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]],  name:{"en": "Ryuo Shiro", "ja": "竜王シロ", "ko": "류오 시로"},
+         desc:{"en": "Kuro's twin brother. Having seen little of the world, he's still much like a small child. Willful and spoiled.", "ja": "クロの双子の弟。世間をほとんど知らず、子どものような状態。わがままな気質。", "ko": "쿠로의 쌍둥이 동생. 세상 경험이 별로 없어 어린아이 같은 상태. 와가마마 기질."}},
+        {img:'8_Lumensia.png',       tags:[["baek",{"en": "White Dragon", "ja": "白龍", "ko": "백룡"}]],   name:{"en": "Lumensia", "ja": "ルメンシア", "ko": "루멘시아"},
+         desc:{"en": "The power of another dragon, one that refused to be sealed. A self-styled Ore-sama out to be the strongest in the world, taking on everyone to settle the pecking order.", "ja": "封印を拒んだ、もう一体の龍の力。俺様気質で世界最強を狙い、序列をかけて片っ端から挑んでいる。", "ko": "봉인을 거부한 또 다른 용의 힘. 오레사마 기질로 세계 최강자를 노리며 서열 도장깨기 중."}} ]
     ]},
-    {en:'SUPPORTING', ko:'조연', cols:[
-      [ {img:'9_Riusu_Fereru.png',   tags:[['vampire','뱀파이어']], name:'리우스 페렐',
-         desc:'성 세인츠 학원 학생회장. 장미 정원을 피로 물들이는 게 취미인 변태.'} ],
-      [ {img:'10_Shota.png',         tags:[['doll','마리오네트']],  name:'쇼타',
-         desc:'성 세인츠 학원 교장. 주인님이 원하는 것을 모으는 미쳐버린 인형.'} ],
-      [ {img:'11_Lubell.png',        tags:[['beast','신성 마물']],  name:'루벨',
-         desc:'학원 뒷편 버려진 성지에서 발견한 신성 마물. 무리에서 소외됐다.'} ],
-      [ {img:'12_Murasaki.png',      tags:[['human','인간'],['mage','흑마법사']], name:'무라사키',
-         desc:'1-B반 쿠로네 담임. 복화술을 하는 괴짜 교사. 모두에게 무시당한다.'} ],
-      [ {img:'13_Miko.png',          tags:[['human','인간'],['miko','무녀']],     name:'류오 미코',
-         desc:'쿠로를 무시하는 동갑 사촌. 요시유키의 제자로, 당주 자리를 두고 라이벌 관계에 있다.'} ],
-      [ {img:'14_Yoshiyuki.png',     tags:[['human','인간'],['onmyo','음양사']],  name:'류오 요시유키',
-         desc:'쿠로의 아버지. 희대의 음양사이자 류오가의 전 당주.'} ],
-      [ {img:'15_Jiji.png',          tags:[['human','인간']], name:'지지',
-         desc:'쿠로의 할아버지이자 류오가의 현 당주. 고집불통 노인.'} ],
-      [ {img:'16_Shitsujide_Hakase.png', tags:[['human','인간']], name:'시츠지데 하카세',
-         desc:'루멘시아의 집사. 예의 바른 태도 뒤에 자신만의 목적을 숨기고 있다.'} ]
+    {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연"}, cols:[
+      [ {img:'9_Riusu_Fereru.png',   tags:[["vampire",{"en": "Vampire", "ja": "ヴァンパイア", "ko": "뱀파이어"}]], name:{"en": "Rius Ferel", "ja": "リウス・フェレル", "ko": "리우스 페렐"},
+         desc:{"en": "Student council president of St. Saints Academy. A creep whose hobby is staining the rose garden with blood.", "ja": "聖セインツ学院の生徒会長。薔薇の庭を血で染めるのが趣味の変態。", "ko": "성 세인츠 학원 학생회장. 장미 정원을 피로 물들이는 게 취미인 변태."}} ],
+      [ {img:'10_Shota.png',         tags:[["doll",{"en": "Marionette", "ja": "マリオネット", "ko": "마리오네트"}]],  name:{"en": "Shota", "ja": "ショウタ", "ko": "쇼타"},
+         desc:{"en": "Principal of St. Saints Academy. A doll gone mad, collecting whatever his master desires.", "ja": "聖セインツ学院の校長。ご主人様が望むものを集める、狂ってしまった人形。", "ko": "성 세인츠 학원 교장. 주인님이 원하는 것을 모으는 미쳐버린 인형."}} ],
+      [ {img:'11_Lubell.png',        tags:[["beast",{"en": "Sacred Beast", "ja": "神聖な魔物", "ko": "신성 마물"}]],  name:{"en": "Lubell", "ja": "ルベル", "ko": "루벨"},
+         desc:{"en": "A sacred beast found in the abandoned holy site behind the academy. An outcast from its herd.", "ja": "学院の裏の打ち捨てられた聖地で見つかった神聖な魔物。群れから疎外されていた。", "ko": "학원 뒷편 버려진 성지에서 발견한 신성 마물. 무리에서 소외됐다."}} ],
+      [ {img:'12_Murasaki.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["mage",{"en": "Dark Mage", "ja": "黒魔法使い", "ko": "흑마법사"}]], name:{"en": "Murasaki", "ja": "ムラサキ", "ko": "무라사키"},
+         desc:{"en": "Homeroom teacher of Kuro's class, 1-B. An oddball who does ventriloquism. Nobody takes him seriously.", "ja": "クロのクラス1-Bの担任。腹話術をする変わり者の教師。みんなから相手にされない。", "ko": "1-B반 쿠로네 담임. 복화술을 하는 괴짜 교사. 모두에게 무시당한다."}} ],
+      [ {img:'13_Miko.png',          tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["miko",{"en": "Shrine Maiden", "ja": "巫女", "ko": "무녀"}]],     name:{"en": "Ryuo Miko", "ja": "竜王ミコ", "ko": "류오 미코"},
+         desc:{"en": "Kuro's cousin, the same age, who looks down on him. A disciple of Yoshiyuki and his rival for the position of family head.", "ja": "クロを見下す同い年のいとこ。ヨシユキの弟子で、当主の座をめぐるライバル関係にある。", "ko": "쿠로를 무시하는 동갑 사촌. 요시유키의 제자로, 당주 자리를 두고 라이벌 관계에 있다."}} ],
+      [ {img:'14_Yoshiyuki.png',     tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["onmyo",{"en": "Onmyoji", "ja": "陰陽師", "ko": "음양사"}]],  name:{"en": "Ryuo Yoshiyuki", "ja": "竜王ヨシユキ", "ko": "류오 요시유키"},
+         desc:{"en": "Kuro's father. A once-in-a-generation onmyoji and former head of the Ryuo family.", "ja": "クロの父。稀代の陰陽師であり、竜王家の前当主。", "ko": "쿠로의 아버지. 희대의 음양사이자 류오가의 전 당주."}} ],
+      [ {img:'15_Jiji.png',          tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]], name:{"en": "Jiji", "ja": "ジジ", "ko": "지지"},
+         desc:{"en": "Kuro's grandfather and the current head of the Ryuo family. A stubborn old man.", "ja": "クロの祖父であり、竜王家の現当主。頑固な老人。", "ko": "쿠로의 할아버지이자 류오가의 현 당주. 고집불통 노인."}} ],
+      [ {img:'16_Shitsujide_Hakase.png', tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]], name:{"en": "Shitsujide Hakase", "ja": "シツジデ・ハカセ", "ko": "시츠지데 하카세"},
+         desc:{"en": "Lumensia's butler. Behind his polite manners, he hides a purpose all his own.", "ja": "ルメンシアの執事。礼儀正しい態度の裏に、自分だけの目的を隠している。", "ko": "루멘시아의 집사. 예의 바른 태도 뒤에 자신만의 목적을 숨기고 있다."}} ]
     ]}
   ]
 },
 
 'novel-2':{
-  part:'PART TWO', num:'2부', sub:'류오가편',
+  part:"PART TWO", num:{"en": "2", "ja": "第2部", "ko": "2부"}, sub:{"en": "The Ryuo Clan Arc", "ja": "竜王家編", "ko": "류오가편"},
   groups:[
-    {en:'MAIN CHARACTERS', ko:'주연', cols:[
-      [ {img:'1_kuro.png', tags:[['human','인간'],['dragon','흑룡']], name:'류오 쿠로',
-         desc:'류오가의 새 당주. 여전히 기가 약하지만 힘과 가문의 무게 사이에서 자신다운 방식을 고민하고 있다.'} ],
-      [ {img:'3_Eun-ho.png',      tags:[['human','인간'],['spirit','여우 신령']], name:'은호',
-         desc:'쿠로 아버지의 부탁으로 소꿉친구로서 곁에 머물러 온 천년 여우 신령. 류오가의 아이들을 필사적으로 지킨다.'} ],
-      [ {img:'17_Aoi.png',        tags:[['human','인간'],['shadow','금단주술사']], name:'카게히라 아오이',
-         desc:'뒷가문 카게히라가의 당주. 겉은 능청스럽고 다정함이 본모습이지만, 당주로서는 냉혹할 수밖에 없다.'} ],
-      [ {img:'13_Miko.png',       tags:[['human','인간'],['miko','무녀']], name:'류오 미코',
-         desc:'악인 렌의 딸이라는 굴레에도 굴하지 않는 요시유키의 제자. 류오가를 바로잡겠다는 독한 야망을 품고 있다.'} ]
+    {en:"MAIN CHARACTERS", sub:{"en": "", "ja": "主要人物", "ko": "주연"}, cols:[
+      [ {img:'1_kuro.png', tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["dragon",{"en": "Black Dragon", "ja": "黒龍", "ko": "흑룡"}]], name:{"en": "Ryuo Kuro", "ja": "竜王クロ", "ko": "류오 쿠로"},
+         desc:{"en": "The new head of the Ryuo family. Still timid, but caught between his power and the weight of the family, he searches for a way that's truly his own.", "ja": "竜王家の新しい当主。相変わらず気は弱いが、力と家の重みの間で、自分らしいやり方を模索している。", "ko": "류오가의 새 당주. 여전히 기가 약하지만 힘과 가문의 무게 사이에서 자신다운 방식을 고민하고 있다."}} ],
+      [ {img:'3_Eun-ho.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["spirit",{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령"}]], name:{"en": "Eunho", "ja": "ウンホ", "ko": "은호"},
+         desc:{"en": "A thousand-year-old fox spirit who has stayed by Kuro's side as his childhood friend at his father's request. He fights desperately to protect the children of the Ryuo family.", "ja": "クロの父の頼みで、幼なじみとしてそばに居続けてきた千年の狐の神霊。竜王家の子どもたちを必死に守る。", "ko": "쿠로 아버지의 부탁으로 소꿉친구로서 곁에 머물러 온 천년 여우 신령. 류오가의 아이들을 필사적으로 지킨다."}} ],
+      [ {img:'17_Aoi.png',        tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사"}]], name:{"en": "Kagehira Aoi", "ja": "影片アオイ", "ko": "카게히라 아오이"},
+         desc:{"en": "Head of the Kagehira, the family that works in the shadows. Easygoing on the surface and kind at heart, but as family head he has no choice but to be ruthless.", "ja": "裏の家・影片家の当主。表向きは飄々としていて、優しさこそが本来の姿だが、当主としては冷酷にならざるを得ない。", "ko": "뒷가문 카게히라가의 당주. 겉은 능청스럽고 다정함이 본모습이지만, 당주로서는 냉혹할 수밖에 없다."}} ],
+      [ {img:'13_Miko.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["miko",{"en": "Shrine Maiden", "ja": "巫女", "ko": "무녀"}]], name:{"en": "Ryuo Miko", "ja": "竜王ミコ", "ko": "류오 미코"},
+         desc:{"en": "Yoshiyuki's disciple, unbowed by the stigma of being the daughter of the villain Ren. She harbors a fierce ambition to set the Ryuo family right.", "ja": "悪人レンの娘という枷にも屈しない、ヨシユキの弟子。竜王家を正すという強い野望を抱いている。", "ko": "악인 렌의 딸이라는 굴레에도 굴하지 않는 요시유키의 제자. 류오가를 바로잡겠다는 독한 야망을 품고 있다."}} ]
     ]},
-    {en:'SUPPORTING', ko:'조연', cols:[
-      [ {img:'5_Herbaeken.png',   tags:[['human','인간'],['herb','탐구자']], name:'헤르바켄',
-         desc:'복수귀에서 벗어나 쿠로와 은호의 동료가 됐다. 용족 전설의 진실을 홀로 쫓는다.'} ],
-      [ {img:'18_Jinnokagi.png',     tags:[['gold','진노카기'],['gold','인외']], name:'그 존재',
-         desc:'보는 이에 따라 다르게 인식되는 정체불명의 인외. 그 목적은 알 수 없다.'} ],
-      [ {img:'19_Yuka.png',       tags:[['human','인간'],['shadow','금단주술사']], name:'카게히라 유카',
-         desc:'카게히라가를 지키는 아오이의 여동생. 전투 시엔 말 한마디 없이 침입자를 처리한다.'} ],
-      [ {img:'7_Siro.png',        tags:[['human','인간'],['baek','백룡']], name:'류오 시로',
-         desc:'류오가에 합류한 쿠로의 쌍둥이 동생. 서열 정리 후 헤르바켄에게 훈육당하고 있다.'} ],
-      [ {img:'20_Ren.png',    tags:[['human','인간']], name:'류오 렌',
-         desc:'미코의 아버지. 류오가 역대 최악의 당주. 비극의 씨앗을 뿌린 인물.'} ],
-      [ {img:'14_Yoshiyuki.png',  tags:[['human','인간'],['onmyo','음양사']], name:'류오 요시유키',
-         desc:'쿠로의 아버지. 류오가의 부패를 청산했던 올바른 당주. 모든 이야기의 시작점.'} ],
-      [ {img:'15_Jiji.png',       tags:[['human','인간']], name:'지지',
-         desc:'쿠로의 할아버지이자 류오가의 전 당주. 가문의 전통을 고집하는 완고한 노인이지만, 무언가를 감추고 있다.'} ],
-      [ {img:'11_Lubell.png',     tags:[['beast','신성 마물']], name:'루벨',
-         desc:'학원 뒷편 버려진 성지에서 발견해 거둔 신성 마물. 현 전설연구부의 마스코트.'} ]
+    {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연"}, cols:[
+      [ {img:'5_Herbaeken.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["herb",{"en": "Seeker", "ja": "探究者", "ko": "탐구자"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄"},
+         desc:{"en": "No longer driven by revenge, he has become Kuro and Eunho's comrade. Alone, he chases the truth behind the legend of the dragon clan.", "ja": "復讐の鬼から抜け出し、クロとウンホの仲間になった。龍族の伝説の真実をひとりで追っている。", "ko": "복수귀에서 벗어나 쿠로와 은호의 동료가 됐다. 용족 전설의 진실을 홀로 쫓는다."}} ],
+      [ {img:'18_Jinnokagi.png',     tags:[["gold",{"en": "Shin no Kagi", "ja": "眞ノ鍵", "ko": "진노카기"}],["gold",{"en": "Nonhuman", "ja": "人外", "ko": "인외"}]], name:{"en": "That Being", "ja": "その存在", "ko": "그 존재"},
+         desc:{"en": "An unknown nonhuman that appears differently to each person who sees it. Its purpose is unknown.", "ja": "見る者によって異なって認識される、正体不明の人外。その目的はわからない。", "ko": "보는 이에 따라 다르게 인식되는 정체불명의 인외. 그 목적은 알 수 없다."}} ],
+      [ {img:'19_Yuka.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사"}]], name:{"en": "Kagehira Yuka", "ja": "影片ユカ", "ko": "카게히라 유카"},
+         desc:{"en": "Aoi's younger sister, who guards the Kagehira house. In battle, she disposes of intruders without a single word.", "ja": "影片家を守るアオイの妹。戦闘では一言も発さずに侵入者を始末する。", "ko": "카게히라가를 지키는 아오이의 여동생. 전투 시엔 말 한마디 없이 침입자를 처리한다."}} ],
+      [ {img:'7_Siro.png',        tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["baek",{"en": "White Dragon", "ja": "白龍", "ko": "백룡"}]], name:{"en": "Ryuo Shiro", "ja": "竜王シロ", "ko": "류오 시로"},
+         desc:{"en": "Kuro's twin brother, now part of the Ryuo household. Since the pecking order was settled, he's been getting disciplined by Herbaeken.", "ja": "竜王家に加わったクロの双子の弟。序列整理のあと、ヘルバーケンにしつけられている。", "ko": "류오가에 합류한 쿠로의 쌍둥이 동생. 서열 정리 후 헤르바켄에게 훈육당하고 있다."}} ],
+      [ {img:'20_Ren.png',    tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]], name:{"en": "Ryuo Ren", "ja": "竜王レン", "ko": "류오 렌"},
+         desc:{"en": "Miko's father. The worst head in the Ryuo family's history. The man who sowed the seeds of tragedy.", "ja": "ミコの父。竜王家の歴代最悪の当主。悲劇の種をまいた人物。", "ko": "미코의 아버지. 류오가 역대 최악의 당주. 비극의 씨앗을 뿌린 인물."}} ],
+      [ {img:'14_Yoshiyuki.png',  tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["onmyo",{"en": "Onmyoji", "ja": "陰陽師", "ko": "음양사"}]], name:{"en": "Ryuo Yoshiyuki", "ja": "竜王ヨシユキ", "ko": "류오 요시유키"},
+         desc:{"en": "Kuro's father. The righteous head who cleaned out the Ryuo family's corruption. Where every story begins.", "ja": "クロの父。竜王家の腐敗を清算した正しき当主。すべての物語の始まり。", "ko": "쿠로의 아버지. 류오가의 부패를 청산했던 올바른 당주. 모든 이야기의 시작점."}} ],
+      [ {img:'15_Jiji.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}]], name:{"en": "Jiji", "ja": "ジジ", "ko": "지지"},
+         desc:{"en": "Kuro's grandfather and former head of the Ryuo family. A rigid old man who clings to family tradition, but he's hiding something.", "ja": "クロの祖父であり、竜王家の前当主。家の伝統に固執する頑固な老人だが、何かを隠している。", "ko": "쿠로의 할아버지이자 류오가의 전 당주. 가문의 전통을 고집하는 완고한 노인이지만, 무언가를 감추고 있다."}} ],
+      [ {img:'11_Lubell.png',     tags:[["beast",{"en": "Sacred Beast", "ja": "神聖な魔物", "ko": "신성 마물"}]], name:{"en": "Lubell", "ja": "ルベル", "ko": "루벨"},
+         desc:{"en": "The sacred beast they found and took in at the abandoned holy site behind the academy. Now the mascot of the Legend Research Club.", "ja": "学院の裏の打ち捨てられた聖地で見つけて引き取った神聖な魔物。現・伝説研究部のマスコット。", "ko": "학원 뒷편 버려진 성지에서 발견해 거둔 신성 마물. 현 전설연구부의 마스코트."}} ]
     ]}
   ]
 }
@@ -1748,7 +2289,7 @@ function bhsRenderHistory(){
     }
 
     var thumb = img
-      ? '<a class="hs-thumb" href="' + bhsEsc(it.url) + '" target="_blank" rel="noopener" aria-label="' + bhsEsc(it.name || '') + ' 보러가기">'
+      ? '<a class="hs-thumb" href="' + bhsEsc(it.url) + '" target="_blank" rel="noopener" aria-label="' + bhsEsc(it.name || '') + ' ' + T('hs.watch') + '">'
         + '<img src="' + bhsEsc(img) + '" alt="" loading="lazy"'
         + ' onerror="this.parentNode.style.display=\'none\'">'
         + (yt ? '<span class="hs-play"></span>' : '')
@@ -1759,7 +2300,7 @@ function bhsRenderHistory(){
       ? '<a class="hs-link" href="' + bhsEsc(it.url) + '" target="_blank" rel="noopener">'
         + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
         + '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>'
-        + (yt ? '유튜브에서 보기' : '보러가기') + '</a>'
+        + (yt ? T('hs.yt') : T('hs.watch')) + '</a>'
       : '';
 
     var isNow = (i === (H.items || []).length - 1);   /* 마지막 = 지금 */
@@ -1849,9 +2390,9 @@ async function bhsFetchText(url){
     if(res.ok) return await res.text();
     last = res.status;
     if(res.status === 404) continue;
-    throw new Error('불러오기 실패 (HTTP ' + res.status + ')');
+    throw new Error(T('err.http', {n: res.status}));
   }
-  throw new Error(last === 404 ? '파일을 찾을 수 없습니다 (404)' : '불러오기 실패');
+  throw new Error(last === 404 ? T('err.404') : T('err.load'));
 }
 
 /* ══════ 라우팅 ══════ */
@@ -1872,13 +2413,13 @@ function biqCopyEmail(btn){
   navigator.clipboard.writeText('rrkt.biz@proton.me').then(function(){
     var svg = btn.querySelector('.biq-copy-svg'), txt = btn.querySelector('.biq-copy-txt');
     if(svg) svg.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-    if(txt) txt.textContent = '완료';
+    if(txt) txt.textContent = T('copied');
     btn.style.borderColor = '#bbf7d0'; btn.style.background = '#f0fdf4'; btn.style.color = '#22c55e';
     setTimeout(function(){
       var s2 = btn.querySelector('.biq-copy-svg');
       if(s2) s2.outerHTML = '<svg class="biq-copy-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
       var t2 = btn.querySelector('.biq-copy-txt');
-      if(t2) t2.textContent = '복사';
+      if(t2) t2.textContent = T('copy');
       btn.style.borderColor = ''; btn.style.background = ''; btn.style.color = '';
     }, 1800);
   });
@@ -2028,7 +2569,7 @@ function bhsBuildTabs(){
     b.id = 'bt-tab-' + v.id;
     b.dataset.vol = v.id;
     b.textContent = v.sub;
-    if(v.available === false){ b.disabled = true; b.title = '공개 예정'; }
+    if(v.available === false){ b.disabled = true; b.title = T('tab.soon'); }
     else b.onclick = function(){ bhsGoAnimated('vol', v.id); };
     /* 로그 탭이 항상 맨 뒤에 오도록 그 앞에 삽입 */
     var hist = document.getElementById('bt-tab-history');
@@ -2138,21 +2679,26 @@ window.bhsOpenLink = function(url){
 };
 
 /* ── 등장인물 오버레이 — BHS_CAST 를 HTML 카드로 그립니다 ── */
+/* Data fields may be {en, ja, ko}: pick the page language (English if missing) */
+function bhsL(x){
+  if(x && typeof x === 'object' && !Array.isArray(x)) return (x[window.__bhsTL] != null) ? x[window.__bhsTL] : (x.en != null ? x.en : '');
+  return x == null ? '' : x;
+}
 function bhsCastCard(c, pos){
   var src = BHS_ROOT + BHS_CAST_IMG + (c.img || '');
   var im  = c.img
-    ? '<img src="' + src + '" alt="' + bhsEsc(c.name) + '" loading="lazy"'
+    ? '<img src="' + src + '" alt="' + bhsEsc(bhsL(c.name)) + '" loading="lazy"'
       + ' onerror="this.style.display=\'none\';this.parentNode.classList.add(\'noimg\')">'
     : '';
   var tg = (c.tags || []).map(function(t){
-    return '<span class="cast-tag tg-' + t[0] + '">' + bhsEsc(t[1]) + '</span>';
+    return '<span class="cast-tag tg-' + t[0] + '">' + bhsEsc(bhsL(t[1])) + '</span>';
   }).join('');
   return '<div class="cast-card' + (pos ? pos.cls : '') + '"' + (pos ? pos.st : '') + '>'
        + '<div class="cast-ci' + (c.img ? '' : ' noimg') + '">' + im + '</div>'
        + '<div class="cast-bd">'
        + (tg ? '<div class="cast-tags">' + tg + '</div>' : '')
-       + '<div class="cast-nm">' + bhsEsc(c.name) + '</div>'
-       + '<div class="cast-de">' + bhsEsc(c.desc || '') + '</div>'
+       + '<div class="cast-nm">' + bhsEsc(bhsL(c.name)) + '</div>'
+       + '<div class="cast-de">' + bhsEsc(bhsL(c.desc)) + '</div>'
        + '</div></div>';
 }
 function bhsCastHtml(d){
@@ -2160,13 +2706,13 @@ function bhsCastHtml(d){
     + '<div class="cast-doc-hd">'
     + '<div class="cast-doc-hd-l">'
     + '<div class="cast-doc-eng"><b>BLOOD</b> HIGH SCHOOL</div>'
-    + '<div class="cast-doc-t">블러드하이스쿨</div>'
-    + '<span class="cast-doc-badge">등장인물 소개</span>'
+    + '<div class="cast-doc-t">' + T('brand') + '</div>'
+    + '<span class="cast-doc-badge">' + T('cast.badge') + '</span>'
     + '</div>'
     + '<div class="cast-doc-hd-r">'
-    + '<span class="cast-doc-num">' + bhsEsc(d.num) + '</span>'
+    + '<span class="cast-doc-num">' + bhsEsc(bhsL(d.num)) + '</span>'
     + '<span><span class="cast-doc-part">' + bhsEsc(d.part) + '</span>'
-    + '<span class="cast-doc-sub">' + bhsEsc(d.sub) + '</span>'
+    + '<span class="cast-doc-sub">' + bhsEsc(bhsL(d.sub)) + '</span>'
     + '<span class="cast-doc-cast">CAST INTRODUCTION</span></span>'
     + '</div></div>';
   (d.groups || []).forEach(function(g){
@@ -2195,11 +2741,12 @@ function bhsCastHtml(d){
         cells += c[r] ? bhsCastCard(c[r], m) : '<div' + (m ? m.st : '') + '></div>';
       });
     }
-    h += '<div class="cast-sec"><i></i>' + bhsEsc(g.en) + '<b>&middot; ' + bhsEsc(g.ko) + '</b><u></u></div>'
+    var gs = bhsL(g.sub);
+    h += '<div class="cast-sec"><i></i>' + bhsEsc(g.en) + (gs ? '<b>&middot; ' + bhsEsc(gs) + '</b>' : '') + '<u></u></div>'
        + '<div class="cast-grid' + (paired ? ' paired' : '') + '">' + cells + '</div>';
   });
   h += '<div class="cast-doc-ft"><span>BLOOD HIGH SCHOOL &middot; '
-     + bhsEsc(d.num) + ' &middot; ' + bhsEsc(d.sub) + '</span><span>rrkt.biz</span></div>';
+     + bhsEsc(bhsL(d.num)) + ' &middot; ' + bhsEsc(bhsL(d.sub)) + '</span><span>rrkt.biz</span></div>';
   return h + '</div>';
 }
 window.bhsOpenCast = function(volId, label){
@@ -2207,7 +2754,7 @@ window.bhsOpenCast = function(volId, label){
   if(!d){ console.warn('[BHS] 아직 등장인물 데이터가 없습니다: ' + volId); return; }
   var ov = document.getElementById('castOverlay');
   document.getElementById('castOverlayBody').innerHTML = bhsCastHtml(d);
-  document.getElementById('castOverlayTitle').textContent = label || '등장인물';
+  document.getElementById('castOverlayTitle').textContent = label || T('cast.title');
   var err = document.getElementById('castOverlayError');
   if(err){ err.style.display = 'none'; err.textContent = ''; }
   ov.scrollTop = 0;
@@ -2249,7 +2796,7 @@ window.bhsOpenNote = function(volId){
   document.getElementById('noteOverlayBody').innerHTML =
       '<div class="note-doc">' + bhsEsc(v.label) + '</div>'
     + paras.map(function(t){ return '<p class="note-p">' + bhsEsc(t) + '</p>'; }).join('');
-  document.getElementById('noteOverlayTitle').textContent = (v.sub ? v.sub + ' 제작노트' : '제작노트');
+  document.getElementById('noteOverlayTitle').textContent = (v.sub ? T('note.titleP', {p: v.sub}) : T('note.title'));
 
   var ov = document.getElementById('noteOverlay');
   ov.scrollTop = 0;
@@ -2276,7 +2823,7 @@ function bhsLk(v){
 }
 function bhsLkMeta(d){
   var a = [];
-  if(d.count) a.push(d.count + ' 페이지');
+  if(d.count) a.push(T('lk.pages', {n: d.count}));
   if(d.meta)  a.push(d.meta);
   return a.join(' · ');
 }
@@ -2292,7 +2839,7 @@ function bhsLkCells(v, slots){
         + ' onerror="this.parentNode.classList.add(\'lk-empty\');this.remove()">'
       : '';
     badge = (i === slots - 1)
-      ? '<span class="lk-badge">' + (wip ? '준비중' : (rest > 0 ? '+' + rest : '보기')) + '</span>'
+      ? '<span class="lk-badge">' + (wip ? T('lk.soon') : (rest > 0 ? '+' + rest : T('lk.view'))) + '</span>'
       : '';
     out += '<div class="lk-cell' + (t ? '' : ' lk-empty') + (wip ? ' lk-wip' : '') + '" ' + go + '>' + img + badge + '</div>';
   }
@@ -2315,25 +2862,31 @@ function bhsBuildVolNav(vol){
 
   var modal = '<div id="vol-picker-modal" class="vol-picker-modal hidden" onclick="if(event.target===this)bhsCloseVolPicker()">'
     + '<div class="vol-picker-inner">'
-    + '<div class="vol-picker-hd"><span class="vol-picker-title">' + vol.type + ' 목록</span>'
+    + '<div class="vol-picker-hd"><span class="vol-picker-title">' + T('list.of', {t: bhsTypeLabel(vol.type)}) + '</span>'
     + '<button class="vol-picker-close" onclick="bhsCloseVolPicker()">&#10005;</button></div>'
     + '<div class="vol-picker-list">' + items + '</div></div></div>';
 
   return '<div class="vol-nav-outer">' + modal
     + '<div class="vol-nav-bar">'
     + '<button class="vol-nav-btn prev' + (prev?'':' disabled') + '"' + (prev?' onclick="bhsGoVol(\''+prev.id+'\')"':'') + '>'
-    + '<span>&#8592;</span><span class="vol-nav-btn-title">' + (prev ? bhsEsc(prev.sub||prev.label) : '이전권 없음') + '</span></button>'
-    + '<button class="vol-list-btn" onclick="bhsOpenVolPicker()">목록 <span style="font-size:10px;opacity:.7">'
+    + '<span>&#8592;</span><span class="vol-nav-btn-title">' + (prev ? bhsEsc(prev.sub||prev.label) : T('vol.noPrev')) + '</span></button>'
+    + '<button class="vol-list-btn" onclick="bhsOpenVolPicker()">' + T('list') + ' <span style="font-size:10px;opacity:.7">'
     + (idx+1) + ' / ' + sameType.length + '</span> &#9660;</button>'
     + '<button class="vol-nav-btn next' + (next?'':' disabled') + '"' + (next?' onclick="bhsGoVol(\''+next.id+'\')"':'') + '>'
-    + '<span class="vol-nav-btn-title">' + (next ? bhsEsc(next.sub||next.label) : '다음권 없음') + '</span><span>&#8594;</span></button>'
+    + '<span class="vol-nav-btn-title">' + (next ? bhsEsc(next.sub||next.label) : T('vol.noNext')) + '</span><span>&#8594;</span></button>'
     + '</div></div>';
 }
 window.bhsOpenVolPicker  = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.remove('hidden'); };
 window.bhsCloseVolPicker = function(){ var m=document.getElementById('vol-picker-modal'); if(m) m.classList.add('hidden'); };
 window.bhsGoVol = function(volId){ bhsGoAnimated('vol', volId); };
 
-var BHS_FOOTER_HTML = "<!-- ===== 푸터 · 저작권 / 공식 백업 ===== --><div class=\"site-footer\">  <div class=\"site-footer-inner\">    <span class=\"sf-copy\">&copy; rrkt.biz. AII rights reserved.</span>    <span class=\"sf-sep\"></span>    <span class=\"sf-note\">본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.</span>    <span class=\"sf-links\">      <a href=\"https://www.postype.com/@biz202099\" target=\"_blank\" rel=\"noopener\">postype.com/@biz202099</a>      <a href=\"https://www.postype.com/@rrkt2022\" target=\"_blank\" rel=\"noopener\">postype.com/@rrkt2022</a>    </span>  </div></div>";
+var BHS_FOOTER_HTML = '<div class="site-footer"><div class="site-footer-inner">'
+  + '<span class="sf-copy">&copy; rrkt.biz. All rights reserved.</span><span class="sf-sep"></span>'
+  + '<span class="sf-note">' + T('footer.note') + '</span>'
+  + '<span class="sf-links">'
+  + '<a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>'
+  + '<a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>'
+  + '</span></div></div>';
 
 /* ── 에피소드 목록 (rrkt renderEpList 이식) ── */
 function bhsRenderEpList(){
@@ -2352,9 +2905,9 @@ function bhsRenderEpList(){
     + '<img src="' + BHS_ROOT + v.cover + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display=\'none\'">'
     + '</div>'
     + '<div class="vb-info">'
-    + '<div class="vb-lbl" style="color:' + BHS_ACC + '">블러드하이스쿨 &middot; ' + v.type + '</div>'
+    + '<div class="vb-lbl" style="color:' + BHS_ACC + '">' + T('brand') + ' &middot; ' + bhsTypeLabel(v.type) + '</div>'
     + '<div class="vb-title">' + bhsEsc(v.label) + '</div>'
-    + '<div class="vb-sub">' + eps.length + '화 수록</div>'
+    + '<div class="vb-sub">' + T('vol.count', {n: eps.length}) + '</div>'
     + (tags ? '<div class="vb-tags">' + tags + '</div>' : '')
     + '</div>'
     + '<div class="lk-band">'
@@ -2363,27 +2916,27 @@ function bhsRenderEpList(){
     + (bhsLkMeta(lkd) ? '<span class="lk-band-m">' + bhsLkMeta(lkd) + '</span>' : '')
     + '<button class="lk-band-go' + (lkd.state==='준비중' ? ' lk-band-go-disabled' : '') + '"'
     + (lkd.state==='준비중' ? '' : ' onclick="bhsOpenLink(\'' + lkd.url + '\')"')
-    + '>' + (lkd.state==='준비중' ? '준비중' : '전체 보기 &rarr;') + '</button>'
+    + '>' + (lkd.state==='준비중' ? T('lk.soon') : T('lk.all')) + '</button>'
     + '</div>'
     + '<div class="lk-grid">' + bhsLkCells(v, 4) + '</div>'
     + '</div>'
     + '</div>'
     + '<div class="v-syn">'
-    + '<div class="v-syn-lbl">줄거리</div>'
+    + '<div class="v-syn-lbl">' + T('syn') + '</div>'
     + '<div class="v-syn-tx">' + bhsEsc(v.synopsis) + '</div>'
     + '<div class="v-links">'
-    + bhsSecBtn(!!BHS_CAST[v.id], '등장인물', 'bhsOpenCast(\'' + v.id + '\',\'' + bhsEsc(v.label) + '\')', '등장인물이 아직 등록되지 않았습니다')
-    + bhsSecBtn(bhsHasNote(v), '제작노트', 'bhsOpenNote(\'' + v.id + '\')', '제작노트가 아직 작성되지 않았습니다')
+    + bhsSecBtn(!!BHS_CAST[v.id], T('cast.title'), 'bhsOpenCast(\'' + v.id + '\',\'' + bhsEsc(v.label) + '\')', T('cast.none'))
+    + bhsSecBtn(bhsHasNote(v), T('note.title'), 'bhsOpenNote(\'' + v.id + '\')', T('note.none'))
     + '</div></div>'
     + '<div class="ep-board">'
-    + '<div class="ep-board-head"><span>#</span><span>제목</span><span style="text-align:right">날짜</span></div>'
+    + '<div class="ep-board-head"><span>#</span><span>' + T('board.title') + '</span><span style="text-align:right">' + T('board.date') + '</span></div>'
     + eps.map(function(e){
         var ok = bhsCanRead(e);
         var wip = e.status === '작업중' ? 'background:#F9F4CA;color:#F9CB4C' : '';
         return '<div class="ep-row' + (ok?'':' ep-row-locked') + '"' + (ok?' onclick="bhsGo(\'vol\',\''+v.id+'\','+e.id+')"':'') + '>'
              + '<span class="ep-num">' + e.id + '</span>'
              + '<span class="ep-title-col"><span class="ep-title-text">' + bhsEsc(e.title) + '</span>'
-             + '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + e.status + '</span></span>'
+             + '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + bhsStLabel(e.status) + '</span></span>'
              + '<span class="ep-date-col">' + (e.date || '&mdash;') + '</span>'
              + '</div>';
       }).join('')
@@ -2609,9 +3162,9 @@ function bhsRenderReader(){
 
   document.getElementById('st-wrap').innerHTML =
       '<div id="content-topbar">'
-    + '<button class="tb-back" onclick="bhsGo(\'vol\',\'' + v.id + '\')">&larr; 목록</button>'
+    + '<button class="tb-back" onclick="bhsGo(\'vol\',\'' + v.id + '\')">' + T('back.list') + '</button>'
     + '<div class="tb-sep"></div>'
-    + '<span class="tb-crumb">블러드하이스쿨</span><span class="tb-arr">&#8250;</span>'
+    + '<span class="tb-crumb">' + T('brand') + '</span><span class="tb-arr">&#8250;</span>'
     + '<span class="tb-crumb">' + bhsEsc(v.label) + '</span><span class="tb-arr">&#8250;</span>'
     + '<span class="tb-cur">' + bhsEsc(e.title) + '</span>'
     + '<div style="margin-left:auto;display:flex;gap:4px;flex-shrink:0">'
@@ -2620,22 +3173,22 @@ function bhsRenderReader(){
     + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='jp'?'active':'') + '" data-lang="jp" onclick="setEpLang(\'jp\')">JA</button>'
     + '<span id="rd-fs-wrap">'
     +   '<span class="rd-fs-sep"></span>'
-    +   '<button class="rd-fs-toggle" id="rd-fs-toggle" onclick="bhsFsToggle(event)" title="본문 글자 크기" aria-label="본문 글자 크기">가</button>'
+    +   '<button class="rd-fs-toggle" id="rd-fs-toggle" onclick="bhsFsToggle(event)" title="' + T('fs.title') + '" aria-label="' + T('fs.title') + '">' + T('fs.glyph') + '</button>'
     +   '<div id="rd-fs-panel" class="hidden" onclick="event.stopPropagation()">'
-    +     '<div class="rd-fs-hd">본문 크기</div>'
+    +     '<div class="rd-fs-hd">' + T('fs.hd') + '</div>'
     +     '<div class="rd-fs-row">'
-    +       '<button class="rd-fs-btn" id="rd-fs-minus" onclick="bhsFsStep(-1)" aria-label="작게">&minus;</button>'
+    +       '<button class="rd-fs-btn" id="rd-fs-minus" onclick="bhsFsStep(-1)" aria-label="' + T('fs.minus') + '">&minus;</button>'
     +       '<span class="rd-fs-val"><span id="rd-fs-num">17</span><small>px</small></span>'
-    +       '<button class="rd-fs-btn" id="rd-fs-plus" onclick="bhsFsStep(1)" aria-label="크게">+</button>'
+    +       '<button class="rd-fs-btn" id="rd-fs-plus" onclick="bhsFsStep(1)" aria-label="' + T('fs.plus') + '">+</button>'
     +     '</div>'
     +     '<div class="rd-fs-bar"><span id="rd-fs-fill"></span></div>'
-    +     '<button class="rd-fs-reset" onclick="bhsFsReset()">기본값으로</button>'
+    +     '<button class="rd-fs-reset" onclick="bhsFsReset()">' + T('fs.reset') + '</button>'
     +   '</div>'
     + '</span>'
     + '</div></div>'
     + '<div class="postype-wrap">'
     + '<div class="postype-header">'
-    + '<div class="postype-series-lbl" onclick="bhsGo(\'vol\',\'' + v.id + '\')">블러드하이스쿨 &middot; ' + bhsEsc(v.label) + '</div>'
+    + '<div class="postype-series-lbl" onclick="bhsGo(\'vol\',\'' + v.id + '\')">' + T('brand') + ' &middot; ' + bhsEsc(v.label) + '</div>'
     + '<div class="postype-title">' + bhsEsc(e.title) + '</div>'
     + '<div class="postype-meta">'
     + (e.date ? '<span class="postype-date">' + e.date + '</span>' : '')
@@ -2643,26 +3196,26 @@ function bhsRenderReader(){
         e.status === '완료'   ? 'background:#ffe4e4;color:#c0392b' :
         e.status === '작업중' ? 'background:#F9F4CA;color:#F9CB4C' :
                                 'background:#f0f0f0;color:#aaa'
-      ) + '">' + e.status + '</span></div>'
+      ) + '">' + bhsStLabel(e.status) + '</span></div>'
     + '<div style="display:flex;align-items:center;gap:6px;margin-top:12px">'
     + '<button id="deepl-translate-btn" onclick="onDeepLBtnClick()" style="margin-top:0">'
-    + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역</button>'
+    + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> ' + T('dl.btn') + '</button>'
     + '<button id="deepl-retranslate-btn" onclick="onDeepLRetranslateClick()" style="margin-top:0;margin-left:0">'
-    + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> 재번역</button>'
+    + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> ' + T('dl.re') + '</button>'
     + '</div></div>'
     + '<div class="postype-body" id="postype-body">'
-    + '<div class="postype-loading"><div class="postype-spinner"></div><span>불러오는 중…</span></div>'
+    + '<div class="postype-loading"><div class="postype-spinner"></div><span>' + T('loading') + '</span></div>'
     + '</div></div>'
     + '<div class="ep-nav-outer"><div class="ep-nav">'
     + '<button class="ep-nav-btn ' + (prev?'':'disabled') + '"' + (prev?' onclick="bhsGo(\'vol\',\''+v.id+'\','+prev.id+')"':'') + '>'
-    + '<span>&#8592;</span><span class="ep-nav-title">' + (prev ? bhsEsc(prev.title) : '처음 화') + '</span></button>'
-    + '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; <span class="epb-long">에피소드 </span>목록</button>'
+    + '<span>&#8592;</span><span class="ep-nav-title">' + (prev ? bhsEsc(prev.title) : T('ep.first')) + '</span></button>'
+    + '<button class="ep-picker-btn" onclick="openEpPicker()">&#9776; ' + T('ep.listBtn') + '</button>'
     + '<button class="ep-nav-btn ' + (next?'':'disabled') + '"' + (next?' onclick="bhsGo(\'vol\',\''+v.id+'\','+next.id+')"':'') + '>'
-    + '<span class="ep-nav-title">' + (next ? bhsEsc(next.title) : '마지막 화') + '</span><span>&#8594;</span></button>'
+    + '<span class="ep-nav-title">' + (next ? bhsEsc(next.title) : T('ep.last')) + '</span><span>&#8594;</span></button>'
     + '</div></div>'
     + '<div class="ep-picker-modal hidden" id="ep-picker-modal" onclick="closeEpPicker(event)">'
     + '<div class="ep-picker-inner">'
-    + '<div class="ep-picker-hd"><span class="ep-picker-title" id="ep-picker-title">에피소드 목록</span>'
+    + '<div class="ep-picker-hd"><span class="ep-picker-title" id="ep-picker-title">' + T('ep.list') + '</span>'
     + '<button class="ep-picker-close" onclick="closeEpPickerBtn()">&#10005;</button></div>'
     + '<div class="ep-picker-list" id="ep-picker-list"></div></div></div>'
     + BHS_FOOTER_HTML;
@@ -2679,12 +3232,12 @@ function bhsRenderReader(){
 /* ── 에피소드 피커 (rrkt 이식) ── */
 function openEpPicker(){
   var v = bhsVol(BS.vol); if(!v) return;
-  document.getElementById('ep-picker-title').textContent = v.label + ' 에피소드 목록';
+  document.getElementById('ep-picker-title').textContent = T('ep.listOf', {v: v.label});
   document.getElementById('ep-picker-list').innerHTML = v.episodes.map(function(e){
     return '<div class="ep-picker-item' + (e.id===BS.ep?' current':'') + '" style="--curr-acc:' + BHS_ACC + '" onclick="pickEp(' + e.id + ')">'
          + '<span class="ep-picker-num">' + e.id + '</span>'
          + '<span class="ep-picker-t">' + bhsEsc(e.title) + '</span>'
-         + '<span class="ep-picker-st ' + bhsStCls(e.status) + '" style="' + (e.status==='작업중'?'color:#F9CB4C':'') + '">' + e.status + '</span>'
+         + '<span class="ep-picker-st ' + bhsStCls(e.status) + '" style="' + (e.status==='작업중'?'color:#F9CB4C':'') + '">' + bhsStLabel(e.status) + '</span>'
          + '</div>';
   }).join('');
   document.getElementById('ep-picker-modal').classList.remove('hidden');
@@ -2756,9 +3309,9 @@ async function bhsLoadText(volId, epId){
     return;
   }
   if(text === null){
-    el.innerHTML = '<div class="postype-error"><strong>본문 파일을 찾을 수 없습니다</strong><br>'
+    el.innerHTML = '<div class="postype-error"><strong>' + T('err.nofile') + '</strong><br>'
                  + '<small style="color:#a03030">' + bhsEsc(path) + '</small><pre>'
-                 + bhsEsc(lastErr ? lastErr.message : '불러오기 실패') + '</pre></div>';
+                 + bhsEsc(lastErr ? lastErr.message : T('err.load')) + '</pre></div>';
     _updateEpLangBtns(lang);
     return;
   }
@@ -2766,7 +3319,8 @@ async function bhsLoadText(volId, epId){
   _epOriginalLines = text.split('\n');
   var jpMode = (lang === 'ja');
   var enMode = (lang === 'en');
-  el.innerHTML = '<div class="postype-text' + ((jpMode || enMode) ? ' notranslate' : '') + '">' + bhsLines(text) + '</div>';
+  var srcHint = (isForeign && !jpMode && !enMode) ? ' lang="ko"' : '';
+  el.innerHTML = '<div class="postype-text' + ((jpMode || enMode) ? ' notranslate' : '') + '"' + srcHint + '>' + bhsLines(text) + '</div>';
 
   if(jpMode)         _tlBadge('jp');
   else if(enMode)    _tlBadge('en');
@@ -2786,32 +3340,12 @@ var _currentLang = 'ko';
 var _epOriginalLines = null;
 
 function setLang(lang){
+  /* Remember the choice (shared with biz-OC-doll) and reload.
+     The <head> script then picks the text: English / Japanese / Korean from the
+     dictionary, any other language through Google Translate. */
   _currentLang = lang;
   try{ localStorage.setItem('bzd_lang', lang); }catch(e){}
-  if(lang === 'ko'){
-    document.querySelectorAll('[data-orig]').forEach(function(n){ n.textContent = n.dataset.orig; });
-    document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    location.reload();
-    return;
-  }
-
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-
-  /* 본문 뷰어가 열려 있을 때 (UI 캐시보다 먼저 처리)
-     — 언어에 맞는 원본 파일부터 다시 읽는다. bhsLoadText 가 본문·배지·버튼을 한 번에 정리한다. */
-  if(BS.view === 'vol' && BS.vol && BS.ep){
-    bhsLoadText(BS.vol, BS.ep);
-    if(_tlCache[lang]) _tlApply(_tlCache[lang]);
-    _tlGoogle(lang);
-    return;
-  }
-
-  if(_tlCache[lang]){ _tlApply(_tlCache[lang]); _updateEpLangBtns(lang); return; }
-
-  _updateEpLangBtns(lang);
-  if(cfg.enabled && cfg.proxyUrl) _tlDeepL(lang, cfg);
-  else _tlGoogle(lang);
+  location.reload();
 }
 
 /* ── ① UI DeepL 번역 ── */
@@ -2857,8 +3391,8 @@ function _tlGoogle(lang){
   _tlBadge('google');
   var sel = document.querySelector('.goog-te-combo');
   if(sel){ sel.value = lang; sel.dispatchEvent(new Event('change')); return; }
-  document.cookie = 'googtrans=/ko/' + lang + ';path=/';
-  document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  document.cookie = 'googtrans=/en/' + lang + ';path=/';
+  document.cookie = 'googtrans=/en/' + lang + ';path=/;domain=.' + location.hostname;
   location.reload();
 }
 
@@ -2930,7 +3464,7 @@ function _tlDeepLEpisode(lang, cfg, onDone){
 
   var jpPath     = bhsTextPath(BS.vol, BS.ep, 'jp');
   var pureKoPath = bhsTextPath(BS.vol, BS.ep, 'pure_ko');
-  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>DeepL 번역 중…</span></div>';
+  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>' + T('dl.ing') + '</span></div>';
 
   var sourcePromise = bhsFetchText(jpPath)
     .then(function(t){ return t.split('\n'); })
@@ -3014,13 +3548,13 @@ function _tlShowDeepLBtn(lang, cfg){
   btn.style.display = 'flex';
   if(cached){
     btn.className = 'done';
-    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ' + T('dl.done');
     btn.onclick = null;
     if(rbtn) rbtn.style.display = 'flex';
     _tlDeepLEpisode(lang, cfg);
   } else {
     btn.className = '';
-    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> DeepL로 번역';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> ' + T('dl.btn');
     btn.onclick = function(){ onDeepLBtnClick(); };
     if(rbtn) rbtn.style.display = 'none';
   }
@@ -3035,7 +3569,7 @@ window.onDeepLBtnClick = function(){
     if(!btn) return;
     btn.style.opacity=''; btn.style.pointerEvents='';
     btn.className='done';
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ' + T('dl.done');
     btn.onclick=null;
     if(rbtn) rbtn.style.display='flex';
   });
@@ -3052,7 +3586,7 @@ window.onDeepLRetranslateClick = function(){
     if(btn){
       btn.style.opacity=''; btn.style.pointerEvents='';
       btn.className='done';
-      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> DeepL 번역됨';
+      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ' + T('dl.done');
       btn.onclick=null;
     }
     if(rbtn){ rbtn.style.opacity=''; rbtn.style.pointerEvents=''; }
@@ -3254,7 +3788,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
 <script>
 function googleTranslateElementInit(){
-  new google.translate.TranslateElement({ pageLanguage:'ko', autoDisplay:false }, 'google_translate_element');
+  new google.translate.TranslateElement({ pageLanguage:'en', autoDisplay:false }, 'google_translate_element');
 }
 </script>
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -3355,7 +3889,7 @@ function googleTranslateElementInit(){
       }
       b.classList.toggle('is-off', mute);
       b.setAttribute('aria-pressed', mute ? 'false' : 'true');
-      b.title = mute ? '클릭 소리 켜기' : '클릭 소리 끄기 (크기 ' + vol + '%)';
+      b.title = mute ? T('snd.on') : T('snd.off', {n: vol});
     }
 
     var r = document.getElementById('tb-sound-range');
