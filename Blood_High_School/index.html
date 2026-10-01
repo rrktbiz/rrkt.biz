@@ -1243,28 +1243,6 @@ He hates fighting. All he wants is a normal life. But from the moment the dragon
     </div>
 
     <div class="v-section reveal">
-      <!-- ══════════════════════════════════════════════════════
-     [구역 A] 인트로 CHARACTERS — 작성 지침
-
-     질문   : "얘 궁금해?"        (인물 매력으로 진입시키는 칸)
-     독자   : 작품을 아직 모르는 사람. 이 페이지가 첫 접촉
-     화자   : 예고편 내레이터
-     인원   : 주연 5명 고정 (쿠로·은호·헤르바켄·시로·미코)
-     분량   : 80~95자 / 3~4문장
-
-     규칙
-     · 마지막 문장은 반드시 갈고리로 끝낸다. 정보를 닫지 말 것
-         예) "운명은 그를 가만두지 않는다" / "정체는 —?"
-             "쿠로도 모르는 비밀이 있다" / "그녀만의 절박한 이유가 있다"
-     · 태그·역할줄·화수는 쓰지 않는다. 읽는 품을 최대한 낮추는 칸
-     · 스포일러 차단이 원칙. 단 인물별로 노출을 다르게 가져간다
-         - 은호·헤르바켄 : 정체를 감춘다 (반전이 서사의 축이라 아낌)
-         - 시로          : 루멘시아를 바로 공개 (갭 자체가 매력 상품)
-     · 시점은 1부 기준. 3부 이후 쿠로가 바뀌면 이 구역은 손봐야 함
-       (또는 "1부 진입용"으로 못 박고 그대로 두기 — 미정)
-
-     충돌 시 : 인상·매력 표현은 이 구역이 기준. 사실은 B, 서사는 C
-     ══════════════════════════════════════════════════════ -->
       
 <div class="v-sec-label">CHARACTERS</div>
       <div class="char-list">
@@ -1338,7 +1316,6 @@ He hates fighting. All he wants is a normal life. But from the moment the dragon
     <span class="sf-sep"></span>
     <span class="sf-note" data-t="footer.note">The author personally uploads backups of this work to the addresses below. These are official uploads, not reposts.</span>
     <span class="sf-links">
-      <a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>
       <a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>
     </span>
   </div>
@@ -1871,9 +1848,9 @@ function bhsI18nApply(){
 }
 document.addEventListener('DOMContentLoaded', bhsI18nApply);
 
-/* Episode status is stored as 완료 / 작업중 / 예정 inside the page; show it in the page language */
+/* Status (done / wip / plan) and type (novel) are stored in English; show them in the page language */
 function bhsStLabel(s){ return T('st.' + bhsStCls(s)); }
-function bhsTypeLabel(t){ return t === '웹소설' ? T('type.novel') : t; }
+function bhsTypeLabel(t){ return t === 'novel' ? T('type.novel') : t; }
 </script>
 
 <script>
@@ -1886,7 +1863,8 @@ function bhsTypeLabel(t){ return t === '웹소설' ? T('type.novel') : t; }
      texts/blood-highschool-novel-1-01.txt              (한국어)
      texts_pure_ko/blood-highschool-novel-1-01_pure_ko.txt
      texts_jp/blood-highschool-novel-1-01_jp.txt
-     texts_en/blood-highschool-novel-1-01_en.txt        (English)
+     texts_en/blood-highschool-novel-1-01_en.txt        (영어 — 순영어판)
+     texts_en_mix/blood-highschool-novel-1-01_en_mix.txt (영어 — 영본어판, 영어+일본어)
 
    ⚠ BHS_ROOT 와 BHS_TEXT_ROOT 는 다른 용도입니다. 헷갈리지 마세요.
      BHS_ROOT      = 사이트 루트. 대문 링크와 표지·썸네일 이미지가 씁니다.
@@ -1902,9 +1880,9 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
    룩북 설정 — 각 부의 lookbook 필드를 채우세요.
 
      lookbook:{
-       count : 68,                          // 총 페이지 수 (0이면 카운터 대신 '보기')
+       count : 68,                          // 총 페이지 수 (0이면 카운터 대신 'View' 글자)
        meta  : '캐릭터 시트 34종',            // 부제 (생략 가능)
-       state : '보기',                      // '보기' = 링크 활성 / '준비중' = 링크 비활성(공개 보류)
+       state : 'view',                      // 'view' = 링크 활성 / 'soon' = 링크 비활성(공개 보류)
        thumbs: [                            // 가로형 썸네일 4장, BHS_ROOT 기준 상대경로
          'Blood_High_School/lookbook/p1_01.jpg',
          'Blood_High_School/lookbook/p1_02.jpg',
@@ -1917,15 +1895,16 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
      → 원본 비율이 뭐든 상관없지만, 가로형 이미지가 가장 자연스럽습니다
    · 마지막 장 위에 '+64' 카운터가 겹쳐 올라갑니다
    · thumbs 가 비어 있어도 빈 칸으로 자리만 잡습니다
-   · state 를 생략하면 자동으로 '보기'(활성)로 취급합니다
-   · state:'준비중' 으로 바꾸면 버튼/뱃지 글자가 '준비중'으로 바뀌고
+   · state 를 생략하면 자동으로 'view'(활성)로 취급합니다
+   · state:'soon' 으로 바꾸면 버튼/뱃지 글자가 Coming soon(준비중)으로 바뀌고
      클릭해도 링크가 열리지 않습니다 (링크 주소는 그대로 남아 있음)
    ══════════════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════════════
    등장인물(캐스트) 데이터 — 이미지가 아니라 HTML 로 그립니다.
 
-   · 여기 적힌 글자는 전부 진짜 텍스트라서 구글/DeepL 번역이 그대로 잡습니다.
+   · 이름(name)·설명(desc)·태그 글자·부 제목(num/sub)은 {"en": , "ja": , "ko": } 세 언어로 적습니다.
+     고칠 때는 세 언어를 같이 고쳐 주세요. 빠진 언어는 영어로 대신 나옵니다.
    · 이미지는 BHS_ROOT + BHS_CAST_IMG + img 로 조합됩니다.
        예) ../Blood_High_School/images/char/1_kuro.png
    · img 파일이 없으면 자동으로 회색 IMAGE 칸이 뜹니다.
@@ -1936,27 +1915,6 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
    · 3·4부는 아직 비어 있습니다. 아래 형식대로 novel-3 을 추가하면
      '등장인물' 버튼이 자동으로 켜집니다.
 
-   ─────────────────────────────────────────────────────
-   [구역 B] 웹소설 캐스트 — 작성 지침
-
-   질문   : "얘 누구였지?"      (읽는 중에 확인하는 대조표)
-   독자   : 그 부를 읽는 중이거나 막 읽은 사람
-   화자   : 도감 편찬자
-   인원   : 조연까지 전원 (1부 16 / 2부 12)
-   분량   : 40~60자 / 2문장 — 정의문 + 성격
-
-   규칙
-   · 이 구역의 주인공은 tags 다. 설명문은 태그의 보조 캡션에 가깝다
-   · 부마다 다시 쓴다. 같은 인물도 그 부 시점의 사실만 적는다
-       예) 쿠로  1부 [인간] 모범생        → 2부 [인간][흑룡] 새 당주
-           미코  1부 "동갑 사촌"          → 2부 "악인 렌의 딸"
-       ※ 1부에 2부 반전을 흘리지 않는 것이 이 구역의 핵심 규율
-   · 변신 쌍은 cols 한 칸에 카드 2장으로 묶어 정체 공개를 레이아웃으로 보여준다
-       (쿠로↕라크니스, 은호↕여우신령, 헤르바켄↕후예, 시로↕루멘시아)
-   · 화수는 쓰지 않는다
-
-   충돌 시 : 사실(누가 뭐다·시점)은 이 구역이 기준. 시간 통제가 가장 정밀함
-   ─────────────────────────────────────────────────────
 
    ══════════════════════════════════════════════════════ */
 var BHS_CAST_IMG = 'Blood_High_School/images/char/';
@@ -2043,13 +2001,13 @@ var BHS_CAST = {
 
 var BHS_VOLUMES = [
   {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:{"en": "Part 1", "ja": "第1部", "ko": "1부"},
-   label:{"en": "Blood High School: Rise of the Dragon", "ja": "ブラッドハイスクール 〜龍の復活〜", "ko": "블러드하이스쿨 ~용의 부활~"}, type:'웹소설',
+   label:{"en": "Blood High School: Rise of the Dragon", "ja": "ブラッドハイスクール 〜龍の復活〜", "ko": "블러드하이스쿨 ~용의 부활~"}, type:'novel',
    available:true, tags:[{"en": "#School", "ja": "#学園", "ko": "#학원"}, {"en": "#Fantasy", "ja": "#ファンタジー", "ko": "#판타지"}, {"en": "#Shonen", "ja": "#少年漫画", "ko": "#소년만화"}, {"en": "#Omnibus", "ja": "#オムニバス", "ko": "#옴니버스"}, {"en": "#AbsurdComedy", "ja": "#シュールギャグ", "ko": "#병맛개그"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지"}],
-   /* ▼▼▼ 여기 lookbook: 뒤 따옴표 안이 "1부 룩북" 링크 주소입니다 (지금은 값이 채워져 있음 — 바꾸려면 이 안을 교체) ▼▼▼ */
+   /* lookbook: 뒤 따옴표 안이 1부 룩북 링크 주소 */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_1part_cast.png',
-   /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
-   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:['Blood_High_School/images/Thumb/1.png','Blood_High_School/images/Thumb/2.png','Blood_High_School/images/Thumb/3.png'] },
+   /* state:'view' ↔ 'soon' 만 바꾸면 룩북 링크가 켜지고 꺼집니다 */
+   lookbook:{ count:0, meta:'Google Drive', state:'soon', thumbs:['Blood_High_School/images/Thumb/1.png','Blood_High_School/images/Thumb/2.png','Blood_High_School/images/Thumb/3.png'] },
    notes:{
      en:["Hello!", "After an animation in 2017 and a webtoon in 2023, \"Blood High School\" has finally arrived as a web novel in 2026.", "You might be wondering why I came back with a web novel after the webtoon stopped. Back then, I wasn't yet a good enough writer to carry my first long series. I handled Part 1, with all its comedy, reasonably well, but from Part 2 on, as the shonen-manga feel grew stronger, keeping the whole story in balance was hard. (I'll get into Part 2 properly in the next production note.)", "The current \"Blood High School\" web novel was born while I was practicing web-novel writing to clear my head after hitting that wall. At first it was just practice, but as I discovered what only prose can do, I got more and more absorbed. Back when I was serializing the webtoon, real-world limits often forced me to cut or change action scenes and slow-burn developments that were hard to draw. In the web novel, I could put down the scenes and staging I first imagined far more freely, and I had a great time the whole way through.", "In the end, the web novel became the closest thing to the \"Blood High School\" I first wanted to draw, and uploading it just felt natural. I'm so happy I can finally show you the ideas that had been tangled up in my head for so long.", "As for Part 1 itself, I built it around a straightforward, childish, old-school feel. Maybe that's why I have a special, nostalgic fondness for it.", "My personal favorite scene is the very last one, where Herbaeken fires the gun. Its meaning changed a lot from the animated version, but I think that change actually brought back the mood unique to old manga originals. Around the turn of the century, anime adaptations often went dark with their own original plotlines. Then you'd open the original manga and find it was surprisingly bright. I have memories like that.", "Herbaeken is the only character whose arc wraps up in Part 1, so I think of him as the 'true protagonist of Part 1.' He's the only human among the leads, yet he never got overshadowed and worked really hard. If there were an off-the-record cast, he might have been the busiest actor of them all.", "And one bit of TMI... my favorite episode is Episode 4. (I'm writing this because I think I'd regret it if I didn't..)", "I'll talk about the other characters and the real behind-the-scenes stuff in more depth in the Part 2 production note.", "I hope Part 1 has been a pleasant first chapter for stepping into the world of \"Blood High School.\"", "Thank you.", "2026.07.29"],
      ja:["こんにちは!", "2017年のアニメ、2023年のウェブトゥーンを経て、ついに2026年、『ブラッドハイスクール』がWeb小説になって帰ってきました。", "ウェブトゥーンの中断後、なぜWeb小説で戻ってきたのか気になる方もいると思いますが、当時の私は初めての長編を背負うにはまだ力不足の作家でした。ギャグ色の強い第1部は比較的うまく描けたのですが、少年漫画らしさが濃くなる第2部からは、作品全体のバランスを取るのが簡単ではありませんでした。(第2部の話は次の制作ノートで詳しくお話しします。)", "今の『ブラッドハイスクール』Web小説は、壁にぶつかっていた私が気分転換にWeb小説を練習する中で生まれました。最初はただの練習のつもりでしたが、文章という媒体ならではの良さに気づくにつれて、どんどんのめり込んでいきました。ウェブトゥーンを連載していた頃は、いろいろな現実的な制約のせいで、描くのが難しいアクションや長い展開を削ったり変えたりしなければならないことが多かったのですが、Web小説では最初に構想していた場面や演出をずっと自由に表現でき、作業の間ずっと本当に楽しかったです。", "結果的に、Web小説版が私が最初に描きたかった『ブラッドハイスクール』の原型にいちばん近いものになり、自然とアップロードすることになりました。頭の中でだけ絡まっていた構想を、ようやく皆さんにお見せできて本当にうれしいです。", "第1部の制作について本格的にお話しすると、第1部は直感的で子どもっぽい、昔ながらの雰囲気を中心に作りました。そのせいか、私は第1部に懐かしさの混じった特別な愛着をたくさん持っています。", "個人的にいちばん好きな場面は、最後にヘルバーケンが銃を撃つシーンです。アニメ版とは意味がだいぶ変わりましたが、むしろその変化のおかげで、昔の漫画原作ならではの空気がより生きたと思います。世紀末の頃は、原作をもとにしたアニメがオリジナル展開で暗い雰囲気になることが多かったですよね。いざ原作を開いてみると、意外と明るい作品だったり。そんな記憶があります。", "ヘルバーケンは第1部で唯一物語が完結したキャラクターなので、「第1部の真の主人公」だったと思っています。主要人物の中で唯一の人間なのに、負けないキャラクター性で本当によく活躍してくれました。オフレコがあるなら、いちばん忙しかった役者かもしれません。", "それから、ちょっとしたTMIをひとつ……私がいちばん好きなエピソードは第4話です。(これを書かないと後悔しそうなので書きます..)", "他のキャラクターの話や本格的な裏話は、第2部の制作ノートでもっと深くお話しします。", "この第1部が、読者の皆さんにとって『ブラッドハイスクール』の世界へ気持ちよく入っていける最初の章になっていたらうれしいです。", "ありがとうございました。", "2026.07.29"],
@@ -2058,30 +2016,30 @@ var BHS_VOLUMES = [
    cover:'Blood_High_School/bhs_novel_prat1_cover.png',
    synopsis:{"en": "Kuro is an ordinary high schooler. Heir to the dragon blood of the Ryuo family, he awakens as Lackness, the dragon of legend. And because he's now the strongest in the world, enemies start flocking to him... A school life tangled up in legends: Blood High School.", "ja": "平凡な高校生クロ。竜王家の龍の血を受け継ぐクロは、伝説の龍ラクニスとして覚醒する。世界最強という理由で、敵が次々と押し寄せてきて……伝説と絡み合うスクールライフ、ブラッドハイスクール。", "ko": "평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨."},
    episodes:[
-     {id:1,  title:{"en": "Ep. 1 Tea Time in the Rose Garden", "ja": "第1話 薔薇の庭のティータイム", "ko": "1화 장미 정원의 티타임"},        date:null, status:'예정'},
-     {id:2,  title:{"en": "Ep. 2 The Marionette in the Art Room", "ja": "第2話 美術室のマリオネット", "ko": "2화 미술실의 마리오네트"},        date:null, status:'예정'},
-     {id:3,  title:{"en": "Ep. 3 The Jewel of the Abandoned Holy Site", "ja": "第3話 廃れた聖地の宝石", "ko": "3화 버려진 성지의 보석"},         date:null, status:'예정'},
-     {id:4,  title:{"en": "Ep. 4 The Dark Mage's Eternal First-Years", "ja": "第4話 黒魔法使いの永遠の一年生", "ko": "4화 흑마법사의 영원한 1학년"},    date:null, status:'예정'},
-     {id:5,  title:{"en": "Ep. 5 Crossed Succession and Unwanted Power", "ja": "第5話 すれ違う継承と望まぬ力", "ko": "5화 엇갈린 계승과 원치 않는 힘"}, date:null, status:'예정'},
-     {id:6,  title:{"en": "Ep. 6 A Tanabata Night and the Silver Fox", "ja": "第6話 七夕の夜と銀色の狐", "ko": "6화 칠석의 밤과 은빛 여우"},      date:null, status:'예정'},
-     {id:7,  title:{"en": "Ep. 7 The Judge of the Fallen Kingdom", "ja": "第7話 滅びた王国の審判者", "ko": "7화 무너진 왕국의 심판자"},       date:null, status:'예정'},
-     {id:8,  title:{"en": "Ep. 8 A Legend Overturned Is Still Just a Legend", "ja": "第8話 ひっくり返った伝説は伝説に過ぎない", "ko": "8화 뒤집힌 전설은 전설일 뿐"},    date:null, status:'예정'},
-     {id:9,  title:{"en": "Ep. 9 Bang! 4-Split STAGE", "ja": "第9話 Bang! 4分割STAGE", "ko": "9화 Bang! 4분할 STAGE"},          date:null, status:'예정'},
-     {id:10, title:{"en": "Ep. 10 Ore-sama Conquers the Academy!!", "ja": "第10話 俺様、学院征服!!", "ko": "10화 오레사마 학원 정복!!"},      date:null, status:'예정'},
-     {id:11, title:{"en": "Ep. 11 Cursed BOY, Crazy BABY", "ja": "第11話 呪いBOY・狂気BABY", "ko": "11화 저주BOY미친BABY"},           date:null, status:'예정'},
-     {id:12, title:{"en": "Ep. 12 Settling the Pecking Order of the Dragon Brothers", "ja": "第12話 龍兄弟の序列整理", "ko": "12화 용 형제의 서열 정리"},       date:null, status:'예정'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
+     {id:1,  title:{"en": "Ep. 1 Tea Time in the Rose Garden", "ja": "第1話 薔薇の庭のティータイム", "ko": "1화 장미 정원의 티타임"},        date:null, status:'plan'},
+     {id:2,  title:{"en": "Ep. 2 The Marionette in the Art Room", "ja": "第2話 美術室のマリオネット", "ko": "2화 미술실의 마리오네트"},        date:null, status:'plan'},
+     {id:3,  title:{"en": "Ep. 3 The Jewel of the Abandoned Holy Site", "ja": "第3話 廃れた聖地の宝石", "ko": "3화 버려진 성지의 보석"},         date:null, status:'plan'},
+     {id:4,  title:{"en": "Ep. 4 The Dark Mage's Eternal First-Years", "ja": "第4話 黒魔法使いの永遠の一年生", "ko": "4화 흑마법사의 영원한 1학년"},    date:null, status:'plan'},
+     {id:5,  title:{"en": "Ep. 5 Crossed Succession and Unwanted Power", "ja": "第5話 すれ違う継承と望まぬ力", "ko": "5화 엇갈린 계승과 원치 않는 힘"}, date:null, status:'plan'},
+     {id:6,  title:{"en": "Ep. 6 A Tanabata Night and the Silver Fox", "ja": "第6話 七夕の夜と銀色の狐", "ko": "6화 칠석의 밤과 은빛 여우"},      date:null, status:'plan'},
+     {id:7,  title:{"en": "Ep. 7 The Judge of the Fallen Kingdom", "ja": "第7話 滅びた王国の審判者", "ko": "7화 무너진 왕국의 심판자"},       date:null, status:'plan'},
+     {id:8,  title:{"en": "Ep. 8 A Legend Overturned Is Still Just a Legend", "ja": "第8話 ひっくり返った伝説は伝説に過ぎない", "ko": "8화 뒤집힌 전설은 전설일 뿐"},    date:null, status:'plan'},
+     {id:9,  title:{"en": "Ep. 9 Bang! 4-Split STAGE", "ja": "第9話 Bang! 4分割STAGE", "ko": "9화 Bang! 4분할 STAGE"},          date:null, status:'plan'},
+     {id:10, title:{"en": "Ep. 10 Ore-sama Conquers the Academy!!", "ja": "第10話 俺様、学院征服!!", "ko": "10화 오레사마 학원 정복!!"},      date:null, status:'plan'},
+     {id:11, title:{"en": "Ep. 11 Cursed BOY, Crazy BABY", "ja": "第11話 呪いBOY・狂気BABY", "ko": "11화 저주BOY미친BABY"},           date:null, status:'plan'},
+     {id:12, title:{"en": "Ep. 12 Settling the Pecking Order of the Dragon Brothers", "ja": "第12話 龍兄弟の序列整理", "ko": "12화 용 형제의 서열 정리"},       date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'plan'}
    ]},
   {id:'novel-2', grad:'150deg,#1a0010,#6b0030,#c0304a', num:2, part:'PART 02', sub:{"en": "Part 2", "ja": "第2部", "ko": "2부"},
-   label:{"en": "Blood High School: The Ryuo Clan Arc", "ja": "ブラッドハイスクール 〜竜王家編〜", "ko": "블러드하이스쿨 ~류오가편~"}, type:'웹소설',
+   label:{"en": "Blood High School: The Ryuo Clan Arc", "ja": "ブラッドハイスクール 〜竜王家編〜", "ko": "블러드하이스쿨 ~류오가편~"}, type:'novel',
    available:true, tags:[{"en": "#Drama", "ja": "#ドラマ", "ko": "#드라마"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지"}, {"en": "#Suspense", "ja": "#サスペンス", "ko": "#서스펜스"}, {"en": "#MovieStyle", "ja": "#劇場版", "ko": "#극장판"}, {"en": "#JapaneseAesthetic", "ja": "#和風", "ko": "#일본풍"}, {"en": "#ComingOfAge", "ja": "#成長物語", "ko": "#성장물"}],
-   /* ▼▼▼ 여기 lookbook: 뒤 따옴표 두 개 사이('') 에 "2부 룩북" 링크 주소를 넣으세요 (지금은 비어 있음) ▼▼▼ */
+   /* lookbook: 뒤 따옴표 안이 2부 룩북 링크 주소 */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_2part_cast.png',
-   /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
-   lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:['Blood_High_School/images/Thumb/4.png','Blood_High_School/images/Thumb/5.png','Blood_High_School/images/Thumb/6.png'] },
+   /* state:'view' ↔ 'soon' 만 바꾸면 룩북 링크가 켜지고 꺼집니다 */
+   lookbook:{ count:0, meta:'Google Drive', state:'soon', thumbs:['Blood_High_School/images/Thumb/4.png','Blood_High_School/images/Thumb/5.png','Blood_High_School/images/Thumb/6.png'] },
    notes:{
      en:["At last, the Ryuo Clan Arc, and with it Part 2 of \"Blood High School,\" is complete.", "Part 2 is the part I've agonized over and spent the most time on since the webtoon days, so just finishing it feels like a huge win for me.", "In the webtoon days, Part 2 had a typical shonen-manga(?) structure: Aoi, a gloomy, unstable villain (lol), kidnaps Ren's daughter Miko and pressures her to carry on Ren's will, and Kuro and the gang rescue her. But it fell short as a story about Kuro growing up, so in the web novel it turned into a story driven by everyone's own beliefs and choices colliding.", "The most fun part of the Ryuo Clan Arc was Eunho's story. Fox spirits usually help the protagonist or stay in an advisor role, but Eunho agonizes over Kuro and jumps in himself. It's a choice that could shake his divine power, his very reason to exist, so it was thrilling to the point of \"Is this even okay!?\", and breaking a familiar cliché to take it somewhere new was a real joy.", "That said, Eunho's arc is now completely finished. It's my first time fully wrapping up a character's story and sending them off(?), so I do feel a little wistful, but I think it's about time Eunho went back to where he belongs. (Good work, Eunho..)", "Herbaeken, on the other hand, has stepped into a new story of his own.", "For the Ryuo Clan Arc, I boldly made Herbaeken and Shiro supporting characters. Even so, in their brief appearances they became an important gateway into Part 3, and my favorite scene is the one in the final episode where he draws close to what \"Shin no Kagi\" really is. (In both Part 1 and Part 2, my favorite scenes always seem to have Herbaeken in them..)", "Since Part 2 deals with much heavier events and emotions than Part 1, the story leans more on emotional beats, with more dialogue and more psychological description. Keeping the action and tension balanced in a story that could easily have sagged was the most enjoyable challenge of this project.", "And this change in tone was something Kuro truly needed to grow into a protagonist. He grows by facing the darkness of the world and the darkness within himself, which meant letting go of pure, cute Kuro little by little, and honestly, that hurt.. (sob) (Everyone.. the current Kuro ends with Part 2... the Kuro of Part 3 will be a new Kuro..)", "But thanks to that process, I came to understand much more clearly who Kuro and Lackness are. I hope you can feel that with me.", "The works I leaned on most to stay grounded were Mushishi, Hell Girl, and Higurashi When They Cry. To me, a \"Japanese feel\" means that quiet, bittersweet mood unique to the mid-2000s. In Part 2, I wanted to capture the feeling of that era in my own way.", "One more bit of TMI: in places, the explanations run a little long. (heh) Wherever something could be open to interpretation, I wanted it to come across without any misunderstanding, so I went for it.", "Finally,", "Looking back, Part 1 was where I showed what I'm good at. Part 2, on the other hand, was built by running into my weak spots again and again. It was a hard process, but that's exactly why I learned and grew the most. So for me, Part 2 is my biggest challenge yet, and a work I'll remember for a long time.", "From Part 3, new nonhuman leads will appear, and the story will grow even bigger around the keyword 'legend.' I can't say yet when I'll be back, but unless I die (lol), I plan to see it through to the end.", "\"Blood High School\" doesn't chase trends, so there's no need to rush. I'll keep going steadily, at my own pace.", "Thank you.", "2026.07.29"],
      ja:["ついに竜王家編、そして『ブラッドハイスクール』第2部が完結しました。", "第2部はウェブトゥーン時代からいちばん長く悩み、時間をかけてきた部分なので、完成できたこと自体が私にとって大きな成功です。", "ウェブトゥーン時代の第2部は、陰気なメンヘラ悪役(笑)だったアオイがレンの娘ミコを誘拐してレンの意志を継げと迫り、クロたちがミコを救出するという、典型的な少年漫画(?)の構成でした。でもクロが成長する物語としては足りない部分があったので、Web小説ではそれぞれの考えと選択がぶつかり合いながら物語が流れていく方向に変わりました。", "今回の竜王家編でいちばん楽しかった作業は、ウンホの物語でした。狐の神霊という存在は、ふつうは主人公を助けたり、助言者の役割にとどまったりすることが多いのですが、ウンホはクロのために悩み、自ら飛び込んでいきます。もしかしたら自分の神力、つまり存在意義そのものが揺らぎかねない選択なので、「これでいいの!?」と思うほどゾクゾクしましたし、おなじみのお約束を壊して新しい方向へ描いていく過程がとても楽しかったです。", "ただ、今回の編でウンホの物語は完全に完結しました。ひとりのキャラクターの物語を完全に終わらせて送り出す(?)経験は初めてなので、寂しさも残りますが、ウンホもそろそろ自分の居場所に戻る時が来たようです。(ウンホ、お疲れさま..)", "逆にヘルバーケンは、また別の物語へ足を踏み入れたキャラクターです。", "ヘルバーケンとシロは、今回の竜王家編では思い切って脇役にしました。それでも短い登場の中で第3部へつながる大事な入口の役割を果たしてくれましたし、特に最終話で「眞ノ鍵」が何なのかに迫ったあの演出が、私のいちばん好きなシーンです。(第1部も第2部も、私の名場面にはいつもヘルバーケンが..)", "第2部は第1部よりずっと重い事件や感情を扱うぶん、感情の流れを中心にした展開や多くのセリフ、心理描写の比重も大きくなりました。停滞しがちな展開の中でも、アクションと緊張感をうまく調整しながら物語を進めていく過程は、今回の作業でいちばん楽しかった挑戦でした。", "そしてこうしたトーンの変化は、クロが主人公として成長していく過程でどうしても必要な変化でした。世界の闇と自分の闇に向き合いながら成長していくぶん、純粋でかわいいクロを少しずつ見送らなければならなくて、個人的には胸が痛みました..(泣)(皆さん..今のクロは第2部が最後です…第3部のクロは新しいクロになる予定です..)", "でもその過程のおかげで、私自身もクロとラクニスがどんなキャラクターなのか、よりはっきり理解できました。読者の皆さんにも一緒に感じてもらえたらうれしいです。", "作業中に軸をぶらさないため、いちばん参考にした作品は『蟲師』『地獄少女』『ひぐらしのなく頃に』でした。私にとって和風とは、2000年代半ばならではの静かでほろ苦い雰囲気です。今回の第2部では、あの頃の空気を自分なりに込めてみたかったんです。", "TMIをもうひとつ付け加えると、ところどころ説明が多すぎる部分があります。(ふふ)解釈の余地が残りそうなところだけは、誤解なく伝えたくて、あえてしっかり書きました。", "最後に、", "振り返ってみると、第1部は私の得意なことを見せた作品でした。一方で第2部は、足りない部分とぶつかり続けながら作っていった作品でした。大変な過程でしたが、そのぶんいちばん多くを学び、成長できました。だから私にとって第2部は、いちばん大きな挑戦であり、長く記憶に残る作品です。", "第3部からは新しい人外の主人公たちが登場し、「伝説」というキーワードを中心に物語のスケールもさらに大きくなる予定です。いつお届けできるかはまだ言えませんが、死なない限り(笑)最後まで走り切るつもりです。", "『ブラッドハイスクール』は流行に左右されない作品なので、急ぐ必要もありません。これからも自分のペースで、こつこつ続けていきます。", "ありがとうございました。", "2026.07.29"],
@@ -2090,24 +2048,24 @@ var BHS_VOLUMES = [
    cover:'Blood_High_School/bhs_novel_prat2_cover.png',
    synopsis:{"en": "Kuro has become head of the Ryuo family. As he faces the sins his family has kept hidden, the despair Lackness knew a thousand years ago threatens to repeat itself. At the end of a long chain of karma, Kuro accepts the King of Ruin and opens his eyes to protect what matters to him.", "ja": "竜王家の当主となったクロ。家が隠してきた罪と向き合う中、千年前のラクニスの絶望が繰り返されようとしている。業の果てで、クロは破壊の王を受け入れ、大切なものを守るために目を開く。", "ko": "류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다."},
    episodes:[
-     {id:1,  title:{"en": "The Ryuo Clan Arc, Ep. 1", "ja": "竜王家編 第1話", "ko": "류오가편 1화"},  date:null, status:'예정'},
-     {id:2,  title:{"en": "The Ryuo Clan Arc, Ep. 2", "ja": "竜王家編 第2話", "ko": "류오가편 2화"},  date:null, status:'예정'},
-     {id:3,  title:{"en": "The Ryuo Clan Arc, Ep. 3", "ja": "竜王家編 第3話", "ko": "류오가편 3화"},  date:null, status:'예정'},
-     {id:4,  title:{"en": "The Ryuo Clan Arc, Ep. 4", "ja": "竜王家編 第4話", "ko": "류오가편 4화"},  date:null, status:'예정'},
-     {id:5,  title:{"en": "The Ryuo Clan Arc, Ep. 5", "ja": "竜王家編 第5話", "ko": "류오가편 5화"},  date:null, status:'예정'},
-     {id:6,  title:{"en": "The Ryuo Clan Arc, Ep. 6", "ja": "竜王家編 第6話", "ko": "류오가편 6화"},  date:null, status:'예정'},
-     {id:7,  title:{"en": "The Ryuo Clan Arc, Ep. 7", "ja": "竜王家編 第7話", "ko": "류오가편 7화"},  date:null, status:'예정'},
-     {id:8,  title:{"en": "The Ryuo Clan Arc, Ep. 8", "ja": "竜王家編 第8話", "ko": "류오가편 8화"},  date:null, status:'예정'},
-     {id:9,  title:{"en": "The Ryuo Clan Arc, Ep. 9", "ja": "竜王家編 第9話", "ko": "류오가편 9화"},  date:null, status:'예정'},
-     {id:10, title:{"en": "The Ryuo Clan Arc, Ep. 10", "ja": "竜王家編 第10話", "ko": "류오가편 10화"}, date:null, status:'예정'},
-     {id:11, title:{"en": "The Ryuo Clan Arc, Ep. 11", "ja": "竜王家編 第11話", "ko": "류오가편 11화"}, date:null, status:'예정'},
-     {id:12, title:{"en": "The Ryuo Clan Arc, Ep. 12", "ja": "竜王家編 第12話", "ko": "류오가편 12화"}, date:null, status:'예정'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
+     {id:1,  title:{"en": "The Ryuo Clan Arc, Ep. 1", "ja": "竜王家編 第1話", "ko": "류오가편 1화"},  date:null, status:'plan'},
+     {id:2,  title:{"en": "The Ryuo Clan Arc, Ep. 2", "ja": "竜王家編 第2話", "ko": "류오가편 2화"},  date:null, status:'plan'},
+     {id:3,  title:{"en": "The Ryuo Clan Arc, Ep. 3", "ja": "竜王家編 第3話", "ko": "류오가편 3화"},  date:null, status:'plan'},
+     {id:4,  title:{"en": "The Ryuo Clan Arc, Ep. 4", "ja": "竜王家編 第4話", "ko": "류오가편 4화"},  date:null, status:'plan'},
+     {id:5,  title:{"en": "The Ryuo Clan Arc, Ep. 5", "ja": "竜王家編 第5話", "ko": "류오가편 5화"},  date:null, status:'plan'},
+     {id:6,  title:{"en": "The Ryuo Clan Arc, Ep. 6", "ja": "竜王家編 第6話", "ko": "류오가편 6화"},  date:null, status:'plan'},
+     {id:7,  title:{"en": "The Ryuo Clan Arc, Ep. 7", "ja": "竜王家編 第7話", "ko": "류오가편 7화"},  date:null, status:'plan'},
+     {id:8,  title:{"en": "The Ryuo Clan Arc, Ep. 8", "ja": "竜王家編 第8話", "ko": "류오가편 8화"},  date:null, status:'plan'},
+     {id:9,  title:{"en": "The Ryuo Clan Arc, Ep. 9", "ja": "竜王家編 第9話", "ko": "류오가편 9화"},  date:null, status:'plan'},
+     {id:10, title:{"en": "The Ryuo Clan Arc, Ep. 10", "ja": "竜王家編 第10話", "ko": "류오가편 10화"}, date:null, status:'plan'},
+     {id:11, title:{"en": "The Ryuo Clan Arc, Ep. 11", "ja": "竜王家編 第11話", "ko": "류오가편 11화"}, date:null, status:'plan'},
+     {id:12, title:{"en": "The Ryuo Clan Arc, Ep. 12", "ja": "竜王家編 第12話", "ko": "류오가편 12화"}, date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'plan'}
    ]},
   {id:'novel-3', grad:'150deg,#1a0000,#700000,#aa2020', num:3, part:'PART 03', sub:{"en": "Part 3", "ja": "第3部", "ko": "3부"},
-   label:{"en": "Blood High School Part 3", "ja": "ブラッドハイスクール 第3部", "ko": "블러드하이스쿨 3부"}, type:'웹소설',
+   label:{"en": "Blood High School Part 3", "ja": "ブラッドハイスクール 第3部", "ko": "블러드하이스쿨 3부"}, type:'novel',
    available:false, tags:[{"en": "#NewRace", "ja": "#新種族", "ko": "#신종족"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정"}],
    links:{ chars:'', lookbook:'', notes:'' },
    cast:'',
@@ -2120,24 +2078,24 @@ var BHS_VOLUMES = [
    cover:'Blood_High_School/bhs_novel_prat3_cover.png',
    synopsis:{"en": "A new race appears.", "ja": "新たな種族が現れる。", "ko": "새로운 종족이 나타난다."},
    episodes:[
-     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화"},  date:null, status:'예정'},
-     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화"},  date:null, status:'예정'},
-     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화"},  date:null, status:'예정'},
-     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화"},  date:null, status:'예정'},
-     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화"},  date:null, status:'예정'},
-     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화"},  date:null, status:'예정'},
-     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화"},  date:null, status:'예정'},
-     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화"},  date:null, status:'예정'},
-     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화"},  date:null, status:'예정'},
-     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화"}, date:null, status:'예정'},
-     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화"}, date:null, status:'예정'},
-     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화"}, date:null, status:'예정'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
+     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화"},  date:null, status:'plan'},
+     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화"},  date:null, status:'plan'},
+     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화"},  date:null, status:'plan'},
+     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화"},  date:null, status:'plan'},
+     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화"},  date:null, status:'plan'},
+     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화"},  date:null, status:'plan'},
+     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화"},  date:null, status:'plan'},
+     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화"},  date:null, status:'plan'},
+     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화"},  date:null, status:'plan'},
+     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화"}, date:null, status:'plan'},
+     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화"}, date:null, status:'plan'},
+     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화"}, date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'plan'}
    ]},
   {id:'novel-4', grad:'150deg,#0d0018,#3a1060,#7040b0', num:4, part:'PART 04', sub:{"en": "Part 4", "ja": "第4部", "ko": "4부"},
-   label:{"en": "Blood High School Part 4", "ja": "ブラッドハイスクール 第4部", "ko": "블러드하이스쿨 4부"}, type:'웹소설',
+   label:{"en": "Blood High School Part 4", "ja": "ブラッドハイスクール 第4部", "ko": "블러드하이스쿨 4부"}, type:'novel',
    available:false, tags:[{"en": "#HighFantasy", "ja": "#本格ファンタジー", "ko": "#본격판타지"}, {"en": "#PayoffArc", "ja": "#伏線回収", "ko": "#떡밥회수"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정"}],
    links:{ chars:'', lookbook:'', notes:'' },
    cast:'',
@@ -2150,21 +2108,21 @@ var BHS_VOLUMES = [
    cover:'Blood_High_School/bhs_novel_prat4_cover.png',
    synopsis:{"en": "Shedding its school-story skin for full-blown fantasy. The true cause of the dragon clan's fall a thousand years ago, and every piece of legendary foreshadowing, pays off at once.", "ja": "学園ものの殻を脱ぎ、本格ファンタジーへ。千年前の龍族滅亡の本当の原因と、積み重なった伝説の伏線が一気に回収される。", "ko": "학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다."},
    episodes:[
-     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화"},  date:null, status:'예정'},
-     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화"},  date:null, status:'예정'},
-     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화"},  date:null, status:'예정'},
-     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화"},  date:null, status:'예정'},
-     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화"},  date:null, status:'예정'},
-     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화"},  date:null, status:'예정'},
-     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화"},  date:null, status:'예정'},
-     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화"},  date:null, status:'예정'},
-     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화"},  date:null, status:'예정'},
-     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화"}, date:null, status:'예정'},
-     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화"}, date:null, status:'예정'},
-     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화"}, date:null, status:'예정'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
+     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화"},  date:null, status:'plan'},
+     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화"},  date:null, status:'plan'},
+     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화"},  date:null, status:'plan'},
+     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화"},  date:null, status:'plan'},
+     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화"},  date:null, status:'plan'},
+     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화"},  date:null, status:'plan'},
+     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화"},  date:null, status:'plan'},
+     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화"},  date:null, status:'plan'},
+     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화"},  date:null, status:'plan'},
+     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화"}, date:null, status:'plan'},
+     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화"}, date:null, status:'plan'},
+     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화"}, date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'plan'}
    ]}
 ];
 
@@ -2347,7 +2305,7 @@ function bhsLines(s){
                     : '<p class="ptl">&nbsp;</p>';
   }).join('');
 }
-function bhsStCls(s){ return s==='완료'?'done':(s==='작업중'?'wip':'plan'); }
+function bhsStCls(s){ return (s==='done' || s==='wip') ? s : 'plan'; }
 function bhsHasNote(v){ return bhsNoteParas(v).length > 0; }
 function bhsSecBtn(on, label, call, offMsg){
   return on
@@ -2355,20 +2313,21 @@ function bhsSecBtn(on, label, call, offMsg){
     : '<button class="vl-off" title="' + offMsg + '" onclick="return false">' + label + ' &rarr;</button>';
 }
 function bhsDate(d){ return d?d.replace(/-/g,'.'):''; }
-function bhsCanRead(e){ return e.status==='완료'; }
+function bhsCanRead(e){ return e.status==='done'; }
 
 /* ── 본문 파일 경로 ── */
 function bhsTextPath(volId, epId, lang){
   var base = 'blood-highschool-' + volId + '-' + String(epId).padStart(2,'0');
   if(lang === 'pure_ko') return BHS_TEXT_ROOT + 'texts_pure_ko/' + base + '_pure_ko.txt';
   if(lang === 'jp')      return BHS_TEXT_ROOT + 'texts_jp/' + base + '_jp.txt';
+  if(lang === 'en_mix')  return BHS_TEXT_ROOT + 'texts_en_mix/' + base + '_en_mix.txt';
   if(lang === 'en')      return BHS_TEXT_ROOT + 'texts_en/' + base + '_en.txt';
   return BHS_TEXT_ROOT + 'texts/' + base + '.txt';
 }
 
 /* ── 본문 fetch (번호 zero-padding 유무 모두 시도) ── */
 async function bhsFetchText(url){
-  var re = /-(\d+)(_pure_ko\.txt|_jp\.txt|_en\.txt|\.txt)$/;
+  var re = /-(\d+)(_pure_ko\.txt|_jp\.txt|_en_mix\.txt|_en\.txt|\.txt)$/;
   var list = [url], m = url.match(re);
   if(m){
     var n = parseInt(m[1],10);
@@ -2811,7 +2770,7 @@ function bhsLk(v){
     count : d.count || 0,
     meta  : d.meta  || '',
     thumbs: d.thumbs || [],
-    state : d.state || '보기',   // '보기' = 링크 활성 / '준비중' = 링크 비활성
+    state : d.state || 'view',   // 'view' = 링크 활성 / 'soon' = 링크 비활성
     url   : (v.links && v.links.lookbook) || ''
   };
 }
@@ -2823,7 +2782,7 @@ function bhsLkMeta(d){
 }
 function bhsLkCells(v, slots){
   var d = bhsLk(v), out = '', i, t, img, badge;
-  var wip  = (d.state === '준비중');
+  var wip  = (d.state === 'soon');
   var go   = wip ? '' : 'onclick="bhsOpenLink(\'' + d.url + '\')"';
   var rest = d.count - slots;
   for(i = 0; i < slots; i++){
@@ -2878,7 +2837,6 @@ var BHS_FOOTER_HTML = '<div class="site-footer"><div class="site-footer-inner">'
   + '<span class="sf-copy">&copy; rrkt.biz. All rights reserved.</span><span class="sf-sep"></span>'
   + '<span class="sf-note">' + T('footer.note') + '</span>'
   + '<span class="sf-links">'
-  + '<a href="https://www.postype.com/@biz202099" target="_blank" rel="noopener">postype.com/@biz202099</a>'
   + '<a href="https://www.postype.com/@rrkt2022" target="_blank" rel="noopener">postype.com/@rrkt2022</a>'
   + '</span></div></div>';
 
@@ -2908,9 +2866,9 @@ function bhsRenderEpList(){
     + '<div class="lk-band-hd">'
     + '<span class="lk-band-t">LOOKBOOK</span>'
     + (bhsLkMeta(lkd) ? '<span class="lk-band-m">' + bhsLkMeta(lkd) + '</span>' : '')
-    + '<button class="lk-band-go' + (lkd.state==='준비중' ? ' lk-band-go-disabled' : '') + '"'
-    + (lkd.state==='준비중' ? '' : ' onclick="bhsOpenLink(\'' + lkd.url + '\')"')
-    + '>' + (lkd.state==='준비중' ? T('lk.soon') : T('lk.all')) + '</button>'
+    + '<button class="lk-band-go' + (lkd.state==='soon' ? ' lk-band-go-disabled' : '') + '"'
+    + (lkd.state==='soon' ? '' : ' onclick="bhsOpenLink(\'' + lkd.url + '\')"')
+    + '>' + (lkd.state==='soon' ? T('lk.soon') : T('lk.all')) + '</button>'
     + '</div>'
     + '<div class="lk-grid">' + bhsLkCells(v, 4) + '</div>'
     + '</div>'
@@ -2926,7 +2884,7 @@ function bhsRenderEpList(){
     + '<div class="ep-board-head"><span>#</span><span>' + T('board.title') + '</span><span style="text-align:right">' + T('board.date') + '</span></div>'
     + eps.map(function(e){
         var ok = bhsCanRead(e);
-        var wip = e.status === '작업중' ? 'background:#F9F4CA;color:#F9CB4C' : '';
+        var wip = e.status === 'wip' ? 'background:#F9F4CA;color:#F9CB4C' : '';
         return '<div class="ep-row' + (ok?'':' ep-row-locked') + '"' + (ok?' onclick="bhsGo(\'vol\',\''+v.id+'\','+e.id+')"':'') + '>'
              + '<span class="ep-num">' + e.id + '</span>'
              + '<span class="ep-title-col"><span class="ep-title-text">' + bhsEsc(e.title) + '</span>'
@@ -3162,9 +3120,7 @@ function bhsRenderReader(){
     + '<span class="tb-crumb">' + bhsEsc(v.label) + '</span><span class="tb-arr">&#8250;</span>'
     + '<span class="tb-cur">' + bhsEsc(e.title) + '</span>'
     + '<div style="margin-left:auto;display:flex;gap:4px;flex-shrink:0">'
-    + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='ko'?'active':'') + '" data-lang="ko" onclick="setEpLang(\'ko\')">한본어</button>'
-    + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='pure_ko'?'active':'') + '" data-lang="pure_ko" onclick="setEpLang(\'pure_ko\')">순KO</button>'
-    + '<button class="ep-lang-btn ' + (BHS_EP_LANG==='jp'?'active':'') + '" data-lang="jp" onclick="setEpLang(\'jp\')">JA</button>'
+    + bhsEpLangBtns()
     + '<span id="rd-fs-wrap">'
     +   '<span class="rd-fs-sep"></span>'
     +   '<button class="rd-fs-toggle" id="rd-fs-toggle" onclick="bhsFsToggle(event)" title="' + T('fs.title') + '" aria-label="' + T('fs.title') + '">' + T('fs.glyph') + '</button>'
@@ -3187,8 +3143,8 @@ function bhsRenderReader(){
     + '<div class="postype-meta">'
     + (e.date ? '<span class="postype-date">' + e.date + '</span>' : '')
     + '<span class="postype-status-badge" style="' + (
-        e.status === '완료'   ? 'background:#ffe4e4;color:#c0392b' :
-        e.status === '작업중' ? 'background:#F9F4CA;color:#F9CB4C' :
+        e.status === 'done'   ? 'background:#ffe4e4;color:#c0392b' :
+        e.status === 'wip' ? 'background:#F9F4CA;color:#F9CB4C' :
                                 'background:#f0f0f0;color:#aaa'
       ) + '">' + bhsStLabel(e.status) + '</span></div>'
     + '<div style="display:flex;align-items:center;gap:6px;margin-top:12px">'
@@ -3231,7 +3187,7 @@ function openEpPicker(){
     return '<div class="ep-picker-item' + (e.id===BS.ep?' current':'') + '" style="--curr-acc:' + BHS_ACC + '" onclick="pickEp(' + e.id + ')">'
          + '<span class="ep-picker-num">' + e.id + '</span>'
          + '<span class="ep-picker-t">' + bhsEsc(e.title) + '</span>'
-         + '<span class="ep-picker-st ' + bhsStCls(e.status) + '" style="' + (e.status==='작업중'?'color:#F9CB4C':'') + '">' + bhsStLabel(e.status) + '</span>'
+         + '<span class="ep-picker-st ' + bhsStCls(e.status) + '" style="' + (e.status==='wip'?'color:#F9CB4C':'') + '">' + bhsStLabel(e.status) + '</span>'
          + '</div>';
   }).join('');
   document.getElementById('ep-picker-modal').classList.remove('hidden');
@@ -3245,13 +3201,32 @@ function pickEp(id){
 function closeEpPicker(ev){ if(ev.target === document.getElementById('ep-picker-modal')) closeEpPickerBtn(); }
 function closeEpPickerBtn(){ var m=document.getElementById('ep-picker-modal'); if(m) m.classList.add('hidden'); document.body.classList.remove('ep-picker-open'); }
 
-/* ── 본문 소스 언어 (한본어 / 순KO / JA) ── */
-var BHS_EP_LANG = 'ko';
-function setEpLang(lang){
-  BHS_EP_LANG = lang;
-  document.querySelectorAll('.ep-lang-btn').forEach(function(b){
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
+/* ── 소설 판본 버튼 ──
+   한국어: 한본어(texts) / 순KO(texts_pure_ko)
+   영어  : EN+JA 영본어판(texts_en_mix) / Pure EN 순영어판(texts_en)
+   고른 판본은 브라우저에 기억합니다 (bhs_ep_ko / bhs_ep_en).
+   일본어와 그 밖의 언어는 판본이 하나라 버튼이 없습니다. */
+var BHS_EP_LANG = 'ko', BHS_EP_EN = 'en_mix';
+try{
+  var _sk = localStorage.getItem('bhs_ep_ko'); if(_sk === 'ko' || _sk === 'pure_ko') BHS_EP_LANG = _sk;
+  var _se = localStorage.getItem('bhs_ep_en'); if(_se === 'en_mix' || _se === 'en') BHS_EP_EN = _se;
+}catch(e){}
+function bhsEpLangBtns(){
+  var list = _currentLang === 'ko' ? [['ko','한본어'],['pure_ko','순KO']]
+           : _currentLang === 'en' ? [['en_mix','EN+JA'],['en','Pure EN']]
+           : [];
+  var cur = _currentLang === 'en' ? BHS_EP_EN : BHS_EP_LANG;
+  return list.map(function(b){
+    return '<button class="ep-lang-btn ' + (cur === b[0] ? 'active' : '') + '" data-lang="' + b[0] + '" onclick="setEpLang(\'' + b[0] + '\')">' + b[1] + '</button>';
+  }).join('');
+}
+function bhsEpMarkBtn(code){
+  document.querySelectorAll('.ep-lang-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.lang === code); });
+}
+function setEpLang(code){
+  if(code === 'en' || code === 'en_mix'){ BHS_EP_EN = code;  try{ localStorage.setItem('bhs_ep_en', code); }catch(e){} }
+  else                                  { BHS_EP_LANG = code; try{ localStorage.setItem('bhs_ep_ko', code); }catch(e){} }
+  bhsEpMarkBtn(code);
   bhsLoadText(BS.vol, BS.ep);
 }
 
@@ -3272,9 +3247,9 @@ async function bhsLoadText(volId, epId){
 
   /* ② 어느 파일을 읽을지 결정 */
   var srcLang;
-  if(!isForeign)         srcLang = BHS_EP_LANG;   /* 한국어: 한본어/순KO/JA 버튼 선택 존중 */
+  if(!isForeign)         srcLang = BHS_EP_LANG;   /* 한국어: 한본어/순KO 버튼 선택 */
   else if(lang === 'ja') srcLang = 'jp';          /* 일본어: 원본 그대로 (번역하지 않음) */
-  else if(lang === 'en') srcLang = 'en';          /* English: texts_en only, no machine translation */
+  else if(lang === 'en') srcLang = BHS_EP_EN;     /* 영어: 영본어/순영어 버튼 선택 (기계번역 없음) */
   else                   srcLang = 'pure_ko';     /* 그 밖의 외국어: 순한국어 → 구글이 번역 */
 
   var path = bhsTextPath(volId, epId, srcLang);
@@ -3284,6 +3259,12 @@ async function bhsLoadText(volId, epId){
     text = await bhsFetchText(path);
   }catch(err){
     lastErr = err;
+    /* 영어: 고른 판본이 아직 없으면 다른 영어 판본으로 한 번 더 (버튼 표시도 그쪽으로) */
+    if(lang === 'en'){
+      var other = (srcLang === 'en_mix') ? 'en' : 'en_mix';
+      try{ text = await bhsFetchText(bhsTextPath(volId, epId, other)); lastErr = null; bhsEpMarkBtn(other); }
+      catch(e3){}
+    }
     /* 외국어 전용 파일이 없으면 일반 한국어 본문으로 한 번 더 시도 */
     if(isForeign && lang !== 'en'){
       try{ text = await bhsFetchText(bhsTextPath(volId, epId, 'ko')); lastErr = null; }
@@ -3325,11 +3306,11 @@ async function bhsLoadText(volId, epId){
 }
 
 /* ══════════════════════════════════════════════════════
-   번역 시스템 — rrkt.biz index.html 과 동일 동작
-   ① UI(data-i18n): DeepL 우선 → 실패 시 Google
-   ② 본문: 일본어 원본 파일 → DeepL(일본어 소스) → 순한국어+Google
+   언어 전환
+   · 화면 글자: 영어·일본어·한국어는 위 사전(BHS_I18N), 그 밖의 언어는 구글 번역
+   · 소설 본문: 영어 texts_en / 일본어 texts_jp / 한국어 texts·texts_pure_ko
+               그 밖의 언어는 순한국어를 구글이 번역 (DeepL 버튼으로 다시 번역 가능)
    ══════════════════════════════════════════════════════ */
-var _tlCache = {};
 var _currentLang = 'ko';
 var _epOriginalLines = null;
 
@@ -3340,44 +3321,6 @@ function setLang(lang){
   _currentLang = lang;
   try{ localStorage.setItem('bzd_lang', lang); }catch(e){}
   location.reload();
-}
-
-/* ── ① UI DeepL 번역 ── */
-function _tlDeepL(lang, cfg){
-  var nodes = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
-  if(!nodes.length){ _tlGoogle(lang); return; }
-  nodes.forEach(function(n){ if(!n.dataset.orig) n.dataset.orig = n.textContent.trim(); });
-  var texts = nodes.map(function(n){ return n.dataset.orig; });
-  var dlLang = (lang === 'zh-CN' || lang === 'zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
-
-  var ctrl = new AbortController();
-  var timer = setTimeout(function(){ ctrl.abort(); }, cfg.timeout || 5000);
-
-  fetch(cfg.proxyUrl, {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ text: texts, target_lang: dlLang }), signal: ctrl.signal
-  })
-  .then(function(res){ clearTimeout(timer); if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
-  .then(function(data){
-    var dict = {};
-    nodes.forEach(function(n,i){ dict[n.dataset.i18n] = data.translations[i].text; });
-    _tlCache[lang] = dict;
-    _tlApply(dict);
-    _tlBadge('deepl');
-    _tlGoogle(lang);
-  })
-  .catch(function(err){
-    clearTimeout(timer);
-    console.warn('[DeepL] 실패 → Google 폴백:', err.message);
-    _tlGoogle(lang);
-  });
-}
-
-function _tlApply(dict){
-  document.querySelectorAll('[data-i18n]').forEach(function(n){
-    var k = n.dataset.i18n;
-    if(dict[k]) n.textContent = dict[k];
-  });
 }
 
 /* ── ② Google Translate ── */
@@ -3411,35 +3354,6 @@ function _renderEpForLang(lang){
   if(lang === 'en'){ _tlHideDeepLBtns(); return; }   /* English edition is read as-is */
   if(cfg.enabled && cfg.proxyUrl) _tlShowDeepLBtn(lang, cfg);
   else _tlHideDeepLBtns();
-}
-
-/* ── [현재 미사용] 일본어 원본 표시 — bhsLoadText 가 직접 처리하도록 바뀜.
-      되돌릴 일이 있을까 봐 남겨 둠. 지우려면 이 함수 통째로 삭제해도 무방. ── */
-function _tlShowJpOriginal(){
-  var el = document.getElementById('postype-body'); if(!el) return;
-  var jpPath     = bhsTextPath(BS.vol, BS.ep, 'jp');
-  var pureKoPath = bhsTextPath(BS.vol, BS.ep, 'pure_ko');
-  el.innerHTML = '<div class="postype-loading"><div class="postype-spinner"></div><span>日本語版を読み込み中…</span></div>';
-  bhsFetchText(jpPath).then(function(text){
-    el.innerHTML = '<div class="postype-text notranslate">' + bhsLines(text) + '</div>';
-    _tlBadge('jp');
-  }).catch(function(){
-    bhsFetchText(pureKoPath).then(function(text){
-      el.innerHTML = '<div class="postype-text">' + bhsLines(text) + '</div>';
-      _tlGoogle('ja');
-    }).catch(function(){ _tlGoogle('ja'); });
-  });
-}
-
-/* ── [현재 미사용] 순한국어+구글 폴백 — bhsLoadText 가 직접 처리하도록 바뀜.
-      되돌릴 일이 있을까 봐 남겨 둠. 지우려면 이 함수 통째로 삭제해도 무방. ── */
-function _tlLoadPureKoAndGoogle(lang){
-  var el = document.getElementById('postype-body');
-  if(!el){ _tlGoogle(lang); return; }
-  bhsFetchText(bhsTextPath(BS.vol, BS.ep, 'pure_ko')).then(function(text){
-    el.innerHTML = '<div class="postype-text">' + bhsLines(text) + '</div>';
-    _tlGoogle(lang);
-  }).catch(function(){ _tlGoogle(lang); });
 }
 
 /* ── 본문 DeepL 번역 (소스: 일본어 → 순한국어 → 화면 원본) ── */
@@ -3524,8 +3438,8 @@ function _tlDeepLEpisode(lang, cfg, onDone){
 
 /* ── 번역 중에는 소스 선택 버튼 숨김 (rrkt 동일) ── */
 function _updateEpLangBtns(lang){
-  var t = lang && lang !== 'ko';
-  document.querySelectorAll('.ep-lang-btn').forEach(function(b){ b.style.display = t ? 'none' : ''; });
+  var show = (lang === 'ko' || lang === 'en');
+  document.querySelectorAll('.ep-lang-btn').forEach(function(b){ b.style.display = show ? '' : 'none'; });
 }
 function _tlHideDeepLBtns(){
   var b=document.getElementById('deepl-translate-btn');   if(b) b.style.display='none';
@@ -3715,16 +3629,11 @@ async function bhsLoadSheet(){
       var m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
       return m ? m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0') : null;
     }
-    /* Sheet values: English (BHS / novel / done·wip·plan).
-       Old Korean values are still accepted, so the sheet and this file
-       can be updated in any order. */
-    var SHEET_TYPE   = { 'novel':'웹소설' };
-    var SHEET_STATUS = { 'done':'완료', 'wip':'작업중', 'plan':'예정' };
+    /* 시트 값: project = BHS · type = novel · status = done / wip / plan */
     function apply(p,t,vn,en,s,d){
-      var pk = String(p).toLowerCase();
-      if(pk !== 'bhs' && p !== '블러드하이스쿨') return;
-      t = SHEET_TYPE[String(t).toLowerCase()] || t;
-      s = SHEET_STATUS[String(s).toLowerCase()] || s;
+      if(String(p).toLowerCase() !== 'bhs') return;
+      t = String(t).toLowerCase();
+      s = String(s).toLowerCase();
       var volNum = parseInt(vn,10), epId = parseInt(en,10);
       if(isNaN(volNum) || isNaN(epId)) return;
       var v = null;
@@ -3762,21 +3671,6 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 <script>
-/* ===== DOMContentLoaded ===== */
-document.addEventListener('DOMContentLoaded',function(){
-});
-
-/* ============================================================
-   작품 보러가기 CTA — 상단바 중복 버그 수정
-   이 파일은 부모(index.html) 안의 iframe으로 떠 있다.
-   링크를 그냥 풀 URL로 열면 iframe '안에서' 사이트 전체가
-   다시 로드되어 상단바가 두 개로 겹친다.
-   → 클릭 시 부모 창을 직접 라우팅하고 iframe은 부모 render()가
-      알아서 숨긴다. (부모와 same-origin일 때)
-   → 단독 열람/타 도메인이면 최상위 창을 풀 URL로 이동(fallback).
-   ============================================================ */
-/* 옛 iframe-부모 라우팅 bhsGoNovel — 완전 독립 SPA 전환으로 폐기.
-   실제 라우팅은 위쪽 bhsGoNovel(ev,volId){ bhsGo('vol',volId) } 가 담당. */
 </script>
 <div id="google_translate_element"></div>
 
