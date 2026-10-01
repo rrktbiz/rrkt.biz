@@ -495,6 +495,9 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tb-lang-search:focus{border-color:#c6c6c6;}
 #tb-lang-list{max-height:260px;overflow-y:auto;}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
+/* Hide Google Translate's top bar (the page shows its own 'Google' badge instead) */
+.goog-te-banner-frame,.skiptranslate{display:none !important}
+body{top:0 !important}
 .bt-tabs{display:flex;align-items:stretch;height:44px;padding:0 12px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .bt-tabs::-webkit-scrollbar{display:none;}
 .bt-tab{position:relative;flex-shrink:0;background:none;border:none;border-bottom:2.5px solid transparent;font-size:15px;font-weight:700;color:var(--tx3);padding:0 14px;white-space:nowrap;transition:color .12s,border-color .12s;}
