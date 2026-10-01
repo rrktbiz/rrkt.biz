@@ -2208,9 +2208,10 @@ function miniNext(){if(S.homeMiniM===11){S.homeMiniM=0;S.homeMiniY++;}else S.hom
    그 다음: rebuildWorkLog() → WORK_LOG → 캘린더에 표시
 
    시트 열 구조 (1행은 헤더라 건너뜀, 좌우 2벌이 한 줄에 들어감)
-     왼쪽  A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜
-     오른쪽 G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜
-   프로젝트 칸에 쓰는 값: "블러드하이스쿨" 또는 "biz-OC-doll"
+     왼쪽  A=project B=type C=vol D=ep E=status F=date
+     오른쪽 G=project H=type I=vol J=ep K=status L=date
+   값: project = BHS · type = novel · status = done / wip / plan
+   (옛 한국어 값 블러드하이스쿨·웹소설·완료·작업중·예정도 계속 읽힘)
    날짜 형식: 2026-04-12 또는 2026. 4. 12  (둘 다 인식)
 
    ※ 실패해도 페이지는 그대로 뜹니다 — 날짜만 안 붙습니다.
@@ -2240,6 +2241,8 @@ async function loadEpDataFromSheets(){
 
     // 프로젝트 이름 → ID 매핑
     const projMap = {
+      "BHS":            "blood-highschool",
+      "bhs":            "blood-highschool",
       "블러드하이스쿨": "blood-highschool",
       "biz-OC-doll":    "biz-oc-doll",
       "biz-oc-doll":    "biz-oc-doll",
@@ -2257,7 +2260,12 @@ async function loadEpDataFromSheets(){
     // 데이터 파싱 (1행 헤더 건너뜀)
     // 시트 구조: A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜 (왼쪽)
     //           G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜 (오른쪽)
+    // 시트 영어 값 → 허브 안에서 쓰는 한국어 값 (옛 한국어 값도 그대로 통과)
+    const SHEET_TYPE   = { novel:"웹소설" };
+    const SHEET_STATUS = { done:"완료", wip:"작업중", plan:"예정" };
     function applyRow(p,t,vn,en,s,d){
+      t = SHEET_TYPE[String(t).toLowerCase()] || t;
+      s = SHEET_STATUS[String(s).toLowerCase()] || s;
       const volNum=parseInt(vn), epId=parseInt(en);
       if(!p||isNaN(volNum)||isNaN(epId)) return;
       const pid=projMap[p]; if(!pid) return;
