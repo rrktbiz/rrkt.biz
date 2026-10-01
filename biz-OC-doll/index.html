@@ -1820,7 +1820,7 @@ body{top:0 !important}
              Tab layout — header in row 1, then one sale per row:
                A date | B code | C name | D amount
                2027-03-15 | 042 | rio_lover | 20
-             · The date header must contain "date" and the code header "code" (the sheet's current words also work).
+             · The date header must contain "date" and the code header "code".
                (This filters out the wrong tab Google sends back when the tab doesn't exist)
              · Only add rows, never delete. Order doesn't matter (sorted by date).
              · Never put personal info such as emails in this tab. (It's a public sheet)
@@ -4039,10 +4039,8 @@ function openFormPopup() {
 (function(){   /* private scope for the characters tab, so names don't clash with the rest */
 /* ── DATA — loaded from the OC-characters tab CSV of the Google Sheet ── */
 
-/* Status values that count as released (shown in the list).
-   The first two are the words the sheet uses now, written as character codes;
-   'done' / 'wip' work too if the sheet switches to English words. */
-window.SHOWN_STATUS = window.SHOWN_STATUS || ['\uC644\uB8CC', '\uC791\uC5C5\uC911', 'done', 'wip'];
+/* Status values that count as released (shown in the list) */
+window.SHOWN_STATUS = window.SHOWN_STATUS || ['done', 'wip'];
 (function(){
   if(window.CHARACTERS) return;
   window.CHARACTERS = []; // empty until loaded (renderList runs again after fetch)
@@ -4335,8 +4333,10 @@ var _sheetPreload = [];
 function normDate(v){
   if(!v) return '';
   if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-  const m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
-  return m ? `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}` : v;
+  let m = v.match(/(\d{4})\s*[-.\/]\s*(\d{1,2})\s*[-.\/]\s*(\d{1,2})/);
+  if(m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+  m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);   /* 4/9/2026 (US sheet setting) */
+  return m ? `${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}` : v;
 }
 function fillDetailSide(c){
   const set = (id, v)=>{ const el = document.getElementById(id); if(el) el.textContent = v; };
@@ -4442,13 +4442,7 @@ function renderDetail(id){
   const badge = document.getElementById('detail-date-badge');
   if(badge){
     // normalize gviz CSV dates (2026. 4. 9. → 2026-04-09)
-    function normalizeDate(v){
-      if(!v) return '';
-      if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-      const m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
-      if(m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
-      return v;
-    }
+    function normalizeDate(v){ return normDate(v); }
     const dateStr = normalizeDate(c.updated);
     if(dateStr){
       badge.textContent = dateStr;
@@ -5108,7 +5102,7 @@ function evLogSwitch(which){ evGo(which === 'vote' ? 'log/vote' : (thl.view === 
    ※ Names are typed by fans, so they're turned into plain text before going on screen (esc).
      Code typed into a name can't run on the site.
    ══════════════════════════════════════════════════ */
-var TH_RECORD_TAB = '\uD0C0\uC774\uD2C0\uAE30\uB85D';   /* the tab's current name, written as character codes — if you rename the tab, put the new name here */
+var TH_RECORD_TAB = 'title-record';   /* sheet tab name — if you rename the tab, change it here too */
 var thl = { state:'idle', rows:[], view:'time', q:'', tries:0 };
 
 var CROWN_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M3.5 8l4 3.5L12 5l4.5 6.5 4-3.5-1.8 10H5.3z"/></svg>';
@@ -5174,7 +5168,7 @@ async function thlLoad(){
     /* If the tab doesn't exist, Google sends the first tab instead.
        It only counts as the real record tab when the header starts with date | code. */
     var head = data[0] || [];
-    var ok = /\uB0A0\uC9DC|date/i.test(head[0] || '') && /\uCF54\uB4DC|code/i.test(head[1] || '');
+    var ok = /date/i.test(head[0] || '') && /code/i.test(head[1] || '');
     if(ok){
       data.slice(1).forEach(function(r){
         var code = normCode(r[1]);
