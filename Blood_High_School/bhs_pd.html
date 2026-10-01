@@ -139,6 +139,71 @@ body{
   }
 
 
+  /* ── 작가의 말 (기획서 맨 앞 여는 글) ── */
+  .pd-doc .author-note {
+    position: relative;
+    background: #fff;
+    border: 2px solid #111;
+    box-shadow: 6px 6px 0 #111;
+    padding: 34px 34px 30px;
+    margin: 4px 6px 64px 0;
+  }
+  .pd-doc .author-note-tag {
+    position: absolute;
+    top: -15px; left: 22px;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    background: #E51937;
+    color: #fff;
+    padding: 3px 12px;
+    line-height: 1.4;
+  }
+  .pd-doc .author-note-title {
+    display: inline-block;
+    background: #111;
+    color: #FFD23F;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    padding: 6px 18px;
+    margin-bottom: 22px;
+  }
+  .pd-doc .author-note p {
+    font-size: 15.5px;
+    line-height: 2;
+    color: #222;
+    margin-bottom: 16px;
+    word-break: keep-all;
+  }
+  .pd-doc .author-note p.an-hello {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+  }
+  .pd-doc .author-note .an-mark {
+    background: linear-gradient(transparent 58%, #FFD23F 58%);
+    font-weight: 700;
+    padding: 0 1px;
+  }
+  .pd-doc .author-note p.an-bridge {
+    margin: 26px 0 0;
+    padding-top: 18px;
+    border-top: 1px dashed #cfcac0;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+  .pd-doc .author-note p.an-bridge::after {
+    content: " \2193";
+    color: #E51937;
+    font-weight: 900;
+  }
+  @media (max-width: 600px){
+    .pd-doc .author-note { padding: 30px 20px 24px; box-shadow: 4px 4px 0 #111; margin-right: 4px; }
+    .pd-doc .author-note p { font-size: 15px; line-height: 1.95; }
+    .pd-doc .author-note p.an-hello { font-size: 16px; }
+  }
   .pd-doc .section {
     margin-bottom: 52px;
   }
@@ -777,6 +842,26 @@ body{
   <h1>블러드하이스쿨 (블하스) — IP 기획서</h1>
   <div class="subtitle">작업용 문서 · 각 카테고리 하단에 가이드 설명 포함</div>
   <div class="subtitle" style="margin-top:6px; font-size:12px; opacity:0.7;">※ 본 기획서는 작가의 자료와 의도를 바탕으로 AI 어시스턴트(Claude)와의 협업으로 작성되었습니다.</div>
+</div>
+
+<!-- ==================== 작가의 말 ==================== -->
+<div class="author-note">
+  <span class="author-note-tag">FROM THE AUTHOR</span>
+  <div class="author-note-title">작가의 말</div>
+
+  <p class="an-hello">안녕하세요. 『블러드하이스쿨』을 쓰고 있는 작가입니다.</p>
+
+  <p>『블러드하이스쿨』은 1990년대 후반부터 2000년대, 그리고 2010년 무렵까지의 일본 소년 애니메이션 감성을 지금 다시 엮어 낸 뉴트로 학원 판타지입니다. 기획서를 읽으시기 전에, 제가 왜 이 작품을 만들게 되었는지 먼저 이야기해 보려고 합니다.</p>
+
+  <p>저는 청소년 때 그 시기의 일본 애니메이션을 정말 많이 봤습니다. 그 시기의 애니는 유치하고 시끌벅적한데, 보다 보면 어느 순간 세상의 어두운 면을 마주하게 되는, 철학적이기도 하고 <span class="an-mark">인간찬가</span>에 가까운 이야기들이 많았어요. 주인공은 착하고 정의로웠고, 이겨낼 수 없는 시련 앞에서도 인간다움을 지켜 내는 모습을 보는 사람들이 미덕처럼 여겨 주기도 했죠.</p>
+
+  <p>하지만 이제는 그런 작품이 다시 나오기 어렵다고 느낍니다. 그건 그 시절이었기에 가능했던 감성이었으니까요. 요즘 작품들은 그때와 결이 많이 다르고, 제가 느끼기에는 착하고 정의로운 주인공이 예전만큼 매력적으로 그려지지 않는 것 같습니다.</p>
+
+  <p>그래서 저는 그 시절 작품들에서 좋아했던 부분들을 하나하나 모아 직접 만들고 있습니다. 어떻게 보면 『블러드하이스쿨』은 저 자신을 위한 작품이기도 합니다.</p>
+
+  <p>그리고 이 작품을 읽어 주시는 분들도 그 시절의 <span class="an-mark">낭만</span>을 함께 느껴 주셨으면 좋겠습니다.</p>
+
+  <p class="an-bridge">아래부터는 이 마음을 바탕으로 작품의 구조와 가능성을 정리한 기획서입니다.</p>
 </div>
 
 <!-- ==================== 1 ==================== -->
