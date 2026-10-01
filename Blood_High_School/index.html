@@ -448,6 +448,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #tl-badge.deepl{background:#e8f0fe;color:#1a4c9e;border-color:#b5d4f4}
 #tl-badge.google{background:#e8f7f2;color:#0a6e56;border-color:#9fe1cb}
 #tl-badge.jp{background:#fdeef2;color:#9e2b50;border-color:#f4c2d2}
+#tl-badge.en{background:#f3f3f3;color:#525252;border-color:#e2e2e2}
 #tl-badge.show{opacity:1}
 #tb-lang-drop-btn{display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid #e2e2e2;border-radius:6px;background:transparent;color:#5f5f5f;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0;font-family:'Inter','Noto Sans KR',sans-serif;}
 #tb-lang-drop-btn:hover{background:#f7f7f7;border-color:#c6c6c6;color:#1a1a1a;}
@@ -598,6 +599,8 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 #view-story .postype-spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--tx3);border-radius:50%;animation:ptSpin .7s linear infinite;flex-shrink:0}
 @keyframes ptSpin{to{transform:rotate(360deg)}}
 #view-story .postype-error{background:#fff5f5;border:1px solid #ffd0d0;border-radius:8px;padding:16px 20px;color:#c03030;font-size:12px;line-height:1.7}
+#view-story .postype-notice{background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;padding:16px 20px;color:#6e6e6e;font-size:12px;line-height:1.7}
+#view-story .postype-notice strong{color:#111111;font-weight:600}
 #view-story .postype-error pre{margin-top:8px;font-size:11px;white-space:pre-wrap;color:#a03030}
 
 /* ── 에피소드 네비 + 피커 ── */
@@ -1304,6 +1307,7 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
      texts/blood-highschool-novel-1-01.txt              (한국어)
      texts_pure_ko/blood-highschool-novel-1-01_pure_ko.txt
      texts_jp/blood-highschool-novel-1-01_jp.txt
+     texts_en/blood-highschool-novel-1-01_en.txt        (English)
 
    ⚠ BHS_ROOT 와 BHS_TEXT_ROOT 는 다른 용도입니다. 헷갈리지 마세요.
      BHS_ROOT      = 사이트 루트. 대문 링크와 표지·썸네일 이미지가 씁니다.
@@ -1785,12 +1789,13 @@ function bhsTextPath(volId, epId, lang){
   var base = 'blood-highschool-' + volId + '-' + String(epId).padStart(2,'0');
   if(lang === 'pure_ko') return BHS_TEXT_ROOT + 'texts_pure_ko/' + base + '_pure_ko.txt';
   if(lang === 'jp')      return BHS_TEXT_ROOT + 'texts_jp/' + base + '_jp.txt';
+  if(lang === 'en')      return BHS_TEXT_ROOT + 'texts_en/' + base + '_en.txt';
   return BHS_TEXT_ROOT + 'texts/' + base + '.txt';
 }
 
 /* ── 본문 fetch (번호 zero-padding 유무 모두 시도) ── */
 async function bhsFetchText(url){
-  var re = /-(\d+)(_pure_ko\.txt|_jp\.txt|\.txt)$/;
+  var re = /-(\d+)(_pure_ko\.txt|_jp\.txt|_en\.txt|\.txt)$/;
   var list = [url], m = url.match(re);
   if(m){
     var n = parseInt(m[1],10);
@@ -2684,6 +2689,7 @@ async function bhsLoadText(volId, epId){
   var srcLang;
   if(!isForeign)         srcLang = BHS_EP_LANG;   /* 한국어: 한본어/순KO/JA 버튼 선택 존중 */
   else if(lang === 'ja') srcLang = 'jp';          /* 일본어: 원본 그대로 (번역하지 않음) */
+  else if(lang === 'en') srcLang = 'en';          /* English: texts_en only, no machine translation */
   else                   srcLang = 'pure_ko';     /* 그 밖의 외국어: 순한국어 → 구글이 번역 */
 
   var path = bhsTextPath(volId, epId, srcLang);
@@ -2694,7 +2700,7 @@ async function bhsLoadText(volId, epId){
   }catch(err){
     lastErr = err;
     /* 외국어 전용 파일이 없으면 일반 한국어 본문으로 한 번 더 시도 */
-    if(isForeign){
+    if(isForeign && lang !== 'en'){
       try{ text = await bhsFetchText(bhsTextPath(volId, epId, 'ko')); lastErr = null; }
       catch(e2){ lastErr = e2; }
     }
@@ -2703,6 +2709,14 @@ async function bhsLoadText(volId, epId){
   if(!document.getElementById('postype-body')) return;
 
   /* ③ 어떤 경우에도 본문칸에 무언가는 남긴다 */
+  if(text === null && lang === 'en'){
+    /* English file not uploaded yet: show a notice instead of an error */
+    el.innerHTML = '<div class="postype-notice notranslate">'
+                 + '<strong>The English edition of this episode is not available yet.</strong><br>'
+                 + 'Please check back later.</div>';
+    _updateEpLangBtns(lang);
+    return;
+  }
   if(text === null){
     el.innerHTML = '<div class="postype-error"><strong>본문 파일을 찾을 수 없습니다</strong><br>'
                  + '<small style="color:#a03030">' + bhsEsc(path) + '</small><pre>'
@@ -2713,9 +2727,11 @@ async function bhsLoadText(volId, epId){
 
   _epOriginalLines = text.split('\n');
   var jpMode = (lang === 'ja');
-  el.innerHTML = '<div class="postype-text' + (jpMode ? ' notranslate' : '') + '">' + bhsLines(text) + '</div>';
+  var enMode = (lang === 'en');
+  el.innerHTML = '<div class="postype-text' + ((jpMode || enMode) ? ' notranslate' : '') + '">' + bhsLines(text) + '</div>';
 
   if(jpMode)         _tlBadge('jp');
+  else if(enMode)    _tlBadge('en');
   else if(isForeign) _tlBadge('google');
 
   /* ④ 이제서야 번역 계층에 넘긴다 (갈아끼우기 전용) */
@@ -2810,7 +2826,7 @@ function _tlGoogle(lang){
 function _tlBadge(engine){
   var el = document.getElementById('tl-badge'); if(!el) return;
   el.className = engine + ' show';
-  el.textContent = engine === 'deepl' ? 'DeepL' : (engine === 'jp' ? '日本語版' : 'Google');
+  el.textContent = engine === 'deepl' ? 'DeepL' : (engine === 'jp' ? '日本語版' : (engine === 'en' ? 'English' : 'Google'));
 }
 function _tlBadgeReset(){
   var el = document.getElementById('tl-badge'); if(!el) return;
@@ -2825,6 +2841,7 @@ function _renderEpForLang(lang){
   _updateEpLangBtns(lang);
   if(!lang || lang === 'ko'){ _tlHideDeepLBtns(); return; }
   if(lang === 'ja'){ _tlHideDeepLBtns(); return; }   /* 일본어 원본은 번역 대상이 아님 */
+  if(lang === 'en'){ _tlHideDeepLBtns(); return; }   /* English edition is read as-is */
   if(cfg.enabled && cfg.proxyUrl) _tlShowDeepLBtn(lang, cfg);
   else _tlHideDeepLBtns();
 }
@@ -3136,8 +3153,16 @@ async function bhsLoadSheet(){
       var m = v.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
       return m ? m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0') : null;
     }
+    /* Sheet values: English (BHS / novel / done·wip·plan).
+       Old Korean values are still accepted, so the sheet and this file
+       can be updated in any order. */
+    var SHEET_TYPE   = { 'novel':'웹소설' };
+    var SHEET_STATUS = { 'done':'완료', 'wip':'작업중', 'plan':'예정' };
     function apply(p,t,vn,en,s,d){
-      if(p !== '블러드하이스쿨') return;
+      var pk = String(p).toLowerCase();
+      if(pk !== 'bhs' && p !== '블러드하이스쿨') return;
+      t = SHEET_TYPE[String(t).toLowerCase()] || t;
+      s = SHEET_STATUS[String(s).toLowerCase()] || s;
       var volNum = parseInt(vn,10), epId = parseInt(en,10);
       if(isNaN(volNum) || isNaN(epId)) return;
       var v = null;
