@@ -18,6 +18,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+/* Language — decided before the page is drawn.
+   A saved choice (localStorage 'bzd_lang', shared with biz-OC-doll) wins;
+   otherwise the browser language: Japanese -> ja, Korean -> ko, everyone else -> en.
+   The Google Translate cookie is rewritten here on every visit, because
+   biz-OC-doll writes the same cookie with a different source language. */
+(function(){
+  function norm(c){
+    var l = String(c || '').toLowerCase();
+    if(!l || l.indexOf('en') === 0) return 'en';
+    if(l.indexOf('ja') === 0) return 'ja';
+    if(l.indexOf('ko') === 0) return 'ko';
+    if(l.indexOf('zh') === 0) return /hant|-tw|-hk|-mo/.test(l) ? 'zh-TW' : 'zh-CN';
+    return String(c);
+  }
+  function detect(){
+    var ls = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
+    var n = norm(ls[0]);
+    return (n === 'ja' || n === 'ko') ? n : 'en';
+  }
+  var saved = null;
+  try{ saved = localStorage.getItem('bzd_lang'); }catch(e){}
+  var lang = saved ? norm(saved) : detect();
+
+  var x = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  document.cookie = 'googtrans=;path=/' + x;
+  document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + x;
+  if(lang !== 'ko'){
+    document.cookie = 'googtrans=/ko/' + lang + ';path=/';
+    document.cookie = 'googtrans=/ko/' + lang + ';path=/;domain=.' + location.hostname;
+  }
+  window.bhsLangNorm = norm;
+  window.__bhsLang = lang;
+})();
+</script>
 <title>블러드하이스쿨 — BLOOD HIGH SCHOOL</title>
 
 <!-- ══════════════════════════════════════════════════
@@ -2749,6 +2784,7 @@ var _epOriginalLines = null;
 
 function setLang(lang){
   _currentLang = lang;
+  try{ localStorage.setItem('bzd_lang', lang); }catch(e){}
   if(lang === 'ko'){
     document.querySelectorAll('[data-orig]').forEach(function(n){ n.textContent = n.dataset.orig; });
     document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
@@ -3047,7 +3083,7 @@ window.onDeepLRetranslateClick = function(){
     ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
   ];
   var _sel=null,_open=false;
-  var PRIORITY_CODES=['ko','en','zh-CN','ja'];
+  var PRIORITY_CODES=['en','ja','ko'];
 
   function _makeItem(l){
     var name=l[0],code=l[1],isS=_sel===code;
@@ -3112,13 +3148,8 @@ window.onDeepLRetranslateClick = function(){
   });
 })();
 
-/* ── 구글 번역 쿠키가 남아 있으면 현재 언어 복원 ── */
-(function(){
-  try{
-    var m = document.cookie.match(/googtrans=\/[^/]+\/([^;]+)/);
-    if(m && m[1] && decodeURIComponent(m[1]) !== 'ko') _currentLang = decodeURIComponent(m[1]);
-  }catch(e){}
-})();
+/* ── Current language: decided in <head> (saved choice or browser language) ── */
+if(window.__bhsLang) _currentLang = window.__bhsLang;
 
 /* ══════ 인트로 CTA → 내부 스토리 라우팅 (기존 함수 대체) ══════ */
 function bhsGoNovel(ev, volId){
@@ -3184,7 +3215,7 @@ async function bhsLoadSheet(){
 
 /* ══════ 부트 ══════ */
 document.addEventListener('DOMContentLoaded', function(){
-  if(_currentLang && _currentLang !== 'ko' && typeof tbLangSetLabel === 'function') tbLangSetLabel(_currentLang);
+  if(_currentLang && typeof tbLangSetLabel === 'function') tbLangSetLabel(_currentLang);
   bhsBuildTabs();
   bhsSyncTopbarH();
   bhsApplyHash();
