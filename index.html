@@ -1,8 +1,79 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>
+/* Language — decided before the page is drawn.
+   A saved choice (localStorage 'bzd_lang', shared with biz-OC-doll and Blood High School) wins;
+   otherwise the browser language. English, Chinese (Simplified / Traditional), Japanese and Korean
+   use the prepared text below; any other language is machine-translated by Google. */
+(function(){
+  var OWN = ['en','zh-CN','zh-TW','ja','ko'];
+  function norm(c){
+    var l = String(c || '').toLowerCase();
+    if(!l || l.indexOf('en') === 0) return 'en';
+    if(l.indexOf('ja') === 0) return 'ja';
+    if(l.indexOf('ko') === 0) return 'ko';
+    if(l.indexOf('zh') === 0) return /hant|-tw|-hk|-mo/.test(l) ? 'zh-TW' : 'zh-CN';
+    return String(c);
+  }
+  function detect(){
+    var ls = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
+    var n = norm(ls[0]);
+    return OWN.indexOf(n) > -1 ? n : 'en';
+  }
+  var saved = null;
+  try{ saved = localStorage.getItem('bzd_lang'); }catch(e){}
+  var lang = saved ? norm(saved) : detect();
+  var TL = OWN.indexOf(lang) > -1 ? lang : 'en';
+
+  var x = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  document.cookie = 'googtrans=;path=/' + x;
+  document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + x;
+  if(OWN.indexOf(lang) === -1){
+    document.cookie = 'googtrans=/en/' + lang + ';path=/';
+    document.cookie = 'googtrans=/en/' + lang + ';path=/;domain=.' + location.hostname;
+  }
+  window.__rrktLang = lang;
+  window.__rrktTL = TL;
+  if(TL !== 'en') document.documentElement.lang = TL;
+
+  var FONT = { 'ja':'Noto+Sans+JP', 'zh-CN':'Noto+Sans+SC', 'zh-TW':'Noto+Sans+TC' };
+  if(FONT[TL]){
+    var ln = document.createElement('link');
+    ln.rel = 'stylesheet';
+    ln.href = 'https://fonts.googleapis.com/css2?family=' + FONT[TL] + ':wght@300;400;500;700&display=swap';
+    document.head.appendChild(ln);
+  }
+
+  /* T('key') = text in the page language (English if missing). {n} {y} {p} are filled in. */
+  window.RRKT_I18N = window.RRKT_I18N || {};
+  window.T = function(key, v){
+    var row = window.RRKT_I18N[key]; if(!row) return key;
+    var s = (row[TL] != null) ? row[TL] : (row.en != null ? row.en : key);
+    if(v) for(var k in v) s = s.split('{' + k + '}').join(v[k]);
+    return s;
+  };
+  /* Pick one language from a {en, zh-CN, zh-TW, ja, ko} object (used for data such as titles) */
+  window.L = function(x){
+    if(x && typeof x === 'object' && !Array.isArray(x) && 'en' in x) return (x[TL] != null) ? x[TL] : x.en;
+    return x;
+  };
+  var LOC = { 'en':'en-US', 'zh-CN':'zh-CN', 'zh-TW':'zh-TW', 'ja':'ja-JP', 'ko':'ko-KR' };
+  window.RRKT_LOCALE = LOC[TL];
+  var DN = {
+    'en':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    'zh-CN':['日','一','二','三','四','五','六'], 'zh-TW':['日','一','二','三','四','五','六'],
+    'ja':['日','月','火','水','木','金','土'],
+    'ko':['일','월','화','수','목','금','토']
+  };
+  var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  window.RRKT_DNAMES = DN[TL];
+  window.YLBL = function(y){ return TL === 'en' ? String(y) : (TL === 'ko' ? y + '년' : y + '年'); };
+  window.MLBL = function(m){ return TL === 'en' ? MN[m - 1] : (TL === 'ko' ? m + '월' : m + '月'); };
+})();
+</script>
 <title>rrkt.biz</title>
 
 <!-- ══════════════════════════════════════════════════
@@ -34,12 +105,12 @@
         developers.kakao.com/tool/debugger/sharing 에 주소를 넣고
         [초기화]를 누르면 바로 갱신됩니다.
      ══════════════════════════════════════════════════ -->
-<meta name="description" content="스토리와 캐릭터를 기반으로, IP로 확장 가능한 원작을 만듭니다.">
+<meta name="description" content="We create original stories and characters built to grow into IP.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="rrkt.biz">
-<meta property="og:locale" content="ko_KR">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="rrkt.biz">
-<meta property="og:description" content="스토리와 캐릭터를 기반으로, IP로 확장 가능한 원작을 만듭니다.">
+<meta property="og:description" content="We create original stories and characters built to grow into IP.">
 <meta property="og:url" content="https://rrktbiz.github.io/rrkt.biz/">
 <meta property="og:image" content="https://rrktbiz.github.io/rrkt.biz/og/hub.png">
 <meta property="og:image:width" content="1200">
@@ -48,13 +119,224 @@
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
 <script src="config.js"></script>
+<script>
+/* Interface text: English / Chinese (Simplified, Traditional) / Japanese / Korean.
+   To change a sentence, edit it here in every language. */
+Object.assign(window.RRKT_I18N, {
+"snd.toggle": {
+"en": "Click sound on/off",
+"zh-CN": "点击音效 开/关",
+"zh-TW": "點擊音效 開/關",
+"ja": "クリック音のオン/オフ",
+"ko": "클릭 소리 켜기·끄기"
+},
+"snd.on": {
+"en": "Turn click sound on",
+"zh-CN": "打开点击音效",
+"zh-TW": "開啟點擊音效",
+"ja": "クリック音をオンにする",
+"ko": "클릭 소리 켜기"
+},
+"snd.off": {
+"en": "Turn click sound off (volume {n}%)",
+"zh-CN": "关闭点击音效(音量 {n}%)",
+"zh-TW": "關閉點擊音效(音量 {n}%)",
+"ja": "クリック音をオフにする(音量 {n}%)",
+"ko": "클릭 소리 끄기 (크기 {n}%)"
+},
+"snd.vol": {
+"en": "Volume",
+"zh-CN": "音量",
+"zh-TW": "音量",
+"ja": "音量",
+"ko": "소리 크기"
+},
+"lang.search": {
+"en": "Search language...",
+"zh-CN": "搜索语言...",
+"zh-TW": "搜尋語言...",
+"ja": "言語を検索...",
+"ko": "언어 검색..."
+},
+"lang.note": {
+"en": "<b>English · Chinese · Japanese · Korean<\/b> are officially supported.<br>Other languages are machine-translated by <b>Google<\/b>.",
+"zh-CN": "<b>英语 · 中文 · 日语 · 韩语<\/b>为官方支持语言。<br>其他语言由 <b>Google<\/b> 机器翻译。",
+"zh-TW": "<b>英語 · 中文 · 日語 · 韓語<\/b>為官方支援語言。<br>其他語言由 <b>Google<\/b> 機器翻譯。",
+"ja": "<b>英語・中国語・日本語・韓国語<\/b>に公式対応しています。<br>その他の言語は<b>Google<\/b>による機械翻訳です。",
+"ko": "<b>영어 · 중국어 · 일본어 · 한국어<\/b>는 공식 지원 언어입니다.<br>그 밖의 언어는 <b>Google<\/b> 기계 번역입니다."
+},
+"cal.title": {
+"en": "Work Calendar",
+"zh-CN": "工作日历",
+"zh-TW": "工作日曆",
+"ja": "作業カレンダー",
+"ko": "작업 캘린더"
+},
+"cal.home": {
+"en": "Home",
+"zh-CN": "返回首页",
+"zh-TW": "返回首頁",
+"ja": "ホームへ",
+"ko": "홈으로"
+},
+"cal.yearAll": {
+"en": "⊞ All of {y}",
+"zh-CN": "⊞ 查看{y}全部",
+"zh-TW": "⊞ 檢視{y}全部",
+"ja": "⊞ {y}をすべて表示",
+"ko": "⊞ {y} 전체 보기"
+},
+"cal.timeline": {
+"en": "☰ Timeline by year",
+"zh-CN": "☰ 按年份时间线",
+"zh-TW": "☰ 按年份時間軸",
+"ja": "☰ 年別タイムライン",
+"ko": "☰ 연도별 타임라인"
+},
+"cal.span": {
+"en": "{n}-year view",
+"zh-CN": "每次显示{n}年",
+"zh-TW": "每次顯示{n}年",
+"ja": "{n}年ずつ表示",
+"ko": "{n}년씩 보기"
+},
+"cal.count": {
+"en": "{n} items",
+"zh-CN": "{n}项",
+"zh-TW": "{n}項",
+"ja": "{n}件",
+"ko": "{n}건"
+},
+"cal.none": {
+"en": "None",
+"zh-CN": "无",
+"zh-TW": "無",
+"ja": "なし",
+"ko": "없음"
+},
+"cal.eps": {
+"en": "×{n} eps",
+"zh-CN": "×{n}话",
+"zh-TW": "×{n}話",
+"ja": "×{n}話",
+"ko": "×{n}화"
+},
+"cal.epsTitle": {
+"en": "{n} episodes",
+"zh-CN": "{n}话",
+"zh-TW": "{n}話",
+"ja": "{n}話",
+"ko": "{n}화"
+},
+"cal.empty": {
+"en": "No work logged",
+"zh-CN": "没有工作记录",
+"zh-TW": "沒有工作紀錄",
+"ja": "作業記録なし",
+"ko": "작업 기록 없음"
+},
+"cal.charSheet": {
+"en": "Character sheet",
+"zh-CN": "角色设定图",
+"zh-TW": "角色設定圖",
+"ja": "キャラクターシート",
+"ko": "캐릭터 시트"
+},
+"type.novel": {
+"en": "Web Novel",
+"zh-CN": "网络小说",
+"zh-TW": "網路小說",
+"ja": "Web小説",
+"ko": "웹소설"
+},
+"type.webtoon": {
+"en": "Webtoon",
+"zh-CN": "条漫",
+"zh-TW": "條漫",
+"ja": "ウェブトゥーン",
+"ko": "웹툰"
+},
+"st.done": {
+"en": "Done",
+"zh-CN": "已完成",
+"zh-TW": "已完成",
+"ja": "完了",
+"ko": "완료"
+},
+"st.wip": {
+"en": "In progress",
+"zh-CN": "进行中",
+"zh-TW": "進行中",
+"ja": "作業中",
+"ko": "작업중"
+},
+"st.plan": {
+"en": "Planned",
+"zh-CN": "计划中",
+"zh-TW": "計劃中",
+"ja": "予定",
+"ko": "예정"
+},
+"card.soon": {
+"en": "COMING SOON",
+"zh-CN": "即将开放",
+"zh-TW": "即將開放",
+"ja": "オープン準備中",
+"ko": "OPEN 준비중"
+},
+"card.soonTitle": {
+"en": "{p} — coming soon",
+"zh-CN": "{p} — 即将开放",
+"zh-TW": "{p} — 即將開放",
+"ja": "{p} — オープン準備中",
+"ko": "{p} — 오픈 준비중"
+},
+"card.view": {
+"en": "View {p}",
+"zh-CN": "查看{p}",
+"zh-TW": "查看{p}",
+"ja": "{p}を見る",
+"ko": "{p} 소개글 보기"
+},
+"card.hover": {
+"en": "View →",
+"zh-CN": "查看 →",
+"zh-TW": "查看 →",
+"ja": "見る →",
+"ko": "소개글 보기 →"
+},
+"cal.recent": {
+"en": "Recent",
+"zh-CN": "最近",
+"zh-TW": "最近",
+"ja": "最近",
+"ko": "최근"
+},
+"vis.none": {
+"en": "No visitors yet",
+"zh-CN": "暂无访客",
+"zh-TW": "暫無訪客",
+"ja": "まだ訪問者はいません",
+"ko": "방문자 없음"
+}
+});
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700;800&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
 <style>
+/* Language fonts */
+:root{--cjk:'Noto Sans KR'}
+:root:lang(ja){--cjk:'Noto Sans JP'}
+:root:lang(zh-CN){--cjk:'Noto Sans SC'}
+:root:lang(zh-TW){--cjk:'Noto Sans TC'}
+/* Hide Google Translate's top bar */
+.goog-te-banner-frame,.skiptranslate{display:none !important}
+body{top:0 !important}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#ffffff;--sb:#fff;--sm:#fafafa;--bd:#e2e2e2;--bd2:#c6c6c6;
   --tx:#1a1a1a;--tx2:#5f5f5f;--tx3:#a0a0a0;
-  --fn:'Inter','Noto Sans KR',sans-serif;
+  --fn:'Inter',var(--cjk),sans-serif;
   --sm-w:240px;
 }
 html{height:100%;overflow:hidden;font-size:14px}
@@ -172,7 +454,7 @@ body.nav-pinned #nav-backdrop{display:none!important}
 .home-proj-thumb .proj-thumb-img{transition:transform .3s ease}
 .home-proj-card:hover .home-proj-thumb{box-shadow:0 6px 20px rgba(0,0,0,.10)}
 .home-proj-card:hover .proj-thumb-img{transform:scale(1.04)}
-.home-proj-card:hover .home-proj-thumb::after{content:"소개글 보기 →";position:absolute;top:8px;right:8px;font-size:9px;font-weight:600;letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;border-radius:20px;backdrop-filter:blur(2px)}
+.home-proj-card:hover .home-proj-thumb::after{content:attr(data-hover);position:absolute;top:8px;right:8px;font-size:9px;font-weight:600;letter-spacing:.04em;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;border-radius:20px;backdrop-filter:blur(2px)}
 .home-proj-title{margin-top:10px;padding-left:4px;font-size:16px;font-weight:600;color:var(--tx);line-height:1.35}
 .home-proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,210px));gap:18px 16px;margin-bottom:0px;justify-content:center}
 /* 오픈 준비중 프로젝트 카드 */
@@ -787,7 +1069,7 @@ body{top:0!important}
 .doll-system{text-align:center;padding:6px 0}
 .doll-system-text{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--tx);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:5px 16px}
 .doll-sfx{text-align:center;padding:4px 0}
-.doll-sfx-text{font-size:22px;font-weight:400;color:var(--tx);letter-spacing:.08em;line-height:1.4;font-family:'Noto Sans KR',sans-serif}
+.doll-sfx-text{font-size:22px;font-weight:400;color:var(--tx);letter-spacing:.08em;line-height:1.4;font-family:var(--cjk),sans-serif}
 .doll-chat{padding:2px 0 2px 54px;display:flex;flex-direction:column;gap:6px}
 .doll-chat-header{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7aaec4;margin-bottom:2px}
 .doll-chat-bubble{display:inline-block;max-width:80%;background:#f0f7ff;border:1.5px solid #b8d9e8;border-radius:4px 16px 16px 16px;padding:8px 14px;font-size:14px;color:var(--tx);line-height:1.75;word-break:keep-all;align-self:flex-start}
@@ -996,7 +1278,7 @@ const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
       }
       b.classList.toggle('is-off', mute);
       b.setAttribute('aria-pressed', mute ? 'false' : 'true');
-      b.title = mute ? '클릭 소리 켜기' : '클릭 소리 끄기 (크기 ' + vol + '%)';
+      b.title = mute ? T('snd.on') : T('snd.off', {n: vol});
     }
 
     var r = document.getElementById('tb-sound-range');
@@ -1095,24 +1377,24 @@ const PROJECTS = [
     label:"biz-OC-doll",
     acc:"#5a90b0", acc2:"#4a7a98",
     illust:"biz-OC-doll_home.png",
-    illustDesc:"오리지널 캐릭터 기반 인형 IP 프로젝트",
+    illustDesc:"An open OC project built on original characters",
     status:"active",
     keepSub:true, landOnIntro:true,
     subType:"doll",
-    intro:"자캐 200개를 목표로 하는 창작 캐릭터(OC) 기반 프로젝트. .",
-    tags:["비주얼게임","판타지","OC","자캐","드라마"]
+    intro:"An open OC project aiming for 200 original characters.",
+    tags:["Visual game","Fantasy","OC","Drama"]
   },
   {
     id:"blood-highschool",
-    label:"블러드하이스쿨",
+    label:{"en": "Blood High School", "zh-CN": "Blood High School", "zh-TW": "Blood High School", "ja": "ブラッドハイスクール", "ko": "블러드하이스쿨"},
     acc:"#c0392b", acc2:"#c0392b",
     illust:"bhs_home.png",
-    illustDesc:"학원 배경의 다크 판타지 스토리",
+    illustDesc:"A dark fantasy set in a school",
     status:"active",
     keepSub:true, landOnIntro:true,
     subType:"default",
-    intro:"혈액형이 운명을 결정하는 세계. 전학 온 주인공이 숨겨진 비밀과 마주하며 성장하는 다크 판타지 학원물입니다. 권력, 혈통, 그리고 그 너머의 진실을 쫓아가는 이야기.",
-    tags:["다크판타지","학원물","액션","병맛개그","소년만화","뉴트로"]
+    intro:"An ordinary model student awakens as Lackness, the legendary black dragon. A school life tangled up in legends.",
+    tags:["Dark fantasy","School","Action","Absurd comedy","Shonen","Newtro"]
   },
 
 ];
@@ -1135,67 +1417,68 @@ const PROJECTS = [
 ══════════════════════════════════════════════════════════════ */
 const VOLUMES = {
   "blood-highschool": [
-    {id:"novel-1", num:1, label:"[웹소설]블러드하이스쿨 ~용의 부활~", sub:"1부", grad:"150deg,#3a0000,#8b0000,#c0392b", type:"웹소설", tags:["판타지","학원"],
+    {id:"novel-1", num:1, label:"Blood High School: Rise of the Dragon", sub:{"en": "Part 1", "zh-CN": "第1部", "zh-TW": "第1部", "ja": "第1部", "ko": "1부"}, grad:"150deg,#3a0000,#8b0000,#c0392b", type:"novel", tags:["Fantasy","School"],
      coverId:"Blood_High_School/bhs_novel_prat1_cover.png",
-     synopsis:"평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.",
+     synopsis:"Kuro is an ordinary high schooler who awakens as Lackness, the dragon of legend. A school life tangled up in legends.",
      episodes:[
-      {id:1,  title:"1화 장미 정원의 티타임",       date:null, status:"예정", textId:null},
-      {id:2,  title:"2화 미술실의 마리오네트",       date:null, status:"예정", textId:null},
-      {id:3,  title:"3화 버려진 성지의 보석",        date:null, status:"예정", textId:null},
-      {id:4,  title:"4화 흑마법사의 영원한 1학년",   date:null, status:"예정", textId:null},
-      {id:5,  title:"5화 엇갈린 계승과 원치 않는 힘",date:null, status:"예정", textId:null},
-      {id:6,  title:"6화 칠석의 밤과 은빛 여우",     date:null, status:"예정", textId:null},
-      {id:7,  title:"7화 무너진 왕국의 심판자",      date:null, status:"예정", textId:null},
-      {id:8,  title:"8화 뒤집힌 전설은 전설일 뿐",   date:null, status:"예정", textId:null},
-      {id:9,  title:"9화 Bang! 4분할 STAGE",        date:null, status:"예정", textId:null},
-      {id:10, title:"10화 오레사마 학원 정복!!",     date:null, status:"예정", textId:null},
-      {id:11, title:"11화 저주BOY미친BABY",          date:null, status:"예정", textId:null},
-      {id:12, title:"12화 용 형제의 서열 정리",      date:null, status:"예정", textId:null},
-      {id:13, title:"번외 1화", date:null, status:"예정", textId:null},
-      {id:14, title:"번외 2화", date:null, status:"예정", textId:null},
-      {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
+      {id:1, title:{"en": "Ep. 1 Tea Time in the Rose Garden", "zh-CN": "第1话 玫瑰庭院的下午茶", "zh-TW": "第1話 玫瑰庭院的下午茶", "ja": "第1話 薔薇の庭のティータイム", "ko": "1화 장미 정원의 티타임"}, date:null, status:"plan", textId:null},
+      {id:2, title:{"en": "Ep. 2 The Marionette in the Art Room", "zh-CN": "第2话 美术室的提线木偶", "zh-TW": "第2話 美術室的提線木偶", "ja": "第2話 美術室のマリオネット", "ko": "2화 미술실의 마리오네트"}, date:null, status:"plan", textId:null},
+      {id:3, title:{"en": "Ep. 3 The Jewel of the Abandoned Holy Site", "zh-CN": "第3话 废弃圣地的宝石", "zh-TW": "第3話 廢棄聖地的寶石", "ja": "第3話 廃れた聖地の宝石", "ko": "3화 버려진 성지의 보석"}, date:null, status:"plan", textId:null},
+      {id:4, title:{"en": "Ep. 4 The Dark Mage's Eternal First-Years", "zh-CN": "第4话 黑魔法师的永远的一年级", "zh-TW": "第4話 黑魔法師的永遠的一年級", "ja": "第4話 黒魔法使いの永遠の一年生", "ko": "4화 흑마법사의 영원한 1학년"}, date:null, status:"plan", textId:null},
+      {id:5, title:{"en": "Ep. 5 Crossed Succession and Unwanted Power", "zh-CN": "第5话 错位的继承与不想要的力量", "zh-TW": "第5話 錯位的繼承與不想要的力量", "ja": "第5話 すれ違う継承と望まぬ力", "ko": "5화 엇갈린 계승과 원치 않는 힘"}, date:null, status:"plan", textId:null},
+      {id:6, title:{"en": "Ep. 6 A Tanabata Night and the Silver Fox", "zh-CN": "第6话 七夕之夜与银狐", "zh-TW": "第6話 七夕之夜與銀狐", "ja": "第6話 七夕の夜と銀色の狐", "ko": "6화 칠석의 밤과 은빛 여우"}, date:null, status:"plan", textId:null},
+      {id:7, title:{"en": "Ep. 7 The Judge of the Fallen Kingdom", "zh-CN": "第7话 覆灭王国的审判者", "zh-TW": "第7話 覆滅王國的審判者", "ja": "第7話 滅びた王国の審判者", "ko": "7화 무너진 왕국의 심판자"}, date:null, status:"plan", textId:null},
+      {id:8, title:{"en": "Ep. 8 A Legend Overturned Is Still Just a Legend", "zh-CN": "第8话 被颠覆的传说终究只是传说", "zh-TW": "第8話 被顛覆的傳說終究只是傳說", "ja": "第8話 ひっくり返った伝説は伝説に過ぎない", "ko": "8화 뒤집힌 전설은 전설일 뿐"}, date:null, status:"plan", textId:null},
+      {id:9, title:{"en": "Ep. 9 Bang! 4-Split STAGE", "zh-CN": "第9话 Bang! 四分割STAGE", "zh-TW": "第9話 Bang! 四分割STAGE", "ja": "第9話 Bang! 4分割STAGE", "ko": "9화 Bang! 4분할 STAGE"}, date:null, status:"plan", textId:null},
+      {id:10, title:{"en": "Ep. 10 Ore-sama Conquers the Academy!!", "zh-CN": "第10话 本大爷征服学院!!", "zh-TW": "第10話 本大爺征服學院!!", "ja": "第10話 俺様、学院征服!!", "ko": "10화 오레사마 학원 정복!!"}, date:null, status:"plan", textId:null},
+      {id:11, title:{"en": "Ep. 11 Cursed BOY, Crazy BABY", "zh-CN": "第11话 诅咒BOY・疯狂BABY", "zh-TW": "第11話 詛咒BOY・瘋狂BABY", "ja": "第11話 呪いBOY・狂気BABY", "ko": "11화 저주BOY미친BABY"}, date:null, status:"plan", textId:null},
+      {id:12, title:{"en": "Ep. 12 Settling the Pecking Order of the Dragon Brothers", "zh-CN": "第12话 龙兄弟的排位之争", "zh-TW": "第12話 龍兄弟的排位之爭", "ja": "第12話 龍兄弟の序列整理", "ko": "12화 용 형제의 서열 정리"}, date:null, status:"plan", textId:null},
+      {id:13, title:{"en": "Extra Ep. 1", "zh-CN": "番外篇 第1话", "zh-TW": "番外篇 第1話", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:"plan", textId:null},
+      {id:14, title:{"en": "Extra Ep. 2", "zh-CN": "番外篇 第2话", "zh-TW": "番外篇 第2話", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:"plan", textId:null},
+      {id:15, title:{"en": "Extra Ep. 3", "zh-CN": "番外篇 第3话", "zh-TW": "番外篇 第3話", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:"plan", textId:null},
     ]},
-    {id:"novel-2", num:2, label:"[웹소설]블러드하이스쿨 ~류오가편~", sub:"2부", grad:"150deg,#1a0010,#6b0030,#c0304a", type:"웹소설", tags:["판타지","미스터리"],
+    {id:"novel-2", num:2, label:"Blood High School: The Ryuo Clan Arc", sub:{"en": "Part 2", "zh-CN": "第2部", "zh-TW": "第2部", "ja": "第2部", "ko": "2부"}, grad:"150deg,#1a0010,#6b0030,#c0304a", type:"novel", tags:["Fantasy","Mystery"],
      coverId:"Blood_High_School/bhs_novel_prat2_cover.png",
-     synopsis:"류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.",
+     synopsis:"Now head of the Ryuo family, Kuro faces the sins his family kept hidden as Lackness's despair from a thousand years ago threatens to repeat.",
      episodes:[
-      {id:1,  title:"류오가편 1화",  date:null, status:"예정", textId:null},
-      {id:2,  title:"류오가편 2화",  date:null, status:"예정", textId:null},
-      {id:3,  title:"류오가편 3화",  date:null, status:"예정", textId:null},
-      {id:4,  title:"류오가편 4화",  date:null, status:"예정", textId:null},
-      {id:5,  title:"류오가편 5화",  date:null, status:"예정", textId:null},
-      {id:6,  title:"류오가편 6화",  date:null, status:"예정", textId:null},
-      {id:7,  title:"류오가편 7화",  date:null, status:"예정", textId:null},
-      {id:8,  title:"류오가편 8화",  date:null, status:"예정", textId:null},
-      {id:9,  title:"류오가편 9화",  date:null, status:"예정", textId:null},
-      {id:10, title:"류오가편 10화", date:null, status:"예정", textId:null},
-      {id:11, title:"류오가편 11화", date:null, status:"예정", textId:null},
-      {id:12, title:"류오가편 12화", date:null, status:"예정", textId:null},
-      {id:13, title:"번외 1화", date:null, status:"예정", textId:null},
-      {id:14, title:"번외 2화", date:null, status:"예정", textId:null},
-      {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
+      {id:1, title:{"en": "The Ryuo Clan Arc, Ep. 1", "zh-CN": "龙王家篇 第1话", "zh-TW": "龍王家篇 第1話", "ja": "竜王家編 第1話", "ko": "류오가편 1화"}, date:null, status:"plan", textId:null},
+      {id:2, title:{"en": "The Ryuo Clan Arc, Ep. 2", "zh-CN": "龙王家篇 第2话", "zh-TW": "龍王家篇 第2話", "ja": "竜王家編 第2話", "ko": "류오가편 2화"}, date:null, status:"plan", textId:null},
+      {id:3, title:{"en": "The Ryuo Clan Arc, Ep. 3", "zh-CN": "龙王家篇 第3话", "zh-TW": "龍王家篇 第3話", "ja": "竜王家編 第3話", "ko": "류오가편 3화"}, date:null, status:"plan", textId:null},
+      {id:4, title:{"en": "The Ryuo Clan Arc, Ep. 4", "zh-CN": "龙王家篇 第4话", "zh-TW": "龍王家篇 第4話", "ja": "竜王家編 第4話", "ko": "류오가편 4화"}, date:null, status:"plan", textId:null},
+      {id:5, title:{"en": "The Ryuo Clan Arc, Ep. 5", "zh-CN": "龙王家篇 第5话", "zh-TW": "龍王家篇 第5話", "ja": "竜王家編 第5話", "ko": "류오가편 5화"}, date:null, status:"plan", textId:null},
+      {id:6, title:{"en": "The Ryuo Clan Arc, Ep. 6", "zh-CN": "龙王家篇 第6话", "zh-TW": "龍王家篇 第6話", "ja": "竜王家編 第6話", "ko": "류오가편 6화"}, date:null, status:"plan", textId:null},
+      {id:7, title:{"en": "The Ryuo Clan Arc, Ep. 7", "zh-CN": "龙王家篇 第7话", "zh-TW": "龍王家篇 第7話", "ja": "竜王家編 第7話", "ko": "류오가편 7화"}, date:null, status:"plan", textId:null},
+      {id:8, title:{"en": "The Ryuo Clan Arc, Ep. 8", "zh-CN": "龙王家篇 第8话", "zh-TW": "龍王家篇 第8話", "ja": "竜王家編 第8話", "ko": "류오가편 8화"}, date:null, status:"plan", textId:null},
+      {id:9, title:{"en": "The Ryuo Clan Arc, Ep. 9", "zh-CN": "龙王家篇 第9话", "zh-TW": "龍王家篇 第9話", "ja": "竜王家編 第9話", "ko": "류오가편 9화"}, date:null, status:"plan", textId:null},
+      {id:10, title:{"en": "The Ryuo Clan Arc, Ep. 10", "zh-CN": "龙王家篇 第10话", "zh-TW": "龍王家篇 第10話", "ja": "竜王家編 第10話", "ko": "류오가편 10화"}, date:null, status:"plan", textId:null},
+      {id:11, title:{"en": "The Ryuo Clan Arc, Ep. 11", "zh-CN": "龙王家篇 第11话", "zh-TW": "龍王家篇 第11話", "ja": "竜王家編 第11話", "ko": "류오가편 11화"}, date:null, status:"plan", textId:null},
+      {id:12, title:{"en": "The Ryuo Clan Arc, Ep. 12", "zh-CN": "龙王家篇 第12话", "zh-TW": "龍王家篇 第12話", "ja": "竜王家編 第12話", "ko": "류오가편 12화"}, date:null, status:"plan", textId:null},
+      {id:13, title:{"en": "Extra Ep. 1", "zh-CN": "番外篇 第1话", "zh-TW": "番外篇 第1話", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:"plan", textId:null},
+      {id:14, title:{"en": "Extra Ep. 2", "zh-CN": "番外篇 第2话", "zh-TW": "番外篇 第2話", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:"plan", textId:null},
+      {id:15, title:{"en": "Extra Ep. 3", "zh-CN": "番外篇 第3话", "zh-TW": "番外篇 第3話", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:"plan", textId:null},
     ]},
-    {id:"novel-3", num:3, label:"[웹소설]블러드하이스쿨 3부", sub:"3부", grad:"150deg,#1a0000,#700000,#aa2020", type:"웹소설", tags:["판타지","액션"],
+    {id:"novel-3", num:3, label:"Blood High School Part 3", sub:{"en": "Part 3", "zh-CN": "第3部", "zh-TW": "第3部", "ja": "第3部", "ko": "3부"}, grad:"150deg,#1a0000,#700000,#aa2020", type:"novel", tags:["Fantasy","Action"],
      coverId:"Blood_High_School/bhs_novel_prat3_cover.png",
-     synopsis:"새로운 종족이 나타난다.",
+     synopsis:"A new race appears.",
      episodes:[
-      {id:1,  title:"1화",  date:null, status:"예정", textId:null},
-      {id:2,  title:"2화",  date:null, status:"예정", textId:null},
-      {id:3,  title:"3화",  date:null, status:"예정", textId:null},
-      {id:4,  title:"4화",  date:null, status:"예정", textId:null},
-      {id:5,  title:"5화",  date:null, status:"예정", textId:null},
-      {id:6,  title:"6화",  date:null, status:"예정", textId:null},
-      {id:7,  title:"7화",  date:null, status:"예정", textId:null},
-      {id:8,  title:"8화",  date:null, status:"예정", textId:null},
-      {id:9,  title:"9화",  date:null, status:"예정", textId:null},
-      {id:10, title:"10화", date:null, status:"예정", textId:null},
-      {id:11, title:"11화", date:null, status:"예정", textId:null},
-      {id:12, title:"12화", date:null, status:"예정", textId:null},
-      {id:13, title:"번외 1화", date:null, status:"예정", textId:null},
-      {id:14, title:"번외 2화", date:null, status:"예정", textId:null},
-      {id:15, title:"번외 3화", date:null, status:"예정", textId:null},
+      {id:1, title:{"en": "Ep. 1", "zh-CN": "第1话", "zh-TW": "第1話", "ja": "第1話", "ko": "1화"}, date:null, status:"plan", textId:null},
+      {id:2, title:{"en": "Ep. 2", "zh-CN": "第2话", "zh-TW": "第2話", "ja": "第2話", "ko": "2화"}, date:null, status:"plan", textId:null},
+      {id:3, title:{"en": "Ep. 3", "zh-CN": "第3话", "zh-TW": "第3話", "ja": "第3話", "ko": "3화"}, date:null, status:"plan", textId:null},
+      {id:4, title:{"en": "Ep. 4", "zh-CN": "第4话", "zh-TW": "第4話", "ja": "第4話", "ko": "4화"}, date:null, status:"plan", textId:null},
+      {id:5, title:{"en": "Ep. 5", "zh-CN": "第5话", "zh-TW": "第5話", "ja": "第5話", "ko": "5화"}, date:null, status:"plan", textId:null},
+      {id:6, title:{"en": "Ep. 6", "zh-CN": "第6话", "zh-TW": "第6話", "ja": "第6話", "ko": "6화"}, date:null, status:"plan", textId:null},
+      {id:7, title:{"en": "Ep. 7", "zh-CN": "第7话", "zh-TW": "第7話", "ja": "第7話", "ko": "7화"}, date:null, status:"plan", textId:null},
+      {id:8, title:{"en": "Ep. 8", "zh-CN": "第8话", "zh-TW": "第8話", "ja": "第8話", "ko": "8화"}, date:null, status:"plan", textId:null},
+      {id:9, title:{"en": "Ep. 9", "zh-CN": "第9话", "zh-TW": "第9話", "ja": "第9話", "ko": "9화"}, date:null, status:"plan", textId:null},
+      {id:10, title:{"en": "Ep. 10", "zh-CN": "第10话", "zh-TW": "第10話", "ja": "第10話", "ko": "10화"}, date:null, status:"plan", textId:null},
+      {id:11, title:{"en": "Ep. 11", "zh-CN": "第11话", "zh-TW": "第11話", "ja": "第11話", "ko": "11화"}, date:null, status:"plan", textId:null},
+      {id:12, title:{"en": "Ep. 12", "zh-CN": "第12话", "zh-TW": "第12話", "ja": "第12話", "ko": "12화"}, date:null, status:"plan", textId:null},
+      {id:13, title:{"en": "Extra Ep. 1", "zh-CN": "番外篇 第1话", "zh-TW": "番外篇 第1話", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:"plan", textId:null},
+      {id:14, title:{"en": "Extra Ep. 2", "zh-CN": "番外篇 第2话", "zh-TW": "番外篇 第2話", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:"plan", textId:null},
+      {id:15, title:{"en": "Extra Ep. 3", "zh-CN": "番外篇 第3话", "zh-TW": "番外篇 第3話", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:"plan", textId:null},
     ]},
   ],
+
   "biz-oc-doll": {
     categories: [
       {id:"main",  label:"MAIN STORY",      color:"#4a7a98", count:24},
@@ -1229,6 +1512,9 @@ const VOLUMES = {
      ③ 돌 캐릭터     → 구글시트 OC-characters 탭 → injectCharDatesIntoWorkLog()
                        (이 항목만 isChar:true 로 표시됨)
 ══════════════════════════════════════════════════════════════ */
+/* Labels and titles above hold several languages; keep only the page language */
+PROJECTS.forEach(p=>{ p.label = L(p.label); });
+Object.values(VOLUMES).forEach(vs=>{ if(Array.isArray(vs)) vs.forEach(v=>{ v.sub = L(v.sub); v.episodes.forEach(e=>{ e.title = L(e.title); }); }); });
 const WORK_LOG = {};
 function buildWorkLog(){
   ["blood-highschool"].forEach(pid=>{
@@ -1269,7 +1555,8 @@ const S={
 
 const getProj=id=>PROJECTS.find(p=>p.id===id);
 const ds=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-const stClass=s=>(s==="완료"||s==="done")?"done":(s==="작업중"||s==="wip")?"wip":"plan";
+const stClass=s=>(s==="done"||s==="wip")?s:"plan";
+const stLabel=s=>T("st."+stClass(s));
 /* "2026-04-12" → "2026.04.12" */
 const fmtDate=d=>d?d.replace(/-/g,"."):"";
 /* JSON의 completedDate → VOLUMES episodes의 date 필드로 매핑
@@ -1329,159 +1616,21 @@ function _renderVisWidget(d){
       <span class="vis-n">${Number(c.count).toLocaleString()}</span>
     </div>`;
   });
-  if(listEl) listEl.innerHTML = html || '<div style="padding:14px 0;text-align:center;font-size:10px;color:var(--tx3)">방문자 없음</div>';
+  if(listEl) listEl.innerHTML = html || '<div style="padding:14px 0;text-align:center;font-size:10px;color:var(--tx3)">' + T('vis.none') + '</div>';
   if(ccEl) ccEl.textContent = d.countries.length;
 }
 
-setInterval(()=>{const el=document.getElementById("home-clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});},1000);
-/* ── 브라우저 언어 감지 배너 ── */
-(function(){
-  /* 이미 언어 선택했거나 무시한 적 있으면 패스 */
-  try { if(localStorage.getItem('ld_dismissed')) return; } catch(e){}
+setInterval(()=>{const el=document.getElementById("home-clock");if(el)el.textContent=new Date().toLocaleTimeString(window.RRKT_LOCALE,{hour:"2-digit",minute:"2-digit",second:"2-digit"});},1000);
 
-  var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
-  /* 한국어, 일본어 브라우저는 스킵 (작가 언어) */
-  if(!nav || nav.startsWith('ko') || nav.startsWith('ja')) return;
-
-  /* 언어코드 → 표시명 매핑 (주요 언어만) */
-  var NAMES = {
-    en:'English', 'en-us':'English', 'en-gb':'English',
-    zh:'Chinese', 'zh-cn':'Chinese (Simplified)', 'zh-tw':'Chinese (Traditional)',
-    fr:'Français', de:'Deutsch', es:'Español', pt:'Português',
-    ru:'Русский', ar:'العربية', th:'ภาษาไทย', vi:'Tiếng Việt',
-    id:'Bahasa Indonesia', ms:'Bahasa Melayu', tr:'Türkçe',
-    it:'Italiano', nl:'Nederlands', pl:'Polski', sv:'Svenska',
-  };
-
-  var code = nav.split('-')[0];
-  var displayName = NAMES[nav] || NAMES[code] || nav.toUpperCase();
-
-  /* setLang에 넘길 코드 결정 */
-  var langCode = nav.startsWith('zh') ? (nav.includes('tw') ? 'zh-TW' : 'zh-CN') : code;
-
-  window._ldLangCode = langCode;
-  window._ldLangName = displayName;
-
-  /* 홈 렌더 후 배너 표시 (DOM 준비 후) */
-  window._ldPending = true;
-})();
-
-window.ldBannerShow = function(){
-  if(!window._ldPending || !window._ldLangCode) return;
-  var banner = document.getElementById('lang-detect-banner');
-  if(!banner) return;
-  banner.querySelector('.ldb-text').textContent =
-    'Your browser is set to ' + window._ldLangName + '. Would you like to view this site in ' + window._ldLangName + '?';
-  banner.querySelector('.ldb-yes').textContent = 'View in ' + window._ldLangName;
-  banner.style.display = 'flex';
-};
-
-window.ldBannerAccept = function(){
-  var banner = document.getElementById('lang-detect-banner');
-  if(banner) banner.style.display = 'none';
-  window._ldPending = false;
-  try { localStorage.setItem('ld_dismissed','1'); } catch(e){}
-  if(window._ldLangCode) setLang(window._ldLangCode);
-  /* topbar label도 업데이트 */
-  var lbl = document.getElementById('tb-lang-label');
-  if(lbl && window._ldLangName) lbl.textContent = window._ldLangName;
-};
-
-window.ldBannerDismiss = function(){
-  var banner = document.getElementById('lang-detect-banner');
-  if(banner) banner.style.display = 'none';
-  window._ldPending = false;
-  try { localStorage.setItem('ld_dismissed','1'); } catch(e){}
-};
-
-/* ── 번역 캐시 (DeepL 결과 저장 → 재호출 방지) ── */
-var _tlCache = {};
-var _currentLang = 'ko';
+var _currentLang = window.__rrktLang || 'en';
 var _epOriginalLines = null; /* 에피소드 원본 줄 배열 — 재번역 시 사용 */
 
+/* 언어 고르기: 고른 언어를 기억(biz-OC-doll·블러드하이스쿨과 공유)하고 새로고침.
+   영어·중국어(간체/번체)·일본어·한국어는 위 사전 글로, 그 밖의 언어는 구글 번역으로 표시됩니다. */
 function setLang(lang){
   _currentLang = lang;
-  if(lang==='ko'){
-    /* KO: data-orig 원본 복원 후 Google 쿠키 삭제 → 리로드 */
-    document.querySelectorAll('[data-orig]').forEach(function(n){
-      n.textContent = n.dataset.orig;
-    });
-    document.cookie='googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    document.cookie='googtrans=;path=/;domain=.'+location.hostname+';expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    location.reload();
-    return;
-  }
-
-  /* DeepL 설정 확인 */
-  var cfg = (typeof CONFIG !== 'undefined' && CONFIG.DEEPL) ? CONFIG.DEEPL : {};
-
-  /* 캐시 히트 → 즉시 적용 (API 호출 없음) */
-  if(_tlCache[lang]){
-    _tlApply(_tlCache[lang]);
-    return;
-  }
-
-  if(cfg.enabled && cfg.proxyUrl){
-    _tlDeepL(lang, cfg);
-  } else {
-    /* DeepL 미설정 → Google 바로 사용 */
-    _tlGoogle(lang);
-  }
-}
-
-/* ── ① DeepL 번역 시도 ── */
-function _tlDeepL(lang, cfg){
-  var nodes = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
-  if(!nodes.length){ _tlGoogle(lang); return; }
-
-  /* 원본 텍스트 보존 */
-  nodes.forEach(function(n){
-    if(!n.dataset.orig) n.dataset.orig = n.textContent.trim();
-  });
-  var texts = nodes.map(function(n){ return n.dataset.orig; });
-
-  /* DeepL 언어 코드 변환 (zh-CN/zh-TW → ZH, 나머지 대문자) */
-  var dlLang = (lang==='zh-CN'||lang==='zh-TW') ? 'ZH' : lang.split('-')[0].toUpperCase();
-
-  var ctrl = new AbortController();
-  var timer = setTimeout(function(){ ctrl.abort(); }, cfg.timeout || 5000);
-
-  fetch(cfg.proxyUrl, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ text: texts, target_lang: dlLang }),
-    signal: ctrl.signal
-  })
-  .then(function(res){
-    clearTimeout(timer);
-    /* 456 = 쿼터 초과, 5xx = 서버 오류 → 폴백 */
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    return res.json();
-  })
-  .then(function(data){
-    var dict = {};
-    nodes.forEach(function(n, i){
-      dict[n.dataset.i18n] = data.translations[i].text;
-    });
-    _tlCache[lang] = dict;
-    _tlApply(dict);
-    _tlBadge('deepl');
-    /* DeepL 성공 시 Google도 함께 구동 (동적 콘텐츠 커버) */
-    _tlGoogle(lang);
-  })
-  .catch(function(err){
-    clearTimeout(timer);
-    console.warn('[DeepL] 실패 → Google 폴백:', err.message);
-    _tlGoogle(lang);
-  });
-}
-
-/* ── DOM에 번역 딕셔너리 적용 ── */
-function _tlApply(dict){
-  document.querySelectorAll('[data-i18n]').forEach(function(n){
-    var k = n.dataset.i18n;
-    if(dict[k]) n.textContent = dict[k];
-  });
+  try{ localStorage.setItem('bzd_lang', lang); }catch(e){}
+  location.reload();
 }
 
 
@@ -1510,16 +1659,11 @@ function _tlGoogle(lang){
     return;
   }
   /* 위젯 미로드 시 쿠키 방식 */
-  document.cookie='googtrans=/ko/'+lang+';path=/';
-  document.cookie='googtrans=/ko/'+lang+';path=/;domain=.'+location.hostname;
+  document.cookie='googtrans=/en/'+lang+';path=/';
+  document.cookie='googtrans=/en/'+lang+';path=/;domain=.'+location.hostname;
   location.reload();
 }
 
-/* ── 본문 DeepL 버튼 숨김 ── */
-
-/* ── 일본어 선택: 번역하지 않고 일본어 원본 파일을 본문에 직접 표시 ── */
-
-/* ── DeepL 미사용 시: 순한국어 본문을 표시하고 구글 번역 (한본어 대신 순한국어 기준) ── */
 
 /* ── TOPBAR LANGUAGE DROPDOWN ── */
 (function(){
@@ -1547,8 +1691,12 @@ function _tlGoogle(lang){
     ['Ukrainian','uk'],['Urdu','ur'],['Uzbek','uz'],['Vietnamese','vi'],['Welsh','cy'],
     ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
   ];
-  var _sel=null,_open=false;
-  var PRIORITY_CODES=['ko','en','zh-CN','ja'];
+  var _sel=window.__rrktLang||null,_open=false;
+  var PRIORITY_CODES=['en','zh-CN','zh-TW','ja'];
+  window.rrktLangLabel=function(){
+    var l=ALL_LANGS.find(function(x){return x[1]===_sel;});
+    return l?l[0]:'Language';
+  };
   function _makeItem(l){
     var name=l[0],code=l[1],isS=_sel===code;
     var d=document.createElement('div');
@@ -1633,10 +1781,10 @@ function render(){
 /* ── HOME ── */
 function renderHome(){
   const now=new Date();
-  const timeStr=now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  const timeStr=now.toLocaleTimeString(window.RRKT_LOCALE,{hour:"2-digit",minute:"2-digit",second:"2-digit"});
   const allRecent=Object.entries(WORK_LOG).flatMap(([date,ws])=>ws.map(w=>({date,...w}))).sort((a,b)=>b.date.localeCompare(a.date));
-  const doneItems=allRecent.filter(w=>w.status==="완료").slice(0,6);
-  const wipItems=allRecent.filter(w=>w.status==="작업중").slice(0,5);
+  const doneItems=allRecent.filter(w=>w.status==="done").slice(0,6);
+  const wipItems=allRecent.filter(w=>w.status==="wip").slice(0,5);
   const latestDone=doneItems[0]||null;
   function relTime(dateStr){
     if(!dateStr) return "";
@@ -1644,12 +1792,12 @@ function renderHome(){
     if(isNaN(d_)) return "";
     const diff=now_-d_;
     const min=Math.floor(diff/60000), hr=Math.floor(diff/3600000), day=Math.floor(diff/86400000);
-    if(diff<60000) return "방금 전";
-    if(min<60) return `${min}분 전`;
-    if(hr<24) return `${hr}시간 전`;
-    if(day<30) return `${day}일 전`;
+    if(diff<60000) return "just now";
+    if(min<60) return `${min}m ago`;
+    if(hr<24) return `${hr}h ago`;
+    if(day<30) return `${day}d ago`;
     const mon=Math.floor(day/30);
-    return mon<12?`${mon}달 전`:`${Math.floor(mon/12)}년 전`;
+    return mon<12?`${mon}mo ago`:`${Math.floor(mon/12)}y ago`;
   }
   function getVolGrad(projId,volId){
     if(!projId||!volId) return "150deg,#333,#666";
@@ -1714,41 +1862,33 @@ function renderHome(){
           <div class="home-logo-big" onclick="goHome()" style="cursor:pointer">rrkt.biz</div>
           <button id="topbar-cal-btn" onclick="goCal()">
             <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M10 1v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-            <span class="tb-btn-txt">작업 캘린더</span>
+            <span class="tb-btn-txt">${T('cal.title')}</span>
           </button>
         </div>
         <div class="topbar-right" style="position:relative">
           <span id="tl-badge"></span>
           <span id="tb-sound-wrap">
-            <button id="tb-sound-btn" onclick="bizSoundToggle()" title="클릭 소리 켜기·끄기" aria-label="클릭 소리 켜기·끄기" aria-pressed="true"></button>
+            <button id="tb-sound-btn" onclick="bizSoundToggle()" title="${T('snd.toggle')}" aria-label="${T('snd.toggle')}" aria-pressed="true"></button>
             <div id="tb-sound-pop">
-              <input id="tb-sound-range" type="range" min="0" max="100" step="5" value="100" aria-label="소리 크기">
+              <input id="tb-sound-range" type="range" min="0" max="100" step="5" value="100" aria-label="${T('snd.vol')}">
               <span id="tb-sound-val">100%</span>
             </div>
           </span>
           <button id="tb-lang-drop-btn" onclick="tbLangToggle()" style="display:flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" style="flex-shrink:0"><circle cx="8" cy="8" r="6.5"/><ellipse cx="8" cy="8" rx="2.6" ry="6.5"/><path d="M1.5 6h13M1.5 10h13"/></svg>
-            <span id="tb-lang-label" class="tb-btn-txt">Language</span>
+            <span id="tb-lang-label" class="tb-btn-txt">${window.rrktLangLabel?window.rrktLangLabel():'Language'}</span>
             <span id="tb-lang-caret" class="tb-btn-txt" style="font-size:8px;transition:transform .15s;display:inline-block">▼</span>
           </button>
           <div id="tb-lang-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--sb);border:1px solid var(--bd);border-radius:10px;z-index:9999;overflow:hidden">
             <div style="padding:12px 14px 10px;border-bottom:1px solid var(--bd)">
               <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px">Language</div>
-              <input id="tb-lang-search" type="text" placeholder="Search language..." oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
+              <input id="tb-lang-search" type="text" placeholder="${T('lang.search')}" oninput="tbLangFilter()" style="width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--tx);outline:none;font-family:var(--fn)">
             </div>
             <div id="tb-lang-list" style="max-height:260px;overflow-y:auto"></div>
             <div class="tb-lang-note">
-              이 페이지는 <b>Google 번역</b>으로 표시됩니다.<br>
-              번역이 어색하면 <b>DeepL</b>로 다시 번역할 수 있습니다.
+              ${T('lang.note')}
             </div>
           </div>
-        </div>
-      </div>
-      <div id="lang-detect-banner">
-        <div class="ldb-text"></div>
-        <div class="ldb-btns">
-          <button class="ldb-yes" onclick="ldBannerAccept()"></button>
-          <button class="ldb-no" onclick="ldBannerDismiss()">No thanks</button>
         </div>
       </div>
       <!-- ── 단일 컬럼 ── -->
@@ -1763,12 +1903,12 @@ function renderHome(){
                 const illustSlot = p.illust
                   ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
                   : `<div class="home-proj-prep-slot"><span class="pp-mark">✦</span><span class="pp-txt">${isPrep?'coming soon':'illustration'}</span></div>`;
-                const badge = isPrep ? `<div class="home-proj-badge">OPEN 준비중</div>` : '';
+                const badge = isPrep ? `<div class="home-proj-badge">${T('card.soon')}</div>` : '';
                 const attrs = isPrep
-                  ? `title="${p.label} — 오픈 준비중"`
-                  : `onclick="goIntro('${p.id}')" title="${p.label} 소개글 보기"`;
+                  ? `title="${T('card.soonTitle',{p:p.label})}"`
+                  : `onclick="goIntro('${p.id}')" title="${T('card.view',{p:p.label})}"`;
                 return `<div class="home-proj-card${isPrep?' prep':''}" ${attrs}>
-                  <div class="home-proj-thumb">${badge}${illustSlot}</div>
+                  <div class="home-proj-thumb" data-hover="${T('card.hover')}">${badge}${illustSlot}</div>
                   <div class="home-proj-title">${p.label}</div>
                 </div>`;
               }).join('');
@@ -1816,8 +1956,6 @@ function renderHome(){
      현재 켜짐·꺼짐과 소리 크기에 맞춰 아이콘을 다시 그려줍니다.
      이 줄이 없으면 홈에서 스피커 자리가 빈 네모로 보입니다. */
   if(window.bizSoundPaint) window.bizSoundPaint();
-  // 언어 감지 배너 표시
-  setTimeout(window.ldBannerShow, 100);
 }
 
 /* ── CALENDAR ── */
@@ -1829,18 +1967,18 @@ function renderHome(){
 function renderCalendar(){
   const{calY:y,calM:m,calOverview:ov,calTimeline:tl,calSpan:span}=S;
   const firstDay=new Date(y,m,1).getDay(),daysInMonth=new Date(y,m+1,0).getDate();
-  const monthStr=new Date(y,m,1).toLocaleDateString("ko-KR",{year:"numeric",month:"long"});
-  const DNAMES=["일","월","화","수","목","금","토"],DCLS=["sun","","","","","","sat"];
+  const monthStr=new Date(y,m,1).toLocaleDateString(window.RRKT_LOCALE,{year:"numeric",month:"long"});
+  const DNAMES=window.RRKT_DNAMES,DCLS=["sun","","","","","","sat"];
 
   // 연도 목록
   const curY=new Date().getFullYear();
   const allYears=[...new Set(Object.keys(WORK_LOG).map(d=>parseInt(d.slice(0,4))).filter(yr=>yr<=curY))];
   if(!allYears.includes(curY)) allYears.push(curY);
   allYears.sort((a,b)=>b-a);
-  const yearTabs = allYears.map(yr=>`<button class="cal-year-tab${yr===y&&!ov&&!tl?" active":""}" onclick="goYear(${yr})">${yr}년</button>`).join("");
+  const yearTabs = allYears.map(yr=>`<button class="cal-year-tab${yr===y&&!ov&&!tl?" active":""}" onclick="goYear(${yr})">${YLBL(yr)}</button>`).join("");
 
   // N년씩 보기 버튼
-  const spanBtns = [1,2,3].map(n=>`<button class="cal-year-overview-btn${(ov&&!tl&&span===n)?" active":""}" onclick="setCalSpan(${n})">${n}년씩 보기</button>`).join("");
+  const spanBtns = [1,2,3].map(n=>`<button class="cal-year-overview-btn${(ov&&!tl&&span===n)?" active":""}" onclick="setCalSpan(${n})">${T('cal.span',{n})}</button>`).join("");
 
   // 연간 요약 미니캘
   function buildMiniMonth(yr,mo){
@@ -1867,7 +2005,7 @@ function renderCalendar(){
       cells+=`<div class="cal-mm-cell${hwCls}${isToday?" td":""}">${d}</div>`;
     }
     return`<div class="cal-mini-month${isCurMo?" cur-month":""}" onclick="goMonth(${yr},${mo})">
-      <div class="cal-mm-head"><span class="cal-mm-lbl">${mo+1}월</span><span class="cal-mm-count${cnt?" has":""}">${cnt?cnt+"건":"없음"}</span></div>
+      <div class="cal-mm-head"><span class="cal-mm-lbl">${MLBL(mo+1)}</span><span class="cal-mm-count${cnt?" has":""}">${cnt?T('cal.count',{n:cnt}):T('cal.none')}</span></div>
       <div class="cal-mm-grid">${DNAMES.map((n,i)=>`<div class="cal-mm-dn${i===0?" s":i===6?" sa":""}">${n}</div>`).join("")}${cells}</div>
     </div>`;
   }
@@ -1880,7 +2018,7 @@ function renderCalendar(){
     for(let offset=0;offset<span;offset++){
       const yr=y+offset;
       html+=`<div style="margin-bottom:${span>1?24:0}px">
-        ${span>1?`<div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--bd)">${yr}년</div>`:""}
+        ${span>1?`<div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--bd)">${YLBL(yr)}</div>`:""}
         <div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px;margin-bottom:0">${Array.from({length:12},(_,mo)=>buildMiniMonth(yr,mo)).join("")}</div>
       </div>`;
     }
@@ -1918,8 +2056,8 @@ function renderCalendar(){
     const _minY_tl = _minY_tl_arr.length ? Math.min(..._minY_tl_arr) : _tn.getFullYear();
     const _atMinTl = startY <= _minY_tl;
 
-    const stBg={완료:"#ffe4e4",작업중:"#fff9e0",예정:"#f0f0f0"};
-    const stClr={완료:"#c0392b",작업중:"#d4a017",예정:"#aaa"};
+    const stBg={done:"#ffe4e4",wip:"#fff9e0",plan:"#f0f0f0"};
+    const stClr={done:"#c0392b",wip:"#d4a017",plan:"#aaa"};
 
     // 타임라인 헤더 (N년씩 보기 드롭다운 + 연도 네비)
     const tlHeader=`
@@ -1928,18 +2066,18 @@ function renderCalendar(){
         <div style="display:flex;align-items:center;gap:10px">
           <button class="cal-nav-btn" onclick="prevTlYear()" ${_atMinTl?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8249;</button>
           <span style="font-size:16px;font-weight:700;color:var(--tx);min-width:${span>1?'150px':'72px'};text-align:center">
-            ${span===1?`${startY}년`:`${startY}년 ~ ${endY}년`}
+            ${span===1?YLBL(startY):`${YLBL(startY)} ~ ${YLBL(endY)}`}
           </span>
           <button class="cal-nav-btn" onclick="nextTlYear()" ${_atMaxTl?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8250;</button>
         </div>
         <div style="display:flex;justify-content:flex-end">
           <div style="position:relative;display:inline-block" id="tl-span-dropdown-wrap">
             <button onclick="toggleTlSpanDropdown()" style="display:flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--sb);color:var(--tx2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s" onmouseover="this.style.borderColor='var(--bd2)'" onmouseout="this.style.borderColor='var(--bd)'">
-              ${span}년씩 보기 <span style="font-size:9px;opacity:.6">▼</span>
+              ${T('cal.span',{n:span})} <span style="font-size:9px;opacity:.6">▼</span>
             </button>
             <div id="tl-span-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--sb);border:1px solid var(--bd);border-radius:8px;box-shadow:0 4px 16px #0000001a;z-index:300;overflow:hidden;min-width:110px">
               ${[1,2,3].map(n=>`<button onclick="setTlSpan(${n})" style="display:block;width:100%;padding:9px 16px;border:none;background:${n===span?'var(--bg)':'transparent'};color:${n===span?'var(--tx)':'var(--tx2)'};font-size:12px;font-weight:${n===span?700:400};text-align:left;cursor:pointer" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='${n===span?'var(--bg)':'transparent'}'">
-                ${n}년씩 보기${n===span?' ✓':''}
+                ${T('cal.span',{n})}${n===span?' ✓':''}
               </button>`).join("")}
             </div>
           </div>
@@ -1972,23 +2110,23 @@ function renderCalendar(){
               const count=g.entries.length;
               const _lock=projStatus(g.projId)!=='active';
               const nav=_lock?'':navCall(g.entries[0]);
-              const typeBadge=g.volType==='웹소설'
-                ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">웹소설</span>`
-                :g.volType==='웹툰'
-                ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">웹툰</span>`
+              const typeBadge=g.volType==='novel'
+                ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">${T('type.novel')}</span>`
+                :g.volType==='webtoon'
+                ?`<span style="font-size:9px;font-weight:500;padding:1px 4px;border-radius:3px;background:#f0f0f0;color:#888;flex-shrink:0">${T('type.webtoon')}</span>`
                 :'';
               const volLabel=g.volSub?` ${g.volSub}`:'';
-              return`<span class="cal-tl-entry" ${_lock?'style="cursor:default"':`onclick="${nav}"`} title="${g.proj}${volLabel} · ${count}화">
+              return`<span class="cal-tl-entry" ${_lock?'style="cursor:default"':`onclick="${nav}"`} title="${g.proj}${volLabel} · ${T('cal.epsTitle',{n:count})}">
                 <span class="cal-tl-entry-dot" style="background:${g.acc}"></span>
                 ${typeBadge}
                 <span class="cal-tl-entry-title">${g.proj}${volLabel}</span>
-                <span style="font-size:10px;color:var(--tx3);flex-shrink:0">×${count}화</span>
-                <span class="cal-tl-entry-st" style="background:${stBg[g.status]||'#f0f0f0'};color:${stClr[g.status]||'#aaa'}">${g.status}</span>
+                <span style="font-size:10px;color:var(--tx3);flex-shrink:0">${T('cal.eps',{n:count})}</span>
+                <span class="cal-tl-entry-st" style="background:${stBg[g.status]||'#f0f0f0'};color:${stClr[g.status]||'#aaa'}">${stLabel(g.status)}</span>
               </span>`;
             }).join("")
           : `<span class="cal-tl-empty-lbl">—</span>`;
         return`<div class="cal-tl-month-row${moEntries.length===0?" empty":""}${isCurMo?" cur-mo":""}">
-          <div class="cal-tl-month-label">${mo+1}월</div>
+          <div class="cal-tl-month-label">${MLBL(mo+1)}</div>
           <div class="cal-tl-entries">${chips}</div>
         </div>`;
       });
@@ -2002,7 +2140,7 @@ function renderCalendar(){
       body = `<div class="cal-tl-year-block">
         <div class="cal-tl-year-hd">
           <span class="cal-tl-year-label">${yr}</span>
-          <span class="cal-tl-year-count">${yearCount}건</span>
+          <span class="cal-tl-year-count">${T('cal.count',{n:yearCount})}</span>
           <div class="cal-tl-year-line"></div>
         </div>
         <div class="cal-tl-months">${months.join("")}</div>
@@ -2014,7 +2152,7 @@ function renderCalendar(){
         return `<div class="cal-tl-year-col">
           <div class="cal-tl-year-hd" style="padding:0 0 14px 0;margin-bottom:0;display:flex;align-items:center;gap:10px">
             <span class="cal-tl-year-label">${yr}</span>
-            <span class="cal-tl-year-count">${yearCount}건</span>
+            <span class="cal-tl-year-count">${T('cal.count',{n:yearCount})}</span>
             <div class="cal-tl-year-line"></div>
           </div>
           <div class="cal-tl-months" style="border-top:1px solid var(--bd)">${months.join("")}</div>
@@ -2045,18 +2183,18 @@ function renderCalendar(){
     <div class="cal-page">
       <button onclick="goHome()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;margin-bottom:16px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--tx2);font-size:12px;font-weight:500;cursor:pointer;transition:all .12s" onmouseover="this.style.background='var(--bg)';this.style.borderColor='var(--bd2)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--bd)'">
         <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        홈으로
+        ${T('cal.home')}
       </button>
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
         <div style="flex-shrink:0">
-          <div class="cal-page-title" style="margin-bottom:10px">작업 캘린더</div>
+          <div class="cal-page-title" style="margin-bottom:10px">${T('cal.title')}</div>
           <div class="cal-year-row" style="margin-bottom:0">
             ${yearTabs}
             <button class="cal-year-overview-btn${ov&&!tl?" active":""}" onclick="toggleCalOverview()">
-              ⊞ ${y}년 전체 보기
+              ${T('cal.yearAll',{y:YLBL(y)})}
             </button>
             <button class="cal-year-overview-btn${tl?" active":""}" onclick="toggleTimeline()">
-              ☰ 연도별 타임라인
+              ${T('cal.timeline')}
             </button>
           </div>
         </div>
@@ -2068,18 +2206,18 @@ function renderCalendar(){
         <div style="display:flex;align-items:center;gap:10px">
           <button class="cal-nav-btn" onclick="prevOverviewYear()" ${_atMinOv?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8249;</button>
           <span style="font-size:16px;font-weight:700;color:var(--tx);min-width:${span>1?'150px':'72px'};text-align:center">
-            ${span===1?`${y}년`:`${y}년 ~ ${y+span-1}년`}
+            ${span===1?YLBL(y):`${YLBL(y)} ~ ${YLBL(y+span-1)}`}
           </span>
           <button class="cal-nav-btn" onclick="nextOverviewYear()" ${_atMaxOv?'disabled style="opacity:.3;cursor:default;pointer-events:none"':''}>&#8250;</button>
         </div>
         <div style="display:flex;justify-content:flex-end">
           <div style="position:relative;display:inline-block" id="span-dropdown-wrap">
             <button onclick="toggleSpanDropdown()" style="display:flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--sb);color:var(--tx2);font-size:12px;font-weight:600;cursor:pointer;transition:all .12s" onmouseover="this.style.borderColor='var(--bd2)'" onmouseout="this.style.borderColor='var(--bd)'">
-              ${span}년씩 보기 <span style="font-size:9px;opacity:.6">▼</span>
+              ${T('cal.span',{n:span})} <span style="font-size:9px;opacity:.6">▼</span>
             </button>
             <div id="span-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--sb);border:1px solid var(--bd);border-radius:8px;box-shadow:0 4px 16px #0000001a;z-index:300;overflow:hidden;min-width:110px">
               ${[1,2,3].map(n=>`<button onclick="setCalSpan(${n})" style="display:block;width:100%;padding:9px 16px;border:none;background:${n===span?'var(--bg)':'transparent'};color:${n===span?'var(--tx)':'var(--tx2)'};font-size:12px;font-weight:${n===span?700:400};text-align:left;cursor:pointer;transition:background .1s" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='${n===span?'var(--bg)':'transparent'}'">
-                ${n}년씩 보기${n===span?' ✓':''}
+                ${T('cal.span',{n})}${n===span?' ✓':''}
               </button>`).join("")}
             </div>
           </div>
@@ -2090,11 +2228,11 @@ function renderCalendar(){
         <div>
           <div class="cal-top-row"><button class="cal-nav-btn" onclick="prevMonth()">&#8249;</button><span class="cal-month-lbl">${monthStr}</span><button class="cal-nav-btn" onclick="nextMonth()">&#8250;</button></div>
           <div class="cal-full"><div class="cal-dnames">${DNAMES.map((n,i)=>`<div class="cal-dn ${DCLS[i]}">${n}</div>`).join("")}</div><div class="cal-grid-rows">${cellsHtml}</div></div>
-          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${projStatus(w.projId)!=='active'?'':w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?'캐릭터 시트':w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="작업중"?`color:#F9CB4C`:""}">${w.status}</div></div>`).join(""):`<div class="dd-empty">작업 기록 없음</div>`}</div>`:""}
+          ${S.selDay?`<div class="day-detail"><div class="dd-hd">${y}.${String(m+1).padStart(2,"0")}.${String(S.selDay).padStart(2,"0")}</div>${selWork.length?selWork.map(w=>`<div class="dd-row" ${projStatus(w.projId)!=='active'?'':w.isChar?`onclick="goDollChar()" style="cursor:pointer"`:w.projId==="biz-oc-doll"?`onclick="goRecentWork('${w.projId}',null,${w.epId},'${w.dollCatId||""}')" style="cursor:pointer"`:`onclick="goRecentWork('${w.projId}','${w.volId}',${w.epId},null)" style="cursor:pointer"`}><div class="dd-bar" style="background:${w.acc}"></div><div><div class="dd-proj">${w.isChar?T('cal.charSheet'):w.proj}</div><div class="dd-name">${w.title}</div></div><div class="dd-st ${stClass(w.status)}" style="${w.status==="wip"?`color:#F9CB4C`:""}">${stLabel(w.status)}</div></div>`).join(""):`<div class="dd-empty">${T('cal.empty')}</div>`}</div>`:""}
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden">
-            <div style="padding:9px 13px 8px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">Recent</div>
+            <div style="padding:9px 13px 8px;border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx3);text-transform:uppercase">${T('cal.recent')}</div>
             <div style="display:flex;flex-direction:column">${recent.map(w=>`<div class="r-item" style="border-left-color:${w.acc}"><div class="r-top"><span class="r-proj" style="color:${w.acc}">${w.proj}</span><span class="r-date">${w.date.slice(5)}</span></div><div class="r-title">${w.title}</div></div>`).join("")}</div>
           </div>
         </div>
@@ -2243,7 +2381,6 @@ async function loadEpDataFromSheets(){
     const projMap = {
       "BHS":            "blood-highschool",
       "bhs":            "blood-highschool",
-      "블러드하이스쿨": "blood-highschool",
       "biz-OC-doll":    "biz-oc-doll",
       "biz-oc-doll":    "biz-oc-doll",
     };
@@ -2261,11 +2398,9 @@ async function loadEpDataFromSheets(){
     // 시트 구조: A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜 (왼쪽)
     //           G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜 (오른쪽)
     // 시트 영어 값 → 허브 안에서 쓰는 한국어 값 (옛 한국어 값도 그대로 통과)
-    const SHEET_TYPE   = { novel:"웹소설" };
-    const SHEET_STATUS = { done:"완료", wip:"작업중", plan:"예정" };
-    function applyRow(p,t,vn,en,s,d){
-      t = SHEET_TYPE[String(t).toLowerCase()] || t;
-      s = SHEET_STATUS[String(s).toLowerCase()] || s;
+        function applyRow(p,t,vn,en,s,d){
+      t = String(t).toLowerCase();
+      s = String(s).toLowerCase();
       const volNum=parseInt(vn), epId=parseInt(en);
       if(!p||isNaN(volNum)||isNaN(epId)) return;
       const pid=projMap[p]; if(!pid) return;
@@ -2308,14 +2443,13 @@ async function loadEpDataFromSheets(){
 
    시트:  공용 시트(config.js 의 SHEETS_ID) 안의 "projects" 탭
    모양:  A열 id  |  B열 status   (1행은 제목줄)
-          biz-oc-doll      | 공개
-          blood-highschool | 준비중
+          biz-oc-doll      | on
+          blood-highschool | soon
 
    status 에 쓸 수 있는 말:
-     공개            → 카드 정상 표시, 클릭 가능
-     준비중 / 오픈준비중 → 카드는 보이지만 흑백·흐리게, 'OPEN 준비중' 뱃지, 클릭 안 됨
-     숨김            → 홈 목록에서 아예 사라짐
-     (영어 active / prep / hidden 도 똑같이 알아듣습니다)
+     on    → 카드 정상 표시, 클릭 가능
+     soon  → 카드는 보이지만 연하게, 'COMING SOON' 뱃지, 클릭 안 됨
+     off   → 홈 목록에서 아예 사라짐
 
    ※ id 는 아래 PROJECTS 의 id 와 글자 하나까지 같아야 합니다.
    ※ 시트에 없는 프로젝트 · 알 수 없는 말 → PROJECTS 에 적힌 status 그대로.
@@ -2324,9 +2458,9 @@ async function loadEpDataFromSheets(){
      시트는 '보이기/숨기기'만 담당합니다.
 ══════════════════════════════════════════════════════════════ */
 const PROJ_STATUS_WORDS = {
-  '공개':'active', 'active':'active', 'open':'active',
-  '준비중':'prep', '오픈준비중':'prep', '오픈 준비중':'prep', '오픈준비':'prep', 'prep':'prep',
-  '숨김':'hidden', '비공개':'hidden', 'hidden':'hidden'
+  'on':'active', 'active':'active',
+  'soon':'prep', 'prep':'prep',
+  'off':'hidden', 'hidden':'hidden'
 };
 async function loadProjStatusFromSheets(){
   const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
@@ -2432,7 +2566,7 @@ function injectCharDatesIntoWorkLog(){
     WORK_LOG[dateStr].push({
       proj: 'biz-OC-doll',
       title: c.code,
-      status: c.status || '완료',
+      status: c.status || 'done',
       acc,
       projId: 'biz-oc-doll',
       isChar: true,
@@ -2451,9 +2585,8 @@ function injectCharDatesIntoWorkLog(){
      회차를 추가하려면 story_editor.json 을 고치면 됩니다. */
 const DOLL_STORY_JSON = 'biz-OC-doll/story_editor.json';
 
-/* story_editor.json 은 done/wip/plan, 이 파일은 완료/작업중/예정 을 씁니다.
-   '최근 작업'의 완료 목록이 "완료" 로만 걸러내기 때문에 반드시 변환해야 합니다. */
-const DOLL_STATUS_MAP = { done:'완료', wip:'작업중', plan:'예정' };
+/* story_editor.json 과 이 파일 모두 done / wip / plan 을 씁니다 */
+const DOLL_STATUS_MAP = { done:'done', wip:'wip', plan:'plan' };
 
 /* "2026-04-12" 또는 "2026. 4. 12" → "2026-04-12", 그 외에는 null */
 function normalizeDollDate(v){
@@ -2480,7 +2613,7 @@ async function loadDollStoryFromJson(){
         num:    e.num || '',
         title:  e.title || '',
         date:   normalizeDollDate(e.completedDate),
-        status: DOLL_STATUS_MAP[e.status] || e.status || '예정',
+        status: DOLL_STATUS_MAP[e.status] || 'plan',
       });
     });
 
@@ -2601,7 +2734,7 @@ function rebuildWorkLog(){
 <script>
 function googleTranslateElementInit(){
   new google.translate.TranslateElement({
-    pageLanguage:'ko',
+    pageLanguage:'en',
     autoDisplay:false
   },'google_translate_element');
 }
