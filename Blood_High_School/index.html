@@ -2021,7 +2021,7 @@ var BHS_CAST = {
     {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연"}, cols:[
       [ {img:'5_Herbaeken.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["herb",{"en": "Seeker", "ja": "探究者", "ko": "탐구자"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄"},
          desc:{"en": "No longer driven by revenge, he has become Kuro and Eunho's comrade. Alone, he chases the truth behind the legend of the dragon clan.", "ja": "復讐の鬼から抜け出し、クロとウンホの仲間になった。龍族の伝説の真実をひとりで追っている。", "ko": "복수귀에서 벗어나 쿠로와 은호의 동료가 됐다. 용족 전설의 진실을 홀로 쫓는다."}} ],
-      [ {img:'18_Jinnokagi.png',     tags:[["gold",{"en": "Shin no Kagi", "ja": "眞ノ鍵", "ko": "진노카기"}],["gold",{"en": "Nonhuman", "ja": "人外", "ko": "인외"}]], name:{"en": "That Being", "ja": "その存在", "ko": "그 존재"},
+      [ {img:'18_Jinnokagi.png',     tags:[["gold",{"en": "Shin no Kagi", "ja": "眞ノ鍵", "ko": "신노카기"}],["gold",{"en": "Nonhuman", "ja": "人外", "ko": "인외"}]], name:{"en": "That Being", "ja": "その存在", "ko": "그 존재"},
          desc:{"en": "An unknown nonhuman that appears differently to each person who sees it. Its purpose is unknown.", "ja": "見る者によって異なって認識される、正体不明の人外。その目的はわからない。", "ko": "보는 이에 따라 다르게 인식되는 정체불명의 인외. 그 목적은 알 수 없다."}} ],
       [ {img:'19_Yuka.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사"}]], name:{"en": "Kagehira Yuka", "ja": "影片ユカ", "ko": "카게히라 유카"},
          desc:{"en": "Aoi's younger sister, who guards the Kagehira house. In battle, she disposes of intruders without a single word.", "ja": "影片家を守るアオイの妹。戦闘では一言も発さずに侵入者を始末する。", "ko": "카게히라가를 지키는 아오이의 여동생. 전투 시엔 말 한마디 없이 침입자를 처리한다."}} ],
@@ -2042,153 +2042,129 @@ var BHS_CAST = {
 };
 
 var BHS_VOLUMES = [
-  {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:'1부',
-   label:'블러드하이스쿨 ~용의 부활~', type:'웹소설',
-   available:true, tags:['#학원','#판타지','#소년만화','#옴니버스','#병맛개그','#다크판타지'],
+  {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:{"en": "Part 1", "ja": "第1部", "ko": "1부"},
+   label:{"en": "Blood High School: Rise of the Dragon", "ja": "ブラッドハイスクール 〜龍の復活〜", "ko": "블러드하이스쿨 ~용의 부활~"}, type:'웹소설',
+   available:true, tags:[{"en": "#School", "ja": "#学園", "ko": "#학원"}, {"en": "#Fantasy", "ja": "#ファンタジー", "ko": "#판타지"}, {"en": "#Shonen", "ja": "#少年漫画", "ko": "#소년만화"}, {"en": "#Omnibus", "ja": "#オムニバス", "ko": "#옴니버스"}, {"en": "#AbsurdComedy", "ja": "#シュールギャグ", "ko": "#병맛개그"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지"}],
    /* ▼▼▼ 여기 lookbook: 뒤 따옴표 안이 "1부 룩북" 링크 주소입니다 (지금은 값이 채워져 있음 — 바꾸려면 이 안을 교체) ▼▼▼ */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_1part_cast.png',
    /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
    lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:['Blood_High_School/images/Thumb/1.png','Blood_High_School/images/Thumb/2.png','Blood_High_School/images/Thumb/3.png'] },
-   notes:[
-     '안녕하세요!',
-     '2017년 애니메이션, 2023년 웹툰을 거쳐 드디어 2026년 『블러드 하이스쿨』이 웹소설로 찾아왔습니다.',
-     '웹툰 중단 후 왜 웹소설로 돌아왔는지 궁금하실 텐데, 당시의 저는 첫 장편을 감당하기엔 아직 부족한 작가였습니다. 개그 성향이 강한 1부는 비교적 잘 풀어낼 수 있었지만, 소년만화 감성이 짙어지는 2부부터는 작품 전체의 균형을 잡는 일이 쉽지 않았습니다. (2부 이야기는 다음 제작 노트에서 자세히 풀어보겠습니다.)',
-     '지금의 『블러드 하이스쿨』 웹소설은 당시 벽에 부딪혔던 제가 머리를 식힐 겸 웹소설을 연습하던 과정에서 탄생했습니다. 처음에는 그저 연습용이었지만, 글이라는 매체만의 장점을 깨닫게 되면서 점점 더 몰입하게 되었습니다. 웹툰을 연재할 당시에는 여러 현실적인 제약 때문에 그리기 어려운 액션이나 긴 호흡의 전개를 줄이거나 바꿔야 하는 경우가 많았는데, 웹소설에서는 처음 구상했던 장면과 연출을 훨씬 자유롭게 담아낼 수 있었고 작업하는 내내 정말 즐거웠습니다.',
-     '결국 웹소설판이 제가 처음 그리고 싶었던 『블러드 하이스쿨』의 초안에 가까워졌고 자연스럽게 업로드하게 되었습니다. 머릿속에만 뒤엉켜 있던 구상들을 비로소 여러분께 보여드릴 수 있게 되어 정말 기쁩니다.',
-     '본격적인 1부 제작 코멘트를 해보자면, 1부는 직관적이고 유치한 옛 감성을 중점으로 제작했습니다. 그래서인지 저는 1부에는 유독 그리움이 섞인 애정을 많이 가지고 있습니다.',
-     '개인적으로 가장 좋아하는 장면은 마지막, 헤르바켄이 총을 쏘는 장면입니다. 애니메이션판과는 그 의미가 많이 달라졌지만, 오히려 그런 변화 덕분에 옛 만화 원작 특유의 분위기가 더 살아난 것 같습니다. 세기말에는 원작을 기반으로 한 애니메이션들이 오리지널 전개로 인해 어두운 분위기를 띠는 경우가 많았으니까요. 막상 원작을 펼쳐보면 의외로 밝은 작품이었다거나. 그런 기억이 있네요.',
-     '헤르바켄은 1부에서 유일하게 서사가 마무리된 캐릭터라 ‘1부 진주인공’이었다고 생각합니다. 주연 중 유일한 인간인데 밀리지 않는 캐릭터성으로 참 열심히 활약해 준 캐릭터였습니다. 오프 더 레코드가 있다면 가장 바빴던 배우였을지도 모르겠습니다.',
-     '그리고 TMI 하나를 적자면… 제가 가장 좋아하는 에피소드는 4화입니다. (이거 안 쓰면 후회할 것 같아서 씁니다..)',
-     '다른 캐릭터의 언급이나 본격적인 비하인드는 2부 제작 노트에서 더 깊게 이야기해 보겠습니다.',
-     '이번 1부가 독자 여러분께 『블러드 하이스쿨』의 세계관에 기분 좋게 입문하실 수 있는 첫 장이 되었기를 바랍니다.',
-     '감사합니다.',
-     '2026.07.29'
-   ],
+   notes:{
+     en:["Hello!", "After an animation in 2017 and a webtoon in 2023, \"Blood High School\" has finally arrived as a web novel in 2026.", "You might be wondering why I came back with a web novel after the webtoon stopped. Back then, I wasn't yet a good enough writer to carry my first long series. I handled Part 1, with all its comedy, reasonably well, but from Part 2 on, as the shonen-manga feel grew stronger, keeping the whole story in balance was hard. (I'll get into Part 2 properly in the next production note.)", "The current \"Blood High School\" web novel was born while I was practicing web-novel writing to clear my head after hitting that wall. At first it was just practice, but as I discovered what only prose can do, I got more and more absorbed. Back when I was serializing the webtoon, real-world limits often forced me to cut or change action scenes and slow-burn developments that were hard to draw. In the web novel, I could put down the scenes and staging I first imagined far more freely, and I had a great time the whole way through.", "In the end, the web novel became the closest thing to the \"Blood High School\" I first wanted to draw, and uploading it just felt natural. I'm so happy I can finally show you the ideas that had been tangled up in my head for so long.", "As for Part 1 itself, I built it around a straightforward, childish, old-school feel. Maybe that's why I have a special, nostalgic fondness for it.", "My personal favorite scene is the very last one, where Herbaeken fires the gun. Its meaning changed a lot from the animated version, but I think that change actually brought back the mood unique to old manga originals. Around the turn of the century, anime adaptations often went dark with their own original plotlines. Then you'd open the original manga and find it was surprisingly bright. I have memories like that.", "Herbaeken is the only character whose arc wraps up in Part 1, so I think of him as the 'true protagonist of Part 1.' He's the only human among the leads, yet he never got overshadowed and worked really hard. If there were an off-the-record cast, he might have been the busiest actor of them all.", "And one bit of TMI... my favorite episode is Episode 4. (I'm writing this because I think I'd regret it if I didn't..)", "I'll talk about the other characters and the real behind-the-scenes stuff in more depth in the Part 2 production note.", "I hope Part 1 has been a pleasant first chapter for stepping into the world of \"Blood High School.\"", "Thank you.", "2026.07.29"],
+     ja:["こんにちは!", "2017年のアニメ、2023年のウェブトゥーンを経て、ついに2026年、『ブラッドハイスクール』がWeb小説になって帰ってきました。", "ウェブトゥーンの中断後、なぜWeb小説で戻ってきたのか気になる方もいると思いますが、当時の私は初めての長編を背負うにはまだ力不足の作家でした。ギャグ色の強い第1部は比較的うまく描けたのですが、少年漫画らしさが濃くなる第2部からは、作品全体のバランスを取るのが簡単ではありませんでした。(第2部の話は次の制作ノートで詳しくお話しします。)", "今の『ブラッドハイスクール』Web小説は、壁にぶつかっていた私が気分転換にWeb小説を練習する中で生まれました。最初はただの練習のつもりでしたが、文章という媒体ならではの良さに気づくにつれて、どんどんのめり込んでいきました。ウェブトゥーンを連載していた頃は、いろいろな現実的な制約のせいで、描くのが難しいアクションや長い展開を削ったり変えたりしなければならないことが多かったのですが、Web小説では最初に構想していた場面や演出をずっと自由に表現でき、作業の間ずっと本当に楽しかったです。", "結果的に、Web小説版が私が最初に描きたかった『ブラッドハイスクール』の原型にいちばん近いものになり、自然とアップロードすることになりました。頭の中でだけ絡まっていた構想を、ようやく皆さんにお見せできて本当にうれしいです。", "第1部の制作について本格的にお話しすると、第1部は直感的で子どもっぽい、昔ながらの雰囲気を中心に作りました。そのせいか、私は第1部に懐かしさの混じった特別な愛着をたくさん持っています。", "個人的にいちばん好きな場面は、最後にヘルバーケンが銃を撃つシーンです。アニメ版とは意味がだいぶ変わりましたが、むしろその変化のおかげで、昔の漫画原作ならではの空気がより生きたと思います。世紀末の頃は、原作をもとにしたアニメがオリジナル展開で暗い雰囲気になることが多かったですよね。いざ原作を開いてみると、意外と明るい作品だったり。そんな記憶があります。", "ヘルバーケンは第1部で唯一物語が完結したキャラクターなので、「第1部の真の主人公」だったと思っています。主要人物の中で唯一の人間なのに、負けないキャラクター性で本当によく活躍してくれました。オフレコがあるなら、いちばん忙しかった役者かもしれません。", "それから、ちょっとしたTMIをひとつ……私がいちばん好きなエピソードは第4話です。(これを書かないと後悔しそうなので書きます..)", "他のキャラクターの話や本格的な裏話は、第2部の制作ノートでもっと深くお話しします。", "この第1部が、読者の皆さんにとって『ブラッドハイスクール』の世界へ気持ちよく入っていける最初の章になっていたらうれしいです。", "ありがとうございました。", "2026.07.29"],
+     ko:["안녕하세요!", "2017년 애니메이션, 2023년 웹툰을 거쳐 드디어 2026년 『블러드 하이스쿨』이 웹소설로 찾아왔습니다.", "웹툰 중단 후 왜 웹소설로 돌아왔는지 궁금하실 텐데, 당시의 저는 첫 장편을 감당하기엔 아직 부족한 작가였습니다. 개그 성향이 강한 1부는 비교적 잘 풀어낼 수 있었지만, 소년만화 감성이 짙어지는 2부부터는 작품 전체의 균형을 잡는 일이 쉽지 않았습니다. (2부 이야기는 다음 제작 노트에서 자세히 풀어보겠습니다.)", "지금의 『블러드 하이스쿨』 웹소설은 당시 벽에 부딪혔던 제가 머리를 식힐 겸 웹소설을 연습하던 과정에서 탄생했습니다. 처음에는 그저 연습용이었지만, 글이라는 매체만의 장점을 깨닫게 되면서 점점 더 몰입하게 되었습니다. 웹툰을 연재할 당시에는 여러 현실적인 제약 때문에 그리기 어려운 액션이나 긴 호흡의 전개를 줄이거나 바꿔야 하는 경우가 많았는데, 웹소설에서는 처음 구상했던 장면과 연출을 훨씬 자유롭게 담아낼 수 있었고 작업하는 내내 정말 즐거웠습니다.", "결국 웹소설판이 제가 처음 그리고 싶었던 『블러드 하이스쿨』의 초안에 가까워졌고 자연스럽게 업로드하게 되었습니다. 머릿속에만 뒤엉켜 있던 구상들을 비로소 여러분께 보여드릴 수 있게 되어 정말 기쁩니다.", "본격적인 1부 제작 코멘트를 해보자면, 1부는 직관적이고 유치한 옛 감성을 중점으로 제작했습니다. 그래서인지 저는 1부에는 유독 그리움이 섞인 애정을 많이 가지고 있습니다.", "개인적으로 가장 좋아하는 장면은 마지막, 헤르바켄이 총을 쏘는 장면입니다. 애니메이션판과는 그 의미가 많이 달라졌지만, 오히려 그런 변화 덕분에 옛 만화 원작 특유의 분위기가 더 살아난 것 같습니다. 세기말에는 원작을 기반으로 한 애니메이션들이 오리지널 전개로 인해 어두운 분위기를 띠는 경우가 많았으니까요. 막상 원작을 펼쳐보면 의외로 밝은 작품이었다거나. 그런 기억이 있네요.", "헤르바켄은 1부에서 유일하게 서사가 마무리된 캐릭터라 '1부 진주인공'이었다고 생각합니다. 주연 중 유일한 인간인데 밀리지 않는 캐릭터성으로 참 열심히 활약해 준 캐릭터였습니다. 오프 더 레코드가 있다면 가장 바빴던 배우였을지도 모르겠습니다.", "그리고 TMI 하나를 적자면… 제가 가장 좋아하는 에피소드는 4화입니다. (이거 안 쓰면 후회할 것 같아서 씁니다..)", "다른 캐릭터의 언급이나 본격적인 비하인드는 2부 제작 노트에서 더 깊게 이야기해 보겠습니다.", "이번 1부가 독자 여러분께 『블러드 하이스쿨』의 세계관에 기분 좋게 입문하실 수 있는 첫 장이 되었기를 바랍니다.", "감사합니다.", "2026.07.29"]
+   },
    cover:'Blood_High_School/bhs_novel_prat1_cover.png',
-   synopsis:'평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.',
+   synopsis:{"en": "Kuro is an ordinary high schooler. Heir to the dragon blood of the Ryuo family, he awakens as Lackness, the dragon of legend. And because he's now the strongest in the world, enemies start flocking to him... A school life tangled up in legends: Blood High School.", "ja": "平凡な高校生クロ。竜王家の龍の血を受け継ぐクロは、伝説の龍ラクニスとして覚醒する。世界最強という理由で、敵が次々と押し寄せてきて……伝説と絡み合うスクールライフ、ブラッドハイスクール。", "ko": "평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨."},
    episodes:[
-     {id:1,  title:'1화 장미 정원의 티타임',        date:null, status:'예정'},
-     {id:2,  title:'2화 미술실의 마리오네트',        date:null, status:'예정'},
-     {id:3,  title:'3화 버려진 성지의 보석',         date:null, status:'예정'},
-     {id:4,  title:'4화 흑마법사의 영원한 1학년',    date:null, status:'예정'},
-     {id:5,  title:'5화 엇갈린 계승과 원치 않는 힘', date:null, status:'예정'},
-     {id:6,  title:'6화 칠석의 밤과 은빛 여우',      date:null, status:'예정'},
-     {id:7,  title:'7화 무너진 왕국의 심판자',       date:null, status:'예정'},
-     {id:8,  title:'8화 뒤집힌 전설은 전설일 뿐',    date:null, status:'예정'},
-     {id:9,  title:'9화 Bang! 4분할 STAGE',          date:null, status:'예정'},
-     {id:10, title:'10화 오레사마 학원 정복!!',      date:null, status:'예정'},
-     {id:11, title:'11화 저주BOY미친BABY',           date:null, status:'예정'},
-     {id:12, title:'12화 용 형제의 서열 정리',       date:null, status:'예정'},
-     {id:13, title:'번외 1화', date:null, status:'예정'},
-     {id:14, title:'번외 2화', date:null, status:'예정'},
-     {id:15, title:'번외 3화', date:null, status:'예정'}
+     {id:1,  title:{"en": "Ep. 1 Tea Time in the Rose Garden", "ja": "第1話 薔薇の庭のティータイム", "ko": "1화 장미 정원의 티타임"},        date:null, status:'예정'},
+     {id:2,  title:{"en": "Ep. 2 The Marionette in the Art Room", "ja": "第2話 美術室のマリオネット", "ko": "2화 미술실의 마리오네트"},        date:null, status:'예정'},
+     {id:3,  title:{"en": "Ep. 3 The Jewel of the Abandoned Holy Site", "ja": "第3話 廃れた聖地の宝石", "ko": "3화 버려진 성지의 보석"},         date:null, status:'예정'},
+     {id:4,  title:{"en": "Ep. 4 The Dark Mage's Eternal First-Years", "ja": "第4話 黒魔法使いの永遠の一年生", "ko": "4화 흑마법사의 영원한 1학년"},    date:null, status:'예정'},
+     {id:5,  title:{"en": "Ep. 5 Crossed Succession and Unwanted Power", "ja": "第5話 すれ違う継承と望まぬ力", "ko": "5화 엇갈린 계승과 원치 않는 힘"}, date:null, status:'예정'},
+     {id:6,  title:{"en": "Ep. 6 A Tanabata Night and the Silver Fox", "ja": "第6話 七夕の夜と銀色の狐", "ko": "6화 칠석의 밤과 은빛 여우"},      date:null, status:'예정'},
+     {id:7,  title:{"en": "Ep. 7 The Judge of the Fallen Kingdom", "ja": "第7話 滅びた王国の審判者", "ko": "7화 무너진 왕국의 심판자"},       date:null, status:'예정'},
+     {id:8,  title:{"en": "Ep. 8 A Legend Overturned Is Still Just a Legend", "ja": "第8話 ひっくり返った伝説は伝説に過ぎない", "ko": "8화 뒤집힌 전설은 전설일 뿐"},    date:null, status:'예정'},
+     {id:9,  title:{"en": "Ep. 9 Bang! 4-Split STAGE", "ja": "第9話 Bang! 4分割STAGE", "ko": "9화 Bang! 4분할 STAGE"},          date:null, status:'예정'},
+     {id:10, title:{"en": "Ep. 10 Ore-sama Conquers the Academy!!", "ja": "第10話 俺様、学院征服!!", "ko": "10화 오레사마 학원 정복!!"},      date:null, status:'예정'},
+     {id:11, title:{"en": "Ep. 11 Cursed BOY, Crazy BABY", "ja": "第11話 呪いBOY・狂気BABY", "ko": "11화 저주BOY미친BABY"},           date:null, status:'예정'},
+     {id:12, title:{"en": "Ep. 12 Settling the Pecking Order of the Dragon Brothers", "ja": "第12話 龍兄弟の序列整理", "ko": "12화 용 형제의 서열 정리"},       date:null, status:'예정'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
    ]},
-  {id:'novel-2', grad:'150deg,#1a0010,#6b0030,#c0304a', num:2, part:'PART 02', sub:'2부',
-   label:'블러드하이스쿨 ~류오가편~', type:'웹소설',
-   available:true, tags:['#드라마','#다크판타지','#서스펜스','#극장판','#일본풍','#성장물'],
+  {id:'novel-2', grad:'150deg,#1a0010,#6b0030,#c0304a', num:2, part:'PART 02', sub:{"en": "Part 2", "ja": "第2部", "ko": "2부"},
+   label:{"en": "Blood High School: The Ryuo Clan Arc", "ja": "ブラッドハイスクール 〜竜王家編〜", "ko": "블러드하이스쿨 ~류오가편~"}, type:'웹소설',
+   available:true, tags:[{"en": "#Drama", "ja": "#ドラマ", "ko": "#드라마"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지"}, {"en": "#Suspense", "ja": "#サスペンス", "ko": "#서스펜스"}, {"en": "#MovieStyle", "ja": "#劇場版", "ko": "#극장판"}, {"en": "#JapaneseAesthetic", "ja": "#和風", "ko": "#일본풍"}, {"en": "#ComingOfAge", "ja": "#成長物語", "ko": "#성장물"}],
    /* ▼▼▼ 여기 lookbook: 뒤 따옴표 두 개 사이('') 에 "2부 룩북" 링크 주소를 넣으세요 (지금은 비어 있음) ▼▼▼ */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_2part_cast.png',
    /* ▼▼▼ state:'보기' ↔ '준비중' 만 바꾸면 링크 활성/비활성이 전환됩니다 ▼▼▼ */
    lookbook:{ count:0, meta:'Google Drive', state:'준비중', thumbs:['Blood_High_School/images/Thumb/4.png','Blood_High_School/images/Thumb/5.png','Blood_High_School/images/Thumb/6.png'] },
-   notes:[
-     '드디어 류오가 편, 그리고 『블러드하이스쿨』 2부가 마무리되었습니다.',
-     '2부는 웹툰 시절부터 가장 오래 고민하며 시간을 들인 만큼, 완성했다는 사실 자체가 저에게는 큰 성공입니다.',
-     '웹툰 시절의 2부는 음침 멘헤라 악역(ㅋㅋ)이었던 아오이가 렌의 딸 미코를 납치하고 렌의 정신을 이어 달라 강요하고, 쿠로 일행이 미코를 구출하는, 전형적인 소년만화(?) 구조였습니다. 하지만 쿠로가 성장하는 이야기로서는 부족한 부분이 있었기에 웹소설에서는 각자가 가진 생각과 선택이 부딪히면서 이야기가 흘러가는 방향으로 바뀌었습니다.',
-     '이번 류오가 편에서 가장 즐거웠던 작업은 은호의 서사였습니다. 여우신령이라는 존재는 보통 주인공을 도와주거나, 조언자 역할에 머무는 경우가 많지만, 은호는 쿠로를 위해 고민하고 직접 뛰어듭니다. 어쩌면 자신의 신력, 즉 존재의의 자체가 흔들릴 수도 있는 선택이라 “이래도 되나!?” 싶을 정도로 짜릿했고, 익숙한 클리셰를 깨고 새로운 방향으로 풀어가는 과정이 무척 즐거웠습니다.',
-     '다만 이번 편을 통해 은호의 서사는 완전히 마무리되었습니다. 한 캐릭터의 서사를 완전히 끝내고 떠나보내는(?) 경험은 처음이라, 아쉬움도 남지만 은호는 이제 슬슬 자기 자리로 돌아갈 때가 된 것 같습니다. (은호야 수고했다..)',
-     '반대로 헤르바켄은 또 다른 서사로 진입한 캐릭터입니다.',
-     '헤르바켄과 시로는 이번 류오가 편에서는 과감하게 조연으로 만들었습니다. 하지만 그 짧은 등장에서도 3부로 이어지는 중요한 진입로 역할을 해주었고 특히 마지막화의 “진노카기”가 무엇인지 다가선 그 연출이 제가 가장 좋아하는 장면입니다. (1부도 2부도 제 명장면에는 항상 헤르바켄이..)',
-     '2부는 1부보다 훨씬 무거운 사건과 감정을 다루는 만큼 감정선 중심의 전개와 많은 대사, 심리 묘사를 다루는 비중도 커졌습니다. 그 침체될 법한 전개 속에서도 액션과 긴장감을 적절히 조절하며 이야기를 풀어가는 과정은 이번 작업에서 가장 즐거웠던 도전이었습니다.',
-     '그리고 이러한 톤의 변화는 쿠로가 주인공으로 성장하는 과정에서 꼭 필요한 변화였는데요. 세상의 어둠과 자신의 어둠을 마주하며 성장하는 만큼, 순수하고 귀여운 쿠로를 조금씩 떠나보내야 해서 개인적으로 마음이 아팠습니다..ㅠㅠ (여러분들.. 지금의 쿠로는 2부가 마지막입니다… 3부의 쿠로는 새로운 쿠로가 될 예정입니다..)',
-     '하지만 그 과정 덕분에 저 역시 쿠로와 라크니스가 어떤 캐릭터인지 더욱 선명하게 이해할 수 있었습니다. 독자분들도 함께 느껴주셨으면 좋겠습니다.',
-     '작업하면서 중심을 잡기 위해 가장 많이 참고한 작품은 《충사》, 《지옥소녀》, 《쓰르라미 울 적에》였습니다. 저에게 일본풍이란 2000년대 중반 특유의 조용하고 씁쓸한 분위기입니다. 이번 2부에는 그 시절의 정서를 제 방식대로 담아보고 싶었습니다.',
-     'TMI를 하나 덧붙이자면, 중간중간 설명이 과한 부분이 있습니다. (ㅎㅎ) 해석의 여지가 남을 수 있는 부분만큼은 오해 없이 전달하고 싶어 과감히 썼습니다.',
-     '마지막으로,',
-     '돌이켜 보면 1부는 제가 잘하는 것을 보여준 작품이었습니다. 반면 2부는 부족한 부분과 계속 부딪히며 만들어간 작품이었습니다. 힘든 과정이었지만 그만큼 가장 많이 배우고 성장할 수 있었습니다. 그래서 저에게 2부는 가장 큰 도전이자 오래 기억에 남을 작품입니다.',
-     '3부부터는 새로운 인외 주연들이 등장하고, ‘전설’이라는 키워드를 중심으로 이야기의 규모도 더욱 커질 예정입니다. 언제 찾아뵙게 될지는 아직 말씀드리기 어렵지만, 죽지 않는 이상(ㅋㅋ) 끝까지 완주할 생각입니다.',
-     '『블러드하이스쿨』은 유행을 타지 않는 작품인 만큼 급할 일도 없습니다. 앞으로도 제 속도에 맞춰 꾸준히 이어가겠습니다.',
-     '감사합니다.',
-     '2026.07.29'
-   ],
+   notes:{
+     en:["At last, the Ryuo Clan Arc, and with it Part 2 of \"Blood High School,\" is complete.", "Part 2 is the part I've agonized over and spent the most time on since the webtoon days, so just finishing it feels like a huge win for me.", "In the webtoon days, Part 2 had a typical shonen-manga(?) structure: Aoi, a gloomy, unstable villain (lol), kidnaps Ren's daughter Miko and pressures her to carry on Ren's will, and Kuro and the gang rescue her. But it fell short as a story about Kuro growing up, so in the web novel it turned into a story driven by everyone's own beliefs and choices colliding.", "The most fun part of the Ryuo Clan Arc was Eunho's story. Fox spirits usually help the protagonist or stay in an advisor role, but Eunho agonizes over Kuro and jumps in himself. It's a choice that could shake his divine power, his very reason to exist, so it was thrilling to the point of \"Is this even okay!?\", and breaking a familiar cliché to take it somewhere new was a real joy.", "That said, Eunho's arc is now completely finished. It's my first time fully wrapping up a character's story and sending them off(?), so I do feel a little wistful, but I think it's about time Eunho went back to where he belongs. (Good work, Eunho..)", "Herbaeken, on the other hand, has stepped into a new story of his own.", "For the Ryuo Clan Arc, I boldly made Herbaeken and Shiro supporting characters. Even so, in their brief appearances they became an important gateway into Part 3, and my favorite scene is the one in the final episode where he draws close to what \"Shin no Kagi\" really is. (In both Part 1 and Part 2, my favorite scenes always seem to have Herbaeken in them..)", "Since Part 2 deals with much heavier events and emotions than Part 1, the story leans more on emotional beats, with more dialogue and more psychological description. Keeping the action and tension balanced in a story that could easily have sagged was the most enjoyable challenge of this project.", "And this change in tone was something Kuro truly needed to grow into a protagonist. He grows by facing the darkness of the world and the darkness within himself, which meant letting go of pure, cute Kuro little by little, and honestly, that hurt.. (sob) (Everyone.. the current Kuro ends with Part 2... the Kuro of Part 3 will be a new Kuro..)", "But thanks to that process, I came to understand much more clearly who Kuro and Lackness are. I hope you can feel that with me.", "The works I leaned on most to stay grounded were Mushishi, Hell Girl, and Higurashi When They Cry. To me, a \"Japanese feel\" means that quiet, bittersweet mood unique to the mid-2000s. In Part 2, I wanted to capture the feeling of that era in my own way.", "One more bit of TMI: in places, the explanations run a little long. (heh) Wherever something could be open to interpretation, I wanted it to come across without any misunderstanding, so I went for it.", "Finally,", "Looking back, Part 1 was where I showed what I'm good at. Part 2, on the other hand, was built by running into my weak spots again and again. It was a hard process, but that's exactly why I learned and grew the most. So for me, Part 2 is my biggest challenge yet, and a work I'll remember for a long time.", "From Part 3, new nonhuman leads will appear, and the story will grow even bigger around the keyword 'legend.' I can't say yet when I'll be back, but unless I die (lol), I plan to see it through to the end.", "\"Blood High School\" doesn't chase trends, so there's no need to rush. I'll keep going steadily, at my own pace.", "Thank you.", "2026.07.29"],
+     ja:["ついに竜王家編、そして『ブラッドハイスクール』第2部が完結しました。", "第2部はウェブトゥーン時代からいちばん長く悩み、時間をかけてきた部分なので、完成できたこと自体が私にとって大きな成功です。", "ウェブトゥーン時代の第2部は、陰気なメンヘラ悪役(笑)だったアオイがレンの娘ミコを誘拐してレンの意志を継げと迫り、クロたちがミコを救出するという、典型的な少年漫画(?)の構成でした。でもクロが成長する物語としては足りない部分があったので、Web小説ではそれぞれの考えと選択がぶつかり合いながら物語が流れていく方向に変わりました。", "今回の竜王家編でいちばん楽しかった作業は、ウンホの物語でした。狐の神霊という存在は、ふつうは主人公を助けたり、助言者の役割にとどまったりすることが多いのですが、ウンホはクロのために悩み、自ら飛び込んでいきます。もしかしたら自分の神力、つまり存在意義そのものが揺らぎかねない選択なので、「これでいいの!?」と思うほどゾクゾクしましたし、おなじみのお約束を壊して新しい方向へ描いていく過程がとても楽しかったです。", "ただ、今回の編でウンホの物語は完全に完結しました。ひとりのキャラクターの物語を完全に終わらせて送り出す(?)経験は初めてなので、寂しさも残りますが、ウンホもそろそろ自分の居場所に戻る時が来たようです。(ウンホ、お疲れさま..)", "逆にヘルバーケンは、また別の物語へ足を踏み入れたキャラクターです。", "ヘルバーケンとシロは、今回の竜王家編では思い切って脇役にしました。それでも短い登場の中で第3部へつながる大事な入口の役割を果たしてくれましたし、特に最終話で「眞ノ鍵」が何なのかに迫ったあの演出が、私のいちばん好きなシーンです。(第1部も第2部も、私の名場面にはいつもヘルバーケンが..)", "第2部は第1部よりずっと重い事件や感情を扱うぶん、感情の流れを中心にした展開や多くのセリフ、心理描写の比重も大きくなりました。停滞しがちな展開の中でも、アクションと緊張感をうまく調整しながら物語を進めていく過程は、今回の作業でいちばん楽しかった挑戦でした。", "そしてこうしたトーンの変化は、クロが主人公として成長していく過程でどうしても必要な変化でした。世界の闇と自分の闇に向き合いながら成長していくぶん、純粋でかわいいクロを少しずつ見送らなければならなくて、個人的には胸が痛みました..(泣)(皆さん..今のクロは第2部が最後です…第3部のクロは新しいクロになる予定です..)", "でもその過程のおかげで、私自身もクロとラクニスがどんなキャラクターなのか、よりはっきり理解できました。読者の皆さんにも一緒に感じてもらえたらうれしいです。", "作業中に軸をぶらさないため、いちばん参考にした作品は『蟲師』『地獄少女』『ひぐらしのなく頃に』でした。私にとって和風とは、2000年代半ばならではの静かでほろ苦い雰囲気です。今回の第2部では、あの頃の空気を自分なりに込めてみたかったんです。", "TMIをもうひとつ付け加えると、ところどころ説明が多すぎる部分があります。(ふふ)解釈の余地が残りそうなところだけは、誤解なく伝えたくて、あえてしっかり書きました。", "最後に、", "振り返ってみると、第1部は私の得意なことを見せた作品でした。一方で第2部は、足りない部分とぶつかり続けながら作っていった作品でした。大変な過程でしたが、そのぶんいちばん多くを学び、成長できました。だから私にとって第2部は、いちばん大きな挑戦であり、長く記憶に残る作品です。", "第3部からは新しい人外の主人公たちが登場し、「伝説」というキーワードを中心に物語のスケールもさらに大きくなる予定です。いつお届けできるかはまだ言えませんが、死なない限り(笑)最後まで走り切るつもりです。", "『ブラッドハイスクール』は流行に左右されない作品なので、急ぐ必要もありません。これからも自分のペースで、こつこつ続けていきます。", "ありがとうございました。", "2026.07.29"],
+     ko:["드디어 류오가 편, 그리고 『블러드하이스쿨』 2부가 마무리되었습니다.", "2부는 웹툰 시절부터 가장 오래 고민하며 시간을 들인 만큼, 완성했다는 사실 자체가 저에게는 큰 성공입니다.", "웹툰 시절의 2부는 음침 멘헤라 악역(ㅋㅋ)이었던 아오이가 렌의 딸 미코를 납치하고 렌의 정신을 이어 달라 강요하고, 쿠로 일행이 미코를 구출하는, 전형적인 소년만화(?) 구조였습니다. 하지만 쿠로가 성장하는 이야기로서는 부족한 부분이 있었기에 웹소설에서는 각자가 가진 생각과 선택이 부딪히면서 이야기가 흘러가는 방향으로 바뀌었습니다.", "이번 류오가 편에서 가장 즐거웠던 작업은 은호의 서사였습니다. 여우신령이라는 존재는 보통 주인공을 도와주거나, 조언자 역할에 머무는 경우가 많지만, 은호는 쿠로를 위해 고민하고 직접 뛰어듭니다. 어쩌면 자신의 신력, 즉 존재의의 자체가 흔들릴 수도 있는 선택이라 \"이래도 되나!?\" 싶을 정도로 짜릿했고, 익숙한 클리셰를 깨고 새로운 방향으로 풀어가는 과정이 무척 즐거웠습니다.", "다만 이번 편을 통해 은호의 서사는 완전히 마무리되었습니다. 한 캐릭터의 서사를 완전히 끝내고 떠나보내는(?) 경험은 처음이라, 아쉬움도 남지만 은호는 이제 슬슬 자기 자리로 돌아갈 때가 된 것 같습니다. (은호야 수고했다..)", "반대로 헤르바켄은 또 다른 서사로 진입한 캐릭터입니다.", "헤르바켄과 시로는 이번 류오가 편에서는 과감하게 조연으로 만들었습니다. 하지만 그 짧은 등장에서도 3부로 이어지는 중요한 진입로 역할을 해주었고 특히 마지막화의 \"신노카기\"가 무엇인지 다가선 그 연출이 제가 가장 좋아하는 장면입니다. (1부도 2부도 제 명장면에는 항상 헤르바켄이..)", "2부는 1부보다 훨씬 무거운 사건과 감정을 다루는 만큼 감정선 중심의 전개와 많은 대사, 심리 묘사를 다루는 비중도 커졌습니다. 그 침체될 법한 전개 속에서도 액션과 긴장감을 적절히 조절하며 이야기를 풀어가는 과정은 이번 작업에서 가장 즐거웠던 도전이었습니다.", "그리고 이러한 톤의 변화는 쿠로가 주인공으로 성장하는 과정에서 꼭 필요한 변화였는데요. 세상의 어둠과 자신의 어둠을 마주하며 성장하는 만큼, 순수하고 귀여운 쿠로를 조금씩 떠나보내야 해서 개인적으로 마음이 아팠습니다..ㅠㅠ (여러분들.. 지금의 쿠로는 2부가 마지막입니다… 3부의 쿠로는 새로운 쿠로가 될 예정입니다..)", "하지만 그 과정 덕분에 저 역시 쿠로와 라크니스가 어떤 캐릭터인지 더욱 선명하게 이해할 수 있었습니다. 독자분들도 함께 느껴주셨으면 좋겠습니다.", "작업하면서 중심을 잡기 위해 가장 많이 참고한 작품은 《충사》, 《지옥소녀》, 《쓰르라미 울 적에》였습니다. 저에게 일본풍이란 2000년대 중반 특유의 조용하고 씁쓸한 분위기입니다. 이번 2부에는 그 시절의 정서를 제 방식대로 담아보고 싶었습니다.", "TMI를 하나 덧붙이자면, 중간중간 설명이 과한 부분이 있습니다. (ㅎㅎ) 해석의 여지가 남을 수 있는 부분만큼은 오해 없이 전달하고 싶어 과감히 썼습니다.", "마지막으로,", "돌이켜 보면 1부는 제가 잘하는 것을 보여준 작품이었습니다. 반면 2부는 부족한 부분과 계속 부딪히며 만들어간 작품이었습니다. 힘든 과정이었지만 그만큼 가장 많이 배우고 성장할 수 있었습니다. 그래서 저에게 2부는 가장 큰 도전이자 오래 기억에 남을 작품입니다.", "3부부터는 새로운 인외 주연들이 등장하고, '전설'이라는 키워드를 중심으로 이야기의 규모도 더욱 커질 예정입니다. 언제 찾아뵙게 될지는 아직 말씀드리기 어렵지만, 죽지 않는 이상(ㅋㅋ) 끝까지 완주할 생각입니다.", "『블러드하이스쿨』은 유행을 타지 않는 작품인 만큼 급할 일도 없습니다. 앞으로도 제 속도에 맞춰 꾸준히 이어가겠습니다.", "감사합니다.", "2026.07.29"]
+   },
    cover:'Blood_High_School/bhs_novel_prat2_cover.png',
-   synopsis:'류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.',
+   synopsis:{"en": "Kuro has become head of the Ryuo family. As he faces the sins his family has kept hidden, the despair Lackness knew a thousand years ago threatens to repeat itself. At the end of a long chain of karma, Kuro accepts the King of Ruin and opens his eyes to protect what matters to him.", "ja": "竜王家の当主となったクロ。家が隠してきた罪と向き合う中、千年前のラクニスの絶望が繰り返されようとしている。業の果てで、クロは破壊の王を受け入れ、大切なものを守るために目を開く。", "ko": "류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다."},
    episodes:[
-     {id:1,  title:'류오가편 1화',  date:null, status:'예정'},
-     {id:2,  title:'류오가편 2화',  date:null, status:'예정'},
-     {id:3,  title:'류오가편 3화',  date:null, status:'예정'},
-     {id:4,  title:'류오가편 4화',  date:null, status:'예정'},
-     {id:5,  title:'류오가편 5화',  date:null, status:'예정'},
-     {id:6,  title:'류오가편 6화',  date:null, status:'예정'},
-     {id:7,  title:'류오가편 7화',  date:null, status:'예정'},
-     {id:8,  title:'류오가편 8화',  date:null, status:'예정'},
-     {id:9,  title:'류오가편 9화',  date:null, status:'예정'},
-     {id:10, title:'류오가편 10화', date:null, status:'예정'},
-     {id:11, title:'류오가편 11화', date:null, status:'예정'},
-     {id:12, title:'류오가편 12화', date:null, status:'예정'},
-     {id:13, title:'번외 1화', date:null, status:'예정'},
-     {id:14, title:'번외 2화', date:null, status:'예정'},
-     {id:15, title:'번외 3화', date:null, status:'예정'}
+     {id:1,  title:{"en": "The Ryuo Clan Arc, Ep. 1", "ja": "竜王家編 第1話", "ko": "류오가편 1화"},  date:null, status:'예정'},
+     {id:2,  title:{"en": "The Ryuo Clan Arc, Ep. 2", "ja": "竜王家編 第2話", "ko": "류오가편 2화"},  date:null, status:'예정'},
+     {id:3,  title:{"en": "The Ryuo Clan Arc, Ep. 3", "ja": "竜王家編 第3話", "ko": "류오가편 3화"},  date:null, status:'예정'},
+     {id:4,  title:{"en": "The Ryuo Clan Arc, Ep. 4", "ja": "竜王家編 第4話", "ko": "류오가편 4화"},  date:null, status:'예정'},
+     {id:5,  title:{"en": "The Ryuo Clan Arc, Ep. 5", "ja": "竜王家編 第5話", "ko": "류오가편 5화"},  date:null, status:'예정'},
+     {id:6,  title:{"en": "The Ryuo Clan Arc, Ep. 6", "ja": "竜王家編 第6話", "ko": "류오가편 6화"},  date:null, status:'예정'},
+     {id:7,  title:{"en": "The Ryuo Clan Arc, Ep. 7", "ja": "竜王家編 第7話", "ko": "류오가편 7화"},  date:null, status:'예정'},
+     {id:8,  title:{"en": "The Ryuo Clan Arc, Ep. 8", "ja": "竜王家編 第8話", "ko": "류오가편 8화"},  date:null, status:'예정'},
+     {id:9,  title:{"en": "The Ryuo Clan Arc, Ep. 9", "ja": "竜王家編 第9話", "ko": "류오가편 9화"},  date:null, status:'예정'},
+     {id:10, title:{"en": "The Ryuo Clan Arc, Ep. 10", "ja": "竜王家編 第10話", "ko": "류오가편 10화"}, date:null, status:'예정'},
+     {id:11, title:{"en": "The Ryuo Clan Arc, Ep. 11", "ja": "竜王家編 第11話", "ko": "류오가편 11화"}, date:null, status:'예정'},
+     {id:12, title:{"en": "The Ryuo Clan Arc, Ep. 12", "ja": "竜王家編 第12話", "ko": "류오가편 12화"}, date:null, status:'예정'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
    ]},
-  {id:'novel-3', grad:'150deg,#1a0000,#700000,#aa2020', num:3, part:'PART 03', sub:'3부',
-   label:'블러드하이스쿨 3부', type:'웹소설',
-   available:false, tags:['#신종족','#공개예정'],
+  {id:'novel-3', grad:'150deg,#1a0000,#700000,#aa2020', num:3, part:'PART 03', sub:{"en": "Part 3", "ja": "第3部", "ko": "3부"},
+   label:{"en": "Blood High School Part 3", "ja": "ブラッドハイスクール 第3部", "ko": "블러드하이스쿨 3부"}, type:'웹소설',
+   available:false, tags:[{"en": "#NewRace", "ja": "#新種族", "ko": "#신종족"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정"}],
    links:{ chars:'', lookbook:'', notes:'' },
    cast:'',
    lookbook:{ count:0, meta:'', thumbs:[] },
-   notes:[
-     '용족과 인간만으로 굴러가던 세계에 제3의 축을 들인다. 기존 세력 구도를 흔드는 것이 목적이라, 능력 설계보다 사회적 위치를 먼저 정하고 들어갔다.',
-     '아직 구성 단계다. 세부 내용은 공개 시점에 맞춰 채울 예정.'
-   ],
+   notes:{
+     en:["A third force enters a world that has run on dragons and humans alone. The goal is to shake up the existing balance of power, so their place in society was decided before their abilities.", "Still in the planning stage. Details will be filled in closer to release."],
+     ja:["龍族と人間だけで回ってきた世界に、第三の軸を持ち込む。既存の勢力図を揺さぶるのが目的なので、能力設計よりも先に社会的な立ち位置を決めた。", "まだ構成段階。詳細は公開時期に合わせて埋める予定。"],
+     ko:["용족과 인간만으로 굴러가던 세계에 제3의 축을 들인다. 기존 세력 구도를 흔드는 것이 목적이라, 능력 설계보다 사회적 위치를 먼저 정하고 들어갔다.", "아직 구성 단계다. 세부 내용은 공개 시점에 맞춰 채울 예정."]
+   },
    cover:'Blood_High_School/bhs_novel_prat3_cover.png',
-   synopsis:'새로운 종족이 나타난다.',
+   synopsis:{"en": "A new race appears.", "ja": "新たな種族が現れる。", "ko": "새로운 종족이 나타난다."},
    episodes:[
-     {id:1,  title:'1화',  date:null, status:'예정'},
-     {id:2,  title:'2화',  date:null, status:'예정'},
-     {id:3,  title:'3화',  date:null, status:'예정'},
-     {id:4,  title:'4화',  date:null, status:'예정'},
-     {id:5,  title:'5화',  date:null, status:'예정'},
-     {id:6,  title:'6화',  date:null, status:'예정'},
-     {id:7,  title:'7화',  date:null, status:'예정'},
-     {id:8,  title:'8화',  date:null, status:'예정'},
-     {id:9,  title:'9화',  date:null, status:'예정'},
-     {id:10, title:'10화', date:null, status:'예정'},
-     {id:11, title:'11화', date:null, status:'예정'},
-     {id:12, title:'12화', date:null, status:'예정'},
-     {id:13, title:'번외 1화', date:null, status:'예정'},
-     {id:14, title:'번외 2화', date:null, status:'예정'},
-     {id:15, title:'번외 3화', date:null, status:'예정'}
+     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화"},  date:null, status:'예정'},
+     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화"},  date:null, status:'예정'},
+     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화"},  date:null, status:'예정'},
+     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화"},  date:null, status:'예정'},
+     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화"},  date:null, status:'예정'},
+     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화"},  date:null, status:'예정'},
+     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화"},  date:null, status:'예정'},
+     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화"},  date:null, status:'예정'},
+     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화"},  date:null, status:'예정'},
+     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화"}, date:null, status:'예정'},
+     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화"}, date:null, status:'예정'},
+     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화"}, date:null, status:'예정'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
    ]},
-  {id:'novel-4', grad:'150deg,#0d0018,#3a1060,#7040b0', num:4, part:'PART 04', sub:'4부',
-   label:'블러드하이스쿨 4부', type:'웹소설',
-   available:false, tags:['#본격판타지','#떡밥회수','#공개예정'],
+  {id:'novel-4', grad:'150deg,#0d0018,#3a1060,#7040b0', num:4, part:'PART 04', sub:{"en": "Part 4", "ja": "第4部", "ko": "4부"},
+   label:{"en": "Blood High School Part 4", "ja": "ブラッドハイスクール 第4部", "ko": "블러드하이스쿨 4부"}, type:'웹소설',
+   available:false, tags:[{"en": "#HighFantasy", "ja": "#本格ファンタジー", "ko": "#본격판타지"}, {"en": "#PayoffArc", "ja": "#伏線回収", "ko": "#떡밥회수"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정"}],
    links:{ chars:'', lookbook:'', notes:'' },
    cast:'',
    lookbook:{ count:0, meta:'', thumbs:[] },
-   notes:[
-     '학원물의 틀을 걷어내고 본격 판타지로 이동한다. 1부부터 배경에만 머물러 있던 설정들이 전면으로 나온다.',
-     '천 년 전 용족 멸망의 진짜 원인을 여기서 연다. 앞선 세 부에서 흘려 둔 단서들이 한꺼번에 정리되는 구간이라, 회수 순서를 따로 표로 관리하고 있다.',
-     '아직 구성 단계다. 세부 내용은 공개 시점에 맞춰 채울 예정.'
-   ],
+   notes:{
+     en:["The school-story frame comes off and the story moves into full fantasy. Lore that has stayed in the background since Part 1 steps to the front.", "This is where the true cause of the dragon clan's fall a thousand years ago is revealed. Clues scattered across the first three parts all come together here, so the order of payoffs is tracked in a separate chart.", "Still in the planning stage. Details will be filled in closer to release."],
+     ja:["学園ものの枠を取り払い、本格ファンタジーへ移る。第1部から背景にとどまっていた設定が前面に出てくる。", "千年前の龍族滅亡の本当の原因をここで明かす。前の三部で撒いておいた手がかりが一気に整理される区間なので、回収の順番は別に表で管理している。", "まだ構成段階。詳細は公開時期に合わせて埋める予定。"],
+     ko:["학원물의 틀을 걷어내고 본격 판타지로 이동한다. 1부부터 배경에만 머물러 있던 설정들이 전면으로 나온다.", "천 년 전 용족 멸망의 진짜 원인을 여기서 연다. 앞선 세 부에서 흘려 둔 단서들이 한꺼번에 정리되는 구간이라, 회수 순서를 따로 표로 관리하고 있다.", "아직 구성 단계다. 세부 내용은 공개 시점에 맞춰 채울 예정."]
+   },
    cover:'Blood_High_School/bhs_novel_prat4_cover.png',
-   synopsis:'학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다.',
+   synopsis:{"en": "Shedding its school-story skin for full-blown fantasy. The true cause of the dragon clan's fall a thousand years ago, and every piece of legendary foreshadowing, pays off at once.", "ja": "学園ものの殻を脱ぎ、本格ファンタジーへ。千年前の龍族滅亡の本当の原因と、積み重なった伝説の伏線が一気に回収される。", "ko": "학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다."},
    episodes:[
-     {id:1,  title:'1화',  date:null, status:'예정'},
-     {id:2,  title:'2화',  date:null, status:'예정'},
-     {id:3,  title:'3화',  date:null, status:'예정'},
-     {id:4,  title:'4화',  date:null, status:'예정'},
-     {id:5,  title:'5화',  date:null, status:'예정'},
-     {id:6,  title:'6화',  date:null, status:'예정'},
-     {id:7,  title:'7화',  date:null, status:'예정'},
-     {id:8,  title:'8화',  date:null, status:'예정'},
-     {id:9,  title:'9화',  date:null, status:'예정'},
-     {id:10, title:'10화', date:null, status:'예정'},
-     {id:11, title:'11화', date:null, status:'예정'},
-     {id:12, title:'12화', date:null, status:'예정'},
-     {id:13, title:'번외 1화', date:null, status:'예정'},
-     {id:14, title:'번외 2화', date:null, status:'예정'},
-     {id:15, title:'번외 3화', date:null, status:'예정'}
+     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화"},  date:null, status:'예정'},
+     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화"},  date:null, status:'예정'},
+     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화"},  date:null, status:'예정'},
+     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화"},  date:null, status:'예정'},
+     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화"},  date:null, status:'예정'},
+     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화"},  date:null, status:'예정'},
+     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화"},  date:null, status:'예정'},
+     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화"},  date:null, status:'예정'},
+     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화"},  date:null, status:'예정'},
+     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화"}, date:null, status:'예정'},
+     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화"}, date:null, status:'예정'},
+     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화"}, date:null, status:'예정'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화"}, date:null, status:'예정'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화"}, date:null, status:'예정'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화"}, date:null, status:'예정'}
    ]}
 ];
 
@@ -2206,42 +2182,60 @@ var BHS_VOLUMES = [
 var BHS_HISTORY = {
   eyebrow : 'LOG',
 /*  title   : 'LOG', */
-  lead    : '작품의 첫 시작과 끝을 기록해놓은 페이지.',
+  lead    : {"en": "A record of this work, from its very first beginning to its end.", "ja": "作品の始まりと終わりを記録したページ。", "ko": "작품의 첫 시작과 끝을 기록해놓은 페이지."},
 
   items : [
     {
       year : '2017',
       date : '02. 28',
-      kind : '클레이 애니메이션',
+      kind : {"en": "Clay Animation", "ja": "クレイアニメ", "ko": "클레이 애니메이션"},
       icon : 'film',
-      name : '[애니] 블러드하이스쿨',
-      desc : '유튜브에 올린 클레이애니메이션.\n펀딩 실패 이후 저퀄리티로 3부/번외편까지 제작해 공개 했으나 현재는 비공개 처리됨.(개인사유로 1부 이외에 공개를 원치않음.)',
+      name : {"en": "[Anime] Blood High School", "ja": "[アニメ] ブラッドハイスクール", "ko": "[애니] 블러드하이스쿨"},
+      desc : {"en": "A clay animation uploaded to YouTube.\nAfter the crowdfunding failed, I made it on a shoestring all the way through Part 3 and the extras, but those are now private. (For personal reasons, I only want Part 1 to be public.)", "ja": "YouTubeに投稿したクレイアニメ。\nクラウドファンディング失敗後、低クオリティで第3部・番外編まで制作して公開しましたが、現在は非公開にしています。(個人的な理由で、第1部以外は公開を望んでいません。)", "ko": "유튜브에 올린 클레이애니메이션.\n펀딩 실패 이후 저퀄리티로 3부/번외편까지 제작해 공개 했으나 현재는 비공개 처리됨.(개인사유로 1부 이외에 공개를 원치않음.)"},
       url  : 'https://youtu.be/dv2ZYwO32z0',
       thumb: ''    /* 유튜브라 비워둬도 자동 */
     },
     {
       year : '2023',
       date : '11. 07',
-      kind : '웹툰',
+      kind : {"en": "Webtoon", "ja": "ウェブトゥーン", "ko": "웹툰"},
       icon : 'pen',
-      name : '[웹툰] 블러드하이스쿨',
-      desc : '4년 뒤 스토리를 확장해 연재한 웹툰판.\n기세로 시작했다가 2부에서 막혀서 웹소설로 전환.',
+      name : {"en": "[Webtoon] Blood High School", "ja": "[ウェブトゥーン] ブラッドハイスクール", "ko": "[웹툰] 블러드하이스쿨"},
+      desc : {"en": "The webtoon version, serialized four years later with an expanded story.\nStarted on pure momentum, got stuck in Part 2, and switched to a web novel.", "ja": "4年後にストーリーを広げて連載したウェブトゥーン版。\n勢いで始めたものの第2部で行き詰まり、Web小説へ転向。", "ko": "4년 뒤 스토리를 확장해 연재한 웹툰판.\n기세로 시작했다가 2부에서 막혀서 웹소설로 전환."},
       url  : 'https://www.postype.com/@rrkt2022/post/15619663',
       thumb: 'https://d3mcojo3jv0dbr.cloudfront.net/2023/11/07/17/08/8190fe32c61b6b36a927acd57aa45054.png?w=1000&h=500&q=65'
     },
     {
       year : '2026',
       date : '02. 14',
-      kind : '웹소설',
+      kind : {"en": "Web Novel", "ja": "Web小説", "ko": "웹소설"},
       icon : 'book',
-      name : '[웹소설] 블러드하이스쿨',
-      desc : '1년 반 뒤, 지금의 형태.\nIP확장을 목표로 시간 들여 진행중.',
+      name : {"en": "[Web Novel] Blood High School", "ja": "[Web小説] ブラッドハイスクール", "ko": "[웹소설] 블러드하이스쿨"},
+      desc : {"en": "A year and a half later: its current form.\nTaking its time, with growing into a full IP as the goal.", "ja": "1年半後、現在の形。\nIP展開を目標に、時間をかけて進行中。", "ko": "1년 반 뒤, 지금의 형태.\nIP확장을 목표로 시간 들여 진행중."},
       url  : '',
       thumb: '',
       covers: true          /* 공개된 부의 표지를 자동으로 붙임 */
     }
   ]
 };
+
+/* Volume and log data hold {en, ja, ko} for each text: keep only the page language */
+(function(){
+  function pick(x){
+    if(Array.isArray(x)) return x.map(pick);
+    if(x && typeof x === 'object'){
+      var ks = Object.keys(x);
+      if(ks.length && 'en' in x && ks.every(function(k){ return k === 'en' || k === 'ja' || k === 'ko'; })){
+        var v = (x[window.__bhsTL] != null) ? x[window.__bhsTL] : x.en;
+        return pick(v);
+      }
+      for(var k in x) x[k] = pick(x[k]);
+    }
+    return x;
+  }
+  BHS_VOLUMES = pick(BHS_VOLUMES);
+  BHS_HISTORY = pick(BHS_HISTORY);
+})();
 
 /* ── 유튜브 주소에서 영상 id 뽑기 (썸네일 자동 생성용) ── */
 function bhsYtId(url){
@@ -2856,7 +2850,7 @@ function bhsBuildVolNav(vol){
     return '<div class="vol-picker-item' + (v.id===vol.id?' current':'') + '" style="--vpick-acc:' + BHS_ACC + '"'
          + ' onclick="bhsGoVol(\'' + v.id + '\');bhsCloseVolPicker()">'
          + '<span class="vol-picker-label">' + bhsEsc(v.label) + '</span>'
-         + '<span class="vol-picker-type">' + v.type + '</span>'
+         + '<span class="vol-picker-type">' + bhsTypeLabel(v.type) + '</span>'
          + '</div>';
   }).join('');
 
