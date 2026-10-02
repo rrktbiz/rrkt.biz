@@ -616,8 +616,8 @@ body{top:0 !important}
 
 /* ── 에피소드 보드 ── */
 #view-story .ep-board{margin:16px auto 12px;max-width:700px;width:calc(100% - 40px);background:var(--sb);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
-#view-story .ep-board-head{display:grid;grid-template-columns:44px 1fr 90px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
-#view-story .ep-row{display:grid;grid-template-columns:44px 1fr 90px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
+#view-story .ep-board-head{display:grid;grid-template-columns:44px 1fr 64px 90px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:9px;font-weight:700;letter-spacing:.8px;color:var(--tx3);text-transform:uppercase}
+#view-story .ep-row{display:grid;grid-template-columns:44px 1fr 64px 90px;padding:11px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;align-items:center}
 #view-story .ep-row:last-child{border-bottom:none}
 #view-story .ep-row:hover{background:#ebebeb}
 #view-story .ep-row-locked{cursor:default}
@@ -630,6 +630,8 @@ body{top:0 !important}
 #view-story .ep-status-badge.wip{background:#F9F4CA;color:#F9CB4C}
 #view-story .ep-status-badge.plan{background:#f0f0f0;color:#aaa}
 #view-story .ep-date-col{font-size:10px;color:var(--tx3);text-align:right;white-space:nowrap}
+#view-story .ep-len-col{font-size:10px;color:var(--tx3);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media(max-width:520px){#view-story .ep-board-head,#view-story .ep-row{grid-template-columns:30px 1fr 54px 66px;padding-left:12px;padding-right:12px}}
 
 /* ── 볼륨 네비 + 목록 모달 ── */
 #view-story .vol-nav-outer{background:var(--sb);padding:8px 0 28px}
@@ -1848,6 +1850,20 @@ Object.assign(window.BHS_I18N, {
 "zh": "日期",
 "zht": "日期"
 },
+"board.len": {
+"en": "Length",
+"ja": "文字数",
+"ko": "글자 수",
+"zh": "字数",
+"zht": "字數"
+},
+"len.fmt": {
+"en": "{n} chars",
+"ja": "{n}字",
+"ko": "{n}자",
+"zh": "{n}字",
+"zht": "{n}字"
+},
 "lk.view": {
 "en": "View",
 "ja": "見る",
@@ -2576,6 +2592,40 @@ async function bhsFetchText(url){
   throw new Error(last === 404 ? T('err.404') : T('err.load'));
 }
 
+/* ── 글자 수: 지금 읽게 될 판본의 본문 파일을 읽어서 셉니다.
+      공백과 엔터(줄바꿈 1번 = 1자)까지 전부 포함. 한 번 센 값은 기억해 둡니다. ── */
+var BHS_LEN_P = {};
+function bhsEpSrcLang(){
+  var lang = _currentLang || 'ko';
+  if(lang === 'ko')    return BHS_EP_LANG;
+  if(lang === 'ja')    return 'jp';
+  if(lang === 'en')    return BHS_EP_EN;
+  if(lang === 'zh-CN') return BHS_EP_ZH;
+  if(lang === 'zh-TW') return BHS_EP_ZHT;
+  return 'pure_ko';
+}
+function bhsCountChars(text){
+  text = String(text).replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+  return Array.from(text).length;
+}
+function bhsLenOf(path){
+  if(!BHS_LEN_P[path]){
+    BHS_LEN_P[path] = bhsFetchText(path).then(bhsCountChars).catch(function(){ delete BHS_LEN_P[path]; return null; });
+  }
+  return BHS_LEN_P[path];
+}
+function bhsFillLens(v){
+  var src = bhsEpSrcLang();
+  v.episodes.forEach(function(e){
+    if(!bhsCanRead(e)) return;
+    bhsLenOf(bhsTextPath(v.id, e.id, src)).then(function(n){
+      if(n == null || BS.vol !== v.id || bhsEpSrcLang() !== src) return;
+      var el = document.getElementById('ep-len-' + e.id);
+      if(el) el.textContent = T('len.fmt', {n: n.toLocaleString('en-US')});
+    });
+  });
+}
+
 /* ══════ 라우팅 ══════ */
 
 /* ── 제작자 소개 · 비즈니스 문의 오버레이 ── */
@@ -3109,20 +3159,22 @@ function bhsRenderEpList(){
     + bhsSecBtn(bhsHasNote(v), T('note.title'), 'bhsOpenNote(\'' + v.id + '\')', T('note.none'))
     + '</div></div>'
     + '<div class="ep-board">'
-    + '<div class="ep-board-head"><span>#</span><span>' + T('board.title') + '</span><span style="text-align:right">' + T('board.date') + '</span></div>'
+    + '<div class="ep-board-head"><span>#</span><span>' + T('board.title') + '</span><span style="text-align:right">' + T('board.len') + '</span><span style="text-align:right">' + T('board.date') + '</span></div>'
     + eps.map(function(e){
         var ok = bhsCanRead(e);
         var wip = e.status === 'wip' ? 'background:#F9F4CA;color:#F9CB4C' : '';
         return '<div class="ep-row' + (ok?'':' ep-row-locked') + '"' + (ok?' onclick="bhsGo(\'vol\',\''+v.id+'\','+e.id+')"':'') + '>'
              + '<span class="ep-num">' + e.id + '</span>'
              + '<span class="ep-title-col"><span class="ep-title-text">' + bhsEsc(e.title) + '</span>'
-             + '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + bhsStLabel(e.status) + '</span></span>'
+             + (e.status === 'done' ? '' : '<span class="ep-status-badge ' + bhsStCls(e.status) + '" style="' + wip + '">' + bhsStLabel(e.status) + '</span>') + '</span>'
+             + '<span class="ep-len-col notranslate" id="ep-len-' + e.id + '"></span>'
              + '<span class="ep-date-col">' + (e.date || '&mdash;') + '</span>'
              + '</div>';
       }).join('')
     + '</div>'
     + bhsBuildVolNav(v)
     + BHS_FOOTER_HTML;
+  bhsFillLens(v);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -3370,11 +3422,10 @@ function bhsRenderReader(){
     + '<div class="postype-title">' + bhsEsc(e.title) + '</div>'
     + '<div class="postype-meta">'
     + (e.date ? '<span class="postype-date">' + e.date + '</span>' : '')
-    + '<span class="postype-status-badge" style="' + (
-        e.status === 'done'   ? 'background:#ffe4e4;color:#c0392b' :
+    + (e.status === 'done' ? '' : '<span class="postype-status-badge" style="' + (
         e.status === 'wip' ? 'background:#F9F4CA;color:#F9CB4C' :
                                 'background:#f0f0f0;color:#aaa'
-      ) + '">' + bhsStLabel(e.status) + '</span></div>'
+      ) + '">' + bhsStLabel(e.status) + '</span>') + '</div>'
     + '<div style="display:flex;align-items:center;gap:6px;margin-top:12px">'
     + '<button id="deepl-translate-btn" onclick="onDeepLBtnClick()" style="margin-top:0">'
     + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg> ' + T('dl.btn') + '</button>'
@@ -3415,7 +3466,7 @@ function openEpPicker(){
     return '<div class="ep-picker-item' + (e.id===BS.ep?' current':'') + '" style="--curr-acc:' + BHS_ACC + '" onclick="pickEp(' + e.id + ')">'
          + '<span class="ep-picker-num">' + e.id + '</span>'
          + '<span class="ep-picker-t">' + bhsEsc(e.title) + '</span>'
-         + '<span class="ep-picker-st ' + bhsStCls(e.status) + '" style="' + (e.status==='wip'?'color:#F9CB4C':'') + '">' + bhsStLabel(e.status) + '</span>'
+         + (e.status === 'done' ? '' : '<span class="ep-picker-st ' + bhsStCls(e.status) + '" style="' + (e.status==='wip'?'color:#F9CB4C':'') + '">' + bhsStLabel(e.status) + '</span>')
          + '</div>';
   }).join('');
   document.getElementById('ep-picker-modal').classList.remove('hidden');
