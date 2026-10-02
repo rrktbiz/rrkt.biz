@@ -8,12 +8,13 @@
 
   ──────────────────────────────────────────────────────────────
   Languages
-    English is the original text written in this file.
+    English is the text written in this file.
     Japanese, Simplified Chinese, and Traditional Chinese are
-    prepared AI translations kept in the I18N dictionary (intro tab script).
+    kept in the I18N dictionary (intro tab script).
+    English, Japanese, and Chinese text is written with AI assistance.
     Any other language is shown through Google Translate.
 
-    · Text that uses the prepared translations gets data-i18n="key".
+    · Text that has a dictionary entry gets data-i18n="key".
       When you change that English text, update the same key in I18N.
     · Text that must never change gets  class="notranslate" translate="no"
       (wordmark, hashtags, character codes, copy-paste credit lines).
@@ -61,7 +62,7 @@
 <script>
 /* Language — decided before the page is drawn.
    A saved choice (localStorage 'bzd_lang') wins; otherwise the browser language.
-   Japanese / Chinese browsers get the prepared translations, everyone else gets English. */
+   Japanese / Chinese browsers get the prepared text, everyone else gets English. */
 (function(){
   var DICT = { 'ja':'ja', 'zh-CN':'zh-Hans', 'zh-TW':'zh-Hant' };
   var FONT = { 'ja':'Noto+Sans+JP', 'zh-CN':'Noto+Sans+SC', 'zh-TW':'Noto+Sans+TC' };
@@ -3001,7 +3002,7 @@ BIZ.mount();
 
 /* ══ Language engine ══
    en                  → the text as written in this file
-   ja / zh-CN / zh-TW  → prepared translations (I18N dictionary, no live machine translation)
+   ja / zh-CN / zh-TW  → prepared text (I18N dictionary, no live machine translation)
    anything else       → Google Translate from English
    The chosen language is remembered in localStorage 'bzd_lang'.
    (The first-visit choice is made in the small script in <head>.) */
@@ -3058,7 +3059,7 @@ function setLang(code){
   code = window.bzdLangNorm ? bzdLangNorm(code) : code;
   try{ localStorage.setItem('bzd_lang', code); }catch(e){}
 
-  /* English or a language with prepared translations */
+  /* English or a language with prepared text */
   if(code === 'en' || bzdDictKey(code)){
     if(_tlGoogleOn()){ _tlGoogleClear(); location.reload(); return; }   /* undo Google first */
     TL.lang = code;
