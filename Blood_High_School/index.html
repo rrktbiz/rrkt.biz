@@ -22,7 +22,8 @@
 /* Language — decided before the page is drawn.
    A saved choice (localStorage 'bzd_lang', shared with biz-OC-doll) wins;
    otherwise the browser language: Japanese -> ja, Korean -> ko,
-   Chinese (Simplified) -> zh-CN, everyone else -> en.
+   Chinese (Simplified) -> zh-CN, Chinese (Traditional: Taiwan / Hong Kong / Macau) -> zh-TW,
+   everyone else -> en.
    The Google Translate cookie is rewritten here on every visit, because
    biz-OC-doll writes the same cookie with a different source language. */
 (function(){
@@ -37,15 +38,15 @@
   function detect(){
     var ls = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
     var n = norm(ls[0]);
-    return (n === 'ja' || n === 'ko' || n === 'zh-CN') ? n : 'en';
+    return (n === 'ja' || n === 'ko' || n === 'zh-CN' || n === 'zh-TW') ? n : 'en';
   }
   var saved = null;
   try{ saved = localStorage.getItem('bzd_lang'); }catch(e){}
   var lang = saved ? norm(saved) : detect();
 
-  /* English, Japanese, Korean and Chinese (Simplified) use the prepared text below (no Google).
+  /* English, Japanese, Korean and Chinese (Simplified / Traditional) use the prepared text below (no Google).
      Any other language: the English page is machine-translated by Google. */
-  var OWN = (lang === 'en' || lang === 'ja' || lang === 'ko' || lang === 'zh-CN');
+  var OWN = (lang === 'en' || lang === 'ja' || lang === 'ko' || lang === 'zh-CN' || lang === 'zh-TW');
   var x = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'googtrans=;path=/' + x;
   document.cookie = 'googtrans=;path=/;domain=.' + location.hostname + x;
@@ -56,11 +57,12 @@
   window.bhsLangNorm = norm;
   window.__bhsLang = lang;
 
-  /* Text language: 'ja' / 'ko' / 'zh' (Chinese, Simplified) read the dictionary, everything else reads English */
-  var TL = (lang === 'ja' || lang === 'ko') ? lang : (lang === 'zh-CN' ? 'zh' : 'en');
+  /* Text language: 'ja' / 'ko' / 'zh' (Chinese, Simplified) / 'zht' (Chinese, Traditional) read the dictionary,
+     everything else reads English */
+  var TL = (lang === 'ja' || lang === 'ko') ? lang : (lang === 'zh-CN' ? 'zh' : (lang === 'zh-TW' ? 'zht' : 'en'));
   window.__bhsTL = TL;
   if(TL !== 'en'){
-    document.documentElement.lang = (TL === 'zh') ? 'zh-CN' : TL;
+    document.documentElement.lang = (TL === 'zh') ? 'zh-CN' : (TL === 'zht' ? 'zh-TW' : TL);
     document.documentElement.classList.add('i18n-wait');
     setTimeout(function(){ document.documentElement.classList.remove('i18n-wait'); }, 1500);
   }
@@ -76,8 +78,14 @@
     lz.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap';
     document.head.appendChild(lz);
   }
+  if(TL === 'zht'){
+    var lt = document.createElement('link');
+    lt.rel = 'stylesheet';
+    lt.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap';
+    document.head.appendChild(lt);
+  }
 
-  /* Dictionary: BHS_I18N[key] = {en, ja, ko, zh}. T('key') gives the current language
+  /* Dictionary: BHS_I18N[key] = {en, ja, ko, zh, zht}. T('key') gives the current language
      (English if missing). {n} / {p} ... are filled from the second argument. */
   window.BHS_I18N = window.BHS_I18N || {};
   window.T = function(key, v){
@@ -536,6 +544,7 @@ button{font-family:var(--fn);cursor:pointer}a{text-decoration:none}
 :root{--cjk:'Noto Sans KR'}
 :root:lang(ja){--cjk:'Noto Sans JP'}
 :root:lang(zh){--cjk:'Noto Sans SC'}
+:root:lang(zh-TW){--cjk:'Noto Sans TC'}
 html.i18n-wait body{visibility:hidden}
 #google_translate_element{position:fixed;bottom:8px;right:8px;z-index:9999;opacity:0;pointer-events:none}
 /* Hide Google Translate's top bar (the page shows its own 'Google' badge instead) */
@@ -1086,7 +1095,7 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
           <input id="tb-lang-search" type="text" placeholder="Search language..." data-t-ph="lang.search" oninput="tbLangFilter()">
         </div>
         <div id="tb-lang-list"></div>
-        <div class="tb-lang-note" data-t="lang.note"><b>English · Japanese · Korean · Chinese (Simplified)</b> are officially supported.<br>Other languages are machine-translated by <b>Google</b>.</div>
+        <div class="tb-lang-note" data-t="lang.note"><b>English · Japanese · Korean · Chinese (Simplified · Traditional)</b> are officially supported.<br>Other languages are machine-translated by <b>Google</b>.</div>
       </div>
     </div>
   </div>
@@ -1228,7 +1237,7 @@ body.ep-picker-open #float-ep-nav{opacity:0;pointer-events:none}
       <div class="v-sec-label">HOOK</div>
       <div class="hook-block">
         <p class="hook-text">
-          <span class="hook-cute" data-t="hook">Inside me, a power that could destroy the world is <em style="color:var(--yellow);font-style:italic;">a.wa.ken.ing.</em><br>
+          <span class="hook-cute" data-t="hook">Inside me, a power that could destroy the world <em style="color:var(--yellow);font-style:italic;">me.za.me.ru.</em><br>
 But... I just want to live a normal life!</span>
           <span class="hook-em" data-t="hook.by">— Ryuo Kuro, right after his black dragon awakening</span>
         </p>
@@ -1239,7 +1248,7 @@ But... I just want to live a normal life!</span>
       <div class="v-sec-label">STORY</div>
       <div class="preview-block">
         <div class="preview-body">
-          <p class="preview-scene" data-t="story.scene">[Lackness, the dragon of legend.]<br>[The Dark Dragon of Darkness, said to hold the power to destroy the world.]<br>[Now, after a thousand years, it a.wa.kens.]</p>
+          <p class="preview-scene" data-t="story.scene">[Lackness, the dragon of legend.]<br>[The Dark Dragon of Darkness, said to hold the power to destroy the world.]<br>[Now, after a thousand years, me.za.me.ru.]</p>
           <p class="preview-text" data-t="story.text">
 Ordinary model student <strong>Ryuo Kuro</strong> enrolls at St. Saints Academy, and on his very first day the vampire student council president comes for his blood. In that instant, a power he never knew he had explodes, and <strong>Lackness</strong>, the legendary black dragon that has slept inside Kuro for a thousand years, awakens.<br><br>
 A vampire's rose garden, a marionette principal gone mad, a monster in an abandoned holy site, a dark mage who keeps students in first year forever. Behind every outlandish incident, week after week, is the black dragon's power, unleashed whether Kuro wants it or not.<br><br>
@@ -1353,590 +1362,687 @@ He hates fighting. All he wants is a normal life. But from the moment the dragon
 </div>
 
 <script>
-/* Interface text in four languages: en / ja / ko / zh (English is also written in the HTML).
+/* Interface text in five languages: en / ja / ko / zh / zht (English is also written in the HTML).
    To change a sentence, edit it here in every language. */
 Object.assign(window.BHS_I18N, {
 "doc.title": {
 "en": "BLOOD HIGH SCHOOL",
 "ja": "ブラッドハイスクール — BLOOD HIGH SCHOOL",
 "ko": "블러드하이스쿨 — BLOOD HIGH SCHOOL",
-"zh": "血色高校 — BLOOD HIGH SCHOOL"
+"zh": "血色高校 — BLOOD HIGH SCHOOL",
+"zht": "血色高校 — BLOOD HIGH SCHOOL"
 },
 "brand": {
 "en": "Blood High School",
 "ja": "ブラッドハイスクール",
 "ko": "블러드하이스쿨",
-"zh": "血色高校"
+"zh": "血色高校",
+"zht": "血色高校"
 },
 "snd.toggle": {
 "en": "Click sound on/off",
 "ja": "クリック音のオン/オフ",
 "ko": "클릭 소리 켜기·끄기",
-"zh": "点击音效 开/关"
+"zh": "点击音效 开/关",
+"zht": "點擊音效 開/關"
 },
 "snd.on": {
 "en": "Turn click sound on",
 "ja": "クリック音をオンにする",
 "ko": "클릭 소리 켜기",
-"zh": "开启点击音效"
+"zh": "开启点击音效",
+"zht": "開啟點擊音效"
 },
 "snd.off": {
 "en": "Turn click sound off (volume {n}%)",
 "ja": "クリック音をオフにする(音量 {n}%)",
 "ko": "클릭 소리 끄기 (크기 {n}%)",
-"zh": "关闭点击音效（音量 {n}%）"
+"zh": "关闭点击音效（音量 {n}%）",
+"zht": "關閉點擊音效（音量 {n}%）"
 },
 "snd.vol": {
 "en": "Volume",
 "ja": "音量",
 "ko": "소리 크기",
-"zh": "音量"
+"zh": "音量",
+"zht": "音量"
 },
 "contact.btn": {
 "en": "About the creator · Business inquiries",
 "ja": "制作者紹介・ビジネスのお問い合わせ",
 "ko": "제작자 소개 · 비즈니스 문의",
-"zh": "关于作者 · 商务合作"
+"zh": "关于作者 · 商务合作",
+"zht": "關於作者 · 商務合作"
 },
 "lang.search": {
 "en": "Search language...",
 "ja": "言語を検索...",
 "ko": "언어 검색...",
-"zh": "搜索语言..."
+"zh": "搜索语言...",
+"zht": "搜尋語言..."
 },
 "lang.note": {
-"en": "<b>English · Japanese · Korean · Chinese (Simplified)<\/b> are officially supported.<br>Other languages are machine-translated by <b>Google<\/b>.",
-"ja": "<b>英語・日本語・韓国語・中国語(簡体字)<\/b>に公式対応しています。<br>その他の言語は<b>Google<\/b>による機械翻訳です。",
-"ko": "<b>영어 · 일본어 · 한국어 · 중국어(간체)<\/b>는 공식 지원 언어입니다.<br>그 밖의 언어는 <b>Google<\/b> 기계 번역입니다.",
-"zh": "<b>英语 · 日语 · 韩语 · 简体中文<\/b>为官方支持语言。<br>其他语言由 <b>Google<\/b> 机器翻译。"
+"en": "<b>English · Japanese · Korean · Chinese (Simplified · Traditional)<\/b> are officially supported.<br>Other languages are machine-translated by <b>Google<\/b>.",
+"ja": "<b>英語・日本語・韓国語・中国語(簡体字・繁体字)<\/b>に公式対応しています。<br>その他の言語は<b>Google<\/b>による機械翻訳です。",
+"ko": "<b>영어 · 일본어 · 한국어 · 중국어(간체·번체)<\/b>는 공식 지원 언어입니다.<br>그 밖의 언어는 <b>Google<\/b> 기계 번역입니다.",
+"zh": "<b>英语 · 日语 · 韩语 · 简体中文 · 繁体中文<\/b>为官方支持语言。<br>其他语言由 <b>Google<\/b> 机器翻译。",
+"zht": "<b>英文 · 日文 · 韓文 · 簡體中文 · 繁體中文<\/b>為官方支援語言。<br>其他語言由 <b>Google<\/b> 機器翻譯。"
 },
 "tab.intro": {
 "en": "Intro",
 "ja": "紹介",
 "ko": "소개",
-"zh": "介绍"
+"zh": "介绍",
+"zht": "介紹"
 },
 "tab.log": {
 "en": "Log",
 "ja": "ログ",
 "ko": "로그",
-"zh": "历程"
+"zh": "历程",
+"zht": "歷程"
 },
 "tab.soon": {
 "en": "Coming soon",
 "ja": "公開予定",
 "ko": "공개 예정",
-"zh": "即将公开"
+"zh": "即将公开",
+"zht": "即將公開"
 },
 "close": {
 "en": "Close",
 "ja": "閉じる",
 "ko": "닫기",
-"zh": "关闭"
+"zh": "关闭",
+"zht": "關閉"
 },
 "contact.tag": {
 "en": "We create original stories and characters built to grow into IP.",
 "ja": "ストーリーとキャラクターを軸に、IPとして広がるオリジナル作品をつくります。",
 "ko": "스토리 / 캐릭터를 기반으로 IP로 확장 가능한 원작을 만듭니다.",
-"zh": "我们以故事和角色为基础，创作可拓展为IP的原创作品。"
+"zh": "我们以故事和角色为基础，创作可拓展为IP的原创作品。",
+"zht": "我們以故事和角色為基礎，創作可拓展為IP的原創作品。"
 },
 "contact.title": {
 "en": "Business Inquiries",
 "ja": "ビジネスのお問い合わせ",
 "ko": "비즈니스 문의",
-"zh": "商务合作"
+"zh": "商务合作",
+"zht": "商務合作"
 },
 "contact.desc": {
 "en": "We only review emails that include a proposal or specific collaboration details.<br>Replies may take time, and we may not be able to respond to every inquiry.",
 "ja": "企画書、または具体的な協業内容を含むメールのみ拝見しています。<br>返信までお時間をいただく場合があり、すべてのお問い合わせにお返事できないこともあります。",
 "ko": "제안서 또는 구체적인 협업 내용이 포함된 메일만 검토합니다.<br>응답까지 시간이 걸릴 수 있으며, 모든 문의에 회신하기 어려울 수 있습니다.",
-"zh": "我们只审阅附有企划书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法逐一回复所有来信。"
+"zh": "我们只审阅附有企划书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法逐一回复所有来信。",
+"zht": "我們只審閱附有企劃書或具體合作內容的郵件。<br>回覆可能需要一些時間，也可能無法逐一回覆所有來信。"
 },
 "copy": {
 "en": "Copy",
 "ja": "コピー",
 "ko": "복사",
-"zh": "复制"
+"zh": "复制",
+"zht": "複製"
 },
 "copied": {
 "en": "Copied",
 "ja": "コピー完了",
 "ko": "완료",
-"zh": "已复制"
+"zh": "已复制",
+"zht": "已複製"
 },
 "pd.open": {
 "en": "Open IP proposal",
 "ja": "IP企画書を開く",
 "ko": "IP 기획서 열기",
-"zh": "打开IP企划书"
+"zh": "打开IP企划书",
+"zht": "打開IP企劃書"
 },
 "pd.note": {
 "en": "Contains spoilers for the whole story, including the plot, ending, and twists.",
 "ja": "あらすじ・結末・どんでん返しなど、作品全体のネタバレを含みます。",
 "ko": "줄거리 · 결말 · 반전 등 작품 전체의 스포일러가 포함되어 있습니다.",
-"zh": "包含剧情、结局、反转等全作剧透。"
+"zh": "包含剧情、结局、反转等全作剧透。",
+"zht": "包含劇情、結局、反轉等全作劇透。"
 },
 "cast.title": {
 "en": "Characters",
 "ja": "登場人物",
 "ko": "등장인물",
-"zh": "登场人物"
+"zh": "登场人物",
+"zht": "登場人物"
 },
 "cast.badge": {
 "en": "Character Guide",
 "ja": "登場人物紹介",
 "ko": "등장인물 소개",
-"zh": "人物介绍"
+"zh": "人物介绍",
+"zht": "人物介紹"
 },
 "overlay.hint": {
 "en": "Click outside or press ESC to close",
 "ja": "外側をクリック、またはESCキーで閉じる",
 "ko": "바깥 영역 클릭 또는 ESC 키로 닫기",
-"zh": "点击外部区域或按 ESC 键关闭"
+"zh": "点击外部区域或按 ESC 键关闭",
+"zht": "點擊外部區域或按 ESC 鍵關閉"
 },
 "note.title": {
 "en": "Production Notes",
 "ja": "制作ノート",
 "ko": "제작노트",
-"zh": "制作笔记"
+"zh": "制作笔记",
+"zht": "製作筆記"
 },
 "note.titleP": {
 "en": "{p} · Production Notes",
 "ja": "{p} 制作ノート",
 "ko": "{p} 제작노트",
-"zh": "{p} 制作笔记"
+"zh": "{p} 制作笔记",
+"zht": "{p} 製作筆記"
 },
 "hero.sub": {
 "en": "Blood High School",
 "ja": "ブ ラ ッ ド ハ イ ス ク ー ル",
 "ko": "블 러 드 하 이 스 쿨",
-"zh": "血 色 高 校"
+"zh": "血 色 高 校",
+"zht": "血 色 高 校"
 },
 "hero.cta": {
 "en": "Read the story",
 "ja": "作品を読む",
 "ko": "작품 보러가기",
-"zh": "阅读作品"
+"zh": "阅读作品",
+"zht": "閱讀作品"
 },
 "cta.p1": {
 "en": "Part 1 &rarr;",
 "ja": "第1部 &rarr;",
 "ko": "1부 &rarr;",
-"zh": "第1部 &rarr;"
+"zh": "第1部 &rarr;",
+"zht": "第1部 &rarr;"
 },
 "cta.p2": {
 "en": "Part 2 &rarr;",
 "ja": "第2部 &rarr;",
 "ko": "2부 &rarr;",
-"zh": "第2部 &rarr;"
+"zh": "第2部 &rarr;",
+"zht": "第2部 &rarr;"
 },
 "meta.age": {
 "en": "Ages 15+",
 "ja": "15歳以上",
 "ko": "15세 이용가",
-"zh": "15岁以上"
+"zh": "15岁以上",
+"zht": "15歲以上"
 },
 "meta.format": {
 "en": "Seasonal",
 "ja": "シーズン制",
 "ko": "시즌제",
-"zh": "季播制"
+"zh": "季播制",
+"zht": "季播制"
 },
 "meta.volume": {
 "en": "12 episodes per season &middot; N parts planned",
 "ja": "1シーズン12話 &middot; 全N部作予定",
 "ko": "시즌당 12화 &middot; 총 N부작 예정",
-"zh": "每季12话 &middot; 预计共N部"
+"zh": "每季12话 &middot; 预计共N部",
+"zht": "每季12話 &middot; 預計共N部"
 },
 "tag.1": {
 "en": "#SchoolFantasy",
 "ja": "#学園ファンタジー",
 "ko": "#학원판타지",
-"zh": "#校园奇幻"
+"zh": "#校园奇幻",
+"zht": "#校園奇幻"
 },
 "tag.2": {
 "en": "#DarkFantasy",
 "ja": "#ダークファンタジー",
 "ko": "#다크판타지",
-"zh": "#黑暗奇幻"
+"zh": "#黑暗奇幻",
+"zht": "#黑暗奇幻"
 },
 "tag.3": {
 "en": "#Shonen",
 "ja": "#少年漫画",
 "ko": "#소년만화",
-"zh": "#少年漫画"
+"zh": "#少年漫画",
+"zht": "#少年漫畫"
 },
 "tag.4": {
 "en": "#ComingOfAge",
 "ja": "#成長物語",
 "ko": "#성장물",
-"zh": "#成长"
+"zh": "#成长",
+"zht": "#成長"
 },
 "tag.5": {
 "en": "#Newtro",
 "ja": "#ニュートロ",
 "ko": "#뉴트로",
-"zh": "#新复古"
+"zh": "#新复古",
+"zht": "#新復古"
 },
 "tag.6": {
 "en": "#Nonhuman",
 "ja": "#人外",
 "ko": "#인외",
-"zh": "#人外"
+"zh": "#人外",
+"zht": "#人外"
 },
 "hook": {
-"en": "Inside me, a power that could destroy the world is <em style=\"color:var(--yellow);font-style:italic;\">a.wa.ken.ing.<\/em><br>\nBut... I just want to live a normal life!",
+"en": "Inside me, a power that could destroy the world <em style=\"color:var(--yellow);font-style:italic;\">me.za.me.ru.<\/em><br>\nBut... I just want to live a normal life!",
 "ja": "僕の中で、世界を滅ぼせる力が <em style=\"color:var(--yellow);font-style:italic;\">メ.ザ.メ.ル.<\/em><br>\nでも...僕は普通に生きたいんだ!",
 "ko": "내 몸속에 세상을 멸망시킬 수 있는 힘이 <em style=\"color:var(--yellow);font-style:italic;\">메.자.메.루.<\/em><br>\n그런데... 난 평범하게 살고 싶어!",
-"zh": "我的体内，足以毁灭世界的力量正在<em style=\"color:var(--yellow);font-style:italic;\">觉.醒.<\/em><br>\n可是……我只想过普通的生活！"
+"zh": "我的体内，足以毁灭世界的力量 <em style=\"color:var(--yellow);font-style:italic;\">me.za.me.ru.<\/em><br>\n可是……我只想过普通的生活！",
+"zht": "我的體內，足以毀滅世界的力量 <em style=\"color:var(--yellow);font-style:italic;\">me.za.me.ru.<\/em><br>\n可是……我只想過普通的生活！"
 },
 "hook.by": {
 "en": "— Ryuo Kuro, right after his black dragon awakening",
 "ja": "— 竜王クロ、黒龍覚醒直後",
 "ko": "— 류오 쿠로, 흑룡 각성 직후",
-"zh": "— 龙王库洛，黑龙觉醒之后"
+"zh": "— 龙王库洛，黑龙觉醒之后",
+"zht": "— 龍王庫洛，黑龍覺醒之後"
 },
 "story.scene": {
-"en": "[Lackness, the dragon of legend.]<br>[The Dark Dragon of Darkness, said to hold the power to destroy the world.]<br>[Now, after a thousand years, it a.wa.kens.]",
+"en": "[Lackness, the dragon of legend.]<br>[The Dark Dragon of Darkness, said to hold the power to destroy the world.]<br>[Now, after a thousand years, me.za.me.ru.]",
 "ja": "[伝説の龍ラクニス。]<br>[それは世界を滅ぼす力を持つという、闇のダークドラゴン。]<br>[千年の時を経た今、目.を.覚.ま.す.]",
-"ko": "[전설의 용 라크니스.]<br>[그것은 세계를 멸망시킬 수 있는 힘을 가졌다는 어둠의 다크 드래곤.]<br>[천 년의 시간이 지난 지금 눈.을.뜬.다.]",
-"zh": "【传说之龙，拉克尼斯。】<br>【那是据说拥有足以毁灭世界之力的，黑暗的暗黑龙。】<br>【千年时光流逝的如今，睁.开.了.眼。】"
+"ko": "[전설의 용 라크니스.]<br>[그것은 세계를 멸망시킬 수 있는 힘을 가졌다는 어둠의 다크 드래곤.]<br>[천 년의 시간이 지난 지금 메.자.메.루.]",
+"zh": "【传说之龙，拉克尼斯。】<br>【那是据说拥有足以毁灭世界之力的，黑暗的暗黑龙。】<br>【千年时光流逝的如今，me.za.me.ru。】",
+"zht": "【傳說之龍，拉克尼斯。】<br>【那是據說擁有足以毀滅世界之力的，黑暗的暗黑龍。】<br>【千年時光流逝的如今，me.za.me.ru。】"
 },
 "story.text": {
 "en": "Ordinary model student <strong>Ryuo Kuro<\/strong> enrolls at St. Saints Academy, and on his very first day the vampire student council president comes for his blood. In that instant, a power he never knew he had explodes, and <strong>Lackness<\/strong>, the legendary black dragon that has slept inside Kuro for a thousand years, awakens.<br><br>\nA vampire's rose garden, a marionette principal gone mad, a monster in an abandoned holy site, a dark mage who keeps students in first year forever. Behind every outlandish incident, week after week, is the black dragon's power, unleashed whether Kuro wants it or not.<br><br>\nThe problem is, <strong style=\"color:var(--red)\">Kuro doesn't remember any of it.<\/strong><br><br>\nHe hates fighting. All he wants is a normal life. But from the moment the dragon's power woke, the world won't leave Kuro alone. Enemies closing in, the weight of his family name, and moment after moment of choices that break him and make him stand back up. Torn between wanting to run and the people he can't bear to lose, can this boy accept the power within him?<br><br>\n<span style=\"color:var(--red);font-weight:900\">— The story of a boy who carries an immense power begins now!<\/span>",
 "ja": "平凡な優等生<strong>竜王クロ<\/strong>は、聖セインツ学院に入学したその日、ヴァンパイアの生徒会長に血を狙われる。その瞬間——自分でも知らない力が爆発し、クロの中で千年眠っていた伝説の黒龍<strong>ラクニス<\/strong>が目を覚ます。<br><br>\nヴァンパイアの薔薇の庭、狂ったマリオネット校長、打ち捨てられた聖地の魔物、永遠の一年生を生み出す黒魔法使い——毎週巻き起こる奇想天外な事件の裏には、いつもクロの意思とは関係なく発動する黒龍の力があった。<br><br>\n問題は、<strong style=\"color:var(--red)\">クロ自身が何ひとつ覚えていないということ。<\/strong><br><br>\n戦うのは嫌だ。ただ普通に生きたいだけだ。けれど龍の力が目覚めたその瞬間から、世界はクロを放っておかない。迫りくる敵、背負うべき家の重み、そしてそのたびに砕けては立ち上がらなければならない選択の瞬間——逃げ出したい気持ちと、目の前の大切なものとの間で、この少年は自分の中の力を受け入れることができるのか。<br><br>\n<span style=\"color:var(--red);font-weight:900\">——巨大な力を秘めた少年の物語が、いま幕を開ける!<\/span>",
 "ko": "평범한 모범생 <strong>류오 쿠로<\/strong>는 성 세인츠 학원에 입학한 첫날, 뱀파이어 학생회장에게 피를 노림당한다. 그 순간 — 자신도 모르는 힘이 폭발하며, 쿠로의 안에서 천 년 동안 잠들어 있던 전설의 흑룡 <strong>라크니스<\/strong>가 깨어난다.<br><br>\n뱀파이어의 장미 정원, 미쳐버린 마리오네트 교장, 버려진 성지의 마물, 영원한 1학년을 만드는 흑마법사 — 매주 터지는 기상천외한 사건의 뒤에는 언제나 쿠로의 의지와 상관없이 발동하는 흑룡의 힘이 있었다.<br><br>\n문제는, <strong style=\"color:var(--red)\">쿠로 자신은 아무것도 기억하지 못한다는 것.<\/strong><br><br>\n싸우는 건 싫다. 평범하게 살고 싶을 뿐이다. 하지만 용의 힘이 깨어난 순간부터 세상은 쿠로를 가만두지 않는다. 다가오는 적, 짊어져야 할 가문의 무게, 그리고 그때마다 부서지고 다시 일어서야 하는 선택의 순간들 — 도망치고 싶은 마음과 눈앞의 소중한 것들 사이에서, 이 소년은 과연 자신 안의 힘을 받아들일 수 있을까.<br><br>\n<span style=\"color:var(--red);font-weight:900\">— 거대한 힘을 품은 소년의 이야기가 지금, 막을 올린다!<\/span>",
-"zh": "普通的模范生<strong>龙王库洛<\/strong>入学圣塞因茨学院的第一天，就被吸血鬼学生会长盯上了血。就在那一刻——连他自己都不知道的力量爆发，在库洛体内沉睡了千年的传说黑龙<strong>拉克尼斯<\/strong>苏醒了。<br><br>\n吸血鬼的蔷薇庭园、发了疯的提线人偶校长、废弃圣地的魔物、制造永远的一年级的黑魔法师——每周爆发的离奇事件背后，总有不受库洛意志控制而发动的黑龙之力。<br><br>\n问题是，<strong style=\"color:var(--red)\">库洛自己什么都不记得。<\/strong><br><br>\n他讨厌战斗。只想过普通的生活。但从龙之力苏醒的那一刻起，世界就不肯放过库洛。步步逼近的敌人、必须背负的家族之重，以及每一次都要破碎后重新站起的抉择时刻——在想要逃跑的心情与眼前珍视的事物之间，这个少年究竟能否接受自己体内的力量。<br><br>\n<span style=\"color:var(--red);font-weight:900\">——怀抱巨大力量的少年的故事，此刻拉开帷幕！<\/span>"
+"zh": "普通的模范生<strong>龙王库洛<\/strong>入学圣塞因茨学院的第一天，就被吸血鬼学生会长盯上了血。就在那一刻——连他自己都不知道的力量爆发，在库洛体内沉睡了千年的传说黑龙<strong>拉克尼斯<\/strong>苏醒了。<br><br>\n吸血鬼的蔷薇庭园、发了疯的提线人偶校长、废弃圣地的魔物、制造永远的一年级的黑魔法师——每周爆发的离奇事件背后，总有不受库洛意志控制而发动的黑龙之力。<br><br>\n问题是，<strong style=\"color:var(--red)\">库洛自己什么都不记得。<\/strong><br><br>\n他讨厌战斗。只想过普通的生活。但从龙之力苏醒的那一刻起，世界就不肯放过库洛。步步逼近的敌人、必须背负的家族之重，以及每一次都要破碎后重新站起的抉择时刻——在想要逃跑的心情与眼前珍视的事物之间，这个少年究竟能否接受自己体内的力量。<br><br>\n<span style=\"color:var(--red);font-weight:900\">——怀抱巨大力量的少年的故事，此刻拉开帷幕！<\/span>",
+"zht": "普通的模範生<strong>龍王庫洛<\/strong>入學聖塞因茨學院的第一天，就被吸血鬼學生會長盯上了血。就在那一刻——連他自己都不知道的力量爆發，在庫洛體內沉睡了千年的傳說黑龍<strong>拉克尼斯<\/strong>甦醒了。<br><br>\n吸血鬼的薔薇庭園、發了瘋的提線人偶校長、廢棄聖地的魔物、製造永遠的一年級的黑魔法師——每週爆發的離奇事件背後，總有不受庫洛意志控制而發動的黑龍之力。<br><br>\n問題是，<strong style=\"color:var(--red)\">庫洛自己什麼都不記得。<\/strong><br><br>\n他討厭戰鬥。只想過普通的生活。但從龍之力甦醒的那一刻起，世界就不肯放過庫洛。步步逼近的敵人、必須背負的家族之重，以及每一次都要破碎後重新站起的抉擇時刻——在想要逃跑的心情與眼前珍視的事物之間，這個少年究竟能否接受自己體內的力量。<br><br>\n<span style=\"color:var(--red);font-weight:900\">——懷抱巨大力量的少年的故事，此刻拉開帷幕！<\/span>"
 },
 "c.kuro.n": {
 "en": "Ryuo Kuro",
 "ja": "竜王クロ",
 "ko": "류오 쿠로",
-"zh": "龙王库洛"
+"zh": "龙王库洛",
+"zht": "龍王庫洛"
 },
 "c.kuro.d": {
 "en": "A bespectacled model student. Timid and gentle, yet kinder than anyone. Unaware of the black dragon sleeping inside him, <strong>he just wants to live a normal life.<\/strong> But fate won't leave him alone.",
 "ja": "メガネの優等生。臆病でおとなしいけれど、誰よりも優しい少年。自分の中に眠る黒龍の存在を知らないまま、<strong>普通に生きたいと願っている。<\/strong>しかし運命は彼を放っておかない。",
 "ko": "안경 모범생. 겁이 많고 순하지만, 누구보다 상냥한 소년. 자기 안에 잠든 흑룡의 존재를 모른 채 <strong>평범하게 살고 싶어 한다.<\/strong> 하지만 운명은 그를 가만두지 않는다.",
-"zh": "戴眼镜的模范生。胆小温顺，却比谁都善良的少年。他不知道自己体内沉睡着黑龙，<strong>只想过普通的生活。<\/strong>但命运不肯放过他。"
+"zh": "戴眼镜的模范生。胆小温顺，却比谁都善良的少年。他不知道自己体内沉睡着黑龙，<strong>只想过普通的生活。<\/strong>但命运不肯放过他。",
+"zht": "戴眼鏡的模範生。膽小溫順，卻比誰都善良的少年。他不知道自己體內沉睡著黑龍，<strong>只想過普通的生活。<\/strong>但命運不肯放過他。"
 },
 "c.eunho.n": {
 "en": "Eunho",
 "ja": "ウンホ",
 "ko": "은호",
-"zh": "银浩"
+"zh": "银浩",
+"zht": "銀浩"
 },
 "c.eunho.d": {
 "en": "Kuro's childhood friend. Sly and full of mischief, but when Kuro is in danger <strong>he moves before anyone else.<\/strong> He has a secret even Kuro doesn't know.",
 "ja": "クロの幼なじみ。飄々としていてイタズラ好きだが、クロが危険にさらされると<strong>誰よりも先に動く。<\/strong>彼には、クロも知らない秘密がある。",
 "ko": "쿠로의 소꿉친구. 능글거리고 장난기 많지만 쿠로가 위험에 처하면 <strong>누구보다 먼저 움직인다.<\/strong> 그에겐 쿠로도 모르는 비밀이 있다.",
-"zh": "库洛的青梅竹马。油嘴滑舌、爱恶作剧，但库洛一遇到危险，<strong>他总是第一个行动。<\/strong>他有一个连库洛都不知道的秘密。"
+"zh": "库洛的青梅竹马。油嘴滑舌、爱恶作剧，但库洛一遇到危险，<strong>他总是第一个行动。<\/strong>他有一个连库洛都不知道的秘密。",
+"zht": "庫洛的青梅竹馬。油嘴滑舌、愛惡作劇，但庫洛一遇到危險，<strong>他總是第一個行動。<\/strong>他有一個連庫洛都不知道的秘密。"
 },
 "c.herb.n": {
 "en": "Herbaeken",
 "ja": "ヘルバーケン",
 "ko": "헤르바켄",
-"zh": "赫尔巴肯"
+"zh": "赫尔巴肯",
+"zht": "赫爾巴肯"
 },
 "c.herb.d": {
 "en": "An exchange student from abroad and a die-hard legend otaku. He drags Kuro and Eunho off on adventures to hunt down every legend in the academy. But what lies behind the <strong>cold glint<\/strong> hidden beneath his bright smile—?",
 "ja": "異国から来た留学生にして伝説オタク。学園のあらゆる伝説を探しに行こうと、クロとウンホを連れ回す。だが明るい笑顔の裏に隠した<strong>冷たい眼差し<\/strong>の正体は——?",
 "ko": "타국에서 온 유학생이자 전설 오타쿠. 학원의 온갖 전설을 찾아 모험을 떠나자며 쿠로와 은호를 끌고 다닌다. 하지만 밝은 웃음 뒤에 숨긴 <strong>싸늘한 눈빛<\/strong>의 정체는 —?",
-"zh": "来自异国的留学生，也是传说宅。他拉着库洛和银浩，说要去寻找学院里的各种传说展开冒险。但藏在灿烂笑容背后的<strong>冰冷眼神<\/strong>，其真面目是——？"
+"zh": "来自异国的留学生，也是传说宅。他拉着库洛和银浩，说要去寻找学院里的各种传说展开冒险。但藏在灿烂笑容背后的<strong>冰冷眼神<\/strong>，其真面目是——？",
+"zht": "來自異國的留學生，也是傳說宅。他拉著庫洛和銀浩，說要去尋找學院裡的各種傳說展開冒險。但藏在燦爛笑容背後的<strong>冰冷眼神<\/strong>，其真面目是——？"
 },
 "c.shiro.n": {
 "en": "Ryuo Shiro",
 "ja": "竜王シロ",
 "ko": "류오 시로",
-"zh": "龙王希洛"
+"zh": "龙王希洛",
+"zht": "龍王希洛"
 },
 "c.shiro.d": {
 "en": "Kuro's twin brother. Pure and childlike, but the other dragon dwelling within him, Lumensia, shouts <strong>\"Ore-sama is the strongest in the world!!\"<\/strong> and turns the whole academy into his playground.",
 "ja": "クロの双子の弟。純粋で子どものようだが、その中に宿るもう一体の龍「ルメンシア」は<strong>「俺様が世界最強だ!!」<\/strong>と叫び、学園をまるごと自分の遊び場にしてしまう。",
 "ko": "쿠로의 쌍둥이 동생. 순수하고 아이 같지만, 그 안에 깃든 또 하나의 용 '루멘시아'는 <strong>\"오레사마가 세계 최강이다!!\"<\/strong>를 외치며 학원을 통째로 자기 놀이터로 만들어 버린다.",
-"zh": "库洛的双胞胎弟弟。天真得像个孩子，但寄宿在他体内的另一条龙「卢门西亚」高喊着<strong>「本大爷才是世界最强！！」<\/strong>，把整个学院变成了自己的游乐场。"
+"zh": "库洛的双胞胎弟弟。天真得像个孩子，但寄宿在他体内的另一条龙「卢门西亚」高喊着<strong>「本大爷才是世界最强！！」<\/strong>，把整个学院变成了自己的游乐场。",
+"zht": "庫洛的雙胞胎弟弟。天真得像個孩子，但寄宿在他體內的另一條龍「盧門西亞」高喊著<strong>「本大爺才是世界最強！！」<\/strong>，把整個學院變成了自己的遊樂場。"
 },
 "c.miko.n": {
 "en": "Ryuo Miko",
 "ja": "竜王ミコ",
 "ko": "류오 미코",
-"zh": "龙王美子"
+"zh": "龙王美子",
+"zht": "龍王美子"
 },
 "c.miko.d": {
 "en": "Kuro's cousin and a disciple of his father, Yoshiyuki. A girl whose talent and pride both reach the sky. She clashes with Kuro over who will lead the family, but <strong>she has desperate reasons of her own.<\/strong>",
 "ja": "クロのいとこであり、その父ヨシユキの弟子。才能もプライドも天を突く少女。当主の座をめぐってクロと対立するが、<strong>彼女には彼女なりの切実な理由<\/strong>がある。",
 "ko": "쿠로의 사촌이자 그 아버지 요시유키의 제자. 재능과 자존심 모두 하늘을 찌르는 소녀. 당주 자리를 두고 쿠로와 대립하지만, <strong>그녀에겐 그녀만의 절박한 이유<\/strong>가 있다.",
-"zh": "库洛的堂亲，也是他父亲义之的弟子。才能与自尊心都高到天上的少女。她为家主之位与库洛对立，但<strong>她有她自己迫切的理由。<\/strong>"
+"zh": "库洛的堂亲，也是他父亲义之的弟子。才能与自尊心都高到天上的少女。她为家主之位与库洛对立，但<strong>她有她自己迫切的理由。<\/strong>",
+"zht": "庫洛的堂親，也是他父親義之的弟子。才能與自尊心都高到天上的少女。她為家主之位與庫洛對立，但<strong>她有她自己迫切的理由。<\/strong>"
 },
 "v.cta": {
 "en": "Start reading now",
 "ja": "今すぐ作品を読む",
 "ko": "지금 바로 작품 보러가기",
-"zh": "现在就去阅读"
+"zh": "现在就去阅读",
+"zht": "現在就去閱讀"
 },
 "footer.note": {
 "en": "The author personally uploads backups of this work to the addresses below. These are official uploads, not reposts.",
 "ja": "本作品は作者本人が下記アドレスにもバックアップとして公式にアップロードしています。無断転載ではありません。",
 "ko": "본 콘텐츠는 작가 본인이 아래 주소에 백업 업로드합니다. 불펌이 아닌 공식 업로드입니다.",
-"zh": "本作品由作者本人备份上传至以下地址。并非盗转，而是官方上传。"
+"zh": "本作品由作者本人备份上传至以下地址。并非盗转，而是官方上传。",
+"zht": "本作品由作者本人備份上傳至以下地址。並非盜轉，而是官方上傳。"
 },
 "st.done": {
 "en": "Available",
 "ja": "公開中",
 "ko": "완료",
-"zh": "已公开"
+"zh": "已公开",
+"zht": "已公開"
 },
 "st.wip": {
 "en": "In progress",
 "ja": "執筆中",
 "ko": "작업중",
-"zh": "制作中"
+"zh": "制作中",
+"zht": "製作中"
 },
 "st.plan": {
 "en": "Coming soon",
 "ja": "公開予定",
 "ko": "예정",
-"zh": "预定"
+"zh": "预定",
+"zht": "預定"
 },
 "type.novel": {
 "en": "Web Novel",
 "ja": "Web小説",
 "ko": "웹소설",
-"zh": "网络小说"
+"zh": "网络小说",
+"zht": "網路小說"
 },
 "list.of": {
 "en": "{t} List",
 "ja": "{t}一覧",
 "ko": "{t} 목록",
-"zh": "{t}列表"
+"zh": "{t}列表",
+"zht": "{t}列表"
 },
 "list": {
 "en": "List",
 "ja": "一覧",
 "ko": "목록",
-"zh": "列表"
+"zh": "列表",
+"zht": "列表"
 },
 "back.list": {
 "en": "&larr; List",
 "ja": "&larr; 一覧",
 "ko": "&larr; 목록",
-"zh": "&larr; 列表"
+"zh": "&larr; 列表",
+"zht": "&larr; 列表"
 },
 "vol.noPrev": {
 "en": "No previous part",
 "ja": "前の部はありません",
 "ko": "이전권 없음",
-"zh": "没有上一部"
+"zh": "没有上一部",
+"zht": "沒有上一部"
 },
 "vol.noNext": {
 "en": "No next part",
 "ja": "次の部はありません",
 "ko": "다음권 없음",
-"zh": "没有下一部"
+"zh": "没有下一部",
+"zht": "沒有下一部"
 },
 "vol.count": {
 "en": "{n} episodes",
 "ja": "全{n}話",
 "ko": "{n}화 수록",
-"zh": "收录{n}话"
+"zh": "收录{n}话",
+"zht": "收錄{n}話"
 },
 "syn": {
 "en": "Synopsis",
 "ja": "あらすじ",
 "ko": "줄거리",
-"zh": "剧情简介"
+"zh": "剧情简介",
+"zht": "劇情簡介"
 },
 "cast.none": {
 "en": "No characters listed yet",
 "ja": "登場人物はまだ登録されていません",
 "ko": "등장인물이 아직 등록되지 않았습니다",
-"zh": "尚未登记登场人物"
+"zh": "尚未登记登场人物",
+"zht": "尚未登記登場人物"
 },
 "note.none": {
 "en": "No production notes yet",
 "ja": "制作ノートはまだありません",
 "ko": "제작노트가 아직 작성되지 않았습니다",
-"zh": "尚未撰写制作笔记"
+"zh": "尚未撰写制作笔记",
+"zht": "尚未撰寫製作筆記"
 },
 "board.title": {
 "en": "Title",
 "ja": "タイトル",
 "ko": "제목",
-"zh": "标题"
+"zh": "标题",
+"zht": "標題"
 },
 "board.date": {
 "en": "Date",
 "ja": "日付",
 "ko": "날짜",
-"zh": "日期"
+"zh": "日期",
+"zht": "日期"
 },
 "lk.view": {
 "en": "View",
 "ja": "見る",
 "ko": "보기",
-"zh": "查看"
+"zh": "查看",
+"zht": "查看"
 },
 "lk.soon": {
 "en": "Coming soon",
 "ja": "準備中",
 "ko": "준비중",
-"zh": "准备中"
+"zh": "准备中",
+"zht": "準備中"
 },
 "lk.pages": {
 "en": "{n} pages",
 "ja": "{n}ページ",
 "ko": "{n} 페이지",
-"zh": "{n} 页"
+"zh": "{n} 页",
+"zht": "{n} 頁"
 },
 "lk.all": {
 "en": "View all &rarr;",
 "ja": "すべて見る &rarr;",
 "ko": "전체 보기 &rarr;",
-"zh": "查看全部 &rarr;"
+"zh": "查看全部 &rarr;",
+"zht": "查看全部 &rarr;"
 },
 "fs.title": {
 "en": "Text size",
 "ja": "文字サイズ",
 "ko": "본문 글자 크기",
-"zh": "正文字号"
+"zh": "正文字号",
+"zht": "內文字體大小"
 },
 "fs.glyph": {
 "en": "Aa",
 "ja": "あ",
 "ko": "가",
-"zh": "字"
+"zh": "字",
+"zht": "字"
 },
 "fs.hd": {
 "en": "Text size",
 "ja": "文字サイズ",
 "ko": "본문 크기",
-"zh": "正文字号"
+"zh": "正文字号",
+"zht": "內文字體大小"
 },
 "fs.minus": {
 "en": "Smaller",
 "ja": "小さく",
 "ko": "작게",
-"zh": "缩小"
+"zh": "缩小",
+"zht": "縮小"
 },
 "fs.plus": {
 "en": "Larger",
 "ja": "大きく",
 "ko": "크게",
-"zh": "放大"
+"zh": "放大",
+"zht": "放大"
 },
 "fs.reset": {
 "en": "Reset",
 "ja": "元に戻す",
 "ko": "기본값으로",
-"zh": "恢复默认"
+"zh": "恢复默认",
+"zht": "恢復預設"
 },
 "dl.btn": {
 "en": "Translate with DeepL",
 "ja": "DeepLで翻訳",
 "ko": "DeepL로 번역",
-"zh": "用DeepL翻译"
+"zh": "用DeepL翻译",
+"zht": "用DeepL翻譯"
 },
 "dl.re": {
 "en": "Retranslate",
 "ja": "再翻訳",
 "ko": "재번역",
-"zh": "重新翻译"
+"zh": "重新翻译",
+"zht": "重新翻譯"
 },
 "dl.done": {
 "en": "Translated by DeepL",
 "ja": "DeepL翻訳済み",
 "ko": "DeepL 번역됨",
-"zh": "已由DeepL翻译"
+"zh": "已由DeepL翻译",
+"zht": "已由DeepL翻譯"
 },
 "dl.ing": {
 "en": "Translating with DeepL…",
 "ja": "DeepLで翻訳中…",
 "ko": "DeepL 번역 중…",
-"zh": "DeepL翻译中…"
+"zh": "DeepL翻译中…",
+"zht": "DeepL翻譯中…"
 },
 "loading": {
 "en": "Loading…",
 "ja": "読み込み中…",
 "ko": "불러오는 중…",
-"zh": "加载中…"
+"zh": "加载中…",
+"zht": "載入中…"
 },
 "ep.first": {
 "en": "First episode",
 "ja": "最初の話",
 "ko": "처음 화",
-"zh": "第一话"
+"zh": "第一话",
+"zht": "第一話"
 },
 "ep.last": {
 "en": "Last episode",
 "ja": "最後の話",
 "ko": "마지막 화",
-"zh": "最后一话"
+"zh": "最后一话",
+"zht": "最後一話"
 },
 "ep.listBtn": {
 "en": "<span class=\"epb-long\">Episode <\/span>List",
 "ja": "<span class=\"epb-long\">エピソード<\/span>一覧",
 "ko": "<span class=\"epb-long\">에피소드 <\/span>목록",
-"zh": "<span class=\"epb-long\">章节<\/span>列表"
+"zh": "<span class=\"epb-long\">章节<\/span>列表",
+"zht": "<span class=\"epb-long\">章節<\/span>列表"
 },
 "ep.list": {
 "en": "Episode List",
 "ja": "エピソード一覧",
 "ko": "에피소드 목록",
-"zh": "章节列表"
+"zh": "章节列表",
+"zht": "章節列表"
 },
 "ep.listOf": {
 "en": "{v} · Episodes",
 "ja": "{v} エピソード一覧",
 "ko": "{v} 에피소드 목록",
-"zh": "{v} 章节列表"
+"zh": "{v} 章节列表",
+"zht": "{v} 章節列表"
 },
 "err.nofile": {
 "en": "Couldn't find the text file for this episode",
 "ja": "本文ファイルが見つかりません",
 "ko": "본문 파일을 찾을 수 없습니다",
-"zh": "找不到正文文件"
+"zh": "找不到正文文件",
+"zht": "找不到內文檔案"
 },
 "err.load": {
 "en": "Failed to load",
 "ja": "読み込みに失敗しました",
 "ko": "불러오기 실패",
-"zh": "加载失败"
+"zh": "加载失败",
+"zht": "載入失敗"
 },
 "err.http": {
 "en": "Failed to load (HTTP {n})",
 "ja": "読み込みに失敗しました (HTTP {n})",
 "ko": "불러오기 실패 (HTTP {n})",
-"zh": "加载失败（HTTP {n}）"
+"zh": "加载失败（HTTP {n}）",
+"zht": "載入失敗（HTTP {n}）"
 },
 "err.404": {
 "en": "File not found (404)",
 "ja": "ファイルが見つかりません (404)",
 "ko": "파일을 찾을 수 없습니다 (404)",
-"zh": "找不到文件（404）"
+"zh": "找不到文件（404）",
+"zht": "找不到檔案（404）"
 },
 "fep.prev": {
 "en": "Previous episode",
 "ja": "前の話",
 "ko": "이전 화",
-"zh": "上一话"
+"zh": "上一话",
+"zht": "上一話"
 },
 "fep.next": {
 "en": "Next episode",
 "ja": "次の話",
 "ko": "다음 화",
-"zh": "下一话"
+"zh": "下一话",
+"zht": "下一話"
 },
 "hs.watch": {
 "en": "View",
 "ja": "見る",
 "ko": "보러가기",
-"zh": "查看"
+"zh": "查看",
+"zht": "查看"
 },
 "hs.yt": {
 "en": "Watch on YouTube",
 "ja": "YouTubeで見る",
 "ko": "유튜브에서 보기",
-"zh": "在YouTube上观看"
+"zh": "在YouTube上观看",
+"zht": "在YouTube上觀看"
 }
 });
 
@@ -1973,6 +2079,8 @@ function bhsTypeLabel(t){ return t === 'novel' ? T('type.novel') : t; }
      texts_en_mix/blood-highschool-novel-1-01_en_mix.txt (영어 — 영본어판, 영어+일본어)
      texts_zh/blood-highschool-novel-1-01_zh.txt        (중국어 간체 — 순중국어판)
      texts_zh_mix/blood-highschool-novel-1-01_zh_mix.txt (중국어 간체 — 중본어판, 중국어+일본어)
+     texts_zh_tw/blood-highschool-novel-1-01_zh_tw.txt   (중국어 번체 — 순중국어판)
+     texts_zh_tw_mix/blood-highschool-novel-1-01_zh_tw_mix.txt (중국어 번체 — 중본어판, 중국어+일본어)
 
    ⚠ BHS_ROOT 와 BHS_TEXT_ROOT 는 다른 용도입니다. 헷갈리지 마세요.
      BHS_ROOT      = 사이트 루트. 대문 링크와 표지·썸네일 이미지가 씁니다.
@@ -2011,8 +2119,8 @@ var BHS_SHEETS_ID = '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
 /* ══════════════════════════════════════════════════════
    등장인물(캐스트) 데이터 — 이미지가 아니라 HTML 로 그립니다.
 
-   · 이름(name)·설명(desc)·태그 글자·부 제목(num/sub)은 {"en": , "ja": , "ko": , "zh": } 네 언어로 적습니다.
-     ("zh" = 중국어 간체)  고칠 때는 네 언어를 같이 고쳐 주세요. 빠진 언어는 영어로 대신 나옵니다.
+   · 이름(name)·설명(desc)·태그 글자·부 제목(num/sub)은 {"en": , "ja": , "ko": , "zh": , "zht": } 다섯 언어로 적습니다.
+     ("zh" = 중국어 간체, "zht" = 중국어 번체)  고칠 때는 다섯 언어를 같이 고쳐 주세요. 빠진 언어는 영어로 대신 나옵니다.
    · 이미지는 BHS_ROOT + BHS_CAST_IMG + img 로 조합됩니다.
        예) ../Blood_High_School/images/char/1_kuro.png
    · img 파일이 없으면 자동으로 회색 IMAGE 칸이 뜹니다.
@@ -2030,77 +2138,77 @@ var BHS_CAST_IMG = 'Blood_High_School/images/char/';
 var BHS_CAST = {
 
 'novel-1':{
-  part:"PART ONE", num:{"en": "1", "ja": "第1部", "ko": "1부", "zh": "第1部"}, sub:{"en": "Rise of the Dragon", "ja": "龍の復活編", "ko": "용의 부활편", "zh": "龙之复活篇"},
+  part:"PART ONE", num:{"en": "1", "ja": "第1部", "ko": "1부", "zh": "第1部", "zht": "第1部"}, sub:{"en": "Rise of the Dragon", "ja": "龍の復活編", "ko": "용의 부활편", "zh": "龙之复活篇", "zht": "龍之復活篇"},
   groups:[
-    {en:"MAIN CHARACTERS", sub:{"en": "", "ja": "主要人物", "ko": "주연", "zh": "主要人物"}, cols:[
-      [ {img:'1_kuro.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]],  name:{"en": "Ryuo Kuro", "ja": "竜王クロ", "ko": "류오 쿠로", "zh": "龙王库洛"},
-         desc:{"en": "An ordinary, naive model student. Timid and easily scared, but because he hates fighting, he treasures the bonds he has.", "ja": "平凡で素直な優等生。気が弱く臆病だが、争いが嫌いなぶん、人とのつながりを大切にする。", "ko": "평범하고 순진한 모범생. 기가 약하고 겁이 많지만, 싸움이 싫은 만큼 관계를 소중히 여긴다.", "zh": "平凡而单纯的模范生。性格软弱又胆小，但正因为讨厌争斗，才格外珍惜与人的关系。"}},
-        {img:'2_Lackness.png',       tags:[["dragon",{"en": "Black Dragon", "ja": "黒龍", "ko": "흑룡", "zh": "黑龙"}]], name:{"en": "Lackness", "ja": "ラクニス", "ko": "라크니스", "zh": "拉克尼斯"},
-         desc:{"en": "The legendary Dark Dragon of Darkness asleep inside Kuro. In moments of crisis, he steps forward in Kuro's place.", "ja": "クロの体の中に眠る、伝説の闇のダークドラゴン。危機の瞬間、クロに代わって表に出る。", "ko": "쿠로의 몸속에 잠든 전설의 어둠의 다크 드래곤. 위기의 순간 쿠로를 대신해 나선다.", "zh": "沉睡在库洛体内的传说中的黑暗的暗黑龙。在危机时刻代替库洛出面。"}} ],
-      [ {img:'3_Eun-ho.png',         tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]],  name:{"en": "Eunho", "ja": "ウンホ", "ko": "은호", "zh": "银浩"},
-         desc:{"en": "Kuro's childhood friend. Sly and full of jokes. He plays it cool, but when it comes to Kuro, he's always the first to step in.", "ja": "クロの幼なじみ。飄々としていてイタズラ好き。クールなふりをしているが、クロのこととなると真っ先に動く。", "ko": "쿠로의 소꿉친구. 능글거리고 장난이 많다. 쿨한 척하지만 쿠로와 관련된 일은 먼저 나선다.", "zh": "库洛的青梅竹马。油嘴滑舌，爱开玩笑。虽然装酷，但只要事关库洛，他总是第一个站出来。"}},
-        {img:'4_Kitsune_no_Shinrei.png', tags:[["spirit",{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령", "zh": "狐神"}]], name:{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령", "zh": "狐神"},
-         desc:{"en": "Eunho's true form. A thousand-year-old fox spirit who protects Kuro at the request of Kuro's father, Yoshiyuki.", "ja": "ウンホの本当の姿。クロの父ヨシユキの頼みでクロを守る、千年を生きる狐の神霊。", "ko": "은호의 본모습. 쿠로의 아버지인 요시유키의 부탁으로 쿠로를 지키는 천년 여우 신령.", "zh": "银浩的真身。受库洛的父亲义之之托守护库洛的千年狐神。"}} ],
-      [ {img:'5_Herbaeken.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]],  name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄", "zh": "赫尔巴肯"},
-         desc:{"en": "A legend otaku who came from abroad chasing legends. Every day he shows up with a new one and drags Kuro and Eunho along.", "ja": "伝説を追って海を渡ってきた伝説オタク。毎日新しい伝説を持ち込んでは、クロとウンホを巻き込む。", "ko": "전설을 쫓아 건너온 전설 오타쿠. 매일 새로운 전설을 들고 와 쿠로와 은호를 끌어들인다.", "zh": "追寻传说远渡而来的传说宅。每天带着新的传说出现，把库洛和银浩卷进去。"}},
-        {img:'6_Herbaeken_ver2.png', tags:[["herb",{"en": "Herba Clan Heir", "ja": "ヘルバ家の末裔", "ko": "헤르바가문의 후예", "zh": "赫尔巴一族的后裔"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄", "zh": "赫尔巴肯"},
-         desc:{"en": "A descendant of the people of the dragon kingdom that fell a thousand years ago. He bears the fate of having to slay Lackness.", "ja": "千年前に滅んだ龍族の王国の民の末裔。ラクニスを討たねばならない宿命を背負っている。", "ko": "천 년 전 멸망한 용족 왕국 백성의 후예. 라크니스를 처단해야 하는 숙명을 짊어졌다.", "zh": "千年前灭亡的龙族王国子民的后裔。背负着必须处决拉克尼斯的宿命。"}} ],
-      [ {img:'7_Siro.png',           tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]],  name:{"en": "Ryuo Shiro", "ja": "竜王シロ", "ko": "류오 시로", "zh": "龙王希洛"},
-         desc:{"en": "Kuro's twin brother. Having seen little of the world, he's still much like a small child. Willful and spoiled.", "ja": "クロの双子の弟。世間をほとんど知らず、子どものような状態。わがままな気質。", "ko": "쿠로의 쌍둥이 동생. 세상 경험이 별로 없어 어린아이 같은 상태. 와가마마 기질.", "zh": "库洛的双胞胎弟弟。没怎么见过世面，还像个小孩子。性子任性。"}},
-        {img:'8_Lumensia.png',       tags:[["baek",{"en": "White Dragon", "ja": "白龍", "ko": "백룡", "zh": "白龙"}]],   name:{"en": "Lumensia", "ja": "ルメンシア", "ko": "루멘시아", "zh": "卢门西亚"},
-         desc:{"en": "The power of another dragon, one that refused to be sealed. A self-styled Ore-sama out to be the strongest in the world, taking on everyone to settle the pecking order.", "ja": "封印を拒んだ、もう一体の龍の力。俺様気質で世界最強を狙い、序列をかけて片っ端から挑んでいる。", "ko": "봉인을 거부한 또 다른 용의 힘. 오레사마 기질로 세계 최강자를 노리며 서열 도장깨기 중.", "zh": "拒绝了封印的另一股龙之力。一副「本大爷」的性子，觊觎着世界最强之位，正在逐个挑战、整理排位。"}} ]
+    {en:"MAIN CHARACTERS", sub:{"en": "", "ja": "主要人物", "ko": "주연", "zh": "主要人物", "zht": "主要人物"}, cols:[
+      [ {img:'1_kuro.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]],  name:{"en": "Ryuo Kuro", "ja": "竜王クロ", "ko": "류오 쿠로", "zh": "龙王库洛", "zht": "龍王庫洛"},
+         desc:{"en": "An ordinary, naive model student. Timid and easily scared, but because he hates fighting, he treasures the bonds he has.", "ja": "平凡で素直な優等生。気が弱く臆病だが、争いが嫌いなぶん、人とのつながりを大切にする。", "ko": "평범하고 순진한 모범생. 기가 약하고 겁이 많지만, 싸움이 싫은 만큼 관계를 소중히 여긴다.", "zh": "平凡而单纯的模范生。性格软弱又胆小，但正因为讨厌争斗，才格外珍惜与人的关系。", "zht": "平凡而單純的模範生。性格軟弱又膽小，但正因為討厭爭鬥，才格外珍惜與人的關係。"}},
+        {img:'2_Lackness.png',       tags:[["dragon",{"en": "Black Dragon", "ja": "黒龍", "ko": "흑룡", "zh": "黑龙", "zht": "黑龍"}]], name:{"en": "Lackness", "ja": "ラクニス", "ko": "라크니스", "zh": "拉克尼斯", "zht": "拉克尼斯"},
+         desc:{"en": "The legendary Dark Dragon of Darkness asleep inside Kuro. In moments of crisis, he steps forward in Kuro's place.", "ja": "クロの体の中に眠る、伝説の闇のダークドラゴン。危機の瞬間、クロに代わって表に出る。", "ko": "쿠로의 몸속에 잠든 전설의 어둠의 다크 드래곤. 위기의 순간 쿠로를 대신해 나선다.", "zh": "沉睡在库洛体内的传说中的黑暗的暗黑龙。在危机时刻代替库洛出面。", "zht": "沉睡在庫洛體內的傳說中的黑暗的暗黑龍。在危機時刻代替庫洛出面。"}} ],
+      [ {img:'3_Eun-ho.png',         tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]],  name:{"en": "Eunho", "ja": "ウンホ", "ko": "은호", "zh": "银浩", "zht": "銀浩"},
+         desc:{"en": "Kuro's childhood friend. Sly and full of jokes. He plays it cool, but when it comes to Kuro, he's always the first to step in.", "ja": "クロの幼なじみ。飄々としていてイタズラ好き。クールなふりをしているが、クロのこととなると真っ先に動く。", "ko": "쿠로의 소꿉친구. 능글거리고 장난이 많다. 쿨한 척하지만 쿠로와 관련된 일은 먼저 나선다.", "zh": "库洛的青梅竹马。油嘴滑舌，爱开玩笑。虽然装酷，但只要事关库洛，他总是第一个站出来。", "zht": "庫洛的青梅竹馬。油嘴滑舌，愛開玩笑。雖然裝酷，但只要事關庫洛，他總是第一個站出來。"}},
+        {img:'4_Kitsune_no_Shinrei.png', tags:[["spirit",{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령", "zh": "狐神", "zht": "狐神"}]], name:{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령", "zh": "狐神", "zht": "狐神"},
+         desc:{"en": "Eunho's true form. A thousand-year-old fox spirit who protects Kuro at the request of Kuro's father, Yoshiyuki.", "ja": "ウンホの本当の姿。クロの父ヨシユキの頼みでクロを守る、千年を生きる狐の神霊。", "ko": "은호의 본모습. 쿠로의 아버지인 요시유키의 부탁으로 쿠로를 지키는 천년 여우 신령.", "zh": "银浩的真身。受库洛的父亲义之之托守护库洛的千年狐神。", "zht": "銀浩的真身。受庫洛的父親義之之託守護庫洛的千年狐神。"}} ],
+      [ {img:'5_Herbaeken.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]],  name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄", "zh": "赫尔巴肯", "zht": "赫爾巴肯"},
+         desc:{"en": "A legend otaku who came from abroad chasing legends. Every day he shows up with a new one and drags Kuro and Eunho along.", "ja": "伝説を追って海を渡ってきた伝説オタク。毎日新しい伝説を持ち込んでは、クロとウンホを巻き込む。", "ko": "전설을 쫓아 건너온 전설 오타쿠. 매일 새로운 전설을 들고 와 쿠로와 은호를 끌어들인다.", "zh": "追寻传说远渡而来的传说宅。每天带着新的传说出现，把库洛和银浩卷进去。", "zht": "追尋傳說遠渡而來的傳說宅。每天帶著新的傳說出現，把庫洛和銀浩捲進去。"}},
+        {img:'6_Herbaeken_ver2.png', tags:[["herb",{"en": "Herba Clan Heir", "ja": "ヘルバ家の末裔", "ko": "헤르바가문의 후예", "zh": "赫尔巴一族的后裔", "zht": "赫爾巴一族的後裔"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄", "zh": "赫尔巴肯", "zht": "赫爾巴肯"},
+         desc:{"en": "A descendant of the people of the dragon kingdom that fell a thousand years ago. He bears the fate of having to slay Lackness.", "ja": "千年前に滅んだ龍族の王国の民の末裔。ラクニスを討たねばならない宿命を背負っている。", "ko": "천 년 전 멸망한 용족 왕국 백성의 후예. 라크니스를 처단해야 하는 숙명을 짊어졌다.", "zh": "千年前灭亡的龙族王国子民的后裔。背负着必须处决拉克尼斯的宿命。", "zht": "千年前滅亡的龍族王國子民的後裔。背負著必須處決拉克尼斯的宿命。"}} ],
+      [ {img:'7_Siro.png',           tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]],  name:{"en": "Ryuo Shiro", "ja": "竜王シロ", "ko": "류오 시로", "zh": "龙王希洛", "zht": "龍王希洛"},
+         desc:{"en": "Kuro's twin brother. Having seen little of the world, he's still much like a small child. Willful and spoiled.", "ja": "クロの双子の弟。世間をほとんど知らず、子どものような状態。わがままな気質。", "ko": "쿠로의 쌍둥이 동생. 세상 경험이 별로 없어 어린아이 같은 상태. 와가마마 기질.", "zh": "库洛的双胞胎弟弟。没怎么见过世面，还像个小孩子。性子任性。", "zht": "庫洛的雙胞胎弟弟。沒怎麼見過世面，還像個小孩子。性子任性。"}},
+        {img:'8_Lumensia.png',       tags:[["baek",{"en": "White Dragon", "ja": "白龍", "ko": "백룡", "zh": "白龙", "zht": "白龍"}]],   name:{"en": "Lumensia", "ja": "ルメンシア", "ko": "루멘시아", "zh": "卢门西亚", "zht": "盧門西亞"},
+         desc:{"en": "The power of another dragon, one that refused to be sealed. A self-styled Ore-sama out to be the strongest in the world, taking on everyone to settle the pecking order.", "ja": "封印を拒んだ、もう一体の龍の力。俺様気質で世界最強を狙い、序列をかけて片っ端から挑んでいる。", "ko": "봉인을 거부한 또 다른 용의 힘. 오레사마 기질로 세계 최강자를 노리며 서열 도장깨기 중.", "zh": "拒绝了封印的另一股龙之力。一副「本大爷」的性子，觊觎着世界最强之位，正在逐个挑战、整理排位。", "zht": "拒絕了封印的另一股龍之力。一副「本大爺」的性子，覬覦著世界最強之位，正在逐個挑戰、整理排位。"}} ]
     ]},
-    {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연", "zh": "配角"}, cols:[
-      [ {img:'9_Riusu_Fereru.png',   tags:[["vampire",{"en": "Vampire", "ja": "ヴァンパイア", "ko": "뱀파이어", "zh": "吸血鬼"}]], name:{"en": "Rius Ferel", "ja": "リウス・フェレル", "ko": "리우스 페렐", "zh": "利乌斯·费雷尔"},
-         desc:{"en": "Student council president of St. Saints Academy. A creep whose hobby is staining the rose garden with blood.", "ja": "聖セインツ学院の生徒会長。薔薇の庭を血で染めるのが趣味の変態。", "ko": "성 세인츠 학원 학생회장. 장미 정원을 피로 물들이는 게 취미인 변태.", "zh": "圣塞因茨学院学生会长。以用鲜血染红蔷薇庭园为乐的变态。"}} ],
-      [ {img:'10_Shota.png',         tags:[["doll",{"en": "Marionette", "ja": "マリオネット", "ko": "마리오네트", "zh": "提线人偶"}]],  name:{"en": "Shota", "ja": "ショウタ", "ko": "쇼타", "zh": "正太"},
-         desc:{"en": "Principal of St. Saints Academy. A doll gone mad, collecting whatever his master desires.", "ja": "聖セインツ学院の校長。ご主人様が望むものを集める、狂ってしまった人形。", "ko": "성 세인츠 학원 교장. 주인님이 원하는 것을 모으는 미쳐버린 인형.", "zh": "圣塞因茨学院校长。为收集主人想要之物而发了疯的人偶。"}} ],
-      [ {img:'11_Lubell.png',        tags:[["beast",{"en": "Sacred Beast", "ja": "神聖な魔物", "ko": "신성 마물", "zh": "神圣魔物"}]],  name:{"en": "Lubell", "ja": "ルベル", "ko": "루벨", "zh": "鲁贝尔"},
-         desc:{"en": "A sacred beast found in the abandoned holy site behind the academy. An outcast from its herd.", "ja": "学院の裏の打ち捨てられた聖地で見つかった神聖な魔物。群れから疎外されていた。", "ko": "학원 뒷편 버려진 성지에서 발견한 신성 마물. 무리에서 소외됐다.", "zh": "在学院后方的废弃圣地发现的神圣魔物。被族群排挤。"}} ],
-      [ {img:'12_Murasaki.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["mage",{"en": "Dark Mage", "ja": "黒魔法使い", "ko": "흑마법사", "zh": "黑魔法师"}]], name:{"en": "Murasaki", "ja": "ムラサキ", "ko": "무라사키", "zh": "紫"},
-         desc:{"en": "Homeroom teacher of Kuro's class, 1-B. An oddball who does ventriloquism. Nobody takes him seriously.", "ja": "クロのクラス1-Bの担任。腹話術をする変わり者の教師。みんなから相手にされない。", "ko": "1-B반 쿠로네 담임. 복화술을 하는 괴짜 교사. 모두에게 무시당한다.", "zh": "库洛所在的1-B班班主任。会腹语术的怪人教师。被所有人无视。"}} ],
-      [ {img:'13_Miko.png',          tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["miko",{"en": "Shrine Maiden", "ja": "巫女", "ko": "무녀", "zh": "巫女"}]],     name:{"en": "Ryuo Miko", "ja": "竜王ミコ", "ko": "류오 미코", "zh": "龙王美子"},
-         desc:{"en": "Kuro's cousin, the same age, who looks down on him. A disciple of Yoshiyuki and his rival for the position of family head.", "ja": "クロを見下す同い年のいとこ。ヨシユキの弟子で、当主の座をめぐるライバル関係にある。", "ko": "쿠로를 무시하는 동갑 사촌. 요시유키의 제자로, 당주 자리를 두고 라이벌 관계에 있다.", "zh": "看不起库洛的同岁堂亲。义之的弟子，与库洛是争夺家主之位的对手。"}} ],
-      [ {img:'14_Yoshiyuki.png',     tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["onmyo",{"en": "Onmyoji", "ja": "陰陽師", "ko": "음양사", "zh": "阴阳师"}]],  name:{"en": "Ryuo Yoshiyuki", "ja": "竜王ヨシユキ", "ko": "류오 요시유키", "zh": "龙王义之"},
-         desc:{"en": "Kuro's father. A once-in-a-generation onmyoji and former head of the Ryuo family.", "ja": "クロの父。稀代の陰陽師であり、竜王家の前当主。", "ko": "쿠로의 아버지. 희대의 음양사이자 류오가의 전 당주.", "zh": "库洛的父亲。稀世的阴阳师，也是龙王家的前任家主。"}} ],
-      [ {img:'15_Jiji.png',          tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]], name:{"en": "Jiji", "ja": "ジジ", "ko": "지지", "zh": "吉吉（爷爷）"},
-         desc:{"en": "Kuro's grandfather and the current head of the Ryuo family. A stubborn old man.", "ja": "クロの祖父であり、竜王家の現当主。頑固な老人。", "ko": "쿠로의 할아버지이자 류오가의 현 당주. 고집불통 노인.", "zh": "库洛的爷爷，龙王家的现任家主。顽固不化的老人。"}} ],
-      [ {img:'16_Shitsujide_Hakase.png', tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]], name:{"en": "Shitsujide Hakase", "ja": "シツジデ・ハカセ", "ko": "시츠지데 하카세", "zh": "执事德·博士"},
-         desc:{"en": "Lumensia's butler. Behind his polite manners, he hides a purpose all his own.", "ja": "ルメンシアの執事。礼儀正しい態度の裏に、自分だけの目的を隠している。", "ko": "루멘시아의 집사. 예의 바른 태도 뒤에 자신만의 목적을 숨기고 있다.", "zh": "卢门西亚的执事。在彬彬有礼的态度背后，藏着只属于自己的目的。"}} ]
+    {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연", "zh": "配角", "zht": "配角"}, cols:[
+      [ {img:'9_Riusu_Fereru.png',   tags:[["vampire",{"en": "Vampire", "ja": "ヴァンパイア", "ko": "뱀파이어", "zh": "吸血鬼", "zht": "吸血鬼"}]], name:{"en": "Rius Ferel", "ja": "リウス・フェレル", "ko": "리우스 페렐", "zh": "利乌斯·费雷尔", "zht": "利烏斯·費雷爾"},
+         desc:{"en": "Student council president of St. Saints Academy. A creep whose hobby is staining the rose garden with blood.", "ja": "聖セインツ学院の生徒会長。薔薇の庭を血で染めるのが趣味の変態。", "ko": "성 세인츠 학원 학생회장. 장미 정원을 피로 물들이는 게 취미인 변태.", "zh": "圣塞因茨学院学生会长。以用鲜血染红蔷薇庭园为乐的变态。", "zht": "聖塞因茨學院學生會長。以用鮮血染紅薔薇庭園為樂的變態。"}} ],
+      [ {img:'10_Shota.png',         tags:[["doll",{"en": "Marionette", "ja": "マリオネット", "ko": "마리오네트", "zh": "提线人偶", "zht": "提線人偶"}]],  name:{"en": "Shota", "ja": "ショウタ", "ko": "쇼타", "zh": "正太", "zht": "正太"},
+         desc:{"en": "Principal of St. Saints Academy. A doll gone mad, collecting whatever his master desires.", "ja": "聖セインツ学院の校長。ご主人様が望むものを集める、狂ってしまった人形。", "ko": "성 세인츠 학원 교장. 주인님이 원하는 것을 모으는 미쳐버린 인형.", "zh": "圣塞因茨学院校长。为收集主人想要之物而发了疯的人偶。", "zht": "聖塞因茨學院校長。為收集主人想要之物而發了瘋的人偶。"}} ],
+      [ {img:'11_Lubell.png',        tags:[["beast",{"en": "Sacred Beast", "ja": "神聖な魔物", "ko": "신성 마물", "zh": "神圣魔物", "zht": "神聖魔物"}]],  name:{"en": "Lubell", "ja": "ルベル", "ko": "루벨", "zh": "鲁贝尔", "zht": "魯貝爾"},
+         desc:{"en": "A sacred beast found in the abandoned holy site behind the academy. An outcast from its herd.", "ja": "学院の裏の打ち捨てられた聖地で見つかった神聖な魔物。群れから疎外されていた。", "ko": "학원 뒷편 버려진 성지에서 발견한 신성 마물. 무리에서 소외됐다.", "zh": "在学院后方的废弃圣地发现的神圣魔物。被族群排挤。", "zht": "在學院後方的廢棄聖地發現的神聖魔物。被族群排擠。"}} ],
+      [ {img:'12_Murasaki.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["mage",{"en": "Dark Mage", "ja": "黒魔法使い", "ko": "흑마법사", "zh": "黑魔法师", "zht": "黑魔法師"}]], name:{"en": "Murasaki", "ja": "ムラサキ", "ko": "무라사키", "zh": "紫", "zht": "紫"},
+         desc:{"en": "Homeroom teacher of Kuro's class, 1-B. An oddball who does ventriloquism. Nobody takes him seriously.", "ja": "クロのクラス1-Bの担任。腹話術をする変わり者の教師。みんなから相手にされない。", "ko": "1-B반 쿠로네 담임. 복화술을 하는 괴짜 교사. 모두에게 무시당한다.", "zh": "库洛所在的1-B班班主任。会腹语术的怪人教师。被所有人无视。", "zht": "庫洛所在的1-B班班導。會腹語術的怪人教師。被所有人無視。"}} ],
+      [ {img:'13_Miko.png',          tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["miko",{"en": "Shrine Maiden", "ja": "巫女", "ko": "무녀", "zh": "巫女", "zht": "巫女"}]],     name:{"en": "Ryuo Miko", "ja": "竜王ミコ", "ko": "류오 미코", "zh": "龙王美子", "zht": "龍王美子"},
+         desc:{"en": "Kuro's cousin, the same age, who looks down on him. A disciple of Yoshiyuki and his rival for the position of family head.", "ja": "クロを見下す同い年のいとこ。ヨシユキの弟子で、当主の座をめぐるライバル関係にある。", "ko": "쿠로를 무시하는 동갑 사촌. 요시유키의 제자로, 당주 자리를 두고 라이벌 관계에 있다.", "zh": "看不起库洛的同岁堂亲。义之的弟子，与库洛是争夺家主之位的对手。", "zht": "看不起庫洛的同歲堂親。義之的弟子，與庫洛是爭奪家主之位的對手。"}} ],
+      [ {img:'14_Yoshiyuki.png',     tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["onmyo",{"en": "Onmyoji", "ja": "陰陽師", "ko": "음양사", "zh": "阴阳师", "zht": "陰陽師"}]],  name:{"en": "Ryuo Yoshiyuki", "ja": "竜王ヨシユキ", "ko": "류오 요시유키", "zh": "龙王义之", "zht": "龍王義之"},
+         desc:{"en": "Kuro's father. A once-in-a-generation onmyoji and former head of the Ryuo family.", "ja": "クロの父。稀代の陰陽師であり、竜王家の前当主。", "ko": "쿠로의 아버지. 희대의 음양사이자 류오가의 전 당주.", "zh": "库洛的父亲。稀世的阴阳师，也是龙王家的前任家主。", "zht": "庫洛的父親。稀世的陰陽師，也是龍王家的前任家主。"}} ],
+      [ {img:'15_Jiji.png',          tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]], name:{"en": "Jiji", "ja": "ジジ", "ko": "지지", "zh": "吉吉（爷爷）", "zht": "吉吉（爺爺）"},
+         desc:{"en": "Kuro's grandfather and the current head of the Ryuo family. A stubborn old man.", "ja": "クロの祖父であり、竜王家の現当主。頑固な老人。", "ko": "쿠로의 할아버지이자 류오가의 현 당주. 고집불통 노인.", "zh": "库洛的爷爷，龙王家的现任家主。顽固不化的老人。", "zht": "庫洛的爺爺，龍王家的現任家主。頑固不化的老人。"}} ],
+      [ {img:'16_Shitsujide_Hakase.png', tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]], name:{"en": "Shitsujide Hakase", "ja": "シツジデ・ハカセ", "ko": "시츠지데 하카세", "zh": "执事德·博士", "zht": "執事德·博士"},
+         desc:{"en": "Lumensia's butler. Behind his polite manners, he hides a purpose all his own.", "ja": "ルメンシアの執事。礼儀正しい態度の裏に、自分だけの目的を隠している。", "ko": "루멘시아의 집사. 예의 바른 태도 뒤에 자신만의 목적을 숨기고 있다.", "zh": "卢门西亚的执事。在彬彬有礼的态度背后，藏着只属于自己的目的。", "zht": "盧門西亞的執事。在彬彬有禮的態度背後，藏著只屬於自己的目的。"}} ]
     ]}
   ]
 },
 
 'novel-2':{
-  part:"PART TWO", num:{"en": "2", "ja": "第2部", "ko": "2부", "zh": "第2部"}, sub:{"en": "The Ryuo Clan Arc", "ja": "竜王家編", "ko": "류오가편", "zh": "龙王家篇"},
+  part:"PART TWO", num:{"en": "2", "ja": "第2部", "ko": "2부", "zh": "第2部", "zht": "第2部"}, sub:{"en": "The Ryuo Clan Arc", "ja": "竜王家編", "ko": "류오가편", "zh": "龙王家篇", "zht": "龍王家篇"},
   groups:[
-    {en:"MAIN CHARACTERS", sub:{"en": "", "ja": "主要人物", "ko": "주연", "zh": "主要人物"}, cols:[
-      [ {img:'1_kuro.png', tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["dragon",{"en": "Black Dragon", "ja": "黒龍", "ko": "흑룡", "zh": "黑龙"}]], name:{"en": "Ryuo Kuro", "ja": "竜王クロ", "ko": "류오 쿠로", "zh": "龙王库洛"},
-         desc:{"en": "The new head of the Ryuo family. Still timid, but caught between his power and the weight of the family, he searches for a way that's truly his own.", "ja": "竜王家の新しい当主。相変わらず気は弱いが、力と家の重みの間で、自分らしいやり方を模索している。", "ko": "류오가의 새 당주. 여전히 기가 약하지만 힘과 가문의 무게 사이에서 자신다운 방식을 고민하고 있다.", "zh": "龙王家的新任家主。依旧性格软弱，却在力量与家族的重量之间，苦苦思索属于自己的方式。"}} ],
-      [ {img:'3_Eun-ho.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["spirit",{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령", "zh": "狐神"}]], name:{"en": "Eunho", "ja": "ウンホ", "ko": "은호", "zh": "银浩"},
-         desc:{"en": "A thousand-year-old fox spirit who has stayed by Kuro's side as his childhood friend at his father's request. He fights desperately to protect the children of the Ryuo family.", "ja": "クロの父の頼みで、幼なじみとしてそばに居続けてきた千年の狐の神霊。竜王家の子どもたちを必死に守る。", "ko": "쿠로 아버지의 부탁으로 소꿉친구로서 곁에 머물러 온 천년 여우 신령. 류오가의 아이들을 필사적으로 지킨다.", "zh": "受库洛父亲之托，以青梅竹马的身份一直陪在他身边的千年狐神。拼命守护着龙王家的孩子们。"}} ],
-      [ {img:'17_Aoi.png',        tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사", "zh": "禁术师"}]], name:{"en": "Kagehira Aoi", "ja": "影片アオイ", "ko": "카게히라 아오이", "zh": "影片葵"},
-         desc:{"en": "Head of the Kagehira, the family that works in the shadows. Easygoing on the surface and kind at heart, but as family head he has no choice but to be ruthless.", "ja": "裏の家・影片家の当主。表向きは飄々としていて、優しさこそが本来の姿だが、当主としては冷酷にならざるを得ない。", "ko": "뒷가문 카게히라가의 당주. 겉은 능청스럽고 다정함이 본모습이지만, 당주로서는 냉혹할 수밖에 없다.", "zh": "地下家族影片家的家主。表面上悠哉从容，温柔才是他的本性，但身为家主不得不冷酷。"}} ],
-      [ {img:'13_Miko.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["miko",{"en": "Shrine Maiden", "ja": "巫女", "ko": "무녀", "zh": "巫女"}]], name:{"en": "Ryuo Miko", "ja": "竜王ミコ", "ko": "류오 미코", "zh": "龙王美子"},
-         desc:{"en": "Yoshiyuki's disciple, unbowed by the stigma of being the daughter of the villain Ren. She harbors a fierce ambition to set the Ryuo family right.", "ja": "悪人レンの娘という枷にも屈しない、ヨシユキの弟子。竜王家を正すという強い野望を抱いている。", "ko": "악인 렌의 딸이라는 굴레에도 굴하지 않는 요시유키의 제자. 류오가를 바로잡겠다는 독한 야망을 품고 있다.", "zh": "即使背负着恶人莲之女的枷锁也不屈服的义之弟子。怀着要纠正龙王家的强烈野心。"}} ]
+    {en:"MAIN CHARACTERS", sub:{"en": "", "ja": "主要人物", "ko": "주연", "zh": "主要人物", "zht": "主要人物"}, cols:[
+      [ {img:'1_kuro.png', tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["dragon",{"en": "Black Dragon", "ja": "黒龍", "ko": "흑룡", "zh": "黑龙", "zht": "黑龍"}]], name:{"en": "Ryuo Kuro", "ja": "竜王クロ", "ko": "류오 쿠로", "zh": "龙王库洛", "zht": "龍王庫洛"},
+         desc:{"en": "The new head of the Ryuo family. Still timid, but caught between his power and the weight of the family, he searches for a way that's truly his own.", "ja": "竜王家の新しい当主。相変わらず気は弱いが、力と家の重みの間で、自分らしいやり方を模索している。", "ko": "류오가의 새 당주. 여전히 기가 약하지만 힘과 가문의 무게 사이에서 자신다운 방식을 고민하고 있다.", "zh": "龙王家的新任家主。依旧性格软弱，却在力量与家族的重量之间，苦苦思索属于自己的方式。", "zht": "龍王家的新任家主。依舊性格軟弱，卻在力量與家族的重量之間，苦苦思索屬於自己的方式。"}} ],
+      [ {img:'3_Eun-ho.png',      tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["spirit",{"en": "Fox Spirit", "ja": "狐の神霊", "ko": "여우 신령", "zh": "狐神", "zht": "狐神"}]], name:{"en": "Eunho", "ja": "ウンホ", "ko": "은호", "zh": "银浩", "zht": "銀浩"},
+         desc:{"en": "A thousand-year-old fox spirit who has stayed by Kuro's side as his childhood friend at his father's request. He fights desperately to protect the children of the Ryuo family.", "ja": "クロの父の頼みで、幼なじみとしてそばに居続けてきた千年の狐の神霊。竜王家の子どもたちを必死に守る。", "ko": "쿠로 아버지의 부탁으로 소꿉친구로서 곁에 머물러 온 천년 여우 신령. 류오가의 아이들을 필사적으로 지킨다.", "zh": "受库洛父亲之托，以青梅竹马的身份一直陪在他身边的千年狐神。拼命守护着龙王家的孩子们。", "zht": "受庫洛父親之託，以青梅竹馬的身份一直陪在他身邊的千年狐神。拼命守護著龍王家的孩子們。"}} ],
+      [ {img:'17_Aoi.png',        tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사", "zh": "禁术师", "zht": "禁術師"}]], name:{"en": "Kagehira Aoi", "ja": "影片アオイ", "ko": "카게히라 아오이", "zh": "影片葵", "zht": "影片葵"},
+         desc:{"en": "Head of the Kagehira, the family that works in the shadows. Easygoing on the surface and kind at heart, but as family head he has no choice but to be ruthless.", "ja": "裏の家・影片家の当主。表向きは飄々としていて、優しさこそが本来の姿だが、当主としては冷酷にならざるを得ない。", "ko": "뒷가문 카게히라가의 당주. 겉은 능청스럽고 다정함이 본모습이지만, 당주로서는 냉혹할 수밖에 없다.", "zh": "地下家族影片家的家主。表面上悠哉从容，温柔才是他的本性，但身为家主不得不冷酷。", "zht": "地下家族影片家的家主。表面上悠哉從容，溫柔才是他的本性，但身為家主不得不冷酷。"}} ],
+      [ {img:'13_Miko.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["miko",{"en": "Shrine Maiden", "ja": "巫女", "ko": "무녀", "zh": "巫女", "zht": "巫女"}]], name:{"en": "Ryuo Miko", "ja": "竜王ミコ", "ko": "류오 미코", "zh": "龙王美子", "zht": "龍王美子"},
+         desc:{"en": "Yoshiyuki's disciple, unbowed by the stigma of being the daughter of the villain Ren. She harbors a fierce ambition to set the Ryuo family right.", "ja": "悪人レンの娘という枷にも屈しない、ヨシユキの弟子。竜王家を正すという強い野望を抱いている。", "ko": "악인 렌의 딸이라는 굴레에도 굴하지 않는 요시유키의 제자. 류오가를 바로잡겠다는 독한 야망을 품고 있다.", "zh": "即使背负着恶人莲之女的枷锁也不屈服的义之弟子。怀着要纠正龙王家的强烈野心。", "zht": "即使背負著惡人蓮之女的枷鎖也不屈服的義之弟子。懷著要糾正龍王家的強烈野心。"}} ]
     ]},
-    {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연", "zh": "配角"}, cols:[
-      [ {img:'5_Herbaeken.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["herb",{"en": "Seeker", "ja": "探究者", "ko": "탐구자", "zh": "探究者"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄", "zh": "赫尔巴肯"},
-         desc:{"en": "No longer driven by revenge, he has become Kuro and Eunho's comrade. Alone, he chases the truth behind the legend of the dragon clan.", "ja": "復讐の鬼から抜け出し、クロとウンホの仲間になった。龍族の伝説の真実をひとりで追っている。", "ko": "복수귀에서 벗어나 쿠로와 은호의 동료가 됐다. 용족 전설의 진실을 홀로 쫓는다.", "zh": "摆脱了复仇鬼的身份，成了库洛和银浩的同伴。独自追寻着龙族传说的真相。"}} ],
-      [ {img:'18_Jinnokagi.png',     tags:[["gold",{"en": "Shin no Kagi", "ja": "眞ノ鍵", "ko": "신노카기", "zh": "眞ノ鍵"}],["gold",{"en": "Nonhuman", "ja": "人外", "ko": "인외", "zh": "人外"}]], name:{"en": "That Being", "ja": "その存在", "ko": "그 존재", "zh": "那个存在"},
-         desc:{"en": "An unknown nonhuman that appears differently to each person who sees it. Its purpose is unknown.", "ja": "見る者によって異なって認識される、正体不明の人外。その目的はわからない。", "ko": "보는 이에 따라 다르게 인식되는 정체불명의 인외. 그 목적은 알 수 없다.", "zh": "因观者不同而被认知为不同模样的、来历不明的人外。其目的不得而知。"}} ],
-      [ {img:'19_Yuka.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사", "zh": "禁术师"}]], name:{"en": "Kagehira Yuka", "ja": "影片ユカ", "ko": "카게히라 유카", "zh": "影片由香"},
-         desc:{"en": "Aoi's younger sister, who guards the Kagehira house. In battle, she disposes of intruders without a single word.", "ja": "影片家を守るアオイの妹。戦闘では一言も発さずに侵入者を始末する。", "ko": "카게히라가를 지키는 아오이의 여동생. 전투 시엔 말 한마디 없이 침입자를 처리한다.", "zh": "守护影片家的葵的妹妹。战斗时一言不发地处理入侵者。"}} ],
-      [ {img:'7_Siro.png',        tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["baek",{"en": "White Dragon", "ja": "白龍", "ko": "백룡", "zh": "白龙"}]], name:{"en": "Ryuo Shiro", "ja": "竜王シロ", "ko": "류오 시로", "zh": "龙王希洛"},
-         desc:{"en": "Kuro's twin brother, now part of the Ryuo household. Since the pecking order was settled, he's been getting disciplined by Herbaeken.", "ja": "竜王家に加わったクロの双子の弟。序列整理のあと、ヘルバーケンにしつけられている。", "ko": "류오가에 합류한 쿠로의 쌍둥이 동생. 서열 정리 후 헤르바켄에게 훈육당하고 있다.", "zh": "加入龙王家的库洛的双胞胎弟弟。排位整理之后，正在被赫尔巴肯管教。"}} ],
-      [ {img:'20_Ren.png',    tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]], name:{"en": "Ryuo Ren", "ja": "竜王レン", "ko": "류오 렌", "zh": "龙王莲"},
-         desc:{"en": "Miko's father. The worst head in the Ryuo family's history. The man who sowed the seeds of tragedy.", "ja": "ミコの父。竜王家の歴代最悪の当主。悲劇の種をまいた人物。", "ko": "미코의 아버지. 류오가 역대 최악의 당주. 비극의 씨앗을 뿌린 인물.", "zh": "美子的父亲。龙王家历代最差的家主。播下悲剧种子的人物。"}} ],
-      [ {img:'14_Yoshiyuki.png',  tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}],["onmyo",{"en": "Onmyoji", "ja": "陰陽師", "ko": "음양사", "zh": "阴阳师"}]], name:{"en": "Ryuo Yoshiyuki", "ja": "竜王ヨシユキ", "ko": "류오 요시유키", "zh": "龙王义之"},
-         desc:{"en": "Kuro's father. The righteous head who cleaned out the Ryuo family's corruption. Where every story begins.", "ja": "クロの父。竜王家の腐敗を清算した正しき当主。すべての物語の始まり。", "ko": "쿠로의 아버지. 류오가의 부패를 청산했던 올바른 당주. 모든 이야기의 시작점.", "zh": "库洛的父亲。清算了龙王家腐败的正直家主。一切故事的起点。"}} ],
-      [ {img:'15_Jiji.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类"}]], name:{"en": "Jiji", "ja": "ジジ", "ko": "지지", "zh": "吉吉（爷爷）"},
-         desc:{"en": "Kuro's grandfather and former head of the Ryuo family. A rigid old man who clings to family tradition, but he's hiding something.", "ja": "クロの祖父であり、竜王家の前当主。家の伝統に固執する頑固な老人だが、何かを隠している。", "ko": "쿠로의 할아버지이자 류오가의 전 당주. 가문의 전통을 고집하는 완고한 노인이지만, 무언가를 감추고 있다.", "zh": "库洛的爷爷，龙王家的前任家主。固守家族传统的顽固老人，却隐瞒着什么。"}} ],
-      [ {img:'11_Lubell.png',     tags:[["beast",{"en": "Sacred Beast", "ja": "神聖な魔物", "ko": "신성 마물", "zh": "神圣魔物"}]], name:{"en": "Lubell", "ja": "ルベル", "ko": "루벨", "zh": "鲁贝尔"},
-         desc:{"en": "The sacred beast they found and took in at the abandoned holy site behind the academy. Now the mascot of the Legend Research Club.", "ja": "学院の裏の打ち捨てられた聖地で見つけて引き取った神聖な魔物。現・伝説研究部のマスコット。", "ko": "학원 뒷편 버려진 성지에서 발견해 거둔 신성 마물. 현 전설연구부의 마스코트.", "zh": "在学院后方的废弃圣地发现并收养的神圣魔物。现为传说研究部的吉祥物。"}} ]
+    {en:"SUPPORTING", sub:{"en": "", "ja": "脇役", "ko": "조연", "zh": "配角", "zht": "配角"}, cols:[
+      [ {img:'5_Herbaeken.png',   tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["herb",{"en": "Seeker", "ja": "探究者", "ko": "탐구자", "zh": "探究者", "zht": "探究者"}]], name:{"en": "Herbaeken", "ja": "ヘルバーケン", "ko": "헤르바켄", "zh": "赫尔巴肯", "zht": "赫爾巴肯"},
+         desc:{"en": "No longer driven by revenge, he has become Kuro and Eunho's comrade. Alone, he chases the truth behind the legend of the dragon clan.", "ja": "復讐の鬼から抜け出し、クロとウンホの仲間になった。龍族の伝説の真実をひとりで追っている。", "ko": "복수귀에서 벗어나 쿠로와 은호의 동료가 됐다. 용족 전설의 진실을 홀로 쫓는다.", "zh": "摆脱了复仇鬼的身份，成了库洛和银浩的同伴。独自追寻着龙族传说的真相。", "zht": "擺脫了復仇鬼的身份，成了庫洛和銀浩的同伴。獨自追尋著龍族傳說的真相。"}} ],
+      [ {img:'18_Jinnokagi.png',     tags:[["gold",{"en": "Shin no Kagi", "ja": "眞ノ鍵", "ko": "신노카기", "zh": "眞ノ鍵", "zht": "眞ノ鍵"}],["gold",{"en": "Nonhuman", "ja": "人外", "ko": "인외", "zh": "人外", "zht": "人外"}]], name:{"en": "That Being", "ja": "その存在", "ko": "그 존재", "zh": "那个存在", "zht": "那個存在"},
+         desc:{"en": "An unknown nonhuman that appears differently to each person who sees it. Its purpose is unknown.", "ja": "見る者によって異なって認識される、正体不明の人外。その目的はわからない。", "ko": "보는 이에 따라 다르게 인식되는 정체불명의 인외. 그 목적은 알 수 없다.", "zh": "因观者不同而被认知为不同模样的、来历不明的人外。其目的不得而知。", "zht": "因觀者不同而被認知為不同模樣的、來歷不明的人外。其目的不得而知。"}} ],
+      [ {img:'19_Yuka.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["shadow",{"en": "Forbidden Sorcerer", "ja": "禁術使い", "ko": "금단주술사", "zh": "禁术师", "zht": "禁術師"}]], name:{"en": "Kagehira Yuka", "ja": "影片ユカ", "ko": "카게히라 유카", "zh": "影片由香", "zht": "影片由香"},
+         desc:{"en": "Aoi's younger sister, who guards the Kagehira house. In battle, she disposes of intruders without a single word.", "ja": "影片家を守るアオイの妹。戦闘では一言も発さずに侵入者を始末する。", "ko": "카게히라가를 지키는 아오이의 여동생. 전투 시엔 말 한마디 없이 침입자를 처리한다.", "zh": "守护影片家的葵的妹妹。战斗时一言不发地处理入侵者。", "zht": "守護影片家的葵的妹妹。戰鬥時一言不發地處理入侵者。"}} ],
+      [ {img:'7_Siro.png',        tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["baek",{"en": "White Dragon", "ja": "白龍", "ko": "백룡", "zh": "白龙", "zht": "白龍"}]], name:{"en": "Ryuo Shiro", "ja": "竜王シロ", "ko": "류오 시로", "zh": "龙王希洛", "zht": "龍王希洛"},
+         desc:{"en": "Kuro's twin brother, now part of the Ryuo household. Since the pecking order was settled, he's been getting disciplined by Herbaeken.", "ja": "竜王家に加わったクロの双子の弟。序列整理のあと、ヘルバーケンにしつけられている。", "ko": "류오가에 합류한 쿠로의 쌍둥이 동생. 서열 정리 후 헤르바켄에게 훈육당하고 있다.", "zh": "加入龙王家的库洛的双胞胎弟弟。排位整理之后，正在被赫尔巴肯管教。", "zht": "加入龍王家的庫洛的雙胞胎弟弟。排位整理之後，正在被赫爾巴肯管教。"}} ],
+      [ {img:'20_Ren.png',    tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]], name:{"en": "Ryuo Ren", "ja": "竜王レン", "ko": "류오 렌", "zh": "龙王莲", "zht": "龍王蓮"},
+         desc:{"en": "Miko's father. The worst head in the Ryuo family's history. The man who sowed the seeds of tragedy.", "ja": "ミコの父。竜王家の歴代最悪の当主。悲劇の種をまいた人物。", "ko": "미코의 아버지. 류오가 역대 최악의 당주. 비극의 씨앗을 뿌린 인물.", "zh": "美子的父亲。龙王家历代最差的家主。播下悲剧种子的人物。", "zht": "美子的父親。龍王家歷代最差的家主。播下悲劇種子的人物。"}} ],
+      [ {img:'14_Yoshiyuki.png',  tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}],["onmyo",{"en": "Onmyoji", "ja": "陰陽師", "ko": "음양사", "zh": "阴阳师", "zht": "陰陽師"}]], name:{"en": "Ryuo Yoshiyuki", "ja": "竜王ヨシユキ", "ko": "류오 요시유키", "zh": "龙王义之", "zht": "龍王義之"},
+         desc:{"en": "Kuro's father. The righteous head who cleaned out the Ryuo family's corruption. Where every story begins.", "ja": "クロの父。竜王家の腐敗を清算した正しき当主。すべての物語の始まり。", "ko": "쿠로의 아버지. 류오가의 부패를 청산했던 올바른 당주. 모든 이야기의 시작점.", "zh": "库洛的父亲。清算了龙王家腐败的正直家主。一切故事的起点。", "zht": "庫洛的父親。清算了龍王家腐敗的正直家主。一切故事的起點。"}} ],
+      [ {img:'15_Jiji.png',       tags:[["human",{"en": "Human", "ja": "人間", "ko": "인간", "zh": "人类", "zht": "人類"}]], name:{"en": "Jiji", "ja": "ジジ", "ko": "지지", "zh": "吉吉（爷爷）", "zht": "吉吉（爺爺）"},
+         desc:{"en": "Kuro's grandfather and former head of the Ryuo family. A rigid old man who clings to family tradition, but he's hiding something.", "ja": "クロの祖父であり、竜王家の前当主。家の伝統に固執する頑固な老人だが、何かを隠している。", "ko": "쿠로의 할아버지이자 류오가의 전 당주. 가문의 전통을 고집하는 완고한 노인이지만, 무언가를 감추고 있다.", "zh": "库洛的爷爷，龙王家的前任家主。固守家族传统的顽固老人，却隐瞒着什么。", "zht": "庫洛的爺爺，龍王家的前任家主。固守家族傳統的頑固老人，卻隱瞞著什麼。"}} ],
+      [ {img:'11_Lubell.png',     tags:[["beast",{"en": "Sacred Beast", "ja": "神聖な魔物", "ko": "신성 마물", "zh": "神圣魔物", "zht": "神聖魔物"}]], name:{"en": "Lubell", "ja": "ルベル", "ko": "루벨", "zh": "鲁贝尔", "zht": "魯貝爾"},
+         desc:{"en": "The sacred beast they found and took in at the abandoned holy site behind the academy. Now the mascot of the Legend Research Club.", "ja": "学院の裏の打ち捨てられた聖地で見つけて引き取った神聖な魔物。現・伝説研究部のマスコット。", "ko": "학원 뒷편 버려진 성지에서 발견해 거둔 신성 마물. 현 전설연구부의 마스코트.", "zh": "在学院后方的废弃圣地发现并收养的神圣魔物。现为传说研究部的吉祥物。", "zht": "在學院後方的廢棄聖地發現並收養的神聖魔物。現為傳說研究部的吉祥物。"}} ]
     ]}
   ]
 }
@@ -2108,9 +2216,9 @@ var BHS_CAST = {
 };
 
 var BHS_VOLUMES = [
-  {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:{"en": "Part 1", "ja": "第1部", "ko": "1부", "zh": "第1部"},
-   label:{"en": "Blood High School: Rise of the Dragon", "ja": "ブラッドハイスクール 〜龍の復活〜", "ko": "블러드하이스쿨 ~용의 부활~", "zh": "血色高校 ~龙之复活~"}, type:'novel',
-   available:true, tags:[{"en": "#School", "ja": "#学園", "ko": "#학원", "zh": "#校园"}, {"en": "#Fantasy", "ja": "#ファンタジー", "ko": "#판타지", "zh": "#奇幻"}, {"en": "#Shonen", "ja": "#少年漫画", "ko": "#소년만화", "zh": "#少年漫画"}, {"en": "#Omnibus", "ja": "#オムニバス", "ko": "#옴니버스", "zh": "#单元剧"}, {"en": "#AbsurdComedy", "ja": "#シュールギャグ", "ko": "#병맛개그", "zh": "#无厘头搞笑"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지", "zh": "#黑暗奇幻"}],
+  {id:'novel-1', grad:'150deg,#3a0000,#8b0000,#c0392b', num:1, part:'PART 01', sub:{"en": "Part 1", "ja": "第1部", "ko": "1부", "zh": "第1部", "zht": "第1部"},
+   label:{"en": "Blood High School: Rise of the Dragon", "ja": "ブラッドハイスクール 〜龍の復活〜", "ko": "블러드하이스쿨 ~용의 부활~", "zh": "血色高校 ~龙之复活~", "zht": "血色高校 ~龍之復活~"}, type:'novel',
+   available:true, tags:[{"en": "#School", "ja": "#学園", "ko": "#학원", "zh": "#校园", "zht": "#校園"}, {"en": "#Fantasy", "ja": "#ファンタジー", "ko": "#판타지", "zh": "#奇幻", "zht": "#奇幻"}, {"en": "#Shonen", "ja": "#少年漫画", "ko": "#소년만화", "zh": "#少年漫画", "zht": "#少年漫畫"}, {"en": "#Omnibus", "ja": "#オムニバス", "ko": "#옴니버스", "zh": "#单元剧", "zht": "#單元劇"}, {"en": "#AbsurdComedy", "ja": "#シュールギャグ", "ko": "#병맛개그", "zh": "#无厘头搞笑", "zht": "#無厘頭搞笑"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지", "zh": "#黑暗奇幻", "zht": "#黑暗奇幻"}],
    /* lookbook: 뒤 따옴표 안이 1부 룩북 링크 주소 */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1-1bKBSBZNFtuS26Nxo_Y3msSH8I5-IVq/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_1part_cast.png',
@@ -2120,30 +2228,31 @@ var BHS_VOLUMES = [
      en:["Hello!", "After an animation in 2017 and a webtoon in 2023, \"Blood High School\" has finally arrived as a web novel in 2026.", "You might be wondering why I came back with a web novel after the webtoon stopped. Back then, I wasn't yet a good enough writer to carry my first long series. I handled Part 1, with all its comedy, reasonably well, but from Part 2 on, as the shonen-manga feel grew stronger, keeping the whole story in balance was hard. (I'll get into Part 2 properly in the next production note.)", "The current \"Blood High School\" web novel was born while I was practicing web-novel writing to clear my head after hitting that wall. At first it was just practice, but as I discovered what only prose can do, I got more and more absorbed. Back when I was serializing the webtoon, real-world limits often forced me to cut or change action scenes and slow-burn developments that were hard to draw. In the web novel, I could put down the scenes and staging I first imagined far more freely, and I had a great time the whole way through.", "In the end, the web novel became the closest thing to the \"Blood High School\" I first wanted to draw, and uploading it just felt natural. I'm so happy I can finally show you the ideas that had been tangled up in my head for so long.", "As for Part 1 itself, I built it around a straightforward, childish, old-school feel. Maybe that's why I have a special, nostalgic fondness for it.", "My personal favorite scene is the very last one, where Herbaeken fires the gun. Its meaning changed a lot from the animated version, but I think that change actually brought back the mood unique to old manga originals. Around the turn of the century, anime adaptations often went dark with their own original plotlines. Then you'd open the original manga and find it was surprisingly bright. I have memories like that.", "Herbaeken is the only character whose arc wraps up in Part 1, so I think of him as the 'true protagonist of Part 1.' He's the only human among the leads, yet he never got overshadowed and worked really hard. If there were an off-the-record cast, he might have been the busiest actor of them all.", "And one bit of TMI... my favorite episode is Episode 4. (I'm writing this because I think I'd regret it if I didn't..)", "I'll talk about the other characters and the real behind-the-scenes stuff in more depth in the Part 2 production note.", "I hope Part 1 has been a pleasant first chapter for stepping into the world of \"Blood High School.\"", "Thank you.", "2026.07.29"],
      ja:["こんにちは!", "2017年のアニメ、2023年のウェブトゥーンを経て、ついに2026年、『ブラッドハイスクール』がWeb小説になって帰ってきました。", "ウェブトゥーンの中断後、なぜWeb小説で戻ってきたのか気になる方もいると思いますが、当時の私は初めての長編を背負うにはまだ力不足の作家でした。ギャグ色の強い第1部は比較的うまく描けたのですが、少年漫画らしさが濃くなる第2部からは、作品全体のバランスを取るのが簡単ではありませんでした。(第2部の話は次の制作ノートで詳しくお話しします。)", "今の『ブラッドハイスクール』Web小説は、壁にぶつかっていた私が気分転換にWeb小説を練習する中で生まれました。最初はただの練習のつもりでしたが、文章という媒体ならではの良さに気づくにつれて、どんどんのめり込んでいきました。ウェブトゥーンを連載していた頃は、いろいろな現実的な制約のせいで、描くのが難しいアクションや長い展開を削ったり変えたりしなければならないことが多かったのですが、Web小説では最初に構想していた場面や演出をずっと自由に表現でき、作業の間ずっと本当に楽しかったです。", "結果的に、Web小説版が私が最初に描きたかった『ブラッドハイスクール』の原型にいちばん近いものになり、自然とアップロードすることになりました。頭の中でだけ絡まっていた構想を、ようやく皆さんにお見せできて本当にうれしいです。", "第1部の制作について本格的にお話しすると、第1部は直感的で子どもっぽい、昔ながらの雰囲気を中心に作りました。そのせいか、私は第1部に懐かしさの混じった特別な愛着をたくさん持っています。", "個人的にいちばん好きな場面は、最後にヘルバーケンが銃を撃つシーンです。アニメ版とは意味がだいぶ変わりましたが、むしろその変化のおかげで、昔の漫画原作ならではの空気がより生きたと思います。世紀末の頃は、原作をもとにしたアニメがオリジナル展開で暗い雰囲気になることが多かったですよね。いざ原作を開いてみると、意外と明るい作品だったり。そんな記憶があります。", "ヘルバーケンは第1部で唯一物語が完結したキャラクターなので、「第1部の真の主人公」だったと思っています。主要人物の中で唯一の人間なのに、負けないキャラクター性で本当によく活躍してくれました。オフレコがあるなら、いちばん忙しかった役者かもしれません。", "それから、ちょっとしたTMIをひとつ……私がいちばん好きなエピソードは第4話です。(これを書かないと後悔しそうなので書きます..)", "他のキャラクターの話や本格的な裏話は、第2部の制作ノートでもっと深くお話しします。", "この第1部が、読者の皆さんにとって『ブラッドハイスクール』の世界へ気持ちよく入っていける最初の章になっていたらうれしいです。", "ありがとうございました。", "2026.07.29"],
      ko:["안녕하세요!", "2017년 애니메이션, 2023년 웹툰을 거쳐 드디어 2026년 『블러드 하이스쿨』이 웹소설로 찾아왔습니다.", "웹툰 중단 후 왜 웹소설로 돌아왔는지 궁금하실 텐데, 당시의 저는 첫 장편을 감당하기엔 아직 부족한 작가였습니다. 개그 성향이 강한 1부는 비교적 잘 풀어낼 수 있었지만, 소년만화 감성이 짙어지는 2부부터는 작품 전체의 균형을 잡는 일이 쉽지 않았습니다. (2부 이야기는 다음 제작 노트에서 자세히 풀어보겠습니다.)", "지금의 『블러드 하이스쿨』 웹소설은 당시 벽에 부딪혔던 제가 머리를 식힐 겸 웹소설을 연습하던 과정에서 탄생했습니다. 처음에는 그저 연습용이었지만, 글이라는 매체만의 장점을 깨닫게 되면서 점점 더 몰입하게 되었습니다. 웹툰을 연재할 당시에는 여러 현실적인 제약 때문에 그리기 어려운 액션이나 긴 호흡의 전개를 줄이거나 바꿔야 하는 경우가 많았는데, 웹소설에서는 처음 구상했던 장면과 연출을 훨씬 자유롭게 담아낼 수 있었고 작업하는 내내 정말 즐거웠습니다.", "결국 웹소설판이 제가 처음 그리고 싶었던 『블러드 하이스쿨』의 초안에 가까워졌고 자연스럽게 업로드하게 되었습니다. 머릿속에만 뒤엉켜 있던 구상들을 비로소 여러분께 보여드릴 수 있게 되어 정말 기쁩니다.", "본격적인 1부 제작 코멘트를 해보자면, 1부는 직관적이고 유치한 옛 감성을 중점으로 제작했습니다. 그래서인지 저는 1부에는 유독 그리움이 섞인 애정을 많이 가지고 있습니다.", "개인적으로 가장 좋아하는 장면은 마지막, 헤르바켄이 총을 쏘는 장면입니다. 애니메이션판과는 그 의미가 많이 달라졌지만, 오히려 그런 변화 덕분에 옛 만화 원작 특유의 분위기가 더 살아난 것 같습니다. 세기말에는 원작을 기반으로 한 애니메이션들이 오리지널 전개로 인해 어두운 분위기를 띠는 경우가 많았으니까요. 막상 원작을 펼쳐보면 의외로 밝은 작품이었다거나. 그런 기억이 있네요.", "헤르바켄은 1부에서 유일하게 서사가 마무리된 캐릭터라 '1부 진주인공'이었다고 생각합니다. 주연 중 유일한 인간인데 밀리지 않는 캐릭터성으로 참 열심히 활약해 준 캐릭터였습니다. 오프 더 레코드가 있다면 가장 바빴던 배우였을지도 모르겠습니다.", "그리고 TMI 하나를 적자면… 제가 가장 좋아하는 에피소드는 4화입니다. (이거 안 쓰면 후회할 것 같아서 씁니다..)", "다른 캐릭터의 언급이나 본격적인 비하인드는 2부 제작 노트에서 더 깊게 이야기해 보겠습니다.", "이번 1부가 독자 여러분께 『블러드 하이스쿨』의 세계관에 기분 좋게 입문하실 수 있는 첫 장이 되었기를 바랍니다.", "감사합니다.", "2026.07.29"],
-     zh:["大家好！", "历经2017年的动画、2023年的条漫，2026年，《血色高校》终于以网络小说的形式与大家见面了。", "大家可能会好奇，条漫中断之后为什么以网络小说回归。当时的我，还是个不足以驾驭第一部长篇的作者。搞笑色彩浓厚的第1部还算处理得比较顺利，但从少年漫画气息渐浓的第2部开始，要把握整部作品的平衡并不容易。（第2部的事会在下一篇制作笔记里详细聊。）", "现在的《血色高校》网络小说，诞生于当时碰壁的我为了换换脑子而练习写网络小说的过程中。起初只是练习，但随着我体会到文字这一媒介独有的长处，便越来越投入。连载条漫的时候，由于种种现实的限制，常常不得不删减或改动那些难画的动作戏和节奏较长的展开；而在网络小说里，我能更自由地写出最初构想的场面与演出，整个创作过程都非常开心。", "最终，网络小说版成了最接近我最初想画的《血色高校》的样子，于是顺理成章地上传了。那些一直纠缠在脑海里的构想终于能呈现给大家，我真的很高兴。", "说到第1部本身的制作感想，第1部是以直观、幼稚的老派感觉为重点来创作的。也许正因如此，我对第1部有着一份格外带着怀念的喜爱。", "我个人最喜欢的场面，是最后赫尔巴肯开枪的那一幕。它的含义和动画版相比已经大不相同，但也许正是这样的变化，反而更凸显出老漫画原作特有的气质。毕竟在世纪末，以原作为基础的动画常常因为原创展开而带上阴暗的氛围。真去翻开原作，却意外地是部明朗的作品。我有过这样的记忆。", "赫尔巴肯是第1部里唯一一个故事线完结的角色，所以我觉得他是「第1部的真主角」。作为主角团里唯一的人类，却凭着毫不逊色的角色魅力，真的非常努力地活跃了一番。如果有幕后花絮的话，他也许是最忙的那位演员。", "再写一条TMI……我最喜欢的章节是第4话。（不写的话感觉会后悔，所以写了……）", "关于其他角色，以及正式的幕后故事，会在第2部的制作笔记里再深入聊。", "希望这第1部，能成为各位读者愉快地踏入《血色高校》世界观的第一章。", "谢谢大家。", "2026.07.29"]
+     zh:["大家好！", "历经2017年的动画、2023年的条漫，2026年，《血色高校》终于以网络小说的形式与大家见面了。", "大家可能会好奇，条漫中断之后为什么以网络小说回归。当时的我，还是个不足以驾驭第一部长篇的作者。搞笑色彩浓厚的第1部还算处理得比较顺利，但从少年漫画气息渐浓的第2部开始，要把握整部作品的平衡并不容易。（第2部的事会在下一篇制作笔记里详细聊。）", "现在的《血色高校》网络小说，诞生于当时碰壁的我为了换换脑子而练习写网络小说的过程中。起初只是练习，但随着我体会到文字这一媒介独有的长处，便越来越投入。连载条漫的时候，由于种种现实的限制，常常不得不删减或改动那些难画的动作戏和节奏较长的展开；而在网络小说里，我能更自由地写出最初构想的场面与演出，整个创作过程都非常开心。", "最终，网络小说版成了最接近我最初想画的《血色高校》的样子，于是顺理成章地上传了。那些一直纠缠在脑海里的构想终于能呈现给大家，我真的很高兴。", "说到第1部本身的制作感想，第1部是以直观、幼稚的老派感觉为重点来创作的。也许正因如此，我对第1部有着一份格外带着怀念的喜爱。", "我个人最喜欢的场面，是最后赫尔巴肯开枪的那一幕。它的含义和动画版相比已经大不相同，但也许正是这样的变化，反而更凸显出老漫画原作特有的气质。毕竟在世纪末，以原作为基础的动画常常因为原创展开而带上阴暗的氛围。真去翻开原作，却意外地是部明朗的作品。我有过这样的记忆。", "赫尔巴肯是第1部里唯一一个故事线完结的角色，所以我觉得他是「第1部的真主角」。作为主角团里唯一的人类，却凭着毫不逊色的角色魅力，真的非常努力地活跃了一番。如果有幕后花絮的话，他也许是最忙的那位演员。", "再写一条TMI……我最喜欢的章节是第4话。（不写的话感觉会后悔，所以写了……）", "关于其他角色，以及正式的幕后故事，会在第2部的制作笔记里再深入聊。", "希望这第1部，能成为各位读者愉快地踏入《血色高校》世界观的第一章。", "谢谢大家。", "2026.07.29"],
+     zht:["大家好！", "歷經2017年的動畫、2023年的條漫，2026年，《血色高校》終於以網路小說的形式與大家見面了。", "大家可能會好奇，條漫中斷之後為什麼以網路小說回歸。當時的我，還是個不足以駕馭第一部長篇的作者。搞笑色彩濃厚的第1部還算處理得比較順利，但從少年漫畫氣息漸濃的第2部開始，要把握整部作品的平衡並不容易。（第2部的事會在下一篇製作筆記裡詳細聊。）", "現在的《血色高校》網路小說，誕生於當時碰壁的我為了轉換心情而練習寫網路小說的過程中。起初只是練習，但隨著我體會到文字這一媒介獨有的長處，便越來越投入。連載條漫的時候，由於種種現實的限制，常常不得不刪減或改動那些難畫的動作戲和節奏較長的展開；而在網路小說裡，我能更自由地寫出最初構想的場面與演出，整個創作過程都非常開心。", "最終，網路小說版成了最接近我最初想畫的《血色高校》的樣子，於是順理成章地上傳了。那些一直糾纏在腦海裡的構想終於能呈現給大家，我真的很高興。", "說到第1部本身的製作感想，第1部是以直觀、幼稚的老派感覺為重點來創作的。也許正因如此，我對第1部有著一份格外帶著懷念的喜愛。", "我個人最喜歡的場面，是最後赫爾巴肯開槍的那一幕。它的含義和動畫版相比已經大不相同，但也許正是這樣的變化，反而更凸顯出老漫畫原作特有的氣質。畢竟在世紀末，以原作為基礎的動畫常常因為原創展開而帶上陰暗的氛圍。真去翻開原作，卻意外地是部明朗的作品。我有過這樣的記憶。", "赫爾巴肯是第1部裡唯一一個故事線完結的角色，所以我覺得他是「第1部的真主角」。作為主角團裡唯一的人類，卻憑著毫不遜色的角色魅力，真的非常努力地活躍了一番。如果有幕後花絮的話，他也許是最忙的那位演員。", "再寫一條TMI……我最喜歡的章節是第4話。（不寫的話感覺會後悔，所以寫了……）", "關於其他角色，以及正式的幕後故事，會在第2部的製作筆記裡再深入聊。", "希望這第1部，能成為各位讀者愉快地踏入《血色高校》世界觀的第一章。", "謝謝大家。", "2026.07.29"]
    },
    cover:'Blood_High_School/bhs_novel_prat1_cover.png',
-   synopsis:{"en": "Kuro is an ordinary high schooler. Heir to the dragon blood of the Ryuo family, he awakens as Lackness, the dragon of legend. And because he's now the strongest in the world, enemies start flocking to him... A school life tangled up in legends: Blood High School.", "ja": "平凡な高校生クロ。竜王家の龍の血を受け継ぐクロは、伝説の龍ラクニスとして覚醒する。世界最強という理由で、敵が次々と押し寄せてきて……伝説と絡み合うスクールライフ、ブラッドハイスクール。", "ko": "평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.", "zh": "普通的高中生库洛。继承了龙王家龙之血的库洛，觉醒为传说之龙拉克尼斯。因为成了世界最强，敌人开始蜂拥而至……与传说纠缠的校园生活，血色高校。"},
+   synopsis:{"en": "Kuro is an ordinary high schooler. Heir to the dragon blood of the Ryuo family, he awakens as Lackness, the dragon of legend. And because he's now the strongest in the world, enemies start flocking to him... A school life tangled up in legends: Blood High School.", "ja": "平凡な高校生クロ。竜王家の龍の血を受け継ぐクロは、伝説の龍ラクニスとして覚醒する。世界最強という理由で、敵が次々と押し寄せてきて……伝説と絡み合うスクールライフ、ブラッドハイスクール。", "ko": "평범한 고등학생 쿠로. 류오 가문의 용의 피를 이어받은 쿠로는 전설의 용 라크니스로 각성한다. 세계 최강자라는 이유로 적들이 몰려들기 시작하는데… 전설과 얽힌 스쿨라이프 블러드하이스쿨.", "zh": "普通的高中生库洛。继承了龙王家龙之血的库洛，觉醒为传说之龙拉克尼斯。因为成了世界最强，敌人开始蜂拥而至……与传说纠缠的校园生活，血色高校。", "zht": "普通的高中生庫洛。繼承了龍王家龍之血的庫洛，覺醒為傳說之龍拉克尼斯。因為成了世界最強，敵人開始蜂擁而至……與傳說糾纏的校園生活，血色高校。"},
    episodes:[
-     {id:1,  title:{"en": "Ep. 1 Tea Time in the Rose Garden", "ja": "第1話 薔薇の庭のティータイム", "ko": "1화 장미 정원의 티타임", "zh": "第1话 蔷薇庭园的茶会"},        date:null, status:'plan'},
-     {id:2,  title:{"en": "Ep. 2 The Marionette in the Art Room", "ja": "第2話 美術室のマリオネット", "ko": "2화 미술실의 마리오네트", "zh": "第2话 美术室的提线人偶"},        date:null, status:'plan'},
-     {id:3,  title:{"en": "Ep. 3 The Jewel of the Abandoned Holy Site", "ja": "第3話 廃れた聖地の宝石", "ko": "3화 버려진 성지의 보석", "zh": "第3话 废弃圣地的宝石"},         date:null, status:'plan'},
-     {id:4,  title:{"en": "Ep. 4 The Dark Mage's Eternal First-Years", "ja": "第4話 黒魔法使いの永遠の一年生", "ko": "4화 흑마법사의 영원한 1학년", "zh": "第4话 黑魔法师的永远的一年级"},    date:null, status:'plan'},
-     {id:5,  title:{"en": "Ep. 5 Crossed Succession and Unwanted Power", "ja": "第5話 すれ違う継承と望まぬ力", "ko": "5화 엇갈린 계승과 원치 않는 힘", "zh": "第5话 交错的继承与不想要的力量"}, date:null, status:'plan'},
-     {id:6,  title:{"en": "Ep. 6 A Tanabata Night and the Silver Fox", "ja": "第6話 七夕の夜と銀色の狐", "ko": "6화 칠석의 밤과 은빛 여우", "zh": "第6话 七夕之夜与银色的狐"},      date:null, status:'plan'},
-     {id:7,  title:{"en": "Ep. 7 The Judge of the Fallen Kingdom", "ja": "第7話 滅びた王国の審判者", "ko": "7화 무너진 왕국의 심판자", "zh": "第7话 覆灭王国的审判者"},       date:null, status:'plan'},
-     {id:8,  title:{"en": "Ep. 8 A Legend Overturned Is Still Just a Legend", "ja": "第8話 ひっくり返った伝説は伝説に過ぎない", "ko": "8화 뒤집힌 전설은 전설일 뿐", "zh": "第8话 颠倒的传说终究只是传说"},    date:null, status:'plan'},
-     {id:9,  title:{"en": "Ep. 9 Bang! 4-Split STAGE", "ja": "第9話 Bang! 4分割STAGE", "ko": "9화 Bang! 4분할 STAGE", "zh": "第9话 Bang! 四分割STAGE"},          date:null, status:'plan'},
-     {id:10, title:{"en": "Ep. 10 Ore-sama Conquers the Academy!!", "ja": "第10話 俺様、学院征服!!", "ko": "10화 오레사마 학원 정복!!", "zh": "第10话 本大爷，征服学院！！"},      date:null, status:'plan'},
-     {id:11, title:{"en": "Ep. 11 Cursed BOY, Crazy BABY", "ja": "第11話 呪いBOY・狂気BABY", "ko": "11화 저주BOY미친BABY", "zh": "第11话 诅咒BOY·疯狂BABY"},           date:null, status:'plan'},
-     {id:12, title:{"en": "Ep. 12 Settling the Pecking Order of the Dragon Brothers", "ja": "第12話 龍兄弟の序列整理", "ko": "12화 용 형제의 서열 정리", "zh": "第12话 龙兄弟的排位整理"},       date:null, status:'plan'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话"}, date:null, status:'plan'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话"}, date:null, status:'plan'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话"}, date:null, status:'plan'}
+     {id:1,  title:{"en": "Ep. 1 Tea Time in the Rose Garden", "ja": "第1話 薔薇の庭のティータイム", "ko": "1화 장미 정원의 티타임", "zh": "第1话 蔷薇庭园的茶会", "zht": "第1話 薔薇庭園的茶會"},        date:null, status:'plan'},
+     {id:2,  title:{"en": "Ep. 2 The Marionette in the Art Room", "ja": "第2話 美術室のマリオネット", "ko": "2화 미술실의 마리오네트", "zh": "第2话 美术室的提线人偶", "zht": "第2話 美術室的提線人偶"},        date:null, status:'plan'},
+     {id:3,  title:{"en": "Ep. 3 The Jewel of the Abandoned Holy Site", "ja": "第3話 廃れた聖地の宝石", "ko": "3화 버려진 성지의 보석", "zh": "第3话 废弃圣地的宝石", "zht": "第3話 廢棄聖地的寶石"},         date:null, status:'plan'},
+     {id:4,  title:{"en": "Ep. 4 The Dark Mage's Eternal First-Years", "ja": "第4話 黒魔法使いの永遠の一年生", "ko": "4화 흑마법사의 영원한 1학년", "zh": "第4话 黑魔法师的永远的一年级", "zht": "第4話 黑魔法師的永遠的一年級"},    date:null, status:'plan'},
+     {id:5,  title:{"en": "Ep. 5 Crossed Succession and Unwanted Power", "ja": "第5話 すれ違う継承と望まぬ力", "ko": "5화 엇갈린 계승과 원치 않는 힘", "zh": "第5话 交错的继承与不想要的力量", "zht": "第5話 交錯的繼承與不想要的力量"}, date:null, status:'plan'},
+     {id:6,  title:{"en": "Ep. 6 A Tanabata Night and the Silver Fox", "ja": "第6話 七夕の夜と銀色の狐", "ko": "6화 칠석의 밤과 은빛 여우", "zh": "第6话 七夕之夜与银色的狐", "zht": "第6話 七夕之夜與銀色的狐"},      date:null, status:'plan'},
+     {id:7,  title:{"en": "Ep. 7 The Judge of the Fallen Kingdom", "ja": "第7話 滅びた王国の審判者", "ko": "7화 무너진 왕국의 심판자", "zh": "第7话 覆灭王国的审判者", "zht": "第7話 覆滅王國的審判者"},       date:null, status:'plan'},
+     {id:8,  title:{"en": "Ep. 8 A Legend Overturned Is Still Just a Legend", "ja": "第8話 ひっくり返った伝説は伝説に過ぎない", "ko": "8화 뒤집힌 전설은 전설일 뿐", "zh": "第8话 颠倒的传说终究只是传说", "zht": "第8話 顛倒的傳說終究只是傳說"},    date:null, status:'plan'},
+     {id:9,  title:{"en": "Ep. 9 Bang! 4-Split STAGE", "ja": "第9話 Bang! 4分割STAGE", "ko": "9화 Bang! 4분할 STAGE", "zh": "第9话 Bang! 四分割STAGE", "zht": "第9話 Bang! 四分割STAGE"},          date:null, status:'plan'},
+     {id:10, title:{"en": "Ep. 10 Ore-sama Conquers the Academy!!", "ja": "第10話 俺様、学院征服!!", "ko": "10화 오레사마 학원 정복!!", "zh": "第10话 本大爷，征服学院！！", "zht": "第10話 本大爺，征服學院！！"},      date:null, status:'plan'},
+     {id:11, title:{"en": "Ep. 11 Cursed BOY, Crazy BABY", "ja": "第11話 呪いBOY・狂気BABY", "ko": "11화 저주BOY미친BABY", "zh": "第11话 诅咒BOY·疯狂BABY", "zht": "第11話 詛咒BOY·瘋狂BABY"},           date:null, status:'plan'},
+     {id:12, title:{"en": "Ep. 12 Settling the Pecking Order of the Dragon Brothers", "ja": "第12話 龍兄弟の序列整理", "ko": "12화 용 형제의 서열 정리", "zh": "第12话 龙兄弟的排位整理", "zht": "第12話 龍兄弟的排位整理"},       date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话", "zht": "番外 第1話"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话", "zht": "番外 第2話"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话", "zht": "番外 第3話"}, date:null, status:'plan'}
    ]},
-  {id:'novel-2', grad:'150deg,#1a0010,#6b0030,#c0304a', num:2, part:'PART 02', sub:{"en": "Part 2", "ja": "第2部", "ko": "2부", "zh": "第2部"},
-   label:{"en": "Blood High School: The Ryuo Clan Arc", "ja": "ブラッドハイスクール 〜竜王家編〜", "ko": "블러드하이스쿨 ~류오가편~", "zh": "血色高校 ~龙王家篇~"}, type:'novel',
-   available:true, tags:[{"en": "#Drama", "ja": "#ドラマ", "ko": "#드라마", "zh": "#剧情"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지", "zh": "#黑暗奇幻"}, {"en": "#Suspense", "ja": "#サスペンス", "ko": "#서스펜스", "zh": "#悬疑"}, {"en": "#MovieStyle", "ja": "#劇場版", "ko": "#극장판", "zh": "#剧场版"}, {"en": "#JapaneseAesthetic", "ja": "#和風", "ko": "#일본풍", "zh": "#和风"}, {"en": "#ComingOfAge", "ja": "#成長物語", "ko": "#성장물", "zh": "#成长"}],
+  {id:'novel-2', grad:'150deg,#1a0010,#6b0030,#c0304a', num:2, part:'PART 02', sub:{"en": "Part 2", "ja": "第2部", "ko": "2부", "zh": "第2部", "zht": "第2部"},
+   label:{"en": "Blood High School: The Ryuo Clan Arc", "ja": "ブラッドハイスクール 〜竜王家編〜", "ko": "블러드하이스쿨 ~류오가편~", "zh": "血色高校 ~龙王家篇~", "zht": "血色高校 ~龍王家篇~"}, type:'novel',
+   available:true, tags:[{"en": "#Drama", "ja": "#ドラマ", "ko": "#드라마", "zh": "#剧情", "zht": "#劇情"}, {"en": "#DarkFantasy", "ja": "#ダークファンタジー", "ko": "#다크판타지", "zh": "#黑暗奇幻", "zht": "#黑暗奇幻"}, {"en": "#Suspense", "ja": "#サスペンス", "ko": "#서스펜스", "zh": "#悬疑", "zht": "#懸疑"}, {"en": "#MovieStyle", "ja": "#劇場版", "ko": "#극장판", "zh": "#剧场版", "zht": "#劇場版"}, {"en": "#JapaneseAesthetic", "ja": "#和風", "ko": "#일본풍", "zh": "#和风", "zht": "#和風"}, {"en": "#ComingOfAge", "ja": "#成長物語", "ko": "#성장물", "zh": "#成长", "zht": "#成長"}],
    /* lookbook: 뒤 따옴표 안이 2부 룩북 링크 주소 */
    links:{ chars:'', lookbook:'https://drive.google.com/file/d/1klfQJ8l6ZWHdhMoes5uecU8-KrlaymtZ/view?usp=drive_link', notes:'' },
    cast:'Blood_High_School/bhs_2part_cast.png',
@@ -2153,30 +2262,31 @@ var BHS_VOLUMES = [
      en:["At last, the Ryuo Clan Arc, and with it Part 2 of \"Blood High School,\" is complete.", "Part 2 is the part I've agonized over and spent the most time on since the webtoon days, so just finishing it feels like a huge win for me.", "In the webtoon days, Part 2 had a typical shonen-manga(?) structure: Aoi, a gloomy, unstable villain (lol), kidnaps Ren's daughter Miko and pressures her to carry on Ren's will, and Kuro and the gang rescue her. But it fell short as a story about Kuro growing up, so in the web novel it turned into a story driven by everyone's own beliefs and choices colliding.", "The most fun part of the Ryuo Clan Arc was Eunho's story. Fox spirits usually help the protagonist or stay in an advisor role, but Eunho agonizes over Kuro and jumps in himself. It's a choice that could shake his divine power, his very reason to exist, so it was thrilling to the point of \"Is this even okay!?\", and breaking a familiar cliché to take it somewhere new was a real joy.", "That said, Eunho's arc is now completely finished. It's my first time fully wrapping up a character's story and sending them off(?), so I do feel a little wistful, but I think it's about time Eunho went back to where he belongs. (Good work, Eunho..)", "Herbaeken, on the other hand, has stepped into a new story of his own.", "For the Ryuo Clan Arc, I boldly made Herbaeken and Shiro supporting characters. Even so, in their brief appearances they became an important gateway into Part 3, and my favorite scene is the one in the final episode where he draws close to what \"Shin no Kagi\" really is. (In both Part 1 and Part 2, my favorite scenes always seem to have Herbaeken in them..)", "Since Part 2 deals with much heavier events and emotions than Part 1, the story leans more on emotional beats, with more dialogue and more psychological description. Keeping the action and tension balanced in a story that could easily have sagged was the most enjoyable challenge of this project.", "And this change in tone was something Kuro truly needed to grow into a protagonist. He grows by facing the darkness of the world and the darkness within himself, which meant letting go of pure, cute Kuro little by little, and honestly, that hurt.. (sob) (Everyone.. the current Kuro ends with Part 2... the Kuro of Part 3 will be a new Kuro..)", "But thanks to that process, I came to understand much more clearly who Kuro and Lackness are. I hope you can feel that with me.", "The works I leaned on most to stay grounded were Mushishi, Hell Girl, and Higurashi When They Cry. To me, a \"Japanese feel\" means that quiet, bittersweet mood unique to the mid-2000s. In Part 2, I wanted to capture the feeling of that era in my own way.", "One more bit of TMI: in places, the explanations run a little long. (heh) Wherever something could be open to interpretation, I wanted it to come across without any misunderstanding, so I went for it.", "Finally,", "Looking back, Part 1 was where I showed what I'm good at. Part 2, on the other hand, was built by running into my weak spots again and again. It was a hard process, but that's exactly why I learned and grew the most. So for me, Part 2 is my biggest challenge yet, and a work I'll remember for a long time.", "From Part 3, new nonhuman leads will appear, and the story will grow even bigger around the keyword 'legend.' I can't say yet when I'll be back, but unless I die (lol), I plan to see it through to the end.", "\"Blood High School\" doesn't chase trends, so there's no need to rush. I'll keep going steadily, at my own pace.", "Thank you.", "2026.07.29"],
      ja:["ついに竜王家編、そして『ブラッドハイスクール』第2部が完結しました。", "第2部はウェブトゥーン時代からいちばん長く悩み、時間をかけてきた部分なので、完成できたこと自体が私にとって大きな成功です。", "ウェブトゥーン時代の第2部は、陰気なメンヘラ悪役(笑)だったアオイがレンの娘ミコを誘拐してレンの意志を継げと迫り、クロたちがミコを救出するという、典型的な少年漫画(?)の構成でした。でもクロが成長する物語としては足りない部分があったので、Web小説ではそれぞれの考えと選択がぶつかり合いながら物語が流れていく方向に変わりました。", "今回の竜王家編でいちばん楽しかった作業は、ウンホの物語でした。狐の神霊という存在は、ふつうは主人公を助けたり、助言者の役割にとどまったりすることが多いのですが、ウンホはクロのために悩み、自ら飛び込んでいきます。もしかしたら自分の神力、つまり存在意義そのものが揺らぎかねない選択なので、「これでいいの!?」と思うほどゾクゾクしましたし、おなじみのお約束を壊して新しい方向へ描いていく過程がとても楽しかったです。", "ただ、今回の編でウンホの物語は完全に完結しました。ひとりのキャラクターの物語を完全に終わらせて送り出す(?)経験は初めてなので、寂しさも残りますが、ウンホもそろそろ自分の居場所に戻る時が来たようです。(ウンホ、お疲れさま..)", "逆にヘルバーケンは、また別の物語へ足を踏み入れたキャラクターです。", "ヘルバーケンとシロは、今回の竜王家編では思い切って脇役にしました。それでも短い登場の中で第3部へつながる大事な入口の役割を果たしてくれましたし、特に最終話で「眞ノ鍵」が何なのかに迫ったあの演出が、私のいちばん好きなシーンです。(第1部も第2部も、私の名場面にはいつもヘルバーケンが..)", "第2部は第1部よりずっと重い事件や感情を扱うぶん、感情の流れを中心にした展開や多くのセリフ、心理描写の比重も大きくなりました。停滞しがちな展開の中でも、アクションと緊張感をうまく調整しながら物語を進めていく過程は、今回の作業でいちばん楽しかった挑戦でした。", "そしてこうしたトーンの変化は、クロが主人公として成長していく過程でどうしても必要な変化でした。世界の闇と自分の闇に向き合いながら成長していくぶん、純粋でかわいいクロを少しずつ見送らなければならなくて、個人的には胸が痛みました..(泣)(皆さん..今のクロは第2部が最後です…第3部のクロは新しいクロになる予定です..)", "でもその過程のおかげで、私自身もクロとラクニスがどんなキャラクターなのか、よりはっきり理解できました。読者の皆さんにも一緒に感じてもらえたらうれしいです。", "作業中に軸をぶらさないため、いちばん参考にした作品は『蟲師』『地獄少女』『ひぐらしのなく頃に』でした。私にとって和風とは、2000年代半ばならではの静かでほろ苦い雰囲気です。今回の第2部では、あの頃の空気を自分なりに込めてみたかったんです。", "TMIをもうひとつ付け加えると、ところどころ説明が多すぎる部分があります。(ふふ)解釈の余地が残りそうなところだけは、誤解なく伝えたくて、あえてしっかり書きました。", "最後に、", "振り返ってみると、第1部は私の得意なことを見せた作品でした。一方で第2部は、足りない部分とぶつかり続けながら作っていった作品でした。大変な過程でしたが、そのぶんいちばん多くを学び、成長できました。だから私にとって第2部は、いちばん大きな挑戦であり、長く記憶に残る作品です。", "第3部からは新しい人外の主人公たちが登場し、「伝説」というキーワードを中心に物語のスケールもさらに大きくなる予定です。いつお届けできるかはまだ言えませんが、死なない限り(笑)最後まで走り切るつもりです。", "『ブラッドハイスクール』は流行に左右されない作品なので、急ぐ必要もありません。これからも自分のペースで、こつこつ続けていきます。", "ありがとうございました。", "2026.07.29"],
      ko:["드디어 류오가 편, 그리고 『블러드하이스쿨』 2부가 마무리되었습니다.", "2부는 웹툰 시절부터 가장 오래 고민하며 시간을 들인 만큼, 완성했다는 사실 자체가 저에게는 큰 성공입니다.", "웹툰 시절의 2부는 음침 멘헤라 악역(ㅋㅋ)이었던 아오이가 렌의 딸 미코를 납치하고 렌의 정신을 이어 달라 강요하고, 쿠로 일행이 미코를 구출하는, 전형적인 소년만화(?) 구조였습니다. 하지만 쿠로가 성장하는 이야기로서는 부족한 부분이 있었기에 웹소설에서는 각자가 가진 생각과 선택이 부딪히면서 이야기가 흘러가는 방향으로 바뀌었습니다.", "이번 류오가 편에서 가장 즐거웠던 작업은 은호의 서사였습니다. 여우신령이라는 존재는 보통 주인공을 도와주거나, 조언자 역할에 머무는 경우가 많지만, 은호는 쿠로를 위해 고민하고 직접 뛰어듭니다. 어쩌면 자신의 신력, 즉 존재의의 자체가 흔들릴 수도 있는 선택이라 \"이래도 되나!?\" 싶을 정도로 짜릿했고, 익숙한 클리셰를 깨고 새로운 방향으로 풀어가는 과정이 무척 즐거웠습니다.", "다만 이번 편을 통해 은호의 서사는 완전히 마무리되었습니다. 한 캐릭터의 서사를 완전히 끝내고 떠나보내는(?) 경험은 처음이라, 아쉬움도 남지만 은호는 이제 슬슬 자기 자리로 돌아갈 때가 된 것 같습니다. (은호야 수고했다..)", "반대로 헤르바켄은 또 다른 서사로 진입한 캐릭터입니다.", "헤르바켄과 시로는 이번 류오가 편에서는 과감하게 조연으로 만들었습니다. 하지만 그 짧은 등장에서도 3부로 이어지는 중요한 진입로 역할을 해주었고 특히 마지막화의 \"신노카기\"가 무엇인지 다가선 그 연출이 제가 가장 좋아하는 장면입니다. (1부도 2부도 제 명장면에는 항상 헤르바켄이..)", "2부는 1부보다 훨씬 무거운 사건과 감정을 다루는 만큼 감정선 중심의 전개와 많은 대사, 심리 묘사를 다루는 비중도 커졌습니다. 그 침체될 법한 전개 속에서도 액션과 긴장감을 적절히 조절하며 이야기를 풀어가는 과정은 이번 작업에서 가장 즐거웠던 도전이었습니다.", "그리고 이러한 톤의 변화는 쿠로가 주인공으로 성장하는 과정에서 꼭 필요한 변화였는데요. 세상의 어둠과 자신의 어둠을 마주하며 성장하는 만큼, 순수하고 귀여운 쿠로를 조금씩 떠나보내야 해서 개인적으로 마음이 아팠습니다..ㅠㅠ (여러분들.. 지금의 쿠로는 2부가 마지막입니다… 3부의 쿠로는 새로운 쿠로가 될 예정입니다..)", "하지만 그 과정 덕분에 저 역시 쿠로와 라크니스가 어떤 캐릭터인지 더욱 선명하게 이해할 수 있었습니다. 독자분들도 함께 느껴주셨으면 좋겠습니다.", "작업하면서 중심을 잡기 위해 가장 많이 참고한 작품은 《충사》, 《지옥소녀》, 《쓰르라미 울 적에》였습니다. 저에게 일본풍이란 2000년대 중반 특유의 조용하고 씁쓸한 분위기입니다. 이번 2부에는 그 시절의 정서를 제 방식대로 담아보고 싶었습니다.", "TMI를 하나 덧붙이자면, 중간중간 설명이 과한 부분이 있습니다. (ㅎㅎ) 해석의 여지가 남을 수 있는 부분만큼은 오해 없이 전달하고 싶어 과감히 썼습니다.", "마지막으로,", "돌이켜 보면 1부는 제가 잘하는 것을 보여준 작품이었습니다. 반면 2부는 부족한 부분과 계속 부딪히며 만들어간 작품이었습니다. 힘든 과정이었지만 그만큼 가장 많이 배우고 성장할 수 있었습니다. 그래서 저에게 2부는 가장 큰 도전이자 오래 기억에 남을 작품입니다.", "3부부터는 새로운 인외 주연들이 등장하고, '전설'이라는 키워드를 중심으로 이야기의 규모도 더욱 커질 예정입니다. 언제 찾아뵙게 될지는 아직 말씀드리기 어렵지만, 죽지 않는 이상(ㅋㅋ) 끝까지 완주할 생각입니다.", "『블러드하이스쿨』은 유행을 타지 않는 작품인 만큼 급할 일도 없습니다. 앞으로도 제 속도에 맞춰 꾸준히 이어가겠습니다.", "감사합니다.", "2026.07.29"],
-     zh:["龙王家篇，也就是《血色高校》第2部，终于完结了。", "第2部是我从条漫时期起烦恼得最久、花费时间最多的部分，所以能够完成这件事本身，对我来说就是巨大的成功。", "条漫时期的第2部，是阴沉的「地雷系」反派（笑）葵绑架了莲的女儿美子、逼迫她继承莲的意志，再由库洛一行救出美子的、典型的少年漫画（？）结构。但作为库洛成长的故事还有不足之处，所以在网络小说里，改成了各人的想法与选择相互碰撞、推动故事前行的方向。", "这次龙王家篇里最让我乐在其中的，是银浩的故事线。狐神这样的存在，通常多半是帮助主角，或者停留在建言者的位置，但银浩会为库洛苦恼，并亲自投身其中。这或许是会动摇他自身神力、也就是存在意义本身的选择，所以刺激到让我觉得「这样真的可以吗！？」，打破熟悉的套路、朝新的方向去写的过程非常开心。", "不过，通过这一篇，银浩的故事线已经彻底完结了。把一个角色的故事完全写完并送别（？）还是第一次，虽然有些不舍，但银浩也差不多该回到自己的位置上了。（银浩，辛苦了……）", "相反，赫尔巴肯则是踏入了另一段故事的角色。", "赫尔巴肯和希洛在这次的龙王家篇里，被我果断地安排成了配角。但即便是短暂的登场，他们也担起了通往第3部的重要入口，尤其是最终话里逼近「眞ノ鍵」究竟为何物的那段演出，是我最喜欢的场面。（不管第1部还是第2部，我的名场面里总有赫尔巴肯……）", "第2部处理的事件与情感比第1部沉重得多，因此以情感线为中心的展开、大量的台词与心理描写所占的比重也变大了。在这种容易沉闷的展开中，一边适度调节动作戏与紧张感一边推进故事，是这次创作中最让我享受的挑战。", "而这种基调的变化，是库洛成长为主角的过程中必不可少的变化。正因为他要直面世界的黑暗与自己的黑暗而成长，就不得不一点点送别那个纯真可爱的库洛，我个人很心痛……QAQ（各位……现在的库洛到第2部就是最后了……第3部的库洛将会是全新的库洛……）", "但也多亏了这个过程，我自己也更清晰地理解了库洛和拉克尼斯是怎样的角色。希望读者们也能一同感受到。", "创作时为了把握重心，我参考最多的作品是《虫师》、《地狱少女》、《寒蝉鸣泣之时》。对我来说，所谓和风，就是2000年代中期特有的那种安静而苦涩的氛围。这次的第2部，我想用自己的方式装进那个年代的情绪。", "再补充一条TMI：中间有些地方解释得有点过头。（笑）唯独那些可能留下解读余地的部分，我想不留误会地传达出来，所以果断地写了。", "最后，", "回头来看，第1部是展示了我所擅长之处的作品。而第2部，则是不断与自己的不足碰撞着完成的作品。过程很辛苦，但也正因如此，我学到的最多、成长得最多。所以对我来说，第2部是最大的挑战，也是会长久留在记忆里的作品。", "从第3部开始，新的人外主角们将登场，故事的规模也会以「传说」这个关键词为中心进一步扩大。什么时候能与大家再见还不好说，但只要我没死（笑），就打算跑完全程。", "《血色高校》是一部不追逐流行的作品，所以也没什么可着急的。今后我也会按自己的节奏，持续写下去。", "谢谢大家。", "2026.07.29"]
+     zh:["龙王家篇，也就是《血色高校》第2部，终于完结了。", "第2部是我从条漫时期起烦恼得最久、花费时间最多的部分，所以能够完成这件事本身，对我来说就是巨大的成功。", "条漫时期的第2部，是阴沉的「地雷系」反派（笑）葵绑架了莲的女儿美子、逼迫她继承莲的意志，再由库洛一行救出美子的、典型的少年漫画（？）结构。但作为库洛成长的故事还有不足之处，所以在网络小说里，改成了各人的想法与选择相互碰撞、推动故事前行的方向。", "这次龙王家篇里最让我乐在其中的，是银浩的故事线。狐神这样的存在，通常多半是帮助主角，或者停留在建言者的位置，但银浩会为库洛苦恼，并亲自投身其中。这或许是会动摇他自身神力、也就是存在意义本身的选择，所以刺激到让我觉得「这样真的可以吗！？」，打破熟悉的套路、朝新的方向去写的过程非常开心。", "不过，通过这一篇，银浩的故事线已经彻底完结了。把一个角色的故事完全写完并送别（？）还是第一次，虽然有些不舍，但银浩也差不多该回到自己的位置上了。（银浩，辛苦了……）", "相反，赫尔巴肯则是踏入了另一段故事的角色。", "赫尔巴肯和希洛在这次的龙王家篇里，被我果断地安排成了配角。但即便是短暂的登场，他们也担起了通往第3部的重要入口，尤其是最终话里逼近「眞ノ鍵」究竟为何物的那段演出，是我最喜欢的场面。（不管第1部还是第2部，我的名场面里总有赫尔巴肯……）", "第2部处理的事件与情感比第1部沉重得多，因此以情感线为中心的展开、大量的台词与心理描写所占的比重也变大了。在这种容易沉闷的展开中，一边适度调节动作戏与紧张感一边推进故事，是这次创作中最让我享受的挑战。", "而这种基调的变化，是库洛成长为主角的过程中必不可少的变化。正因为他要直面世界的黑暗与自己的黑暗而成长，就不得不一点点送别那个纯真可爱的库洛，我个人很心痛……QAQ（各位……现在的库洛到第2部就是最后了……第3部的库洛将会是全新的库洛……）", "但也多亏了这个过程，我自己也更清晰地理解了库洛和拉克尼斯是怎样的角色。希望读者们也能一同感受到。", "创作时为了把握重心，我参考最多的作品是《虫师》、《地狱少女》、《寒蝉鸣泣之时》。对我来说，所谓和风，就是2000年代中期特有的那种安静而苦涩的氛围。这次的第2部，我想用自己的方式装进那个年代的情绪。", "再补充一条TMI：中间有些地方解释得有点过头。（笑）唯独那些可能留下解读余地的部分，我想不留误会地传达出来，所以果断地写了。", "最后，", "回头来看，第1部是展示了我所擅长之处的作品。而第2部，则是不断与自己的不足碰撞着完成的作品。过程很辛苦，但也正因如此，我学到的最多、成长得最多。所以对我来说，第2部是最大的挑战，也是会长久留在记忆里的作品。", "从第3部开始，新的人外主角们将登场，故事的规模也会以「传说」这个关键词为中心进一步扩大。什么时候能与大家再见还不好说，但只要我没死（笑），就打算跑完全程。", "《血色高校》是一部不追逐流行的作品，所以也没什么可着急的。今后我也会按自己的节奏，持续写下去。", "谢谢大家。", "2026.07.29"],
+     zht:["龍王家篇，也就是《血色高校》第2部，終於完結了。", "第2部是我從條漫時期起煩惱得最久、花費時間最多的部分，所以能夠完成這件事本身，對我來說就是巨大的成功。", "條漫時期的第2部，是陰沉的「地雷系」反派（笑）葵綁架了蓮的女兒美子、逼迫她繼承蓮的意志，再由庫洛一行救出美子的、典型的少年漫畫（？）結構。但作為庫洛成長的故事還有不足之處，所以在網路小說裡，改成了各人的想法與選擇相互碰撞、推動故事前行的方向。", "這次龍王家篇裡最讓我樂在其中的，是銀浩的故事線。狐神這樣的存在，通常多半是幫助主角，或者停留在建言者的位置，但銀浩會為庫洛苦惱，並親自投身其中。這或許是會動搖他自身神力、也就是存在意義本身的選擇，所以刺激到讓我覺得「這樣真的可以嗎！？」，打破熟悉的套路、朝新的方向去寫的過程非常開心。", "不過，透過這一篇，銀浩的故事線已經徹底完結了。把一個角色的故事完全寫完並送別（？）還是第一次，雖然有些不捨，但銀浩也差不多該回到自己的位置上了。（銀浩，辛苦了……）", "相反，赫爾巴肯則是踏入了另一段故事的角色。", "赫爾巴肯和希洛在這次的龍王家篇裡，被我果斷地安排成了配角。但即便是短暫的登場，他們也擔起了通往第3部的重要入口，尤其是最終話裡逼近「眞ノ鍵」究竟為何物的那段演出，是我最喜歡的場面。（不管第1部還是第2部，我的名場面裡總有赫爾巴肯……）", "第2部處理的事件與情感比第1部沉重得多，因此以情感線為中心的展開、大量的台詞與心理描寫所佔的比重也變大了。在這種容易沉悶的展開中，一邊適度調節動作戲與緊張感一邊推進故事，是這次創作中最讓我享受的挑戰。", "而這種基調的變化，是庫洛成長為主角的過程中必不可少的變化。正因為他要直面世界的黑暗與自己的黑暗而成長，就不得不一點點送別那個純真可愛的庫洛，我個人很心痛……QAQ（各位……現在的庫洛到第2部就是最後了……第3部的庫洛將會是全新的庫洛……）", "但也多虧了這個過程，我自己也更清晰地理解了庫洛和拉克尼斯是怎樣的角色。希望讀者們也能一同感受到。", "創作時為了把握重心，我參考最多的作品是《蟲師》、《地獄少女》、《寒蟬鳴泣之時》。對我來說，所謂和風，就是2000年代中期特有的那種安靜而苦澀的氛圍。這次的第2部，我想用自己的方式裝進那個年代的情緒。", "再補充一條TMI：中間有些地方解釋得有點過頭。（笑）唯獨那些可能留下解讀餘地的部分，我想不留誤會地傳達出來，所以果斷地寫了。", "最後，", "回頭來看，第1部是展示了我所擅長之處的作品。而第2部，則是不斷與自己的不足碰撞著完成的作品。過程很辛苦，但也正因如此，我學到的最多、成長得最多。所以對我來說，第2部是最大的挑戰，也是會長久留在記憶裡的作品。", "從第3部開始，新的人外主角們將登場，故事的規模也會以「傳說」這個關鍵字為中心進一步擴大。什麼時候能與大家再見還不好說，但只要我沒死（笑），就打算跑完全程。", "《血色高校》是一部不追逐流行的作品，所以也沒什麼可著急的。今後我也會按自己的節奏，持續寫下去。", "謝謝大家。", "2026.07.29"]
    },
    cover:'Blood_High_School/bhs_novel_prat2_cover.png',
-   synopsis:{"en": "Kuro has become head of the Ryuo family. As he faces the sins his family has kept hidden, the despair Lackness knew a thousand years ago threatens to repeat itself. At the end of a long chain of karma, Kuro accepts the King of Ruin and opens his eyes to protect what matters to him.", "ja": "竜王家の当主となったクロ。家が隠してきた罪と向き合う中、千年前のラクニスの絶望が繰り返されようとしている。業の果てで、クロは破壊の王を受け入れ、大切なものを守るために目を開く。", "ko": "류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.", "zh": "成为龙王家家主的库洛。直面家族隐藏的罪孽，千年前拉克尼斯的绝望即将重演。在业障的尽头，库洛接纳了灭亡之王，为守护珍视之物而睁开双眼。"},
+   synopsis:{"en": "Kuro has become head of the Ryuo family. As he faces the sins his family has kept hidden, the despair Lackness knew a thousand years ago threatens to repeat itself. At the end of a long chain of karma, Kuro accepts the King of Ruin and opens his eyes to protect what matters to him.", "ja": "竜王家の当主となったクロ。家が隠してきた罪と向き合う中、千年前のラクニスの絶望が繰り返されようとしている。業の果てで、クロは破壊の王を受け入れ、大切なものを守るために目を開く。", "ko": "류오가의 당주가 된 쿠로. 가문이 감춰온 죄와 마주하고 천 년 전 라크니스의 절망이 되풀이되려 한다. 업보의 끝에서 쿠로는 멸망의 왕을 받아들이고 소중한 것을 지키기 위해 눈을 뜬다.", "zh": "成为龙王家家主的库洛。直面家族隐藏的罪孽，千年前拉克尼斯的绝望即将重演。在业障的尽头，库洛接纳了灭亡之王，为守护珍视之物而睁开双眼。", "zht": "成為龍王家家主的庫洛。直面家族隱藏的罪孽，千年前拉克尼斯的絕望即將重演。在業障的盡頭，庫洛接納了滅亡之王，為守護珍視之物而睜開雙眼。"},
    episodes:[
-     {id:1,  title:{"en": "The Ryuo Clan Arc, Ep. 1", "ja": "竜王家編 第1話", "ko": "류오가편 1화", "zh": "龙王家篇 第1话"},  date:null, status:'plan'},
-     {id:2,  title:{"en": "The Ryuo Clan Arc, Ep. 2", "ja": "竜王家編 第2話", "ko": "류오가편 2화", "zh": "龙王家篇 第2话"},  date:null, status:'plan'},
-     {id:3,  title:{"en": "The Ryuo Clan Arc, Ep. 3", "ja": "竜王家編 第3話", "ko": "류오가편 3화", "zh": "龙王家篇 第3话"},  date:null, status:'plan'},
-     {id:4,  title:{"en": "The Ryuo Clan Arc, Ep. 4", "ja": "竜王家編 第4話", "ko": "류오가편 4화", "zh": "龙王家篇 第4话"},  date:null, status:'plan'},
-     {id:5,  title:{"en": "The Ryuo Clan Arc, Ep. 5", "ja": "竜王家編 第5話", "ko": "류오가편 5화", "zh": "龙王家篇 第5话"},  date:null, status:'plan'},
-     {id:6,  title:{"en": "The Ryuo Clan Arc, Ep. 6", "ja": "竜王家編 第6話", "ko": "류오가편 6화", "zh": "龙王家篇 第6话"},  date:null, status:'plan'},
-     {id:7,  title:{"en": "The Ryuo Clan Arc, Ep. 7", "ja": "竜王家編 第7話", "ko": "류오가편 7화", "zh": "龙王家篇 第7话"},  date:null, status:'plan'},
-     {id:8,  title:{"en": "The Ryuo Clan Arc, Ep. 8", "ja": "竜王家編 第8話", "ko": "류오가편 8화", "zh": "龙王家篇 第8话"},  date:null, status:'plan'},
-     {id:9,  title:{"en": "The Ryuo Clan Arc, Ep. 9", "ja": "竜王家編 第9話", "ko": "류오가편 9화", "zh": "龙王家篇 第9话"},  date:null, status:'plan'},
-     {id:10, title:{"en": "The Ryuo Clan Arc, Ep. 10", "ja": "竜王家編 第10話", "ko": "류오가편 10화", "zh": "龙王家篇 第10话"}, date:null, status:'plan'},
-     {id:11, title:{"en": "The Ryuo Clan Arc, Ep. 11", "ja": "竜王家編 第11話", "ko": "류오가편 11화", "zh": "龙王家篇 第11话"}, date:null, status:'plan'},
-     {id:12, title:{"en": "The Ryuo Clan Arc, Ep. 12", "ja": "竜王家編 第12話", "ko": "류오가편 12화", "zh": "龙王家篇 第12话"}, date:null, status:'plan'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话"}, date:null, status:'plan'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话"}, date:null, status:'plan'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话"}, date:null, status:'plan'}
+     {id:1,  title:{"en": "The Ryuo Clan Arc, Ep. 1", "ja": "竜王家編 第1話", "ko": "류오가편 1화", "zh": "龙王家篇 第1话", "zht": "龍王家篇 第1話"},  date:null, status:'plan'},
+     {id:2,  title:{"en": "The Ryuo Clan Arc, Ep. 2", "ja": "竜王家編 第2話", "ko": "류오가편 2화", "zh": "龙王家篇 第2话", "zht": "龍王家篇 第2話"},  date:null, status:'plan'},
+     {id:3,  title:{"en": "The Ryuo Clan Arc, Ep. 3", "ja": "竜王家編 第3話", "ko": "류오가편 3화", "zh": "龙王家篇 第3话", "zht": "龍王家篇 第3話"},  date:null, status:'plan'},
+     {id:4,  title:{"en": "The Ryuo Clan Arc, Ep. 4", "ja": "竜王家編 第4話", "ko": "류오가편 4화", "zh": "龙王家篇 第4话", "zht": "龍王家篇 第4話"},  date:null, status:'plan'},
+     {id:5,  title:{"en": "The Ryuo Clan Arc, Ep. 5", "ja": "竜王家編 第5話", "ko": "류오가편 5화", "zh": "龙王家篇 第5话", "zht": "龍王家篇 第5話"},  date:null, status:'plan'},
+     {id:6,  title:{"en": "The Ryuo Clan Arc, Ep. 6", "ja": "竜王家編 第6話", "ko": "류오가편 6화", "zh": "龙王家篇 第6话", "zht": "龍王家篇 第6話"},  date:null, status:'plan'},
+     {id:7,  title:{"en": "The Ryuo Clan Arc, Ep. 7", "ja": "竜王家編 第7話", "ko": "류오가편 7화", "zh": "龙王家篇 第7话", "zht": "龍王家篇 第7話"},  date:null, status:'plan'},
+     {id:8,  title:{"en": "The Ryuo Clan Arc, Ep. 8", "ja": "竜王家編 第8話", "ko": "류오가편 8화", "zh": "龙王家篇 第8话", "zht": "龍王家篇 第8話"},  date:null, status:'plan'},
+     {id:9,  title:{"en": "The Ryuo Clan Arc, Ep. 9", "ja": "竜王家編 第9話", "ko": "류오가편 9화", "zh": "龙王家篇 第9话", "zht": "龍王家篇 第9話"},  date:null, status:'plan'},
+     {id:10, title:{"en": "The Ryuo Clan Arc, Ep. 10", "ja": "竜王家編 第10話", "ko": "류오가편 10화", "zh": "龙王家篇 第10话", "zht": "龍王家篇 第10話"}, date:null, status:'plan'},
+     {id:11, title:{"en": "The Ryuo Clan Arc, Ep. 11", "ja": "竜王家編 第11話", "ko": "류오가편 11화", "zh": "龙王家篇 第11话", "zht": "龍王家篇 第11話"}, date:null, status:'plan'},
+     {id:12, title:{"en": "The Ryuo Clan Arc, Ep. 12", "ja": "竜王家編 第12話", "ko": "류오가편 12화", "zh": "龙王家篇 第12话", "zht": "龍王家篇 第12話"}, date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话", "zht": "番外 第1話"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话", "zht": "番外 第2話"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话", "zht": "番外 第3話"}, date:null, status:'plan'}
    ]},
-  {id:'novel-3', grad:'150deg,#1a0000,#700000,#aa2020', num:3, part:'PART 03', sub:{"en": "Part 3", "ja": "第3部", "ko": "3부", "zh": "第3部"},
-   label:{"en": "Blood High School Part 3", "ja": "ブラッドハイスクール 第3部", "ko": "블러드하이스쿨 3부", "zh": "血色高校 第3部"}, type:'novel',
-   available:false, tags:[{"en": "#NewRace", "ja": "#新種族", "ko": "#신종족", "zh": "#新种族"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정", "zh": "#即将公开"}],
+  {id:'novel-3', grad:'150deg,#1a0000,#700000,#aa2020', num:3, part:'PART 03', sub:{"en": "Part 3", "ja": "第3部", "ko": "3부", "zh": "第3部", "zht": "第3部"},
+   label:{"en": "Blood High School Part 3", "ja": "ブラッドハイスクール 第3部", "ko": "블러드하이스쿨 3부", "zh": "血色高校 第3部", "zht": "血色高校 第3部"}, type:'novel',
+   available:false, tags:[{"en": "#NewRace", "ja": "#新種族", "ko": "#신종족", "zh": "#新种族", "zht": "#新種族"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정", "zh": "#即将公开", "zht": "#即將公開"}],
    links:{ chars:'', lookbook:'', notes:'' },
    cast:'',
    lookbook:{ count:0, meta:'', thumbs:[] },
@@ -2184,30 +2294,31 @@ var BHS_VOLUMES = [
      en:["A third force enters a world that has run on dragons and humans alone. The goal is to shake up the existing balance of power, so their place in society was decided before their abilities.", "Still in the planning stage. Details will be filled in closer to release."],
      ja:["龍族と人間だけで回ってきた世界に、第三の軸を持ち込む。既存の勢力図を揺さぶるのが目的なので、能力設計よりも先に社会的な立ち位置を決めた。", "まだ構成段階。詳細は公開時期に合わせて埋める予定。"],
      ko:["용족과 인간만으로 굴러가던 세계에 제3의 축을 들인다. 기존 세력 구도를 흔드는 것이 목적이라, 능력 설계보다 사회적 위치를 먼저 정하고 들어갔다.", "아직 구성 단계다. 세부 내용은 공개 시점에 맞춰 채울 예정."],
-     zh:["在只靠龙族与人类运转的世界里，引入第三根轴。目的是动摇既有的势力格局，所以比起能力设计，先定下了他们的社会位置。", "还在构成阶段。细节预计会配合公开时间再填充。"]
+     zh:["在只靠龙族与人类运转的世界里，引入第三根轴。目的是动摇既有的势力格局，所以比起能力设计，先定下了他们的社会位置。", "还在构成阶段。细节预计会配合公开时间再填充。"],
+     zht:["在只靠龍族與人類運轉的世界裡，引入第三根軸。目的是動搖既有的勢力格局，所以比起能力設計，先定下了他們的社會位置。", "還在構成階段。細節預計會配合公開時間再填充。"]
    },
    cover:'Blood_High_School/bhs_novel_prat3_cover.png',
-   synopsis:{"en": "A new race appears.", "ja": "新たな種族が現れる。", "ko": "새로운 종족이 나타난다.", "zh": "新的种族登场。"},
+   synopsis:{"en": "A new race appears.", "ja": "新たな種族が現れる。", "ko": "새로운 종족이 나타난다.", "zh": "新的种族登场。", "zht": "新的種族登場。"},
    episodes:[
-     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화", "zh": "第1话"},  date:null, status:'plan'},
-     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화", "zh": "第2话"},  date:null, status:'plan'},
-     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화", "zh": "第3话"},  date:null, status:'plan'},
-     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화", "zh": "第4话"},  date:null, status:'plan'},
-     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화", "zh": "第5话"},  date:null, status:'plan'},
-     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화", "zh": "第6话"},  date:null, status:'plan'},
-     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화", "zh": "第7话"},  date:null, status:'plan'},
-     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화", "zh": "第8话"},  date:null, status:'plan'},
-     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화", "zh": "第9话"},  date:null, status:'plan'},
-     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화", "zh": "第10话"}, date:null, status:'plan'},
-     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화", "zh": "第11话"}, date:null, status:'plan'},
-     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화", "zh": "第12话"}, date:null, status:'plan'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话"}, date:null, status:'plan'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话"}, date:null, status:'plan'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话"}, date:null, status:'plan'}
+     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화", "zh": "第1话", "zht": "第1話"},  date:null, status:'plan'},
+     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화", "zh": "第2话", "zht": "第2話"},  date:null, status:'plan'},
+     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화", "zh": "第3话", "zht": "第3話"},  date:null, status:'plan'},
+     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화", "zh": "第4话", "zht": "第4話"},  date:null, status:'plan'},
+     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화", "zh": "第5话", "zht": "第5話"},  date:null, status:'plan'},
+     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화", "zh": "第6话", "zht": "第6話"},  date:null, status:'plan'},
+     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화", "zh": "第7话", "zht": "第7話"},  date:null, status:'plan'},
+     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화", "zh": "第8话", "zht": "第8話"},  date:null, status:'plan'},
+     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화", "zh": "第9话", "zht": "第9話"},  date:null, status:'plan'},
+     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화", "zh": "第10话", "zht": "第10話"}, date:null, status:'plan'},
+     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화", "zh": "第11话", "zht": "第11話"}, date:null, status:'plan'},
+     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화", "zh": "第12话", "zht": "第12話"}, date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话", "zht": "番外 第1話"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话", "zht": "番外 第2話"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话", "zht": "番外 第3話"}, date:null, status:'plan'}
    ]},
-  {id:'novel-4', grad:'150deg,#0d0018,#3a1060,#7040b0', num:4, part:'PART 04', sub:{"en": "Part 4", "ja": "第4部", "ko": "4부", "zh": "第4部"},
-   label:{"en": "Blood High School Part 4", "ja": "ブラッドハイスクール 第4部", "ko": "블러드하이스쿨 4부", "zh": "血色高校 第4部"}, type:'novel',
-   available:false, tags:[{"en": "#HighFantasy", "ja": "#本格ファンタジー", "ko": "#본격판타지", "zh": "#正统奇幻"}, {"en": "#PayoffArc", "ja": "#伏線回収", "ko": "#떡밥회수", "zh": "#伏笔回收"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정", "zh": "#即将公开"}],
+  {id:'novel-4', grad:'150deg,#0d0018,#3a1060,#7040b0', num:4, part:'PART 04', sub:{"en": "Part 4", "ja": "第4部", "ko": "4부", "zh": "第4部", "zht": "第4部"},
+   label:{"en": "Blood High School Part 4", "ja": "ブラッドハイスクール 第4部", "ko": "블러드하이스쿨 4부", "zh": "血色高校 第4部", "zht": "血色高校 第4部"}, type:'novel',
+   available:false, tags:[{"en": "#HighFantasy", "ja": "#本格ファンタジー", "ko": "#본격판타지", "zh": "#正统奇幻", "zht": "#正統奇幻"}, {"en": "#PayoffArc", "ja": "#伏線回収", "ko": "#떡밥회수", "zh": "#伏笔回收", "zht": "#伏筆回收"}, {"en": "#ComingSoon", "ja": "#公開予定", "ko": "#공개예정", "zh": "#即将公开", "zht": "#即將公開"}],
    links:{ chars:'', lookbook:'', notes:'' },
    cast:'',
    lookbook:{ count:0, meta:'', thumbs:[] },
@@ -2215,26 +2326,27 @@ var BHS_VOLUMES = [
      en:["The school-story frame comes off and the story moves into full fantasy. Lore that has stayed in the background since Part 1 steps to the front.", "This is where the true cause of the dragon clan's fall a thousand years ago is revealed. Clues scattered across the first three parts all come together here, so the order of payoffs is tracked in a separate chart.", "Still in the planning stage. Details will be filled in closer to release."],
      ja:["学園ものの枠を取り払い、本格ファンタジーへ移る。第1部から背景にとどまっていた設定が前面に出てくる。", "千年前の龍族滅亡の本当の原因をここで明かす。前の三部で撒いておいた手がかりが一気に整理される区間なので、回収の順番は別に表で管理している。", "まだ構成段階。詳細は公開時期に合わせて埋める予定。"],
      ko:["학원물의 틀을 걷어내고 본격 판타지로 이동한다. 1부부터 배경에만 머물러 있던 설정들이 전면으로 나온다.", "천 년 전 용족 멸망의 진짜 원인을 여기서 연다. 앞선 세 부에서 흘려 둔 단서들이 한꺼번에 정리되는 구간이라, 회수 순서를 따로 표로 관리하고 있다.", "아직 구성 단계다. 세부 내용은 공개 시점에 맞춰 채울 예정."],
-     zh:["摘掉校园故事的框架，转向正统奇幻。从第1部起一直停留在背景里的设定将走到台前。", "千年前龙族灭亡的真正原因将在这里揭开。前三部里埋下的线索会在这一段一并收拢，所以回收的顺序另外用表格管理着。", "还在构成阶段。细节预计会配合公开时间再填充。"]
+     zh:["摘掉校园故事的框架，转向正统奇幻。从第1部起一直停留在背景里的设定将走到台前。", "千年前龙族灭亡的真正原因将在这里揭开。前三部里埋下的线索会在这一段一并收拢，所以回收的顺序另外用表格管理着。", "还在构成阶段。细节预计会配合公开时间再填充。"],
+     zht:["摘掉校園故事的框架，轉向正統奇幻。從第1部起一直停留在背景裡的設定將走到台前。", "千年前龍族滅亡的真正原因將在這裡揭開。前三部裡埋下的線索會在這一段一併收攏，所以回收的順序另外用表格管理著。", "還在構成階段。細節預計會配合公開時間再填充。"]
    },
    cover:'Blood_High_School/bhs_novel_prat4_cover.png',
-   synopsis:{"en": "Shedding its school-story skin for full-blown fantasy. The true cause of the dragon clan's fall a thousand years ago, and every piece of legendary foreshadowing, pays off at once.", "ja": "学園ものの殻を脱ぎ、本格ファンタジーへ。千年前の龍族滅亡の本当の原因と、積み重なった伝説の伏線が一気に回収される。", "ko": "학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다.", "zh": "褪去校园故事的外壳，走向正统奇幻。千年前龙族灭亡的真正原因，与层层累积的传说伏笔，将一并揭晓。"},
+   synopsis:{"en": "Shedding its school-story skin for full-blown fantasy. The true cause of the dragon clan's fall a thousand years ago, and every piece of legendary foreshadowing, pays off at once.", "ja": "学園ものの殻を脱ぎ、本格ファンタジーへ。千年前の龍族滅亡の本当の原因と、積み重なった伝説の伏線が一気に回収される。", "ko": "학원물의 외피를 벗고 본격 판타지로. 천 년 전 용족 멸망의 진짜 원인과 누적된 전설의 떡밥이 한꺼번에 회수된다.", "zh": "褪去校园故事的外壳，走向正统奇幻。千年前龙族灭亡的真正原因，与层层累积的传说伏笔，将一并揭晓。", "zht": "褪去校園故事的外殼，走向正統奇幻。千年前龍族滅亡的真正原因，與層層累積的傳說伏筆，將一併揭曉。"},
    episodes:[
-     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화", "zh": "第1话"},  date:null, status:'plan'},
-     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화", "zh": "第2话"},  date:null, status:'plan'},
-     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화", "zh": "第3话"},  date:null, status:'plan'},
-     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화", "zh": "第4话"},  date:null, status:'plan'},
-     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화", "zh": "第5话"},  date:null, status:'plan'},
-     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화", "zh": "第6话"},  date:null, status:'plan'},
-     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화", "zh": "第7话"},  date:null, status:'plan'},
-     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화", "zh": "第8话"},  date:null, status:'plan'},
-     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화", "zh": "第9话"},  date:null, status:'plan'},
-     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화", "zh": "第10话"}, date:null, status:'plan'},
-     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화", "zh": "第11话"}, date:null, status:'plan'},
-     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화", "zh": "第12话"}, date:null, status:'plan'},
-     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话"}, date:null, status:'plan'},
-     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话"}, date:null, status:'plan'},
-     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话"}, date:null, status:'plan'}
+     {id:1,  title:{"en": "Ep. 1", "ja": "第1話", "ko": "1화", "zh": "第1话", "zht": "第1話"},  date:null, status:'plan'},
+     {id:2,  title:{"en": "Ep. 2", "ja": "第2話", "ko": "2화", "zh": "第2话", "zht": "第2話"},  date:null, status:'plan'},
+     {id:3,  title:{"en": "Ep. 3", "ja": "第3話", "ko": "3화", "zh": "第3话", "zht": "第3話"},  date:null, status:'plan'},
+     {id:4,  title:{"en": "Ep. 4", "ja": "第4話", "ko": "4화", "zh": "第4话", "zht": "第4話"},  date:null, status:'plan'},
+     {id:5,  title:{"en": "Ep. 5", "ja": "第5話", "ko": "5화", "zh": "第5话", "zht": "第5話"},  date:null, status:'plan'},
+     {id:6,  title:{"en": "Ep. 6", "ja": "第6話", "ko": "6화", "zh": "第6话", "zht": "第6話"},  date:null, status:'plan'},
+     {id:7,  title:{"en": "Ep. 7", "ja": "第7話", "ko": "7화", "zh": "第7话", "zht": "第7話"},  date:null, status:'plan'},
+     {id:8,  title:{"en": "Ep. 8", "ja": "第8話", "ko": "8화", "zh": "第8话", "zht": "第8話"},  date:null, status:'plan'},
+     {id:9,  title:{"en": "Ep. 9", "ja": "第9話", "ko": "9화", "zh": "第9话", "zht": "第9話"},  date:null, status:'plan'},
+     {id:10, title:{"en": "Ep. 10", "ja": "第10話", "ko": "10화", "zh": "第10话", "zht": "第10話"}, date:null, status:'plan'},
+     {id:11, title:{"en": "Ep. 11", "ja": "第11話", "ko": "11화", "zh": "第11话", "zht": "第11話"}, date:null, status:'plan'},
+     {id:12, title:{"en": "Ep. 12", "ja": "第12話", "ko": "12화", "zh": "第12话", "zht": "第12話"}, date:null, status:'plan'},
+     {id:13, title:{"en": "Extra Ep. 1", "ja": "番外編 第1話", "ko": "번외 1화", "zh": "番外 第1话", "zht": "番外 第1話"}, date:null, status:'plan'},
+     {id:14, title:{"en": "Extra Ep. 2", "ja": "番外編 第2話", "ko": "번외 2화", "zh": "番外 第2话", "zht": "番外 第2話"}, date:null, status:'plan'},
+     {id:15, title:{"en": "Extra Ep. 3", "ja": "番外編 第3話", "ko": "번외 3화", "zh": "番外 第3话", "zht": "番外 第3話"}, date:null, status:'plan'}
    ]}
 ];
 
@@ -2252,36 +2364,36 @@ var BHS_VOLUMES = [
 var BHS_HISTORY = {
   eyebrow : 'LOG',
 /*  title   : 'LOG', */
-  lead    : {"en": "A record of this work, from its very first beginning to its end.", "ja": "作品の始まりと終わりを記録したページ。", "ko": "작품의 첫 시작과 끝을 기록해놓은 페이지.", "zh": "记录这部作品从最初的开始到结束的页面。"},
+  lead    : {"en": "A record of this work, from its very first beginning to its end.", "ja": "作品の始まりと終わりを記録したページ。", "ko": "작품의 첫 시작과 끝을 기록해놓은 페이지.", "zh": "记录这部作品从最初的开始到结束的页面。", "zht": "記錄這部作品從最初的開始到結束的頁面。"},
 
   items : [
     {
       year : '2017',
       date : '02. 28',
-      kind : {"en": "Clay Animation", "ja": "クレイアニメ", "ko": "클레이 애니메이션", "zh": "黏土动画"},
+      kind : {"en": "Clay Animation", "ja": "クレイアニメ", "ko": "클레이 애니메이션", "zh": "黏土动画", "zht": "黏土動畫"},
       icon : 'film',
-      name : {"en": "[Anime] Blood High School", "ja": "[アニメ] ブラッドハイスクール", "ko": "[애니] 블러드하이스쿨", "zh": "[动画] 血色高校"},
-      desc : {"en": "A clay animation uploaded to YouTube.\nAfter the crowdfunding failed, I made it on a shoestring all the way through Part 3 and the extras, but those are now private. (For personal reasons, I only want Part 1 to be public.)", "ja": "YouTubeに投稿したクレイアニメ。\nクラウドファンディング失敗後、低クオリティで第3部・番外編まで制作して公開しましたが、現在は非公開にしています。(個人的な理由で、第1部以外は公開を望んでいません。)", "ko": "유튜브에 올린 클레이애니메이션.\n펀딩 실패 이후 저퀄리티로 3부/번외편까지 제작해 공개 했으나 현재는 비공개 처리됨.(개인사유로 1부 이외에 공개를 원치않음.)", "zh": "上传到YouTube的黏土动画。\n众筹失败后，以低成本一直制作到第3部和番外篇并公开，但现在已设为不公开。（出于个人原因，不希望公开第1部以外的内容。）"},
+      name : {"en": "[Anime] Blood High School", "ja": "[アニメ] ブラッドハイスクール", "ko": "[애니] 블러드하이스쿨", "zh": "[动画] 血色高校", "zht": "[動畫] 血色高校"},
+      desc : {"en": "A clay animation uploaded to YouTube.\nAfter the crowdfunding failed, I made it on a shoestring all the way through Part 3 and the extras, but those are now private. (For personal reasons, I only want Part 1 to be public.)", "ja": "YouTubeに投稿したクレイアニメ。\nクラウドファンディング失敗後、低クオリティで第3部・番外編まで制作して公開しましたが、現在は非公開にしています。(個人的な理由で、第1部以外は公開を望んでいません。)", "ko": "유튜브에 올린 클레이애니메이션.\n펀딩 실패 이후 저퀄리티로 3부/번외편까지 제작해 공개 했으나 현재는 비공개 처리됨.(개인사유로 1부 이외에 공개를 원치않음.)", "zh": "上传到YouTube的黏土动画。\n众筹失败后，以低成本一直制作到第3部和番外篇并公开，但现在已设为不公开。（出于个人原因，不希望公开第1部以外的内容。）", "zht": "上傳到YouTube的黏土動畫。\n募資失敗後，以低成本一直製作到第3部和番外篇並公開，但現在已設為不公開。（出於個人原因，不希望公開第1部以外的內容。）"},
       url  : 'https://youtu.be/dv2ZYwO32z0',
       thumb: ''    /* 유튜브라 비워둬도 자동 */
     },
     {
       year : '2023',
       date : '11. 07',
-      kind : {"en": "Webtoon", "ja": "ウェブトゥーン", "ko": "웹툰", "zh": "条漫"},
+      kind : {"en": "Webtoon", "ja": "ウェブトゥーン", "ko": "웹툰", "zh": "条漫", "zht": "條漫"},
       icon : 'pen',
-      name : {"en": "[Webtoon] Blood High School", "ja": "[ウェブトゥーン] ブラッドハイスクール", "ko": "[웹툰] 블러드하이스쿨", "zh": "[条漫] 血色高校"},
-      desc : {"en": "The webtoon version, serialized four years later with an expanded story.\nStarted on pure momentum, got stuck in Part 2, and switched to a web novel.", "ja": "4年後にストーリーを広げて連載したウェブトゥーン版。\n勢いで始めたものの第2部で行き詰まり、Web小説へ転向。", "ko": "4년 뒤 스토리를 확장해 연재한 웹툰판.\n기세로 시작했다가 2부에서 막혀서 웹소설로 전환.", "zh": "4年后扩展故事连载的条漫版。\n凭一股劲头开始，却在第2部卡住，于是转为网络小说。"},
+      name : {"en": "[Webtoon] Blood High School", "ja": "[ウェブトゥーン] ブラッドハイスクール", "ko": "[웹툰] 블러드하이스쿨", "zh": "[条漫] 血色高校", "zht": "[條漫] 血色高校"},
+      desc : {"en": "The webtoon version, serialized four years later with an expanded story.\nStarted on pure momentum, got stuck in Part 2, and switched to a web novel.", "ja": "4年後にストーリーを広げて連載したウェブトゥーン版。\n勢いで始めたものの第2部で行き詰まり、Web小説へ転向。", "ko": "4년 뒤 스토리를 확장해 연재한 웹툰판.\n기세로 시작했다가 2부에서 막혀서 웹소설로 전환.", "zh": "4年后扩展故事连载的条漫版。\n凭一股劲头开始，却在第2部卡住，于是转为网络小说。", "zht": "4年後擴展故事連載的條漫版。\n憑一股衝勁開始，卻在第2部卡住，於是轉為網路小說。"},
       url  : 'https://www.postype.com/@rrkt2022/post/15619663',
       thumb: 'https://d3mcojo3jv0dbr.cloudfront.net/2023/11/07/17/08/8190fe32c61b6b36a927acd57aa45054.png?w=1000&h=500&q=65'
     },
     {
       year : '2026',
       date : '02. 14',
-      kind : {"en": "Web Novel", "ja": "Web小説", "ko": "웹소설", "zh": "网络小说"},
+      kind : {"en": "Web Novel", "ja": "Web小説", "ko": "웹소설", "zh": "网络小说", "zht": "網路小說"},
       icon : 'book',
-      name : {"en": "[Web Novel] Blood High School", "ja": "[Web小説] ブラッドハイスクール", "ko": "[웹소설] 블러드하이스쿨", "zh": "[网络小说] 血色高校"},
-      desc : {"en": "A year and a half later: its current form.\nTaking its time, with growing into a full IP as the goal.", "ja": "1年半後、現在の形。\nIP展開を目標に、時間をかけて進行中。", "ko": "1년 반 뒤, 지금의 형태.\nIP확장을 목표로 시간 들여 진행중.", "zh": "一年半之后，如今的形态。\n以IP拓展为目标，花时间慢慢推进中。"},
+      name : {"en": "[Web Novel] Blood High School", "ja": "[Web小説] ブラッドハイスクール", "ko": "[웹소설] 블러드하이스쿨", "zh": "[网络小说] 血色高校", "zht": "[網路小說] 血色高校"},
+      desc : {"en": "A year and a half later: its current form.\nTaking its time, with growing into a full IP as the goal.", "ja": "1年半後、現在の形。\nIP展開を目標に、時間をかけて進行中。", "ko": "1년 반 뒤, 지금의 형태.\nIP확장을 목표로 시간 들여 진행중.", "zh": "一年半之后，如今的形态。\n以IP拓展为目标，花时间慢慢推进中。", "zht": "一年半之後，如今的形態。\n以IP拓展為目標，花時間慢慢推進中。"},
       url  : '',
       thumb: '',
       covers: true          /* 공개된 부의 표지를 자동으로 붙임 */
@@ -2289,13 +2401,13 @@ var BHS_HISTORY = {
   ]
 };
 
-/* Volume and log data hold {en, ja, ko, zh} for each text: keep only the page language */
+/* Volume and log data hold {en, ja, ko, zh, zht} for each text: keep only the page language */
 (function(){
   function pick(x){
     if(Array.isArray(x)) return x.map(pick);
     if(x && typeof x === 'object'){
       var ks = Object.keys(x);
-      if(ks.length && 'en' in x && ks.every(function(k){ return k === 'en' || k === 'ja' || k === 'ko' || k === 'zh'; })){
+      if(ks.length && 'en' in x && ks.every(function(k){ return k === 'en' || k === 'ja' || k === 'ko' || k === 'zh' || k === 'zht'; })){
         var v = (x[window.__bhsTL] != null) ? x[window.__bhsTL] : x.en;
         return pick(v);
       }
@@ -2436,12 +2548,14 @@ function bhsTextPath(volId, epId, lang){
   if(lang === 'en')      return BHS_TEXT_ROOT + 'texts_en/' + base + '_en.txt';
   if(lang === 'zh_mix')  return BHS_TEXT_ROOT + 'texts_zh_mix/' + base + '_zh_mix.txt';
   if(lang === 'zh')      return BHS_TEXT_ROOT + 'texts_zh/' + base + '_zh.txt';
+  if(lang === 'zht_mix') return BHS_TEXT_ROOT + 'texts_zh_tw_mix/' + base + '_zh_tw_mix.txt';
+  if(lang === 'zht')     return BHS_TEXT_ROOT + 'texts_zh_tw/' + base + '_zh_tw.txt';
   return BHS_TEXT_ROOT + 'texts/' + base + '.txt';
 }
 
 /* ── 본문 fetch (번호 zero-padding 유무 모두 시도) ── */
 async function bhsFetchText(url){
-  var re = /-(\d+)(_pure_ko\.txt|_jp\.txt|_en_mix\.txt|_en\.txt|_zh_mix\.txt|_zh\.txt|\.txt)$/;
+  var re = /-(\d+)(_pure_ko\.txt|_jp\.txt|_en_mix\.txt|_en\.txt|_zh_tw_mix\.txt|_zh_tw\.txt|_zh_mix\.txt|_zh\.txt|\.txt)$/;
   var list = [url], m = url.match(re);
   if(m){
     var n = parseInt(m[1],10);
@@ -2746,7 +2860,7 @@ window.bhsOpenLink = function(url){
 };
 
 /* ── 등장인물 오버레이 — BHS_CAST 를 HTML 카드로 그립니다 ── */
-/* Data fields may be {en, ja, ko, zh}: pick the page language (English if missing) */
+/* Data fields may be {en, ja, ko, zh, zht}: pick the page language (English if missing) */
 function bhsL(x){
   if(x && typeof x === 'object' && !Array.isArray(x)) return (x[window.__bhsTL] != null) ? x[window.__bhsTL] : (x.en != null ? x.en : '');
   return x == null ? '' : x;
@@ -3319,20 +3433,26 @@ function closeEpPickerBtn(){ var m=document.getElementById('ep-picker-modal'); i
    한국어: 한본어(texts) / 순KO(texts_pure_ko)
    영어  : EN+JA 영본어판(texts_en_mix) / Pure EN 순영어판(texts_en)
    중국어: 中+日 중본어판(texts_zh_mix) / 纯中文 순중국어판(texts_zh)   ← 중국어 간체(zh-CN)
-   고른 판본은 브라우저에 기억합니다 (bhs_ep_ko / bhs_ep_en / bhs_ep_zh).
+   중국어: 中+日 중본어판(texts_zh_tw_mix) / 純中文 순중국어판(texts_zh_tw) ← 중국어 번체(zh-TW, 대만·홍콩)
+   고른 판본은 브라우저에 기억합니다 (bhs_ep_ko / bhs_ep_en / bhs_ep_zh / bhs_ep_zht).
    일본어와 그 밖의 언어는 판본이 하나라 버튼이 없습니다. */
-var BHS_EP_LANG = 'ko', BHS_EP_EN = 'en_mix', BHS_EP_ZH = 'zh_mix';
+var BHS_EP_LANG = 'ko', BHS_EP_EN = 'en_mix', BHS_EP_ZH = 'zh_mix', BHS_EP_ZHT = 'zht_mix';
 try{
   var _sk = localStorage.getItem('bhs_ep_ko'); if(_sk === 'ko' || _sk === 'pure_ko') BHS_EP_LANG = _sk;
   var _se = localStorage.getItem('bhs_ep_en'); if(_se === 'en_mix' || _se === 'en') BHS_EP_EN = _se;
   var _sz = localStorage.getItem('bhs_ep_zh'); if(_sz === 'zh_mix' || _sz === 'zh') BHS_EP_ZH = _sz;
+  var _st = localStorage.getItem('bhs_ep_zht'); if(_st === 'zht_mix' || _st === 'zht') BHS_EP_ZHT = _st;
 }catch(e){}
 function bhsEpLangBtns(){
   var list = _currentLang === 'ko' ? [['ko','한본어'],['pure_ko','순KO']]
            : _currentLang === 'en' ? [['en_mix','EN+JA'],['en','Pure EN']]
            : _currentLang === 'zh-CN' ? [['zh_mix','中+日'],['zh','纯中文']]
+           : _currentLang === 'zh-TW' ? [['zht_mix','中+日'],['zht','純中文']]
            : [];
-  var cur = _currentLang === 'en' ? BHS_EP_EN : (_currentLang === 'zh-CN' ? BHS_EP_ZH : BHS_EP_LANG);
+  var cur = _currentLang === 'en' ? BHS_EP_EN
+          : _currentLang === 'zh-CN' ? BHS_EP_ZH
+          : _currentLang === 'zh-TW' ? BHS_EP_ZHT
+          : BHS_EP_LANG;
   return list.map(function(b){
     return '<button class="ep-lang-btn ' + (cur === b[0] ? 'active' : '') + '" data-lang="' + b[0] + '" onclick="setEpLang(\'' + b[0] + '\')">' + b[1] + '</button>';
   }).join('');
@@ -3343,6 +3463,7 @@ function bhsEpMarkBtn(code){
 function setEpLang(code){
   if(code === 'en' || code === 'en_mix'){ BHS_EP_EN = code;  try{ localStorage.setItem('bhs_ep_en', code); }catch(e){} }
   else if(code === 'zh' || code === 'zh_mix'){ BHS_EP_ZH = code; try{ localStorage.setItem('bhs_ep_zh', code); }catch(e){} }
+  else if(code === 'zht' || code === 'zht_mix'){ BHS_EP_ZHT = code; try{ localStorage.setItem('bhs_ep_zht', code); }catch(e){} }
   else                                  { BHS_EP_LANG = code; try{ localStorage.setItem('bhs_ep_ko', code); }catch(e){} }
   bhsEpMarkBtn(code);
   bhsLoadText(BS.vol, BS.ep);
@@ -3369,6 +3490,7 @@ async function bhsLoadText(volId, epId){
   else if(lang === 'ja') srcLang = 'jp';          /* 일본어: 원본 그대로 (번역하지 않음) */
   else if(lang === 'en') srcLang = BHS_EP_EN;     /* 영어: 영본어/순영어 버튼 선택 (기계번역 없음) */
   else if(lang === 'zh-CN') srcLang = BHS_EP_ZH;  /* 중국어(간체): 중본어/순중국어 버튼 선택 (기계번역 없음) */
+  else if(lang === 'zh-TW') srcLang = BHS_EP_ZHT; /* 중국어(번체): 중본어/순중국어 버튼 선택 (기계번역 없음) */
   else                   srcLang = 'pure_ko';     /* 그 밖의 외국어: 순한국어 → 구글이 번역 */
 
   var path = bhsTextPath(volId, epId, srcLang);
@@ -3390,8 +3512,14 @@ async function bhsLoadText(volId, epId){
       try{ text = await bhsFetchText(bhsTextPath(volId, epId, otherZh)); lastErr = null; bhsEpMarkBtn(otherZh); }
       catch(e4){}
     }
+    /* 중국어(번체): 고른 판본이 아직 없으면 다른 번체 판본으로 한 번 더 (버튼 표시도 그쪽으로) */
+    if(lang === 'zh-TW'){
+      var otherZht = (srcLang === 'zht_mix') ? 'zht' : 'zht_mix';
+      try{ text = await bhsFetchText(bhsTextPath(volId, epId, otherZht)); lastErr = null; bhsEpMarkBtn(otherZht); }
+      catch(e5){}
+    }
     /* 외국어 전용 파일이 없으면 일반 한국어 본문으로 한 번 더 시도 */
-    if(isForeign && lang !== 'en' && lang !== 'zh-CN'){
+    if(isForeign && lang !== 'en' && lang !== 'zh-CN' && lang !== 'zh-TW'){
       try{ text = await bhsFetchText(bhsTextPath(volId, epId, 'ko')); lastErr = null; }
       catch(e2){ lastErr = e2; }
     }
@@ -3416,6 +3544,14 @@ async function bhsLoadText(volId, epId){
     _updateEpLangBtns(lang);
     return;
   }
+  if(text === null && lang === 'zh-TW'){
+    /* 번체 파일이 아직 없을 때: 오류 대신 안내문 */
+    el.innerHTML = '<div class="postype-notice notranslate">'
+                 + '<strong>本話的中文版尚未上線。</strong><br>'
+                 + '請稍後再來。</div>';
+    _updateEpLangBtns(lang);
+    return;
+  }
   if(text === null){
     el.innerHTML = '<div class="postype-error"><strong>' + T('err.nofile') + '</strong><br>'
                  + '<small style="color:#a03030">' + bhsEsc(path) + '</small><pre>'
@@ -3427,7 +3563,7 @@ async function bhsLoadText(volId, epId){
   _epOriginalLines = text.split('\n');
   var jpMode = (lang === 'ja');
   var enMode = (lang === 'en');
-  var zhMode = (lang === 'zh-CN');
+  var zhMode = (lang === 'zh-CN' || lang === 'zh-TW');
   var srcHint = (isForeign && !jpMode && !enMode && !zhMode) ? ' lang="ko"' : '';
   el.innerHTML = '<div class="postype-text' + ((jpMode || enMode || zhMode) ? ' notranslate' : '') + '"' + srcHint + '>' + bhsLines(text) + '</div>';
 
@@ -3442,8 +3578,9 @@ async function bhsLoadText(volId, epId){
 
 /* ══════════════════════════════════════════════════════
    언어 전환
-   · 화면 글자: 영어·일본어·한국어·중국어(간체)는 위 사전(BHS_I18N), 그 밖의 언어는 구글 번역
+   · 화면 글자: 영어·일본어·한국어·중국어(간체·번체)는 위 사전(BHS_I18N), 그 밖의 언어는 구글 번역
    · 소설 본문: 영어 texts_en / 일본어 texts_jp / 한국어 texts·texts_pure_ko / 중국어(간체) texts_zh_mix·texts_zh
+               / 중국어(번체) texts_zh_tw_mix·texts_zh_tw
                그 밖의 언어는 순한국어를 구글이 번역 (DeepL 버튼으로 다시 번역 가능)
    ══════════════════════════════════════════════════════ */
 var _currentLang = 'ko';
@@ -3451,7 +3588,7 @@ var _epOriginalLines = null;
 
 function setLang(lang){
   /* Remember the choice (shared with biz-OC-doll) and reload.
-     The <head> script then picks the text: English / Japanese / Korean / Chinese (Simplified)
+     The <head> script then picks the text: English / Japanese / Korean / Chinese (Simplified, Traditional)
      from the dictionary, any other language through Google Translate. */
   _currentLang = lang;
   try{ localStorage.setItem('bzd_lang', lang); }catch(e){}
@@ -3487,7 +3624,7 @@ function _renderEpForLang(lang){
   if(!lang || lang === 'ko'){ _tlHideDeepLBtns(); return; }
   if(lang === 'ja'){ _tlHideDeepLBtns(); return; }   /* 일본어 원본은 번역 대상이 아님 */
   if(lang === 'en'){ _tlHideDeepLBtns(); return; }   /* English edition is read as-is */
-  if(lang === 'zh-CN'){ _tlHideDeepLBtns(); return; }   /* 중국어(간체)판도 번역 없이 그대로 읽음 */
+  if(lang === 'zh-CN' || lang === 'zh-TW'){ _tlHideDeepLBtns(); return; }   /* 중국어(간체·번체)판도 번역 없이 그대로 읽음 */
   if(cfg.enabled && cfg.proxyUrl) _tlShowDeepLBtn(lang, cfg);
   else _tlHideDeepLBtns();
 }
@@ -3574,7 +3711,7 @@ function _tlDeepLEpisode(lang, cfg, onDone){
 
 /* ── 번역 중에는 소스 선택 버튼 숨김 (rrkt 동일) ── */
 function _updateEpLangBtns(lang){
-  var show = (lang === 'ko' || lang === 'en' || lang === 'zh-CN');
+  var show = (lang === 'ko' || lang === 'en' || lang === 'zh-CN' || lang === 'zh-TW');
   document.querySelectorAll('.ep-lang-btn').forEach(function(b){ b.style.display = show ? '' : 'none'; });
 }
 function _tlHideDeepLBtns(){
@@ -3664,7 +3801,7 @@ window.onDeepLRetranslateClick = function(){
     ['Xhosa','xh'],['Yiddish','yi'],['Yoruba','yo'],['Zulu','zu']
   ];
   var _sel=null,_open=false;
-  var PRIORITY_CODES=['en','ja','ko','zh-CN'];
+  var PRIORITY_CODES=['en','ja','ko','zh-CN','zh-TW'];
 
   function _makeItem(l){
     var name=l[0],code=l[1],isS=_sel===code;
@@ -3817,11 +3954,11 @@ function googleTranslateElementInit(){
 </script>
 <script>
 /* 구글 번역은 '준비된 판본이 없는 언어'에서만 필요합니다.
-   영어·일본어·한국어·중국어(간체)는 불러오지 않습니다.
+   영어·일본어·한국어·중국어(간체·번체)는 불러오지 않습니다.
    (구글에 접속이 안 되는 지역에서도 페이지가 바로 열리게 하려는 것입니다.) */
 (function(){
   var l = window.__bhsLang;
-  if(l === 'en' || l === 'ja' || l === 'ko' || l === 'zh-CN') return;
+  if(l === 'en' || l === 'ja' || l === 'ko' || l === 'zh-CN' || l === 'zh-TW') return;
   var s = document.createElement('script');
   s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
   document.body.appendChild(s);
