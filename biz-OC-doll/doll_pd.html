@@ -11,13 +11,14 @@
      page's contact window. The robots line keeps it out of search engines.
 
      Languages: English is written in this file. Japanese, Simplified Chinese
-     and Traditional Chinese are prepared AI translations in the I18N dictionary
-     at the bottom (same key as data-i18n="..."). Other languages use Google Translate.
+     and Traditional Chinese are kept in the I18N dictionary at the bottom
+     (same key as data-i18n="..."). English, Japanese and Chinese text is written
+     with AI assistance. Other languages use Google Translate.
      ══════════════════════════════════════════════════ -->
 <script>
 /* Language — decided before the page is drawn.
    A saved choice (localStorage 'bzd_lang') wins; otherwise the browser language.
-   Japanese / Chinese browsers get the human translations, everyone else gets English. */
+   Japanese / Chinese browsers get the prepared text, everyone else gets English. */
 (function(){
   var DICT = { 'ja':'ja', 'zh-CN':'zh-Hans', 'zh-TW':'zh-Hant' };
   var FONT = { 'ja':'Noto+Sans+JP', 'zh-CN':'Noto+Sans+SC', 'zh-TW':'Noto+Sans+TC' };
@@ -1047,7 +1048,7 @@ var BIZ = window.BIZ = {
 
   /* Note at the bottom of the language menu */
   TL_NOTE:
-    '<b>Japanese and Chinese</b> are translated by AI.<br>' +
+    '<b>English, Japanese and Chinese</b> text is written with AI assistance.<br>' +
     'Other languages are shown through <b>Google Translate</b>.',
 
   /* ── Top bar, right side ── */
@@ -1140,7 +1141,7 @@ document.addEventListener('keydown', function(e){
 
 /* ══ Language engine ══
    en                  → the text as written in this file
-   ja / zh-CN / zh-TW  → human translations (I18N dictionary, no machine translation)
+   ja / zh-CN / zh-TW  → prepared text (I18N dictionary, no live machine translation)
    anything else       → Google Translate from English
    The chosen language is remembered in localStorage 'bzd_lang'.
    (The first-visit choice is made in the small script in <head>.) */
@@ -1197,7 +1198,7 @@ function setLang(code){
   code = window.bzdLangNorm ? bzdLangNorm(code) : code;
   try{ localStorage.setItem('bzd_lang', code); }catch(e){}
 
-  /* English or a language with human translations */
+  /* English or a language with prepared text */
   if(code === 'en' || bzdDictKey(code)){
     if(_tlGoogleOn()){ _tlGoogleClear(); location.reload(); return; }   /* undo Google first */
     TL.lang = code;
@@ -1388,8 +1389,9 @@ function bars(hide){
 var DEMO_OPEN_AT = 50;
 var DEMO_URL     = '';   /* address of the demo game page, once it exists */
 
-/* Status values that count as released */
-var SHOWN_STATUS = ['done', 'wip'];
+/* Status values that count as released. The first two are the values
+   currently used in the sheet; the last two are ready for English values. */
+var SHOWN_STATUS = ['\uC644\uB8CC', '\uC791\uC5C5\uC911', 'done', 'wip'];
 
 (function(){
   var stats = null;
