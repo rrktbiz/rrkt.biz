@@ -137,7 +137,7 @@
        Image: 1200 x 630 px, PNG/JPG, under 2 MB, at biz-OC-doll/images/og/main.png
        Some apps crop the center square, so keep text and faces
        inside the middle 630 x 630.
-     · KakaoTalk caches previews: developers.kakao.com/tool/debugger/sharing
+     · Apps and sites keep an old preview for a while after the image changes.
      ══════════════════════════════════════════════════ -->
 <meta name="description" content="No names, no personalities, no stories yet. Just codes and art. The rest is up to you.">
 <meta property="og:type" content="website">
@@ -2710,7 +2710,7 @@ var BIZ = window.BIZ = {
 
     <!-- Link to the Project Note page (only in this file's contact window) -->
     <div class="contact-pd">
-      <div class="contact-pd-lbl">For PD</div>
+      <div class="contact-pd-lbl">For business</div>
       <a class="contact-pd-link" href="doll_pd.html">
         <span data-i18n="pd_link">Open the project notes</span>
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
@@ -4793,13 +4793,16 @@ window.shareChar = function(where){
   if(!c) return;
   const url  = charShareUrl(c, true);
   const text = 'biz-OC-doll ' + c.idCode;
+  /* Hashtags, in the same order as the TITLE HOLDER share: project tag, then the code tag.
+     Used where hashtags work; title-style fields keep the plain text above. */
+  const tags = '#bizOCdoll #' + c.idCode;
   const E = encodeURIComponent;
   let go = '';
-  if(where === 'x')        go = 'https://twitter.com/intent/tweet?text=' + E(text) + '&url=' + E(url);
-  if(where === 'threads')  go = 'https://www.threads.net/intent/post?text=' + E(text + ' ' + url);
+  if(where === 'x')        go = 'https://twitter.com/intent/tweet?text=' + E(tags) + '&url=' + E(url);
+  if(where === 'threads')  go = 'https://www.threads.net/intent/post?text=' + E(tags + ' ' + url);
   /* English-speaking platforms */
-  if(where === 'tumblr')    go = 'https://www.tumblr.com/widgets/share/tool?posttype=link&canonicalUrl=' + E(url) + '&title=' + E(text);
-  if(where === 'bluesky')   go = 'https://bsky.app/intent/compose?text=' + E(text + ' ' + url);
+  if(where === 'tumblr')    go = 'https://www.tumblr.com/widgets/share/tool?posttype=link&canonicalUrl=' + E(url) + '&title=' + E(text) + '&tags=' + E('bizOCdoll,' + c.idCode);
+  if(where === 'bluesky')   go = 'https://bsky.app/intent/compose?text=' + E(tags + ' ' + url);
   if(where === 'reddit')    go = 'https://www.reddit.com/submit?url=' + E(url) + '&title=' + E(text);
   if(where === 'pinterest'){
     /* Pinterest needs an image, so the character sheet address is attached */
@@ -4808,23 +4811,23 @@ window.shareChar = function(where){
   }
   /* Japan */
   if(where === 'line')      go = 'https://social-plugins.line.me/lineit/share?url=' + E(url);
-  if(where === 'misskey')   go = 'https://misskey-hub.net/share/?text=' + E(text + ' ' + url) + '&visibility=public&localOnly=0';
+  if(where === 'misskey')   go = 'https://misskey-hub.net/share/?text=' + E(tags + ' ' + url) + '&visibility=public&localOnly=0';
   /* China */
-  if(where === 'weibo')     go = 'https://service.weibo.com/share/share.php?url=' + E(url) + '&title=' + E(text);
+  if(where === 'weibo')     go = 'https://service.weibo.com/share/share.php?url=' + E(url) + '&title=' + E(text + ' #bizOCdoll# #' + c.idCode + '#');   /* Weibo tags close with a second # */
   /* Xiaohongshu and Discord have no web "share" link,
      so the text + link is copied and the site is opened → paste there (Ctrl+V).
      (Discord adds a preview card automatically when a link is pasted) */
   if(where === 'xhs' || where === 'discord'){
     const lbl = document.getElementById('share-lbl-' + where);
     const orig = lbl ? lbl.textContent : '';
-    const payload = text + ' ' + url;
+    const payload = (where === 'xhs' ? tags : text) + ' ' + url;   /* hashtags work on Xiaohongshu, not on Discord */
     try{ if(navigator.clipboard) navigator.clipboard.writeText(payload); }catch(err){}
     if(lbl){ lbl.textContent = i18nText('copied_paste'); setTimeout(()=>{ lbl.textContent = orig; }, 1600); }
     window.open(where === 'xhs' ? 'https://www.xiaohongshu.com/explore' : 'https://discord.com/channels/@me', '_blank', 'noopener,noreferrer');
     return;
   }
   if(where === 'native'){
-    if(navigator.share) navigator.share({ title: text, text: text, url: url }).catch(()=>{});
+    if(navigator.share) navigator.share({ title: text, text: tags, url: url }).catch(()=>{});
     closeShareMenu();
     return;
   }

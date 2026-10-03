@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 열기 전까지 검색엔진에 안 잡히게 막아 둡니다. 정식으로 열 때 이 줄을 지우세요 -->
+<!-- Kept out of search engines until the box opens. Delete this line when it opens. -->
 <meta name="robots" content="noindex, nofollow">
-<title>biz-OC-doll · 제안함</title>
+<title>biz-OC-doll · Suggestion box</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M8 3H24L31 13L16 31L1 13Z' fill='%23cfe6f4' stroke='%231a1a1a' stroke-width='1.2' stroke-linejoin='round'/><g stroke='%231a1a1a' stroke-width='0.9' fill='none' stroke-linejoin='round' opacity='0.6'><path d='M1 13H31'/><path d='M8 3L11.5 13L16 31L20.5 13L24 3'/></g></svg>">
 <!--
   ══════════════════════════════════════════════════════════════
-  biz-OC-doll 제안함 (board.html)
+  biz-OC-doll suggestion box (board.html)
 
-  ■ 바꿀 일이 있는 곳은 아래 스크립트 맨 위 두 군데뿐입니다.
-    ① BOARD      : Apps Script 주소 · Turnstile 사이트 키
-    ② T (글자판)  : 화면에 나오는 모든 글자. 나중에 영어로 바꿀 때 여기만 고치면 됩니다.
-    안내문(왼쪽 칸)은 아래 HTML 의 <aside id="guide"> 안에 그대로 적혀 있습니다.
+  ■ Only two places near the top of the script ever need editing.
+    ① BOARD : Apps Script address · Turnstile site key
+    ② T     : every piece of text the script puts on screen
+    The guide (left column) is written directly in the HTML below, inside <details id="guide">.
 
-  ■ 주소
-    board.html#/        목록
-    board.html#/p/12    12번 글
-    board.html#/new     글쓰기
+  ■ Addresses
+    board.html#/        list
+    board.html#/p/12    post 12
+    board.html#/new     new post
 
-  ■ 안전
-    사람들이 쓴 글은 전부 "그냥 글자"로만 화면에 넣습니다(textContent).
-    글 안에 코드를 적어도 실행되지 않습니다.
+  ■ Safety
+    Everything people write is put on screen as plain text only (textContent).
+    Code typed into a post does not run.
   ══════════════════════════════════════════════════════════════
 -->
 <style>
 :root{
   --tx:#111111; --tx2:#525252; --tx3:#8a8a8a; --bd:#e8e8e8; --bg2:#fafafa;
-  --ac:#477693;               /* 강조색은 이것 하나 (사이트의 blue-ink) */
-  --fn:system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  --ac:#477693;               /* the only accent color (the site's blue-ink) */
+  --fn:system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -44,7 +44,7 @@ button.on{color:var(--ac);border-color:var(--ac)}
 .muted{color:var(--tx3)}
 .ac{color:var(--ac)}
 
-/* ── 틀 ── */
+/* ── Frame ── */
 .wrap{max-width:1280px;margin:0 auto;padding:22px 28px 60px;display:grid;grid-template-columns:390px 1fr;gap:48px;align-items:start}
 header{grid-column:1 / -1;display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--bd);padding-bottom:12px}
 header .home{font-size:12px;color:var(--tx3);text-decoration:none}
@@ -53,15 +53,15 @@ header h1{font-size:14px;font-weight:600;letter-spacing:.01em}
 header h1 a{text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 header .home{display:inline-flex;align-items:center;gap:3px}
 
-/* 아이콘 공통 */
+/* Icons */
 .i{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;vertical-align:-2px}
 button{display:inline-flex;align-items:center;gap:5px}
 button.on .i-fill{fill:currentColor}
 
-/* ── 왼쪽 안내문 ──
-   바탕색 있는 블록. 안쪽 스크롤바는 없습니다.
-   화면보다 짧으면 위에 붙어 있고, 길면 페이지를 내리다가 안내문 끝이 보이는 순간부터 그 자리에 붙습니다.
-   (붙는 위치는 아래 스크립트의 fitGuide 가 화면 높이에 맞춰 계산) */
+/* ── Guide (left) ──
+   A block with a background color and no inner scrollbar.
+   Shorter than the screen: it stays at the top. Longer: it scrolls with the page and sticks once its end comes into view.
+   (The sticking position is worked out from the screen height by fitGuide in the script below) */
 #guide{position:sticky;top:18px;font-size:13.5px;line-height:1.75;color:#000;
   background:#f4f8fb;border:1px solid #e1eaf0;border-radius:6px;padding:20px 22px 22px}
 #guide > summary{display:none}
@@ -73,12 +73,12 @@ button.on .i-fill{fill:currentColor}
 #guide p{margin-top:4px}
 #guide h3 .i,#guide h2 .i{width:15px;height:15px}
 #guide > summary .i{margin-right:6px}
-#guide h3.no{color:#c0392b}          /* 받지 않는 것: 빨강 */
+#guide h3.no{color:#c0392b}          /* Not accepted: red */
 #guide h3.yes .i{color:var(--ac)}
 
-/* ── 오른쪽 ── */
+/* ── Right side ── */
 main{min-width:0}
-/* 글쓰기 화면에서는 오른쪽 글쓰기 칸이 화면 위에 붙어 따라옵니다. 왼쪽 안내문을 읽으며 바로 쓸 수 있게 */
+/* On the new-post screen the form on the right sticks to the top, so the guide on the left can be read while writing */
 main.is-write{position:sticky;top:18px}
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .bar .grow{flex:1}
@@ -87,7 +87,7 @@ main.is-write{position:sticky;top:18px}
 .bar input[type=search]{border:none;padding:0;min-width:0;width:150px;outline:none;background:none}
 .notice{font-size:12.5px;color:var(--tx2);background:var(--bg2);border:1px solid var(--bd);padding:8px 10px;margin-bottom:12px}
 
-/* 목록 */
+/* List */
 .list{list-style:none;border-top:1px solid var(--bd)}
 .list li{border-bottom:1px solid var(--bd)}
 .list a{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:baseline;padding:9px 2px;text-decoration:none}
@@ -99,7 +99,7 @@ main.is-write{position:sticky;top:18px}
 .list .fold .t{color:var(--tx3)}
 .empty{padding:28px 2px;color:var(--tx3);font-size:13px}
 
-/* 피드 카드 */
+/* Feed cards */
 .feed{border-top:1px solid var(--bd)}
 .card{padding:18px 2px 20px;border-bottom:1px solid var(--bd)}
 .card .meta{margin:0 0 3px}
@@ -130,7 +130,7 @@ main.is-write{position:sticky;top:18px}
 .c-form{margin-top:10px}
 .more-feed{display:block;width:100%;margin-top:16px;padding:9px;color:var(--tx2)}
 
-/* 글 보기 */
+/* Single post */
 .post h2{font-size:17px;font-weight:600;line-height:1.45;word-break:break-word}
 .meta{font-size:12px;color:var(--tx3);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
 .body{white-space:pre-wrap;word-break:break-word;margin:16px 0 14px;line-height:1.75}
@@ -149,7 +149,7 @@ main.is-write{position:sticky;top:18px}
 .cmt .acts .i{width:12px;height:12px}
 .cmt.is-pick{background:linear-gradient(90deg,rgba(71,118,147,.05),transparent 60%)}
 
-/* 글쓰기 · 댓글 입력 */
+/* New post · comment form */
 .form{margin-top:14px;display:flex;flex-direction:column;gap:8px}
 .form input[type=text],.form textarea{width:100%;border:1px solid var(--bd);border-radius:3px;padding:7px 9px;outline:none;background:#fff}
 .form input[type=text]:focus,.form textarea:focus{border-color:var(--tx3)}
@@ -168,7 +168,7 @@ main.is-write{position:sticky;top:18px}
 .back{font-size:12.5px;color:var(--tx3);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px}
 .back:hover{color:var(--tx2)}
 
-/* ── 휴대폰: 안내문은 맨 위에서 펼쳐 보기 ── */
+/* ── Phones: the guide sits at the top and opens on tap ── */
 @media (max-width:760px){
   .wrap{grid-template-columns:1fr;gap:14px;padding:16px 14px 50px}
   main.is-write{position:static}
@@ -185,7 +185,7 @@ main.is-write{position:sticky;top:18px}
 </style>
 </head>
 <body>
-<!-- 아이콘 모음: 선 하나짜리 작은 아이콘들. 화면 곳곳에서 <use href="#i-이름"> 으로 불러 씁니다 -->
+<!-- Icon set: small line icons, used across the page with <use href="#i-name"> -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
@@ -210,134 +210,134 @@ main.is-write{position:sticky;top:18px}
 <div class="wrap">
   <header>
     <a class="home" href="./"><svg class="i" aria-hidden="true"><use href="#i-back"/></svg>biz-OC-doll</a>
-    <h1><a href="#/"><svg class="i" aria-hidden="true"><use href="#i-box"/></svg>제안함</a></h1>
+    <h1><a href="#/"><svg class="i" aria-hidden="true"><use href="#i-box"/></svg>Suggestion box</a></h1>
   </header>
 
-  <!-- ══ 안내문 ══ 데스크탑은 왼쪽 블록, 휴대폰은 맨 위에서 눌러 펼칩니다 -->
+  <!-- ══ Guide ══ a block on the left on desktop; on phones it sits at the top and opens on tap -->
   <details id="guide" open>
-    <summary><svg class="i" aria-hidden="true"><use href="#i-info"/></svg>안내 보기 ▾</summary>
+    <summary><svg class="i" aria-hidden="true"><use href="#i-info"/></svg>Show guide ▾</summary>
     <div class="g-in">
-      <h2><svg class="i" aria-hidden="true"><use href="#i-box"/></svg>제안함</h2>
-      <p>biz-OC-doll 사이트를 더 편하게 만들기 위한 제안을 받는 곳이에요.</p>
+      <h2><svg class="i" aria-hidden="true"><use href="#i-box"/></svg>Suggestion box</h2>
+      <p>This is where suggestions for making the biz-OC-doll site easier to use are collected.</p>
 
-      <h3 class="yes"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg>받는 것</h3>
+      <h3 class="yes"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg>Accepted</h3>
       <ul>
-        <li>사이트를 쓰면서 불편했던 점</li>
-        <li>있으면 모두가 편할 것 같은 기능</li>
-        <li>이벤트 진행 방식에 대한 제안</li>
+        <li>Things that were inconvenient while using the site</li>
+        <li>Features that would make things easier for everyone</li>
+        <li>Suggestions about how events are run</li>
       </ul>
 
-      <h3 class="no"><svg class="i" aria-hidden="true"><use href="#i-no"/></svg>받지 않는 것</h3>
+      <h3 class="no"><svg class="i" aria-hidden="true"><use href="#i-no"/></svg>Not accepted</h3>
       <ul>
-        <li>캐릭터의 설정, 이야기, 관계에 대한 제안</li>
-        <li>새 캐릭터 아이디어나 디자인 요청</li>
-        <li>캐릭터 해석을 두고 옳고 그름을 가리는 글</li>
-        <li>특정 홀더나 창작물을 지목하는 글</li>
-        <li>욕설, 비하, 다른 사람을 공격하는 글</li>
-        <li>대안 없이 불만이나 항의만 하는 글</li>
+        <li>Suggestions about characters' settings, stories, or relationships</li>
+        <li>New character ideas or design requests</li>
+        <li>Posts arguing over which take on a character is right</li>
+        <li>Posts that single out a specific Holder or work</li>
+        <li>Insults, put-downs, or attacks on other people</li>
+        <li>Complaints or protests with no alternative offered</li>
       </ul>
-      <p>위에 해당하는 글은 올라가지 않아요.<span id="hiddenCount"></span></p>
-      <!-- ※ 이 목록을 바꾸면 Apps Script 위쪽 AI_RULES 도 같이 바꿔 주세요 (AI가 이 기준으로 거릅니다).
-           숫자는 AI가 규칙 위반으로 거른 건수 + 비즈가 숨기며 메모에 '규칙'이라 적은 글 수입니다. 스팸은 세지 않습니다. -->
+      <p>Posts like these are not published.<span id="hiddenCount"></span></p>
+      <!-- If this list changes, change AI_RULES at the top of the Apps Script too (the filter follows it).
+           The number = posts the filter turned away for breaking these rules + posts hidden by hand and marked as a rule case in the sheet. Spam is not counted. -->
 
-      <h3><svg class="i" aria-hidden="true"><use href="#i-scale"/></svg>반영 기준</h3>
-      <p>한 번 만들어 두면 그다음부터 저절로 돌아가는 것은 받아요. 작은 수정이든 새 기능이든 상관없어요.</p>
+      <h3><svg class="i" aria-hidden="true"><use href="#i-scale"/></svg>What gets adopted</h3>
+      <p>Things that keep running on their own once built are taken on. It doesn't matter whether it's a small fix or a new feature.</p>
       <ul>
-        <li>버튼 위치, 문구 한 줄, 불편한 동작 하나 같은 수정</li>
-        <li>캐릭터 목록의 분류, 필터, 검색, 정렬 같은 기능</li>
+        <li>Fixes like a button's position, a line of wording, or one awkward behavior</li>
+        <li>Features for the character list, like grouping, filtering, searching, or sorting</li>
       </ul>
-      <p>만든 뒤에도 공식이 계속 손을 대야 하는 것은 반영하지 않아요.</p>
+      <p>Things the official side would have to keep tending after they're built are not taken on.</p>
       <ul>
-        <li>정기적으로 새 내용을 채워야 하는 코너</li>
-        <li>올라오는 것마다 공식이 확인하거나 골라야 하는 기능</li>
-        <li>신청을 받아 하나씩 처리해야 하는 이벤트</li>
-        <li>홀더 이름 목록, 창작물 모음, 태그 정리 같은 팬덤 정리</li>
+        <li>Sections that need new content on a regular basis</li>
+        <li>Features where the official side has to check or pick each new entry</li>
+        <li>Events where requests are taken and handled one by one</li>
+        <li>Fandom housekeeping, like lists of Holder names, collections of works, or tag cleanup</li>
       </ul>
-      <p>이 프로젝트는 운영을 가볍게 유지하는 걸 원칙으로 하고 있어요. 받는 쪽에 해당하는 제안도 모두 반영되지는 않아요.</p>
+      <p>This project keeps its operation light as a rule. Not every suggestion on the accepted side gets adopted.</p>
 
-      <h3><svg class="i" aria-hidden="true"><use href="#i-out"/></svg>다른 곳으로</h3>
+      <h3><svg class="i" aria-hidden="true"><use href="#i-out"/></svg>Goes elsewhere</h3>
       <ul>
-        <li>TITLE HOLDER 이름 변경·결제·환불: Ko-fi 메시지</li>
-        <li>기업·협업 제안: 비즈니스 메일</li>
-        <li>연재·상업 창작 등록: 등록 폼</li>
+        <li>TITLE HOLDER name changes, payments, refunds: Ko-fi message</li>
+        <li>Company and collaboration proposals: business email</li>
+        <li>Registering serials and commercial works: the registration form</li>
       </ul>
-      <p>이곳에 실명, 연락처, 결제 내역 같은 개인 정보는 적지 마세요.</p>
+      <p>Do not write personal information here, such as real names, contact details, or payment records.</p>
 
-      <h3><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg>공식의 참여 방식</h3>
+      <h3><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg>How the official side takes part</h3>
       <ul>
-        <li>글은 틈틈이 읽어요.</li>
-        <li>답글은 달지 않아요. 결과는 상태 표시로만 알려요.</li>
-        <li>제안에 달린 좋은 답글에는 표시를 해 두기도 해요.</li>
-        <li>공감 수는 참고만 해요. 공감이 많다고 반영되는 건 아니에요.</li>
+        <li>Posts are read from time to time.</li>
+        <li>No replies are written. Results are shown only through status marks.</li>
+        <li>Good replies to a suggestion may get a mark.</li>
+        <li>Agree counts are for reference only. A high count doesn't mean a suggestion gets adopted.</li>
       </ul>
 
-      <h3><svg class="i" aria-hidden="true"><use href="#i-dot"/></svg>상태 표시</h3>
-      <p>읽음 · 검토 중 · 반영함 · 반영 안 함</p>
+      <h3><svg class="i" aria-hidden="true"><use href="#i-dot"/></svg>Status marks</h3>
+      <p>Read · Under review · Adopted · Not adopted</p>
 
-      <h3><svg class="i" aria-hidden="true"><use href="#i-info"/></svg>기타</h3>
+      <h3><svg class="i" aria-hidden="true"><use href="#i-info"/></svg>Other</h3>
       <ul>
-        <li>이 제안함에는 번역 기능이 없어요. 어떤 언어로 써도 돼요.</li>
-        <li>신고가 쌓인 글은 자동으로 접혀요.</li>
-        <li>올린 제안은 공식이 자유롭게 참고하고 반영할 수 있어요. 반영되어도 보상이나 이름 표기는 없어요.</li>
-        <li>제안함은 운영 상황에 따라 닫히거나 정리될 수 있어요.</li>
+        <li>This suggestion box has no translation feature. Write in any language.</li>
+        <li>Posts that collect reports are folded automatically.</li>
+        <li>The official side may freely refer to and adopt posted suggestions. No reward or name credit is given when one is adopted.</li>
+        <li>The suggestion box may be closed or cleared depending on how things are going.</li>
       </ul>
     </div>
   </details>
 
-  <main id="view"><p class="muted">불러오는 중…</p></main>
+  <main id="view"><p class="muted">Loading…</p></main>
 </div>
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   ① BOARD — 연결 정보
+   ① BOARD — connection settings
    ══════════════════════════════════════════════════════════════ */
 var BOARD = {
   API:      'https://script.google.com/macros/s/AKfycbz1ERiR27f67i0bE6jsWbELrNfOVgpW9SMl0S4w8SNoo03HttjecEgo1fxKwjz-OOXi/exec',
-  SITE_KEY: '0x4AAAAAAFC6LZTS_0gCMId2',   // Turnstile 사이트 키 (공개용. 비밀 키는 절대 여기 넣지 않음)
-  TITLE_MAX: 100, BODY_MAX: 3000, COMMENT_MAX: 1000   // Apps Script 쪽 숫자와 맞춰 둠
+  SITE_KEY: '0x4AAAAAAFC6LZTS_0gCMId2',   // Turnstile site key (the public one; the secret key never goes here)
+  TITLE_MAX: 100, BODY_MAX: 3000, COMMENT_MAX: 1000   // same numbers as in the Apps Script
 };
 
 /* ══════════════════════════════════════════════════════════════
-   ② T — 화면 글자판. 영어로 바꿀 때는 따옴표 안만 고치면 됩니다.
+   ② T — on-screen text. Edit only what is inside the quotes.
    ══════════════════════════════════════════════════════════════ */
 var T = {
-  loading:'불러오는 중…', loadFail:'불러오지 못했어요. 잠시 뒤 새로고침해 주세요.',
-  write:'제안하기', newest:'최신순', top:'공감순', search:'제목 검색',
-  empty:'아직 올라온 제안이 없어요.', noMatch:'찾는 제안이 없어요.',
-  closed:'지금은 제안함이 닫혀 있어요. 읽기만 할 수 있어요.',
-  likes:'공감', comments:'댓글', report:'신고',
-  foldedPost:'신고가 쌓여 접힌 글이에요.', foldedCmt:'신고가 쌓여 접힌 댓글이에요.', unfold:'펼치기',
-  backList:'← 목록', backAll:'← 전체 보기', notFound:'없거나 숨겨진 글이에요.',
-  more:'더 보기', less:'접기', loadMore:'제안 더 보기', cmtOpen:'댓글 달기', cancel:'취소',
-  reply:'답글', replyPh:'{who}에게 답글을 적어 주세요.', replyTo:'{who}에게',
-  copyLink:'링크 복사', copied:'복사했어요', retry:'다시 시도',
-  op:'글쓴이', anon:'익명 ', picked:'공식 표시',
-  cmtTitle:'댓글', cmtNone:'아직 댓글이 없어요.', cmtPh:'댓글을 적어 주세요.', cmtSend:'댓글 달기',
-  newTitle:'제안하기', titlePh:'제목', bodyPh:'무엇이 불편했는지, 어떻게 바뀌면 좋을지 적어 주세요.', send:'올리기',
-  brief:'<b>받는 것</b> 사이트를 쓰면서 불편했던 점 · 있으면 모두가 편할 것 같은 기능 · 이벤트 진행 방식<br><b>받지 않는 것</b> 캐릭터 설정·이야기·관계 · 새 캐릭터 아이디어 · 캐릭터 해석 논쟁 · 특정 홀더나 창작물 지목 · 욕설·비하·공격 · 대안 없는 항의',
-  similar:'비슷한 제안이 이미 있어요. 먼저 확인해 보세요.',
-  reportAsk:'이 글을 신고할까요?', reportAskC:'이 댓글을 신고할까요?', reported:'신고했어요.', reportedAlready:'이미 신고한 글이에요.',
-  status:{ read:'읽음', reviewing:'검토 중', done:'반영함', declined:'반영 안 함' },
+  loading:'Loading…', loadFail:"Couldn't load. Please refresh in a moment.",
+  write:'Suggest', newest:'Newest', top:'Most agreed', search:'Search titles',
+  empty:'No suggestions yet.', noMatch:'No matching suggestions.',
+  closed:'The suggestion box is closed right now. Reading only.',
+  likes:'Agree', comments:'Comments', report:'Report',
+  foldedPost:'This post was folded after several reports.', foldedCmt:'This comment was folded after several reports.', unfold:'Show',
+  backList:'← List', backAll:'← All suggestions', notFound:"This post doesn't exist or is hidden.",
+  more:'More', less:'Less', loadMore:'More suggestions', cmtOpen:'Add a comment', cancel:'Cancel',
+  reply:'Reply', replyPh:'Write a reply to {who}.', replyTo:'to {who}',
+  copyLink:'Copy link', copied:'Copied', retry:'Try again',
+  op:'Author', anon:'Anon ', picked:'Official mark',
+  cmtTitle:'Comments', cmtNone:'No comments yet.', cmtPh:'Write a comment.', cmtSend:'Comment',
+  newTitle:'Suggest', titlePh:'Title', bodyPh:"Write what was inconvenient and how you'd like it to change.", send:'Post',
+  brief:'<b>Accepted</b> Things that were inconvenient on the site · Features that would help everyone · How events are run<br><b>Not accepted</b> Character settings, stories, relationships · New character ideas · Arguments over character takes · Singling out a Holder or work · Insults, put-downs, attacks · Complaints with no alternative',
+  similar:'Similar suggestions already exist. Please check them first.',
+  reportAsk:'Report this post?', reportAskC:'Report this comment?', reported:'Reported.', reportedAlready:'Already reported.',
+  status:{ read:'Read', reviewing:'Under review', done:'Adopted', declined:'Not adopted' },
   err:{
-    empty:'제목과 내용을 적어 주세요.', slow_down:'조금 뒤에 다시 올려 주세요.', not_human:'사람 확인을 다시 해 주세요.',
-    closed:'지금은 제안함이 닫혀 있어요.', busy:'지금 요청이 많아요. 잠시 뒤 다시 해 주세요.', not_found:'없거나 숨겨진 글이에요.',
-    wait_human:'사람 확인이 끝날 때까지 잠깐만 기다려 주세요.', human_fail:'사람 확인 칸을 불러오지 못했어요. 새로고침해 주세요.',
-    net:'연결이 불안정해요. 잠시 뒤 다시 해 주세요.', other:'문제가 생겼어요. 잠시 뒤 다시 해 주세요.',
-    rejected:'안내에 맞지 않는 내용이 있어 올릴 수 없어요. 안내문을 확인해 주세요.',
-    privacy:'개인 정보(연락처, 결제 내역 등)는 지우고 다시 올려 주세요.',
-    redirect_kofi:'TITLE HOLDER 이름 변경·결제·환불은 Ko-fi 메시지로 보내 주세요.',
-    redirect_mail:'기업·협업 제안은 비즈니스 메일로 보내 주세요.',
-    redirect_form:'연재·상업 창작 등록은 등록 폼으로 해 주세요.'
+    empty:'Please fill it in first.', slow_down:'Please wait a little before posting again.', not_human:'Please do the human check again.',
+    closed:'The suggestion box is closed right now.', busy:'Too many requests right now. Please try again in a moment.', not_found:"This post doesn't exist or is hidden.",
+    wait_human:'Please wait until the human check finishes.', human_fail:"The human check didn't load. Please refresh.",
+    net:'The connection is unstable. Please try again in a moment.', other:'Something went wrong. Please try again in a moment.',
+    rejected:"This can't be posted because part of it doesn't fit the guide. Please check the guide.",
+    privacy:'Please remove personal information (contact details, payment records, etc.) and post again.',
+    redirect_kofi:'For TITLE HOLDER name changes, payments, or refunds, please send a Ko-fi message.',
+    redirect_mail:'For company or collaboration proposals, please use the business email.',
+    redirect_form:'To register a serial or commercial work, please use the registration form.'
   },
-  checking:'확인하는 중…',
-  hiddenCount:' (지금까지 {n}건)'
+  checking:'Checking…',
+  hiddenCount:' ({n} so far)'
 };
 
-/* ══════════ 여기부터는 고치지 않아도 됩니다 ══════════ */
+/* ══════════ Nothing below needs editing ══════════ */
 (function(){
 'use strict';
 
-/* ── 익명 딱지: 브라우저마다 하나. 공감·신고 중복을 막는 데만 쓰고 화면엔 안 나옴 ── */
+/* ── Anonymous tag: one per browser. Used only to stop duplicate agrees and reports; never shown ── */
 var TAG = (function(){
   var k = 'bzd_board', v = '';
   try{ v = localStorage.getItem(k) || ''; }catch(e){}
@@ -353,7 +353,7 @@ var TAG = (function(){
 var S = { list:null, open:true, sort:'new', q:'', draft:{ title:'', body:'' }, cmtDraft:{} };
 var view = document.getElementById('view');
 
-/* ── 화면 조각 만들기 (사용자 글은 전부 textContent 로만 넣음) ── */
+/* ── Building page pieces (user text goes in through textContent only) ── */
 function el(tag, attrs, kids){
   var n = document.createElement(tag);
   if(attrs) for(var k in attrs){
@@ -375,11 +375,11 @@ function whoLabel(x){ return x.who === 'OP' ? T.op : T.anon + x.who; }
 function day(iso){ return iso ? String(iso).slice(0, 10) : ''; }
 function errText(code){ return T.err[code] || T.err.other; }
 
-/* ── 서버와 주고받기 ── */
+/* ── Talking to the server ── */
 function apiGet(q){
   return fetch(BOARD.API + q, { redirect:'follow' }).then(function(r){ return r.json(); });
 }
-/* 읽기는 실패하면 한 번 더 시도합니다 (구글 서버가 가끔 첫 요청을 늦게 받거나 튕겨서) */
+/* A failed read is tried once more (the server sometimes takes the first request late or drops it) */
 function apiGetRetry(q){
   return apiGet(q).then(function(d){ if(d && d.ok === false && d.error === 'server') throw new Error('server'); return d; })
     .catch(function(){ return new Promise(function(r){ setTimeout(r, 900); }).then(function(){ return apiGet(q); }); });
@@ -388,7 +388,7 @@ function apiPost(body){
   body.tag = TAG;
   return fetch(BOARD.API, {
     method:'POST', redirect:'follow',
-    headers:{ 'Content-Type':'text/plain;charset=utf-8' },   /* 이 모양이어야 구글이 막지 않습니다 */
+    headers:{ 'Content-Type':'text/plain;charset=utf-8' },   /* this content type keeps the request from being blocked */
     body: JSON.stringify(body)
   }).then(function(r){ return r.json(); });
 }
@@ -403,7 +403,7 @@ function loadList(force){
   });
 }
 
-/* ── 사람 확인 (Turnstile) ── */
+/* ── Human check (Turnstile) ── */
 var human = { ready:false, waiters:[], id:null, token:'' };
 window.onTurnstileLoad = function(){ human.ready = true; human.waiters.splice(0).forEach(function(f){ f(); }); };
 function mountHuman(box){
@@ -436,11 +436,11 @@ function needHuman(){
   return '';
 }
 
-/* ══════════ 화면 1: 피드 ══════════
-   SNS처럼 글과 댓글이 한 화면에 쭉 이어집니다. 10개씩 보여 주고, 아래 "더 보기"로 이어서 불러옵니다.
-   목록을 먼저 그려 두고, 글마다 본문·댓글을 뒤이어 채웁니다. */
+/* ══════════ Screen 1: feed ══════════
+   Posts and comments run down one page, like a social feed. Ten at a time, with a "more" button at the bottom.
+   The list is drawn first; each post's body and comments are filled in afterwards. */
 var PAGE = 10;
-S.details = {};      /* 글 번호 → 본문·댓글 (한 번 불러오면 기억) */
+S.details = {};      /* post number → body and comments (kept once loaded) */
 S.loading = {};
 S.shown = PAGE;
 
@@ -455,7 +455,7 @@ function fetchDetail(id, force){
   return S.loading[id];
 }
 
-/* 피드용: 아직 없는 글들을 요청 한 번으로 받아 옵니다 (최대 20개) */
+/* For the feed: posts not loaded yet are fetched in a single request (up to 20) */
 function fetchMany(ids){
   ids = ids.filter(function(id){ return !S.details[id]; });
   if(!ids.length) return Promise.resolve();
@@ -464,14 +464,14 @@ function fetchMany(ids){
     d.posts.forEach(function(b){ S.details[b.post.id] = b; });
   });
 }
-/* 카드 여러 장을 한 번에 채우기. 실패한 카드에는 "다시 시도" 버튼 */
+/* Fill several cards at once. A card that fails gets a "try again" button */
 function loadCards(items){
   if(!items.length) return;
   fetchMany(items.map(function(x){ return x.p.id; })).then(function(){
     items.forEach(function(x){
       if(!x.el.isConnected) return;
       var d = S.details[x.p.id];
-      if(d) fillCard(x.el, d); else x.el.remove();   /* 그사이 숨겨진 글은 빼기 */
+      if(d) fillCard(x.el, d); else x.el.remove();   /* drop posts hidden in the meantime */
     });
   }).catch(function(){ items.forEach(markFail); });
 }
@@ -533,18 +533,18 @@ function showFeed(){
   loadList(false).then(draw).catch(function(){ box.replaceChildren(el('p', { cls:'empty', text:T.loadFail })); });
 }
 
-/* 글 한 장. 목록 정보로 먼저 그리고, 본문·댓글이 오면 다시 채웁니다 */
+/* One post. Drawn first from the list data, then filled again when the body and comments arrive */
 function card(p){
   var c = el('article', { cls:'card', id:'post-' + p.id });
   if(S.details[p.id]) fillCard(c, S.details[p.id]);
   else {
     fillCard(c, { post:{ id:p.id, at:p.at, title:p.title, body:p.ex, likes:p.likes, status:p.status, folded:p.folded, liked:false }, comments:null, n:p.comments });
-    /* 본문·댓글은 부른 쪽(loadCards)이 여러 장을 모아 한 번에 채웁니다 */
+    /* body and comments are filled by the caller (loadCards), several cards at a time */
   }
   return c;
 }
 
-/* 댓글 한 줄. isReply 면 들여쓰기, toWho 가 있으면 "익명 2에게" 표시(답글에 단 답글) */
+/* One comment. isReply indents it; toWho shows "to Anon 2" (a reply to a reply) */
 function cmtEl(c, pid, x, isReply, toWho){
   var acts = S.open
     ? [ likeBtn('comment', x), el('button', { onclick:function(){ openForm(c, pid, x); } }, [ ic('reply'), T.reply ]), reportBtn('comment', x) ]
@@ -597,7 +597,7 @@ function fillCard(c, d){
   var cm = el('div', { cls:'cmts' });
   if(!ready) cm.appendChild(el('p', { cls:'muted small', text:T.loading }));
   else {
-    /* 답글은 맨 처음 댓글(뿌리) 아래로 모아 들여쓰기. 답글의 답글이면 "익명 2에게" 표시 */
+    /* Replies are gathered and indented under the first comment (the root). A reply to a reply shows "to Anon 2" */
     var byId = {}; d.comments.forEach(function(x){ byId[x.id] = x; });
     var rootOf = function(x){ var n = 0; while(x.parent && byId[x.parent] && n++ < 50) x = byId[x.parent]; return x; };
     var roots = [], kids = {};
@@ -610,12 +610,12 @@ function fillCard(c, d){
   if(ready && S.open){
     cm.appendChild(el('button', { cls:'textbtn add-c', onclick:function(){ openForm(c, p.id, null); } }, [ ic('plus'), T.cmtOpen ]));
   }
-  if(ready && !d.comments.length){ if(S.open) cm.classList.add('none'); else cm.style.display = 'none'; }   /* 댓글이 없으면 회색 상자 없이 '+ 댓글 달기'만 */
+  if(ready && !d.comments.length){ if(S.open) cm.classList.add('none'); else cm.style.display = 'none'; }   /* with no comments, only '+ Add a comment' is shown, without the gray box */
 
   c.replaceChildren(head, foldable(p.folded, T.foldedPost, el('div', {}, [ bodyBlock, cm ])));
 }
 
-/* 링크 복사: 이 글만 보이는 주소 (#/p/12) */
+/* Copy link: the address that shows only this post (#/p/12) */
 function shareBtn(id){
   var b = el('button', { cls:'muted' }, [ ic('link'), T.copyLink ]);
   b.addEventListener('click', function(){
@@ -627,12 +627,12 @@ function shareBtn(id){
   return b;
 }
 
-/* ══════════ 화면 2: 글 하나만 (공유 링크로 들어왔을 때) ══════════ */
+/* ══════════ Screen 2: a single post (opened from a shared link) ══════════ */
 function showSingle(id){
   closeForm();
   var holder = el('div', { cls:'feed' }, [ el('p', { cls:'muted', text:T.loading }) ]);
   view.replaceChildren(el('a', { cls:'back', href:'#/' }, [ ic('back'), T.backAll.replace('← ', '') ]), holder);
-  loadList(false).catch(function(){});   /* 안내문 숫자를 채우려고 */
+  loadList(false).catch(function(){});   /* to fill the number in the guide */
   fetchDetail(id, true).then(function(d){
     if(location.hash !== '#/p/' + id) return;
     var c = el('article', { cls:'card', id:'post-' + id });
@@ -649,7 +649,7 @@ function likeBtn(kind, item){
   paint();
   b.addEventListener('click', function(){
     if(!S.open || b.disabled) return;
-    item.liked = !item.liked; item.likes += item.liked ? 1 : -1; paint();   /* 먼저 바꿔 보여 주고 */
+    item.liked = !item.liked; item.likes += item.liked ? 1 : -1; paint();   /* show the change first */
     b.disabled = true;
     apiPost({ action:'like', kind:kind, id:item.id }).then(function(r){
       if(r.ok){ item.liked = r.liked; item.likes = r.likes; S.list = null; }
@@ -672,7 +672,7 @@ function reportBtn(kind, item){
   });
   return b;
 }
-/* 접힌 글·댓글: 안내 한 줄 + 펼치기 버튼. 펼치면 원래 내용이 나옵니다 */
+/* Folded post or comment: one line of notice + a button that shows the original content */
 function foldable(isFolded, msg, inner){
   if(!isFolded) return inner;
   var holder = el('div');
@@ -681,7 +681,7 @@ function foldable(isFolded, msg, inner){
   return holder;
 }
 
-/* ── 댓글 입력칸: 한 번에 한 글에만 열립니다 (사람 확인 칸이 하나뿐이라서) ── */
+/* ── Comment form: open on one post at a time (there is only one human-check box) ── */
 var openedForm = null;
 function closeForm(){
   unmountHuman();
@@ -698,7 +698,7 @@ function openForm(c, pid, target){
   f.dataset.key = key;
   var cm = c.querySelector('.cmts');
   if(target){
-    /* 답글 칸은 그 댓글 바로 아래(그 댓글에 달린 답글들 다음)에 */
+    /* the reply form goes right under that comment (after its replies) */
     var after = c.querySelector('.cmt[data-cid="' + target.id + '"]');
     while(after && after.nextElementSibling && after.nextElementSibling.classList.contains('is-reply')) after = after.nextElementSibling;
     f.classList.add('is-reply-form');
@@ -738,7 +738,7 @@ function commentForm(pid, target, onDone){
   return f;
 }
 
-/* ══════════ 화면 3: 글쓰기 ══════════ */
+/* ══════════ Screen 3: new post ══════════ */
 function showNew(){
   if(!S.open){ location.hash = '#/'; return; }
   closeForm();
@@ -750,7 +750,7 @@ function showNew(){
   var msg = el('div', { cls:'msg' });
   var hb = el('div', { cls:'human' });
   var send = el('button', { cls:'on' }, [ ic('pen'), T.send ]);
-  var brief = el('div', { cls:'brief' }); brief.innerHTML = T.brief;   /* 공식이 쓴 고정 문구라 HTML 로 넣어도 안전 */
+  var brief = el('div', { cls:'brief' }); brief.innerHTML = T.brief;   /* fixed text from this file, so putting it in as HTML is safe */
 
   function upd(){ S.draft.title = ti.value; S.draft.body = ta.value; cnt.textContent = ta.value.length + ' / ' + BOARD.BODY_MAX; }
   ti.addEventListener('input', function(){ upd(); findSimilar(ti.value, sim); });
@@ -777,7 +777,7 @@ function showNew(){
   loadList(false).then(function(){ findSimilar(ti.value, sim); }).catch(function(){});
 }
 
-/* 제목에 쓴 단어가 겹치는 기존 제안을 세 개까지 보여 줍니다 (AI 없이 단어 겹침만으로) */
+/* Shows up to three existing suggestions whose titles share words with the one being typed (plain word overlap) */
 function words(s){
   return String(s || '').toLowerCase().split(/[^0-9a-z\u3131-\u318e\uac00-\ud7a3\u3040-\u30ff\u4e00-\u9fff]+/)
     .filter(function(w){ return w.length >= 2; });
@@ -799,7 +799,7 @@ function findSimilar(title, box){
   box.style.display = 'block';
 }
 
-/* ══════════ 주소 따라 화면 바꾸기 ══════════ */
+/* ══════════ Switching screens by address ══════════ */
 function route(){
   var h = location.hash || '#/';
   var m = h.match(/^#\/p\/(\d+)$/);
@@ -811,7 +811,7 @@ function route(){
 }
 window.addEventListener('hashchange', route);
 
-/* 안내문이 화면보다 길면, 끝부분이 보이는 위치에서 붙도록 top 값을 맞춥니다 (안쪽 스크롤바 없이) */
+/* When the guide is taller than the screen, top is set so it sticks where its end is visible (no inner scrollbar) */
 var guideEl = document.getElementById('guide');
 function fitGuide(){
   if(window.matchMedia('(max-width:760px)').matches){ guideEl.style.top = ''; return; }
@@ -822,10 +822,10 @@ window.addEventListener('resize', fitGuide);
 window.addEventListener('load', fitGuide);
 fitGuide();
 
-/* 휴대폰에서는 안내문을 처음에 접어 둡니다 */
+/* On phones the guide starts closed */
 if(window.matchMedia('(max-width:760px)').matches) document.getElementById('guide').removeAttribute('open');
 
-/* 제안함이 열려 있는지 먼저 확인하고 시작 */
+/* Check whether the box is open, then start */
 apiGet('').then(function(d){ S.open = d.ok !== false && d.open !== false; })
   .catch(function(){})
   .then(route);

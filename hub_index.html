@@ -6,6 +6,21 @@
 <title>rrkt.biz · HUB</title>
 
 <!-- ══════════════════════════════════════════════════
+     ★ 로컬 전용 파일입니다. 깃허브에 올리지 않습니다.
+
+     내 컴퓨터에서 이 파일을 더블클릭해서 엽니다.
+     옆에 다른 파일(config.js · 그림)이 없어도 됩니다.
+     필요한 것은 전부 실제 사이트 주소(아래 스크립트의 SITE)에서 불러옵니다.
+       · 카드 그림, config.js      → 사이트에서 읽어 옴
+       · 카드를 눌렀을 때 가는 곳   → 사이트의 그 프로젝트 주소 (PROJECT_SITES)
+       · 캘린더 날짜               → 구글시트 (인터넷 연결 필요)
+
+     나중에 어떤 프로젝트를 깃허브에서 내리고 로컬로 옮기면,
+     PROJECT_SITES 와 PROJECTS 의 illust 에서 그 줄만 "./폴더/파일" 로 바꾸면 됩니다.
+     ("./" 로 시작하면 이 파일 옆에서 찾습니다)
+     ══════════════════════════════════════════════════ -->
+
+<!-- ══════════════════════════════════════════════════
      링크 미리보기 (OG 태그)
 
      트위터·카톡·디스코드에 이 주소를 붙였을 때 뜨는 카드입니다.
@@ -38,7 +53,7 @@
 <meta name="robots" content="noindex, nofollow">
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='white' stroke='%23111' stroke-width='1.5'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23111'>B</text></svg>">
-<script src="config.js"></script>
+<script src="https://rrktbiz.github.io/rrkt.biz/config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700;800&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -875,6 +890,13 @@ body{top:0!important}
 /* ── Google Sheets 동기화 설정 (API 키 불필요 — 공개 CSV 방식) ──
    config.js 에 CONFIG.SHEETS_ID 가 있으면 그 값이 우선이고,
    없으면 아래 기본 ID를 씁니다. 시트를 갈아끼울 땐 config.js 쪽을 고치세요. */
+/* ── 실제 사이트 주소 ──
+   이 파일은 로컬에서 열기 때문에, 그림과 프로젝트 페이지는 이 주소에서 가져옵니다.
+   siteUrl('bhs_home.png')      → 사이트의 그 파일
+   siteUrl('./bhs_home.png')    → 이 파일 옆(로컬)의 그 파일  ("./" 로 시작하면 로컬) */
+const SITE = 'https://rrktbiz.github.io/rrkt.biz/';
+const siteUrl = p => /^(https?:|file:|\.{1,2}\/)/.test(p) ? p : SITE + p;
+
 const SHEETS_ID = (typeof CONFIG !== 'undefined' && CONFIG.SHEETS_ID)
   ? CONFIG.SHEETS_ID
   : '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk';
@@ -1277,6 +1299,11 @@ const S={
 const getProj=id=>PROJECTS.find(p=>p.id===id);
 const ds=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
 const stClass=s=>(s==="완료"||s==="done")?"done":(s==="작업중"||s==="wip")?"wip":"plan";
+/* 구글시트는 영어 값(done / wip / plan)을 씁니다. 이 파일 안에서는 한국어 값(완료 / 작업중 / 예정)을 쓰므로
+   시트에서 읽어 올 때 여기서 바꿉니다. 옛 한국어 값이 와도 그대로 통과합니다. */
+const koStatus=s=>{ s=String(s==null?"":s).trim(); return ({done:"완료",wip:"작업중",plan:"예정"})[s.toLowerCase()] || s; };
+/* 시트의 종류 값(novel) → 이 파일의 VOLUMES type(웹소설) */
+const koType=t=>{ t=String(t==null?"":t).trim(); return ({novel:"웹소설"})[t.toLowerCase()] || t; };
 /* "2026-04-12" → "2026.04.12" */
 const fmtDate=d=>d?d.replace(/-/g,"."):"";
 /* JSON의 completedDate → VOLUMES episodes의 date 필드로 매핑
@@ -1297,6 +1324,8 @@ let _visFetched = false;
 function fetchGlobalVisits(){
   if(_visFetched) return;
   _visFetched = true;
+  /* 로컬에서 내가 열어 본 것은 방문자로 세지 않습니다 */
+  if(location.protocol === 'file:'){ _renderVisWidget(null); return; }
   fetch(VIS_WORKER_URL + '/hit', {method:'POST'})
     .then(r=>r.json())
     .then(d=>_renderVisWidget(d))
@@ -1768,7 +1797,7 @@ function renderHome(){
               return shownProjs.map(p=>{
                 const isPrep=(p.status||'active')==='prep';
                 const illustSlot = p.illust
-                  ? `<img src="${p.illust}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
+                  ? `<img src="${siteUrl(p.illust)}" class="proj-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">`
                   : `<div class="home-proj-prep-slot"><span class="pp-mark">✦</span><span class="pp-txt">${isPrep?'coming soon':'illustration'}</span></div>`;
                 const badge = isPrep ? `<div class="home-proj-badge">OPEN 준비중</div>` : '';
                 const attrs = isPrep
@@ -2131,6 +2160,9 @@ function goHome(){
 function goCal(){S.view="calendar";S.activeProj=null;pushHash();render();}
 
 /* ── 프로젝트별 독립 사이트 진입 ── */
+/* 카드를 누르면 가는 곳. 지금은 넷 다 실제 사이트 주소로 갑니다.
+   깃허브에서 내리고 로컬로 옮긴 프로젝트는 "./폴더/파일" 로 적으면 됩니다.
+     예) "stock": "./stock/index.html"   ← 이 파일 옆 stock 폴더 */
 const PROJECT_SITES = {
   "blood-highschool": "Blood_High_School/index.html",
   "biz-oc-doll":      "biz-OC-doll/index.html",
@@ -2140,7 +2172,7 @@ const PROJECT_SITES = {
 function goSite(pid, hash){
   const base = PROJECT_SITES[pid];
   if(!base) return;
-  location.href = base + (hash || "");
+  location.href = siteUrl(base) + (hash || "");
 }
 function goIntro(pid){ goSite(pid, pid === "blood-highschool" ? "#intro" : "#/intro"); }
 function goDollChar(){ goSite("biz-oc-doll", "#/chars"); }
@@ -2228,7 +2260,8 @@ function miniNext(){if(S.homeMiniM===11){S.homeMiniM=0;S.homeMiniY++;}else S.hom
    시트 열 구조 (1행은 헤더라 건너뜀, 좌우 2벌이 한 줄에 들어감)
      왼쪽  A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜
      오른쪽 G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜
-   프로젝트 칸에 쓰는 값: "블러드하이스쿨" 또는 "biz-OC-doll"
+   프로젝트 칸에 쓰는 값: "BHS" 또는 "biz-OC-doll"   (종류: novel / 상태: done · wip · plan)
+   ※ 옛 한국어 값(블러드하이스쿨 · 웹소설 · 완료 · 작업중 · 예정)도 그대로 읽힙니다.
    날짜 형식: 2026-04-12 또는 2026. 4. 12  (둘 다 인식)
 
    ※ 실패해도 페이지는 그대로 뜹니다 — 날짜만 안 붙습니다.
@@ -2258,6 +2291,8 @@ async function loadEpDataFromSheets(){
 
     // 프로젝트 이름 → ID 매핑
     const projMap = {
+      "BHS":            "blood-highschool",
+      "bhs":            "blood-highschool",
       "블러드하이스쿨": "blood-highschool",
       "biz-OC-doll":    "biz-oc-doll",
       "biz-oc-doll":    "biz-oc-doll",
@@ -2276,6 +2311,7 @@ async function loadEpDataFromSheets(){
     // 시트 구조: A=프로젝트 B=종류 C=권수 D=N화 E=상태 F=날짜 (왼쪽)
     //           G=프로젝트 H=종류 I=권수 J=N화 K=상태 L=날짜 (오른쪽)
     function applyRow(p,t,vn,en,s,d){
+      t=koType(t); s=koStatus(s);   /* 영어 값 → 이 파일의 한국어 값 */
       const volNum=parseInt(vn), epId=parseInt(en);
       if(!p||isNaN(volNum)||isNaN(epId)) return;
       const pid=projMap[p]; if(!pid) return;
@@ -2341,7 +2377,7 @@ async function loadCharDataFromSheets(){
       code:    (r[0]||'').trim(),
       type:    (r[1]||'').trim(),
       holder:  (r[2]||'').trim(),
-      status:  (r[3]||'').trim(),
+      status:  koStatus(r[3]),
       updated: (r[4]||'').trim(),
     })).filter(c=>c.code);
 
@@ -2396,7 +2432,7 @@ function injectCharDatesIntoWorkLog(){
    ※ VOLUMES["biz-oc-doll"].episodes 를 손으로 적지 마세요.
      불러오기에 성공하면 이 함수가 통째로 덮어씁니다.
      회차를 추가하려면 story_editor.json 을 고치면 됩니다. */
-const DOLL_STORY_JSON = 'biz-OC-doll/story_editor.json';
+const DOLL_STORY_JSON = siteUrl('biz-OC-doll/story_editor.json');
 
 /* story_editor.json 은 done/wip/plan, 이 파일은 완료/작업중/예정 을 씁니다.
    '최근 작업'의 완료 목록이 "완료" 로만 걸러내기 때문에 반드시 변환해야 합니다. */
@@ -2653,7 +2689,7 @@ function googleTranslateElementInit(){
   },'google_translate_element');
 }
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
 
