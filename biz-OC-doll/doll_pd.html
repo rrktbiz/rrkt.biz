@@ -20,7 +20,7 @@
    A saved choice (localStorage 'bzd_lang') wins; otherwise the browser language.
    Japanese / Chinese browsers get the prepared text, everyone else gets English. */
 (function(){
-  var DICT = { 'ja':'ja', 'zh-CN':'zh-Hans', 'zh-TW':'zh-Hant' };
+  var DICT = { 'ja':'ja', 'zh-CN':'zh-CN', 'zh-TW':'zh-TW' };
   var FONT = { 'ja':'Noto+Sans+JP', 'zh-CN':'Noto+Sans+SC', 'zh-TW':'Noto+Sans+TC' };
 
   function norm(c){
@@ -116,8 +116,8 @@ catch(e){ document.documentElement.className = 'embed'; }
 }
 /* ── Japanese / Chinese pages: local fonts, and line breaks between characters ── */
 html:lang(ja){--cjk:'Noto Sans JP'}
-html:lang(zh-Hans){--cjk:'Noto Sans SC'}
-html:lang(zh-Hant){--cjk:'Noto Sans TC'}
+html:lang(zh-CN){--cjk:'Noto Sans SC'}
+html:lang(zh-TW){--cjk:'Noto Sans TC'}
 html:lang(ja) *,html:lang(zh) *{word-break:normal !important;line-break:strict}
 body{background:var(--bg);color:var(--tx);font-family:var(--fn);-webkit-font-smoothing:antialiased}
 button{font-family:var(--fn);cursor:pointer}
@@ -365,12 +365,14 @@ a.pd-contact{text-decoration:none}
 
     <!-- ══ Suggestion box ══
          Address: board.html in the same folder.
-         To open it, delete the single word is-locked from the <a> below
-         (label, lock icon, fade and click-block all switch together),
-         then remove or change the second paragraph (board_p2). -->
+         It unlocks by itself when released characters reach BOARD_OPEN_AT
+         (set in the script at the bottom). The script removes is-locked from
+         the <a> below (label, lock icon, fade and click-block all switch
+         together) and hides the second paragraph (board_p2).
+         To open it by hand instead, delete the single word is-locked. -->
     <div class="pd-sub" data-i18n="board_h">Suggestion box</div>
     <p class="pd-body" data-i18n="board_p1">If you have something too small for an email but too good to let slide, leave it here. Things that bugged you while using the site, or ideas for things you'd like to see, are all welcome.</p>
-    <p class="pd-body" data-i18n="board_p2">It's still being prepared. We plan to open it once the scene grows a bit more.</p>
+    <p class="pd-body" id="pd-board-pre" data-i18n="board_p2">It's still being prepared. We plan to open it once the scene grows a bit more.</p>
     <a class="pd-contact pd-board is-locked" href="board.html" onclick="if(this.classList.contains('is-locked')) return false;">
       <svg class="ic-lock" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       <svg class="ic-open" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
@@ -510,498 +512,498 @@ a.pd-contact{text-decoration:none}
 var I18N = {
   pd_title: { 'en': "<span class=\"brandname\">biz-OC-doll</span> Project Note",
     'ja': "<span class=\"brandname\">biz-OC-doll</span> プロジェクトノート",
-    'zh-Hans': "<span class=\"brandname\">biz-OC-doll</span> 企划笔记",
-    'zh-Hant': "<span class=\"brandname\">biz-OC-doll</span> 企劃筆記" },
+    'zh-CN': "<span class=\"brandname\">biz-OC-doll</span> 企划笔记",
+    'zh-TW': "<span class=\"brandname\">biz-OC-doll</span> 企劃筆記" },
 
   pd_date: { 'en': "Written September 30, 2026",
     'ja': "2026年9月30日 記",
-    'zh-Hans': "2026年9月30日 撰写",
-    'zh-Hant': "2026年9月30日 撰寫" },
+    'zh-CN': "2026年9月30日 撰写",
+    'zh-TW': "2026年9月30日 撰寫" },
 
   pd_lede: { 'en': "Thank you for finding your way here. Before we get to the IP business side, we'd like to walk you through why this reckless project began and how it came to look the way it does. It's a little long, but most of the questions this project may have raised for you are answered here.",
     'ja': "ここまで来てくださって、ありがとうございます。IPビジネスの話をする前に、この無謀なプロジェクトをなぜ始めたのか、なぜ今の形になったのかを、ひとつずつお話しさせてください。少し長くなりますが、この企画を見て浮かんだ疑問への答えは、ほとんどここにあります。",
-    'zh-Hans': "感谢你一路来到这里。在谈IP商务之前，想先一件件说明这个有些莽撞的企划为什么会开始，又为什么会是现在这个样子。内容有点长，但看到这个企划时可能产生的疑问，答案大多都在这里。",
-    'zh-Hant': "感謝你一路來到這裡。在談IP商務之前，想先一件件說明這個有些莽撞的企劃為什麼會開始，又為什麼會是現在這個樣子。內容有點長，但看到這個企劃時可能產生的疑問，答案大多都在這裡。" },
+    'zh-CN': "感谢你一路来到这里。在谈IP商务之前，想先一件件说明这个有些莽撞的企划为什么会开始，又为什么会是现在这个样子。内容有点长，但看到这个企划时可能产生的疑问，答案大多都在这里。",
+    'zh-TW': "感謝你一路來到這裡。在談IP商務之前，想先一件件說明這個有些莽撞的企劃為什麼會開始，又為什麼會是現在這個樣子。內容有點長，但看到這個企劃時可能產生的疑問，答案大多都在這裡。" },
 
   pd_jump: { 'en': "Considering a collaboration? Skip to <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>",
     'ja': "コラボをご検討中の方は <span class=\"notranslate\" translate=\"no\">BUSINESS</span> へ <span aria-hidden=\"true\">&darr;</span>",
-    'zh-Hans': "正在考虑合作的话，直接跳到 <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>",
-    'zh-Hant': "正在考慮合作的話，直接跳到 <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>" },
+    'zh-CN': "正在考虑合作的话，直接跳到 <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>",
+    'zh-TW': "正在考慮合作的話，直接跳到 <span class=\"notranslate\" translate=\"no\">BUSINESS</span> <span aria-hidden=\"true\">&darr;</span>" },
 
   cn_title: { 'en': "Why it's made this way",
     'ja': "こうして作った理由",
-    'zh-Hans': "为什么这样做",
-    'zh-Hant': "為什麼這樣做" },
+    'zh-CN': "为什么这样做",
+    'zh-TW': "為什麼這樣做" },
 
   s1_h: { 'en': "The culture we grew up with",
     'ja': "見て育った文化",
-    'zh-Hans': "看着长大的文化",
-    'zh-Hant': "看著長大的文化" },
+    'zh-CN': "看着长大的文化",
+    'zh-TW': "看著長大的文化" },
 
   s1_p1: { 'en': "We used to love the Vocaloid fan culture. Even with only a few lines of character info, people spun stories out of it, others made something new from those stories, and it all spread out into all kinds of content. That was the fun of it. Beyond Vocaloid, too, there used to be a livelier culture than today of fan works, and works built on those, that stood on their own as real creations.",
     'ja': "かつて、ボーカロイドの同人文化がとても好きでした。キャラクターの情報はほんの数行しかないのに、人々がそこから物語を作り、その物語からまた別の誰かが何かを作り、そうしてさまざまなコンテンツへ広がっていくのが面白かったんです。ボーカロイド以外の作品でも、二次創作にとどまらず、作品として読み応えのある二次・三次創作が続いていく文化が、今よりも活発でした。",
-    'zh-Hans': "过去我们非常喜欢VOCALOID的同人文化。明明角色资料只有寥寥几行，大家却能以此编出故事，又有人根据那些故事做出新的东西，就这样扩散成各式各样的内容，这一点特别有意思。在VOCALOID以外的作品里，超越二次创作、本身就具有作品性的二次、三次创作接连出现的文化，也比现在活跃得多。",
-    'zh-Hant': "過去我們非常喜歡VOCALOID的同人文化。明明角色資料只有寥寥幾行，大家卻能以此編出故事，又有人根據那些故事做出新的東西，就這樣擴散成各式各樣的內容，這一點特別有意思。在VOCALOID以外的作品裡，超越二次創作、本身就具有作品性的二次、三次創作接連出現的文化，也比現在活躍得多。" },
+    'zh-CN': "过去我们非常喜欢VOCALOID的同人文化。明明角色资料只有寥寥几行，大家却能以此编出故事，又有人根据那些故事做出新的东西，就这样扩散成各式各样的内容，这一点特别有意思。在VOCALOID以外的作品里，超越二次创作、本身就具有作品性的二次、三次创作接连出现的文化，也比现在活跃得多。",
+    'zh-TW': "過去我們非常喜歡VOCALOID的同人文化。明明角色資料只有寥寥幾行，大家卻能以此編出故事，又有人根據那些故事做出新的東西，就這樣擴散成各式各樣的內容，這一點特別有意思。在VOCALOID以外的作品裡，超越二次創作、本身就具有作品性的二次、三次創作接連出現的文化，也比現在活躍得多。" },
 
   s1_p2: { 'en': "In the ten-odd years since, subculture has grown far bigger. Mobile games now sit at the center of it all, and a clear flow has settled in: the official side releases new characters and stories, fans take them in and enjoy them through art and cosplay, then go looking for them in merch and pop-up stores. It's an era where showing love through spending feels natural, and it's true that this has let many more people enjoy the culture. But by the same token, the sight of people freely setting each other's creativity alight from almost nothing has become hard to find. We don't think that's anyone's fault. It's a change that came naturally with the times. So rather than waiting for those days to return, this project is closer to a struggle to make even one place where that kind of scene could happen again.",
     'ja': "それから10年あまりのあいだに、サブカルチャーはずっと大きくなりました。今ではモバイルゲームがこの界隈の中心になり、公式が新しいキャラクターと物語を出すと、ファンがそれを受け取ってイラストやコスプレで楽しみ、グッズやポップアップストアへ足を運ぶ流れが定着しています。好きな気持ちを消費で表すのが自然な時代ですよね。そのおかげで、より多くの人がこの文化を楽しめるようになったのも事実です。ただそのぶん、ほとんど何もないところから、自由にお互いの創作に火をつけ合っていく光景は見かけにくくなりました。誰かのせいというより、時代に合わせて自然に生まれた変化だと思っています。だからこのプロジェクトは、あの頃が戻ってくるのを待つよりも、そんな場がもう一度生まれうる場所をひとつでも作ってみようという、あがきに近いものです。",
-    'zh-Hans': "从那之后的十多年里，亚文化变得庞大得多。如今手游成了这个圈子的中心，官方推出新角色和新故事，粉丝接收之后用绘画和cos来享受，再去周边和快闪店寻找它们，这样的流程已经固定下来。这是一个用消费来表达喜爱显得理所当然的时代，也确实因此让更多人能享受这份文化。只是相应地，从几乎一无所有的地方出发、自由地互相点燃创作的景象，已经很难看到了。与其说是谁的错，不如说是顺应时代自然产生的变化。所以这个企划与其说是在等那个时代回来，更像是在拼命挣扎，想至少打造一个能让那样的圈子再次诞生的地方。",
-    'zh-Hant': "從那之後的十多年裡，次文化變得龐大得多。如今手遊成了這個圈子的中心，官方推出新角色和新故事，粉絲接收之後用繪畫和cos來享受，再去周邊和快閃店尋找它們，這樣的流程已經固定下來。這是一個用消費來表達喜愛顯得理所當然的時代，也確實因此讓更多人能享受這份文化。只是相應地，從幾乎一無所有的地方出發、自由地互相點燃創作的景象，已經很難看到了。與其說是誰的錯，不如說是順應時代自然產生的變化。所以這個企劃與其說是在等那個時代回來，更像是在拼命掙扎，想至少打造一個能讓那樣的圈子再次誕生的地方。" },
+    'zh-CN': "从那之后的十多年里，亚文化变得庞大得多。如今手游成了这个圈子的中心，官方推出新角色和新故事，粉丝接收之后用绘画和cos来享受，再去周边和快闪店寻找它们，这样的流程已经固定下来。这是一个用消费来表达喜爱显得理所当然的时代，也确实因此让更多人能享受这份文化。只是相应地，从几乎一无所有的地方出发、自由地互相点燃创作的景象，已经很难看到了。与其说是谁的错，不如说是顺应时代自然产生的变化。所以这个企划与其说是在等那个时代回来，更像是在拼命挣扎，想至少打造一个能让那样的圈子再次诞生的地方。",
+    'zh-TW': "從那之後的十多年裡，次文化變得龐大得多。如今手遊成了這個圈子的中心，官方推出新角色和新故事，粉絲接收之後用繪畫和cos來享受，再去周邊和快閃店尋找它們，這樣的流程已經固定下來。這是一個用消費來表達喜愛顯得理所當然的時代，也確實因此讓更多人能享受這份文化。只是相應地，從幾乎一無所有的地方出發、自由地互相點燃創作的景象，已經很難看到了。與其說是誰的錯，不如說是順應時代自然產生的變化。所以這個企劃與其說是在等那個時代回來，更像是在拼命掙扎，想至少打造一個能讓那樣的圈子再次誕生的地方。" },
 
   s1_p3: { 'en': "That's why the character structure of this project was designed the way it is below. Even if the story ends, we hope these characters never do.",
     'ja': "だから、このプロジェクトのキャラクター構造を次のように設計しました。作品は終わっても、このキャラクターたちは終わらないでほしいから。",
-    'zh-Hans': "所以，这个企划的角色结构是按下面的方式设计的。因为希望即使作品结束了，这些角色也不会结束。",
-    'zh-Hant': "所以，這個企劃的角色結構是按下面的方式設計的。因為希望即使作品結束了，這些角色也不會結束。" },
+    'zh-CN': "所以，这个企划的角色结构是按下面的方式设计的。因为希望即使作品结束了，这些角色也不会结束。",
+    'zh-TW': "所以，這個企劃的角色結構是按下面的方式設計的。因為希望即使作品結束了，這些角色也不會結束。" },
 
   s2_h: { 'en': "What fan culture taught us",
     'ja': "同人文化への理解",
-    'zh-Hans': "对同人文化的理解",
-    'zh-Hant': "對同人文化的理解" },
+    'zh-CN': "对同人文化的理解",
+    'zh-TW': "對同人文化的理解" },
 
   s2_p1: { 'en': "Watching fan culture for a long time taught us that the less the official side says, the more fans fill in. So the character sheets are made to be closer to raw material than a finished product. If you're used to receiving a finished story and enjoying it, this approach may feel unfamiliar at first, since you have to fill in the spaces the official side leaves open yourself.",
     'ja': "公式が語らないほど、ファンがより多くを埋めていく。それは同人文化を長く見てきて、自然とわかったことです。だからキャラクターシートは、完成品というより素材に近い形で作っています。完成した物語を受け取って楽しむことに慣れている方は、最初はこのやり方に戸惑うかもしれません。公式が埋めていない部分を、自分で埋めなければならないので。",
-    'zh-Hans': "官方说得越少，粉丝就填补得越多——这是长期看着同人文化自然明白的事。所以角色设定图与其说是成品，不如说更接近素材。对于习惯接收完整故事来享受的人来说，这种方式一开始可能会有点陌生，因为官方没有填上的地方，需要自己去填。",
-    'zh-Hant': "官方說得越少，粉絲就填補得越多——這是長期看著同人文化自然明白的事。所以角色設定圖與其說是成品，不如說更接近素材。對於習慣接收完整故事來享受的人來說，這種方式一開始可能會有點陌生，因為官方沒有填上的地方，需要自己去填。" },
+    'zh-CN': "官方说得越少，粉丝就填补得越多——这是长期看着同人文化自然明白的事。所以角色设定图与其说是成品，不如说更接近素材。对于习惯接收完整故事来享受的人来说，这种方式一开始可能会有点陌生，因为官方没有填上的地方，需要自己去填。",
+    'zh-TW': "官方說得越少，粉絲就填補得越多——這是長期看著同人文化自然明白的事。所以角色設定圖與其說是成品，不如說更接近素材。對於習慣接收完整故事來享受的人來說，這種方式一開始可能會有點陌生，因為官方沒有填上的地方，需要自己去填。" },
 
   s2_p2: { 'en': "Like any creator, when we first imagined this project, it wasn't easy to let the characters go. Then, as we shifted to a structure where one character branches out differently with each Holder, we were able to loosen our grip a little. Now fans are welcome to interpret the characters freely, and it's fine if their take becomes more famous than what was first imagined. That's what this project was built hoping for in the first place. Someday the official side may also name a character and create with it, standing in the same place as every other Holder. Even then, the name and personality will change from work to work, so the official version will be just one of that code's many faces, never the right answer.",
     'ja': "創作者なら誰でもそうであるように、最初にこのプロジェクトを構想したときは、キャラクターたちを簡単には手放せませんでした。けれど、ひとつのキャラクターがホルダーごとに違う方向へ枝分かれしていく構造に変えてから、少しは手放せるようになりました。今では、ファンが自由にキャラ解釈をしてもいいし、その解釈が最初に思い描いた姿より有名になってもかまいません。もともと、そうなることを願って作ったプロジェクトでもあります。いつか公式も、ほかのホルダーと同じ立場で名前をつけて創作するかもしれません。そのときも作品ごとに名前も性格も変えて使うので、公式が描いた姿もそのコードのいくつもの姿のひとつにすぎず、正解にはならないはずです。",
-    'zh-Hans': "就像所有创作者一样，最初构思这个企划时，我们也很难放手让角色离开。后来改成一个角色会随着每位持有者延伸出不同分支的结构，才终于能稍微放下。现在，粉丝可以自由地解读角色，那份解读就算比最初设想的样子更出名也没关系。这个企划本来就是抱着这样的期望做出来的。也许有一天，官方也会站在和其他持有者一样的位置，为角色起名并进行创作。到那时，每部作品里的名字和性格也都会不同，所以官方笔下的样子同样只是那个编号众多面貌中的一种，不会成为标准答案。",
-    'zh-Hant': "就像所有創作者一樣，最初構思這個企劃時，我們也很難放手讓角色離開。後來改成一個角色會隨著每位持有者延伸出不同分支的結構，才終於能稍微放下。現在，粉絲可以自由地解讀角色，那份解讀就算比最初設想的樣子更出名也沒關係。這個企劃本來就是抱著這樣的期望做出來的。也許有一天，官方也會站在和其他持有者一樣的位置，為角色取名並進行創作。到那時，每部作品裡的名字和性格也都會不同，所以官方筆下的樣子同樣只是那個編號眾多面貌中的一種，不會成為標準答案。" },
+    'zh-CN': "就像所有创作者一样，最初构思这个企划时，我们也很难放手让角色离开。后来改成一个角色会随着每位持有者延伸出不同分支的结构，才终于能稍微放下。现在，粉丝可以自由地解读角色，那份解读就算比最初设想的样子更出名也没关系。这个企划本来就是抱着这样的期望做出来的。也许有一天，官方也会站在和其他持有者一样的位置，为角色起名并进行创作。到那时，每部作品里的名字和性格也都会不同，所以官方笔下的样子同样只是那个编号众多面貌中的一种，不会成为标准答案。",
+    'zh-TW': "就像所有創作者一樣，最初構思這個企劃時，我們也很難放手讓角色離開。後來改成一個角色會隨著每位持有者延伸出不同分支的結構，才終於能稍微放下。現在，粉絲可以自由地解讀角色，那份解讀就算比最初設想的樣子更出名也沒關係。這個企劃本來就是抱著這樣的期望做出來的。也許有一天，官方也會站在和其他持有者一樣的位置，為角色取名並進行創作。到那時，每部作品裡的名字和性格也都會不同，所以官方筆下的樣子同樣只是那個編號眾多面貌中的一種，不會成為標準答案。" },
 
   s3_h: { 'en': "Never ending it",
     'ja': "終わらせないということ",
-    'zh-Hans': "所谓不完结",
-    'zh-Hant': "所謂不完結" },
+    'zh-CN': "所谓不完结",
+    'zh-TW': "所謂不完結" },
 
   s3_p1: { 'en': "This project has no finale and no finished state. Not ending is its baseline. Taking Cinderella Girls as a reference, we set the goal at 200 characters or more, but it's hard to promise how far it will go. Not everything always goes to plan. What we promise instead is not to stop.",
     'ja': "このプロジェクトは、完結も完成もなく、終わらせないことを基準にしました。デレマスを参考に目標は200人以上としていますが、どこまで続くかは断言できません。すべてがいつも計画どおりにいくわけではないので。そのかわり、止まらないことを約束にしました。",
-    'zh-Hans': "这个企划没有完结，也没有完成，以不结束为基准。参考灰姑娘女孩，目标定在200人以上，但会延续到哪里，很难打包票。毕竟并不是所有事都能按计划进行。取而代之的，是把不停下来当作承诺。",
-    'zh-Hant': "這個企劃沒有完結，也沒有完成，以不結束為基準。參考灰姑娘女孩，目標定在200人以上，但會延續到哪裡，很難打包票。畢竟並不是所有事都能按計畫進行。取而代之的，是把不停下來當作承諾。" },
+    'zh-CN': "这个企划没有完结，也没有完成，以不结束为基准。参考灰姑娘女孩，目标定在200人以上，但会延续到哪里，很难打包票。毕竟并不是所有事都能按计划进行。取而代之的，是把不停下来当作承诺。",
+    'zh-TW': "這個企劃沒有完結，也沒有完成，以不結束為基準。參考灰姑娘女孩，目標定在200人以上，但會延續到哪裡，很難打包票。畢竟並不是所有事都能按計畫進行。取而代之的，是把不停下來當作承諾。" },
 
   s3_p2: { 'en': "The release order, too, follows whichever character we feel like making at the time rather than some complex strategy. Keeping the character sheets rough and the workload light is for the same reason. That's how it can keep going for a long time.",
     'ja': "公開の順番も、複雑な戦略よりは、そのときどきで作りたいキャラクターについていこうと思っています。キャラクターシートをラフなままにして、作業を軽く保っているのも同じ理由です。そうしてこそ、長く続けていけるので。",
-    'zh-Hans': "发布顺序也不走复杂的策略，而是跟着当下想做的角色走。角色设定图保持粗略、让工作保持轻量，也是同样的理由。这样才能长久地走下去。",
-    'zh-Hant': "發布順序也不走複雜的策略，而是跟著當下想做的角色走。角色設定圖保持粗略、讓工作保持輕量，也是同樣的理由。這樣才能長久地走下去。" },
+    'zh-CN': "发布顺序也不走复杂的策略，而是跟着当下想做的角色走。角色设定图保持粗略、让工作保持轻量，也是同样的理由。这样才能长久地走下去。",
+    'zh-TW': "發布順序也不走複雜的策略，而是跟著當下想做的角色走。角色設定圖保持粗略、讓工作保持輕量，也是同樣的理由。這樣才能長久地走下去。" },
 
   s4_h: { 'en': "Branding / one color",
     'ja': "ブランディング / ひとつのカラー",
-    'zh-Hans': "品牌 / 唯一的色彩",
-    'zh-Hant': "品牌 / 唯一的色彩" },
+    'zh-CN': "品牌 / 唯一的色彩",
+    'zh-TW': "品牌 / 唯一的色彩" },
 
   s4_p1: { 'en': "biz-OC-doll is filled only with characters the official side genuinely loves. They're made to the official side's taste, and that direction isn't going to change. Just as a good label has a color you can recognize at a glance, we believe this project needs a color of its own too. If that color started to waver, the solidity holding this project up would fade along with it. The color gives the official side strength as well. It feels like growing a collection of favorite things one piece at a time, and that's what makes it possible to stay with this project for a long time.",
     'ja': "biz-OC-dollは、公式が愛着を感じるキャラクターだけで満たされています。公式の好みで作ったキャラクターたちで、これからもその方向は変えないつもりです。レーベルごとにひと目でわかるカラーがあるように、このプロジェクトにもそんなカラーがひとつ必要だと思っているからです。そのカラーが揺らぎはじめたら、このプロジェクトを支える芯の強さも一緒に薄れていく気がします。このカラーは公式にとっても力になります。好きなものを集めたコレクションをひとつずつ増やしていく感覚なので、このプロジェクトを長く続けていける理由になってくれるんです。",
-    'zh-Hans': "biz-OC-doll里只会有官方真心喜爱的角色。这些角色是按照官方的喜好做出来的，今后这个方向也不打算改变。就像每个厂牌都有一眼就能认出的色彩，我们认为这个企划也需要一种这样的色彩。一旦这种色彩开始动摇，支撑这个企划的那份坚实感也会跟着变淡。这种色彩对官方来说也是一种力量。那种感觉就像是把喜欢的东西一件件收进收藏里，正因为如此，才能长久地坚持做这个企划。",
-    'zh-Hant': "biz-OC-doll裡只會有官方真心喜愛的角色。這些角色是按照官方的喜好做出來的，今後這個方向也不打算改變。就像每個廠牌都有一眼就能認出的色彩，我們認為這個企劃也需要一種這樣的色彩。一旦這種色彩開始動搖，支撐這個企劃的那份堅實感也會跟著變淡。這種色彩對官方來說也是一種力量。那種感覺就像是把喜歡的東西一件件收進收藏裡，正因為如此，才能長久地堅持做這個企劃。" },
+    'zh-CN': "biz-OC-doll里只会有官方真心喜爱的角色。这些角色是按照官方的喜好做出来的，今后这个方向也不打算改变。就像每个厂牌都有一眼就能认出的色彩，我们认为这个企划也需要一种这样的色彩。一旦这种色彩开始动摇，支撑这个企划的那份坚实感也会跟着变淡。这种色彩对官方来说也是一种力量。那种感觉就像是把喜欢的东西一件件收进收藏里，正因为如此，才能长久地坚持做这个企划。",
+    'zh-TW': "biz-OC-doll裡只會有官方真心喜愛的角色。這些角色是按照官方的喜好做出來的，今後這個方向也不打算改變。就像每個廠牌都有一眼就能認出的色彩，我們認為這個企劃也需要一種這樣的色彩。一旦這種色彩開始動搖，支撐這個企劃的那份堅實感也會跟著變淡。這種色彩對官方來說也是一種力量。那種感覺就像是把喜歡的東西一件件收進收藏裡，正因為如此，才能長久地堅持做這個企劃。" },
 
   s4_p2: { 'en': "Because of that, there will surely be people who wish their favorite type of character were here. If those people start open character projects of their own, we'd be truly glad. Characters with that place's own color would come out of it. We wouldn't see that as following us or copying us. If anything, many projects like this springing up and filling the scene with their own colors is closer to the picture we described earlier.",
     'ja': "そのぶん、好みのタイプのキャラクターがいなくて残念に思う方も、きっといると思います。そんな方が自分だけのオープンキャラクタープロジェクトを始めてくれたら、本当にうれしいです。そこからは、またその場所ならではのカラーを持ったキャラクターが生まれるはずなので。それを真似したとか、パクったとは思いません。むしろ、こういうプロジェクトがいくつも生まれて、それぞれのカラーで界隈を満たしていく姿のほうが、先ほどお話しした光景に近いと思っています。",
-    'zh-Hans': "也因此，一定会有人因为没有自己喜欢的类型而觉得遗憾。如果那些人能开始属于自己的开放角色企划，我们会非常高兴。因为那里又会诞生带有那个地方独特色彩的角色。我们不会把那看作模仿或抄袭。反而，像这样的企划出现很多个、各自用自己的色彩填满这个圈子的样子，才更接近前面说的那幅景象。",
-    'zh-Hant': "也因此，一定會有人因為沒有自己喜歡的類型而覺得遺憾。如果那些人能開始屬於自己的開放角色企劃，我們會非常高興。因為那裡又會誕生帶有那個地方獨特色彩的角色。我們不會把那看作模仿或抄襲。反而，像這樣的企劃出現很多個、各自用自己的色彩填滿這個圈子的樣子，才更接近前面說的那幅景象。" },
+    'zh-CN': "也因此，一定会有人因为没有自己喜欢的类型而觉得遗憾。如果那些人能开始属于自己的开放角色企划，我们会非常高兴。因为那里又会诞生带有那个地方独特色彩的角色。我们不会把那看作模仿或抄袭。反而，像这样的企划出现很多个、各自用自己的色彩填满这个圈子的样子，才更接近前面说的那幅景象。",
+    'zh-TW': "也因此，一定會有人因為沒有自己喜歡的類型而覺得遺憾。如果那些人能開始屬於自己的開放角色企劃，我們會非常高興。因為那裡又會誕生帶有那個地方獨特色彩的角色。我們不會把那看作模仿或抄襲。反而，像這樣的企劃出現很多個、各自用自己的色彩填滿這個圈子的樣子，才更接近前面說的那幅景象。" },
 
   s5_h: { 'en': "The scene we want to see",
     'ja': "見たい光景",
-    'zh-Hans': "想看到的画面",
-    'zh-Hant': "想看到的畫面" },
+    'zh-CN': "想看到的画面",
+    'zh-TW': "想看到的畫面" },
 
   s5_p1: { 'en': "The scene we most want to see from this project is biz-OC-dolls appearing in all kinds of works, like actors. A character who's the lead in one artist's webcomic shows up as a villain in someone else's game, and as a supporting role who passes by for a moment in yet another web novel. The name and personality differ in every work, but follow them back to the original code and it's the same face, and all those appearances add up to that character's filmography. If that happens a lot, we think it will be the most moving scene this project can show.",
     'ja': "このプロジェクトでいちばん見たい光景は、biz-OC-dollが俳優のようにいろいろな作品に出演する姿です。ある作家のWebマンガでは主人公だったキャラクターが、別の人のゲームでは悪役として、また別のWeb小説ではほんの一瞬すれ違う脇役として登場するんです。作品ごとに名前も性格も違うけれど、元のコードをたどれば同じ顔で、そうして積み重なった出演作がそのキャラクターのフィルモグラフィーになる。そんなことがたくさん起きたら、それがこのプロジェクトが見せられるいちばん胸が熱くなる光景だと思います。",
-    'zh-Hans': "这个企划最想看到的画面，是biz-OC-doll像演员一样出演各种作品的样子。在某位作者的条漫里是主角的角色，到了别人的游戏里成了反派，在另一部网络小说里又是一闪而过的配角。每部作品里的名字和性格都不一样，但顺着原本的编号找回去，就是同一张脸，这样累积起来的出演作品，就成了那个角色的作品履历。如果这样的事能大量发生，我们认为那会是这个企划能展现的最令人心潮澎湃的画面。",
-    'zh-Hant': "這個企劃最想看到的畫面，是biz-OC-doll像演員一樣出演各種作品的樣子。在某位作者的網路漫畫裡是主角的角色，到了別人的遊戲裡成了反派，在另一部網路小說裡又是一閃而過的配角。每部作品裡的名字和性格都不一樣，但順著原本的編號找回去，就是同一張臉，這樣累積起來的出演作品，就成了那個角色的作品履歷。如果這樣的事能大量發生，我們認為那會是這個企劃能展現的最令人心潮澎湃的畫面。" },
+    'zh-CN': "这个企划最想看到的画面，是biz-OC-doll像演员一样出演各种作品的样子。在某位作者的条漫里是主角的角色，到了别人的游戏里成了反派，在另一部网络小说里又是一闪而过的配角。每部作品里的名字和性格都不一样，但顺着原本的编号找回去，就是同一张脸，这样累积起来的出演作品，就成了那个角色的作品履历。如果这样的事能大量发生，我们认为那会是这个企划能展现的最令人心潮澎湃的画面。",
+    'zh-TW': "這個企劃最想看到的畫面，是biz-OC-doll像演員一樣出演各種作品的樣子。在某位作者的網路漫畫裡是主角的角色，到了別人的遊戲裡成了反派，在另一部網路小說裡又是一閃而過的配角。每部作品裡的名字和性格都不一樣，但順著原本的編號找回去，就是同一張臉，這樣累積起來的出演作品，就成了那個角色的作品履歷。如果這樣的事能大量發生，我們認為那會是這個企劃能展現的最令人心潮澎湃的畫面。" },
 
   s5_p2: { 'en': "Part of what led to this structure is a regret the official side has carried for a long time. Whenever a work with a beloved character reached its end, it always felt sad, as if the character had ended along with it. We wanted to keep loving them, but with nothing new coming out, the affection would cool on its own, and it felt like the character was trapped inside the work. We wanted to keep seeing them by giving them new stories, at least in our own original works, but of course we couldn't use someone else's character as we pleased. In the end we let them go with a bitter feeling, and after that happened again and again, it became hard to find the courage to love a new character. Wanting a way out of that dilemma is what became this structure.",
     'ja': "こうした構造を思いついた背景には、公式が長いあいだ抱えてきた寂しさもあります。好きなキャラクターが出る作品が完結すると、そのキャラクターまで一緒に終わってしまったようで、いつも悲しかったんです。ずっと好きでいたいのに、新しく出るものがないから愛情も自然と冷めていくし、キャラクターが作品の中に閉じ込められているようにも感じました。自分で作る一次創作の中だけでも物語を作って見続けたかったけれど、当然ながら他人のキャラクターを勝手に使うことはできません。結局は苦い気持ちで見送り、それを繰り返すうちに、新しいキャラクターを好きになる勇気が出なくなりました。このジレンマから抜け出したいという気持ちが、今の構造になりました。",
-    'zh-Hans': "会想出这样的结构，也是因为官方一直以来怀着的一份遗憾。每当喜欢的角色所在的作品完结，就好像那个角色也跟着一起结束了，总是很难过。明明想继续喜欢下去，却没有新的东西出来，喜爱也就自然而然地冷却了，还会觉得角色被困在了作品里。哪怕只是在自己做的原创作品里，也想给他们编故事、继续看下去，但理所当然，不能随意使用别人的角色。最后只能怀着苦涩的心情送他们离开，这样反复几次之后，就再也提不起喜欢新角色的勇气了。想从这个两难中走出来的心情，成就了现在的结构。",
-    'zh-Hant': "會想出這樣的結構，也是因為官方一直以來懷著的一份遺憾。每當喜歡的角色所在的作品完結，就好像那個角色也跟著一起結束了，總是很難過。明明想繼續喜歡下去，卻沒有新的東西出來，喜愛也就自然而然地冷卻了，還會覺得角色被困在了作品裡。哪怕只是在自己做的原創作品裡，也想給他們編故事、繼續看下去，但理所當然，不能隨意使用別人的角色。最後只能懷著苦澀的心情送他們離開，這樣反覆幾次之後，就再也提不起喜歡新角色的勇氣了。想從這個兩難中走出來的心情，成就了現在的結構。" },
+    'zh-CN': "会想出这样的结构，也是因为官方一直以来怀着的一份遗憾。每当喜欢的角色所在的作品完结，就好像那个角色也跟着一起结束了，总是很难过。明明想继续喜欢下去，却没有新的东西出来，喜爱也就自然而然地冷却了，还会觉得角色被困在了作品里。哪怕只是在自己做的原创作品里，也想给他们编故事、继续看下去，但理所当然，不能随意使用别人的角色。最后只能怀着苦涩的心情送他们离开，这样反复几次之后，就再也提不起喜欢新角色的勇气了。想从这个两难中走出来的心情，成就了现在的结构。",
+    'zh-TW': "會想出這樣的結構，也是因為官方一直以來懷著的一份遺憾。每當喜歡的角色所在的作品完結，就好像那個角色也跟著一起結束了，總是很難過。明明想繼續喜歡下去，卻沒有新的東西出來，喜愛也就自然而然地冷卻了，還會覺得角色被困在了作品裡。哪怕只是在自己做的原創作品裡，也想給他們編故事、繼續看下去，但理所當然，不能隨意使用別人的角色。最後只能懷著苦澀的心情送他們離開，這樣反覆幾次之後，就再也提不起喜歡新角色的勇氣了。想從這個兩難中走出來的心情，成就了現在的結構。" },
 
   s5_p3: { 'en': "For a fandom to never end, someone has to keep making things, and for that, anyone has to be able to come back easily. Every otaku has that one fandom they can always go back to, don't they? Not blazing brightly, but quietly staying alive, with people still there whenever you return. We hope biz-OC-doll becomes that kind of fandom, a place where scattered tastes gather and anyone can rekindle the fire at any time. Here, going beyond fan works, simply taking a character into your own work makes you a creator who moves the whole scene. Instead of just watching a beloved work come to an end, you can keep the scene you love going yourself. Staying around for a long time as a fandom built together like that is what this project hopes to be.",
     'ja': "終わらないジャンルになるには、誰かが作り続けてくれなければならないし、そのためには誰もが気軽に戻ってこられなければならないと思います。オタクには、いつでも気軽に戻れるジャンルがひとつくらいありますよね。大きく燃え上がらなくても、静かにずっと生きていて、戻ればまだ人がいる場所。biz-OC-dollがそんなジャンルになって、細かく散らばった好みがひとつに集まり、いつでも誰でもまた火をつけられる場所になってほしいです。ここでは二次創作を超えて、キャラクターを連れて自分の作品を出すだけで、この界隈を動かす創作者になれます。好きだった作品が終わるのをただ見届けるかわりに、好きな界隈を自分の手でつないでいけるんです。そうやってみんなで作っていくジャンルとして長く残ること。それが、このプロジェクトが願う姿です。",
-    'zh-Hans': "要成为一个不会结束的圈子，就需要有人一直创作下去；而要做到这一点，就得让任何人都能轻松地回来。每个宅都有那么一个随时都能轻松回去的圈子吧。不会烧得轰轰烈烈，却一直静静地活着，回去的时候依然有人在。希望biz-OC-doll能成为那样的圈子，让零散的喜好聚到一起，任何人在任何时候都能重新点燃它。在这里，不只是二次创作，只要带着角色推出自己的作品，就能成为推动这个圈子的创作者。不再只是眼看着喜欢的作品走向结局，而是能亲手让喜欢的圈子延续下去。像这样作为大家一起打造的圈子长久地存在下去，就是这个企划所期望的样子。",
-    'zh-Hant': "要成為一個不會結束的圈子，就需要有人一直創作下去；而要做到這一點，就得讓任何人都能輕鬆地回來。每個宅都有那麼一個隨時都能輕鬆回去的圈子吧。不會燒得轟轟烈烈，卻一直靜靜地活著，回去的時候依然有人在。希望biz-OC-doll能成為那樣的圈子，讓零散的喜好聚到一起，任何人在任何時候都能重新點燃它。在這裡，不只是二次創作，只要帶著角色推出自己的作品，就能成為推動這個圈子的創作者。不再只是眼看著喜歡的作品走向結局，而是能親手讓喜歡的圈子延續下去。像這樣作為大家一起打造的圈子長久地存在下去，就是這個企劃所期望的樣子。" },
+    'zh-CN': "要成为一个不会结束的圈子，就需要有人一直创作下去；而要做到这一点，就得让任何人都能轻松地回来。每个宅都有那么一个随时都能轻松回去的圈子吧。不会烧得轰轰烈烈，却一直静静地活着，回去的时候依然有人在。希望biz-OC-doll能成为那样的圈子，让零散的喜好聚到一起，任何人在任何时候都能重新点燃它。在这里，不只是二次创作，只要带着角色推出自己的作品，就能成为推动这个圈子的创作者。不再只是眼看着喜欢的作品走向结局，而是能亲手让喜欢的圈子延续下去。像这样作为大家一起打造的圈子长久地存在下去，就是这个企划所期望的样子。",
+    'zh-TW': "要成為一個不會結束的圈子，就需要有人一直創作下去；而要做到這一點，就得讓任何人都能輕鬆地回來。每個宅都有那麼一個隨時都能輕鬆回去的圈子吧。不會燒得轟轟烈烈，卻一直靜靜地活著，回去的時候依然有人在。希望biz-OC-doll能成為那樣的圈子，讓零散的喜好聚到一起，任何人在任何時候都能重新點燃它。在這裡，不只是二次創作，只要帶著角色推出自己的作品，就能成為推動這個圈子的創作者。不再只是眼看著喜歡的作品走向結局，而是能親手讓喜歡的圈子延續下去。像這樣作為大家一起打造的圈子長久地存在下去，就是這個企劃所期望的樣子。" },
 
   s6_h: { 'en': "So you can create with peace of mind",
     'ja': "安心して使えるように",
-    'zh-Hans': "为了能放心使用",
-    'zh-Hant': "為了能放心使用" },
+    'zh-CN': "为了能放心使用",
+    'zh-TW': "為了能放心使用" },
 
   s6_p1: { 'en': "A few years ago, while this project was still taking shape, we casually suggested to a creator we're close with that they make something using a biz-OC-doll character. They happily agreed, but as time went on, we could see them growing uneasy. They asked whether using someone else's character might cause legal trouble later, and whether they should sign some kind of contract. This was even though we were simply happy to see the character used and had no intention of asking for anything.",
     'ja': "このプロジェクトを構想していた数年前、親しい創作者の方に、biz-OC-dollのキャラクターを使って作品をひとつ作ってみないかと、軽く提案したことがあります。快く使ってくれたのですが、時間が経つにつれて不安そうにしているのがわかりました。他人のキャラクターを使うのは後で法的に問題にならないか、契約書のようなものを書いたほうがいいんじゃないかと聞かれたんです。こちらはただキャラクターを使ってもらえるのがうれしいだけで、何かを求めるつもりはまったくなかったのに。",
-    'zh-Hans': "几年前构思这个企划时，曾经随口向一位亲近的创作者提议，用biz-OC-doll的角色来做一部作品。对方爽快地用了，但随着时间过去，能看出对方越来越不安。对方问，用别人的角色以后会不会有法律问题，是不是该签个合同之类的。明明这边只是单纯为角色能被使用而高兴，完全没有打算要求什么。",
-    'zh-Hant': "幾年前構思這個企劃時，曾經隨口向一位親近的創作者提議，用biz-OC-doll的角色來做一部作品。對方爽快地用了，但隨著時間過去，能看出對方越來越不安。對方問，用別人的角色以後會不會有法律問題，是不是該簽個合約之類的。明明這邊只是單純為角色能被使用而高興，完全沒有打算要求什麼。" },
+    'zh-CN': "几年前构思这个企划时，曾经随口向一位亲近的创作者提议，用biz-OC-doll的角色来做一部作品。对方爽快地用了，但随着时间过去，能看出对方越来越不安。对方问，用别人的角色以后会不会有法律问题，是不是该签个合同之类的。明明这边只是单纯为角色能被使用而高兴，完全没有打算要求什么。",
+    'zh-TW': "幾年前構思這個企劃時，曾經隨口向一位親近的創作者提議，用biz-OC-doll的角色來做一部作品。對方爽快地用了，但隨著時間過去，能看出對方越來越不安。對方問，用別人的角色以後會不會有法律問題，是不是該簽個合約之類的。明明這邊只是單純為角色能被使用而高興，完全沒有打算要求什麼。" },
 
   s6_p2: { 'en': "That's when we learned that, for the person using the character, this can bring up quite complicated feelings. Love alone isn't enough; people need to be able to trust before they can create with peace of mind. It was then that we took to heart that this project can only work if the trust between the official side and Holders is solid.",
     'ja': "そのとき、使う側からすると、これはかなり複雑な気持ちになることなのだと知りました。好きという気持ちだけでは足りず、信頼できてこそ安心して作れるということも。このプロジェクトは、公式とホルダーのあいだの信頼がしっかりしていなければ回らない。そのことを、あのとき深く胸に刻みました。",
-    'zh-Hans': "那时才明白，站在使用者的角度，这是一件会让人心情相当复杂的事。光有喜欢是不够的，要能够信任，才能安心创作。这个企划只有在官方和持有者之间的信任足够牢固时才能运转——那时，我们把这一点深深记在了心里。",
-    'zh-Hant': "那時才明白，站在使用者的角度，這是一件會讓人心情相當複雜的事。光有喜歡是不夠的，要能夠信任，才能安心創作。這個企劃只有在官方和持有者之間的信任足夠牢固時才能運轉——那時，我們把這一點深深記在了心裡。" },
+    'zh-CN': "那时才明白，站在使用者的角度，这是一件会让人心情相当复杂的事。光有喜欢是不够的，要能够信任，才能安心创作。这个企划只有在官方和持有者之间的信任足够牢固时才能运转——那时，我们把这一点深深记在了心里。",
+    'zh-TW': "那時才明白，站在使用者的角度，這是一件會讓人心情相當複雜的事。光有喜歡是不夠的，要能夠信任，才能安心創作。這個企劃只有在官方和持有者之間的信任足夠牢固時才能運轉——那時，我們把這一點深深記在了心裡。" },
 
   s6_p3: { 'en': "So as long as your work follows the published rules, there's no need to come ask for permission. Those rules are the official side's permission.",
     'ja': "だから、公開しているルールの範囲で作った作品なら、わざわざ許可を取りに来なくても大丈夫です。そのルールこそが、公式の許可だからです。",
-    'zh-Hans': "所以，只要是在公开的规则范围内创作的作品，就不需要特地来请求许可。那些规则本身就是官方的许可。",
-    'zh-Hant': "所以，只要是在公開的規則範圍內創作的作品，就不需要特地來請求許可。那些規則本身就是官方的許可。" },
+    'zh-CN': "所以，只要是在公开的规则范围内创作的作品，就不需要特地来请求许可。那些规则本身就是官方的许可。",
+    'zh-TW': "所以，只要是在公開的規則範圍內創作的作品，就不需要特地來請求許可。那些規則本身就是官方的許可。" },
 
   s7_h: { 'en': "The atmosphere we protect",
     'ja': "公式が守る雰囲気",
-    'zh-Hans': "官方守护的氛围",
-    'zh-Hant': "官方守護的氛圍" },
+    'zh-CN': "官方守护的氛围",
+    'zh-TW': "官方守護的氛圍" },
 
   s7_p1: { 'en': "biz-OC-doll Official aims to protect its own atmosphere, clear and sparkling like a gem, just like the feel of this site you're looking at now. We think it's the makers' job to keep everything, from the characters to how things are run, from straying out of that atmosphere.",
     'ja': "biz-OC-doll公式は、宝石のように澄んできらめく、独自の雰囲気を守っていこうと思っています。今ご覧になっているこのサイトの雰囲気、そのままです。キャラクターから運営まで、この雰囲気から外れないようにするのが、作る側の役目だと考えています。",
-    'zh-Hans': "biz-OC-doll官方想守护一种像宝石一样清澈闪耀的独特氛围，就是你现在看到的这个网站的感觉。我们认为，让角色乃至运营都不偏离这种氛围，是制作方的责任。",
-    'zh-Hant': "biz-OC-doll官方想守護一種像寶石一樣清澈閃耀的獨特氛圍，就是你現在看到的這個網站的感覺。我們認為，讓角色乃至營運都不偏離這種氛圍，是製作方的責任。" },
+    'zh-CN': "biz-OC-doll官方想守护一种像宝石一样清澈闪耀的独特氛围，就是你现在看到的这个网站的感觉。我们认为，让角色乃至运营都不偏离这种氛围，是制作方的责任。",
+    'zh-TW': "biz-OC-doll官方想守護一種像寶石一樣清澈閃耀的獨特氛圍，就是你現在看到的這個網站的感覺。我們認為，讓角色乃至營運都不偏離這種氛圍，是製作方的責任。" },
 
   s7_p2: { 'en': "To put your mind at ease up front: the official side will never be the one shaking up the scene. Looking at how this project is built, some of you may worry that it's all a way to hold the scene in the palm of our hand and play with it. We know the kind of scars that sort of management leaves on a community, so we won't do it. We won't throw out provocative bait or controversies to see how people react, and we won't test anything on the fandom. In other words, there will never be a day when we say, \"Actually, this was a social experiment.\"",
     'ja': "先にお伝えしておくと、公式が界隈を揺さぶる側になることはありません。もしかすると、このプロジェクトの構造を見て、界隈を手のひらの上で転がそうとしているのではと心配される方もいるかもしれません。そうした運営が界隈にどんな傷を残すかを知っているからこそ、そういうことはしません。反応を見るために刺激的な燃料や火種を先に投げることも、ファンダムを相手に何かを試すこともありません。あとになって「実はこれは社会実験でした」なんて言い出すことはない、ということです。",
-    'zh-Hans': "先让大家安心：官方不会成为搅动圈子的那一方。看到这个企划的结构，也许有人会担心，这是不是想把圈子放在手心里随意摆弄。正因为知道那样的运营会给圈子留下怎样的伤痕，所以不会那样做。不会为了看反应而抛出刺激性的饵或争议话题，也不会拿粉丝群体来测试什么。也就是说，以后绝不会冒出\"其实这是一场社会实验\"这种话。",
-    'zh-Hant': "先讓大家安心：官方不會成為攪動圈子的那一方。看到這個企劃的結構，也許有人會擔心，這是不是想把圈子放在手心裡隨意擺弄。正因為知道那樣的營運會給圈子留下怎樣的傷痕，所以不會那樣做。不會為了看反應而拋出刺激性的餌或爭議話題，也不會拿粉絲群體來測試什麼。也就是說，以後絕不會冒出「其實這是一場社會實驗」這種話。" },
+    'zh-CN': "先让大家安心：官方不会成为搅动圈子的那一方。看到这个企划的结构，也许有人会担心，这是不是想把圈子放在手心里随意摆弄。正因为知道那样的运营会给圈子留下怎样的伤痕，所以不会那样做。不会为了看反应而抛出刺激性的饵或争议话题，也不会拿粉丝群体来测试什么。也就是说，以后绝不会冒出\"其实这是一场社会实验\"这种话。",
+    'zh-TW': "先讓大家安心：官方不會成為攪動圈子的那一方。看到這個企劃的結構，也許有人會擔心，這是不是想把圈子放在手心裡隨意擺弄。正因為知道那樣的營運會給圈子留下怎樣的傷痕，所以不會那樣做。不會為了看反應而拋出刺激性的餌或爭議話題，也不會拿粉絲群體來測試什麼。也就是說，以後絕不會冒出「其實這是一場社會實驗」這種話。" },
 
   s7_p3: { 'en': "In the end, we believe a scene's atmosphere comes to resemble what the official side steadily puts out. So the surest thing the official side can do is hold the center. If the official side wavers, the fandom can't play at ease. That's why we're writing down here what the official side intends to protect, and then focusing on releasing characters.",
     'ja': "界隈の雰囲気は、結局のところ公式がコツコツと出していくものに似ていくのだと思います。だから公式にできるいちばん確かなことは、軸を守ることです。公式が揺らげば、ファンダムは安心して遊べなくなりますから。そこで、公式が何を守ろうとしているのかをこうして先に書いておき、公式はキャラクターを出すことに集中しようと思っています。",
-    'zh-Hans': "我们认为，圈子的氛围最终会越来越像官方持续推出的东西。所以官方能做的最确实的事，就是守住中心。官方一旦动摇，粉丝就没法安心地玩了。因此我们先把官方想守护什么写在这里，之后官方会专注于推出角色。",
-    'zh-Hant': "我們認為，圈子的氛圍最終會越來越像官方持續推出的東西。所以官方能做的最確實的事，就是守住中心。官方一旦動搖，粉絲就沒法安心地玩了。因此我們先把官方想守護什麼寫在這裡，之後官方會專注於推出角色。" },
+    'zh-CN': "我们认为，圈子的氛围最终会越来越像官方持续推出的东西。所以官方能做的最确实的事，就是守住中心。官方一旦动摇，粉丝就没法安心地玩了。因此我们先把官方想守护什么写在这里，之后官方会专注于推出角色。",
+    'zh-TW': "我們認為，圈子的氛圍最終會越來越像官方持續推出的東西。所以官方能做的最確實的事，就是守住中心。官方一旦動搖，粉絲就沒法安心地玩了。因此我們先把官方想守護什麼寫在這裡，之後官方會專注於推出角色。" },
 
   s8_h: { 'en': "Even with a worldview",
     'ja': "世界観があっても",
-    'zh-Hans': "即使有世界观",
-    'zh-Hant': "即使有世界觀" },
+    'zh-CN': "即使有世界观",
+    'zh-TW': "即使有世界觀" },
 
   s8_p1: { 'en': "biz-OC-doll has an official worldview ready. It hasn't been revealed yet, but the foundation of the world the characters live in is already decided. That said, hearing that there's a separate official worldview might actually feel like pressure. When official settings exist, you may feel self-conscious about taking your biz-OC-doll your own way, and start to wonder whether you're wrong if it differs from the official version.",
     'ja': "biz-OC-dollには公式の世界観が用意されています。まだ公開していませんが、キャラクターたちが生きる世界の土台はすでに決めてあります。ただ、公式の世界観が別にあると聞くと、かえって負担に感じるかもしれません。公式設定が決まっていると、自分のbiz-OC-dollを自分のやり方で推し進めることに、なんとなく気が引けてしまうし、公式が描いた姿と違ったら間違いなのかなと思えてしまいますから。",
-    'zh-Hans': "biz-OC-doll准备了官方世界观。虽然还没有公开，但角色们生活的世界的基础已经定好了。只是，听到另外还有官方世界观，反而可能会觉得有压力。官方设定一旦存在，按自己的方式推进自己的biz-OC-doll时就难免会有所顾虑，和官方描绘的样子不一样时，也会怀疑自己是不是错了。",
-    'zh-Hant': "biz-OC-doll準備了官方世界觀。雖然還沒有公開，但角色們生活的世界的基礎已經定好了。只是，聽到另外還有官方世界觀，反而可能會覺得有壓力。官方設定一旦存在，按自己的方式推進自己的biz-OC-doll時就難免會有所顧慮，和官方描繪的樣子不一樣時，也會懷疑自己是不是錯了。" },
+    'zh-CN': "biz-OC-doll准备了官方世界观。虽然还没有公开，但角色们生活的世界的基础已经定好了。只是，听到另外还有官方世界观，反而可能会觉得有压力。官方设定一旦存在，按自己的方式推进自己的biz-OC-doll时就难免会有所顾虑，和官方描绘的样子不一样时，也会怀疑自己是不是错了。",
+    'zh-TW': "biz-OC-doll準備了官方世界觀。雖然還沒有公開，但角色們生活的世界的基礎已經定好了。只是，聽到另外還有官方世界觀，反而可能會覺得有壓力。官方設定一旦存在，按自己的方式推進自己的biz-OC-doll時就難免會有所顧慮，和官方描繪的樣子不一樣時，也會懷疑自己是不是錯了。" },
 
   s8_p2: { 'en': "So the very first rule we set when building the worldview was that it must not clash with what happens in this project. We can't go into detail yet, but in that world too, biz-OC-dolls share the same face based on their code while each living with a different way of talking and a different story. Choosing a biz-OC-doll, naming it, and raising it in your own way were all made to carry over naturally into that world as well.",
     'ja': "だから世界観を組み立てるとき、最初に決めた基準は、このプロジェクトで起きることと食い違わないことでした。まだ詳しくはお話しできませんが、その世界でもbiz-OC-dollたちは、コードをベースに同じ顔をしたまま、それぞれ違う口調と物語を持って生きています。biz-OC-dollを選び、名前をつけ、それぞれ違うふうに育てていくことが、その世界の中でも自然なこととしてつながるように作りました。",
-    'zh-Hans': "所以在构建世界观时，最先定下的标准，就是不能和这个企划里会发生的事相矛盾。虽然现在还不能细说，但在那个世界里，biz-OC-doll们同样以编号为基础，长着同一张脸，却各自带着不同的说话方式和故事生活着。挑选biz-OC-doll、为它起名、各自以不同的方式培养它——这些在那个世界里也被设计成了自然而然的事。",
-    'zh-Hant': "所以在建構世界觀時，最先定下的標準，就是不能和這個企劃裡會發生的事相矛盾。雖然現在還不能細說，但在那個世界裡，biz-OC-doll們同樣以編號為基礎，長著同一張臉，卻各自帶著不同的說話方式和故事生活著。挑選biz-OC-doll、為它取名、各自以不同的方式培養它——這些在那個世界裡也被設計成了自然而然的事。" },
+    'zh-CN': "所以在构建世界观时，最先定下的标准，就是不能和这个企划里会发生的事相矛盾。虽然现在还不能细说，但在那个世界里，biz-OC-doll们同样以编号为基础，长着同一张脸，却各自带着不同的说话方式和故事生活着。挑选biz-OC-doll、为它起名、各自以不同的方式培养它——这些在那个世界里也被设计成了自然而然的事。",
+    'zh-TW': "所以在建構世界觀時，最先定下的標準，就是不能和這個企劃裡會發生的事相矛盾。雖然現在還不能細說，但在那個世界裡，biz-OC-doll們同樣以編號為基礎，長著同一張臉，卻各自帶著不同的說話方式和故事生活著。挑選biz-OC-doll、為它取名、各自以不同的方式培養它——這些在那個世界裡也被設計成了自然而然的事。" },
 
   s8_p3: { 'en': "So it's fine not to know the worldview, and it's fine to create stories completely different from it. The official worldview isn't a frame that locks in Holders' biz-OC-dolls. It's built as a world where that kind of creativity is welcome in any amount. If we get to show it someday as a demo game, you'll be able to feel better what we meant by this.",
     'ja': "だから、世界観を知らなくても、世界観とまったく違う物語を作っても大丈夫です。公式の世界観は、ホルダーたちのbiz-OC-dollを閉じ込める枠ではなく、そうした創作がいくらあってもいい世界として作ってあります。いつかデモゲームでお見せできたら、この言葉がどういう意味だったのか、もっとよく感じていただけると思います。",
-    'zh-Hans': "所以，不了解世界观也没关系，创作出和世界观完全不同的故事也没关系。官方世界观不是把持有者们的biz-OC-doll关起来的框架，而是被打造成一个容得下任何这类创作的世界。如果有一天能以试玩游戏的形式展示出来，应该就能更好地体会这句话的意思了。",
-    'zh-Hant': "所以，不了解世界觀也沒關係，創作出和世界觀完全不同的故事也沒關係。官方世界觀不是把持有者們的biz-OC-doll關起來的框架，而是被打造成一個容得下任何這類創作的世界。如果有一天能以試玩遊戲的形式展示出來，應該就能更好地體會這句話的意思了。" },
+    'zh-CN': "所以，不了解世界观也没关系，创作出和世界观完全不同的故事也没关系。官方世界观不是把持有者们的biz-OC-doll关起来的框架，而是被打造成一个容得下任何这类创作的世界。如果有一天能以试玩游戏的形式展示出来，应该就能更好地体会这句话的意思了。",
+    'zh-TW': "所以，不了解世界觀也沒關係，創作出和世界觀完全不同的故事也沒關係。官方世界觀不是把持有者們的biz-OC-doll關起來的框架，而是被打造成一個容得下任何這類創作的世界。如果有一天能以試玩遊戲的形式展示出來，應該就能更好地體會這句話的意思了。" },
 
   s9_h: { 'en': "Official merch",
     'ja': "公式グッズ",
-    'zh-Hans': "官方周边",
-    'zh-Hant': "官方周邊" },
+    'zh-CN': "官方周边",
+    'zh-TW': "官方周邊" },
 
   s9_p1: { 'en': "Some of you may be waiting for the official side to release some merch, especially those who love the characters as their codes are, before any name is given. However, biz-OC-doll Official has no plans to make merch directly for now. We think official merch is more likely to come out through collaborations with companies. When a collaboration happens, many kinds of merch often come out all at once, so we hope you'll wait just a little for that time.",
     'ja': "公式がグッズを出してくれるのを待っている方もいると思います。名前をつける前の、コードそのままの姿を好きでいてくださる方なら、なおさらでしょう。ただ、biz-OC-doll公式が直接グッズを作る予定は、今のところありません。公式グッズは、企業とのコラボを通じて出る可能性のほうが高いと考えています。コラボが実現すると、グッズが何種類もまとめて出ることが多いので、そのときまで少しだけ待っていただけたらうれしいです。",
-    'zh-Hans': "也许有人在等官方推出一些周边，特别是喜欢在起名之前、角色原本编号模样的人。不过，biz-OC-doll官方目前没有亲自制作周边的计划。我们认为官方周边更有可能通过与企业的合作推出。一旦合作成真，周边往往会一次推出很多种，所以希望大家能稍微等一等那个时候。",
-    'zh-Hant': "也許有人在等官方推出一些周邊，特別是喜歡在取名之前、角色原本編號模樣的人。不過，biz-OC-doll官方目前沒有親自製作周邊的計畫。我們認為官方周邊更有可能透過與企業的合作推出。一旦合作成真，周邊往往會一次推出很多種，所以希望大家能稍微等一等那個時候。" },
+    'zh-CN': "也许有人在等官方推出一些周边，特别是喜欢在起名之前、角色原本编号模样的人。不过，biz-OC-doll官方目前没有亲自制作周边的计划。我们认为官方周边更有可能通过与企业的合作推出。一旦合作成真，周边往往会一次推出很多种，所以希望大家能稍微等一等那个时候。",
+    'zh-TW': "也許有人在等官方推出一些周邊，特別是喜歡在取名之前、角色原本編號模樣的人。不過，biz-OC-doll官方目前沒有親自製作周邊的計畫。我們認為官方周邊更有可能透過與企業的合作推出。一旦合作成真，周邊往往會一次推出很多種，所以希望大家能稍微等一等那個時候。" },
 
   s9_p2: { 'en': "In the meantime, we'd love for merch made by Holders to fill that space. We hope a culture takes root in this fandom where merch made by Holders is treasured just as much as official merch. If unofficial goods fill the official place until official ones arrive, we think that too is very much in the spirit of this project.",
     'ja': "それまでは、ホルダーたちが作ったグッズがその場所を埋めてくれたらうれしいです。このジャンルでは、ホルダーが作ったグッズも公式グッズと同じくらい大切にされる文化が根づいてほしいと思っています。公式が出るまで非公式が公式の場所を埋めていく流れなら、それもまたこのプロジェクトらしい姿だと思います。",
-    'zh-Hans': "在那之前，希望持有者们做的周边能填补那个位置。希望在这个圈子里，持有者做的周边也能像官方周边一样被珍视，形成这样的文化。在官方推出之前，由非官方来填补官方的位置——如果是这样的走向，我们觉得那也很有这个企划的风格。",
-    'zh-Hant': "在那之前，希望持有者們做的周邊能填補那個位置。希望在這個圈子裡，持有者做的周邊也能像官方周邊一樣被珍視，形成這樣的文化。在官方推出之前，由非官方來填補官方的位置——如果是這樣的走向，我們覺得那也很有這個企劃的風格。" },
+    'zh-CN': "在那之前，希望持有者们做的周边能填补那个位置。希望在这个圈子里，持有者做的周边也能像官方周边一样被珍视，形成这样的文化。在官方推出之前，由非官方来填补官方的位置——如果是这样的走向，我们觉得那也很有这个企划的风格。",
+    'zh-TW': "在那之前，希望持有者們做的周邊能填補那個位置。希望在這個圈子裡，持有者做的周邊也能像官方周邊一樣被珍視，形成這樣的文化。在官方推出之前，由非官方來填補官方的位置——如果是這樣的走向，我們覺得那也很有這個企劃的風格。" },
 
   board_h: { 'en': "Suggestion box",
     'ja': "提案箱",
-    'zh-Hans': "建议箱",
-    'zh-Hant': "建議箱" },
+    'zh-CN': "建议箱",
+    'zh-TW': "建議箱" },
 
   board_p1: { 'en': "If you have something too small for an email but too good to let slide, leave it here. Things that bugged you while using the site, or ideas for things you'd like to see, are all welcome.",
     'ja': "メールで送るほどではないけれど、そのまま流すのはもったいない話があれば、ここに残してください。サイトを使っていて不便だったことも、こういうのがあったらいいなという思いつきも大歓迎です。",
-    'zh-Hans': "如果有些话发邮件显得太轻，就这么放过又觉得可惜，欢迎留在这里。使用网站时觉得不方便的地方，或是希望能有某某功能的想法，都可以。",
-    'zh-Hant': "如果有些話寄郵件顯得太輕，就這麼放過又覺得可惜，歡迎留在這裡。使用網站時覺得不方便的地方，或是希望能有某某功能的想法，都可以。" },
+    'zh-CN': "如果有些话发邮件显得太轻，就这么放过又觉得可惜，欢迎留在这里。使用网站时觉得不方便的地方，或是希望能有某某功能的想法，都可以。",
+    'zh-TW': "如果有些話寄郵件顯得太輕，就這麼放過又覺得可惜，歡迎留在這裡。使用網站時覺得不方便的地方，或是希望能有某某功能的想法，都可以。" },
 
   board_p2: { 'en': "It's still being prepared. We plan to open it once the scene grows a bit more.",
     'ja': "今はまだ準備中です。界隈がもう少し大きくなったら開く予定です。",
-    'zh-Hans': "目前还在准备中。等圈子再大一点就会开放。",
-    'zh-Hant': "目前還在準備中。等圈子再大一點就會開放。" },
+    'zh-CN': "目前还在准备中。等圈子再大一点就会开放。",
+    'zh-TW': "目前還在準備中。等圈子再大一點就會開放。" },
 
   board_lock: { 'en': "Suggestion box · Coming soon",
     'ja': "提案箱 · 準備中",
-    'zh-Hans': "建议箱 · 准备中",
-    'zh-Hant': "建議箱 · 準備中" },
+    'zh-CN': "建议箱 · 准备中",
+    'zh-TW': "建議箱 · 準備中" },
 
   board_open: { 'en': "Go to the suggestion box",
     'ja': "提案箱へ",
-    'zh-Hans': "前往建议箱",
-    'zh-Hant': "前往建議箱" },
+    'zh-CN': "前往建议箱",
+    'zh-TW': "前往建議箱" },
 
   part_note: { 'en': "From here on, for those considering a collaboration, we'll write in a more organized, formal tone.",
     'ja': "ここからは、コラボをご検討中の方に向けて、もう少し整理した言葉でお伝えします。",
-    'zh-Hans': "以下内容面向正在考虑合作的各位，将以更正式、有条理的方式说明。",
-    'zh-Hant': "以下內容面向正在考慮合作的各位，將以更正式、有條理的方式說明。" },
+    'zh-CN': "以下内容面向正在考虑合作的各位，将以更正式、有条理的方式说明。",
+    'zh-TW': "以下內容面向正在考慮合作的各位，將以更正式、有條理的方式說明。" },
 
   collab_title: { 'en': "If we build it together",
     'ja': "一緒に作るなら",
-    'zh-Hans': "如果一起打造",
-    'zh-Hant': "如果一起打造" },
+    'zh-CN': "如果一起打造",
+    'zh-TW': "如果一起打造" },
 
   biz_intro: { 'en': "<span class=\"brandname\">biz-OC-doll</span> was designed from the start as an IP that can collaborate with others. For a dream like this to last, it needs a design that can hold it up, so biz-OC-doll Official built the structure first. At its center are the number of characters and the official worldview.",
     'ja': "<span class=\"brandname\">biz-OC-doll</span>は、最初から外部とコラボできるIPを目指して設計したプロジェクトです。ロマンを長く続けるには、そのロマンを支える設計も必要だと考え、biz-OC-doll公式はまず構造から組み立てました。その中心にあるのが、キャラクターの数と公式の世界観です。",
-    'zh-Hans': "<span class=\"brandname\">biz-OC-doll</span>从一开始就是以能与外部合作的IP为目标设计的企划。我们认为，浪漫要长久延续，也需要支撑这份浪漫的设计，因此biz-OC-doll官方先把结构搭好了。其核心是角色数量与官方世界观。",
-    'zh-Hant': "<span class=\"brandname\">biz-OC-doll</span>從一開始就是以能與外部合作的IP為目標設計的企劃。我們認為，浪漫要長久延續，也需要支撐這份浪漫的設計，因此biz-OC-doll官方先把結構搭好了。其核心是角色數量與官方世界觀。" },
+    'zh-CN': "<span class=\"brandname\">biz-OC-doll</span>从一开始就是以能与外部合作的IP为目标设计的企划。我们认为，浪漫要长久延续，也需要支撑这份浪漫的设计，因此biz-OC-doll官方先把结构搭好了。其核心是角色数量与官方世界观。",
+    'zh-TW': "<span class=\"brandname\">biz-OC-doll</span>從一開始就是以能與外部合作的IP為目標設計的企劃。我們認為，浪漫要長久延續，也需要支撐這份浪漫的設計，因此biz-OC-doll官方先把結構搭好了。其核心是角色數量與官方世界觀。" },
 
   row_count_h: { 'en': "Number of characters",
     'ja': "キャラクター数",
-    'zh-Hans': "角色数量",
-    'zh-Hant': "角色數量" },
+    'zh-CN': "角色数量",
+    'zh-TW': "角色數量" },
 
   row_count_p: { 'en': "The goal of 200 characters is set high so that, even if each character's fandom differs in size, together they form an IP at a scale worth considering for collaboration. Because every character is made under the same standards and atmosphere, they read as a single IP no matter how many there are.",
     'ja': "キャラクター数の目標を200人と大きく設定したのは、キャラクターごとにファンダムの大きさが違っても、キャラクターが集まることでコラボを検討できる規模のIPになるためです。すべてのキャラクターが同じ基準と雰囲気のもとで作られるため、数が増えてもひとつのIPとしてまとまって見えます。",
-    'zh-Hans': "将角色数量目标定为200人这样的大数目，是为了即使每个角色的粉丝规模不同，角色聚集起来也能构成值得考虑合作的IP规模。所有角色都在同样的标准和氛围下制作，因此数量再多，看起来也是一个统一的IP。",
-    'zh-Hant': "將角色數量目標定為200人這樣的大數目，是為了即使每個角色的粉絲規模不同，角色聚集起來也能構成值得考慮合作的IP規模。所有角色都在同樣的標準和氛圍下製作，因此數量再多，看起來也是一個統一的IP。" },
+    'zh-CN': "将角色数量目标定为200人这样的大数目，是为了即使每个角色的粉丝规模不同，角色聚集起来也能构成值得考虑合作的IP规模。所有角色都在同样的标准和氛围下制作，因此数量再多，看起来也是一个统一的IP。",
+    'zh-TW': "將角色數量目標定為200人這樣的大數目，是為了即使每個角色的粉絲規模不同，角色聚集起來也能構成值得考慮合作的IP規模。所有角色都在同樣的標準和氛圍下製作，因此數量再多，看起來也是一個統一的IP。" },
 
   row_world_h: { 'en': "Official worldview",
     'ja': "公式の世界観",
-    'zh-Hans': "官方世界观",
-    'zh-Hant': "官方世界觀" },
+    'zh-CN': "官方世界观",
+    'zh-TW': "官方世界觀" },
 
   row_world_p1: { 'en': "Building a worldview only after a collaboration is decided tends to mean racing the clock, and the IP's character can shift before and after the collaboration, shaking the trust fans have built up. So biz-OC-doll Official aligned the project's character, the way it is run, and its worldview to point in the same direction from the start. This keeps the foundation firm whatever compromises a collaboration may involve, and because fan creations rest on the same structure, there is little risk of a collaboration clashing with the existing fandom.",
     'ja': "コラボが決まってから世界観を新しく作ると時間に追われやすく、コラボの前後でIPの性格が変わり、積み上げてきたファンの信頼が揺らぎやすくなります。そこでbiz-OC-doll公式は、プロジェクトの性格と運営方針、世界観が同じ方向を向くよう、最初からそろえてあります。どのようなコラボで歩み寄ることがあっても根幹が揺らがないようにするためであり、ファンの創作も同じ構造の上にあるため、コラボ作品が既存のファンダムとぶつかるリスクも小さくなっています。",
-    'zh-Hans': "如果在合作确定后才新建世界观，往往会被时间追着跑，而且合作前后IP的性质会发生变化，粉丝积累起来的信任也容易动摇。因此，biz-OC-doll官方从一开始就让企划的性质、运营方式和世界观指向同一个方向。这是为了无论在何种合作中做出妥协，根本都不会动摇；而粉丝创作也建立在同样的结构之上，合作作品与现有粉丝群体发生冲突的风险也较小。",
-    'zh-Hant': "如果在合作確定後才新建世界觀，往往會被時間追著跑，而且合作前後IP的性質會發生變化，粉絲累積起來的信任也容易動搖。因此，biz-OC-doll官方從一開始就讓企劃的性質、營運方式和世界觀指向同一個方向。這是為了無論在何種合作中做出妥協，根本都不會動搖；而粉絲創作也建立在同樣的結構之上，合作作品與現有粉絲群體發生衝突的風險也較小。" },
+    'zh-CN': "如果在合作确定后才新建世界观，往往会被时间追着跑，而且合作前后IP的性质会发生变化，粉丝积累起来的信任也容易动摇。因此，biz-OC-doll官方从一开始就让企划的性质、运营方式和世界观指向同一个方向。这是为了无论在何种合作中做出妥协，根本都不会动摇；而粉丝创作也建立在同样的结构之上，合作作品与现有粉丝群体发生冲突的风险也较小。",
+    'zh-TW': "如果在合作確定後才新建世界觀，往往會被時間追著跑，而且合作前後IP的性質會發生變化，粉絲累積起來的信任也容易動搖。因此，biz-OC-doll官方從一開始就讓企劃的性質、營運方式和世界觀指向同一個方向。這是為了無論在何種合作中做出妥協，根本都不會動搖；而粉絲創作也建立在同樣的結構之上，合作作品與現有粉絲群體發生衝突的風險也較小。" },
 
   row_world_p2: { 'en': "What has been set in advance is the worldview; the stories built on it are left open to be shaped together in a collaboration. The worldview will be shown through a demo game, planned for release once there are around 50 or more characters.",
     'ja': "あらかじめ決めてあるのは世界観で、その上の物語はコラボの中で一緒に調整できるよう開いてあります。世界観はデモゲームでお見せする予定で、公開はキャラクターが50人以上ほどそろった時点を目安にしています。",
-    'zh-Hans': "事先定好的是世界观，建立在其上的故事则保持开放，可以在合作中共同调整。世界观预计以试玩游戏的形式展示，公开时间定在角色累积到约50人以上时。",
-    'zh-Hant': "事先定好的是世界觀，建立在其上的故事則保持開放，可以在合作中共同調整。世界觀預計以試玩遊戲的形式展示，公開時間定在角色累積到約50人以上時。" },
+    'zh-CN': "事先定好的是世界观，建立在其上的故事则保持开放，可以在合作中共同调整。世界观预计以试玩游戏的形式展示，公开时间定在角色累积到约50人以上时。",
+    'zh-TW': "事先定好的是世界觀，建立在其上的故事則保持開放，可以在合作中共同調整。世界觀預計以試玩遊戲的形式展示，公開時間定在角色累積到約50人以上時。" },
 
   row_world_p3: { 'en': "Turning this worldview into a full-fledged work will only come after the fandom has grown enough, which could take as long as ten years, and we also keep in mind that it may never happen. Even so, the demo game is being made ahead of time.",
     'ja': "この世界観が正式な作品につながるのはファンダムが十分に育ってからのことなので、長ければ10年かかる可能性があり、最後まで実現しない可能性も視野に入れています。それでも、デモゲームは先に作っておきます。",
-    'zh-Hans': "这个世界观要发展成正式作品，得等粉丝群体充分成长之后，长则可能需要十年，我们也考虑到了最终无法推出的可能性。即便如此，试玩游戏仍会提前做好。",
-    'zh-Hant': "這個世界觀要發展成正式作品，得等粉絲群體充分成長之後，長則可能需要十年，我們也考慮到了最終無法推出的可能性。即便如此，試玩遊戲仍會提前做好。" },
+    'zh-CN': "这个世界观要发展成正式作品，得等粉丝群体充分成长之后，长则可能需要十年，我们也考虑到了最终无法推出的可能性。即便如此，试玩游戏仍会提前做好。",
+    'zh-TW': "這個世界觀要發展成正式作品，得等粉絲群體充分成長之後，長則可能需要十年，我們也考慮到了最終無法推出的可能性。即便如此，試玩遊戲仍會提前做好。" },
 
   demo_note: { 'en': "Once released, the demo game and worldview notes will be collected below.",
     'ja': "デモゲームと世界観のまとめは、公開されたらこの下にまとめる予定です。",
-    'zh-Hans': "试玩游戏和世界观整理公开后将汇总在下方。",
-    'zh-Hant': "試玩遊戲和世界觀整理公開後將彙整在下方。" },
+    'zh-CN': "试玩游戏和世界观整理公开后将汇总在下方。",
+    'zh-TW': "試玩遊戲和世界觀整理公開後將彙整在下方。" },
 
   demo_note_open: { 'en': "The demo game and worldview notes are collected below.",
     'ja': "デモゲームと世界観のまとめは、この下にまとめてあります。",
-    'zh-Hans': "试玩游戏和世界观整理已汇总在下方。",
-    'zh-Hant': "試玩遊戲和世界觀整理已彙整在下方。" },
+    'zh-CN': "试玩游戏和世界观整理已汇总在下方。",
+    'zh-TW': "試玩遊戲和世界觀整理已彙整在下方。" },
 
   demo_title: { 'en': "Demo game",
     'ja': "デモゲーム",
-    'zh-Hans': "试玩游戏",
-    'zh-Hant': "試玩遊戲" },
+    'zh-CN': "试玩游戏",
+    'zh-TW': "試玩遊戲" },
 
   demo_sub: { 'en': "Where the demo game of the official worldview and its notes will be kept",
     'ja': "公式の世界観を収めたデモゲームと、世界観のまとめを置く場所です",
-    'zh-Hans': "收录官方世界观的试玩游戏与世界观整理将放在这里",
-    'zh-Hant': "收錄官方世界觀的試玩遊戲與世界觀整理將放在這裡" },
+    'zh-CN': "收录官方世界观的试玩游戏与世界观整理将放在这里",
+    'zh-TW': "收錄官方世界觀的試玩遊戲與世界觀整理將放在這裡" },
 
   demo_go: { 'en': "View",
     'ja': "見る",
-    'zh-Hans': "查看",
-    'zh-Hant': "查看" },
+    'zh-CN': "查看",
+    'zh-TW': "查看" },
 
   demo_lock: { 'en': "Coming soon",
     'ja': "準備中",
-    'zh-Hans': "准备中",
-    'zh-Hant': "準備中" },
+    'zh-CN': "准备中",
+    'zh-TW': "準備中" },
 
   row_open_h: { 'en': "Open to collaboration",
     'ja': "開かれたコラボ",
-    'zh-Hans': "开放的合作",
-    'zh-Hant': "開放的合作" },
+    'zh-CN': "开放的合作",
+    'zh-TW': "開放的合作" },
 
   row_open_p1: { 'en': "The official worldview is somewhat removed from what the market currently favors and is fairly niche. For that reason, the official worldview is not a condition for collaboration. If you've come for the character IP, starting lightly with a new story separate from the official worldview may actually be the better fit. Short-running games, experimental projects, and small games or merch that borrow the characters for a while are all welcome. Every biz-OC-doll collaboration becomes part of the IP's track record and a chance for the partner to show off its technology, so we believe it becomes a meaningful record for both sides.",
     'ja': "公式の世界観は、いまの市場が好む方向とは少し距離があり、好みが分かれるタイプです。そのため、公式の世界観をコラボの条件にはしていません。キャラクターIPを見てお越しいただいた場合は、公式の世界観とは別の新しい物語で気軽に始めるほうが、かえって合うかもしれません。短期運営のゲームや実験的なプロジェクト、キャラクターを一時的に借りる小さなゲームやグッズも歓迎します。biz-OC-dollのコラボ実績はIPの経歴として残り、コラボ先にとっても技術を披露する場になるため、双方にとって意味のある記録になると考えています。",
-    'zh-Hans': "官方世界观与当下市场偏好的方向有些距离，属于比较挑受众的类型。因此，我们不把官方世界观作为合作的条件。如果是看中角色IP而来，用一个与官方世界观无关的新故事轻松起步，反而可能更合适。短期运营的游戏、实验性的项目，以及暂时借用角色的小型游戏和周边，我们也都欢迎。biz-OC-doll的合作记录会作为IP的履历留存，对合作方来说也是展示技术的机会，因此我们相信这对双方都会是有意义的记录。",
-    'zh-Hant': "官方世界觀與當下市場偏好的方向有些距離，屬於比較挑受眾的類型。因此，我們不把官方世界觀作為合作的條件。如果是看中角色IP而來，用一個與官方世界觀無關的新故事輕鬆起步，反而可能更合適。短期營運的遊戲、實驗性的專案，以及暫時借用角色的小型遊戲和周邊，我們也都歡迎。biz-OC-doll的合作紀錄會作為IP的履歷留存，對合作方來說也是展示技術的機會，因此我們相信這對雙方都會是有意義的紀錄。" },
+    'zh-CN': "官方世界观与当下市场偏好的方向有些距离，属于比较挑受众的类型。因此，我们不把官方世界观作为合作的条件。如果是看中角色IP而来，用一个与官方世界观无关的新故事轻松起步，反而可能更合适。短期运营的游戏、实验性的项目，以及暂时借用角色的小型游戏和周边，我们也都欢迎。biz-OC-doll的合作记录会作为IP的履历留存，对合作方来说也是展示技术的机会，因此我们相信这对双方都会是有意义的记录。",
+    'zh-TW': "官方世界觀與當下市場偏好的方向有些距離，屬於比較挑受眾的類型。因此，我們不把官方世界觀作為合作的條件。如果是看中角色IP而來，用一個與官方世界觀無關的新故事輕鬆起步，反而可能更合適。短期營運的遊戲、實驗性的專案，以及暫時借用角色的小型遊戲和周邊，我們也都歡迎。biz-OC-doll的合作紀錄會作為IP的履歷留存，對合作方來說也是展示技術的機會，因此我們相信這對雙方都會是有意義的紀錄。" },
 
   row_open_p2: { 'en': "In this way, biz-OC-doll is structured so that the whole IP never rides on the outcome of a single work. A new story made through a collaboration is still unmistakably biz-OC-doll, while the original and the official worldview remain separate from it. So there's no need to feel much pressure about trying something new.",
     'ja': "このように、biz-OC-dollはひとつの作品の結果にIP全体がかかっていない構造です。コラボで新しく作られる物語も間違いなくbiz-OC-dollであり、原作と公式の世界観はそれとは別に残ります。ですので、新しい試みに大きな負担を感じていただく必要はありません。",
-    'zh-Hans': "由此可见，biz-OC-doll的结构并不会让整个IP押在一部作品的成败上。通过合作新创作的故事同样是biz-OC-doll，而原作与官方世界观则独立于此保留。所以，尝试新事物时不必有太大压力。",
-    'zh-Hant': "由此可見，biz-OC-doll的結構並不會讓整個IP押在一部作品的成敗上。透過合作新創作的故事同樣是biz-OC-doll，而原作與官方世界觀則獨立於此保留。所以，嘗試新事物時不必有太大壓力。" },
+    'zh-CN': "由此可见，biz-OC-doll的结构并不会让整个IP押在一部作品的成败上。通过合作新创作的故事同样是biz-OC-doll，而原作与官方世界观则独立于此保留。所以，尝试新事物时不必有太大压力。",
+    'zh-TW': "由此可見，biz-OC-doll的結構並不會讓整個IP押在一部作品的成敗上。透過合作新創作的故事同樣是biz-OC-doll，而原作與官方世界觀則獨立於此保留。所以，嘗試新事物時不必有太大壓力。" },
 
   row_open_p3: { 'en': "It isn't something for right now, but we'd like to note the direction in advance. biz-OC-doll is being built to be an IP that keeps pace with advancing technology and can showcase it. We believe that the further technology advances, the more vividly characters come to life and the more closely they can reach more people. If you have that kind of technology, we're glad to work together, starting with small experiments, whatever your size.",
     'ja': "今すぐの話ではありませんが、方向性だけは先に書いておきます。biz-OC-dollは技術の発展に合わせて、その技術を載せて見せられるIPを目指して作られています。技術が発展するほど、キャラクターはより立体的に息づき、より多くの人のもとへ、より近く届けられると考えています。そうした技術をお持ちであれば、規模を問わず、小さな実験からでも喜んでご一緒します。",
-    'zh-Hans': "虽然不是眼下的事，但方向还是想先写在这里。biz-OC-doll正以能够跟上技术发展、并承载和展示这些技术的IP为目标而打造。我们认为，技术越进步，角色就越能立体地活起来，也能更贴近地触达更多人。只要拥有这样的技术，无论规模大小，我们都乐意从小型实验开始合作。",
-    'zh-Hant': "雖然不是眼下的事，但方向還是想先寫在這裡。biz-OC-doll正以能夠跟上技術發展、並承載和展示這些技術的IP為目標而打造。我們認為，技術越進步，角色就越能立體地活起來，也能更貼近地觸及更多人。只要擁有這樣的技術，無論規模大小，我們都樂意從小型實驗開始合作。" },
+    'zh-CN': "虽然不是眼下的事，但方向还是想先写在这里。biz-OC-doll正以能够跟上技术发展、并承载和展示这些技术的IP为目标而打造。我们认为，技术越进步，角色就越能立体地活起来，也能更贴近地触达更多人。只要拥有这样的技术，无论规模大小，我们都乐意从小型实验开始合作。",
+    'zh-TW': "雖然不是眼下的事，但方向還是想先寫在這裡。biz-OC-doll正以能夠跟上技術發展、並承載和展示這些技術的IP為目標而打造。我們認為，技術越進步，角色就越能立體地活起來，也能更貼近地觸及更多人。只要擁有這樣的技術，無論規模大小，我們都樂意從小型實驗開始合作。" },
 
   row_rules_h: { 'en': "Collaboration principles",
     'ja': "コラボの原則",
-    'zh-Hans': "合作原则",
-    'zh-Hant': "合作原則" },
+    'zh-CN': "合作原则",
+    'zh-TW': "合作原則" },
 
   rules_lede: { 'en': "These principles do not change in any collaboration.",
     'ja': "コラボにおいて変わらない原則です。",
-    'zh-Hans': "以下是合作中不会改变的原则。",
-    'zh-Hant': "以下是合作中不會改變的原則。" },
+    'zh-CN': "以下是合作中不会改变的原则。",
+    'zh-TW': "以下是合作中不會改變的原則。" },
 
   rule_1: { 'en': "The original copyright belongs to biz-OC-doll and is not transferred in any form.",
     'ja': "原著作権はbiz-OC-dollにある。いかなる形でも譲渡されない。",
-    'zh-Hans': "原著作权归biz-OC-doll所有，不以任何形式转让。",
-    'zh-Hant': "原著作權歸biz-OC-doll所有，不以任何形式轉讓。" },
+    'zh-CN': "原著作权归biz-OC-doll所有，不以任何形式转让。",
+    'zh-TW': "原著作權歸biz-OC-doll所有，不以任何形式轉讓。" },
 
   rule_2: { 'en': "Companies may use the characters only within the permitted scope.",
     'ja': "企業は許可された範囲内でのみキャラクターを活用できる。",
-    'zh-Hans': "企业仅可在获得许可的范围内使用角色。",
-    'zh-Hant': "企業僅可在獲得許可的範圍內使用角色。" },
+    'zh-CN': "企业仅可在获得许可的范围内使用角色。",
+    'zh-TW': "企業僅可在獲得許可的範圍內使用角色。" },
 
   rule_3: { 'en': "Rights to fan creations belong to their creators. A company wishing to use them must reach an individual agreement with the creator.",
     'ja': "ファン創作物の権利は創作者にある。企業がこれを活用するには、創作者との個別の協議を経なければならない。",
-    'zh-Hans': "粉丝创作物的权利归创作者所有。企业如需使用，须与创作者另行协商。",
-    'zh-Hant': "粉絲創作物的權利歸創作者所有。企業如需使用，須與創作者另行協商。" },
+    'zh-CN': "粉丝创作物的权利归创作者所有。企业如需使用，须与创作者另行协商。",
+    'zh-TW': "粉絲創作物的權利歸創作者所有。企業如需使用，須與創作者另行協商。" },
 
   rule_4: { 'en': "Companies may not call themselves official or represent biz-OC-doll.",
     'ja': "企業はbiz-OC-dollの公式を名乗ったり、代表したりすることはできない。",
-    'zh-Hans': "企业不得自称官方，也不得代表biz-OC-doll。",
-    'zh-Hant': "企業不得自稱官方，也不得代表biz-OC-doll。" },
+    'zh-CN': "企业不得自称官方，也不得代表biz-OC-doll。",
+    'zh-TW': "企業不得自稱官方，也不得代表biz-OC-doll。" },
 
   rule_5: { 'en': "Companies take no part in the production or operation of the project.",
     'ja': "プロジェクトの制作と運営に企業は関与しない。",
-    'zh-Hans': "企业不参与企划的制作与运营。",
-    'zh-Hant': "企業不參與企劃的製作與營運。" },
+    'zh-CN': "企业不参与企划的制作与运营。",
+    'zh-TW': "企業不參與企劃的製作與營運。" },
 
   rule_6: { 'en': "Individual custom requests are not accepted.",
     'ja': "個別のカスタム依頼は受け付けない。",
-    'zh-Hans': "不接受个别定制请求。",
-    'zh-Hant': "不接受個別客製請求。" },
+    'zh-CN': "不接受个别定制请求。",
+    'zh-TW': "不接受個別客製請求。" },
 
   rules_foot: { 'en': "All specific terms and scope of a collaboration are set by <b>individual contract</b>.",
     'ja': "コラボの具体的な条件と範囲は、すべて<b>個別契約</b>で定めます。",
-    'zh-Hans': "合作的具体条件与范围，均通过<b>个别合同</b>确定。",
-    'zh-Hant': "合作的具體條件與範圍，均透過<b>個別合約</b>確定。" },
+    'zh-CN': "合作的具体条件与范围，均通过<b>个别合同</b>确定。",
+    'zh-TW': "合作的具體條件與範圍，均透過<b>個別合約</b>確定。" },
 
   rules_pre: { 'en': "Even before its public release, the demo game can be shared with you first as soon as it's ready, on request.",
     'ja': "デモゲームは公開前でも、ご依頼いただければ準備でき次第お先にお渡しします。",
-    'zh-Hans': "试玩游戏即使在公开之前，如有需要，也会在准备好后优先提供。",
-    'zh-Hant': "試玩遊戲即使在公開之前，如有需要，也會在準備好後優先提供。" },
+    'zh-CN': "试玩游戏即使在公开之前，如有需要，也会在准备好后优先提供。",
+    'zh-TW': "試玩遊戲即使在公開之前，如有需要，也會在準備好後優先提供。" },
 
   biz_contact: { 'en': "Business inquiries",
     'ja': "ビジネスのお問い合わせ",
-    'zh-Hans': "商务咨询",
-    'zh-Hant': "商務洽詢" },
+    'zh-CN': "商务咨询",
+    'zh-TW': "商務洽詢" },
 
   rights_title: { 'en': "Rights",
     'ja': "権利関係",
-    'zh-Hans': "权利关系",
-    'zh-Hant': "權利關係" },
+    'zh-CN': "权利关系",
+    'zh-TW': "權利關係" },
 
   rights_p: { 'en': "We have seen, more than once, creators who failed to sort out their rights properly and later could not freely use their own characters even in their own works. So the official side makes it a rule to complete copyright registration before releasing a character. The purpose is not to hold on to particular rights or to police anyone.",
     'ja': "創作者が権利関係をきちんと整理できていなかったために、のちに自分のキャラクターを自分の作品でさえ自由に使えなくなる例を、何度も見てきました。そのため公式は、キャラクターを公開する前に著作権登録を済ませることを原則としています。特定の権利を握ったり、誰かを取り締まったりすることが目的ではありません。",
-    'zh-Hans': "我们多次见过创作者因为没有妥善整理权利关系，后来连在自己的作品里都无法自由使用自己的角色。因此，官方坚持在公开角色之前先完成著作权登记。这样做并不是为了握住某种权利或管控任何人。",
-    'zh-Hant': "我們多次見過創作者因為沒有妥善整理權利關係，後來連在自己的作品裡都無法自由使用自己的角色。因此，官方堅持在公開角色之前先完成著作權登記。這樣做並不是為了握住某種權利或管控任何人。" },
+    'zh-CN': "我们多次见过创作者因为没有妥善整理权利关系，后来连在自己的作品里都无法自由使用自己的角色。因此，官方坚持在公开角色之前先完成著作权登记。这样做并不是为了握住某种权利或管控任何人。",
+    'zh-TW': "我們多次見過創作者因為沒有妥善整理權利關係，後來連在自己的作品裡都無法自由使用自己的角色。因此，官方堅持在公開角色之前先完成著作權登記。這樣做並不是為了握住某種權利或管控任何人。" },
 
   ov_title: { 'en': "Overview",
     'ja': "企画概要",
-    'zh-Hans': "企划概要",
-    'zh-Hant': "企劃概要" },
+    'zh-CN': "企划概要",
+    'zh-TW': "企劃概要" },
 
   ov_note: { 'en': "Only the essentials, in brief. Character-related numbers update automatically to match what has been released.",
     'ja': "必要な情報だけを簡単にまとめました。キャラクター関連の数字は、公開状況に合わせて自動で更新されます。",
-    'zh-Hans': "仅简要整理了必要信息。与角色相关的数字会根据公开情况自动更新。",
-    'zh-Hant': "僅簡要整理了必要資訊。與角色相關的數字會根據公開情況自動更新。" },
+    'zh-CN': "仅简要整理了必要信息。与角色相关的数字会根据公开情况自动更新。",
+    'zh-TW': "僅簡要整理了必要資訊。與角色相關的數字會根據公開情況自動更新。" },
 
   ov_form_h: { 'en': "Format",
     'ja': "形態",
-    'zh-Hans': "形式",
-    'zh-Hant': "形式" },
+    'zh-CN': "形式",
+    'zh-TW': "形式" },
 
   ov_form: { 'en': "Open character project",
     'ja': "オープンキャラクタープロジェクト",
-    'zh-Hans': "开放角色企划",
-    'zh-Hant': "開放角色企劃" },
+    'zh-CN': "开放角色企划",
+    'zh-TW': "開放角色企劃" },
 
   ov_give_h: { 'en': "What's provided",
     'ja': "公式が用意するもの",
-    'zh-Hans': "官方提供的内容",
-    'zh-Hant': "官方提供的內容" },
+    'zh-CN': "官方提供的内容",
+    'zh-TW': "官方提供的內容" },
 
   ov_give: { 'en': "A unique code, a character sheet, a few expressions",
     'ja': "固有コード、キャラクターシート、いくつかの表情",
-    'zh-Hans': "专属编号、角色设定图、几种表情",
-    'zh-Hant': "專屬編號、角色設定圖、幾種表情" },
+    'zh-CN': "专属编号、角色设定图、几种表情",
+    'zh-TW': "專屬編號、角色設定圖、幾種表情" },
 
   ov_count_h: { 'en': "Characters",
     'ja': "キャラクター数",
-    'zh-Hans': "角色数量",
-    'zh-Hant': "角色數量" },
+    'zh-CN': "角色数量",
+    'zh-TW': "角色數量" },
 
   ov_count: { 'en': "Goal of 200, more may follow",
     'ja': "目標200人、以降も追加可能",
-    'zh-Hans': "目标200人，之后可继续增加",
-    'zh-Hant': "目標200人，之後可繼續增加" },
+    'zh-CN': "目标200人，之后可继续增加",
+    'zh-TW': "目標200人，之後可繼續增加" },
 
   ov_age_h: { 'en': "Official target rating",
     'ja': "公式の想定年齢",
-    'zh-Hans': "官方面向年龄",
-    'zh-Hant': "官方面向年齡" },
+    'zh-CN': "官方面向年龄",
+    'zh-TW': "官方面向年齡" },
 
   ov_age: { 'en': "All ages to 12+",
     'ja': "全年齢〜12歳以上",
-    'zh-Hans': "全年龄～12岁以上",
-    'zh-Hant': "普遍級～輔12級" },
+    'zh-CN': "全年龄～12岁以上",
+    'zh-TW': "普遍級～輔12級" },
 
   ov_use_h: { 'en': "Fan use",
     'ja': "ファンの利用範囲",
-    'zh-Hans': "粉丝使用范围",
-    'zh-Hant': "粉絲使用範圍" },
+    'zh-CN': "粉丝使用范围",
+    'zh-TW': "粉絲使用範圍" },
 
   ov_use: { 'en': "Mostly allowed, including commercial use; no revenue share",
     'ja': "商業利用を含めほぼ許可、収益分配なし",
-    'zh-Hans': "包括商业用途在内基本允许，不收分成",
-    'zh-Hant': "包括商業用途在內基本允許，不收分潤" },
+    'zh-CN': "包括商业用途在内基本允许，不收分成",
+    'zh-TW': "包括商業用途在內基本允許，不收分潤" },
 
   ov_track_h: { 'en': "Tracks",
     'ja': "運営トラック",
-    'zh-Hans': "运营路线",
-    'zh-Hant': "營運路線" },
+    'zh-CN': "运营路线",
+    'zh-TW': "營運路線" },
 
   ov_track: { 'en': "Free fan creation / Official worldview",
     'ja': "ファンの自由創作 / 公式の世界観",
-    'zh-Hans': "粉丝自由创作 / 官方世界观",
-    'zh-Hant': "粉絲自由創作 / 官方世界觀" },
+    'zh-CN': "粉丝自由创作 / 官方世界观",
+    'zh-TW': "粉絲自由創作 / 官方世界觀" },
 
   ov_world_h: { 'en': "Official worldview",
     'ja': "公式の世界観",
-    'zh-Hans': "官方世界观",
-    'zh-Hant': "官方世界觀" },
+    'zh-CN': "官方世界观",
+    'zh-TW': "官方世界觀" },
 
   ov_world: { 'en': "To be released as a demo game (at 50+ characters, subject to change)",
     'ja': "デモゲームとして公開予定（キャラクター50人以上の時点、変更の可能性あり）",
-    'zh-Hans': "将以试玩游戏形式公开（角色达50人以上时，可能变动）",
-    'zh-Hant': "將以試玩遊戲形式公開（角色達50人以上時，可能變動）" },
+    'zh-CN': "将以试玩游戏形式公开（角色达50人以上时，可能变动）",
+    'zh-TW': "將以試玩遊戲形式公開（角色達50人以上時，可能變動）" },
 
   ov_world_open: { 'en': "Demo game now available",
     'ja': "デモゲーム公開中",
-    'zh-Hans': "试玩游戏公开中",
-    'zh-Hant': "試玩遊戲公開中" },
+    'zh-CN': "试玩游戏公开中",
+    'zh-TW': "試玩遊戲公開中" },
 
   stat_count: { 'en': "{n} released",
     'ja': "現在{n}人公開",
-    'zh-Hans': "目前已公开{n}人",
-    'zh-Hant': "目前已公開{n}人" },
+    'zh-CN': "目前已公开{n}人",
+    'zh-TW': "目前已公開{n}人" },
 
   stat_holder: { 'en': "Assigned to {n} characters",
     'ja': "{n}人のキャラクターに設定済み",
-    'zh-Hans': "已指定给{n}个角色",
-    'zh-Hant': "已指定給{n}個角色" },
+    'zh-CN': "已指定给{n}个角色",
+    'zh-TW': "已指定給{n}個角色" },
 
   ct_tag: { 'en': "Original works built on story and characters, made to grow into IP.",
     'ja': "ストーリーとキャラクターを軸に、IPへと広がっていく原作を作っています。",
-    'zh-Hans': "以故事和角色为基础，打造可拓展为IP的原创作品。",
-    'zh-Hant': "以故事和角色為基礎，打造可拓展為IP的原創作品。" },
+    'zh-CN': "以故事和角色为基础，打造可拓展为IP的原创作品。",
+    'zh-TW': "以故事和角色為基礎，打造可拓展為IP的原創作品。" },
 
   ct_desc: { 'en': "We only review emails that include a proposal or specific collaboration details.<br>Replies may take some time, and we may not be able to respond to every inquiry.",
     'ja': "企画書、または具体的なコラボ内容が含まれたメールのみ確認しています。<br>お返事までお時間をいただく場合があり、すべてのお問い合わせにはお返事できないことがあります。",
-    'zh-Hans': "仅受理附有提案书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法回复所有咨询。",
-    'zh-Hant': "僅受理附有提案書或具體合作內容的郵件。<br>回覆可能需要一些時間，也可能無法回覆所有洽詢。" },
+    'zh-CN': "仅受理附有提案书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法回复所有咨询。",
+    'zh-TW': "僅受理附有提案書或具體合作內容的郵件。<br>回覆可能需要一些時間，也可能無法回覆所有洽詢。" },
 
   ct_copy: { 'en': "Copy",
     'ja': "コピー",
-    'zh-Hans': "复制",
-    'zh-Hant': "複製" },
+    'zh-CN': "复制",
+    'zh-TW': "複製" },
 
   ct_done: { 'en': "Copied",
     'ja': "完了",
-    'zh-Hans': "已复制",
-    'zh-Hant': "已複製" },
+    'zh-CN': "已复制",
+    'zh-TW': "已複製" },
 
   ct_close: { 'en': "Close",
     'ja': "閉じる",
-    'zh-Hans': "关闭",
-    'zh-Hant': "關閉" },
+    'zh-CN': "关闭",
+    'zh-TW': "關閉" },
 
   tb_contact: { 'en': "About · Business inquiries",
     'ja': "制作者紹介 · ビジネスのお問い合わせ",
-    'zh-Hans': "关于 · 商务咨询",
-    'zh-Hant': "關於 · 商務洽詢" }
+    'zh-CN': "关于 · 商务咨询",
+    'zh-TW': "關於 · 商務洽詢" }
 };
 
 /* Short text used by scripts (copy button, counters) */
@@ -1043,7 +1045,7 @@ window.i18nApply = i18nApply;
 var BIZ = window.BIZ = {
 
   MAIL:        'rrkt.biz@proton.me',
-  PROFILE_IMG: '../profile.png',
+  PROFILE_IMG: '../images/profile/profile.png',
   WHO_NAME:    'rrkt.biz',
 
   /* Note at the bottom of the language menu */
@@ -1383,9 +1385,14 @@ function bars(hide){
      · Demo game    = opens when released rows reach DEMO_OPEN_AT and DEMO_URL is set.
                       Lines marked data-open-key switch to their "open" wording,
                       and the "even before its public release" line hides.
+     · Suggestion box = opens when released rows reach BOARD_OPEN_AT.
+                      The lock comes off the link and the "still being prepared"
+                      line hides.
 
-   If the sheet can't be read, nothing changes (the demo card stays locked).
+   If the sheet can't be read, nothing changes (the demo card and the
+   suggestion box stay locked).
    ═══════════════════════════════════════════════════════════════════ */
+var BOARD_OPEN_AT = 12;
 var DEMO_OPEN_AT = 50;
 var DEMO_URL     = '';   /* address of the demo game page, once it exists */
 
@@ -1439,6 +1446,12 @@ var SHOWN_STATUS = ['done', 'wip'];
     var pre = document.getElementById('pd-demo-pre');
     if(pre) pre.hidden = true;
   }
+  function openBoard(){
+    var link = document.querySelector('.pd-board.is-locked');
+    if(link) link.classList.remove('is-locked');
+    var pre = document.getElementById('pd-board-pre');
+    if(pre) pre.hidden = true;
+  }
   async function run(){
     try{
       if(typeof SHEET_CSV !== 'function') return;
@@ -1462,6 +1475,7 @@ var SHOWN_STATUS = ['done', 'wip'];
       stats = { count: chars.length, holders: holders };
       renderStats();
 
+      if(chars.length >= BOARD_OPEN_AT) openBoard();
       if(chars.length >= DEMO_OPEN_AT) openDemo();
     }catch(e){ /* stay quiet — the table keeps its default text */ }
   }

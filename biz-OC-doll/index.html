@@ -21,7 +21,7 @@
 
   ──────────────────────────────────────────────────────────────
   Terms
-    English                ja                 zh-Hans           zh-Hant
+    English                ja                 zh-CN           zh-TW
     ─────────────────────  ─────────────────  ────────────────  ────────────────
     biz-OC-doll            biz-OC-doll        biz-OC-doll       biz-OC-doll
       (project name, and the name for the characters)
@@ -64,7 +64,7 @@
    A saved choice (localStorage 'bzd_lang') wins; otherwise the browser language.
    Japanese / Chinese browsers get the prepared text, everyone else gets English. */
 (function(){
-  var DICT = { 'ja':'ja', 'zh-CN':'zh-Hans', 'zh-TW':'zh-Hant' };
+  var DICT = { 'ja':'ja', 'zh-CN':'zh-CN', 'zh-TW':'zh-TW' };
   var FONT = { 'ja':'Noto+Sans+JP', 'zh-CN':'Noto+Sans+SC', 'zh-TW':'Noto+Sans+TC' };
 
   function norm(c){
@@ -248,8 +248,8 @@
    Each language gets its own font so kanji/hanzi are drawn the local way,
    and lines may break between characters (these languages have no spaces). */
 html:lang(ja){--cjk:'Noto Sans JP'}
-html:lang(zh-Hans){--cjk:'Noto Sans SC'}
-html:lang(zh-Hant){--cjk:'Noto Sans TC'}
+html:lang(zh-CN){--cjk:'Noto Sans SC'}
+html:lang(zh-TW){--cjk:'Noto Sans TC'}
 html:lang(ja) *,html:lang(zh) *{word-break:normal !important;line-break:strict}
 /* ── Lilac skin ──
    #B4A3D4 is too light for text on white, so text uses #6B559B and fills use #9C88C4. */
@@ -2035,615 +2035,615 @@ body{top:0 !important}
    To change values only, edit BIZ.MAIL / PROFILE_IMG / WHO_* / TL_NOTE below.
    ═══════════════════════════════════════════════════════════ */
 
-/* ── Interface text (tabs, buttons, messages) — en / ja / zh-Hans / zh-Hant ──
+/* ── Interface text (tabs, buttons, messages) — en / ja / zh-CN / zh-TW ──
    The English here must match the English written in the HTML (for data-i18n elements).
    Quotes: Japanese and Traditional Chinese use 「 」, Simplified uses " ". */
 Object.assign(window.I18N, {
   tab_intro: { 'en': "About",
     'ja': "紹介",
-    'zh-Hans': "介绍",
-    'zh-Hant': "介紹" },
+    'zh-CN': "介绍",
+    'zh-TW': "介紹" },
 
   tab_chars: { 'en': "Characters",
     'ja': "キャラクター",
-    'zh-Hans': "角色",
-    'zh-Hant': "角色" },
+    'zh-CN': "角色",
+    'zh-TW': "角色" },
 
   tab_event: { 'en': "Events",
     'ja': "イベント",
-    'zh-Hans': "活动",
-    'zh-Hant': "活動" },
+    'zh-CN': "活动",
+    'zh-TW': "活動" },
 
   skin_group: { 'en': "Site color",
     'ja': "サイトの色",
-    'zh-Hans': "网站配色",
-    'zh-Hant': "網站配色" },
+    'zh-CN': "网站配色",
+    'zh-TW': "網站配色" },
 
   skin_blue: { 'en': "Blue",
     'ja': "ブルー",
-    'zh-Hans': "蓝色",
-    'zh-Hant': "藍色" },
+    'zh-CN': "蓝色",
+    'zh-TW': "藍色" },
 
   skin_lilac: { 'en': "Lilac",
     'ja': "ライラック",
-    'zh-Hans': "丁香紫",
-    'zh-Hant': "丁香紫" },
+    'zh-CN': "丁香紫",
+    'zh-TW': "丁香紫" },
 
   snd_toggle: { 'en': "Click sound on/off",
     'ja': "クリック音のオン・オフ",
-    'zh-Hans': "点击音效开关",
-    'zh-Hant': "點擊音效開關" },
+    'zh-CN': "点击音效开关",
+    'zh-TW': "點擊音效開關" },
 
   snd_on: { 'en': "Turn click sound on",
     'ja': "クリック音をオンにする",
-    'zh-Hans': "开启点击音效",
-    'zh-Hant': "開啟點擊音效" },
+    'zh-CN': "开启点击音效",
+    'zh-TW': "開啟點擊音效" },
 
   snd_off: { 'en': "Turn click sound off (volume {n}%)",
     'ja': "クリック音をオフにする（音量 {n}%）",
-    'zh-Hans': "关闭点击音效（音量 {n}%）",
-    'zh-Hant': "關閉點擊音效（音量 {n}%）" },
+    'zh-CN': "关闭点击音效（音量 {n}%）",
+    'zh-TW': "關閉點擊音效（音量 {n}%）" },
 
   snd_vol: { 'en': "Volume",
     'ja': "音量",
-    'zh-Hans': "音量",
-    'zh-Hant': "音量" },
+    'zh-CN': "音量",
+    'zh-TW': "音量" },
 
   tb_contact: { 'en': "About · Business inquiries",
     'ja': "制作者紹介 · ビジネスのお問い合わせ",
-    'zh-Hans': "关于 · 商务咨询",
-    'zh-Hant': "關於 · 商務洽詢" },
+    'zh-CN': "关于 · 商务咨询",
+    'zh-TW': "關於 · 商務洽詢" },
 
   ct_tag: { 'en': "Original works built on story and characters, made to grow into IP.",
     'ja': "ストーリーとキャラクターを軸に、IPへと広がっていく原作を作っています。",
-    'zh-Hans': "以故事和角色为基础，打造可拓展为IP的原创作品。",
-    'zh-Hant': "以故事和角色為基礎，打造可拓展為IP的原創作品。" },
+    'zh-CN': "以故事和角色为基础，打造可拓展为IP的原创作品。",
+    'zh-TW': "以故事和角色為基礎，打造可拓展為IP的原創作品。" },
 
   biz_contact: { 'en': "Business inquiries",
     'ja': "ビジネスのお問い合わせ",
-    'zh-Hans': "商务咨询",
-    'zh-Hant': "商務洽詢" },
+    'zh-CN': "商务咨询",
+    'zh-TW': "商務洽詢" },
 
   ct_desc: { 'en': "We only review emails that include a proposal or specific collaboration details.<br>Replies may take some time, and we may not be able to respond to every inquiry.",
     'ja': "企画書、または具体的なコラボ内容が含まれたメールのみ確認しています。<br>お返事までお時間をいただく場合があり、すべてのお問い合わせにはお返事できないことがあります。",
-    'zh-Hans': "仅受理附有提案书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法回复所有咨询。",
-    'zh-Hant': "僅受理附有提案書或具體合作內容的郵件。<br>回覆可能需要一些時間，也可能無法回覆所有洽詢。" },
+    'zh-CN': "仅受理附有提案书或具体合作内容的邮件。<br>回复可能需要一些时间，也可能无法回复所有咨询。",
+    'zh-TW': "僅受理附有提案書或具體合作內容的郵件。<br>回覆可能需要一些時間，也可能無法回覆所有洽詢。" },
 
   ct_copy: { 'en': "Copy",
     'ja': "コピー",
-    'zh-Hans': "复制",
-    'zh-Hant': "複製" },
+    'zh-CN': "复制",
+    'zh-TW': "複製" },
 
   ct_done: { 'en': "Copied",
     'ja': "完了",
-    'zh-Hans': "已复制",
-    'zh-Hant': "已複製" },
+    'zh-CN': "已复制",
+    'zh-TW': "已複製" },
 
   ct_close: { 'en': "Close",
     'ja': "閉じる",
-    'zh-Hans': "关闭",
-    'zh-Hant': "關閉" },
+    'zh-CN': "关闭",
+    'zh-TW': "關閉" },
 
   pd_link: { 'en': "Open the project notes",
     'ja': "企画資料を見る",
-    'zh-Hans': "查看企划资料",
-    'zh-Hant': "查看企劃資料" },
+    'zh-CN': "查看企划资料",
+    'zh-TW': "查看企劃資料" },
 
   pd_note: { 'en': "A page gathering why the project is made this way, its rights, and collaboration principles.",
     'ja': "プロジェクトの背景、権利関係、コラボの原則をまとめたページです。",
-    'zh-Hans': "汇集企划背景、权利关系与合作原则的页面。",
-    'zh-Hant': "彙整企劃背景、權利關係與合作原則的頁面。" },
+    'zh-CN': "汇集企划背景、权利关系与合作原则的页面。",
+    'zh-TW': "彙整企劃背景、權利關係與合作原則的頁面。" },
 
   ch_search_ph: { 'en': "Search code...",
     'ja': "コードで検索…",
-    'zh-Hans': "搜索编号…",
-    'zh-Hant': "搜尋編號…" },
+    'zh-CN': "搜索编号…",
+    'zh-TW': "搜尋編號…" },
 
   ch_sort_title: { 'en': "Change sort order",
     'ja': "並び順を変更",
-    'zh-Hans': "更改排序",
-    'zh-Hant': "變更排序" },
+    'zh-CN': "更改排序",
+    'zh-TW': "變更排序" },
 
   sort_newest: { 'en': "Newest",
     'ja': "新しい順",
-    'zh-Hans': "最新",
-    'zh-Hant': "最新" },
+    'zh-CN': "最新",
+    'zh-TW': "最新" },
 
   sort_oldest: { 'en': "Oldest",
     'ja': "古い順",
-    'zh-Hans': "最早",
-    'zh-Hant': "最早" },
+    'zh-CN': "最早",
+    'zh-TW': "最早" },
 
   ch_width_title: { 'en': "Toggle width",
     'ja': "幅を切り替え",
-    'zh-Hans': "切换宽度",
-    'zh-Hant': "切換寬度" },
+    'zh-CN': "切换宽度",
+    'zh-TW': "切換寬度" },
 
   w_full: { 'en': "Full width",
     'ja': "全幅表示",
-    'zh-Hans': "全宽显示",
-    'zh-Hant': "全寬顯示" },
+    'zh-CN': "全宽显示",
+    'zh-TW': "全寬顯示" },
 
   w_narrow: { 'en': "Narrow view",
     'ja': "狭く表示",
-    'zh-Hans': "窄版显示",
-    'zh-Hant': "窄版顯示" },
+    'zh-CN': "窄版显示",
+    'zh-TW': "窄版顯示" },
 
   w_wide: { 'en': "Wide view",
     'ja': "広く表示",
-    'zh-Hans': "宽版显示",
-    'zh-Hant': "寬版顯示" },
+    'zh-CN': "宽版显示",
+    'zh-TW': "寬版顯示" },
 
   like_notice: { 'en': "♥ Likes are counted anonymously. We don't record who pressed them.",
     'ja': "♥ いいねは匿名で集計されます。誰が押したかは記録しません。",
-    'zh-Hans': "♥ 点赞为匿名统计，不会记录是谁点的。",
-    'zh-Hant': "♥ 按讚為匿名統計，不會記錄是誰按的。" },
+    'zh-CN': "♥ 点赞为匿名统计，不会记录是谁点的。",
+    'zh-TW': "♥ 按讚為匿名統計，不會記錄是誰按的。" },
 
   ch_count: { 'en': "{n} shown",
     'ja': "{n}件表示",
-    'zh-Hans': "显示{n}个",
-    'zh-Hant': "顯示{n}個" },
+    'zh-CN': "显示{n}个",
+    'zh-TW': "顯示{n}個" },
 
   ch_loading: { 'en': "Loading...",
     'ja': "読み込み中…",
-    'zh-Hans': "加载中…",
-    'zh-Hant': "載入中…" },
+    'zh-CN': "加载中…",
+    'zh-TW': "載入中…" },
 
   ch_err: { 'en': "Couldn't load the character list.",
     'ja': "キャラクター一覧を読み込めませんでした。",
-    'zh-Hans': "无法加载角色列表。",
-    'zh-Hant': "無法載入角色列表。" },
+    'zh-CN': "无法加载角色列表。",
+    'zh-TW': "無法載入角色列表。" },
 
   ch_err2: { 'en': "Please try again in a moment.",
     'ja': "しばらくしてからもう一度お試しください。",
-    'zh-Hans': "请稍后再试。",
-    'zh-Hant': "請稍後再試。" },
+    'zh-CN': "请稍后再试。",
+    'zh-TW': "請稍後再試。" },
 
   ch_reload: { 'en': "Reload",
     'ja': "再読み込み",
-    'zh-Hans': "重新加载",
-    'zh-Hant': "重新載入" },
+    'zh-CN': "重新加载",
+    'zh-TW': "重新載入" },
 
   ch_empty: { 'en': "No characters released yet.",
     'ja': "まだ公開されたキャラクターはいません。",
-    'zh-Hans': "还没有公开的角色。",
-    'zh-Hant': "還沒有公開的角色。" },
+    'zh-CN': "还没有公开的角色。",
+    'zh-TW': "還沒有公開的角色。" },
 
   ch_liked_none: { 'en': "No liked characters yet ♥",
     'ja': "いいねしたキャラクターはいません ♥",
-    'zh-Hans': "还没有点赞的角色 ♥",
-    'zh-Hant': "還沒有按讚的角色 ♥" },
+    'zh-CN': "还没有点赞的角色 ♥",
+    'zh-TW': "還沒有按讚的角色 ♥" },
 
   ch_no_result: { 'en': "No results",
     'ja': "該当なし",
-    'zh-Hans': "没有搜索结果",
-    'zh-Hant': "沒有搜尋結果" },
+    'zh-CN': "没有搜索结果",
+    'zh-TW': "沒有搜尋結果" },
 
   like: { 'en': "Like",
     'ja': "いいね",
-    'zh-Hans': "点赞",
-    'zh-Hant': "按讚" },
+    'zh-CN': "点赞",
+    'zh-TW': "按讚" },
 
   like_on: { 'en': "Unlike",
     'ja': "いいねを取り消す",
-    'zh-Hans': "取消点赞",
-    'zh-Hant': "取消按讚" },
+    'zh-CN': "取消点赞",
+    'zh-TW': "取消按讚" },
 
   like_off: { 'en': "Like this character",
     'ja': "このキャラクターにいいね",
-    'zh-Hans': "为这个角色点赞",
-    'zh-Hant': "為這個角色按讚" },
+    'zh-CN': "为这个角色点赞",
+    'zh-TW': "為這個角色按讚" },
 
   crumb_list: { 'en': "Character list",
     'ja': "キャラクター一覧",
-    'zh-Hans': "角色一览",
-    'zh-Hant': "角色一覽" },
+    'zh-CN': "角色一览",
+    'zh-TW': "角色一覽" },
 
   sheet_width_title: { 'en': "Toggle sheet width",
     'ja': "シートの幅を切り替え",
-    'zh-Hans': "切换设定图宽度",
-    'zh-Hant': "切換設定圖寬度" },
+    'zh-CN': "切换设定图宽度",
+    'zh-TW': "切換設定圖寬度" },
 
   share_title: { 'en': "Share this character",
     'ja': "このキャラクターをシェア",
-    'zh-Hans': "分享这个角色",
-    'zh-Hant': "分享這個角色" },
+    'zh-CN': "分享这个角色",
+    'zh-TW': "分享這個角色" },
 
   share: { 'en': "Share",
     'ja': "シェア",
-    'zh-Hans': "分享",
-    'zh-Hant': "分享" },
+    'zh-CN': "分享",
+    'zh-TW': "分享" },
 
   copy_link: { 'en': "Copy link",
     'ja': "リンクをコピー",
-    'zh-Hans': "复制链接",
-    'zh-Hant': "複製連結" },
+    'zh-CN': "复制链接",
+    'zh-TW': "複製連結" },
 
   save_sheet: { 'en': "Save sheet image",
     'ja': "シート画像を保存",
-    'zh-Hans': "保存设定图",
-    'zh-Hant': "儲存設定圖" },
+    'zh-CN': "保存设定图",
+    'zh-TW': "儲存設定圖" },
 
   sh_x: { 'en': "Share on X",
     'ja': "Xでシェア",
-    'zh-Hans': "分享到X",
-    'zh-Hant': "分享到X" },
+    'zh-CN': "分享到X",
+    'zh-TW': "分享到X" },
 
   sh_th_x: { 'en': "Share the TITLE HOLDER on X",
     'ja': "TITLE HOLDERをXでシェア",
-    'zh-Hans': "将TITLE HOLDER分享到X",
-    'zh-Hant': "將TITLE HOLDER分享到X" },
+    'zh-CN': "将TITLE HOLDER分享到X",
+    'zh-TW': "將TITLE HOLDER分享到X" },
 
   sh_threads: { 'en': "Share on Threads",
     'ja': "Threadsでシェア",
-    'zh-Hans': "分享到Threads",
-    'zh-Hant': "分享到Threads" },
+    'zh-CN': "分享到Threads",
+    'zh-TW': "分享到Threads" },
 
   sh_xhs: { 'en': "Xiaohongshu (小红书) · Copy & open",
     'ja': "小紅書 · コピーして開く",
-    'zh-Hans': "小红书 · 复制后打开",
-    'zh-Hant': "小紅書 · 複製後開啟" },
+    'zh-CN': "小红书 · 复制后打开",
+    'zh-TW': "小紅書 · 複製後開啟" },
 
   sh_discord: { 'en': "Discord · Copy & open",
     'ja': "Discord · コピーして開く",
-    'zh-Hans': "Discord · 复制后打开",
-    'zh-Hant': "Discord · 複製後開啟" },
+    'zh-CN': "Discord · 复制后打开",
+    'zh-TW': "Discord · 複製後開啟" },
 
   sh_native: { 'en': "Share to other apps (Instagram, etc.)",
     'ja': "ほかのアプリでシェア（Instagramなど）",
-    'zh-Hans': "分享到其他应用（Instagram等）",
-    'zh-Hant': "分享到其他App（Instagram等）" },
+    'zh-CN': "分享到其他应用（Instagram等）",
+    'zh-TW': "分享到其他App（Instagram等）" },
 
   sh_qr: { 'en': "Show QR code (WeChat, etc.)",
     'ja': "QRコードを表示（WeChatなど）",
-    'zh-Hans': "显示二维码（微信等）",
-    'zh-Hant': "顯示QR碼（微信等）" },
+    'zh-CN': "显示二维码（微信等）",
+    'zh-TW': "顯示QR碼（微信等）" },
 
   qr_title: { 'en': "QR code",
     'ja': "QRコード",
-    'zh-Hans': "二维码",
-    'zh-Hant': "QR碼" },
+    'zh-CN': "二维码",
+    'zh-TW': "QR碼" },
 
   qr_note: { 'en': "Scan with a phone camera<br>to go straight to this character<br><span>You can also share it with a WeChat or LINE scan</span>",
     'ja': "スマホのカメラで読み取ると<br>このキャラクターにすぐ移動します<br><span>WeChat・LINEのスキャンでもシェアできます</span>",
-    'zh-Hans': "用手机相机扫描<br>即可直接跳转到这个角色<br><span>也可以用微信、LINE扫一扫分享</span>",
-    'zh-Hant': "用手機相機掃描<br>即可直接前往這個角色<br><span>也可以用微信、LINE掃描分享</span>" },
+    'zh-CN': "用手机相机扫描<br>即可直接跳转到这个角色<br><span>也可以用微信、LINE扫一扫分享</span>",
+    'zh-TW': "用手機相機掃描<br>即可直接前往這個角色<br><span>也可以用微信、LINE掃描分享</span>" },
 
   qr_fail: { 'en': "Couldn't load the QR code",
     'ja': "QRコードを読み込めませんでした",
-    'zh-Hans': "二维码加载失败",
-    'zh-Hant': "QR碼載入失敗" },
+    'zh-CN': "二维码加载失败",
+    'zh-TW': "QR碼載入失敗" },
 
   sheet_hint: { 'en': "Character sheet / illustration<br><span style=\"opacity:.5\">visual sheet · reference · SNS</span>",
     'ja': "キャラクターシート / イラスト<br><span style=\"opacity:.5\">visual sheet · reference · SNS</span>",
-    'zh-Hans': "角色设定图 / 插画<br><span style=\"opacity:.5\">visual sheet · reference · SNS</span>",
-    'zh-Hant': "角色設定圖 / 插畫<br><span style=\"opacity:.5\">visual sheet · reference · SNS</span>" },
+    'zh-CN': "角色设定图 / 插画<br><span style=\"opacity:.5\">visual sheet · reference · SNS</span>",
+    'zh-TW': "角色設定圖 / 插畫<br><span style=\"opacity:.5\">visual sheet · reference · SNS</span>" },
 
   prev_char: { 'en': "Previous character",
     'ja': "前のキャラクター",
-    'zh-Hans': "上一个角色",
-    'zh-Hant': "上一個角色" },
+    'zh-CN': "上一个角色",
+    'zh-TW': "上一個角色" },
 
   next_char: { 'en': "Next character",
     'ja': "次のキャラクター",
-    'zh-Hans': "下一个角色",
-    'zh-Hant': "下一個角色" },
+    'zh-CN': "下一个角色",
+    'zh-TW': "下一個角色" },
 
   ai_label: { 'en': "About AI use",
     'ja': "AIの使用について",
-    'zh-Hans': "关于AI的使用",
-    'zh-Hant': "關於AI的使用" },
+    'zh-CN': "关于AI的使用",
+    'zh-TW': "關於AI的使用" },
 
   ai_text: { 'en': "All character art is hand-drawn by the artist. Only the sheet's background frame (the geometric frame) was made with generative AI.",
     'ja': "キャラクターのイラストはすべて作者の手描きで、シートの背景フレーム（幾何学フレーム）のみ生成AIで作成しています。",
-    'zh-Hans': "角色插画全部由作者亲手绘制，只有设定图的背景框（几何框架）使用生成式AI制作。",
-    'zh-Hant': "角色插畫全部由作者親手繪製，只有設定圖的背景框（幾何框架）使用生成式AI製作。" },
+    'zh-CN': "角色插画全部由作者亲手绘制，只有设定图的背景框（几何框架）使用生成式AI制作。",
+    'zh-TW': "角色插畫全部由作者親手繪製，只有設定圖的背景框（幾何框架）使用生成式AI製作。" },
 
   back_list: { 'en': "Back to list",
     'ja': "一覧へ",
-    'zh-Hans': "返回列表",
-    'zh-Hant': "返回列表" },
+    'zh-CN': "返回列表",
+    'zh-TW': "返回列表" },
 
   none: { 'en': "None",
     'ja': "なし",
-    'zh-Hans': "无",
-    'zh-Hant': "無" },
+    'zh-CN': "无",
+    'zh-TW': "無" },
 
   side_create: { 'en': "Create with this character",
     'ja': "このキャラクターで創作する",
-    'zh-Hans': "用这个角色创作",
-    'zh-Hant': "用這個角色創作" },
+    'zh-CN': "用这个角色创作",
+    'zh-TW': "用這個角色創作" },
 
   side_note: { 'en': "Personal social media · small works: free to use<br>Serials · commercial works · VTubers: credit required",
     'ja': "個人SNS・小規模な創作は自由に<br>連載・商業創作・VTuberはクレジット表記必須",
-    'zh-Hans': "个人社交平台 · 小规模创作可自由使用<br>连载 · 商业创作 · 虚拟主播须标注出处",
-    'zh-Hant': "個人社群 · 小規模創作可自由使用<br>連載 · 商業創作 · VTuber須標示出處" },
+    'zh-CN': "个人社交平台 · 小规模创作可自由使用<br>连载 · 商业创作 · 虚拟主播须标注出处",
+    'zh-TW': "個人社群 · 小規模創作可自由使用<br>連載 · 商業創作 · VTuber須標示出處" },
 
   dl_sheet: { 'en': "Download sheet image",
     'ja': "シート画像をダウンロード",
-    'zh-Hans': "下载设定图",
-    'zh-Hant': "下載設定圖" },
+    'zh-CN': "下载设定图",
+    'zh-TW': "下載設定圖" },
 
   copied: { 'en': "Copied!",
     'ja': "コピーしました",
-    'zh-Hans': "已复制",
-    'zh-Hant': "已複製" },
+    'zh-CN': "已复制",
+    'zh-TW': "已複製" },
 
   copied_paste: { 'en': "Copied! Paste it there",
     'ja': "コピーしました。貼り付けてください",
-    'zh-Hans': "已复制，请粘贴",
-    'zh-Hant': "已複製，請貼上" },
+    'zh-CN': "已复制，请粘贴",
+    'zh-TW': "已複製，請貼上" },
 
   copy_prompt: { 'en': "Copy the text below",
     'ja': "下の文章をコピーしてください",
-    'zh-Hans': "请复制下方文字",
-    'zh-Hant': "請複製下方文字" },
+    'zh-CN': "请复制下方文字",
+    'zh-TW': "請複製下方文字" },
 
   copy_prompt_url: { 'en': "Copy the address below",
     'ja': "下のアドレスをコピーしてください",
-    'zh-Hans': "请复制下方链接",
-    'zh-Hant': "請複製下方網址" },
+    'zh-CN': "请复制下方链接",
+    'zh-TW': "請複製下方網址" },
 
   dl_loading: { 'en': "Downloading…",
     'ja': "保存中…",
-    'zh-Hans': "下载中…",
-    'zh-Hant': "下載中…" },
+    'zh-CN': "下载中…",
+    'zh-TW': "下載中…" },
 
   dl_done: { 'en': "Saved",
     'ja': "保存しました",
-    'zh-Hans': "已下载",
-    'zh-Hant': "已下載" },
+    'zh-CN': "已下载",
+    'zh-TW': "已下載" },
 
   dl_none: { 'en': "No sheet image yet",
     'ja': "シート画像はまだありません",
-    'zh-Hans': "还没有设定图",
-    'zh-Hant': "還沒有設定圖" },
+    'zh-CN': "还没有设定图",
+    'zh-TW': "還沒有設定圖" },
 
   help_arrows: { 'en': "Arrow keys<br>previous · next character",
     'ja': "矢印キーで<br>前・次のキャラクター",
-    'zh-Hans': "方向键<br>上一个 · 下一个角色",
-    'zh-Hant': "方向鍵<br>上一個 · 下一個角色" },
+    'zh-CN': "方向键<br>上一个 · 下一个角色",
+    'zh-TW': "方向鍵<br>上一個 · 下一個角色" },
 
   help_esc: { 'en': "Esc or click outside<br>to return to the list",
     'ja': "Escか外側を押すと<br>一覧に戻ります",
-    'zh-Hans': "按Esc或点击外侧<br>返回列表",
-    'zh-Hant': "按Esc或點擊外側<br>返回列表" },
+    'zh-CN': "按Esc或点击外侧<br>返回列表",
+    'zh-TW': "按Esc或點擊外側<br>返回列表" },
 
   cr_0: { 'en': "The character [Character Name] in this work is based on the character {n} from the biz-OC-doll project.",
     'ja': "本作品に登場するキャラクター[キャラクター名]は、biz-OC-dollプロジェクトの{n}をもとに創作されました。",
-    'zh-Hans': "本作品中登场的角色[角色名]，是以biz-OC-doll企划的{n}为原型创作的。",
-    'zh-Hant': "本作品中登場的角色[角色名]，是以biz-OC-doll企劃的{n}為原型創作的。" },
+    'zh-CN': "本作品中登场的角色[角色名]，是以biz-OC-doll企划的{n}为原型创作的。",
+    'zh-TW': "本作品中登場的角色[角色名]，是以biz-OC-doll企劃的{n}為原型創作的。" },
 
   cr_1: { 'en': "[Character Name] Original Character by biz-OC-doll",
     'ja': "[キャラクター名] Original Character by biz-OC-doll",
-    'zh-Hans': "[角色名] Original Character by biz-OC-doll",
-    'zh-Hant': "[角色名] Original Character by biz-OC-doll" },
+    'zh-CN': "[角色名] Original Character by biz-OC-doll",
+    'zh-TW': "[角色名] Original Character by biz-OC-doll" },
 
   ev_desc: { 'en': "Events & logs",
     'ja': "イベント & ログ",
-    'zh-Hans': "活动 & 记录",
-    'zh-Hant': "活動 & 紀錄" },
+    'zh-CN': "活动 & 记录",
+    'zh-TW': "活動 & 紀錄" },
 
   ev_log: { 'en': "Log",
     'ja': "ログ",
-    'zh-Hans': "记录",
-    'zh-Hant': "紀錄" },
+    'zh-CN': "记录",
+    'zh-TW': "紀錄" },
 
   th_eyebrow: { 'en': "Always open",
     'ja': "常時オープン",
-    'zh-Hans': "常驻开放",
-    'zh-Hant': "常駐開放" },
+    'zh-CN': "常驻开放",
+    'zh-TW': "常駐開放" },
 
   th_info: { 'en': "What is a TITLE HOLDER?",
     'ja': "TITLE HOLDERとは？",
-    'zh-Hans': "什么是TITLE HOLDER？",
-    'zh-Hant': "什麼是TITLE HOLDER？" },
+    'zh-CN': "什么是TITLE HOLDER？",
+    'zh-TW': "什麼是TITLE HOLDER？" },
 
   th_desc: { 'en': "The spot where your name appears in a character's detail window. There's only one per code.",
     'ja': "キャラクター詳細画面に名前が載る枠です。コードごとに一人だけです。",
-    'zh-Hans': "你的名字会出现在角色详情窗口中的位置。每个编号只有一位。",
-    'zh-Hant': "你的名字會出現在角色詳情視窗中的位置。每個編號只有一位。" },
+    'zh-CN': "你的名字会出现在角色详情窗口中的位置。每个编号只有一位。",
+    'zh-TW': "你的名字會出現在角色詳情視窗中的位置。每個編號只有一位。" },
 
   th_more: { 'en': "Anyone can become a Holder by naming a character, but there's only one TITLE HOLDER per code. An open code goes to whoever claims it first, and a code that already has a TITLE HOLDER can be challenged during a season for that amount or more. The amount paid is shown with the name.",
     'ja': "名前をつけたホルダーには誰でもなれますが、TITLE HOLDERはコードごとに一人だけです。空いているコードはいつでも先に手にした方のもので、すでにTITLE HOLDERがいるコードは、シーズンが開いたときにその金額以上で挑戦できます。支払った金額は名前と一緒に表示されます。",
-    'zh-Hans': "起了名字的持有者人人都能当，但TITLE HOLDER每个编号只有一位。空着的编号随时归先拿下的人所有；已有TITLE HOLDER的编号，可以在赛季开放时以不低于该金额的价格挑战。支付的金额会和名字一起显示。",
-    'zh-Hant': "取了名字的持有者人人都能當，但TITLE HOLDER每個編號只有一位。空著的編號隨時歸先拿下的人所有；已有TITLE HOLDER的編號，可以在賽季開放時以不低於該金額的價格挑戰。支付的金額會和名字一起顯示。" },
+    'zh-CN': "起了名字的持有者人人都能当，但TITLE HOLDER每个编号只有一位。空着的编号随时归先拿下的人所有；已有TITLE HOLDER的编号，可以在赛季开放时以不低于该金额的价格挑战。支付的金额会和名字一起显示。",
+    'zh-TW': "取了名字的持有者人人都能當，但TITLE HOLDER每個編號只有一位。空著的編號隨時歸先拿下的人所有；已有TITLE HOLDER的編號，可以在賽季開放時以不低於該金額的價格挑戰。支付的金額會和名字一起顯示。" },
 
   th_btn: { 'en': "Claim the title on Ko-fi",
     'ja': "Ko-fiでタイトルを手に入れる",
-    'zh-Hans': "前往Ko-fi获取头衔",
-    'zh-Hant': "前往Ko-fi取得頭銜" },
+    'zh-CN': "前往Ko-fi获取头衔",
+    'zh-TW': "前往Ko-fi取得頭銜" },
 
   vote_unit: { 'en': "votes",
     'ja': "票",
-    'zh-Hans': "票",
-    'zh-Hant': "票" },
+    'zh-CN': "票",
+    'zh-TW': "票" },
 
   pv_eyebrow: { 'en': "Ongoing vote",
     'ja': "常時投票",
-    'zh-Hans': "常驻投票",
-    'zh-Hant': "常駐投票" },
+    'zh-CN': "常驻投票",
+    'zh-TW': "常駐投票" },
 
   pv_title: { 'en': "Send your love with votes",
     'ja': "投票で気持ちを届ける",
-    'zh-Hans': "用投票传达心意",
-    'zh-Hant': "用投票傳達心意" },
+    'zh-CN': "用投票传达心意",
+    'zh-TW': "用投票傳達心意" },
 
   pv_desc: { 'en': "You can send votes to your favorite biz-OC-doll.",
     'ja': "好きなbiz-OC-dollに票を送れます。",
-    'zh-Hans': "可以为喜欢的biz-OC-doll投票。",
-    'zh-Hant': "可以為喜歡的biz-OC-doll投票。" },
+    'zh-CN': "可以为喜欢的biz-OC-doll投票。",
+    'zh-TW': "可以為喜歡的biz-OC-doll投票。" },
 
   pv_note: { 'en': "Votes you send never disappear when a new round begins; they keep adding up. Tallies are updated from time to time.",
     'ja': "送った票は回が変わっても消えずにたまっていきます。集計への反映は不定期です。",
-    'zh-Hans': "投出的票不会因轮次更换而消失，会一直累积。统计结果不定期更新。",
-    'zh-Hant': "投出的票不會因輪次更換而消失，會一直累積。統計結果不定期更新。" },
+    'zh-CN': "投出的票不会因轮次更换而消失，会一直累积。统计结果不定期更新。",
+    'zh-TW': "投出的票不會因輪次更換而消失，會一直累積。統計結果不定期更新。" },
 
   pv_btn: { 'en': "Send votes on Ko-fi",
     'ja': "Ko-fiで票を送る",
-    'zh-Hans': "前往Ko-fi投票",
-    'zh-Hant': "前往Ko-fi投票" },
+    'zh-CN': "前往Ko-fi投票",
+    'zh-TW': "前往Ko-fi投票" },
 
   fv_free: { 'en': "Free vote",
     'ja': "無料投票",
-    'zh-Hans': "免费投票",
-    'zh-Hant': "免費投票" },
+    'zh-CN': "免费投票",
+    'zh-TW': "免費投票" },
 
   st_lock: { 'en': "Not started",
     'ja': "開催前",
-    'zh-Hans': "未开始",
-    'zh-Hant': "未開始" },
+    'zh-CN': "未开始",
+    'zh-TW': "未開始" },
 
   st_open: { 'en': "Open now",
     'ja': "開催中",
-    'zh-Hans': "进行中",
-    'zh-Hant': "進行中" },
+    'zh-CN': "进行中",
+    'zh-TW': "進行中" },
 
   st_end: { 'en': "Ended",
     'ja': "終了",
-    'zh-Hans': "已结束",
-    'zh-Hant': "已結束" },
+    'zh-CN': "已结束",
+    'zh-TW': "已結束" },
 
   fv_title: { 'en': "1st Popularity Vote",
     'ja': "第1回人気投票",
-    'zh-Hans': "第1届人气投票",
-    'zh-Hant': "第1屆人氣投票" },
+    'zh-CN': "第1届人气投票",
+    'zh-TW': "第1屆人氣投票" },
 
   fv_desc: { 'en': "A vote anyone can join for free.",
     'ja': "誰でも無料で参加できる投票です。",
-    'zh-Hans': "任何人都可以免费参与的投票。",
-    'zh-Hant': "任何人都可以免費參與的投票。" },
+    'zh-CN': "任何人都可以免费参与的投票。",
+    'zh-TW': "任何人都可以免費參與的投票。" },
 
   fv_note: { 'en': "Ko-fi votes from the ongoing vote are added to the regular votes and count toward the ranking.",
     'ja': "常時投票のKo-fi支援票は、通常の投票と合算して順位に反映されます。",
-    'zh-Hans': "常驻投票中的Ko-fi赞助票将与普通投票合计，计入排名。",
-    'zh-Hant': "常駐投票中的Ko-fi贊助票將與一般投票合計，計入排名。" },
+    'zh-CN': "常驻投票中的Ko-fi赞助票将与普通投票合计，计入排名。",
+    'zh-TW': "常駐投票中的Ko-fi贊助票將與一般投票合計，計入排名。" },
 
   fv_go: { 'en': "Go vote",
     'ja': "投票する",
-    'zh-Hans': "去投票",
-    'zh-Hant': "去投票" },
+    'zh-CN': "去投票",
+    'zh-TW': "去投票" },
 
   fv_lock: { 'en': "Coming soon",
     'ja': "準備中",
-    'zh-Hans': "准备中",
-    'zh-Hant': "準備中" },
+    'zh-CN': "准备中",
+    'zh-TW': "準備中" },
 
   fv_ended: { 'en': "Vote ended",
     'ja': "終了した投票",
-    'zh-Hans': "已结束的投票",
-    'zh-Hant': "已結束的投票" },
+    'zh-CN': "已结束的投票",
+    'zh-TW': "已結束的投票" },
 
   al_th: { 'en': "TITLE HOLDER opens soon.",
     'ja': "TITLE HOLDERはまもなくオープンします。",
-    'zh-Hans': "TITLE HOLDER即将开放。",
-    'zh-Hant': "TITLE HOLDER即將開放。" },
+    'zh-CN': "TITLE HOLDER即将开放。",
+    'zh-TW': "TITLE HOLDER即將開放。" },
 
   al_vote: { 'en': "Voting opens soon.",
     'ja': "投票はまもなく始まります。",
-    'zh-Hans': "投票即将开始。",
-    'zh-Hant': "投票即將開始。" },
+    'zh-CN': "投票即将开始。",
+    'zh-TW': "投票即將開始。" },
 
   al_kofi: { 'en': "The ongoing vote opens soon.",
     'ja': "常時投票はまもなく始まります。",
-    'zh-Hans': "常驻投票即将开始。",
-    'zh-Hant': "常駐投票即將開始。" },
+    'zh-CN': "常驻投票即将开始。",
+    'zh-TW': "常駐投票即將開始。" },
 
   log_vote: { 'en': "Popularity vote",
     'ja': "人気投票",
-    'zh-Hans': "人气投票",
-    'zh-Hant': "人氣投票" },
+    'zh-CN': "人气投票",
+    'zh-TW': "人氣投票" },
 
   thl_desc: { 'en': "A record of titles changing hands, code by code. Even when a title moves on, the name stays here.<br>Amounts are what was paid at the time.",
     'ja': "コードごとにタイトルが移り変わった記録です。タイトルが移っても、名前はここに残ります。<br>金額はそのときに支払われた金額です。",
-    'zh-Hans': "这里记录了每个编号头衔的易主经过。即使头衔易主，名字也会留在这里。<br>金额为当时支付的金额。",
-    'zh-Hant': "這裡記錄了每個編號頭銜的易主經過。即使頭銜易主，名字也會留在這裡。<br>金額為當時支付的金額。" },
+    'zh-CN': "这里记录了每个编号头衔的易主经过。即使头衔易主，名字也会留在这里。<br>金额为当时支付的金额。",
+    'zh-TW': "這裡記錄了每個編號頭銜的易主經過。即使頭銜易主，名字也會留在這裡。<br>金額為當時支付的金額。" },
 
   thl_time: { 'en': "By date",
     'ja': "日付順",
-    'zh-Hans': "按日期",
-    'zh-Hant': "依日期" },
+    'zh-CN': "按日期",
+    'zh-TW': "依日期" },
 
   thl_code: { 'en': "By code",
     'ja': "コード別",
-    'zh-Hans': "按编号",
-    'zh-Hant': "依編號" },
+    'zh-CN': "按编号",
+    'zh-TW': "依編號" },
 
   thl_ph: { 'en': "Code or name",
     'ja': "コードまたは名前",
-    'zh-Hans': "编号或名字",
-    'zh-Hant': "編號或名字" },
+    'zh-CN': "编号或名字",
+    'zh-TW': "編號或名字" },
 
   thl_loading: { 'en': "Loading records…",
     'ja': "記録を読み込んでいます…",
-    'zh-Hans': "正在加载记录…",
-    'zh-Hant': "正在載入紀錄…" },
+    'zh-CN': "正在加载记录…",
+    'zh-TW': "正在載入紀錄…" },
 
   thl_err: { 'en': "Couldn't load the records.<br>Please open this again later.",
     'ja': "記録を読み込めませんでした。<br>しばらくしてからもう一度開いてください。",
-    'zh-Hans': "无法加载记录。<br>请稍后再打开。",
-    'zh-Hant': "無法載入紀錄。<br>請稍後再開啟。" },
+    'zh-CN': "无法加载记录。<br>请稍后再打开。",
+    'zh-TW': "無法載入紀錄。<br>請稍後再開啟。" },
 
   thl_empty: { 'en': "No TITLE HOLDER records yet.<br>They'll appear here once the first TITLE HOLDER arrives.",
     'ja': "まだTITLE HOLDERの記録はありません。<br>最初のTITLE HOLDERが生まれたら、ここに記録されます。",
-    'zh-Hans': "还没有TITLE HOLDER的记录。<br>第一位TITLE HOLDER出现后会记录在这里。",
-    'zh-Hant': "還沒有TITLE HOLDER的紀錄。<br>第一位TITLE HOLDER出現後會記錄在這裡。" },
+    'zh-CN': "还没有TITLE HOLDER的记录。<br>第一位TITLE HOLDER出现后会记录在这里。",
+    'zh-TW': "還沒有TITLE HOLDER的紀錄。<br>第一位TITLE HOLDER出現後會記錄在這裡。" },
 
   thl_none: { 'en': "No matching records.",
     'ja': "該当する記録はありません。",
-    'zh-Hans': "没有找到相关记录。",
-    'zh-Hant': "沒有找到相關紀錄。" },
+    'zh-CN': "没有找到相关记录。",
+    'zh-TW': "沒有找到相關紀錄。" },
 
   thl_nodate: { 'en': "Date not recorded",
     'ja': "日付未記録",
-    'zh-Hans': "日期未记录",
-    'zh-Hant': "日期未記錄" },
+    'zh-CN': "日期未记录",
+    'zh-TW': "日期未記錄" },
 
   thl_first: { 'en': "First TITLE HOLDER",
     'ja': "最初のTITLE HOLDER",
-    'zh-Hans': "首位TITLE HOLDER",
-    'zh-Hant': "首位TITLE HOLDER" },
+    'zh-CN': "首位TITLE HOLDER",
+    'zh-TW': "首位TITLE HOLDER" },
 
   thl_prev: { 'en': "Previous",
     'ja': "前任",
-    'zh-Hans': "前任",
-    'zh-Hant': "前任" },
+    'zh-CN': "前任",
+    'zh-TW': "前任" },
 
   thl_current: { 'en': "Current TITLE HOLDER",
     'ja': "現在のTITLE HOLDER",
-    'zh-Hans': "现任TITLE HOLDER",
-    'zh-Hant': "現任TITLE HOLDER" },
+    'zh-CN': "现任TITLE HOLDER",
+    'zh-TW': "現任TITLE HOLDER" },
 
   thl_now: { 'en': "now",
     'ja': "現在",
-    'zh-Hans': "至今",
-    'zh-Hant': "至今" },
+    'zh-CN': "至今",
+    'zh-TW': "至今" },
 
   thl_meta: { 'en': "First record {d} · {n} records",
     'ja': "最初の記録 {d} · 記録{n}件",
-    'zh-Hans': "首次记录 {d} · 共{n}条记录",
-    'zh-Hant': "首次紀錄 {d} · 共{n}筆紀錄" },
+    'zh-CN': "首次记录 {d} · 共{n}条记录",
+    'zh-TW': "首次紀錄 {d} · 共{n}筆紀錄" },
 
   thl_view: { 'en': "View {n}",
     'ja': "{n} の詳細",
-    'zh-Hans': "查看{n}详情",
-    'zh-Hant': "查看{n}詳情" },
+    'zh-CN': "查看{n}详情",
+    'zh-TW': "查看{n}詳情" },
 
   vlog_label: { 'en': "Popularity vote log",
     'ja': "人気投票ログ",
-    'zh-Hans': "人气投票记录",
-    'zh-Hant': "人氣投票紀錄" },
+    'zh-CN': "人气投票记录",
+    'zh-TW': "人氣投票紀錄" },
 
   vlog_empty: { 'en': "No popularity vote results recorded yet.<br>Rankings will be recorded here after results are announced.",
     'ja': "まだ記録された人気投票の結果はありません。<br>結果発表後、ここに順位が記録されます。",
-    'zh-Hans': "还没有记录的人气投票结果。<br>结果公布后，排名会记录在这里。",
-    'zh-Hant': "還沒有記錄的人氣投票結果。<br>結果公布後，排名會記錄在這裡。" }
+    'zh-CN': "还没有记录的人气投票结果。<br>结果公布后，排名会记录在这里。",
+    'zh-TW': "還沒有記錄的人氣投票結果。<br>結果公布後，排名會記錄在這裡。" }
 });
 
 var BIZ = window.BIZ = {
 
   MAIL:        'rrkt.biz@proton.me',
-  PROFILE_IMG: '../profile.png',
+  PROFILE_IMG: '../images/profile/profile.png',
   WHO_NAME:    'rrkt.biz',
   WHO_TAG:     'Original works built on story and characters, made to grow into IP.',   /* translations: ct_tag */
 
@@ -3570,283 +3570,283 @@ Object.assign(window.I18N, {
   /* ── Hero ── */
   hero_btn: {
     'ja':      'キャラクターを見る',
-    'zh-Hans': '去看角色',
-    'zh-Hant': '去看角色'
+    'zh-CN': '去看角色',
+    'zh-TW': '去看角色'
   },
 
   /* ── How to Play ── */
   howto_title: {
     'ja':      '遊び方',
-    'zh-Hans': '玩法',
-    'zh-Hant': '玩法'
+    'zh-CN': '玩法',
+    'zh-TW': '玩法'
   },
   howto_lead: {
     'ja':      'biz-OC-dollは、誰でもキャラクターを自由に使えるオープンキャラクタープロジェクトです。<br> 気に入ったキャラクターが決まったら、こんなふうに楽しんでください。',
-    'zh-Hans': 'biz-OC-doll是一个任何人都可以拿角色去用的开放角色企划。<br> 选好喜欢的角色之后，就这样来玩吧。',
-    'zh-Hant': 'biz-OC-doll是一個任何人都可以拿角色去用的開放角色企劃。<br> 選好喜歡的角色之後，就這樣來玩吧。'
+    'zh-CN': 'biz-OC-doll是一个任何人都可以拿角色去用的开放角色企划。<br> 选好喜欢的角色之后，就这样来玩吧。',
+    'zh-TW': 'biz-OC-doll是一個任何人都可以拿角色去用的開放角色企劃。<br> 選好喜歡的角色之後，就這樣來玩吧。'
   },
   holder_call: {
     'ja':      '<b>biz-OC-dollのホルダーになってください！</b>',
-    'zh-Hans': '<b>来成为biz-OC-doll的持有者吧！</b>',
-    'zh-Hant': '<b>來成為biz-OC-doll的持有者吧！</b>'
+    'zh-CN': '<b>来成为biz-OC-doll的持有者吧！</b>',
+    'zh-TW': '<b>來成為biz-OC-doll的持有者吧！</b>'
   },
   holder_def: {
     'ja':      '<b>ホルダーとは？</b><br>コードでしか呼ばれていないbiz-OC-dollに名前をつけた瞬間、あなたはそのbiz-OC-dollのホルダーになります。名前をつけたキャラクターは、まるごとあなたのものです。',
-    'zh-Hans': '<b>什么是持有者？</b><br>当你为只有编号的biz-OC-doll起名的那一刻，你就成为了这个biz-OC-doll的持有者。你起名的角色，完完全全属于你。',
-    'zh-Hant': '<b>什麼是持有者？</b><br>當你為只有編號的biz-OC-doll取名的那一刻，你就成為了這個biz-OC-doll的持有者。你取名的角色，完完全全屬於你。'
+    'zh-CN': '<b>什么是持有者？</b><br>当你为只有编号的biz-OC-doll起名的那一刻，你就成为了这个biz-OC-doll的持有者。你起名的角色，完完全全属于你。',
+    'zh-TW': '<b>什麼是持有者？</b><br>當你為只有編號的biz-OC-doll取名的那一刻，你就成為了這個biz-OC-doll的持有者。你取名的角色，完完全全屬於你。'
   },
   give_head: {
     'ja':      'biz-OC-doll公式が用意するもの',
-    'zh-Hans': 'biz-OC-doll官方提供的',
-    'zh-Hant': 'biz-OC-doll官方提供的'
+    'zh-CN': 'biz-OC-doll官方提供的',
+    'zh-TW': 'biz-OC-doll官方提供的'
   },
   give_list: {
     'ja':      '<li>固有コード</li><li>キャラクターシート</li><li>いくつかの表情</li>',
-    'zh-Hans': '<li>专属编号</li><li>角色设定图</li><li>几种表情</li>',
-    'zh-Hant': '<li>專屬編號</li><li>角色設定圖</li><li>幾種表情</li>'
+    'zh-CN': '<li>专属编号</li><li>角色设定图</li><li>几种表情</li>',
+    'zh-TW': '<li>專屬編號</li><li>角色設定圖</li><li>幾種表情</li>'
   },
   decide_head: {
     'ja':      'ホルダーが決めるもの',
-    'zh-Hans': '持有者来决定的',
-    'zh-Hant': '持有者來決定的'
+    'zh-CN': '持有者来决定的',
+    'zh-TW': '持有者來決定的'
   },
   decide_list: {
     'ja':      '<li>名前・性格</li><li>口調・ストーリー</li><li>年齢・身長</li><li>そのほかのすべて</li>',
-    'zh-Hans': '<li>名字 · 性格</li><li>说话方式 · 故事</li><li>年龄 · 身高</li><li>其他一切</li>',
-    'zh-Hant': '<li>名字 · 性格</li><li>說話方式 · 故事</li><li>年齡 · 身高</li><li>其他一切</li>'
+    'zh-CN': '<li>名字 · 性格</li><li>说话方式 · 故事</li><li>年龄 · 身高</li><li>其他一切</li>',
+    'zh-TW': '<li>名字 · 性格</li><li>說話方式 · 故事</li><li>年齡 · 身高</li><li>其他一切</li>'
   },
   example_title: {
     'ja':      '<b>使い方の例</b>',
-    'zh-Hans': '<b>使用示例</b>',
-    'zh-Hant': '<b>使用範例</b>'
+    'zh-CN': '<b>使用示例</b>',
+    'zh-TW': '<b>使用範例</b>'
   },
   example: {
     'ja':      '042番に「A」と名前をつけたら、その瞬間からそのキャラクターはAになります。',
-    'zh-Hans': '如果你给042号起名"A"，从那一刻起，这个角色就是A。',
-    'zh-Hant': '如果你為042號取名「A」，從那一刻起，這個角色就是A。'
+    'zh-CN': '如果你给042号起名"A"，从那一刻起，这个角色就是A。',
+    'zh-TW': '如果你為042號取名「A」，從那一刻起，這個角色就是A。'
   },
   example_same: {
     'ja':      '同じ042番でも、ホルダーごとにつける名前もキャラ解釈も、まったく違ってかまいません。そうして生まれたキャラクターは、すべて同じ042番として扱われます。',
-    'zh-Hans': '即使是同一个042号，每位持有者起的名字和角色解读也可以完全不同。这样诞生的角色，都算作同一个042号。',
-    'zh-Hant': '即使是同一個042號，每位持有者取的名字和角色解讀也可以完全不同。這樣誕生的角色，都算作同一個042號。'
+    'zh-CN': '即使是同一个042号，每位持有者起的名字和角色解读也可以完全不同。这样诞生的角色，都算作同一个042号。',
+    'zh-TW': '即使是同一個042號，每位持有者取的名字和角色解讀也可以完全不同。這樣誕生的角色，都算作同一個042號。'
   },
   play_solo: {
     'ja':      '名前をつけたら、Aを自分のWeb小説の主人公にしても、作っているゲームに出演させても、Aの同人誌を出してイベントで頒布しても、Aの姿でVTuberとして活動してもかまいません。どこでどう使うかは、すべてホルダーが決めればいいんです。',
-    'zh-Hans': '起好名字之后，就可以让A当你网络小说的主角，可以让A出演你正在做的游戏，也可以出A的同人本拿到漫展上卖，还可以用A的形象当虚拟主播。用在哪里、怎么用，全都由持有者决定。',
-    'zh-Hant': '取好名字之後，就可以讓A當你網路小說的主角，可以讓A在你正在做的遊戲裡登場，也可以出A的同人誌拿到同人場上販售，還可以用A的形象當VTuber。用在哪裡、怎麼用，全都由持有者決定。'
+    'zh-CN': '起好名字之后，就可以让A当你网络小说的主角，可以让A出演你正在做的游戏，也可以出A的同人本拿到漫展上卖，还可以用A的形象当虚拟主播。用在哪里、怎么用，全都由持有者决定。',
+    'zh-TW': '取好名字之後，就可以讓A當你網路小說的主角，可以讓A在你正在做的遊戲裡登場，也可以出A的同人誌拿到同人場上販售，還可以用A的形象當VTuber。用在哪裡、怎麼用，全都由持有者決定。'
   },
   play_together: {
     'ja':      'ただし、名前がついたキャラクターはそのホルダーのものなので、ほかのホルダーのキャラクターを使いたいときは、まずそのホルダーに許可をもらってください。',
-    'zh-Hans': '不过，有了名字的角色属于它的持有者，如果想使用其他持有者的角色，请先征得那位持有者的同意。',
-    'zh-Hant': '不過，有了名字的角色屬於它的持有者，如果想使用其他持有者的角色，請先徵得那位持有者的同意。'
+    'zh-CN': '不过，有了名字的角色属于它的持有者，如果想使用其他持有者的角色，请先征得那位持有者的同意。',
+    'zh-TW': '不過，有了名字的角色屬於它的持有者，如果想使用其他持有者的角色，請先徵得那位持有者的同意。'
   },
   bonus_title: {
     'ja':      '見た目が変わっても042番です',
-    'zh-Hans': '外观变了也还是042号',
-    'zh-Hant': '外觀變了也還是042號'
+    'zh-CN': '外观变了也还是042号',
+    'zh-TW': '外觀變了也還是042號'
   },
   bonus_body: {
     'ja':      'Aを自分の作品に使いたいのに、すでに決まっている主人公の目の色とかぶって迷うこともあるかもしれません。そんなときは、Aの目の色を変えてかまいません。作品に合わせるためでも好みのためでも、衣装の変更、年齢の変化、種族の変化、目の色などの一部の配色まで、自由にカスタマイズしてください。',
-    'zh-Hans': '想在自己的作品里用A，却可能因为和已经定好的主角瞳色撞了而犹豫。这时，可以直接改掉A的瞳色。无论是为了配合作品还是出于个人喜好，换装、改变年龄、改变种族、调整瞳色等部分配色，都可以自由定制。',
-    'zh-Hant': '想在自己的作品裡用A，卻可能因為和已經定好的主角瞳色撞了而猶豫。這時，可以直接改掉A的瞳色。無論是為了配合作品還是出於個人喜好，換裝、改變年齡、改變種族、調整瞳色等部分配色，都可以自由客製化。'
+    'zh-CN': '想在自己的作品里用A，却可能因为和已经定好的主角瞳色撞了而犹豫。这时，可以直接改掉A的瞳色。无论是为了配合作品还是出于个人喜好，换装、改变年龄、改变种族、调整瞳色等部分配色，都可以自由定制。',
+    'zh-TW': '想在自己的作品裡用A，卻可能因為和已經定好的主角瞳色撞了而猶豫。這時，可以直接改掉A的瞳色。無論是為了配合作品還是出於個人喜好，換裝、改變年齡、改變種族、調整瞳色等部分配色，都可以自由客製化。'
   },
   attitude_title: {
     'ja':      '<b>私の推しが、私の正解</b>',
-    'zh-Hans': '<b>我的本命，就是我的答案</b>',
-    'zh-Hant': '<b>我的本命，就是我的正解</b>'
+    'zh-CN': '<b>我的本命，就是我的答案</b>',
+    'zh-TW': '<b>我的本命，就是我的正解</b>'
   },
   attitude: {
     'ja':      '同じコードをまったく違う形で楽しむホルダーに出会っても、揺らがないでください。どちらが正しいということはないので、ここが、それぞれ自分のキャラクターを愛しながら誰よりも楽しく遊べる場所になってほしいと思っています。biz-OC-doll公式も、名前がついたキャラクターをどう活用しても関与しません。絵が描けなくても、文章を書かなくても大丈夫です。biz-OC-dollには、ホルダーの愛情だけで十分です。推し活は勢いが大事なので、思いきり突き進んでください。',
-    'zh-Hans': '即使遇到用完全不同的方式享受同一个编号的持有者，也不要动摇。没有谁对谁错，希望这里能成为每个人都爱着自己的角色、玩得比谁都开心的地方。已经有了名字的角色，无论你怎么使用，biz-OC-doll官方也不会干涉。不会画画、不写文章也没关系。对biz-OC-doll来说，有持有者的喜爱就足够了。追推就是要有气势，尽管放手去冲吧。',
-    'zh-Hant': '即使遇到用完全不同的方式享受同一個編號的持有者，也不要動搖。沒有誰對誰錯，希望這裡能成為每個人都愛著自己的角色、玩得比誰都開心的地方。已經有了名字的角色，無論你怎麼使用，biz-OC-doll官方也不會干涉。不會畫畫、不寫文章也沒關係。對biz-OC-doll來說，有持有者的喜愛就足夠了。追推就是要有氣勢，儘管放手去衝吧。'
+    'zh-CN': '即使遇到用完全不同的方式享受同一个编号的持有者，也不要动摇。没有谁对谁错，希望这里能成为每个人都爱着自己的角色、玩得比谁都开心的地方。已经有了名字的角色，无论你怎么使用，biz-OC-doll官方也不会干涉。不会画画、不写文章也没关系。对biz-OC-doll来说，有持有者的喜爱就足够了。追推就是要有气势，尽管放手去冲吧。',
+    'zh-TW': '即使遇到用完全不同的方式享受同一個編號的持有者，也不要動搖。沒有誰對誰錯，希望這裡能成為每個人都愛著自己的角色、玩得比誰都開心的地方。已經有了名字的角色，無論你怎麼使用，biz-OC-doll官方也不會干涉。不會畫畫、不寫文章也沒關係。對biz-OC-doll來說，有持有者的喜愛就足夠了。追推就是要有氣勢，儘管放手去衝吧。'
   },
 
   /* ── Figures (image alt text) ── */
   alt_1: {
     'ja':      '042番の元の姿と、同じ042番に別々の名前をつけたAとB',
-    'zh-Hans': '042号的原本样子，以及给同一个042号起了不同名字的A和B',
-    'zh-Hant': '042號的原本樣子，以及為同一個042號取了不同名字的A和B'
+    'zh-CN': '042号的原本样子，以及给同一个042号起了不同名字的A和B',
+    'zh-TW': '042號的原本樣子，以及為同一個042號取了不同名字的A和B'
   },
   alt_2: {
     'ja':      'Web小説の表紙、ゲーム画面、同人誌のブース、VTuber配信に登場したA',
-    'zh-Hans': '出现在网络小说封面、游戏画面、同人摊位和虚拟主播直播中的A',
-    'zh-Hant': '出現在網路小說封面、遊戲畫面、同人攤位和VTuber直播中的A'
+    'zh-CN': '出现在网络小说封面、游戏画面、同人摊位和虚拟主播直播中的A',
+    'zh-TW': '出現在網路小說封面、遊戲畫面、同人攤位和VTuber直播中的A'
   },
   alt_3: {
     'ja':      'ほかのホルダーにキャラクターを使っていいかメッセージで聞き、許可をもらう場面',
-    'zh-Hans': '发消息询问其他持有者能否使用其角色，并得到同意的场景',
-    'zh-Hant': '傳訊息詢問其他持有者能否使用其角色，並得到同意的場景'
+    'zh-CN': '发消息询问其他持有者能否使用其角色，并得到同意的场景',
+    'zh-TW': '傳訊息詢問其他持有者能否使用其角色，並得到同意的場景'
   },
   alt_4: {
     'ja':      '自分の主人公と目の色がかぶるAと、目の色を変えたA',
-    'zh-Hans': '与自己主角瞳色撞了的A，以及换了瞳色的A',
-    'zh-Hant': '和自己主角瞳色撞了的A，以及換了瞳色的A'
+    'zh-CN': '与自己主角瞳色撞了的A，以及换了瞳色的A',
+    'zh-TW': '和自己主角瞳色撞了的A，以及換了瞳色的A'
   },
 
   /* ── Guideline ── */
   guide_title: {
     'ja':      'ガイドライン',
-    'zh-Hans': '使用规范',
-    'zh-Hant': '使用規範'
+    'zh-CN': '使用规范',
+    'zh-TW': '使用規範'
   },
   ok_list: {
     'ja':      '<li>名前をつける・設定を作る</li><li>イラスト・文章・映像・ゲーム</li><li>個人グッズの制作と販売</li><li>有料記事の公開</li><li>プラットフォームでの連載・商業ゲームのリリース</li><li>ほかの作品への出演</li><li>VTuber活動</li>',
-    'zh-Hans': '<li>起名字 · 编设定</li><li>绘画 · 文字 · 视频 · 游戏</li><li>个人周边的制作与贩售</li><li>发布付费文章</li><li>平台连载 · 发行商业游戏</li><li>让角色出演其他作品</li><li>虚拟主播活动</li>',
-    'zh-Hant': '<li>取名字 · 編設定</li><li>繪畫 · 文字 · 影片 · 遊戲</li><li>個人周邊的製作與販售</li><li>發布付費文章</li><li>平台連載 · 發行商業遊戲</li><li>讓角色出演其他作品</li><li>VTuber活動</li>'
+    'zh-CN': '<li>起名字 · 编设定</li><li>绘画 · 文字 · 视频 · 游戏</li><li>个人周边的制作与贩售</li><li>发布付费文章</li><li>平台连载 · 发行商业游戏</li><li>让角色出演其他作品</li><li>虚拟主播活动</li>',
+    'zh-TW': '<li>取名字 · 編設定</li><li>繪畫 · 文字 · 影片 · 遊戲</li><li>個人周邊的製作與販售</li><li>發布付費文章</li><li>平台連載 · 發行商業遊戲</li><li>讓角色出演其他作品</li><li>VTuber活動</li>'
   },
   ng_list: {
     'ja':      '<li>現実の政治宣伝・ヘイトの助長・対立をあおる目的<small>キャラクターのアイデンティティや関係性の設定は自由</small></li><li>現実の宗教の布教物への使用<small>作品内の宗教設定はOK</small></li><li>公式・原作だと誤解させるような利用<small>ホルダーならではの名前と解釈が込められたWebマンガ・グッズ・ポップアップは大歓迎</small></li>',
-    'zh-Hans': '<li>现实政治宣传 · 煽动仇恨 · 以挑起纷争为目的<small>角色的身份认同与关系设定可以自由决定</small></li><li>用于现实宗教的传教宣传品<small>作品中的宗教设定没有问题</small></li><li>让人误以为是官方或原作的使用方式<small>欢迎带有持有者自己的名字与解读的条漫、周边、快闪店</small></li>',
-    'zh-Hant': '<li>現實政治宣傳 · 煽動仇恨 · 以挑起紛爭為目的<small>角色的身分認同與關係設定可以自由決定</small></li><li>用於現實宗教的傳教宣傳品<small>作品中的宗教設定沒有問題</small></li><li>讓人誤以為是官方或原作的使用方式<small>歡迎帶有持有者自己的名字與解讀的網路漫畫、周邊、快閃店</small></li>'
+    'zh-CN': '<li>现实政治宣传 · 煽动仇恨 · 以挑起纷争为目的<small>角色的身份认同与关系设定可以自由决定</small></li><li>用于现实宗教的传教宣传品<small>作品中的宗教设定没有问题</small></li><li>让人误以为是官方或原作的使用方式<small>欢迎带有持有者自己的名字与解读的条漫、周边、快闪店</small></li>',
+    'zh-TW': '<li>現實政治宣傳 · 煽動仇恨 · 以挑起紛爭為目的<small>角色的身分認同與關係設定可以自由決定</small></li><li>用於現實宗教的傳教宣傳品<small>作品中的宗教設定沒有問題</small></li><li>讓人誤以為是官方或原作的使用方式<small>歡迎帶有持有者自己的名字與解讀的網路漫畫、周邊、快閃店</small></li>'
   },
   foot_rights: {
     'ja':      '<strong>biz-OC-doll公式は収益の分配を求めません。</strong>ホルダーが名前をつけたキャラクターと、その創作物の権利はホルダーにあります。biz-OC-doll公式がそれを無断で使ったり、所有権を主張したりすることはありません。コラボが必要なときはこちらから提案することがありますが、無理強いはしません。',
-    'zh-Hans': '<strong>biz-OC-doll官方不要求分成。</strong>持有者起名的角色及其创作物的权利归持有者所有。biz-OC-doll官方不会擅自使用，也不会主张所有权。需要合作时，官方可能会先提出邀请，但绝不强求。',
-    'zh-Hant': '<strong>biz-OC-doll官方不要求分潤。</strong>持有者取名的角色及其創作物的權利歸持有者所有。biz-OC-doll官方不會擅自使用，也不會主張所有權。需要合作時，官方可能會先提出邀請，但絕不強求。'
+    'zh-CN': '<strong>biz-OC-doll官方不要求分成。</strong>持有者起名的角色及其创作物的权利归持有者所有。biz-OC-doll官方不会擅自使用，也不会主张所有权。需要合作时，官方可能会先提出邀请，但绝不强求。',
+    'zh-TW': '<strong>biz-OC-doll官方不要求分潤。</strong>持有者取名的角色及其創作物的權利歸持有者所有。biz-OC-doll官方不會擅自使用，也不會主張所有權。需要合作時，官方可能會先提出邀請，但絕不強求。'
   },
   foot_review: {
     'ja':      '<strong>創作物をひとつひとつ検閲することはありません。</strong>上のNG3つだけ避けていただければ大丈夫です。',
-    'zh-Hans': '<strong>官方不会逐一审查作品。</strong>只要避开上面三条NG就可以了。',
-    'zh-Hant': '<strong>官方不會逐一審查作品。</strong>只要避開上面三條NG就可以了。'
+    'zh-CN': '<strong>官方不会逐一审查作品。</strong>只要避开上面三条NG就可以了。',
+    'zh-TW': '<strong>官方不會逐一審查作品。</strong>只要避開上面三條NG就可以了。'
   },
   foot_ai: {
     'ja':      '<strong>AIを創作ツールとして使うことを制限しません。</strong>それ以上の活用も、NG3つに当たらなければ同じです。ただ、公式が判断しない分、判断は創作者にゆだねられます。',
-    'zh-Hans': '<strong>不限制将AI作为创作工具使用。</strong>更进一步的使用，只要不触及三条NG也同样如此。不过既然官方不做判断，判断就交给创作者自己。',
-    'zh-Hant': '<strong>不限制將AI作為創作工具使用。</strong>更進一步的使用，只要不觸及三條NG也同樣如此。不過既然官方不做判斷，判斷就交給創作者自己。'
+    'zh-CN': '<strong>不限制将AI作为创作工具使用。</strong>更进一步的使用，只要不触及三条NG也同样如此。不过既然官方不做判断，判断就交给创作者自己。',
+    'zh-TW': '<strong>不限制將AI作為創作工具使用。</strong>更進一步的使用，只要不觸及三條NG也同樣如此。不過既然官方不做判斷，判斷就交給創作者自己。'
   },
   foot_rules: {
     'ja':      '<strong>ルールが変わっても、変わる前につけた名前や作った創作物には適用しません。</strong>',
-    'zh-Hans': '<strong>即使规则有所变更，也不会追溯适用于变更前起的名字和创作的作品。</strong>',
-    'zh-Hant': '<strong>即使規則有所變更，也不會追溯適用於變更前取的名字和創作的作品。</strong>'
+    'zh-CN': '<strong>即使规则有所变更，也不会追溯适用于变更前起的名字和创作的作品。</strong>',
+    'zh-TW': '<strong>即使規則有所變更，也不會追溯適用於變更前取的名字和創作的作品。</strong>'
   },
   rating_foot: {
     'ja':      '<strong>表現の度合いは創作者の責任です。</strong>年齢制限の表記や閲覧制限は、ご自身で対応してください。公式は健全な雰囲気を守っていく予定のため、年齢制限のある創作物はグッズ・ゲームとの連携には使いません。',
-    'zh-Hans': '<strong>尺度由创作者自行负责。</strong>请自行做好年龄限制标注和浏览限制。官方会保持清水向的氛围，因此带有尺度的作品不会用于周边或游戏联动。',
-    'zh-Hant': '<strong>尺度由創作者自行負責。</strong>請自行做好年齡限制標示和瀏覽限制。官方會維持清水向的氛圍，因此帶有尺度的作品不會用於周邊或遊戲聯動。'
+    'zh-CN': '<strong>尺度由创作者自行负责。</strong>请自行做好年龄限制标注和浏览限制。官方会保持清水向的氛围，因此带有尺度的作品不会用于周边或游戏联动。',
+    'zh-TW': '<strong>尺度由創作者自行負責。</strong>請自行做好年齡限制標示和瀏覽限制。官方會維持清水向的氛圍，因此帶有尺度的作品不會用於周邊或遊戲聯動。'
   },
 
   /* ── Politics & religion (fold) ── */
   pr_summary: {
     'ja':      '政治・宗教に関するOK/NGの詳細',
-    'zh-Hans': '政治 · 宗教相关的允许 / 禁止细则',
-    'zh-Hant': '政治 · 宗教相關的允許 / 禁止細則'
+    'zh-CN': '政治 · 宗教相关的允许 / 禁止细则',
+    'zh-TW': '政治 · 宗教相關的允許 / 禁止細則'
   },
   pr_ok: {
     'ja':      'OK',
-    'zh-Hans': '允许',
-    'zh-Hant': '允許'
+    'zh-CN': '允许',
+    'zh-TW': '允許'
   },
   pr_ng: {
     'ja':      'NG',
-    'zh-Hans': '禁止',
-    'zh-Hant': '禁止'
+    'zh-CN': '禁止',
+    'zh-TW': '禁止'
   },
   pr_pol_ok: {
     'ja':      'キャラクターの性別、性的指向、人種、国籍といったアイデンティティや、恋愛、家族、友情といった関係性を自由に設定する創作行為。作品内の架空世界の政治設定（王国、選挙、戦争など）もOKです。',
-    'zh-Hans': '自由设定角色的性别、性取向、种族、国籍等身份认同，以及恋爱、家人、友情等关系的创作行为。作品中虚构世界的政治设定（王国、选举、战争等）也允许。',
-    'zh-Hant': '自由設定角色的性別、性傾向、種族、國籍等身分認同，以及戀愛、家人、友情等關係的創作行為。作品中虛構世界的政治設定（王國、選舉、戰爭等）也允許。'
+    'zh-CN': '自由设定角色的性别、性取向、种族、国籍等身份认同，以及恋爱、家人、友情等关系的创作行为。作品中虚构世界的政治设定（王国、选举、战争等）也允许。',
+    'zh-TW': '自由設定角色的性別、性傾向、種族、國籍等身分認同，以及戀愛、家人、友情等關係的創作行為。作品中虛構世界的政治設定（王國、選舉、戰爭等）也允許。'
   },
   pr_pol_ng: {
     'ja':      'キャラクターを現実の政党、候補者、政治キャンペーンの広報物や宣伝の道具として使う行為。',
-    'zh-Hans': '将角色用作现实中政党、候选人、政治活动的宣传品或宣传工具的行为。',
-    'zh-Hant': '將角色用作現實中政黨、候選人、政治活動的宣傳品或宣傳工具的行為。'
+    'zh-CN': '将角色用作现实中政党、候选人、政治活动的宣传品或宣传工具的行为。',
+    'zh-TW': '將角色用作現實中政黨、候選人、政治活動的宣傳品或宣傳工具的行為。'
   },
   pr_rel_ok: {
     'ja':      'キャラクターが各種コンテンツ（Web小説、Webマンガ、イラスト、映像、ゲームなど）やメディアの物語の中で、宗教的な設定（司祭、修道女、仏教徒など）で登場したり、関連する服装を身につけたりする創作行為。それをもとにした三次創作もOKです。',
-    'zh-Hans': '角色在各类内容（网络小说、条漫、插画、视频、游戏等）及媒体叙事中，以宗教相关设定（神父、修女、佛教徒等）登场或穿着相关服饰的创作行为。在此基础上的三次创作也允许。',
-    'zh-Hant': '角色在各類內容（網路小說、網路漫畫、插畫、影片、遊戲等）及媒體敘事中，以宗教相關設定（神父、修女、佛教徒等）登場或穿著相關服飾的創作行為。在此基礎上的三次創作也允許。'
+    'zh-CN': '角色在各类内容（网络小说、条漫、插画、视频、游戏等）及媒体叙事中，以宗教相关设定（神父、修女、佛教徒等）登场或穿着相关服饰的创作行为。在此基础上的三次创作也允许。',
+    'zh-TW': '角色在各類內容（網路小說、網路漫畫、插畫、影片、遊戲等）及媒體敘事中，以宗教相關設定（神父、修女、佛教徒等）登場或穿著相關服飾的創作行為。在此基礎上的三次創作也允許。'
   },
   pr_rel_ng: {
     'ja':      'キャラクターを現実の宗教の布教用広報物（ポスター、チラシなど）に無断で使う行為。キャラクターを特定の宗教のシンボルにおとしめ、宣伝の道具として使うことを禁止します。',
-    'zh-Hans': '擅自将角色用于现实宗教的传教宣传品（海报、传单等）的行为。禁止把角色贬为特定宗教的象征物、当作宣传工具使用。',
-    'zh-Hant': '擅自將角色用於現實宗教的傳教宣傳品（海報、傳單等）的行為。禁止把角色貶為特定宗教的象徵物、當作宣傳工具使用。'
+    'zh-CN': '擅自将角色用于现实宗教的传教宣传品（海报、传单等）的行为。禁止把角色贬为特定宗教的象征物、当作宣传工具使用。',
+    'zh-TW': '擅自將角色用於現實宗教的傳教宣傳品（海報、傳單等）的行為。禁止把角色貶為特定宗教的象徵物、當作宣傳工具使用。'
   },
 
   /* ── Crediting ── */
   credit_title: {
     'ja':      'クレジット表記',
-    'zh-Hans': '出处标注',
-    'zh-Hant': '出處標示'
+    'zh-CN': '出处标注',
+    'zh-TW': '出處標示'
   },
   badge_opt: {
     'ja':      '任意',
-    'zh-Hans': '自愿',
-    'zh-Hant': '自願'
+    'zh-CN': '自愿',
+    'zh-TW': '自願'
   },
   badge_req: {
     'ja':      '必須',
-    'zh-Hans': '必须',
-    'zh-Hant': '必須'
+    'zh-CN': '必须',
+    'zh-TW': '必須'
   },
   credit_opt: {
     'ja':      '個人のSNS・小規模な創作は表記の義務なし。よければ <strong>#bizOCdoll</strong> を。',
-    'zh-Hans': '个人社交平台 · 小规模创作无需标注。愿意的话可以加上 <strong>#bizOCdoll</strong>',
-    'zh-Hant': '個人社群平台 · 小規模創作無需標示。願意的話可以加上 <strong>#bizOCdoll</strong>'
+    'zh-CN': '个人社交平台 · 小规模创作无需标注。愿意的话可以加上 <strong>#bizOCdoll</strong>',
+    'zh-TW': '個人社群平台 · 小規模創作無需標示。願意的話可以加上 <strong>#bizOCdoll</strong>'
   },
   credit_req: {
     'ja':      'プラットフォーム連載・商業ゲーム・大規模な販売は、作品の末尾やクレジットに記載してください。VTuber活動は規模にかかわらず、チャンネルやプロフィールの紹介欄に記載してください。',
-    'zh-Hans': '平台连载 · 商业游戏 · 大规模贩售，请在作品末尾或制作人员名单中注明；虚拟主播活动无论规模大小，请在频道或个人简介中注明。',
-    'zh-Hant': '平台連載 · 商業遊戲 · 大規模販售，請在作品末尾或製作名單中註明；VTuber活動無論規模大小，請在頻道或個人簡介中註明。'
+    'zh-CN': '平台连载 · 商业游戏 · 大规模贩售，请在作品末尾或制作人员名单中注明；虚拟主播活动无论规模大小，请在频道或个人简介中注明。',
+    'zh-TW': '平台連載 · 商業遊戲 · 大規模販售，請在作品末尾或製作名單中註明；VTuber活動無論規模大小，請在頻道或個人簡介中註明。'
   },
   credit_mod: {
     'ja':      '見た目を変えたキャラクターも、表記のルールは同じです。コードは元のキャラクターのものをそのまま書いてください。',
-    'zh-Hans': '修改过外观的角色，标注规则也一样。编号请照原样写上原本角色的编号。',
-    'zh-Hant': '修改過外觀的角色，標示規則也一樣。編號請照原樣寫上原本角色的編號。'
+    'zh-CN': '修改过外观的角色，标注规则也一样。编号请照原样写上原本角色的编号。',
+    'zh-TW': '修改過外觀的角色，標示規則也一樣。編號請照原樣寫上原本角色的編號。'
   },
   cite_summary: {
     'ja':      '表記例3種',
-    'zh-Hans': '标注示例3种',
-    'zh-Hant': '標示範例3種'
+    'zh-CN': '标注示例3种',
+    'zh-TW': '標示範例3種'
   },
   cite_guide: {
     'ja':      '<b class="fill">[ ]</b> の部分だけ書き換えてください。<b>かっこも一緒に消してください。</b>それ以外はそのままコピーして大丈夫です。',
-    'zh-Hans': '只需替换 <b class="fill">[ ]</b> 标出的部分。<b>方括号也请一起删掉。</b>其余内容可以直接复制。',
-    'zh-Hant': '只需替換 <b class="fill">[ ]</b> 標出的部分。<b>方括號也請一起刪掉。</b>其餘內容可以直接複製。'
+    'zh-CN': '只需替换 <b class="fill">[ ]</b> 标出的部分。<b>方括号也请一起删掉。</b>其余内容可以直接复制。',
+    'zh-TW': '只需替換 <b class="fill">[ ]</b> 標出的部分。<b>方括號也請一起刪掉。</b>其餘內容可以直接複製。'
   },
   cite_1: {
     'ja':      '本作品に登場するキャラクター<span class="fill">[キャラクター名]</span>は、biz-OC-dollプロジェクトの<span class="fill">[BIZOCDOLL000]</span>をもとに創作されました。',
-    'zh-Hans': '本作品中登场的角色<span class="fill">[角色名]</span>，是以biz-OC-doll企划的<span class="fill">[BIZOCDOLL000]</span>为原型创作的。',
-    'zh-Hant': '本作品中登場的角色<span class="fill">[角色名]</span>，是以biz-OC-doll企劃的<span class="fill">[BIZOCDOLL000]</span>為原型創作的。'
+    'zh-CN': '本作品中登场的角色<span class="fill">[角色名]</span>，是以biz-OC-doll企划的<span class="fill">[BIZOCDOLL000]</span>为原型创作的。',
+    'zh-TW': '本作品中登場的角色<span class="fill">[角色名]</span>，是以biz-OC-doll企劃的<span class="fill">[BIZOCDOLL000]</span>為原型創作的。'
   },
   /* The English credit at the end stays the same in every language */
   cite_2: {
     'ja':      '<span class="fill">[キャラクター名]</span> Original Character by biz-OC-doll',
-    'zh-Hans': '<span class="fill">[角色名]</span> Original Character by biz-OC-doll',
-    'zh-Hant': '<span class="fill">[角色名]</span> Original Character by biz-OC-doll'
+    'zh-CN': '<span class="fill">[角色名]</span> Original Character by biz-OC-doll',
+    'zh-TW': '<span class="fill">[角色名]</span> Original Character by biz-OC-doll'
   },
   cite_done_head: {
     'ja':      '記入例',
-    'zh-Hans': '填写示例',
-    'zh-Hant': '填寫範例'
+    'zh-CN': '填写示例',
+    'zh-TW': '填寫範例'
   },
   cite_done_sub: {
     'ja':      '名前を「リオ」に決めて、コードが042なら',
-    'zh-Hans': '如果名字定为"里奥"，编号是042：',
-    'zh-Hant': '如果名字定為「里奧」，編號是042：'
+    'zh-CN': '如果名字定为"里奥"，编号是042：',
+    'zh-TW': '如果名字定為「里奧」，編號是042：'
   },
   cite_done_1: {
     'ja':      '本作品に登場するキャラクターリオは、biz-OC-dollプロジェクトのBIZOCDOLL042をもとに創作されました。',
-    'zh-Hans': '本作品中登场的角色里奥，是以biz-OC-doll企划的BIZOCDOLL042为原型创作的。',
-    'zh-Hant': '本作品中登場的角色里奧，是以biz-OC-doll企劃的BIZOCDOLL042為原型創作的。'
+    'zh-CN': '本作品中登场的角色里奥，是以biz-OC-doll企划的BIZOCDOLL042为原型创作的。',
+    'zh-TW': '本作品中登場的角色里奧，是以biz-OC-doll企劃的BIZOCDOLL042為原型創作的。'
   },
 
   /* ── Registration ── */
   reg_text: {
     'ja':      '<b>biz-OC-doll公式に自分の活動を知らせる</b>登録しておくと、公式が把握しておきます。義務ではありません。',
-    'zh-Hans': '<b>告诉biz-OC-doll官方你的活动</b>登记之后，官方会记下来。这不是义务。',
-    'zh-Hant': '<b>告訴biz-OC-doll官方你的活動</b>登記之後，官方會記下來。這不是義務。'
+    'zh-CN': '<b>告诉biz-OC-doll官方你的活动</b>登记之后，官方会记下来。这不是义务。',
+    'zh-TW': '<b>告訴biz-OC-doll官方你的活動</b>登記之後，官方會記下來。這不是義務。'
   },
   reg_btn: {
     'ja':      '登録する',
-    'zh-Hans': '去登记',
-    'zh-Hant': '去登記'
+    'zh-CN': '去登记',
+    'zh-TW': '去登記'
   },
 
   /* ── Footer ── */
   footer_note: {
     'ja':      'このコンテンツは下記のアドレスにも公式でバックアップしています。無断転載ではなく公式のアップロードです。',
-    'zh-Hans': '本内容也会以官方身份备份上传至以下地址。这是官方上传，并非盗转。',
-    'zh-Hant': '本內容也會以官方身分備份上傳至以下網址。這是官方上傳，並非盜轉。'
+    'zh-CN': '本内容也会以官方身份备份上传至以下地址。这是官方上传，并非盗转。',
+    'zh-TW': '本內容也會以官方身分備份上傳至以下網址。這是官方上傳，並非盜轉。'
   }
 });
 

@@ -2,11 +2,15 @@
 //  config.js — shared site settings
 //
 //  Used by (check before deleting anything):
-//    · index.html (hub)          — SHEETS_ID: projects, OC-characters tabs
-//    · biz-OC-doll/index.html    — SHEETS_ID: OC-characters, title record tabs · API: likes
-//    · biz-OC-doll/doll_pd.html  — SHEETS_ID: OC-characters tab
-//    · stock_index.html          — SHEETS_ID: stock tab · DEEPL
-//    · bhs_index.html            — DEEPL (reads its sheet with its own BHS_SHEETS_ID)
+//    · index.html (hub)              — SHEETS_ID: episodes, OC-characters tabs
+//    · biz-OC-doll/index.html        — SHEETS_ID: OC-characters, title record tabs · API: likes
+//    · biz-OC-doll/doll_pd.html      — SHEETS_ID: OC-characters tab
+//    · Blood_High_School/index.html  — DEEPL (reads its sheet with its own BHS_SHEETS_ID)
+//    · stock/index.html              — SHEETS_ID: stock tab · DEEPL
+//    · goods_shop/index.html         — DEEPL
+//
+//  File names above are the deployed ones. The working copies are named
+//  bizocdoll_index.html, bhs_index.html, stock_index.html and goods_shop_index.html.
 //
 //  This file is public: every visitor's browser downloads it,
 //  comments included. Never put passwords, API keys or tokens here,
@@ -37,8 +41,10 @@ var CONFIG = {
   //  Put only things that are fine to be public in this sheet.
   //  (Like logs are kept in a separate private spreadsheet.)
   //
-  //  bhs_index.html has the same ID written separately (BHS_SHEETS_ID).
-  //  If the sheet ever moves, change it there too.
+  //  Two pages have the same ID written separately:
+  //    · Blood_High_School/index.html — BHS_SHEETS_ID
+  //    · index.html (hub)             — a fallback copy, used if this file fails to load
+  //  If the sheet ever moves, change it in both places too.
   // --------------------------------------------------
   SHEETS_ID: '19UUoMegsFTR3jeAo-dml6DSZEmWsqv6zM6EaiJPGbfk',
 
